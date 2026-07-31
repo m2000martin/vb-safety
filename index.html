@@ -16,7 +16,6 @@
        -webkit-font-smoothing:antialiased;overflow-x:hidden}
   body::before{content:"";position:fixed;inset:0 0 auto 0;height:2px;z-index:5;
        background:linear-gradient(90deg,var(--ember),var(--uv) 55%,var(--emit));opacity:.85}
-
   .stage{position:fixed;inset:0;z-index:0;pointer-events:none}
   .field{position:absolute;inset:-10%;background-repeat:repeat;
     -webkit-mask-image:radial-gradient(circle 340px at var(--x,50%) var(--y,45%),#000 0%,rgba(0,0,0,.55) 45%,transparent 72%);
@@ -35,12 +34,19 @@
   @keyframes drift2{0%,100%{transform:translate3d(0,0,0) scale(1.06)}40%{transform:translate3d(-17vw,-12vh,0) scale(.92)}70%{transform:translate3d(-5vw,14vh,0) scale(1.15)}}
   @keyframes drift3{0%,100%{transform:translate3d(0,0,0) scale(.95)}50%{transform:translate3d(13vw,-16vh,0) scale(1.14)}}
   .vignette{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 0%,transparent 40%,rgba(11,13,20,.85) 100%)}
-
   .wrap{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;
         padding:clamp(20px,4vw,44px);gap:clamp(24px,6vh,64px)}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .mark{font-family:"Archivo","Helvetica Neue",Arial,sans-serif;font-weight:700;
         font-stretch:125%;font-variation-settings:"wdth" 125;
         font-size:clamp(15px,1.5vw,19px);letter-spacing:.22em}
+  .langsw{display:flex;align-items:center;gap:8px}
+  .langsw button{appearance:none;background:none;border:none;cursor:pointer;padding:11px;margin:-11px;
+        line-height:0;border-radius:2px;opacity:.4;filter:grayscale(.55);
+        transition:opacity .25s ease,filter .25s ease,transform .25s ease}
+  .langsw button svg{display:block}
+  .langsw button:hover{opacity:.75;filter:grayscale(0)}
+  .langsw button.on{opacity:1;filter:grayscale(0)}
   main{flex:1;display:flex;align-items:center;justify-content:center;width:100%}
   h1{margin:0;text-align:center}
   .rotator{display:grid;place-items:center}
@@ -51,17 +57,14 @@
     color:#E4E7EF;
     opacity:0;filter:blur(8px);transform:scale(1.01);
     transition:opacity 1.5s cubic-bezier(.4,0,.2,1),filter 1.5s cubic-bezier(.4,0,.2,1),transform 1.9s cubic-bezier(.4,0,.2,1);
-    text-wrap:balance;will-change:opacity,filter}
+    text-wrap:balance;will-change:opacity,filter;pointer-events:none}
   .rotator>span.on{opacity:1;filter:blur(0);transform:none}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-
   footer{display:flex;justify-content:center;
     font-size:12px;letter-spacing:.05em;color:var(--mute)}
   footer a{color:var(--mute);text-decoration:none;border-bottom:1px solid transparent;transition:.25s}
   footer a:hover,footer a:focus-visible{color:var(--bone);border-color:var(--ember)}
   :focus-visible{outline:2px solid var(--emit);outline-offset:3px}
-
-
   @media (max-width:640px){
     .rotator>span{max-width:none;font-size:clamp(1.6rem,6.6vw,2.3rem);letter-spacing:.085em;line-height:1.45}
   }
@@ -72,37 +75,39 @@
 </style>
 </head>
 <body>
-
 <div class="stage" aria-hidden="true">
   <div class="shade"><i class="s1"></i><i class="s2"></i><i class="s3"></i></div>
   <div class="field" id="field"></div>
   <div class="lamp" id="lamp"></div>
   <div class="vignette"></div>
 </div>
-
 <div class="wrap">
-  <div class="mark">VB SAFETY</div>
-
+  <div class="topbar">
+    <div class="mark">VB SAFETY</div>
+    <div class="langsw" role="group" aria-label="Language / Langue">
+      <button type="button" class="on" data-lang="en" aria-pressed="true" title="English" aria-label="English">
+        <svg viewBox="0 0 60 36" width="22" height="14" aria-hidden="true"><rect width="60" height="36" fill="#00247d"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,36 M60,0 L0,36" stroke="#cf142b" stroke-width="2"/><path d="M30,0 V36 M0,18 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V36 M0,18 H60" stroke="#cf142b" stroke-width="6"/></svg>
+      </button>
+      <button type="button" data-lang="fr" aria-pressed="false" title="Français" aria-label="Français">
+        <svg viewBox="0 0 3 2" width="22" height="14" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
+      </button>
+    </div>
+  </div>
   <main>
     <h1>
-      <span class="sr">Firefighters' health technological revolution. La santé des pompiers révolutionnée.</span>
+      <span class="sr">Firefighter health revolution. La santé des pompiers révolutionnée.</span>
       <span class="rotator" aria-hidden="true">
-        <span class="on" lang="en">Firefighters' health technological revolution</span>
+        <span class="on" lang="en">Firefighter health revolution</span>
         <span lang="fr">La santé des pompiers révolutionnée</span>
       </span>
     </h1>
   </main>
-
   <footer>
     <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
   </footer>
 </div>
-
-
 <script>
 (function(){
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   var c = document.createElement('canvas'), S = 620;
   c.width = c.height = S;
   var g = c.getContext('2d');
@@ -113,9 +118,9 @@
     g.fill();
   }
   document.getElementById('field').style.backgroundImage = 'url(' + c.toDataURL() + ')';
-
   var layers=[document.getElementById('field'),document.getElementById('lamp')];
   var tx=innerWidth*.5, ty=innerHeight*.45, cx=tx, cy=ty, t=0;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function frame(){
     t+=0.0068;
     tx=innerWidth*(0.5+0.32*Math.sin(t));
@@ -127,12 +132,21 @@
   if(reduce){layers.forEach(function(el){el.style.setProperty('--x','50%');el.style.setProperty('--y','45%');});}
   else{frame();}
 
-  var lines=document.querySelectorAll('.rotator>span'), n=0;
-  setInterval(function(){
-    lines[n].classList.remove('on');
-    n=(n+1)%lines.length;
-    lines[n].classList.add('on');
-  }, reduce?5000:3200);
+  var lines = document.querySelectorAll('.rotator>span');
+  var buttons = document.querySelectorAll('.langsw button');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var lang = btn.getAttribute('data-lang');
+      buttons.forEach(function(b){
+        var active = b === btn;
+        b.classList.toggle('on', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      lines.forEach(function(el){
+        el.classList.toggle('on', el.getAttribute('lang') === lang);
+      });
+    });
+  });
 })();
 </script>
 </body>
