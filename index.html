@@ -3,11 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A1725">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>VB Safety | Mesure de l'exposition professionnelle</title>
 <meta id="meta-desc" name="description" content="VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle pour les services de secours et l'industrie.">
 
-<!-- Bold "VB" Favicon generated via inline SVG Data URI -->
+<!-- Bold "VB" Favicon & Apple Touch Icon generated via SVG Data URIs -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230E1E30'/><rect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23D9713C' stroke-width='2.5' opacity='0.7'/><text x='32' y='42' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='28' fill='%23E8EFF4' text-anchor='middle' letter-spacing='-0.5'>VB</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230E1E30'/><rect x='6' y='6' width='168' height='168' rx='34' fill='none' stroke='%23D9713C' stroke-width='6' opacity='0.75'/><text x='90' y='118' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='82' fill='%23E8EFF4' text-anchor='middle' letter-spacing='-1.5'>VB</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +31,7 @@
 
   *, *::before, *::after {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html, body {
@@ -45,17 +50,19 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     position: relative;
+    /* Prevents pull-to-refresh jitter on mobile while keeping smooth scroll */
+    overscroll-behavior-y: none;
   }
 
   a {
     color: inherit;
-    transition: color 0.25s ease, border-color 0.25s ease;
+    transition: color 0.25s ease, border-color 0.25s ease, opacity 0.2s ease;
   }
 
   :focus-visible {
     outline: 2px solid var(--signal);
     outline-offset: 4px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
   /* ---- Interactive Canvas Background ---- */
@@ -66,6 +73,7 @@
     height: 100%;
     z-index: 0;
     pointer-events: none;
+    will-change: transform;
   }
 
   /* Ambient bottom glow gradient overlay */
@@ -78,7 +86,7 @@
     background: linear-gradient(to top, var(--nuit-profond) 0%, rgba(14, 30, 48, 0.4) 50%, rgba(14, 30, 48, 0) 100%);
   }
 
-  /* Main Scene Layout */
+  /* Main Scene Layout - Using 100dvh for precise mobile browser viewport stability */
   .scene {
     position: relative;
     z-index: 2;
@@ -86,7 +94,8 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: 0 clamp(24px, 6vw, 76px);
+    justify-content: space-between;
+    padding: 0 clamp(20px, 5vw, 76px);
   }
 
   /* ---- Header ---- */
@@ -94,8 +103,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding-top: calc(clamp(28px, 4.5vw, 44px) + env(safe-area-inset-top, 0px));
+    gap: 16px;
+    padding-top: calc(clamp(20px, 4vw, 44px) + env(safe-area-inset-top, 0px));
+    flex-wrap: wrap;
   }
 
   .brand-group {
@@ -106,40 +116,47 @@
 
   .marque {
     font-weight: 600;
-    font-size: 14px;
+    font-size: clamp(13px, 3.5vw, 15px);
     letter-spacing: 0.22em;
     color: var(--clair);
+    user-select: none;
   }
 
   .actions-group {
     display: flex;
     align-items: center;
-    gap: clamp(16px, 3vw, 32px);
+    gap: clamp(12px, 3vw, 28px);
+    margin-left: auto;
   }
 
-  /* Language Switcher */
+  /* Language Switcher - Touch target optimized (min 44px height for interactive tap area) */
   .lang-switcher {
     display: inline-flex;
     align-items: center;
     background: rgba(147, 170, 189, 0.08);
-    border: 1px solid rgba(147, 170, 189, 0.2);
-    border-radius: 20px;
+    border: 1px solid rgba(147, 170, 189, 0.22);
+    border-radius: 24px;
     padding: 3px;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.05em;
   }
 
   .lang-btn {
     background: none;
     border: none;
     color: var(--doux);
-    padding: 4px 10px;
-    border-radius: 14px;
+    min-height: 38px;
+    min-width: 40px;
+    padding: 6px 12px;
+    border-radius: 20px;
     cursor: pointer;
     transition: all 0.25s ease;
     font-family: var(--sans);
-    font-size: 12px;
+    font-size: 12.5px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .lang-btn:hover {
@@ -150,34 +167,38 @@
     background: var(--signal);
     color: #fff;
     font-weight: 600;
-    box-shadow: 0 2px 8px rgba(217, 113, 60, 0.3);
+    box-shadow: 0 2px 10px rgba(217, 113, 60, 0.35);
   }
 
+  /* Email header link with generous mobile target */
   .ecrire {
     font-size: 14.5px;
     color: var(--doux);
     text-decoration: none;
-    padding-bottom: 3px;
+    padding: 10px 4px;
     border-bottom: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 
-  .ecrire:hover {
+  .ecrire:hover, .ecrire:active {
     color: #fff;
     border-bottom-color: var(--signal);
   }
 
-  /* ---- Center Hero ---- */
+  /* ---- Center Hero Content ---- */
   .centre {
     flex: 1;
     display: flex;
     align-items: center;
-    padding: clamp(56px, 11vh, 120px) 0;
+    padding: clamp(36px, 8vh, 120px) 0;
   }
 
   .enonce {
     font-family: var(--serif);
     font-weight: 200;
-    font-size: clamp(34px, 6.8vw, 76px);
+    font-size: clamp(30px, 7.8vw, 76px);
     line-height: 1.12;
     letter-spacing: -0.018em;
     margin: 0;
@@ -191,10 +212,10 @@
   }
 
   .trait {
-    width: 58px;
+    width: clamp(44px, 10vw, 58px);
     height: 2px;
     background: var(--signal);
-    margin: clamp(30px, 4.5vw, 46px) 0 clamp(24px, 3.5vw, 34px);
+    margin: clamp(22px, 4vw, 46px) 0 clamp(18px, 3vw, 34px);
     box-shadow: 0 0 10px var(--signal-glow);
   }
 
@@ -202,34 +223,66 @@
     margin: 0;
     max-width: 38ch;
     color: var(--doux);
-    font-size: clamp(15.5px, 1.9vw, 18px);
-    line-height: 1.72;
+    font-size: clamp(15px, 2vw, 18px);
+    line-height: 1.68;
   }
 
   /* ---- Footer ---- */
   .bas {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    gap: 14px 32px;
-    padding-bottom: calc(clamp(26px, 4vw, 42px) + env(safe-area-inset-bottom, 0px));
+    gap: 12px 24px;
+    padding-bottom: calc(clamp(20px, 3.5vw, 42px) + env(safe-area-inset-bottom, 0px));
     font-size: 13px;
     color: #6E8599;
   }
 
   .courriel {
     font-family: var(--serif);
-    font-size: clamp(18px, 2.4vw, 22px);
+    font-size: clamp(17px, 2.8vw, 22px);
     color: var(--clair);
     text-decoration: none;
     border-bottom: 1px solid rgba(217, 113, 60, 0.55);
-    padding-bottom: 4px;
+    padding: 8px 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 
-  .courriel:hover {
+  .courriel:hover, .courriel:active {
     color: var(--signal);
     border-bottom-color: var(--signal);
+  }
+
+  .localisation {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  /* Mobile specific optimizations (< 480px) */
+  @media (max-width: 480px) {
+    .haut {
+      gap: 10px;
+    }
+    .brand-group {
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: -4px;
+    }
+    .actions-group {
+      width: 100%;
+      justify-content: space-between;
+      padding-top: 4px;
+      border-top: 1px solid rgba(147, 170, 189, 0.08);
+    }
+    .bas {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
   }
 
   /* ---- Entrance Animations ---- */
@@ -237,12 +290,12 @@
     .lever {
       opacity: 0;
       transform: translateY(16px);
-      animation: lever 1s cubic-bezier(.2, .7, .3, 1) forwards;
+      animation: lever 0.9s cubic-bezier(.2, .7, .3, 1) forwards;
     }
     .lever-1 { animation-delay: 0.05s; }
-    .lever-2 { animation-delay: 0.22s; }
-    .lever-3 { animation-delay: 0.38s; }
-    .lever-4 { animation-delay: 0.54s; }
+    .lever-2 { animation-delay: 0.18s; }
+    .lever-3 { animation-delay: 0.32s; }
+    .lever-4 { animation-delay: 0.46s; }
 
     @keyframes lever {
       to {
@@ -279,13 +332,13 @@
     </div>
     
     <div class="actions-group">
-      <!-- Language Switcher Control -->
+      <!-- Language Switcher Control with 44px touch target optimization -->
       <div class="lang-switcher" role="group" aria-label="Language selector">
         <button id="btn-fr" class="lang-btn active" onclick="setLanguage('fr')" aria-label="Passer en français">FR</button>
         <button id="btn-en" class="lang-btn" onclick="setLanguage('en')" aria-label="Switch to English">EN</button>
       </div>
 
-      <a id="txt-write" class="ecrire trans-fade" href="mailto:contact@vbsafety.fr">Nous écrire</a>
+      <a id="txt-write" class="ecrire trans-fade" href="mailto:contact@vb-safety.com">Nous écrire</a>
     </div>
   </header>
 
@@ -305,8 +358,8 @@
   </main>
 
   <footer class="bas lever lever-4">
-    <a class="courriel" href="mailto:contact@vbsafety.fr">contact@vbsafety.fr</a>
-    <span id="txt-footer-loc" class="trans-fade">VB Safety — France</span>
+    <a class="courriel" href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
+    <span id="txt-footer-loc" class="localisation trans-fade">VB Safety — France</span>
   </footer>
 
 </div>
@@ -345,17 +398,14 @@ function setLanguage(lang) {
   try {
     localStorage.setItem('vbsafety_lang', lang);
   } catch(e) {
-    // LocalStorage fallback for restricted environments
+    // LocalStorage fallback for restricted iFrames / privacy modes
   }
 
-  // Update HTML lang attribute
   document.documentElement.lang = lang;
 
-  // Toggle active class on buttons
   document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
 
-  // Fade out elements briefly for smooth textual transition
   const transElements = document.querySelectorAll('.trans-fade');
   transElements.forEach(el => el.classList.add('trans-out'));
 
@@ -370,12 +420,10 @@ function setLanguage(lang) {
     document.getElementById('txt-description').textContent = data.description;
     document.getElementById('txt-footer-loc').textContent = data.footerLoc;
 
-    // Fade back in
     transElements.forEach(el => el.classList.remove('trans-out'));
-  }, 180);
+  }, 160);
 }
 
-// Initialize language from saved preference or browser settings
 function initLanguage() {
   let savedLang = null;
   try {
@@ -393,29 +441,27 @@ function initLanguage() {
 }
 
 /* ==========================================================================
-   2. DETECTION PARTICLES CANVAS SIMULATION
-   Symbolizes airborne hazard particles, airborne toxins, & sensor detection nodes
+   2. MOBILE-OPTIMIZED DETECTION PARTICLES SIMULATION
+   Symbolizes airborne hazard detection & sensor networks with low CPU/battery load
    ========================================================================== */
 (function() {
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
   
-  // Respect accessibility settings
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let width = 0;
   let height = 0;
   let particles = [];
   let animationFrameId = null;
-
-  // Configuration settings
-  const PARTICLE_COUNT_DESKTOP = 65;
-  const PARTICLE_COUNT_MOBILE = 32;
-  const MAX_CONNECT_DISTANCE = 110;
+  let maxConnectDist = 110;
 
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    
+    // Scale connection distance for smaller screens
+    maxConnectDist = width < 480 ? 80 : (width < 768 ? 95 : 115);
   }
 
   class Particle {
@@ -426,16 +472,15 @@ function initLanguage() {
     reset(initial = false) {
       this.x = Math.random() * width;
       this.y = initial ? Math.random() * height : height + 10;
-      this.radius = Math.random() * 1.8 + 0.6; // Small, refined particle size
-      this.vy = -(Math.random() * 0.45 + 0.15); // Drifts upwards
-      this.vx = (Math.random() - 0.5) * 0.25;
+      this.radius = Math.random() * 1.6 + 0.5; // Fine particle scale
+      this.vy = -(Math.random() * 0.4 + 0.12);
+      this.vx = (Math.random() - 0.5) * 0.2;
       this.alpha = Math.random() * 0.5 + 0.2;
       
-      // Sensor pulse accent (~20% orange signal particles, ~80% light subtle blue/gray)
-      this.isSignal = Math.random() < 0.22;
+      // Signal nodes (~20% orange detection indicators)
+      this.isSignal = Math.random() < 0.2;
       this.color = this.isSignal ? '217, 113, 60' : '232, 239, 244';
       
-      // Pulse animation properties
       this.pulseSpeed = Math.random() * 0.02 + 0.005;
       this.pulseAngle = Math.random() * Math.PI * 2;
     }
@@ -446,13 +491,11 @@ function initLanguage() {
       this.x += this.vx;
       this.y += this.vy;
 
-      // Gentle pulsing of opacity
       this.pulseAngle += this.pulseSpeed;
       this.currentAlpha = this.alpha + Math.sin(this.pulseAngle) * 0.15;
-      this.currentAlpha = Math.max(0.05, Math.min(0.8, this.currentAlpha));
+      this.currentAlpha = Math.max(0.05, Math.min(0.75, this.currentAlpha));
 
-      // Reset when particle drifts off screen top or sides
-      if (this.y < -20 || this.x < -20 || this.x > width + 20) {
+      if (this.y < -15 || this.x < -15 || this.x > width + 15) {
         this.reset(false);
       }
     }
@@ -463,46 +506,57 @@ function initLanguage() {
       ctx.fillStyle = `rgba(${this.color}, ${this.currentAlpha || this.alpha})`;
       ctx.fill();
 
-      // Subtle glow ring around signal detection nodes
       if (this.isSignal) {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius * 2.8, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(217, 113, 60, ${(this.currentAlpha || this.alpha) * 0.18})`;
+        ctx.arc(this.x, this.y, this.radius * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(217, 113, 60, ${(this.currentAlpha || this.alpha) * 0.15})`;
         ctx.fill();
       }
     }
   }
 
+  /* Compute particle count based on screen area to ensure optimal mobile battery life */
+  function getOptimalParticleCount() {
+    const area = width * height;
+    if (area < 350000) return 22;     // Compact Mobile
+    if (area < 650000) return 35;     // Large Mobile / Tablet
+    return 65;                        // Desktop
+  }
+
   function initParticles() {
-    const count = width < 768 ? PARTICLE_COUNT_MOBILE : PARTICLE_COUNT_DESKTOP;
+    const count = getOptimalParticleCount();
     particles = [];
     for (let i = 0; i < count; i++) {
       particles.push(new Particle());
     }
   }
 
-  /* Connect nearby particles with delicate detection network lines */
+  /* Draw detection network mesh */
   function drawConnections() {
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
+    const len = particles.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = i + 1; j < len; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
+        
+        // Fast bounding box check before expensive square root calculation
+        if (Math.abs(dx) > maxConnectDist || Math.abs(dy) > maxConnectDist) continue;
+
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < MAX_CONNECT_DISTANCE) {
-          const alpha = (1 - dist / MAX_CONNECT_DISTANCE) * 0.12;
+        if (dist < maxConnectDist) {
+          const alpha = (1 - dist / maxConnectDist) * 0.12;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
           
-          // Connect orange-to-orange or generic neutral line
           if (particles[i].isSignal && particles[j].isSignal) {
             ctx.strokeStyle = `rgba(217, 113, 60, ${alpha * 1.5})`;
           } else {
             ctx.strokeStyle = `rgba(147, 170, 189, ${alpha})`;
           }
           
-          ctx.lineWidth = 0.6;
+          ctx.lineWidth = 0.5;
           ctx.stroke();
         }
       }
@@ -512,25 +566,26 @@ function initLanguage() {
   function animate() {
     ctx.clearRect(0, 0, width, height);
 
-    // Update and draw each particle
     for (let i = 0; i < particles.length; i++) {
       particles[i].update();
       particles[i].draw();
     }
 
-    // Render sensor proximity grid lines
     drawConnections();
 
     animationFrameId = requestAnimationFrame(animate);
   }
 
-  // Window Listeners
+  // Debounced resize handler for smooth orientation switching on phones
+  let resizeTimeout = null;
   window.addEventListener('resize', () => {
-    resize();
-    initParticles();
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      resize();
+      initParticles();
+    }, 100);
   });
 
-  // Start initialization
   window.addEventListener('load', () => {
     resize();
     initParticles();
