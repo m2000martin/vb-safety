@@ -11,26 +11,50 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;1,300&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
+    /* Landing Page - Retour au bleu nuit initial */
     --nuit: #0E1E30;
     --nuit-profond: #0A1725;
-    --nuit-card: #0F1F33;
-    --nuit-border: #1E344F;
-    --nuit-input: #060D15;
-    --clair: #E8EFF4;
-    --doux: #93AABD;
-    --signal: #D9713C;
-    --signal-glow: rgba(217, 113, 60, 0.35);
-    --danger: #E54D42;
-    --warning: #F1A023;
-    --success: #27B068;
-    --info: #2B80FF;
+    
+    /* Variables V0/Shadcn par défaut (Mode Sombre - Zinc) */
+    --app-bg: #09090b;          
+    --app-card: #18181b;        
+    --app-border: #27272a;      
+    --app-border-hover: #3f3f46;
+    --app-text: #fafafa;
+    --app-text-muted: #a1a1aa;
+    --app-input: #09090b;       
+    --app-muted: #27272a;       
+    --app-primary: #fafafa;
+    --app-primary-fg: #09090b;
+
+    /* Couleurs sémantiques (Adaptables) */
+    --signal: #E06C34;
+    --danger: #EF4444;           
+    --warning: #F59E0B;          
+    --success: #10B981;          
+    --info: #3B82F6;             
+    
     --serif: "Spectral", Georgia, serif;
-    --sans: "IBM Plex Sans", -apple-system, sans-serif;
+    --sans: "Inter", -apple-system, sans-serif;
     --mono: "IBM Plex Mono", monospace;
+  }
+
+  /* Remplacement des variables pour le Mode Clair */
+  body.light-mode {
+    --app-bg: #f4f4f5; 
+    --app-card: #ffffff; 
+    --app-border: #e4e4e7; 
+    --app-border-hover: #d4d4d8; 
+    --app-text: #09090b; 
+    --app-text-muted: #71717a; 
+    --app-input: #ffffff;
+    --app-muted: #f4f4f5;
+    --app-primary: #18181b; 
+    --app-primary-fg: #fafafa;
   }
 
   *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -38,17 +62,18 @@
 
   body {
     background: var(--nuit);
-    color: var(--clair);
+    color: #FAFAFA;
     font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  a { color: inherit; transition: all 0.25s ease; }
+  a { color: inherit; transition: all 0.2s ease; }
 
-  /* Background Particles Canvas */
+  /* Background Particles Canvas (Landing) */
   #particles-canvas {
     position: fixed;
     inset: 0;
@@ -87,165 +112,180 @@
     padding-top: calc(clamp(16px, 4vw, 44px) + env(safe-area-inset-top, 0px));
   }
 
-  .marque { font-weight: 600; font-size: 14px; letter-spacing: 0.22em; }
+  .marque { font-weight: 700; font-size: 14px; letter-spacing: 0.2em; color: #FAFAFA; text-transform: uppercase; }
   .actions-group { display: flex; align-items: center; gap: 16px; }
 
   .lang-switcher {
     display: inline-flex;
-    background: rgba(147, 170, 189, 0.08);
-    border: 1px solid rgba(147, 170, 189, 0.22);
-    border-radius: 24px;
-    padding: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 2px;
   }
 
   .lang-btn {
-    background: none; border: none; color: var(--doux); padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; min-height: 32px;
+    background: none; border: none; color: #A1A1AA; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500; min-height: 28px;
   }
   .lang-btn.active { background: var(--signal); color: #fff; font-weight: 600; }
 
-  .ecrire { font-size: 14px; color: var(--doux); text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; }
+  .ecrire { font-size: 14px; color: #A1A1AA; text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; }
   .ecrire:hover { color: #fff; border-bottom-color: var(--signal); }
 
   /* Hero Content */
   .centre { flex: 1; display: flex; align-items: center; padding: 40px 0; }
-  .enonce { font-family: var(--serif); font-weight: 700; font-size: clamp(28px, 6.5vw, 72px); line-height: 1.15; margin: 0; }
-  .enonce .seconde { display: block; color: var(--doux); }
-  .trait { width: 45px; height: 2px; background: var(--signal); margin: 24px 0; box-shadow: 0 0 10px var(--signal-glow); }
-  .note { margin: 0; max-width: 40ch; color: var(--doux); font-size: clamp(15px, 2vw, 18px); }
+  .enonce { font-family: var(--serif); font-weight: 700; font-size: clamp(32px, 6.5vw, 72px); line-height: 1.1; margin: 0; }
+  .enonce .seconde { display: block; color: #A1A1AA; margin-top: 4px; }
+  .trait { width: 45px; height: 2px; background: var(--signal); margin: 24px 0; box-shadow: 0 0 10px rgba(224, 108, 52, 0.3); }
+  .note { margin: 0; max-width: 44ch; color: #A1A1AA; font-size: clamp(15px, 2vw, 17px); font-weight: 400; line-height: 1.6; }
 
   /* Footer Vitrine */
-  .bas { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); font-size: 13px; color: #6E8599; }
-  .courriel { font-family: var(--serif); font-size: clamp(16px, 2.5vw, 20px); color: var(--clair); text-decoration: none; border-bottom: 1px solid rgba(217, 113, 60, 0.55); }
-  .footer-sub-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .bas { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); font-size: 13px; color: #A1A1AA; }
+  .courriel { font-family: var(--serif); font-size: clamp(16px, 2vw, 20px); color: #FAFAFA; text-decoration: none; border-bottom: 1px solid rgba(224, 108, 52, 0.5); padding-bottom: 2px; }
+  .courriel:hover { border-color: var(--signal); }
+  .footer-sub-links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
   .lien-cmr {
-    color: var(--doux); text-decoration: none; font-size: 13px; padding: 8px 14px; border-radius: 20px;
-    border: 1px solid rgba(147, 170, 189, 0.2); background: rgba(10, 20, 32, 0.5); min-height: 38px; display: inline-flex; align-items: center;
+    color: #FAFAFA; text-decoration: none; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); min-height: 38px; display: inline-flex; align-items: center;
+    transition: all 0.2s;
   }
-  .lien-cmr:hover { color: #fff; border-color: var(--signal); background: rgba(217, 113, 60, 0.15); }
+  .lien-cmr:hover { border-color: var(--signal); background: rgba(224, 108, 52, 0.1); }
 
-  /* Modale Authentification & Demande */
+  /* Modale Authentification */
   .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(6, 13, 21, 0.9); backdrop-filter: blur(8px); z-index: 1000;
+    display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); z-index: 1000;
     align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
   }
 
   .auth-card {
-    background: var(--nuit-card); border: 1px solid var(--nuit-border); border-radius: 12px; max-width: 440px; width: 100%;
-    padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; margin: auto;
+    background: #09090b; border: 1px solid #27272a; border-radius: 8px; max-width: 400px; width: 100%;
+    padding: 32px; position: relative; margin: auto; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); color: #fafafa;
   }
 
-  .auth-title { font-family: var(--serif); font-size: 20px; margin: 0 0 6px 0; color: var(--clair); }
-  .auth-sub { font-size: 13px; color: var(--doux); margin-bottom: 16px; }
+  .auth-title { font-family: var(--sans); font-weight: 600; font-size: 18px; margin: 0 0 6px 0; letter-spacing: -0.02em; }
+  .auth-sub { font-size: 13px; color: #a1a1aa; margin-bottom: 20px; }
 
   .input-field {
-    width: 100%; background: var(--nuit-input); border: 1px solid var(--nuit-border); color: #fff; padding: 12px; border-radius: 6px;
-    font-size: 16px; margin-bottom: 12px; outline: none; -webkit-appearance: none;
+    width: 100%; background: #09090b; border: 1px solid #27272a; color: #fff; padding: 10px 12px; border-radius: 6px;
+    font-size: 14px; margin-bottom: 12px; outline: none; -webkit-appearance: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .input-field:focus { border-color: var(--signal); }
+  .input-field:focus { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal); }
 
   .btn-submit {
-    width: 100%; background: var(--signal); color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: 600;
-    font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px var(--signal-glow); min-height: 44px;
+    width: 100%; background: var(--signal); color: #fff; border: 1px solid transparent; padding: 10px; border-radius: 6px; font-weight: 500;
+    font-size: 14px; cursor: pointer; min-height: 40px; transition: opacity 0.2s;
   }
+  .btn-submit:hover { opacity: 0.9; }
 
-  .toggle-auth-mode { margin-top: 14px; text-align: center; font-size: 12px; color: var(--doux); }
-  .toggle-auth-mode a { color: var(--signal); text-decoration: underline; cursor: pointer; }
+  .toggle-auth-mode { margin-top: 16px; text-align: center; font-size: 13px; color: #a1a1aa; }
+  .toggle-auth-mode a { color: #fafafa; text-decoration: underline; cursor: pointer; }
 
-  /* APPLICATION NEXSIS OVERLAY MOBILE OPTIMIZED */
-  #app-nexsis { display: none; position: fixed; inset: 0; background: var(--nuit-profond); z-index: 500; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  /* APPLICATION NEXSIS OVERLAY (v0 / Shadcn Style) */
+  #app-nexsis { display: none; position: fixed; inset: 0; background: var(--app-bg); z-index: 500; overflow-y: auto; -webkit-overflow-scrolling: touch; color: var(--app-text); transition: background-color 0.3s ease, color 0.3s ease; }
 
   .nexsis-header {
-    background: #060D15; border-bottom: 1px solid var(--nuit-border); padding: 12px 16px; display: flex; align-items: center;
-    justify-content: space-between; position: sticky; top: 0; z-index: 100;
+    background: var(--app-bg); border-bottom: 1px solid var(--app-border); padding: 12px 24px; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 100; transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .nexsis-badge {
-    display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; font-weight: 600;
-    background: rgba(43, 128, 255, 0.15); color: var(--info); border: 1px solid rgba(43, 128, 255, 0.3); padding: 3px 6px; border-radius: 4px;
+    display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500;
+    background: transparent; color: var(--app-text-muted); border: 1px solid var(--app-border); padding: 4px 10px; border-radius: 9999px;
   }
 
-  .app-title { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px; }
-  .app-title span { color: var(--signal); }
+  .app-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; font-family: var(--sans); }
+  .app-title span.brand { color: var(--app-text); }
 
-  .layout-wrapper { display: flex; max-width: 1100px; margin: 0 auto; padding: 16px; padding-bottom: 110px; gap: 16px; flex-direction: column; }
-  @media (min-width: 820px) { .layout-wrapper { flex-direction: row; } }
+  .layout-wrapper { display: flex; max-width: 1300px; margin: 0 auto; padding: 32px 24px; padding-bottom: 110px; gap: 32px; flex-direction: column; }
+  @media (min-width: 900px) { .layout-wrapper { flex-direction: row; } }
 
   .sidebar-interventions { width: 100%; flex-shrink: 0; }
-  @media (min-width: 820px) { .sidebar-interventions { width: 260px; } }
+  @media (min-width: 900px) { .sidebar-interventions { width: 280px; } }
 
   .inter-item {
-    background: rgba(10, 20, 32, 0.6); border: 1px solid var(--nuit-border); border-radius: 8px; padding: 12px; margin-bottom: 8px; cursor: pointer;
+    background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s;
   }
-  .inter-item.active { background: var(--nuit-card); border-color: var(--signal); box-shadow: 0 0 10px var(--signal-glow); }
+  .inter-item:hover { background: var(--app-muted); }
+  .inter-item.active { background: var(--app-card); border-color: var(--app-border-hover); box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
 
-  .inter-item-header { display: flex; justify-content: space-between; font-size: 11px; font-family: var(--mono); color: var(--doux); }
-  .inter-item-title { font-weight: 600; font-size: 13px; color: #fff; margin-top: 4px; }
+  .inter-item-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--app-text-muted); }
+  .inter-item-title { font-weight: 500; font-size: 14px; color: var(--app-text); margin-top: 4px; }
+  .inter-item-status { margin-top: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
 
-  .main-content { flex: 1; min-width: 0; }
+  .main-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
 
-  .card { background: var(--nuit-card); border: 1px solid var(--nuit-border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-  .card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--doux); margin-bottom: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+  /* CARDS */
+  .card { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); transition: background-color 0.3s, border-color 0.3s; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--app-text); margin-bottom: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; align-items: center; letter-spacing: -0.01em; }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
-  @media (min-width: 540px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 580px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
 
-  label.nexsis-label { display: block; font-size: 11px; color: var(--doux); text-transform: uppercase; margin-bottom: 4px; font-weight: 500; }
+  label.nexsis-label { display: block; font-size: 13px; color: var(--app-text); font-weight: 500; margin-bottom: 8px; }
   select.nexsis-input, input[type="text"].nexsis-input, textarea.nexsis-input {
-    width: 100%; background: var(--nuit-input); border: 1px solid var(--nuit-border); color: var(--clair); padding: 12px; border-radius: 6px; font-size: 14px; outline: none; font-family: var(--sans); -webkit-appearance: none;
+    width: 100%; background: var(--app-input); border: 1px solid var(--app-border); color: var(--app-text); padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none; font-family: var(--sans); -webkit-appearance: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
+  select.nexsis-input:focus, input[type="text"].nexsis-input:focus, textarea.nexsis-input:focus { border-color: var(--app-border-hover); box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--app-border-hover); }
 
-  .agent-card { background: rgba(10, 20, 32, 0.65); border: 1px solid var(--nuit-border); border-radius: 8px; padding: 14px; margin-bottom: 14px; }
-  .agent-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; margin-bottom: 10px; border-bottom: 1px solid rgba(30, 52, 79, 0.6); flex-wrap: wrap; gap: 6px; }
-  .agent-name { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; }
-  .agent-role-tag { font-size: 10px; font-family: var(--mono); background: rgba(143, 162, 181, 0.15); padding: 2px 6px; border-radius: 4px; }
+  /* CREW GRID (2 PER LINE COMPACT VIEW) */
+  .crew-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 1100px) { .crew-grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .chips-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-  .chip-btn { font-size: 11px; background: var(--nuit-input); border: 1px solid var(--nuit-border); color: var(--doux); padding: 6px 10px; border-radius: 16px; cursor: pointer; min-height: 32px; display: inline-flex; align-items: center; }
-  .chip-btn.selected { background: rgba(217, 113, 60, 0.2); border-color: var(--signal); color: #fff; font-weight: 500; }
+  .agent-card { background: transparent; border: 1px solid var(--app-border); padding: 20px; border-radius: 8px; display: flex; flex-direction: column; }
+  
+  .agent-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;}
+  .agent-name { font-weight: 600; font-size: 15px; color: var(--app-text); display: flex; align-items: center; gap: 12px;}
+  .agent-role-tag { font-size: 11px; font-family: var(--mono); background: var(--app-muted); color: var(--app-text-muted); border: 1px solid var(--app-border); padding: 2px 8px; border-radius: 6px; font-weight: 500;}
 
-  .slider-container { background: var(--nuit-input); border: 1px solid var(--nuit-border); border-radius: 8px; padding: 10px; }
-  .expo-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: linear-gradient(to right, var(--success), var(--warning), var(--danger)); outline: none; margin: 8px 0; }
-  .expo-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 2px solid var(--signal); cursor: pointer; }
+  /* Neutral Buttons for Selections */
+  .chips-group { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  
+  .selection-group-expo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 6px; }
+  .selection-group-epi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 6px; }
+  
+  .select-btn { font-size: 12px; font-weight: 500; background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text-muted); padding: 8px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s; }
+  .select-btn:hover { background: var(--app-muted); color: var(--app-text); }
+  
+  .chip-btn { font-size: 12px; font-weight: 500; background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text-muted); padding: 6px 14px; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s; }
+  .chip-btn:hover { background: var(--app-muted); color: var(--app-text); }
+  .chip-btn.selected { background: var(--app-primary); border-color: var(--app-primary); color: var(--app-primary-fg); }
+  
+  /* Active states without forcing red/green by default */
+  .select-btn.active { background: var(--app-primary); border-color: var(--app-primary); color: var(--app-primary-fg); }
+  .select-btn.active-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+  .select-btn.active-warning { background: var(--warning); border-color: var(--warning); color: #fff; }
+  .select-btn.active-success { background: var(--success); border-color: var(--success); color: #fff; }
 
-  .toggle-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
-  @media (min-width: 480px) { .toggle-grid { grid-template-columns: repeat(3, 1fr); } }
+  .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--app-bg); border-top: 1px solid var(--app-border); padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 12px; z-index: 100; transition: background-color 0.3s; }
+  .btn-nexsis { flex: 1; padding: 10px 16px; border-radius: 6px; border: 1px solid transparent; font-weight: 500; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; transition: all 0.2s; }
+  .btn-nexsis-primary { background: var(--app-primary); color: var(--app-primary-fg); }
+  .btn-nexsis-primary:hover { opacity: 0.9; }
+  .btn-nexsis-secondary { background: transparent; color: var(--app-text); border: 1px solid var(--app-border); }
+  .btn-nexsis-secondary:hover { background: var(--app-muted); }
 
-  .toggle-btn { display: flex; align-items: center; justify-content: space-between; background: var(--nuit-input); border: 1px solid var(--nuit-border); padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; color: var(--doux); min-height: 38px; }
-  .toggle-btn.active { background: rgba(39, 176, 104, 0.12); border-color: var(--success); color: #fff; }
-  .toggle-btn.active-danger { background: rgba(229, 77, 66, 0.15); border-color: var(--danger); color: #fff; }
-  .toggle-indicator { width: 8px; height: 8px; border-radius: 50%; background: #233548; flex-shrink: 0; }
-  .toggle-btn.active .toggle-indicator { background: var(--success); }
-  .toggle-btn.active-danger .toggle-indicator { background: var(--danger); }
+  /* MODALES NEXSIS */
+  .modal-nexsis { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); z-index: 600; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
+  .modal-nexsis-content { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; max-width: 640px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; margin: auto; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); color: var(--app-text); }
+  .modal-nexsis-header { padding: 20px 24px; border-bottom: 1px solid var(--app-border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-nexsis-body { padding: 24px; overflow-y: auto; flex: 1; }
+  .modal-nexsis-footer { padding: 16px 24px; border-top: 1px solid var(--app-border); display: flex; gap: 12px; flex-wrap: wrap; background: var(--app-bg); border-radius: 0 0 8px 8px; }
 
-  .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #060D15; border-top: 1px solid var(--nuit-border); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 10px; z-index: 100; }
-  .btn-nexsis { flex: 1; padding: 12px; border-radius: 6px; border: none; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; text-align: center; }
-  .btn-nexsis-primary { background: var(--signal); color: #fff; }
-  .btn-nexsis-secondary { background: rgba(143, 162, 181, 0.1); color: var(--clair); border: 1px solid var(--nuit-border); }
+  .workflow-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 24px 0; }
+  @media (min-width: 580px) { .workflow-grid { grid-template-columns: repeat(3, 1fr); } }
+  .workflow-card { background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .workflow-icon { font-size: 24px; margin-bottom: 12px; display: block; opacity: 0.9; }
+  .workflow-title { font-size: 13px; font-weight: 600; color: var(--app-text); margin-bottom: 6px; }
+  .workflow-text { font-size: 13px; color: var(--app-text-muted); line-height: 1.5; }
 
-  /* MODALES ET OVERLAYS */
-  .modal-nexsis { display: none; position: fixed; inset: 0; background: rgba(6, 13, 21, 0.92); backdrop-filter: blur(6px); z-index: 600; align-items: center; justify-content: center; padding: 12px; overflow-y: auto; }
-  .modal-nexsis-content { background: var(--nuit-card); border: 1px solid var(--nuit-border); border-radius: 10px; max-width: 640px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; margin: auto; }
-  .modal-nexsis-header { padding: 14px 16px; border-bottom: 1px solid var(--nuit-border); display: flex; justify-content: space-between; align-items: center; }
-  .modal-nexsis-body { padding: 16px; overflow-y: auto; flex: 1; }
-  .modal-nexsis-footer { padding: 12px 16px; border-top: 1px solid var(--nuit-border); display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .workflow-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 14px 0; }
-  @media (min-width: 540px) { .workflow-grid { grid-template-columns: repeat(3, 1fr); } }
-  .workflow-card { background: rgba(10, 20, 32, 0.8); border: 1px solid var(--nuit-border); border-radius: 8px; padding: 12px; text-align: center; }
-  .workflow-icon { font-size: 24px; margin-bottom: 4px; display: block; }
-  .workflow-title { font-size: 11px; font-weight: 700; color: var(--signal); text-transform: uppercase; }
-  .workflow-text { font-size: 10px; color: var(--doux); margin-top: 4px; }
-
-  .tox-card { background: #060D15; border: 1px solid var(--nuit-border); border-radius: 6px; padding: 12px; margin-top: 10px; font-size: 11px; }
-  .tox-header { display: flex; justify-content: space-between; font-weight: 700; color: var(--warning); border-bottom: 1px solid var(--nuit-border); padding-bottom: 6px; margin-bottom: 8px; flex-wrap: wrap; gap: 4px; }
-  .tox-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
-  @media (min-width: 540px) { .tox-grid { grid-template-columns: repeat(2, 1fr); } }
-  .tox-item { background: var(--nuit-card); padding: 8px; border-radius: 4px; border-left: 3px solid var(--signal); }
+  .tox-card { background: transparent; border: 1px solid var(--app-border); border-radius: 6px; padding: 20px; margin-top: 16px; font-size: 13px; }
+  .tox-header { display: flex; justify-content: space-between; font-weight: 600; color: var(--app-text); border-bottom: 1px solid var(--app-border); padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; }
+  .tox-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 580px) { .tox-grid { grid-template-columns: repeat(2, 1fr); } }
+  .tox-item { background: var(--app-bg); padding: 16px; border-radius: 6px; border: 1px solid var(--app-border); }
 
   /* ÉCRAN DE FIN / FEEDBACK */
-  #feedback-screen { display: none; position: fixed; inset: 0; background: var(--nuit-profond); z-index: 700; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
-  .feedback-box { background: var(--nuit-card); border: 1px solid var(--nuit-border); border-radius: 12px; max-width: 500px; width: 100%; padding: 24px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.8); margin: auto; }
+  #feedback-screen { display: none; position: fixed; inset: 0; background: var(--app-bg); z-index: 700; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; color: var(--app-text); }
+  .feedback-box { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; max-width: 480px; width: 100%; padding: 32px; text-align: left; margin: auto; }
 </style>
 </head>
 <body>
@@ -291,7 +331,7 @@
 <!-- MODALE D'AUTHENTIFICATION & DEMANDE -->
 <div id="auth-modal" class="modal-overlay">
   <div class="auth-card">
-    <button onclick="closeAuthModal()" style="position:absolute; top:14px; right:14px; background:none; border:none; color:var(--doux); cursor:pointer; font-size:16px;">✕</button>
+    <button onclick="closeAuthModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; color:#a1a1aa; cursor:pointer; font-size:18px; padding:4px;">✕</button>
 
     <div id="form-login">
       <h2 id="txt-auth-title" class="auth-title">Accès Partenaire SSSM</h2>
@@ -316,7 +356,7 @@
         <button type="submit" id="btn-send-request" class="btn-submit">Envoyer la demande d'accès</button>
       </form>
       
-      <div id="form-status-msg" style="display:none; margin-top:10px; font-size:12px; text-align:center;"></div>
+      <div id="form-status-msg" style="display:none; margin-top:12px; font-size:13px; text-align:center; font-weight:500;"></div>
       <div class="toggle-auth-mode">
         <span id="txt-has-code">Déjà un code ?</span> <a id="txt-link-login" onclick="switchAuthMode('login')">Se connecter</a>
       </div>
@@ -324,80 +364,80 @@
   </div>
 </div>
 
-<!-- MODALE RAPPEL D'UTILISATION (POST-LOGIN) -->
+<!-- MODALE RAPPEL D'UTILISATION -->
 <div id="onboarding-modal" class="modal-nexsis" style="display:none;">
   <div class="modal-nexsis-content">
     <div class="modal-nexsis-header">
-      <div id="onb-title" style="font-weight: 700; color: var(--signal); font-size: 14px;">
-        🔥 RAPPEL DU PROTOCOLE TERRAIN & CAPTEURS HAP
+      <div id="onb-title" style="font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+        Protocole Terrain & Capteurs HAP
       </div>
-      <button onclick="closeOnboardingModal()" style="background:none; border:none; color:var(--doux); cursor:pointer; font-size:16px;">✕</button>
+      <button onclick="closeOnboardingModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
     </div>
     
     <div class="modal-nexsis-body">
-      <p id="onb-desc" style="font-size: 13px; color: var(--clair); margin-top:0;">
+      <p id="onb-desc" style="font-size: 14px; color: var(--app-text-muted); margin-top:0;">
         Cette interface s'utilise <strong>en fin d'intervention par le CA/COS</strong> pour tracer la contamination de ses agents.
       </p>
 
       <div class="workflow-grid">
         <div class="workflow-card">
           <span class="workflow-icon">🦺</span>
-          <div id="wf-1-t" class="workflow-title">1. Intervention</div>
+          <div id="wf-1-t" class="workflow-title">Intervention</div>
           <div id="wf-1-d" class="workflow-text">Saisie des rôles réels, port de l'ARI/EPI & exposition.</div>
         </div>
         <div class="workflow-card">
           <span class="workflow-icon">🔬</span>
-          <div id="wf-2-t" class="workflow-title">2. Vérification de décontamination</div>
+          <div id="wf-2-t" class="workflow-title">Vérification de décontamination</div>
           <div id="wf-2-d" class="workflow-text">Liaison automatique du système au contrôle de décontamination cutané HAP.</div>
         </div>
         <div class="workflow-card">
           <span class="workflow-icon">📋</span>
-          <div id="wf-3-t" class="workflow-title">3. Registre SSSM</div>
+          <div id="wf-3-t" class="workflow-title">Registre SSSM</div>
           <div id="wf-3-d" class="workflow-text">Transmission automatique au dossier médical de l'agent.</div>
         </div>
       </div>
 
-      <div style="background: rgba(43, 128, 255, 0.1); border: 1px solid var(--info); border-radius: 6px; padding: 10px; font-size: 12px; color: var(--clair);">
-        <strong id="onb-tip-title">💡 Lien Capteurs HAP :</strong> <span id="onb-tip-desc">Le capteur de contamination cutané et le logiciel de suivi CRM sont directements connectés.</span>
+      <div style="background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 16px; font-size: 13px; color: var(--app-text-muted);">
+        <strong id="onb-tip-title" style="color: var(--app-text);">💡 Lien Capteurs HAP :</strong> <span id="onb-tip-desc">Le capteur de contamination cutané et le logiciel de suivi CRM sont directements connectés.</span>
       </div>
     </div>
 
     <div class="modal-nexsis-footer">
-      <button id="onb-btn-learn" class="btn-nexsis btn-nexsis-secondary" onclick="openLearnModal(); closeOnboardingModal();">📖 Mode Apprendre (Learn)</button>
-      <button id="onb-btn-ok" class="btn-nexsis btn-nexsis-primary" onclick="closeOnboardingModal()">J'ai compris — Accéder au registre</button>
+      <button id="onb-btn-learn" class="btn-nexsis btn-nexsis-secondary" onclick="openLearnModal(); closeOnboardingModal();" style="width: auto;">Mode Apprendre</button>
+      <button id="onb-btn-ok" class="btn-nexsis btn-nexsis-primary" onclick="closeOnboardingModal()" style="width: auto; margin-left: auto;">J'ai compris</button>
     </div>
   </div>
 </div>
 
-<!-- MODALE MENU APPRENDRE (LEARN MENU) -->
+<!-- MODALE MENU APPRENDRE -->
 <div id="learn-modal" class="modal-nexsis" style="display:none;">
   <div class="modal-nexsis-content">
     <div class="modal-nexsis-header">
-      <div id="learn-head-title" style="font-weight: 700; color: var(--info); font-size: 14px;">
-        🎓 GUIDE APPRENTISSAGE : PAS-À-PAS DU TRAÇAGE
+      <div id="learn-head-title" style="font-weight: 600; font-size: 16px;">
+        Guide Apprentissage
       </div>
-      <button onclick="closeLearnModal()" style="background:none; border:none; color:var(--doux); cursor:pointer; font-size:16px;">✕</button>
+      <button onclick="closeLearnModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
     </div>
     
-    <div class="modal-nexsis-body" style="font-size: 12px;">
-      <div style="margin-bottom: 14px; border-left: 3px solid var(--signal); padding-left: 8px;">
-        <strong id="learn-s1-t">Étape 1 : Qualification du Sinistre</strong>
-        <p id="learn-s1-d" style="color: var(--doux); margin: 2px 0 0 0;">Sélectionnez la typologie exacte (ex: Feu VL Lithium-Ion) pour ajuster le profil des contaminants (CO, HAP, COV, Métaux Lourds).</p>
+    <div class="modal-nexsis-body" style="font-size: 14px;">
+      <div style="margin-bottom: 24px; border-left: 2px solid var(--app-border-hover); padding-left: 16px;">
+        <strong id="learn-s1-t" style="color:var(--app-text);">Étape 1 : Qualification du Sinistre</strong>
+        <p id="learn-s1-d" style="color: var(--app-text-muted); margin: 6px 0 0 0;">Sélectionnez la typologie exacte (ex: Feu VL Lithium-Ion) pour ajuster le profil des contaminants (CO, HAP, COV, Métaux Lourds).</p>
       </div>
 
-      <div style="margin-bottom: 14px; border-left: 3px solid var(--warning); padding-left: 8px;">
-        <strong id="learn-s2-t">Étape 2 : Rôles de l'Équipage & EPI</strong>
-        <p id="learn-s2-d" style="color: var(--doux); margin: 2px 0 0 0;">Indiquez scrupuleusement si les EPI ont été portés. Ces informations ne sont pas partagées au commandement - usage médical uniquement.</p>
+      <div style="margin-bottom: 24px; border-left: 2px solid var(--app-border-hover); padding-left: 16px;">
+        <strong id="learn-s2-t" style="color:var(--app-text);">Étape 2 : Rôles de l'Équipage & EPI</strong>
+        <p id="learn-s2-d" style="color: var(--app-text-muted); margin: 6px 0 0 0;">Indiquez scrupuleusement si les EPI ont été portés. Ces informations ne sont pas partagées au commandement - usage médical uniquement.</p>
       </div>
 
-      <div style="margin-bottom: 14px; border-left: 3px solid var(--success); padding-left: 8px;">
-        <strong id="learn-s3-t">Étape 3 : Contrôle de contamination cutané PAH Scan</strong>
-        <p id="learn-s3-d" style="color: var(--doux); margin: 2px 0 0 0;">Assurez-vous que chaque agent a bien été contrôlé après l'intervention.</p>
+      <div style="margin-bottom: 12px; border-left: 2px solid var(--app-border-hover); padding-left: 16px;">
+        <strong id="learn-s3-t" style="color:var(--app-text);">Étape 3 : Contrôle de contamination cutané PAH Scan</strong>
+        <p id="learn-s3-d" style="color: var(--app-text-muted); margin: 6px 0 0 0;">Assurez-vous que chaque agent a bien été contrôlé après l'intervention.</p>
       </div>
     </div>
 
     <div class="modal-nexsis-footer">
-      <button id="learn-btn-close" class="btn-nexsis btn-nexsis-primary" onclick="closeLearnModal()">Fermer le guide</button>
+      <button id="learn-btn-close" class="btn-nexsis btn-nexsis-primary" onclick="closeLearnModal()" style="margin-left: auto; width: auto; padding: 10px 24px;">Fermer le guide</button>
     </div>
   </div>
 </div>
@@ -406,53 +446,52 @@
 <div id="app-nexsis">
   <header class="nexsis-header">
     <div class="app-title">
-      <span>VB SAFETY</span> | NEXSIS-EXPO
+      <span class="brand">VB SAFETY</span>
     </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <button id="app-btn-learn" class="btn-sm" onclick="openLearnModal()" style="background: rgba(43, 128, 255, 0.2); border: 1px solid var(--info); color:#fff; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:11px;">📖 Apprendre</button>
-      <div class="nexsis-badge">
-        <span style="width: 5px; height: 5px; border-radius: 50%; background: var(--info); display: inline-block;"></span>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="btn-sm" onclick="toggleTheme()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:500;" id="theme-btn">☀️ Light</button>
+      <button id="app-btn-learn" class="btn-sm" onclick="openLearnModal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:500;">Apprendre</button>
+      <div class="nexsis-badge" style="display:none;">
         SDIS - REGISTRE EXPOSITION
       </div>
-      <button id="app-btn-quit" class="btn-sm" onclick="closeApp()" style="background: rgba(225,225,225,0.1); border: 1px solid var(--nuit-border); color:#fff; padding:6px 8px; border-radius:4px; cursor:pointer; font-size:11px;">✕</button>
+      <button id="app-btn-quit" class="btn-sm" onclick="closeApp()" style="background: transparent; border: none; color:var(--app-text-muted); cursor:pointer; font-size:16px; padding: 0 4px;">✕</button>
     </div>
   </header>
 
   <div class="layout-wrapper">
     <aside class="sidebar-interventions">
-      <div id="app-sidebar-title" style="font-size: 11px; font-weight: 600; color: var(--doux); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">
-        Choix des Interventions (Chef d'Agrès)
+      <div id="app-sidebar-title" style="font-size: 13px; font-weight: 600; margin-bottom: 16px;">
+        Interventions
       </div>
 
-      <div class="inter-item active">
+      <div class="inter-item active" id="mission-1" onclick="selectMission(1)">
         <div class="inter-item-header">
           <span>#2026-88312</span>
           <span>14:22 UTC+2</span>
         </div>
         <div id="app-inter-1" class="inter-item-title">Feu de VL / Engin léger</div>
-        <div id="app-inter-status1" style="margin-top:4px; font-size:10px; color:var(--signal); font-family:var(--mono);">En cours de saisie</div>
+        <div class="inter-item-status" style="color:var(--app-text-muted);" id="status-mission-1">En cours de saisie</div>
       </div>
 
-      <div class="inter-item" style="opacity:0.6; cursor:not-allowed;" onclick="alert(currentLang==='en'?'Sealed SSSM incident.':'Intervention scellée SSSM.')">
+      <div class="inter-item" id="mission-2" onclick="selectMission(2)">
         <div class="inter-item-header">
           <span>#2026-88204</span>
           <span>09:15 UTC+2</span>
         </div>
         <div id="app-inter-2" class="inter-item-title">Feu de pavillon</div>
-        <div id="app-inter-status2" style="margin-top:4px; font-size:10px; color:var(--success); font-family:var(--mono);">🔒 Validé SSSM</div>
+        <div class="inter-item-status" style="color:var(--app-text-muted);" id="status-mission-2">Validé SSSM 🔒</div>
       </div>
     </aside>
 
     <main class="main-content">
       <section class="card">
         <div class="card-title">
-          <span id="app-card1-title">1. Typologie du Sinistre & Motif</span>
-          <span style="color: var(--signal); font-family: var(--mono);">FPT-01</span>
+          <span id="app-card1-title">Typologie du sinistre</span>
         </div>
 
         <div class="grid-2">
           <div>
-            <label id="app-lbl-nature" class="nexsis-label">Nature du Sinistre</label>
+            <label id="app-lbl-nature" class="nexsis-label">Nature du sinistre</label>
             <select id="select-nature" class="nexsis-input" onchange="handleNatureChange()">
               <option id="opt-nat-1" value="appartement">Feu d'appartement (Gros potentiel COV/HAP)</option>
               <option id="opt-nat-2" value="vl" selected>Feu de VL (Véhicule Léger)</option>
@@ -461,7 +500,7 @@
           </div>
 
           <div id="wrapper-sub-vl">
-            <label id="app-lbl-motor" class="nexsis-label">Motorisation / Carburation (Spécifique VL)</label>
+            <label id="app-lbl-motor" class="nexsis-label">Motorisation / Carburation</label>
             <select id="select-sub-vl" class="nexsis-input">
               <option id="opt-mot-1" value="thermique">Thermique - Carburation classique (Essence/Gazole)</option>
               <option id="opt-mot-2" value="gpl">GPL (Gaz de Pétrole Liquéfié)</option>
@@ -472,30 +511,38 @@
           </div>
         </div>
 
-        <div class="global-expo-box" style="margin-top:12px; background:rgba(217,113,60,0.08); border:1px solid rgba(217,113,60,0.3); border-radius:6px; padding:12px;">
-          <label id="app-lbl-globexpo" class="nexsis-label" style="color: var(--signal);">Exposition Particulière globale de la zone d'intervention</label>
+        <!-- Global Exposure Toggle -->
+        <div id="btn-show-global-expo" style="margin-top:24px;">
+          <button class="select-btn" onclick="toggleGlobalExpo()" id="txt-btn-add-glob">+ Ajouter une exposition particulière globale</button>
+        </div>
+
+        <div id="global-expo-box" style="display:none; margin-top:24px; border:1px solid var(--app-border); border-radius:6px; padding:20px; background: var(--app-bg);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label id="app-lbl-globexpo" class="nexsis-label" style="margin:0;">Exposition particulière globale</label>
+            <span onclick="toggleGlobalExpo()" style="cursor:pointer; color:var(--app-text-muted); font-size:12px;">✕</span>
+          </div>
           <input type="text" id="global-expo-text" class="nexsis-input" placeholder="Saisir une exposition particulière...">
-          <div class="btn-group-sm" style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
-            <button id="app-btn-applyall" class="btn-sm primary" onclick="applyGlobalExpoToAll()" style="font-size:11px; padding:6px 10px; background:rgba(217,113,60,0.2); border:1px solid var(--signal); color:#fff; border-radius:4px; cursor:pointer;">Appliquer à tous</button>
-            <button id="app-btn-selectpers" class="btn-sm" onclick="openSelectAgentModal()" style="font-size:11px; padding:6px 10px; background:var(--nuit-input); border:1px solid var(--nuit-border); color:#fff; border-radius:4px; cursor:pointer;">Sélectionner le personnel</button>
+          <div class="btn-group-sm" style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+            <button id="app-btn-applyall" class="btn-sm primary" onclick="applyGlobalExpoToAll()" style="font-size:13px; font-weight:500; padding:8px 16px; background:var(--app-primary); border:1px solid var(--app-primary); color:var(--app-primary-fg); border-radius:6px; cursor:pointer;">Appliquer à tous</button>
+            <button id="app-btn-selectpers" class="btn-sm" onclick="openSelectAgentModal()" style="font-size:13px; font-weight:500; padding:8px 16px; background:transparent; border:1px solid var(--app-border); color:var(--app-text); border-radius:6px; cursor:pointer;">Sélectionner le personnel</button>
           </div>
         </div>
       </section>
 
       <section class="card">
-        <div class="card-title">
-          <span id="app-card2-title">2. Engagements, Rôles, Protection ARI & Exposition Perçue</span>
+        <div class="card-title" style="margin-bottom: 24px;">
+          <span id="app-card2-title">Engagements & Protection</span>
         </div>
 
-        <div id="crew-container"></div>
+        <div id="crew-container" class="crew-grid"></div>
       </section>
     </main>
   </div>
 
   <footer class="action-bar">
-    <button id="app-btn-reset" class="btn-nexsis btn-nexsis-secondary" onclick="resetForm()">Réinitialiser</button>
-    <button id="app-btn-synth" class="btn-nexsis btn-nexsis-primary" onclick="generateAndOpenSummary()">
-      📄 Synthèse & SSSM
+    <button id="app-btn-reset" class="btn-nexsis btn-nexsis-secondary" onclick="resetForm()" style="max-width: 150px;">Réinitialiser</button>
+    <button id="app-btn-synth" class="btn-nexsis btn-nexsis-primary" onclick="generateAndOpenSummary()" style="max-width: 250px; margin-left: auto;">
+      Synthèse & SSSM
     </button>
   </footer>
 </div>
@@ -504,12 +551,12 @@
 <div id="select-modal" class="modal-nexsis">
   <div class="modal-nexsis-content" style="max-width: 420px;">
     <div class="modal-nexsis-header">
-      <div id="sel-mod-title" style="font-weight: 600; font-size: 13px;">Appliquer l'exposition particulière</div>
-      <button onclick="closeSelectModal()" style="background:none; border:none; color:var(--doux); cursor:pointer; font-size:16px;">✕</button>
+      <div id="sel-mod-title" style="font-weight: 600; font-size: 16px;">Sélection du personnel</div>
+      <button onclick="closeSelectModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
     </div>
     <div class="modal-nexsis-body" id="modal-agent-list"></div>
     <div class="modal-nexsis-footer">
-      <button id="sel-mod-btn" class="btn-nexsis btn-nexsis-primary" onclick="confirmSelectAgents()">Valider la sélection</button>
+      <button id="sel-mod-btn" class="btn-nexsis btn-nexsis-primary" onclick="confirmSelectAgents()">Valider</button>
     </div>
   </div>
 </div>
@@ -518,50 +565,50 @@
 <div id="summary-modal" class="modal-nexsis">
   <div class="modal-nexsis-content">
     <div class="modal-nexsis-header">
-      <div id="sum-mod-title" style="font-weight: 700; font-size: 14px; color: var(--clair);">
-        🔬 FICHE & ANNALES D'EXPOSITION TOXICOLOGIQUE (SSSM)
+      <div id="sum-mod-title" style="font-weight: 600; font-size: 16px;">
+        Synthèse Toxicologique
       </div>
-      <button onclick="closeSummaryModal()" style="background:none; border:none; color:var(--doux); cursor:pointer; font-size:16px;">✕</button>
+      <button onclick="closeSummaryModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
     </div>
 
     <div class="modal-nexsis-body">
       <div class="tox-card">
         <div class="tox-header">
-          <span id="tox-head-txt">COMPOSITION ESTIMÉE DU NUAGE DE COMBUSTION</span>
-          <span id="tox-nature-badge">FEU VL THERMIQUE</span>
+          <span id="tox-head-txt">Composition du nuage</span>
+          <span id="tox-nature-badge" style="background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text-muted); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 500;">Feu VL Thermique</span>
         </div>
         <div class="tox-grid">
           <div class="tox-item">
-            <strong id="tox-l-hap">HAP (Hydrocarbures Aromatiques) :</strong>
-            <div style="color: var(--doux); margin-top:2px;" id="tox-hap-val">Benzo(a)pyrène, Chrysène (Déposés sur tenue)</div>
+            <strong id="tox-l-hap" style="font-size: 13px;">HAP</strong>
+            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-hap-val">Benzo(a)pyrène, Chrysène</div>
           </div>
           <div class="tox-item">
-            <strong id="tox-l-co">CO / Cyano-gaz :</strong>
-            <div style="color: var(--doux); margin-top:2px;" id="tox-co-val">Monoxyde de Carbone, HCN (Aigu inhalation)</div>
+            <strong id="tox-l-co" style="font-size: 13px;">CO / Cyano-gaz</strong>
+            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-co-val">Monoxyde de Carbone, HCN</div>
           </div>
           <div class="tox-item">
-            <strong id="tox-l-met">Métaux Lourds :</strong>
-            <div style="color: var(--doux); margin-top:2px;" id="tox-metaux-val">Plomb, Nickel, Cadmium, Cobalt</div>
+            <strong id="tox-l-met" style="font-size: 13px;">Métaux Lourds</strong>
+            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-metaux-val">Plomb, Nickel, Cadmium, Cobalt</div>
           </div>
           <div class="tox-item">
-            <strong id="tox-l-cov">COV / Aldéhydes :</strong>
-            <div style="color: var(--doux); margin-top:2px;" id="tox-cov-val">Benzène, Formaldéhyde, Acroléine</div>
+            <strong id="tox-l-cov" style="font-size: 13px;">COV / Aldéhydes</strong>
+            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-cov-val">Benzène, Formaldéhyde, Acroléine</div>
           </div>
         </div>
       </div>
 
-      <div style="margin-top: 16px;">
-        <div id="sum-bilan-title" style="font-size:11px; font-weight:700; color:var(--signal); text-transform:uppercase; margin-bottom:6px;">
-          Bilan de l'Équipage & Impact du port de l'ARI
+      <div style="margin-top: 32px;">
+        <div id="sum-bilan-title" style="font-size:14px; font-weight:600; margin-bottom:16px;">
+          Bilan de l'équipage
         </div>
         <div id="step-2-summary"></div>
       </div>
     </div>
 
-    <div class="modal-nexsis-footer">
-      <button id="sum-btn-adjust" class="btn-nexsis btn-nexsis-secondary" onclick="closeSummaryModal()">Ajuster</button>
-      <button id="sum-btn-send" class="btn-nexsis btn-nexsis-primary" onclick="confirmSend()">
-        ✓ Transmettre au registre médical SSSM
+    <div class="modal-nexsis-footer" style="justify-content: flex-end;">
+      <button id="sum-btn-adjust" class="btn-nexsis btn-nexsis-secondary" onclick="closeSummaryModal()" style="max-width: 150px;">Ajuster</button>
+      <button id="sum-btn-send" class="btn-nexsis btn-nexsis-primary" onclick="confirmSend()" style="max-width: 200px;">
+        Transmettre
       </button>
     </div>
   </div>
@@ -571,39 +618,38 @@
 <div id="feedback-screen">
   <div style="display: flex; align-items: center; justify-content: center; min-height: 100%; width: 100%;">
     <div class="feedback-box">
-      <div style="font-size: 28px; margin-bottom: 6px;">🎉</div>
-      <h2 id="fb-h2" style="font-family: var(--serif); font-size: 20px; color: #fff; margin-top: 0; margin-bottom: 4px;">Transmission validée !</h2>
-      <p id="fb-p" style="font-size: 12px; color: var(--doux); margin-bottom: 14px;">
-        Le registre d'exposition a bien été transmis au SSSM. Donnez-nous votre avis pour améliorer l'outil.
+      <h2 id="fb-h2" style="font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 12px;">Transmission validée</h2>
+      <p id="fb-p" style="font-size: 14px; color: var(--app-text-muted); margin-bottom: 24px;">
+        Le registre d'exposition a bien été transmis. Donnez-nous votre avis pour améliorer l'outil.
       </p>
       
       <form id="feedback-form" onsubmit="handleFeedbackSubmit(event)">
-        <div style="margin-bottom: 10px;">
-          <label id="fb-lbl-rate" class="nexsis-label">Note globale (1 à 5 étoiles)</label>
+        <div style="margin-bottom: 20px;">
+          <label id="fb-lbl-rate" class="nexsis-label">Note globale</label>
           <select id="fb-rating" class="nexsis-input">
-            <option value="★★★★★ (5/5 - Excellent)">★★★★★ (5/5 - Excellent)</option>
-            <option value="★★★★☆ (4/5 - Très bien)">★★★★☆ (4/5 - Très bien)</option>
-            <option value="★★★☆☆ (3/5 - Correct)">★★★☆☆ (3/5 - Correct)</option>
-            <option value="★★☆☆☆ (2/5 - Améliorable)">★★☆☆☆ (2/5 - Améliorable)</option>
-            <option value="★☆☆☆☆ (1/5 - Insatisfaisant)">★☆☆☆☆ (1/5 - Insatisfaisant)</option>
+            <option value="★★★★★ (5/5 - Excellent)">5/5 - Excellent</option>
+            <option value="★★★★☆ (4/5 - Très bien)">4/5 - Très bien</option>
+            <option value="★★★☆☆ (3/5 - Correct)">3/5 - Correct</option>
+            <option value="★★☆☆☆ (2/5 - Améliorable)">2/5 - Améliorable</option>
+            <option value="★☆☆☆☆ (1/5 - Insatisfaisant)">1/5 - Insatisfaisant</option>
           </select>
         </div>
 
-        <div style="margin-bottom: 10px;">
-          <label id="fb-lbl-comm" class="nexsis-label">Votre avis / Suggestions d'amélioration</label>
-          <textarea id="fb-comment" class="nexsis-input" rows="2" placeholder="Qu'avez-vous pensé de l'ergonomie ?" required></textarea>
+        <div style="margin-bottom: 20px;">
+          <label id="fb-lbl-comm" class="nexsis-label">Suggestions</label>
+          <textarea id="fb-comment" class="nexsis-input" rows="3" placeholder="Qu'avez-vous pensé de l'ergonomie ?" required></textarea>
         </div>
 
-        <div style="margin-bottom: 14px;">
-          <label id="fb-lbl-email" class="nexsis-label">Votre email (optionnel pour échange)</label>
+        <div style="margin-bottom: 32px;">
+          <label id="fb-lbl-email" class="nexsis-label">Votre email (optionnel)</label>
           <input type="email" id="fb-email" class="nexsis-input" placeholder="prenom.nom@sdis.fr">
         </div>
 
-        <div id="fb-status" style="display:none; font-size:11px; margin-bottom:10px; text-align:center;"></div>
+        <div id="fb-status" style="display:none; font-size:13px; margin-bottom:16px; color: var(--success);"></div>
 
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button type="submit" id="fb-btn-submit" class="btn-nexsis btn-nexsis-primary">Envoyer mon avis</button>
-          <button type="button" id="fb-btn-skip" class="btn-nexsis btn-nexsis-secondary" onclick="returnToHome()">Ignorer & Accueil</button>
+        <div style="display: flex; gap: 12px;">
+          <button type="submit" id="fb-btn-submit" class="btn-nexsis btn-nexsis-primary">Envoyer</button>
+          <button type="button" id="fb-btn-skip" class="btn-nexsis btn-nexsis-secondary" onclick="returnToHome()">Ignorer</button>
         </div>
       </form>
     </div>
@@ -615,7 +661,7 @@ let currentLang = 'fr';
 
 const dictionary = {
   fr: {
-    pageTitle: "VB Safety | Mesure de l'exposition professionnelle",
+    pageTitle: "VB Safety",
     metaDesc: "VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle pour les services de secours et l'industrie.",
     write: "Nous écrire",
     headline1: "Le risque est reconnu.",
@@ -640,57 +686,59 @@ const dictionary = {
     reqSuccess: "✓ Votre demande d'accès Beta a été transmise à beta-acces@vb-safety.com.",
     reqFallback: "Ouverture du client mail pour transmission directe...",
     reqTransmitting: "Transmission en cours...",
-    // Onboarding modal
-    onbTitle: "🔥 RAPPEL DU PROTOCOLE TERRAIN & CAPTEURS HAP",
+    onbTitle: "Protocole Terrain & Capteurs HAP",
     onbDesc: "Cette interface s'utilise <strong>en fin d'intervention par le CA/COS</strong> pour tracer la contamination de ses agents.",
-    wf1T: "1. Intervention", wf1D: "Saisie des rôles réels, port de l'ARI/EPI & exposition.",
-    wf2T: "2. Vérification de décontamination", wf2D: "Liaison automatique du système au contrôle de décontamination cutané HAP.",
-    wf3T: "3. Registre SSSM", wf3D: "Transmission automatique au dossier médical de l'agent.",
+    wf1T: "Intervention", wf1D: "Saisie des rôles réels, port de l'ARI/EPI & exposition.",
+    wf2T: "Vérification", wf2D: "Liaison automatique du système au contrôle de décontamination cutané HAP.",
+    wf3T: "Registre SSSM", wf3D: "Transmission automatique au dossier médical de l'agent.",
     onbTipTitle: "💡 Lien Capteurs HAP :",
     onbTipDesc: "Le capteur de contamination cutané et le logiciel de suivi CRM sont directements connectés.",
-    onbBtnLearn: "📖 Mode Apprendre (Learn)",
-    onbBtnOk: "J'ai compris — Accéder au registre",
-    // Learn modal
-    learnHeadTitle: "🎓 GUIDE APPRENTISSAGE : PAS-À-PAS DU TRAÇAGE",
+    onbBtnLearn: "Mode Apprendre",
+    onbBtnOk: "J'ai compris",
+    learnHeadTitle: "Guide Apprentissage",
     learnS1T: "Étape 1 : Qualification du Sinistre",
     learnS1D: "Sélectionnez la typologie exacte (ex: Feu VL Lithium-Ion) pour ajuster le profil des contaminants (CO, HAP, COV, Métaux Lourds).",
     learnS2T: "Étape 2 : Rôles de l'Équipage & EPI",
     learnS2D: "Indiquez scrupuleusement si les EPI ont été portés. Ces informations ne sont pas partagées au commandement - usage médical uniquement.",
     learnS3T: "Étape 3 : Contrôle de contamination cutané PAH Scan",
     learnS3D: "Assurez-vous que chaque agent a bien été contrôlé après l'intervention.",
-    learnBtnClose: "Fermer le guide",
-    // App interface
-    appSidebarTitle: "Choix des Interventions (Chef d'Agrès)",
+    learnBtnClose: "Fermer",
+    appSidebarTitle: "Interventions",
     appInter1: "Feu de VL / Engin léger", appInterStatus1: "En cours de saisie",
-    appInter2: "Feu de pavillon", appInterStatus2: "🔒 Validé SSSM",
-    appCard1Title: "1. Typologie du Sinistre & Motif",
-    appLblNature: "Nature du Sinistre",
+    appInter2: "Feu de pavillon", appInterStatus2: "Validé SSSM 🔒",
+    appCard1Title: "Typologie du sinistre",
+    appLblNature: "Nature du sinistre",
     optNat1: "Feu d'appartement (Gros potentiel COV/HAP)", optNat2: "Feu de VL (Véhicule Léger)", optNat3: "Feu de pavillon / Structure",
-    appLblMotor: "Motorisation / Carburation (Spécifique VL)",
+    appLblMotor: "Motorisation / Carburation",
     optMot1: "Thermique - Carburation classique (Essence/Gazole)", optMot2: "GPL (Gaz de Pétrole Liquéfié)", optMot3: "Hybride", optMot4: "Électrique classique", optMot5: "Lithium-Ion (Pac batterie emballement - HF/Lithium)",
-    appLblGlobExpo: "Exposition Particulière globale de la zone d'intervention",
+    btnAddGlob: "+ Ajouter une exposition particulière globale",
+    appLblGlobExpo: "Exposition particulière globale",
     appPlaceholderGlob: "Saisir une exposition particulière...",
     appBtnApplyAll: "Appliquer à tous", appBtnSelectPers: "Sélectionner le personnel",
-    appCard2Title: "2. Engagements, Rôles, Protection ARI & Exposition Perçue",
-    appBtnReset: "Réinitialiser", appBtnSynth: "📄 Synthèse & SSSM",
-    // Modals
-    selModTitle: "Appliquer l'exposition particulière", selModBtn: "Valider la sélection",
-    sumModTitle: "🔬 FICHE & ANNALES D'EXPOSITION TOXICOLOGIQUE (SSSM)",
-    toxHeadTxt: "COMPOSITION ESTIMÉE DU NUAGE DE COMBUSTION",
-    toxLHap: "HAP (Hydrocarbures Aromatiques) :", toxLCo: "CO / Cyano-gaz :", toxLMet: "Métaux Lourds :", toxLCov: "COV / Aldéhydes :",
-    sumBilanTitle: "Bilan de l'Équipage & Impact du port de l'ARI",
-    sumBtnAdjust: "Ajuster", sumBtnSend: "✓ Transmettre au registre médical SSSM",
-    // Feedback
-    fbH2: "Transmission validée !",
-    fbP: "Le registre d'exposition a bien été transmis au SSSM. Donnez-nous votre avis pour améliorer l'outil.",
-    fbLblRate: "Note globale (1 à 5 étoiles)",
-    fbLblComm: "Votre avis / Suggestions d'amélioration",
+    appCard2Title: "Engagements & Protection",
+    appBtnReset: "Réinitialiser", appBtnSynth: "Synthèse & SSSM",
+    selModTitle: "Sélection du personnel", selModBtn: "Valider",
+    sumModTitle: "Synthèse Toxicologique",
+    toxHeadTxt: "Composition du nuage",
+    toxLHap: "HAP", toxLCo: "CO / Cyano-gaz", toxLMet: "Métaux Lourds", toxLCov: "COV / Aldéhydes",
+    sumBilanTitle: "Bilan de l'équipage",
+    sumBtnAdjust: "Ajuster", sumBtnSend: "Transmettre",
+    fbH2: "Transmission validée",
+    fbP: "Le registre d'exposition a bien été transmis. Donnez-nous votre avis pour améliorer l'outil.",
+    fbLblRate: "Note globale",
+    fbLblComm: "Suggestions",
     fbCommPlace: "Qu'avez-vous pensé de l'ergonomie ?",
-    fbLblEmail: "Votre email (optionnel pour échange)",
-    fbBtnSubmit: "Envoyer mon avis", fbBtnSkip: "Ignorer & Accueil"
+    fbLblEmail: "Votre email (optionnel)",
+    fbBtnSubmit: "Envoyer", fbBtnSkip: "Ignorer",
+    
+    // GDO Exposures
+    expo0Title: "Nulle", expo0Desc: "Aucun engagement en zone d'exclusion",
+    expo1Title: "Faible", expo1Desc: "Évolution en zone de soutien (hors atmosphère toxique)",
+    expo2Title: "Moyenne", expo2Desc: "Évolution en atmosphère viciée (fumées diffuses)",
+    expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion d'incendie)"
   },
   en: {
-    pageTitle: "VB Safety | Occupational Exposure Measurement",
+    pageTitle: "VB Safety",
     metaDesc: "VB Safety develops innovative occupational exposure measurement solutions for emergency response units and industrial environments.",
     write: "Contact us",
     headline1: "The risk is known.",
@@ -715,80 +763,77 @@ const dictionary = {
     reqSuccess: "✓ Your Beta access request has been sent to beta-acces@vb-safety.com.",
     reqFallback: "Opening email client for direct transmission...",
     reqTransmitting: "Sending request...",
-    // Onboarding modal
-    onbTitle: "🔥 FIELD PROTOCOL & PAH SENSORS REMINDER",
+    onbTitle: "Field Protocol & PAH Sensors",
     onbDesc: "This interface is used <strong>at the end of an incident by the IC (Incident Commander)</strong> to track crew contamination.",
-    wf1T: "1. Incident", wf1D: "Entry of actual roles, SCBA/PPE wear & exposure.",
-    wf2T: "2. Decontamination Check", wf2D: "Automatic system linking to skin PAH decontamination monitoring.",
-    wf3T: "3. Health Register", wf3D: "Automatic transmission to the firefighter medical file.",
+    wf1T: "Incident", wf1D: "Entry of actual roles, SCBA/PPE wear & exposure.",
+    wf2T: "Check", wf2D: "Automatic system linking to skin PAH decontamination monitoring.",
+    wf3T: "Health Register", wf3D: "Automatic transmission to the firefighter medical file.",
     onbTipTitle: "💡 PAH Sensor Link:",
     onbTipDesc: "The skin contamination sensor and CRM tracking software are directly connected.",
-    onbBtnLearn: "📖 Learn Mode",
-    onbBtnOk: "I understand — Access Register",
-    // Learn modal
-    learnHeadTitle: "🎓 LEARNING GUIDE: STEP-BY-STEP TRACKING",
+    onbBtnLearn: "Learn Mode",
+    onbBtnOk: "I understand",
+    learnHeadTitle: "Learning Guide",
     learnS1T: "Step 1: Incident Classification",
     learnS1D: "Select the exact typology (e.g., Li-Ion EV fire) to adjust contaminant profiles (CO, PAH, VOCs, Heavy Metals).",
     learnS2T: "Step 2: Crew Roles & PPE",
     learnS2D: "Scrupulously indicate whether PPE was worn. This information is not shared with command - medical use only.",
     learnS3T: "Step 3: PAH Scan Skin Contamination Check",
     learnS3D: "Ensure each agent has been properly checked post-incident.",
-    learnBtnClose: "Close Guide",
-    // App interface
-    appSidebarTitle: "Incident Selection (Crew Leader)",
+    learnBtnClose: "Close",
+    appSidebarTitle: "Incidents",
     appInter1: "Light Vehicle Fire", appInterStatus1: "Drafting",
-    appInter2: "Structure Fire", appInterStatus2: "🔒 Validated SSSM",
-    appCard1Title: "1. Incident Typology & Motive",
+    appInter2: "Structure Fire", appInterStatus2: "Validated 🔒",
+    appCard1Title: "Incident Typology",
     appLblNature: "Incident Nature",
     optNat1: "Apartment Fire (High VOC/PAH potential)", optNat2: "Light Vehicle Fire", optNat3: "Structure / House Fire",
-    appLblMotor: "Motorization / Fuel (Vehicle Specific)",
+    appLblMotor: "Motorization / Fuel",
     optMot1: "Thermal - Classic Fuel (Gasoline/Diesel)", optMot2: "LPG (Liquefied Petroleum Gas)", optMot3: "Hybrid", optMot4: "Classic Electric", optMot5: "Lithium-Ion (Battery Thermal Runaway - HF/Lithium)",
-    appLblGlobExpo: "Global Particular Exposure of Intervention Zone",
+    btnAddGlob: "+ Add a particular global exposure",
+    appLblGlobExpo: "Global Exposure",
     appPlaceholderGlob: "Enter particular exposure...",
     appBtnApplyAll: "Apply to all", appBtnSelectPers: "Select personnel",
-    appCard2Title: "2. Engagements, Roles, SCBA Protection & Perceived Exposure",
-    appBtnReset: "Reset", appBtnSynth: "📄 Summary & SSSM",
-    // Modals
-    selModTitle: "Apply particular exposure", selModBtn: "Validate selection",
-    sumModTitle: "🔬 TOXICOLOGICAL EXPOSURE SHEET & RECORDS (SSSM)",
-    toxHeadTxt: "ESTIMATED COMBUSTION PLUME COMPOSITION",
-    toxLHap: "PAHs (Polycyclic Aromatics):", toxLCo: "CO / Cyano-gas:", toxLMet: "Heavy Metals:", toxLCov: "VOCs / Aldehydes:",
-    sumBilanTitle: "Crew Summary & SCBA Protection Impact",
-    sumBtnAdjust: "Adjust", sumBtnSend: "✓ Transmit to SSSM Medical Register",
-    // Feedback
-    fbH2: "Transmission Validated!",
-    fbP: "The exposure register has been successfully transmitted to SSSM. Give us your feedback to improve the tool.",
-    fbLblRate: "Overall rating (1 to 5 stars)",
-    fbLblComm: "Your feedback / Improvement suggestions",
+    appCard2Title: "Engagements & Protection",
+    appBtnReset: "Reset", appBtnSynth: "Summary & SSSM",
+    selModTitle: "Personnel Selection", selModBtn: "Validate",
+    sumModTitle: "Toxicological Summary",
+    toxHeadTxt: "Plume Composition",
+    toxLHap: "PAHs", toxLCo: "CO / Cyano-gas", toxLMet: "Heavy Metals", toxLCov: "VOCs / Aldehydes",
+    sumBilanTitle: "Crew Summary",
+    sumBtnAdjust: "Adjust", sumBtnSend: "Transmit",
+    fbH2: "Transmission Validated",
+    fbP: "The exposure register has been successfully transmitted. Give us your feedback to improve the tool.",
+    fbLblRate: "Overall rating",
+    fbLblComm: "Suggestions",
     fbCommPlace: "What did you think of the ergonomics?",
-    fbLblEmail: "Your email (optional for contact)",
-    fbBtnSubmit: "Send feedback", fbBtnSkip: "Skip & Home"
+    fbLblEmail: "Your email (optional)",
+    fbBtnSubmit: "Send", fbBtnSkip: "Skip",
+    
+    // GDO Exposures translated to standard Hazmat/Fire terms
+    expo0Title: "None", expo0Desc: "No entry in the hot zone / exclusion zone",
+    expo1Title: "Low", expo1Desc: "Operating in support zone (outside toxic atmosphere)",
+    expo2Title: "Medium", expo2Desc: "Operating in vitiated atmosphere (diffuse smoke)",
+    expo3Title: "High", expo3Desc: "Operating in smoke-filled environment (Hot zone)"
   }
 };
 
 function setLanguage(lang) {
   currentLang = lang;
   const t = dictionary[lang];
-
   document.getElementById('meta-title').textContent = t.pageTitle;
   document.getElementById('meta-desc').setAttribute('content', t.metaDesc);
-
   document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-  
   document.getElementById('txt-write').textContent = t.write;
   document.getElementById('txt-headline-1').textContent = t.headline1;
   document.getElementById('txt-headline-2').textContent = t.headline2;
   document.getElementById('txt-description').textContent = t.description;
   document.getElementById('txt-btn-cmr').textContent = t.btnCmr;
-
   document.getElementById('txt-auth-title').textContent = t.authTitle;
   document.getElementById('txt-auth-sub').textContent = t.authSub;
   document.getElementById('input-pass').placeholder = t.inputPassPlaceholder;
   document.getElementById('txt-btn-access').textContent = t.btnAccess;
   document.getElementById('txt-no-access').textContent = t.noAccess;
   document.getElementById('txt-link-request').textContent = t.linkRequest;
-
   document.getElementById('txt-req-title').textContent = t.reqTitle;
   document.getElementById('txt-req-sub').innerHTML = t.reqSub;
   document.getElementById('req-nom').placeholder = t.phName;
@@ -798,7 +843,6 @@ function setLanguage(lang) {
   document.getElementById('txt-has-code').textContent = t.hasCode;
   document.getElementById('txt-link-login').textContent = t.linkLogin;
 
-  // Onboarding translations
   document.getElementById('onb-title').textContent = t.onbTitle;
   document.getElementById('onb-desc').innerHTML = t.onbDesc;
   document.getElementById('wf-1-t').textContent = t.wf1T; document.getElementById('wf-1-d').textContent = t.wf1D;
@@ -809,32 +853,32 @@ function setLanguage(lang) {
   document.getElementById('onb-btn-learn').textContent = t.onbBtnLearn;
   document.getElementById('onb-btn-ok').textContent = t.onbBtnOk;
 
-  // Learn translations
   document.getElementById('learn-head-title').textContent = t.learnHeadTitle;
   document.getElementById('learn-s1-t').textContent = t.learnS1T; document.getElementById('learn-s1-d').textContent = t.learnS1D;
   document.getElementById('learn-s2-t').textContent = t.learnS2T; document.getElementById('learn-s2-d').textContent = t.learnS2D;
   document.getElementById('learn-s3-t').textContent = t.learnS3T; document.getElementById('learn-s3-d').textContent = t.learnS3D;
   document.getElementById('learn-btn-close').textContent = t.learnBtnClose;
 
-  // App UI translations
   document.getElementById('app-sidebar-title').textContent = t.appSidebarTitle;
-  document.getElementById('app-inter-1').textContent = t.appInter1; document.getElementById('app-inter-status1').textContent = t.appInterStatus1;
-  document.getElementById('app-inter-2').textContent = t.appInter2; document.getElementById('app-inter-status2').textContent = t.appInterStatus2;
+  document.getElementById('app-inter-1').textContent = t.appInter1; document.getElementById('status-mission-1').textContent = t.appInterStatus1;
+  document.getElementById('app-inter-2').textContent = t.appInter2; document.getElementById('status-mission-2').textContent = t.appInterStatus2;
   document.getElementById('app-card1-title').textContent = t.appCard1Title;
   document.getElementById('app-lbl-nature').textContent = t.appLblNature;
   document.getElementById('opt-nat-1').textContent = t.optNat1; document.getElementById('opt-nat-2').textContent = t.optNat2; document.getElementById('opt-nat-3').textContent = t.optNat3;
   document.getElementById('app-lbl-motor').textContent = t.appLblMotor;
   document.getElementById('opt-mot-1').textContent = t.optMot1; document.getElementById('opt-mot-2').textContent = t.optMot2; document.getElementById('opt-mot-3').textContent = t.optMot3; document.getElementById('opt-mot-4').textContent = t.optMot4; document.getElementById('opt-mot-5').textContent = t.optMot5;
+  
+  document.getElementById('txt-btn-add-glob').textContent = t.btnAddGlob;
   document.getElementById('app-lbl-globexpo').textContent = t.appLblGlobExpo;
   document.getElementById('global-expo-text').placeholder = t.appPlaceholderGlob;
   document.getElementById('app-btn-applyall').textContent = t.appBtnApplyAll;
   document.getElementById('app-btn-selectpers').textContent = t.appBtnSelectPers;
+  
   document.getElementById('app-card2-title').textContent = t.appCard2Title;
   document.getElementById('app-btn-reset').textContent = t.appBtnReset;
   document.getElementById('app-btn-synth').textContent = t.appBtnSynth;
-
-  // Modals & Feedback
   document.getElementById('sel-mod-title').textContent = t.selModTitle; document.getElementById('sel-mod-btn').textContent = t.selModBtn;
+  
   document.getElementById('sum-mod-title').textContent = t.sumModTitle;
   document.getElementById('tox-head-txt').textContent = t.toxHeadTxt;
   document.getElementById('tox-l-hap').textContent = t.toxLHap; document.getElementById('tox-l-co').textContent = t.toxLCo;
@@ -850,6 +894,8 @@ function setLanguage(lang) {
   document.getElementById('fb-lbl-email').textContent = t.fbLblEmail;
   document.getElementById('fb-btn-submit').textContent = t.fbBtnSubmit;
   document.getElementById('fb-btn-skip').textContent = t.fbBtnSkip;
+  
+  renderCrew();
 }
 
 function openAuthModal() {
@@ -874,10 +920,38 @@ function checkAuth() {
   }
 }
 
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
+}
+
 function openOnboardingModal() { document.getElementById('onboarding-modal').style.display = 'flex'; }
 function closeOnboardingModal() { document.getElementById('onboarding-modal').style.display = 'none'; }
 function openLearnModal() { document.getElementById('learn-modal').style.display = 'flex'; }
 function closeLearnModal() { document.getElementById('learn-modal').style.display = 'none'; }
+
+function selectMission(id) {
+  if (id === 2) {
+    alert(currentLang==='en'?'Sealed SSSM incident. Cannot edit.':'Intervention scellée SSSM. Modification impossible.');
+    return;
+  }
+  document.querySelectorAll('.inter-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('mission-' + id).classList.add('active');
+}
+
+function toggleGlobalExpo() {
+  const btn = document.getElementById('btn-show-global-expo');
+  const box = document.getElementById('global-expo-box');
+  
+  if (box.style.display === 'none') {
+    box.style.display = 'block';
+    btn.style.display = 'none';
+  } else {
+    box.style.display = 'none';
+    btn.style.display = 'block';
+  }
+}
 
 async function handleRealEmailSubmit(event) {
   event.preventDefault();
@@ -956,7 +1030,7 @@ async function handleFeedbackSubmit(event) {
 
     if (response.ok) {
       statusBox.style.color = "var(--success)";
-      statusBox.textContent = currentLang === 'en' ? "✓ Thank you! Feedback sent to beta-acces@vb-safety.com." : "✓ Merci ! Votre avis a bien été envoyé à beta-acces@vb-safety.com.";
+      statusBox.textContent = currentLang === 'en' ? "✓ Thank you! Feedback sent." : "✓ Merci ! Votre avis a bien été envoyé.";
       statusBox.style.display = 'block';
       setTimeout(() => { returnToHome(); }, 3000);
     } else {
@@ -976,25 +1050,20 @@ async function handleFeedbackSubmit(event) {
     }, 1000);
   } finally {
     btn.disabled = false;
-    btn.textContent = currentLang === 'en' ? "Send feedback" : "Envoyer mon avis";
+    btn.textContent = currentLang === 'en' ? "Send" : "Envoyer";
   }
 }
 
 function closeApp() { document.getElementById('app-nexsis').style.display = 'none'; }
 
-const expoLevels = [
-  { value: 0, label: "Nulle / None", color: "var(--success)", desc: "Aucun contact / No direct contact" },
-  { value: 1, label: "Faible / Low", color: "var(--info)", desc: "Zone périphérique / Perimeter zone" },
-  { value: 2, label: "Moyenne / Medium", color: "var(--warning)", desc: "Atmosphère viciée / Smoky atmosphere" },
-  { value: 3, label: "Forte / High", color: "var(--danger)", desc: "Fumées épaisses / Thick smoke" }
-];
-
+// Crew data initialized fully neutral (null)
 let crew = [
-  { id: 1, roleTag: "Chef d'agrès", name: "Adj Thomas BERNARD", availableRoles: ['commandement', 'attaque', 'alimentation', 'deblais', 'rangement'], selectedRoles: ['commandement'], completeEpi: true, ari: false, ffp3: true, expoLevel: 1, customExpo: "", decontamTime: "14h50", decontamDate: "21/09/2026" },
-  { id: 2, roleTag: "Conducteur", name: "Sgt-C Laurent DUBOIS", availableRoles: ['conducteur', 'attaque', 'alimentation', 'deblais', 'rangement'], selectedRoles: ['conducteur'], completeEpi: true, ari: false, ffp3: true, expoLevel: 1, customExpo: "", decontamTime: "14h42", decontamDate: "21/09/2026" },
-  { id: 3, roleTag: "Chef BAT", name: "Sgt Alexandre MARTIN", availableRoles: ['attaque', 'alimentation', 'deblais', 'rangement'], selectedRoles: ['attaque', 'deblais'], completeEpi: true, ari: true, ffp3: true, expoLevel: 3, customExpo: "", decontamTime: "14h50", decontamDate: "21/09/2026" },
-  { id: 4, roleTag: "Équipier BAT", name: "Cpl Nicolas PETIT", availableRoles: ['attaque', 'alimentation', 'deblais', 'rangement'], selectedRoles: ['attaque', 'deblais'], completeEpi: true, ari: false, ffp3: true, expoLevel: 3, customExpo: "", decontamTime: "14h50", decontamDate: "21/09/2026" },
-  { id: 5, roleTag: "Équipier BAL", name: "Sap Julien LEROY", availableRoles: ['attaque', 'alimentation', 'deblais', 'rangement'], selectedRoles: ['alimentation', 'rangement'], completeEpi: true, ari: false, ffp3: true, expoLevel: 1, customExpo: "", decontamTime: "14h45", decontamDate: "21/09/2026" }
+  { id: 1, roleTag: "CA", name: "Adj Thomas BERNARD", availableRoles: ['Commandement', 'Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 2, roleTag: "COND", name: "Sgt-C Laurent DUBOIS", availableRoles: ['Conducteur', 'Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 3, roleTag: "CHEF BAL", name: "Sgt Alexandre MARTIN", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 4, roleTag: "ÉQUIPIER BAL", name: "Sap Julien LEROY", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 5, roleTag: "CHEF BAT", name: "Adj Cédric FAURE", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 6, roleTag: "ÉQUIPIER BAT", name: "Cpl Nicolas PETIT", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" }
 ];
 
 function handleNatureChange() {
@@ -1006,6 +1075,7 @@ function handleNatureChange() {
 function renderCrew() {
   const container = document.getElementById('crew-container');
   container.innerHTML = '';
+  const t = dictionary[currentLang];
 
   crew.forEach((agent, index) => {
     const card = document.createElement('div');
@@ -1013,73 +1083,96 @@ function renderCrew() {
 
     const rolesHtml = agent.availableRoles.map(rKey => {
       const isSelected = agent.selectedRoles.includes(rKey);
-      const labelMap = { commandement: 'Commandement', conducteur: 'Conducteur', attaque: 'Attaque', alimentation: 'Alimentation', deblais: 'Déblais', rangement: 'Nettoyage' };
-      return `<div class="chip-btn ${isSelected ? 'selected' : ''}" onclick="toggleRole(${index}, '${rKey}')">${labelMap[rKey]}</div>`;
+      return `<div class="chip-btn ${isSelected ? 'selected' : ''}" onclick="toggleRole(${index}, '${rKey}')">${rKey}</div>`;
     }).join('');
-
-    const currentExpo = expoLevels[agent.expoLevel];
 
     card.innerHTML = `
       <div class="agent-header">
         <div class="agent-name">
           ${agent.name}
-          <span class="agent-role-tag">${agent.roleTag}</span>
         </div>
+        <div class="agent-role-tag">${agent.roleTag}</div>
       </div>
 
-      <div style="margin-bottom: 10px;">
-        <label class="nexsis-label">${currentLang==='en'?'Roles & Functions':'Fonction & Rôles exécutés'}</label>
+      <div style="margin-bottom: 24px;">
+        <label class="nexsis-label">${currentLang==='en'?'Roles executed':'Fonction & Rôles exécutés'}</label>
         <div class="chips-group">${rolesHtml}</div>
       </div>
 
-      <div style="margin-bottom: 12px;">
-        <label class="nexsis-label">${currentLang==='en'?'Perceived Exposure':'Exposition Perçue'}</label>
-        <div class="slider-container">
-          <input type="range" min="0" max="3" step="1" class="expo-slider" value="${agent.expoLevel}" onchange="updateExpoSlider(${index}, this.value)">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-size:11px;">
-            <span style="color: ${currentExpo.color}; font-weight:600;">Niveau : ${currentExpo.label}</span>
-          </div>
+      <div style="margin-bottom: 24px;">
+        <label class="nexsis-label">${currentLang==='en'?'Perceived Exposure (Operational Terminology)':'Exposition Perçue (Terminologie GDO)'}</label>
+        <div class="selection-group-expo">
+          <button class="select-btn ${agent.expoLevel === 0 ? 'active' : ''}" onclick="setExpo(${index}, 0)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
+            <strong style="margin-bottom:4px;">${t.expo0Title}</strong> 
+            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo0Desc}</span>
+          </button>
+          <button class="select-btn ${agent.expoLevel === 1 ? 'active' : ''}" onclick="setExpo(${index}, 1)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
+            <strong style="margin-bottom:4px;">${t.expo1Title}</strong> 
+            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo1Desc}</span>
+          </button>
+          <button class="select-btn ${agent.expoLevel === 2 ? 'active-warning' : ''}" onclick="setExpo(${index}, 2)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
+            <strong style="margin-bottom:4px;">${t.expo2Title}</strong> 
+            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo2Desc}</span>
+          </button>
+          <button class="select-btn ${agent.expoLevel === 3 ? 'active-danger' : ''}" onclick="setExpo(${index}, 3)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
+            <strong style="margin-bottom:4px;">${t.expo3Title}</strong> 
+            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo3Desc}</span>
+          </button>
         </div>
       </div>
 
-      <div style="margin-bottom: 8px;">
-        <label class="nexsis-label">${currentLang==='en'?'PPE / SCBA Wear':'Port des Équipements de Protection (EPI / ARI)'}</label>
-        <div class="toggle-grid">
-          <div class="toggle-btn ${agent.completeEpi ? 'active' : ''}" onclick="toggleAgentProp(${index}, 'completeEpi')">
-            <span>${currentLang==='en'?'Full gear':'Tenue complète'}</span>
-            <div class="toggle-indicator"></div>
+      <div style="margin-bottom: 20px;">
+        <label class="nexsis-label">${currentLang==='en'?'PPE / SCBA Wear':'Port des Équipements de Protection'}</label>
+        <div class="selection-group-epi">
+          
+          <div>
+            <div style="font-size: 11px; color: var(--app-text-muted); margin-bottom: 4px;">Tenue d'intervention</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="select-btn ${agent.completeEpi === true ? 'active' : ''}" onclick="setProp(${index}, 'completeEpi', true)" style="justify-content:center;">Tenue Complète</button>
+              <button class="select-btn ${agent.completeEpi === false ? 'active-warning' : ''}" onclick="setProp(${index}, 'completeEpi', false)" style="justify-content:center;">Tenue Incomplète</button>
+            </div>
           </div>
-          <div class="toggle-btn ${agent.ari ? 'active' : 'active-danger'}" onclick="toggleAgentProp(${index}, 'ari')">
-            <span>${agent.ari ? (currentLang==='en'?'SCBA Worn':'Port ARI') : (currentLang==='en'?'⚠️ NO SCBA':'⚠️ SANS ARI')}</span>
-            <div class="toggle-indicator"></div>
+
+          <div>
+            <div style="font-size: 11px; color: var(--app-text-muted); margin-bottom: 4px;">Protection (ARI)</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="select-btn ${agent.ari === true ? 'active-success' : ''}" onclick="setProp(${index}, 'ari', true)" style="justify-content:center;">ARI Porté</button>
+              <button class="select-btn ${agent.ari === false ? 'active-danger' : ''}" onclick="setProp(${index}, 'ari', false)" style="justify-content:center;">SANS ARI</button>
+            </div>
           </div>
-          <div class="toggle-btn ${agent.ffp3 ? 'active' : ''}" onclick="toggleAgentProp(${index}, 'ffp3')">
-            <span>${currentLang==='en'?'FFP3 Mask':'Déblais FFP3'}</span>
-            <div class="toggle-indicator"></div>
+          
+          <div>
+            <div style="font-size: 11px; color: var(--app-text-muted); margin-bottom: 4px;">Masque FFP3</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="select-btn ${agent.ffp3 === true ? 'active' : ''}" onclick="setProp(${index}, 'ffp3', true)" style="justify-content:center;">FFP3 Porté</button>
+              <button class="select-btn ${agent.ffp3 === false ? 'active' : ''}" onclick="setProp(${index}, 'ffp3', false)" style="justify-content:center;">Non Porté</button>
+            </div>
           </div>
+
         </div>
       </div>
 
       ${agent.customExpo ? `
-        <div style="margin-top: 6px; font-size: 11px; background: rgba(217,113,60,0.15); border: 1px solid var(--signal); padding: 6px 10px; border-radius: 4px; color: #fff;">
-          <strong>Exposition :</strong> ${agent.customExpo}
-          <span onclick="clearCustomExpo(${index})" style="float:right; cursor:pointer; font-weight:bold;">✕</span>
+        <div style="margin-bottom: 16px; font-size: 13px; border: 1px solid var(--app-border-hover); background: var(--app-bg); padding: 12px 16px; border-radius: 6px;">
+          <strong style="color:var(--app-text);">Exposition :</strong> ${agent.customExpo}
+          <span onclick="clearCustomExpo(${index})" style="float:right; cursor:pointer; color:var(--app-text-muted);">✕</span>
         </div>
       ` : ''}
 
-      <div style="background: rgba(39, 176, 104, 0.05); border: 1px solid rgba(39, 176, 104, 0.25); border-radius: 6px; padding: 8px 10px; font-size: 11px; display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
-        <div>
-          <span style="color: var(--success); font-weight: 600;">✓ ${currentLang==='en'?'Decontamination Validated':'Décontamination Validée'}</span>
-          <span style="color: var(--doux); display: block; font-size: 10px;">PAH Scan check</span>
-        </div>
-        <div style="font-family: var::mono; color: var(--success); font-weight: 600;">${agent.decontamTime}</div>
+      <div style="margin-top: auto;">
+        <input type="text" class="nexsis-input" style="font-size:13px;" placeholder="${currentLang==='en'?'Individual comment (optional)...':'Commentaire individuel (optionnel)...'}" value="${agent.indivComment}" onchange="updateComment(${index}, this.value)">
       </div>
     `;
     container.appendChild(card);
   });
 }
 
-function updateExpoSlider(agentIndex, val) { crew[agentIndex].expoLevel = parseInt(val); renderCrew(); }
+function setExpo(agentIndex, val) { crew[agentIndex].expoLevel = val; renderCrew(); }
+function setProp(agentIndex, prop, val) { 
+  if(crew[agentIndex][prop] === val) crew[agentIndex][prop] = null; 
+  else crew[agentIndex][prop] = val; 
+  renderCrew(); 
+}
 function toggleRole(agentIndex, roleKey) {
   const roles = crew[agentIndex].selectedRoles;
   const idx = roles.indexOf(roleKey);
@@ -1087,8 +1180,8 @@ function toggleRole(agentIndex, roleKey) {
   else roles.push(roleKey);
   renderCrew();
 }
-function toggleAgentProp(agentIndex, prop) { crew[agentIndex][prop] = !crew[agentIndex][prop]; renderCrew(); }
 function clearCustomExpo(agentIndex) { crew[agentIndex].customExpo = ""; renderCrew(); }
+function updateComment(agentIndex, val) { crew[agentIndex].indivComment = val; }
 
 function applyGlobalExpoToAll() {
   const text = document.getElementById('global-expo-text').value;
@@ -1106,11 +1199,11 @@ function openSelectAgentModal() {
 
   crew.forEach((agent, i) => {
     const row = document.createElement('div');
-    row.style.cssText = "display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--nuit-border);";
+    row.style.cssText = "display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--app-border);";
     row.innerHTML = `
-      <input type="checkbox" id="chk-agent-${i}" value="${i}" ${agent.customExpo ? 'checked' : ''}>
-      <label for="chk-agent-${i}" style="margin:0; text-transform:none; font-size:12px; color:#fff; cursor:pointer;">
-        ${agent.name} (${agent.roleTag})
+      <input type="checkbox" id="chk-agent-${i}" value="${i}" ${agent.customExpo ? 'checked' : ''} style="width: 16px; height: 16px; accent-color: var(--app-text);">
+      <label for="chk-agent-${i}" style="margin:0; text-transform:none; font-size:14px; color:var(--app-text); cursor:pointer;">
+        ${agent.name} <span style="color:var(--app-text-muted); font-size:13px;">(${agent.roleTag})</span>
       </label>
     `;
     listContainer.appendChild(row);
@@ -1139,38 +1232,36 @@ function generateAndOpenSummary() {
 
   const badgeTox = document.getElementById('tox-nature-badge');
   if (natureVal === 'vl' && subVlVal === 'lithium_ion') {
-    badgeTox.textContent = currentLang==='en'?"LITHIUM-ION EV BATTERY FIRE":"FEU VL BATTERIE LITHIUM-ION";
+    badgeTox.textContent = currentLang==='en'?"LITHIUM-ION EV BATTERY FIRE":"Feu VL Batterie Lithium-Ion";
   } else if (natureVal === 'appartement') {
-    badgeTox.textContent = currentLang==='en'?"APARTMENT / STRUCTURE FIRE":"FEU DE STRUCTURE / HABITATION";
+    badgeTox.textContent = currentLang==='en'?"APARTMENT / STRUCTURE FIRE":"Feu de structure / Habitation";
   } else {
-    badgeTox.textContent = currentLang==='en'?"THERMAL VEHICLE FIRE":"FEU VL THERMIQUE / CLASSIQUE";
+    badgeTox.textContent = currentLang==='en'?"THERMAL VEHICLE FIRE":"Feu VL Thermique / Classique";
   }
 
   let step2Html = '';
-  const labelMap = { commandement: 'Commandement', conducteur: 'Conducteur', attaque: 'Attaque', alimentation: 'Alimentation', deblais: 'Déblais', rangement: 'Nettoyage' };
-
+  
   crew.forEach(a => {
-    const rolesLabels = a.selectedRoles.map(r => labelMap[r]).join(', ') || 'Aucun';
-    const currentExpo = expoLevels[a.expoLevel];
-
     let riskInhalation = "";
-    if (a.expoLevel >= 2 && !a.ari) {
-      riskInhalation = `<span style="color:var(--danger); font-weight:bold;">${currentLang==='en'?'🚨 HIGH INHALATION RISK (Smoky zone WITHOUT SCBA)':'🚨 RISQUE D\'INHALATION ÉLEVÉ (Zone enfumée SANS ARI)'}</span>`;
-    } else if (a.ari) {
+    if (a.expoLevel >= 2 && a.ari !== true) {
+      riskInhalation = `<span style="color:var(--danger); font-weight:500;">${currentLang==='en'?'🚨 High Inhalation Risk (Hot zone without SCBA)':'🚨 Risque d\'inhalation élevé (Zone d\'exclusion sans ARI)'}</span>`;
+    } else if (a.ari === true) {
       riskInhalation = `<span style="color:var(--success);">${currentLang==='en'?'✓ Respiratory tract protected (SCBA worn)':'✓ Voies respiratoires protégées (ARI porté)'}</span>`;
+    } else if (a.expoLevel === 0) {
+      riskInhalation = `<span style="color:var(--app-text-muted);">${currentLang==='en'?'No exposure recorded':'Aucune exposition renseignée'}</span>`;
     } else {
-      riskInhalation = `<span style="color:var(--doux);">${currentLang==='en'?'Moderate respiratory exposure (Perimeter)':'Exposition respiratoire modérée (Périphérique)'}</span>`;
+      riskInhalation = `<span style="color:var(--app-text-muted);">${currentLang==='en'?'Moderate respiratory exposure (Support zone)':'Exposition respiratoire modérée (Zone de soutien)'}</span>`;
     }
 
     step2Html += `
-      <div style="padding: 6px 0; border-bottom: 1px solid rgba(30, 52, 79, 0.4); font-size: 11px;">
+      <div style="padding: 16px 0; border-bottom: 1px solid var(--app-border); font-size: 13px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong>${a.name} (${a.roleTag})</strong>
-          <span style="color: ${currentExpo.color}; font-weight:600;">${currentExpo.label}</span>
+          <strong style="color:var(--app-text); font-size:14px; font-weight:500;">${a.name} <span style="color:var(--app-text-muted); font-weight:normal;">(${a.roleTag})</span></strong>
         </div>
-        <div style="color: var(--doux); margin-top:2px;">
+        <div style="color: var(--app-text-muted); margin-top:6px;">
           ${riskInhalation}
-          ${a.customExpo ? `<br><span style="color:var(--signal);">⚠️ ${a.customExpo}</span>` : ''}
+          ${a.customExpo ? `<br><span style="color:var(--app-text); display:inline-block; margin-top:6px;">⚠️ ${a.customExpo}</span>` : ''}
+          ${a.indivComment ? `<br><span style="color:var(--app-text-muted); display:inline-block; margin-top:6px; font-style:italic;">💬 "${a.indivComment}"</span>` : ''}
         </div>
       </div>
     `;
@@ -1194,11 +1285,19 @@ function returnToHome() {
 
 function resetForm() {
   document.getElementById('global-expo-text').value = "";
-  crew.forEach(a => a.customExpo = "");
+  crew.forEach(a => {
+    a.customExpo = "";
+    a.selectedRoles = [];
+    a.completeEpi = null;
+    a.ari = null;
+    a.ffp3 = null;
+    a.expoLevel = null;
+    a.indivComment = "";
+  });
   renderCrew();
 }
 
-/* Canvas Animation */
+/* Canvas Animation - Landing Page Brightened */
 (function() {
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
@@ -1209,19 +1308,19 @@ function resetForm() {
   function init() {
     resize();
     particles = [];
-    for(let i=0; i<30; i++) {
+    for(let i=0; i<60; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 1.5 + 0.5,
-        vy: -(Math.random() * 0.3 + 0.1)
+        r: Math.random() * 1.8 + 0.8,
+        vy: -(Math.random() * 0.4 + 0.15)
       });
     }
   }
 
   function animate() {
     ctx.clearRect(0,0,width,height);
-    ctx.fillStyle = 'rgba(232,239,244,0.3)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     particles.forEach(p => {
       p.y += p.vy;
       if (p.y < 0) p.y = height;
