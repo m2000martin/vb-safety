@@ -333,6 +333,89 @@
   .fiche-foot { font-size: 12px; color: var(--app-text-muted); border-top: 1px solid var(--app-border); padding-top: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
   .sign-box { border: 1px dashed var(--app-border-hover); border-radius: 4px; padding: 10px 14px; min-width: 200px; min-height: 56px; }
   .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; justify-content: space-between; }
+
+  /* ===== RESPONSIVE ===== */
+  .lbl-short { display: none; }
+  .btp-grid > * { min-width: 0; }
+  .agent-tag { white-space: normal; max-width: 100%; }
+  .ecrire { white-space: nowrap; }
+
+  /* Tablette et moins */
+  @media (max-width: 899px) {
+    .inter-list { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+    .inter-list .inter-item { flex: 0 0 min(260px, 78%); margin: 0; scroll-snap-align: start; border-color: var(--app-border); background: var(--app-card); }
+    .inter-list .inter-item.active { border-color: var(--signal); }
+  }
+
+  /* Téléphone */
+  @media (max-width: 700px) {
+    .brand-long, .lbl-long { display: none; }
+    .lbl-short { display: inline; }
+    input, select, textarea, .nexsis-input, .input-field { font-size: 16px !important; } /* évite le zoom iOS */
+
+    .nexsis-header { padding: 10px 16px; gap: 8px; }
+    .nexsis-header button { padding: 6px 10px !important; }
+    .app-title { font-size: 14px; }
+
+    .auth-card { padding: 24px 20px; }
+    .modal-nexsis-header, .modal-nexsis-body { padding: 16px; }
+    .modal-nexsis-footer { padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
+
+    /* Pompiers */
+    .layout-wrapper { padding: 16px 16px 110px; gap: 20px; }
+    .card { padding: 16px; }
+    .agent-card { padding: 14px; }
+    .selection-group-epi { gap: 8px; }
+    .selection-group-epi .select-btn { padding: 8px 4px; font-size: 12px; }
+    .action-bar { padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
+    .action-bar .btn-nexsis { max-width: none !important; }
+
+    /* BTP */
+    .btp-wrap { padding: 16px 16px 48px; gap: 16px; }
+    .btp-company .meta { font-size: 11px; }
+    .btp-tabs { position: sticky; top: 52px; z-index: 50; background: var(--app-bg); margin: 0 -16px; padding: 0 8px; }
+    .btp-tab { padding: 12px 10px; flex: 1; justify-content: center; }
+    .btp-kpi b { font-size: 22px; }
+    .toolbar > * { width: 100%; }
+    .toolbar .btn-nexsis { width: 100%; }
+
+    /* Tableaux → cartes empilées */
+    .stack-wrap { border: none; overflow: visible; }
+    .btp-table.stack, .btp-table.stack tbody, .btp-table.stack tr, .btp-table.stack td { display: block; width: 100%; }
+    .btp-table.stack thead { display: none; }
+    .btp-table.stack tr { border: 1px solid var(--app-border); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; background: var(--app-card); }
+    .btp-table.stack td { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 10px; padding: 5px 0; border: none; text-align: left; }
+    .btp-table.stack td::before { content: attr(data-label); font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--app-text-muted); padding-top: 2px; }
+    .btp-table.stack td[data-label=""] { display: flex; justify-content: flex-end; padding-top: 2px; }
+    .btp-table.stack td[data-label=""]::before { display: none; }
+    .btp-table.stack td[colspan] { display: block; }
+    .btp-table.stack td[colspan]::before { display: none; }
+    .btp-table.stack .num { font-family: var(--mono); }
+    .row-del { border: 1px solid var(--app-border); border-radius: 6px; padding: 6px 10px; }
+
+    /* Journal : carte compacte */
+    #btp-journal tr { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; grid-template-areas: "who who who lvl" "task task task task" "date dur ag del"; gap: 6px 12px; align-items: center; }
+    #btp-journal td { display: block; padding: 0; width: auto; }
+    #btp-journal td::before { display: none; }
+    #btp-journal td:nth-child(1) { grid-area: date; }
+    #btp-journal td:nth-child(2) { grid-area: who; }
+    #btp-journal td:nth-child(2) .muted { display: inline; margin-left: 6px; }
+    #btp-journal td:nth-child(2) .cell > div { display: inline; margin-left: 6px; }
+    #btp-journal td:nth-child(3) { grid-area: task; }
+    #btp-journal td:nth-child(4) { grid-area: ag; }
+    #btp-journal td:nth-child(5) { grid-area: dur; }
+    #btp-journal td:nth-child(6) { grid-area: lvl; }
+    #btp-journal td:nth-child(7) { grid-area: del; }
+    #btp-journal td[colspan] { grid-column: 1 / -1; }
+
+    /* Fiche */
+    .fiche-doc { padding: 18px 16px; gap: 14px; }
+    .fiche-head h2 { font-size: 20px; }
+    .fiche-head .ref { text-align: left; }
+    .fiche-ids { grid-template-columns: 1fr 1fr; }
+    .fiche-foot > div:last-child { width: 100%; }
+    .sign-box { flex: 1; min-width: 0; }
+  }
 </style>
 </head>
 <body class="light-mode">
@@ -343,7 +426,7 @@
 <!-- PAGE VITRINE -->
 <div class="scene">
   <header class="haut">
-    <span class="marque">VB SAFETY - Toxicologie & exposition</span>
+    <span class="marque">VB SAFETY<span class="brand-long"> - Toxicologie & exposition</span></span>
     <div class="actions-group">
       <div class="lang-switcher">
         <button id="btn-fr" class="lang-btn active" onclick="setLanguage('fr')">FR</button>
@@ -493,12 +576,12 @@
 <div id="app-nexsis">
   <header class="nexsis-header">
     <div class="app-title">
-      <span class="brand">VB SAFETY - Toxicologie & exposition</span>
+      <span class="brand">VB SAFETY<span class="brand-long"> - Toxicologie & exposition</span></span>
     </div>
     <div style="display: flex; align-items: center; gap: 12px;">
-      <button class="btn-sm" onclick="toggleTheme()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;" id="theme-btn">🌙 Dark</button>
+      <button class="btn-sm" onclick="toggleTheme()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;" id="theme-btn">🌙<span class="lbl-long"> Dark</span></button>
       <button id="app-btn-learn" class="btn-sm" onclick="openLearnModal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">Apprendre</button>
-      <button class="btn-sm" onclick="switchPortal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">Changer d'espace</button>
+      <button class="btn-sm" onclick="switchPortal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><span class="lbl-long">Changer d'espace</span><span class="lbl-short">Espace</span></button>
       <button id="app-btn-quit" class="btn-sm" onclick="closeApp()" style="background: transparent; border: none; color:var(--app-text); cursor:pointer; font-size:16px; padding: 0 4px;">✕</button>
     </div>
   </header>
@@ -508,6 +591,7 @@
       <div id="app-sidebar-title" style="font-size: 13px; font-weight: 700; margin-bottom: 16px;">
         Interventions
       </div>
+      <div class="inter-list">
 
       <div class="inter-item active" id="mission-1" onclick="selectMission(1)">
         <div class="inter-item-header">
@@ -543,6 +627,7 @@
         </div>
         <div class="inter-item-title">Feu de local industriel / Bureau</div>
         <div class="inter-item-status" style="color:var(--app-text-muted);">Validé SSSM [🔒 Verrouillé]</div>
+      </div>
       </div>
     </aside>
 
@@ -721,10 +806,10 @@
 <!-- PORTAIL BTP -->
 <div id="app-btp">
   <header class="nexsis-header">
-    <div class="app-title"><span class="brand">VB SAFETY - Toxicologie & exposition</span><span class="agent-role-tag">BTP</span></div>
+    <div class="app-title"><span class="brand">VB SAFETY<span class="brand-long"> - Toxicologie & exposition</span></span><span class="agent-role-tag">BTP</span></div>
     <div style="display:flex; align-items:center; gap:12px;">
-      <button onclick="switchPortal()" style="background:transparent; border:1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">Changer d'espace</button>
-      <button onclick="toggleTheme()" class="theme-toggle" style="background:transparent; border:1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">🌙 Dark</button>
+      <button onclick="switchPortal()" style="background:transparent; border:1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><span class="lbl-long">Changer d'espace</span><span class="lbl-short">Espace</span></button>
+      <button onclick="toggleTheme()" class="theme-toggle" style="background:transparent; border:1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">🌙<span class="lbl-long"> Dark</span></button>
       <button onclick="closeBtp()" aria-label="Quitter" style="background:transparent; border:none; color:var(--app-text); cursor:pointer; font-size:16px; padding:0 4px;">✕</button>
     </div>
   </header>
@@ -736,9 +821,9 @@
     </div>
 
     <nav class="btp-tabs" role="tablist">
-      <button class="btp-tab active" role="tab" data-tab="expo" onclick="btpTab('expo')"><span class="n">1</span>Expositions individuelles</button>
-      <button class="btp-tab" role="tab" data-tab="duerp" onclick="btpTab('duerp')"><span class="n">2</span>DUERP · risque chimique</button>
-      <button class="btp-tab" role="tab" data-tab="fiche" onclick="btpTab('fiche')"><span class="n">3</span>Fiches d'exposition</button>
+      <button class="btp-tab active" role="tab" data-tab="expo" onclick="btpTab('expo')"><span class="n">1</span><span class="lbl-long">Expositions individuelles</span><span class="lbl-short">Expositions</span></button>
+      <button class="btp-tab" role="tab" data-tab="duerp" onclick="btpTab('duerp')"><span class="n">2</span><span class="lbl-long">DUERP · risque chimique</span><span class="lbl-short">DUERP</span></button>
+      <button class="btp-tab" role="tab" data-tab="fiche" onclick="btpTab('fiche')"><span class="n">3</span><span class="lbl-long">Fiches d'exposition</span><span class="lbl-short">Fiches</span></button>
     </nav>
 
     <!-- COUCHE 1 -->
@@ -787,8 +872,8 @@
 
         <div class="card">
           <div class="card-title"><span>Journal des expositions</span><span class="muted" style="font-weight:500; font-size:12px; color:var(--app-text-muted);" id="btp-journal-count"></span></div>
-          <div class="tbl-wrap">
-            <table class="btp-table">
+          <div class="tbl-wrap stack-wrap">
+            <table class="btp-table stack">
               <thead><tr><th>Date</th><th>Salarié</th><th>Chantier · tâche</th><th>Agents</th><th class="num">Durée</th><th>Niveau</th><th></th></tr></thead>
               <tbody id="btp-journal"></tbody>
             </table>
@@ -809,8 +894,8 @@
           <span class="meta" style="font-family:var(--mono); font-size:12px; color:var(--app-text-muted);" id="duerp-updated"></span>
         </div>
         <div class="btp-kpis" id="duerp-kpis"></div>
-        <div class="tbl-wrap">
-          <table class="btp-table">
+        <div class="tbl-wrap stack-wrap">
+          <table class="btp-table stack">
             <thead><tr><th>Unité de travail</th><th>Agent CMR</th><th>Situations d'exposition</th><th class="num">Fréq.</th><th class="num">Gravité</th><th>Maîtrise actuelle</th><th>Criticité</th><th>Actions à prévoir</th></tr></thead>
             <tbody id="duerp-body"></tbody>
           </table>
@@ -835,8 +920,8 @@
 
       <div class="card" style="margin-top:20px;">
         <div class="card-title" style="margin-bottom:16px;"><span>Liste des travailleurs exposés aux agents CMR</span></div>
-        <div class="tbl-wrap">
-          <table class="btp-table">
+        <div class="tbl-wrap stack-wrap">
+          <table class="btp-table stack">
             <thead><tr><th>Salarié</th><th>Poste</th><th>Agents CMR</th><th>Période</th><th class="num">Durée cumulée</th><th class="num">Expositions</th></tr></thead>
             <tbody id="list-body"></tbody>
           </table>
@@ -1142,8 +1227,9 @@ function toggleTheme() {
   document.documentElement.classList.toggle('light-mode');
   document.body.classList.toggle('light-mode');
   const isLight = document.body.classList.contains('light-mode');
-  document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
-  document.querySelectorAll('.theme-toggle').forEach(b => b.textContent = isLight ? '🌙 Dark' : '☀️ Light');
+  const lbl = isLight ? '🌙<span class="lbl-long"> Dark</span>' : '☀️<span class="lbl-long"> Light</span>';
+  document.getElementById('theme-btn').innerHTML = lbl;
+  document.querySelectorAll('.theme-toggle').forEach(b => b.innerHTML = lbl);
 }
 
 function openOnboardingModal() { document.getElementById('onboarding-modal').style.display = 'flex'; }
@@ -1685,13 +1771,13 @@ const BTP_SITES = [
   { id: 'mlv',     name: 'Bureaux R+3 · Marne-la-Vallée',    ref: 'CH-2026-021' }
 ];
 const BTP_AGENTS = {
-  silice:  { label: 'Silice cristalline alvéolaire' },
-  bois:    { label: 'Poussières de bois' },
-  formol:  { label: 'Formaldéhyde' },
-  hap:     { label: 'HAP (bitume, brai)' },
-  diesel:  { label: 'Émissions diesel' },
-  soudage: { label: 'Fumées de soudage' },
-  amiante: { label: 'Amiante', flag: true }
+  silice:  { label: 'Silice cristalline alvéolaire', short: 'Silice' },
+  bois:    { label: 'Poussières de bois', short: 'Bois' },
+  formol:  { label: 'Formaldéhyde', short: 'Formaldéhyde' },
+  hap:     { label: 'HAP (bitume, brai)', short: 'HAP' },
+  diesel:  { label: 'Émissions diesel', short: 'Diesel' },
+  soudage: { label: 'Fumées de soudage', short: 'Soudage' },
+  amiante: { label: 'Amiante', short: 'Amiante', flag: true }
 };
 // ordre = priorité de reconnaissance pour la saisie rapide
 const BTP_TASKS = [
@@ -1760,6 +1846,7 @@ function btpInit() {
 function btpTab(tab) {
   document.querySelectorAll('.btp-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   ['expo', 'duerp', 'fiche'].forEach(t => document.getElementById('btp-' + t).hidden = (t !== tab));
+  document.getElementById('app-btp').scrollTop = 0;
   btpRenderAll();
 }
 function btpRenderAll() { renderJournal(); renderDuerp(); renderFiche(); renderList(); }
@@ -1828,6 +1915,15 @@ function btpDelete(btn, id) {
 }
 function btpSorted() { return btpEntries.slice().sort((a, b) => b.date.localeCompare(a.date)); }
 
+function stampLabels(tbodyId) {
+  const tb = document.getElementById(tbodyId);
+  const ths = [...tb.closest('table').querySelectorAll('thead th')].map(t => t.textContent.trim());
+  tb.querySelectorAll('tr').forEach(tr => [...tr.children].forEach((td, i) => {
+    if (td.colSpan !== 1) return;
+    td.dataset.label = ths[i] || '';
+    td.innerHTML = '<div class="cell">' + td.innerHTML + '</div>';
+  }));
+}
 function renderJournal() {
   const rows = btpSorted();
   document.getElementById('btp-journal-count').textContent = rows.length + ' saisies';
@@ -1837,12 +1933,13 @@ function renderJournal() {
       <td class="muted" style="white-space:nowrap;">${bFr(e.date)}</td>
       <td><strong>${bEsc(w.name.split(' ')[0])}</strong><div class="muted">${bEsc(w.poste)}</div></td>
       <td>${bEsc(t.label)}<div class="muted">${bEsc(bSite(e.site).name)} · ${bEsc(BTP_METHOD[e.method].label)} · ${bEsc(BTP_PPE[e.ppe].label)}</div></td>
-      <td>${t.agents.map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].label.split(' (')[0])}</span>`).join('')}</td>
+      <td>${t.agents.map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].short)}</span>`).join('')}</td>
       <td class="num">${bHours(e.hours)}</td>
       <td><span class="lvl lvl-${l}">${BTP_LVL[l]}</span></td>
       <td><button class="row-del" onclick="btpDelete(this,'${e.id}')">Suppr.</button></td>
     </tr>`;
   }).join('') || '<tr><td colspan="7" class="muted">Aucune exposition saisie.</td></tr>';
+  stampLabels('btp-journal');
 }
 
 /* ---------- couche 2 : DUERP ---------- */
@@ -1901,6 +1998,7 @@ function renderDuerp() {
       <td><div class="crit-cell"><span class="crit-bar"><i style="width:${Math.round(r.C / 48 * 100)}%; background:${critColor(r.C)}"></i></span><span style="font-family:var(--mono); font-weight:600; color:${critColor(r.C)}">${r.C}</span></div></td>
       <td>${r.actions.map(a => '· ' + bEsc(a)).join('<br>')}</td>
     </tr>`).join('') || '<tr><td colspan="8" class="muted">Aucune exposition saisie : le DUERP se remplit depuis la couche 1.</td></tr>';
+  stampLabels('duerp-body');
 }
 
 /* ---------- couche 3 : fiches d'exposition ---------- */
@@ -1933,8 +2031,8 @@ function renderFiche() {
       <div class="nexsis-label" style="margin-bottom:8px;">Synthèse par agent</div>
       <div class="chips-group">${Object.entries(s.agents).map(([a, v]) => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}" style="padding:4px 8px;">${bEsc(BTP_AGENTS[a].label)} · ${bHours(v.h)} · ${v.n}× · max <b>${BTP_LVL[v.max]}</b></span>`).join('') || '<span class="muted">Aucune exposition enregistrée.</span>'}</div>
     </div>
-    <div class="tbl-wrap">
-      <table class="btp-table">
+    <div class="tbl-wrap stack-wrap">
+      <table class="btp-table stack">
         <thead><tr><th>Date</th><th>Chantier (réf.)</th><th>Nature des travaux</th><th>Agents / produits</th><th>Procédé de travail</th><th>Protection resp.</th><th class="num">Durée</th><th>Niveau</th></tr></thead>
         <tbody>${s.es.map(e => { const t = bTask(e.task), l = btpLevel(e), si = bSite(e.site); return `<tr>
           <td style="white-space:nowrap;">${bFrLong(e.date)}</td>
@@ -1955,6 +2053,7 @@ function renderFiche() {
         <div class="sign-box">Visa salarié</div>
       </div>
     </div>`;
+  const ft = document.querySelector('#fiche-doc tbody'); if (ft) { ft.id = 'fiche-body'; stampLabels('fiche-body'); }
 }
 function copyFiche() {
   const wid = document.getElementById('fiche-worker').value, w = bWorker(wid), s = btpWorkerSummary(wid);
@@ -1976,12 +2075,13 @@ function renderList() {
     return `<tr>
       <td><a href="#" onclick="event.preventDefault(); document.getElementById('fiche-worker').value='${w.id}'; renderFiche(); document.getElementById('fiche-doc').scrollIntoView({behavior:'smooth'});" style="font-weight:600;">${bEsc(w.name)}</a></td>
       <td>${bEsc(w.poste)}</td>
-      <td>${Object.keys(s.agents).map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].label.split(' (')[0])}</span>`).join('')}</td>
+      <td>${Object.keys(s.agents).map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].short)}</span>`).join('')}</td>
       <td class="muted" style="white-space:nowrap;">${bFr(s.from)} → ${bFr(s.to)}</td>
       <td class="num">${bHours(s.total)}</td>
       <td class="num">${s.es.length}</td>
     </tr>`;
   }).join('');
+  stampLabels('list-body');
 }
 </script>
 
