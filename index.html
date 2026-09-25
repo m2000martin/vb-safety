@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="light-mode">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title id="meta-title">VB Safety</title>
-<meta id="meta-desc" name="description" content="VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle pour les services de secours et l'industrie.">
+<title id="meta-title">VB Safety - Toxicologie & exposition</title>
+<meta id="meta-desc" name="description" content="VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle.">
 
-<!-- Favicon SVG Bold "VB" -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230E1E30'/><rect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23D9713C' stroke-width='2.5' opacity='0.7'/><text x='32' y='42' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='28' fill='%23E8EFF4' text-anchor='middle' letter-spacing='-0.5'>VB</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,25 +14,23 @@
 
 <style>
   :root {
-    /* Landing Page - Retour au bleu nuit initial */
     --nuit: #0E1E30;
     --nuit-profond: #0A1725;
     
-    /* Variables V0/Shadcn par défaut (Mode Sombre - Zinc) */
-    --app-bg: #09090b;          
-    --app-card: #18181b;        
-    --app-border: #27272a;      
-    --app-border-hover: #3f3f46;
-    --app-text: #fafafa;
-    --app-text-muted: #a1a1aa;
-    --app-input: #09090b;       
+    /* Mode Sombre à contrastes renforcés */
+    --app-bg: #050507;          
+    --app-card: #121215;        
+    --app-border: #323239;      
+    --app-border-hover: #52525b;
+    --app-text: #ffffff;
+    --app-text-muted: #d4d4d8;
+    --app-input: #050507;       
     --app-muted: #27272a;       
-    --app-primary: #fafafa;
-    --app-primary-fg: #09090b;
+    --app-primary: #ffffff;
+    --app-primary-fg: #050507;
 
-    /* Couleurs sémantiques (Adaptables) */
     --signal: #E06C34;
-    --danger: #EF4444;           
+    --danger: #EF4444;            
     --warning: #F59E0B;          
     --success: #10B981;          
     --info: #3B82F6;             
@@ -43,18 +40,18 @@
     --mono: "IBM Plex Mono", monospace;
   }
 
-  /* Remplacement des variables pour le Mode Clair */
+  /* Mode Clair par défaut à forts contrastes */
   body.light-mode {
-    --app-bg: #f4f4f5; 
+    --app-bg: #f0f0f3; 
     --app-card: #ffffff; 
-    --app-border: #e4e4e7; 
-    --app-border-hover: #d4d4d8; 
+    --app-border: #cbd5e1; 
+    --app-border-hover: #94a3b8; 
     --app-text: #09090b; 
-    --app-text-muted: #71717a; 
+    --app-text-muted: #3f3f46; 
     --app-input: #ffffff;
-    --app-muted: #f4f4f5;
-    --app-primary: #18181b; 
-    --app-primary-fg: #fafafa;
+    --app-muted: #e2e8f0;
+    --app-primary: #09090b; 
+    --app-primary-fg: #ffffff;
   }
 
   *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -73,7 +70,6 @@
 
   a { color: inherit; transition: all 0.2s ease; }
 
-  /* Background Particles Canvas (Landing) */
   #particles-canvas {
     position: fixed;
     inset: 0;
@@ -92,7 +88,6 @@
     background: linear-gradient(to top, var(--nuit-profond) 0%, rgba(14, 30, 48, 0.4) 50%, rgba(14, 30, 48, 0) 100%);
   }
 
-  /* Main Scene Layout */
   .scene {
     position: relative;
     z-index: 2;
@@ -103,7 +98,6 @@
     padding: 0 clamp(16px, 5vw, 76px);
   }
 
-  /* Header Vitrine */
   .haut {
     display: flex;
     align-items: center;
@@ -131,14 +125,12 @@
   .ecrire { font-size: 14px; color: #A1A1AA; text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; }
   .ecrire:hover { color: #fff; border-bottom-color: var(--signal); }
 
-  /* Hero Content */
   .centre { flex: 1; display: flex; align-items: center; padding: 40px 0; }
   .enonce { font-family: var(--serif); font-weight: 700; font-size: clamp(32px, 6.5vw, 72px); line-height: 1.1; margin: 0; }
   .enonce .seconde { display: block; color: #A1A1AA; margin-top: 4px; }
   .trait { width: 45px; height: 2px; background: var(--signal); margin: 24px 0; box-shadow: 0 0 10px rgba(224, 108, 52, 0.3); }
   .note { margin: 0; max-width: 44ch; color: #A1A1AA; font-size: clamp(15px, 2vw, 17px); font-weight: 400; line-height: 1.6; }
 
-  /* Footer Vitrine */
   .bas { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); font-size: 13px; color: #A1A1AA; }
   .courriel { font-family: var(--serif); font-size: clamp(16px, 2vw, 20px); color: #FAFAFA; text-decoration: none; border-bottom: 1px solid rgba(224, 108, 52, 0.5); padding-bottom: 2px; }
   .courriel:hover { border-color: var(--signal); }
@@ -151,22 +143,21 @@
   }
   .lien-cmr:hover { border-color: var(--signal); background: rgba(224, 108, 52, 0.1); }
 
-  /* Modale Authentification */
   .modal-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); z-index: 1000;
     align-items: center; justify-content: center; padding: 16px; overflow-y: auto;
   }
 
   .auth-card {
-    background: #09090b; border: 1px solid #27272a; border-radius: 8px; max-width: 400px; width: 100%;
-    padding: 32px; position: relative; margin: auto; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); color: #fafafa;
+    background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; max-width: 400px; width: 100%;
+    padding: 32px; position: relative; margin: auto; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); color: var(--app-text);
   }
 
   .auth-title { font-family: var(--sans); font-weight: 600; font-size: 18px; margin: 0 0 6px 0; letter-spacing: -0.02em; }
-  .auth-sub { font-size: 13px; color: #a1a1aa; margin-bottom: 20px; }
+  .auth-sub { font-size: 13px; color: var(--app-text-muted); margin-bottom: 20px; }
 
   .input-field {
-    width: 100%; background: #09090b; border: 1px solid #27272a; color: #fff; padding: 10px 12px; border-radius: 6px;
+    width: 100%; background: var(--app-input); border: 1px solid var(--app-border); color: var(--app-text); padding: 10px 12px; border-radius: 6px;
     font-size: 14px; margin-bottom: 12px; outline: none; -webkit-appearance: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
   .input-field:focus { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal); }
@@ -177,20 +168,14 @@
   }
   .btn-submit:hover { opacity: 0.9; }
 
-  .toggle-auth-mode { margin-top: 16px; text-align: center; font-size: 13px; color: #a1a1aa; }
-  .toggle-auth-mode a { color: #fafafa; text-decoration: underline; cursor: pointer; }
+  .toggle-auth-mode { margin-top: 16px; text-align: center; font-size: 13px; color: var(--app-text-muted); }
+  .toggle-auth-mode a { color: var(--app-text); text-decoration: underline; cursor: pointer; }
 
-  /* APPLICATION NEXSIS OVERLAY (v0 / Shadcn Style) */
   #app-nexsis { display: none; position: fixed; inset: 0; background: var(--app-bg); z-index: 500; overflow-y: auto; -webkit-overflow-scrolling: touch; color: var(--app-text); transition: background-color 0.3s ease, color 0.3s ease; }
 
   .nexsis-header {
     background: var(--app-bg); border-bottom: 1px solid var(--app-border); padding: 12px 24px; display: flex; align-items: center;
     justify-content: space-between; position: sticky; top: 0; z-index: 100; transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
-
-  .nexsis-badge {
-    display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500;
-    background: transparent; color: var(--app-text-muted); border: 1px solid var(--app-border); padding: 4px 10px; border-radius: 9999px;
   }
 
   .app-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; font-family: var(--sans); }
@@ -209,61 +194,56 @@
   .inter-item.active { background: var(--app-card); border-color: var(--app-border-hover); box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
 
   .inter-item-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--app-text-muted); }
-  .inter-item-title { font-weight: 500; font-size: 14px; color: var(--app-text); margin-top: 4px; }
+  .inter-item-title { font-weight: 600; font-size: 14px; color: var(--app-text); margin-top: 4px; }
   .inter-item-status { margin-top: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
 
   .main-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
 
-  /* CARDS */
   .card { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); transition: background-color 0.3s, border-color 0.3s; }
   .card-title { font-size: 14px; font-weight: 600; color: var(--app-text); margin-bottom: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; align-items: center; letter-spacing: -0.01em; }
 
   .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
   @media (min-width: 580px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
 
-  label.nexsis-label { display: block; font-size: 13px; color: var(--app-text); font-weight: 500; margin-bottom: 8px; }
+  label.nexsis-label { display: block; font-size: 13px; color: var(--app-text); font-weight: 600; margin-bottom: 8px; }
   select.nexsis-input, input[type="text"].nexsis-input, textarea.nexsis-input {
     width: 100%; background: var(--app-input); border: 1px solid var(--app-border); color: var(--app-text); padding: 10px 12px; border-radius: 6px; font-size: 14px; outline: none; font-family: var(--sans); -webkit-appearance: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
   select.nexsis-input:focus, input[type="text"].nexsis-input:focus, textarea.nexsis-input:focus { border-color: var(--app-border-hover); box-shadow: 0 0 0 2px var(--app-bg), 0 0 0 4px var(--app-border-hover); }
 
-  /* CREW GRID (2 PER LINE COMPACT VIEW) */
   .crew-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
   @media (min-width: 1100px) { .crew-grid { grid-template-columns: repeat(2, 1fr); } }
 
   .agent-card { background: transparent; border: 1px solid var(--app-border); padding: 20px; border-radius: 8px; display: flex; flex-direction: column; }
   
   .agent-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;}
-  .agent-name { font-weight: 600; font-size: 15px; color: var(--app-text); display: flex; align-items: center; gap: 12px;}
-  .agent-role-tag { font-size: 11px; font-family: var(--mono); background: var(--app-muted); color: var(--app-text-muted); border: 1px solid var(--app-border); padding: 2px 8px; border-radius: 6px; font-weight: 500;}
+  .agent-name { font-weight: 700; font-size: 15px; color: var(--app-text); display: flex; align-items: center; gap: 12px;}
+  .agent-role-tag { font-size: 11px; font-family: var(--mono); background: var(--app-muted); color: var(--app-text); border: 1px solid var(--app-border); padding: 2px 8px; border-radius: 6px; font-weight: 600;}
 
-  /* Neutral Buttons for Selections */
   .chips-group { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
   
   .selection-group-expo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 6px; }
   .selection-group-epi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 6px; }
   
-  .select-btn { font-size: 12px; font-weight: 500; background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text-muted); padding: 8px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s; }
-  .select-btn:hover { background: var(--app-muted); color: var(--app-text); }
+  .select-btn { font-size: 12px; font-weight: 600; background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text); padding: 8px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s; }
+  .select-btn:hover { background: var(--app-muted); }
   
-  .chip-btn { font-size: 12px; font-weight: 500; background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text-muted); padding: 6px 14px; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s; }
-  .chip-btn:hover { background: var(--app-muted); color: var(--app-text); }
+  .chip-btn { font-size: 12px; font-weight: 600; background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text); padding: 6px 14px; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s; }
+  .chip-btn:hover { background: var(--app-muted); }
   .chip-btn.selected { background: var(--app-primary); border-color: var(--app-primary); color: var(--app-primary-fg); }
   
-  /* Active states without forcing red/green by default */
   .select-btn.active { background: var(--app-primary); border-color: var(--app-primary); color: var(--app-primary-fg); }
   .select-btn.active-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
   .select-btn.active-warning { background: var(--warning); border-color: var(--warning); color: #fff; }
   .select-btn.active-success { background: var(--success); border-color: var(--success); color: #fff; }
 
   .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--app-bg); border-top: 1px solid var(--app-border); padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 12px; z-index: 100; transition: background-color 0.3s; }
-  .btn-nexsis { flex: 1; padding: 10px 16px; border-radius: 6px; border: 1px solid transparent; font-weight: 500; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; transition: all 0.2s; }
+  .btn-nexsis { flex: 1; padding: 10px 16px; border-radius: 6px; border: 1px solid transparent; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; transition: all 0.2s; }
   .btn-nexsis-primary { background: var(--app-primary); color: var(--app-primary-fg); }
   .btn-nexsis-primary:hover { opacity: 0.9; }
   .btn-nexsis-secondary { background: transparent; color: var(--app-text); border: 1px solid var(--app-border); }
   .btn-nexsis-secondary:hover { background: var(--app-muted); }
 
-  /* MODALES NEXSIS */
   .modal-nexsis { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); z-index: 600; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
   .modal-nexsis-content { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; max-width: 640px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; margin: auto; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); color: var(--app-text); }
   .modal-nexsis-header { padding: 20px 24px; border-bottom: 1px solid var(--app-border); display: flex; justify-content: space-between; align-items: center; }
@@ -274,21 +254,88 @@
   @media (min-width: 580px) { .workflow-grid { grid-template-columns: repeat(3, 1fr); } }
   .workflow-card { background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
   .workflow-icon { font-size: 24px; margin-bottom: 12px; display: block; opacity: 0.9; }
-  .workflow-title { font-size: 13px; font-weight: 600; color: var(--app-text); margin-bottom: 6px; }
+  .workflow-title { font-size: 13px; font-weight: 700; color: var(--app-text); margin-bottom: 6px; }
   .workflow-text { font-size: 13px; color: var(--app-text-muted); line-height: 1.5; }
 
   .tox-card { background: transparent; border: 1px solid var(--app-border); border-radius: 6px; padding: 20px; margin-top: 16px; font-size: 13px; }
-  .tox-header { display: flex; justify-content: space-between; font-weight: 600; color: var(--app-text); border-bottom: 1px solid var(--app-border); padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; }
+  .tox-header { display: flex; justify-content: space-between; font-weight: 700; color: var(--app-text); border-bottom: 1px solid var(--app-border); padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; }
   .tox-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
   @media (min-width: 580px) { .tox-grid { grid-template-columns: repeat(2, 1fr); } }
   .tox-item { background: var(--app-bg); padding: 16px; border-radius: 6px; border: 1px solid var(--app-border); }
 
-  /* ÉCRAN DE FIN / FEEDBACK */
   #feedback-screen { display: none; position: fixed; inset: 0; background: var(--app-bg); z-index: 700; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; color: var(--app-text); }
   .feedback-box { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; max-width: 480px; width: 100%; padding: 32px; text-align: left; margin: auto; }
+
+  /* ===== CHOIX DU PORTAIL ===== */
+  .portal-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 8px; }
+  @media (min-width: 520px) { .portal-grid { grid-template-columns: 1fr 1fr; } }
+  .portal-card { text-align: left; background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 8px; padding: 18px; cursor: pointer; color: var(--app-text); font-family: var(--sans); display: flex; flex-direction: column; gap: 6px; transition: border-color .2s, transform .2s; }
+  .portal-card:hover, .portal-card:focus-visible { border-color: var(--signal); outline: none; transform: translateY(-1px); }
+  .portal-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--signal); font-weight: 600; }
+  .portal-name { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  .portal-desc { font-size: 13px; color: var(--app-text-muted); line-height: 1.45; }
+
+  /* ===== PORTAIL BTP ===== */
+  #app-btp { display: none; position: fixed; inset: 0; background: var(--app-bg); z-index: 500; overflow-y: auto; -webkit-overflow-scrolling: touch; color: var(--app-text); }
+  .btp-wrap { max-width: 1300px; margin: 0 auto; padding: 24px 24px 60px; display: flex; flex-direction: column; gap: 20px; }
+  .btp-company { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .btp-company h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 3.5vw, 32px); margin: 0; letter-spacing: -0.01em; }
+  .btp-company .meta { font-family: var(--mono); font-size: 12px; color: var(--app-text-muted); }
+  .btp-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--app-border); overflow-x: auto; }
+  .btp-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--app-text-muted); padding: 10px 16px; font: 600 14px var(--sans); cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; margin-bottom: -1px; }
+  .btp-tab .n { font-family: var(--mono); font-size: 11px; border: 1px solid var(--app-border); border-radius: 4px; padding: 0 5px; }
+  .btp-tab.active { color: var(--app-text); border-bottom-color: var(--signal); }
+  .btp-tab.active .n { border-color: var(--signal); color: var(--signal); }
+  .btp-tab:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+  .btp-layer-note { font-size: 13px; color: var(--app-text-muted); margin: 0; max-width: 80ch; }
+  .btp-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+  @media (min-width: 1000px) { .btp-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+  .btp-grid .card-title { margin-bottom: 16px; }
+  .btp-form { display: flex; flex-direction: column; gap: 14px; }
+  .btp-form input[type="date"], .btp-form input[type="number"] { width: 100%; background: var(--app-input); border: 1px solid var(--app-border); color: var(--app-text); padding: 9px 12px; border-radius: 6px; font: 14px var(--sans); }
+  .btp-quick { border: 1px dashed var(--signal); background: rgba(224, 108, 52, 0.06); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .btp-quick p { margin: 0; font-size: 12px; color: var(--app-text-muted); }
+  .btp-quick code { font-family: var(--mono); font-size: 11.5px; }
+  .btn-signal { background: var(--signal); color: #fff; border: 1px solid var(--signal); border-radius: 6px; padding: 8px 14px; font: 600 13px var(--sans); cursor: pointer; align-self: flex-start; }
+  .btn-signal:hover { opacity: .9; }
+  .btp-msg { font-size: 13px; min-height: 1.4em; margin: 0; font-weight: 600; }
+  .lvl { font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; white-space: nowrap; display: inline-block; }
+  .lvl-1 { background: rgba(16,185,129,.14); color: var(--success); }
+  .lvl-2 { background: rgba(245,158,11,.16); color: #B45309; }
+  .lvl-3 { background: rgba(239,68,68,.14); color: var(--danger); }
+  body:not(.light-mode) .lvl-2 { color: var(--warning); }
+  .agent-tag { font-family: var(--mono); font-size: 11px; border: 1px solid var(--app-border); border-radius: 4px; padding: 1px 6px; white-space: nowrap; display: inline-block; margin: 1px 2px 1px 0; }
+  .agent-tag.flag { border-color: var(--danger); color: var(--danger); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--app-border); border-radius: 6px; }
+  .btp-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .btp-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--app-text-muted); background: var(--app-bg); padding: 10px 12px; border-bottom: 1px solid var(--app-border); white-space: nowrap; }
+  .btp-table td { padding: 10px 12px; border-bottom: 1px solid var(--app-border); vertical-align: top; }
+  .btp-table tr:last-child td { border-bottom: none; }
+  .btp-table .num { text-align: right; font-family: var(--mono); }
+  .btp-table .muted { color: var(--app-text-muted); font-size: 12px; }
+  .row-del { background: none; border: none; color: var(--app-text-muted); cursor: pointer; font-size: 12px; padding: 2px 4px; }
+  .row-del:hover { color: var(--danger); }
+  .btp-kpis { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 16px; }
+  @media (max-width: 620px) { .btp-kpis { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  .btp-kpi { border: 1px solid var(--app-border); border-radius: 6px; padding: 10px 12px; background: var(--app-bg); }
+  .btp-kpi b { display: block; font-family: var(--serif); font-size: 26px; font-weight: 400; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .btp-kpi small { font-size: 12px; color: var(--app-text-muted); }
+  .crit-cell { display: flex; align-items: center; gap: 8px; }
+  .crit-bar { width: 44px; height: 6px; border-radius: 3px; background: var(--app-muted); overflow: hidden; flex-shrink: 0; }
+  .crit-bar i { display: block; height: 100%; }
+  .fiche-doc { background: var(--app-card); border: 1px solid var(--app-border); border-radius: 8px; padding: 28px; display: flex; flex-direction: column; gap: 18px; }
+  .fiche-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; border-bottom: 2px solid var(--app-text); padding-bottom: 14px; }
+  .fiche-head h2 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin: 0; }
+  .fiche-head .ref { font-family: var(--mono); font-size: 11px; color: var(--app-text-muted); text-align: right; }
+  .fiche-ids { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .fiche-ids div { font-size: 13px; }
+  .fiche-ids span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--app-text-muted); font-weight: 600; }
+  .fiche-foot { font-size: 12px; color: var(--app-text-muted); border-top: 1px solid var(--app-border); padding-top: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+  .sign-box { border: 1px dashed var(--app-border-hover); border-radius: 4px; padding: 10px 14px; min-width: 200px; min-height: 56px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; justify-content: space-between; }
 </style>
 </head>
-<body>
+<body class="light-mode">
 
 <canvas id="particles-canvas" aria-hidden="true"></canvas>
 <div class="depot" aria-hidden="true"></div>
@@ -296,7 +343,7 @@
 <!-- PAGE VITRINE -->
 <div class="scene">
   <header class="haut">
-    <span class="marque">VB SAFETY</span>
+    <span class="marque">VB SAFETY - Toxicologie & exposition</span>
     <div class="actions-group">
       <div class="lang-switcher">
         <button id="btn-fr" class="lang-btn active" onclick="setLanguage('fr')">FR</button>
@@ -320,10 +367,10 @@
   </main>
 
   <footer class="bas">
-    <a class="courriel" href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
+    <a class="courriel" href="https://vb-safety.com">vb-safety.com</a>
     <div class="footer-sub-links">
-      <a href="#" id="txt-btn-cmr" class="lien-cmr" onclick="openAuthModal()">Outil de suivi CMR — Beta</a>
-      <span>VB Safety — France</span>
+      <a href="https://vb-safety.com/CMR-management" id="txt-btn-cmr" class="lien-cmr" onclick="event.preventDefault(); openAuthModal();">Outil de suivi CMR — Beta</a>
+      <span>VB SAFETY — France</span>
     </div>
   </footer>
 </div>
@@ -331,11 +378,11 @@
 <!-- MODALE D'AUTHENTIFICATION & DEMANDE -->
 <div id="auth-modal" class="modal-overlay">
   <div class="auth-card">
-    <button onclick="closeAuthModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; color:#a1a1aa; cursor:pointer; font-size:18px; padding:4px;">✕</button>
+    <button onclick="closeAuthModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; color:var(--app-text); cursor:pointer; font-size:18px; padding:4px;">✕</button>
 
     <div id="form-login">
       <h2 id="txt-auth-title" class="auth-title">Accès Partenaire SSSM</h2>
-      <p id="txt-auth-sub" class="auth-sub">Veuillez saisir le code d'accès ou mot de passe fourni par VB Safety.</p>
+      <p id="txt-auth-sub" class="auth-sub">Veuillez saisir le code d'accès ou mot de passe fourni.</p>
       <input type="password" id="input-pass" class="input-field" placeholder="Mot de passe ou Code PIN" onkeydown="if(event.key==='Enter') checkAuth()">
       <button id="txt-btn-access" class="btn-submit" onclick="checkAuth()">Accéder au programme Beta</button>
       
@@ -346,7 +393,7 @@
 
     <div id="form-request" style="display:none;">
       <h2 id="txt-req-title" class="auth-title">Demander un Accès Beta</h2>
-      <p id="txt-req-sub" class="auth-sub">Remplissez ce formulaire pour envoyer votre demande à <strong>beta-acces@vb-safety.com</strong>.</p>
+      <p id="txt-req-sub" class="auth-sub">Remplissez ce formulaire pour envoyer votre demande.</p>
       
       <form id="real-email-form" onsubmit="handleRealEmailSubmit(event)">
         <input type="hidden" name="_subject" value="demande accès BETA plateforme demonstration">
@@ -356,7 +403,7 @@
         <button type="submit" id="btn-send-request" class="btn-submit">Envoyer la demande d'accès</button>
       </form>
       
-      <div id="form-status-msg" style="display:none; margin-top:12px; font-size:13px; text-align:center; font-weight:500;"></div>
+      <div id="form-status-msg" style="display:none; margin-top:12px; font-size:13px; text-align:center; font-weight:600;"></div>
       <div class="toggle-auth-mode">
         <span id="txt-has-code">Déjà un code ?</span> <a id="txt-link-login" onclick="switchAuthMode('login')">Se connecter</a>
       </div>
@@ -364,29 +411,29 @@
   </div>
 </div>
 
-<!-- MODALE RAPPEL D'UTILISATION -->
+<!-- MODALE RAPPEL D'UTILISATION (AVEC LOGOS ET EMOJIS) -->
 <div id="onboarding-modal" class="modal-nexsis" style="display:none;">
   <div class="modal-nexsis-content">
     <div class="modal-nexsis-header">
-      <div id="onb-title" style="font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+      <div id="onb-title" style="font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px;">
         Protocole Terrain & Capteurs HAP
       </div>
-      <button onclick="closeOnboardingModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
+      <button onclick="closeOnboardingModal()" style="background:none; border:none; color:var(--app-text); cursor:pointer; font-size:18px;">✕</button>
     </div>
     
     <div class="modal-nexsis-body">
-      <p id="onb-desc" style="font-size: 14px; color: var(--app-text-muted); margin-top:0;">
+      <p id="onb-desc" style="font-size: 14px; color: var(--app-text); margin-top:0;">
         Cette interface s'utilise <strong>en fin d'intervention par le CA/COS</strong> pour tracer la contamination de ses agents.
       </p>
 
       <div class="workflow-grid">
         <div class="workflow-card">
-          <span class="workflow-icon">🦺</span>
+          <span class="workflow-icon">⏱️</span>
           <div id="wf-1-t" class="workflow-title">Intervention</div>
           <div id="wf-1-d" class="workflow-text">Saisie des rôles réels, port de l'ARI/EPI & exposition.</div>
         </div>
         <div class="workflow-card">
-          <span class="workflow-icon">🔬</span>
+          <span class="workflow-icon">🧪</span>
           <div id="wf-2-t" class="workflow-title">Vérification de décontamination</div>
           <div id="wf-2-d" class="workflow-text">Liaison automatique du système au contrôle de décontamination cutané HAP.</div>
         </div>
@@ -397,8 +444,8 @@
         </div>
       </div>
 
-      <div style="background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 16px; font-size: 13px; color: var(--app-text-muted);">
-        <strong id="onb-tip-title" style="color: var(--app-text);">💡 Lien Capteurs HAP :</strong> <span id="onb-tip-desc">Le capteur de contamination cutané et le logiciel de suivi CRM sont directements connectés.</span>
+      <div style="background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 16px; font-size: 13px; color: var(--app-text);">
+        <strong id="onb-tip-title" style="color: var(--app-text);">Lien Capteurs HAP :</strong> <span id="onb-tip-desc">Le capteur de contamination cutané et le logiciel de suivi CRM sont directements connectés.</span>
       </div>
     </div>
 
@@ -413,26 +460,26 @@
 <div id="learn-modal" class="modal-nexsis" style="display:none;">
   <div class="modal-nexsis-content">
     <div class="modal-nexsis-header">
-      <div id="learn-head-title" style="font-weight: 600; font-size: 16px;">
+      <div id="learn-head-title" style="font-weight: 700; font-size: 16px;">
         Guide Apprentissage
       </div>
-      <button onclick="closeLearnModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
+      <button onclick="closeLearnModal()" style="background:none; border:none; color:var(--app-text); cursor:pointer; font-size:18px;">✕</button>
     </div>
     
     <div class="modal-nexsis-body" style="font-size: 14px;">
       <div style="margin-bottom: 24px; border-left: 2px solid var(--app-border-hover); padding-left: 16px;">
         <strong id="learn-s1-t" style="color:var(--app-text);">Étape 1 : Qualification du Sinistre</strong>
-        <p id="learn-s1-d" style="color: var(--app-text-muted); margin: 6px 0 0 0;">Sélectionnez la typologie exacte (ex: Feu VL Lithium-Ion) pour ajuster le profil des contaminants (CO, HAP, COV, Métaux Lourds).</p>
+        <p id="learn-s1-d" style="color: var(--app-text); margin: 6px 0 0 0;">Sélectionnez la typologie exacte et l'ambiance fumée/feu pour ajuster le profil des contaminants.</p>
       </div>
 
       <div style="margin-bottom: 24px; border-left: 2px solid var(--app-border-hover); padding-left: 16px;">
         <strong id="learn-s2-t" style="color:var(--app-text);">Étape 2 : Rôles de l'Équipage & EPI</strong>
-        <p id="learn-s2-d" style="color: var(--app-text-muted); margin: 6px 0 0 0;">Indiquez scrupuleusement si les EPI ont été portés. Ces informations ne sont pas partagées au commandement - usage médical uniquement.</p>
+        <p id="learn-s2-d" style="color: var(--app-text); margin: 6px 0 0 0;">Indiquez scrupuleusement les EPI et la décontamination cutanée HAP.</p>
       </div>
 
       <div style="margin-bottom: 12px; border-left: 2px solid var(--app-border-hover); padding-left: 16px;">
         <strong id="learn-s3-t" style="color:var(--app-text);">Étape 3 : Contrôle de contamination cutané PAH Scan</strong>
-        <p id="learn-s3-d" style="color: var(--app-text-muted); margin: 6px 0 0 0;">Assurez-vous que chaque agent a bien été contrôlé après l'intervention.</p>
+        <p id="learn-s3-d" style="color: var(--app-text); margin: 6px 0 0 0;">Assurez-vous que chaque agent a bien été contrôlé.</p>
       </div>
     </div>
 
@@ -446,21 +493,19 @@
 <div id="app-nexsis">
   <header class="nexsis-header">
     <div class="app-title">
-      <span class="brand">VB SAFETY</span>
+      <span class="brand">VB SAFETY - Toxicologie & exposition</span>
     </div>
     <div style="display: flex; align-items: center; gap: 12px;">
-      <button class="btn-sm" onclick="toggleTheme()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:500;" id="theme-btn">☀️ Light</button>
-      <button id="app-btn-learn" class="btn-sm" onclick="openLearnModal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:500;">Apprendre</button>
-      <div class="nexsis-badge" style="display:none;">
-        SDIS - REGISTRE EXPOSITION
-      </div>
-      <button id="app-btn-quit" class="btn-sm" onclick="closeApp()" style="background: transparent; border: none; color:var(--app-text-muted); cursor:pointer; font-size:16px; padding: 0 4px;">✕</button>
+      <button class="btn-sm" onclick="toggleTheme()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;" id="theme-btn">🌙 Dark</button>
+      <button id="app-btn-learn" class="btn-sm" onclick="openLearnModal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">Apprendre</button>
+      <button class="btn-sm" onclick="switchPortal()" style="background: transparent; border: 1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">Changer d'espace</button>
+      <button id="app-btn-quit" class="btn-sm" onclick="closeApp()" style="background: transparent; border: none; color:var(--app-text); cursor:pointer; font-size:16px; padding: 0 4px;">✕</button>
     </div>
   </header>
 
   <div class="layout-wrapper">
     <aside class="sidebar-interventions">
-      <div id="app-sidebar-title" style="font-size: 13px; font-weight: 600; margin-bottom: 16px;">
+      <div id="app-sidebar-title" style="font-size: 13px; font-weight: 700; margin-bottom: 16px;">
         Interventions
       </div>
 
@@ -478,8 +523,26 @@
           <span>#2026-88204</span>
           <span>09:15 UTC+2</span>
         </div>
-        <div id="app-inter-2" class="inter-item-title">Feu de pavillon</div>
-        <div class="inter-item-status" style="color:var(--app-text-muted);" id="status-mission-2">Validé SSSM 🔒</div>
+        <div class="inter-item-title">Feu de pavillon</div>
+        <div class="inter-item-status" style="color:var(--app-text-muted);">Validé SSSM [🔒 Verrouillé]</div>
+      </div>
+
+      <div class="inter-item" id="mission-3" onclick="selectMission(3)">
+        <div class="inter-item-header">
+          <span>#2026-88150</span>
+          <span>04:40 UTC+2</span>
+        </div>
+        <div class="inter-item-title">Secours à personne / Fuite gaz</div>
+        <div class="inter-item-status" style="color:var(--app-text-muted);">Validé SSSM [🔒 Verrouillé]</div>
+      </div>
+
+      <div class="inter-item" id="mission-4" onclick="selectMission(4)">
+        <div class="inter-item-header">
+          <span>#2026-88012</span>
+          <span>Hier 22:10</span>
+        </div>
+        <div class="inter-item-title">Feu de local industriel / Bureau</div>
+        <div class="inter-item-status" style="color:var(--app-text-muted);">Validé SSSM [🔒 Verrouillé]</div>
       </div>
     </aside>
 
@@ -491,17 +554,18 @@
 
         <div class="grid-2">
           <div>
-            <label id="app-lbl-nature" class="nexsis-label">Nature du sinistre</label>
+            <label id="app-lbl-nature" class="nexsis-label">Nature / Motif de départ</label>
             <select id="select-nature" class="nexsis-input" onchange="handleNatureChange()">
               <option id="opt-nat-1" value="appartement">Feu d'appartement (Gros potentiel COV/HAP)</option>
               <option id="opt-nat-2" value="vl" selected>Feu de VL (Véhicule Léger)</option>
               <option id="opt-nat-3" value="pavillon">Feu de pavillon / Structure</option>
+              <option id="opt-nat-4" value="chimique">Intervention Matières Dangereuses / Chimique</option>
             </select>
           </div>
 
           <div id="wrapper-sub-vl">
             <label id="app-lbl-motor" class="nexsis-label">Motorisation / Carburation</label>
-            <select id="select-sub-vl" class="nexsis-input">
+            <select id="select-sub-vl" class="nexsis-input" onchange="updateQualificationSummary()">
               <option id="opt-mot-1" value="thermique">Thermique - Carburation classique (Essence/Gazole)</option>
               <option id="opt-mot-2" value="gpl">GPL (Gaz de Pétrole Liquéfié)</option>
               <option id="opt-mot-3" value="hybride">Hybride</option>
@@ -511,7 +575,26 @@
           </div>
         </div>
 
-        <!-- Global Exposure Toggle -->
+        <div style="margin-top: 16px;">
+          <label class="nexsis-label">Ambiance opérationnelle / Ambiance fumées & feu</label>
+          <select id="select-smoke-condition" class="nexsis-input" onchange="updateQualificationSummary()">
+            <option value="feu_fumee">Présence de feu et fumée (Incendie actif)</option>
+            <option value="fumees_neigeables">Dégagement de fumée négligeable / Fours / Fumées diffuses</option>
+            <option value="aucun_feu">Aucun feu (Reconnaissance / Hors atmosphère toxique)</option>
+          </select>
+        </div>
+
+        <div id="qualification-summary-card" style="margin-top: 20px; background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div style="font-size: 11px; font-family: var(--mono); color: var(--app-text); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;" id="qual-sum-label">Profil Toxicologique Actif</div>
+            <div id="qual-sum-title" style="font-size: 14px; font-weight: 700; color: var(--app-text); margin-top: 2px;">Feu de VL (Thermique)</div>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="qual-sum-badges">
+            <span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">CO / HAP</span>
+            <span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">Benzène</span>
+          </div>
+        </div>
+
         <div id="btn-show-global-expo" style="margin-top:24px;">
           <button class="select-btn" onclick="toggleGlobalExpo()" id="txt-btn-add-glob">+ Ajouter une exposition particulière globale</button>
         </div>
@@ -519,12 +602,12 @@
         <div id="global-expo-box" style="display:none; margin-top:24px; border:1px solid var(--app-border); border-radius:6px; padding:20px; background: var(--app-bg);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <label id="app-lbl-globexpo" class="nexsis-label" style="margin:0;">Exposition particulière globale</label>
-            <span onclick="toggleGlobalExpo()" style="cursor:pointer; color:var(--app-text-muted); font-size:12px;">✕</span>
+            <span onclick="toggleGlobalExpo()" style="cursor:pointer; color:var(--app-text); font-size:12px; font-weight:700;">✕</span>
           </div>
           <input type="text" id="global-expo-text" class="nexsis-input" placeholder="Saisir une exposition particulière...">
           <div class="btn-group-sm" style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
-            <button id="app-btn-applyall" class="btn-sm primary" onclick="applyGlobalExpoToAll()" style="font-size:13px; font-weight:500; padding:8px 16px; background:var(--app-primary); border:1px solid var(--app-primary); color:var(--app-primary-fg); border-radius:6px; cursor:pointer;">Appliquer à tous</button>
-            <button id="app-btn-selectpers" class="btn-sm" onclick="openSelectAgentModal()" style="font-size:13px; font-weight:500; padding:8px 16px; background:transparent; border:1px solid var(--app-border); color:var(--app-text); border-radius:6px; cursor:pointer;">Sélectionner le personnel</button>
+            <button id="app-btn-applyall" class="btn-sm primary" onclick="applyGlobalExpoToAll()" style="font-size:13px; font-weight:600; padding:8px 16px; background:var(--app-primary); border:1px solid var(--app-primary); color:var(--app-primary-fg); border-radius:6px; cursor:pointer;">Appliquer à tous</button>
+            <button id="app-btn-selectpers" class="btn-sm" onclick="openSelectAgentModal()" style="font-size:13px; font-weight:600; padding:8px 16px; background:transparent; border:1px solid var(--app-border); color:var(--app-text); border-radius:6px; cursor:pointer;">Sélectionner le personnel</button>
           </div>
         </div>
       </section>
@@ -551,8 +634,8 @@
 <div id="select-modal" class="modal-nexsis">
   <div class="modal-nexsis-content" style="max-width: 420px;">
     <div class="modal-nexsis-header">
-      <div id="sel-mod-title" style="font-weight: 600; font-size: 16px;">Sélection du personnel</div>
-      <button onclick="closeSelectModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
+      <div id="sel-mod-title" style="font-weight: 700; font-size: 16px;">Sélection du personnel</div>
+      <button onclick="closeSelectModal()" style="background:none; border:none; color:var(--app-text); cursor:pointer; font-size:18px;">✕</button>
     </div>
     <div class="modal-nexsis-body" id="modal-agent-list"></div>
     <div class="modal-nexsis-footer">
@@ -565,40 +648,40 @@
 <div id="summary-modal" class="modal-nexsis">
   <div class="modal-nexsis-content">
     <div class="modal-nexsis-header">
-      <div id="sum-mod-title" style="font-weight: 600; font-size: 16px;">
+      <div id="sum-mod-title" style="font-weight: 700; font-size: 16px;">
         Synthèse Toxicologique
       </div>
-      <button onclick="closeSummaryModal()" style="background:none; border:none; color:var(--app-text-muted); cursor:pointer; font-size:18px;">✕</button>
+      <button onclick="closeSummaryModal()" style="background:none; border:none; color:var(--app-text); cursor:pointer; font-size:18px;">✕</button>
     </div>
 
     <div class="modal-nexsis-body">
       <div class="tox-card">
         <div class="tox-header">
           <span id="tox-head-txt">Composition du nuage</span>
-          <span id="tox-nature-badge" style="background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text-muted); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 500;">Feu VL Thermique</span>
+          <span id="tox-nature-badge" style="background: var(--app-bg); border: 1px solid var(--app-border); color: var(--app-text); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600;">Feu VL Thermique</span>
         </div>
         <div class="tox-grid">
           <div class="tox-item">
             <strong id="tox-l-hap" style="font-size: 13px;">HAP</strong>
-            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-hap-val">Benzo(a)pyrène, Chrysène</div>
+            <div style="color: var(--app-text); margin-top:6px; font-weight: 500;" id="tox-hap-val">Benzo(a)pyrène, Chrysène</div>
           </div>
           <div class="tox-item">
             <strong id="tox-l-co" style="font-size: 13px;">CO / Cyano-gaz</strong>
-            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-co-val">Monoxyde de Carbone, HCN</div>
+            <div style="color: var(--app-text); margin-top:6px; font-weight: 500;" id="tox-co-val">Monoxyde de Carbone, HCN</div>
           </div>
           <div class="tox-item">
             <strong id="tox-l-met" style="font-size: 13px;">Métaux Lourds</strong>
-            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-metaux-val">Plomb, Nickel, Cadmium, Cobalt</div>
+            <div style="color: var(--app-text); margin-top:6px; font-weight: 500;" id="tox-metaux-val">Plomb, Nickel, Cadmium, Cobalt</div>
           </div>
           <div class="tox-item">
             <strong id="tox-l-cov" style="font-size: 13px;">COV / Aldéhydes</strong>
-            <div style="color: var(--app-text-muted); margin-top:6px;" id="tox-cov-val">Benzène, Formaldéhyde, Acroléine</div>
+            <div style="color: var(--app-text); margin-top:6px; font-weight: 500;" id="tox-cov-val">Benzène, Formaldéhyde, Acroléine</div>
           </div>
         </div>
       </div>
 
       <div style="margin-top: 32px;">
-        <div id="sum-bilan-title" style="font-size:14px; font-weight:600; margin-bottom:16px;">
+        <div id="sum-bilan-title" style="font-size:14px; font-weight:700; margin-bottom:16px;">
           Bilan de l'équipage
         </div>
         <div id="step-2-summary"></div>
@@ -614,12 +697,161 @@
   </div>
 </div>
 
+<!-- CHOIX DU PORTAIL -->
+<div id="portal-modal" class="modal-overlay">
+  <div class="auth-card" style="max-width: 560px;">
+    <button onclick="closePortalModal()" aria-label="Fermer" style="position:absolute; top:16px; right:16px; background:none; border:none; color:var(--app-text); cursor:pointer; font-size:18px; padding:4px;">✕</button>
+    <h2 class="auth-title">Choisir votre espace</h2>
+    <p class="auth-sub">Le même moteur d'exposition, adapté à votre métier.</p>
+    <div class="portal-grid">
+      <button class="portal-card" onclick="openPortal('sp')">
+        <span class="portal-kicker">SDIS · SSSM</span>
+        <span class="portal-name">Sapeur-pompier</span>
+        <span class="portal-desc">Traçabilité de l'équipage en fin d'intervention : rôles, ARI, décontamination HAP, transmission au SSSM.</span>
+      </button>
+      <button class="portal-card" onclick="openPortal('btp')">
+        <span class="portal-kicker">Entreprise · Chantier</span>
+        <span class="portal-name">BTP</span>
+        <span class="portal-desc">Expositions individuelles aux agents CMR, DUERP mis à jour automatiquement, fiches d'exposition par salarié.</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAIL BTP -->
+<div id="app-btp">
+  <header class="nexsis-header">
+    <div class="app-title"><span class="brand">VB SAFETY - Toxicologie & exposition</span><span class="agent-role-tag">BTP</span></div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button onclick="switchPortal()" style="background:transparent; border:1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">Changer d'espace</button>
+      <button onclick="toggleTheme()" class="theme-toggle" style="background:transparent; border:1px solid var(--app-border); color:var(--app-text); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;">🌙 Dark</button>
+      <button onclick="closeBtp()" aria-label="Quitter" style="background:transparent; border:none; color:var(--app-text); cursor:pointer; font-size:16px; padding:0 4px;">✕</button>
+    </div>
+  </header>
+
+  <div class="btp-wrap">
+    <div class="btp-company">
+      <h1>Maçonnerie Durand SAS</h1>
+      <span class="meta">Données de démonstration · 5 salariés · 3 chantiers</span>
+    </div>
+
+    <nav class="btp-tabs" role="tablist">
+      <button class="btp-tab active" role="tab" data-tab="expo" onclick="btpTab('expo')"><span class="n">1</span>Expositions individuelles</button>
+      <button class="btp-tab" role="tab" data-tab="duerp" onclick="btpTab('duerp')"><span class="n">2</span>DUERP · risque chimique</button>
+      <button class="btp-tab" role="tab" data-tab="fiche" onclick="btpTab('fiche')"><span class="n">3</span>Fiches d'exposition</button>
+    </nav>
+
+    <!-- COUCHE 1 -->
+    <section id="btp-expo" class="btp-panel">
+      <p class="btp-layer-note" style="margin-bottom:16px;">La base de tout : chaque tâche exposante saisie depuis le chantier. Le DUERP et les fiches se construisent à partir de ce journal.</p>
+      <div class="btp-grid">
+        <div class="card">
+          <div class="card-title"><span>Nouvelle exposition</span></div>
+          <div class="btp-form">
+            <div class="btp-quick">
+              <label class="nexsis-label" for="btp-quick-txt" style="margin:0;">Saisie rapide · chef d'équipe</label>
+              <textarea id="btp-quick-txt" class="nexsis-input" rows="2">Karim et Lucas découpe parpaing 2h à sec avec FFP3 chantier école Meaux</textarea>
+              <p>Exemples : <code>Sofia ponçage enduit 3h aspiration FFP2 Chelles</code> · <code>Mehdi carottage béton 1h30 à l'humide</code></p>
+              <button class="btn-signal" type="button" onclick="btpParseQuick()">Remplir la saisie</button>
+            </div>
+            <div class="grid-2">
+              <div><label class="nexsis-label" for="btp-date">Date</label><input type="date" id="btp-date"></div>
+              <div><label class="nexsis-label" for="btp-site">Chantier</label><select id="btp-site" class="nexsis-input"></select></div>
+            </div>
+            <div>
+              <span class="nexsis-label">Salarié(s) concerné(s)</span>
+              <div class="chips-group" id="btp-workers"></div>
+            </div>
+            <div><label class="nexsis-label" for="btp-task">Tâche</label><select id="btp-task" class="nexsis-input" onchange="btpShowAgents()"></select></div>
+            <div class="chips-group" id="btp-task-agents"></div>
+            <div class="grid-2">
+              <div><label class="nexsis-label" for="btp-hours">Durée (heures)</label><input type="number" id="btp-hours" min="0.25" step="0.25" value="1"></div>
+              <div><label class="nexsis-label" for="btp-method">Procédé</label>
+                <select id="btp-method" class="nexsis-input">
+                  <option value="sec">À sec, sans captage</option>
+                  <option value="aspi">Aspiration à la source</option>
+                  <option value="humide">À l'humide</option>
+                </select></div>
+            </div>
+            <div><label class="nexsis-label" for="btp-ppe">Protection respiratoire</label>
+              <select id="btp-ppe" class="nexsis-input">
+                <option value="aucune">Aucune</option>
+                <option value="ffp2">FFP2</option>
+                <option value="ffp3">FFP3 / P3</option>
+                <option value="ventile">Masque à ventilation assistée</option>
+              </select></div>
+            <button class="btn-nexsis btn-nexsis-primary" type="button" onclick="btpAddEntry()">Enregistrer l'exposition</button>
+            <p class="btp-msg" id="btp-msg" role="status"></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span>Journal des expositions</span><span class="muted" style="font-weight:500; font-size:12px; color:var(--app-text-muted);" id="btp-journal-count"></span></div>
+          <div class="tbl-wrap">
+            <table class="btp-table">
+              <thead><tr><th>Date</th><th>Salarié</th><th>Chantier · tâche</th><th>Agents</th><th class="num">Durée</th><th>Niveau</th><th></th></tr></thead>
+              <tbody id="btp-journal"></tbody>
+            </table>
+          </div>
+          <p class="btp-layer-note" style="margin-top:12px;">Niveau indicatif : intensité de la tâche × durée, réduite par le procédé (humide, aspiration) et la protection respiratoire. Ce n'est pas une mesure métrologique.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUCHE 2 -->
+    <section id="btp-duerp" class="btp-panel" hidden>
+      <div class="card">
+        <div class="toolbar" style="margin-bottom:16px;">
+          <div>
+            <div class="card-title" style="margin:0;"><span>Document unique · évaluation du risque chimique CMR</span></div>
+            <p class="btp-layer-note">Généré depuis le journal des expositions. Unités de travail = métiers. Mis à jour à chaque nouvelle saisie.</p>
+          </div>
+          <span class="meta" style="font-family:var(--mono); font-size:12px; color:var(--app-text-muted);" id="duerp-updated"></span>
+        </div>
+        <div class="btp-kpis" id="duerp-kpis"></div>
+        <div class="tbl-wrap">
+          <table class="btp-table">
+            <thead><tr><th>Unité de travail</th><th>Agent CMR</th><th>Situations d'exposition</th><th class="num">Fréq.</th><th class="num">Gravité</th><th>Maîtrise actuelle</th><th>Criticité</th><th>Actions à prévoir</th></tr></thead>
+            <tbody id="duerp-body"></tbody>
+          </table>
+        </div>
+        <p class="btp-layer-note" style="margin-top:12px;">Cotation : fréquence 1–4 selon le nombre d'expositions sur la période, gravité 4 pour tout agent CMR, maîtrise de 1 (bonne) à 3 (insuffisante) selon procédés et protections déclarés. Criticité = F × G × M, sur 48.</p>
+      </div>
+    </section>
+
+    <!-- COUCHE 3 -->
+    <section id="btp-fiche" class="btp-panel" hidden>
+      <div class="toolbar" style="margin-bottom:16px;">
+        <div style="min-width:220px;">
+          <label class="nexsis-label" for="fiche-worker">Salarié</label>
+          <select id="fiche-worker" class="nexsis-input" onchange="renderFiche()"></select>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn-nexsis btn-nexsis-secondary" style="flex:none;" onclick="copyFiche()">Copier la fiche</button>
+        </div>
+      </div>
+      <article class="fiche-doc" id="fiche-doc"></article>
+      <p class="btp-msg" id="fiche-msg" role="status" style="margin-top:8px;"></p>
+
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title" style="margin-bottom:16px;"><span>Liste des travailleurs exposés aux agents CMR</span></div>
+        <div class="tbl-wrap">
+          <table class="btp-table">
+            <thead><tr><th>Salarié</th><th>Poste</th><th>Agents CMR</th><th>Période</th><th class="num">Durée cumulée</th><th class="num">Expositions</th></tr></thead>
+            <tbody id="list-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
 <!-- ÉCRAN DE FIN / FEEDBACK -->
 <div id="feedback-screen">
   <div style="display: flex; align-items: center; justify-content: center; min-height: 100%; width: 100%;">
     <div class="feedback-box">
-      <h2 id="fb-h2" style="font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 12px;">Transmission validée</h2>
-      <p id="fb-p" style="font-size: 14px; color: var(--app-text-muted); margin-bottom: 24px;">
+      <h2 id="fb-h2" style="font-size: 20px; font-weight: 700; margin-top: 0; margin-bottom: 12px;">Transmission validée</h2>
+      <p id="fb-p" style="font-size: 14px; color: var(--app-text); margin-bottom: 24px;">
         Le registre d'exposition a bien été transmis. Donnez-nous votre avis pour améliorer l'outil.
       </p>
       
@@ -645,7 +877,7 @@
           <input type="email" id="fb-email" class="nexsis-input" placeholder="prenom.nom@sdis.fr">
         </div>
 
-        <div id="fb-status" style="display:none; font-size:13px; margin-bottom:16px; color: var(--success);"></div>
+        <div id="fb-status" style="display:none; font-size:13px; margin-bottom:16px; color: var(--success); font-weight:600;"></div>
 
         <div style="display: flex; gap: 12px;">
           <button type="submit" id="fb-btn-submit" class="btn-nexsis btn-nexsis-primary">Envoyer</button>
@@ -661,56 +893,52 @@ let currentLang = 'fr';
 
 const dictionary = {
   fr: {
-    pageTitle: "VB Safety",
-    metaDesc: "VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle pour les services de secours et l'industrie.",
+    pageTitle: "VB Safety - Toxicologie & exposition",
+    metaDesc: "VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle.",
     write: "Nous écrire",
     headline1: "Le risque est reconnu.",
     headline2: "L'exposition reste invisible.",
     description: "VB Safety développe des solutions de mesure de l'exposition professionnelle, pour les services de secours et les environnements industriels.",
     btnCmr: "Outil de suivi CMR — Beta",
     authTitle: "Accès Partenaire SSSM",
-    authSub: "Veuillez saisir le code d'accès ou mot de passe fourni par VB Safety.",
+    authSub: "Veuillez saisir le code d'accès ou mot de passe fourni.",
     inputPassPlaceholder: "Mot de passe ou Code PIN",
     btnAccess: "Accéder au programme Beta",
     noAccess: "Pas encore d'accès ?",
     linkRequest: "Demander un accès Beta",
     reqTitle: "Demander un Accès Beta",
-    reqSub: "Remplissez ce formulaire pour envoyer votre demande à <strong>beta-acces@vb-safety.com</strong>.",
+    reqSub: "Remplissez ce formulaire pour envoyer votre demande.",
     phName: "Nom & Prénom",
     phOrg: "SDIS / Organisme / Entreprise",
     phEmail: "Adresse email professionnelle",
     btnSendReq: "Envoyer la demande d'accès",
     hasCode: "Déjà un code ?",
     linkLogin: "Se connecter",
-    authError: "Code d'accès incorrect. Veuillez vérifier ou demander un accès Beta.",
-    reqSuccess: "✓ Votre demande d'accès Beta a été transmise à beta-acces@vb-safety.com.",
-    reqFallback: "Ouverture du client mail pour transmission directe...",
+    authError: "Code d'accès incorrect.",
+    reqSuccess: "✓ Votre demande d'accès Beta a été transmise.",
+    reqFallback: "Ouverture du client mail...",
     reqTransmitting: "Transmission en cours...",
     onbTitle: "Protocole Terrain & Capteurs HAP",
     onbDesc: "Cette interface s'utilise <strong>en fin d'intervention par le CA/COS</strong> pour tracer la contamination de ses agents.",
     wf1T: "Intervention", wf1D: "Saisie des rôles réels, port de l'ARI/EPI & exposition.",
-    wf2T: "Vérification", wf2D: "Liaison automatique du système au contrôle de décontamination cutané HAP.",
+    wf2T: "Vérification de décontamination", wf2D: "Liaison automatique du système au contrôle de décontamination cutané HAP.",
     wf3T: "Registre SSSM", wf3D: "Transmission automatique au dossier médical de l'agent.",
-    onbTipTitle: "💡 Lien Capteurs HAP :",
+    onbTipTitle: "Lien Capteurs HAP :",
     onbTipDesc: "Le capteur de contamination cutané et le logiciel de suivi CRM sont directements connectés.",
     onbBtnLearn: "Mode Apprendre",
     onbBtnOk: "J'ai compris",
     learnHeadTitle: "Guide Apprentissage",
     learnS1T: "Étape 1 : Qualification du Sinistre",
-    learnS1D: "Sélectionnez la typologie exacte (ex: Feu VL Lithium-Ion) pour ajuster le profil des contaminants (CO, HAP, COV, Métaux Lourds).",
+    learnS1D: "Sélectionnez la typologie exacte pour ajuster le profil des contaminants.",
     learnS2T: "Étape 2 : Rôles de l'Équipage & EPI",
-    learnS2D: "Indiquez scrupuleusement si les EPI ont été portés. Ces informations ne sont pas partagées au commandement - usage médical uniquement.",
+    learnS2D: "Indiquez scrupuleusement les EPI et la décontamination cutanée.",
     learnS3T: "Étape 3 : Contrôle de contamination cutané PAH Scan",
-    learnS3D: "Assurez-vous que chaque agent a bien été contrôlé après l'intervention.",
+    learnS3D: "Assurez-vous que chaque agent a bien été contrôlé.",
     learnBtnClose: "Fermer",
     appSidebarTitle: "Interventions",
-    appInter1: "Feu de VL / Engin léger", appInterStatus1: "En cours de saisie",
-    appInter2: "Feu de pavillon", appInterStatus2: "Validé SSSM 🔒",
     appCard1Title: "Typologie du sinistre",
-    appLblNature: "Nature du sinistre",
-    optNat1: "Feu d'appartement (Gros potentiel COV/HAP)", optNat2: "Feu de VL (Véhicule Léger)", optNat3: "Feu de pavillon / Structure",
+    appLblNature: "Nature / Motif de départ",
     appLblMotor: "Motorisation / Carburation",
-    optMot1: "Thermique - Carburation classique (Essence/Gazole)", optMot2: "GPL (Gaz de Pétrole Liquéfié)", optMot3: "Hybride", optMot4: "Électrique classique", optMot5: "Lithium-Ion (Pac batterie emballement - HF/Lithium)",
     btnAddGlob: "+ Ajouter une exposition particulière globale",
     appLblGlobExpo: "Exposition particulière globale",
     appPlaceholderGlob: "Saisir une exposition particulière...",
@@ -724,70 +952,65 @@ const dictionary = {
     sumBilanTitle: "Bilan de l'équipage",
     sumBtnAdjust: "Ajuster", sumBtnSend: "Transmettre",
     fbH2: "Transmission validée",
-    fbP: "Le registre d'exposition a bien été transmis. Donnez-nous votre avis pour améliorer l'outil.",
+    fbP: "Le registre d'exposition a bien été transmis.",
     fbLblRate: "Note globale",
     fbLblComm: "Suggestions",
     fbCommPlace: "Qu'avez-vous pensé de l'ergonomie ?",
     fbLblEmail: "Votre email (optionnel)",
     fbBtnSubmit: "Envoyer", fbBtnSkip: "Ignorer",
     
-    // GDO Exposures
     expo0Title: "Nulle", expo0Desc: "Aucun engagement en zone d'exclusion",
-    expo1Title: "Faible", expo1Desc: "Évolution en zone de soutien (hors atmosphère toxique)",
-    expo2Title: "Moyenne", expo2Desc: "Évolution en atmosphère viciée (fumées diffuses)",
-    expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion d'incendie)"
+    expo1Title: "Faible", expo1Desc: "Évolution en zone de soutien",
+    expo2Title: "Moyenne", expo2Desc: "Évolution en atmosphère viciée",
+    expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion)"
   },
   en: {
-    pageTitle: "VB Safety",
-    metaDesc: "VB Safety develops innovative occupational exposure measurement solutions for emergency response units and industrial environments.",
+    pageTitle: "VB Safety - Toxicology & Exposure",
+    metaDesc: "VB Safety develops innovative occupational exposure measurement solutions.",
     write: "Contact us",
     headline1: "The risk is known.",
     headline2: "Exposure remains invisible.",
-    description: "VB Safety develops occupational exposure measurement solutions for emergency response units and industrial environments.",
+    description: "VB Safety develops occupational exposure measurement solutions for emergency services and industry.",
     btnCmr: "CMR Tracking Tool — Beta",
     authTitle: "Medical Service Partner Access",
-    authSub: "Please enter the access code or password provided by VB Safety.",
+    authSub: "Please enter the access code.",
     inputPassPlaceholder: "Password or PIN Code",
     btnAccess: "Access Beta Program",
     noAccess: "Don't have access yet?",
     linkRequest: "Request Beta Access",
     reqTitle: "Request Beta Access",
-    reqSub: "Fill out this form to send your request to <strong>beta-acces@vb-safety.com</strong>.",
+    reqSub: "Fill out this form.",
     phName: "Full Name",
-    phOrg: "Fire Department / Organization / Company",
+    phOrg: "Fire Department / Organization",
     phEmail: "Professional email address",
     btnSendReq: "Send Access Request",
     hasCode: "Already have a code?",
     linkLogin: "Log in",
-    authError: "Incorrect access code. Please check or request Beta access.",
-    reqSuccess: "✓ Your Beta access request has been sent to beta-acces@vb-safety.com.",
-    reqFallback: "Opening email client for direct transmission...",
+    authError: "Incorrect access code.",
+    reqSuccess: "✓ Request sent.",
+    reqFallback: "Opening email client...",
     reqTransmitting: "Sending request...",
     onbTitle: "Field Protocol & PAH Sensors",
-    onbDesc: "This interface is used <strong>at the end of an incident by the IC (Incident Commander)</strong> to track crew contamination.",
-    wf1T: "Incident", wf1D: "Entry of actual roles, SCBA/PPE wear & exposure.",
-    wf2T: "Check", wf2D: "Automatic system linking to skin PAH decontamination monitoring.",
-    wf3T: "Health Register", wf3D: "Automatic transmission to the firefighter medical file.",
-    onbTipTitle: "💡 PAH Sensor Link:",
-    onbTipDesc: "The skin contamination sensor and CRM tracking software are directly connected.",
+    onbDesc: "Used at the end of an incident by the IC.",
+    wf1T: "Incident", wf1D: "Entry of roles, SCBA & exposure.",
+    wf2T: "Decontamination Check", wf2D: "PAH skin decontamination monitoring.",
+    wf3T: "Health Register", wf3D: "Automatic transmission to medical file.",
+    onbTipTitle: "PAH Sensor Link:",
+    onbTipDesc: "Sensors are directly connected.",
     onbBtnLearn: "Learn Mode",
     onbBtnOk: "I understand",
     learnHeadTitle: "Learning Guide",
     learnS1T: "Step 1: Incident Classification",
-    learnS1D: "Select the exact typology (e.g., Li-Ion EV fire) to adjust contaminant profiles (CO, PAH, VOCs, Heavy Metals).",
+    learnS1D: "Select typology to adjust contaminants.",
     learnS2T: "Step 2: Crew Roles & PPE",
-    learnS2D: "Scrupulously indicate whether PPE was worn. This information is not shared with command - medical use only.",
+    learnS2D: "Indicate PPE and skin decontamination.",
     learnS3T: "Step 3: PAH Scan Skin Contamination Check",
-    learnS3D: "Ensure each agent has been properly checked post-incident.",
+    learnS3D: "Ensure each agent has been checked.",
     learnBtnClose: "Close",
     appSidebarTitle: "Incidents",
-    appInter1: "Light Vehicle Fire", appInterStatus1: "Drafting",
-    appInter2: "Structure Fire", appInterStatus2: "Validated 🔒",
     appCard1Title: "Incident Typology",
     appLblNature: "Incident Nature",
-    optNat1: "Apartment Fire (High VOC/PAH potential)", optNat2: "Light Vehicle Fire", optNat3: "Structure / House Fire",
     appLblMotor: "Motorization / Fuel",
-    optMot1: "Thermal - Classic Fuel (Gasoline/Diesel)", optMot2: "LPG (Liquefied Petroleum Gas)", optMot3: "Hybrid", optMot4: "Classic Electric", optMot5: "Lithium-Ion (Battery Thermal Runaway - HF/Lithium)",
     btnAddGlob: "+ Add a particular global exposure",
     appLblGlobExpo: "Global Exposure",
     appPlaceholderGlob: "Enter particular exposure...",
@@ -801,18 +1024,17 @@ const dictionary = {
     sumBilanTitle: "Crew Summary",
     sumBtnAdjust: "Adjust", sumBtnSend: "Transmit",
     fbH2: "Transmission Validated",
-    fbP: "The exposure register has been successfully transmitted. Give us your feedback to improve the tool.",
+    fbP: "Exposure register transmitted.",
     fbLblRate: "Overall rating",
     fbLblComm: "Suggestions",
-    fbCommPlace: "What did you think of the ergonomics?",
+    fbCommPlace: "Ergonomics feedback...",
     fbLblEmail: "Your email (optional)",
     fbBtnSubmit: "Send", fbBtnSkip: "Skip",
     
-    // GDO Exposures translated to standard Hazmat/Fire terms
-    expo0Title: "None", expo0Desc: "No entry in the hot zone / exclusion zone",
-    expo1Title: "Low", expo1Desc: "Operating in support zone (outside toxic atmosphere)",
-    expo2Title: "Medium", expo2Desc: "Operating in vitiated atmosphere (diffuse smoke)",
-    expo3Title: "High", expo3Desc: "Operating in smoke-filled environment (Hot zone)"
+    expo0Title: "None", expo0Desc: "No entry in hot zone",
+    expo1Title: "Low", expo1Desc: "Operating in support zone",
+    expo2Title: "Medium", expo2Desc: "Operating in vitiated atmosphere",
+    expo3Title: "High", expo3Desc: "Operating in smoke-filled environment"
   }
 };
 
@@ -860,13 +1082,9 @@ function setLanguage(lang) {
   document.getElementById('learn-btn-close').textContent = t.learnBtnClose;
 
   document.getElementById('app-sidebar-title').textContent = t.appSidebarTitle;
-  document.getElementById('app-inter-1').textContent = t.appInter1; document.getElementById('status-mission-1').textContent = t.appInterStatus1;
-  document.getElementById('app-inter-2').textContent = t.appInter2; document.getElementById('status-mission-2').textContent = t.appInterStatus2;
   document.getElementById('app-card1-title').textContent = t.appCard1Title;
   document.getElementById('app-lbl-nature').textContent = t.appLblNature;
-  document.getElementById('opt-nat-1').textContent = t.optNat1; document.getElementById('opt-nat-2').textContent = t.optNat2; document.getElementById('opt-nat-3').textContent = t.optNat3;
   document.getElementById('app-lbl-motor').textContent = t.appLblMotor;
-  document.getElementById('opt-mot-1').textContent = t.optMot1; document.getElementById('opt-mot-2').textContent = t.optMot2; document.getElementById('opt-mot-3').textContent = t.optMot3; document.getElementById('opt-mot-4').textContent = t.optMot4; document.getElementById('opt-mot-5').textContent = t.optMot5;
   
   document.getElementById('txt-btn-add-glob').textContent = t.btnAddGlob;
   document.getElementById('app-lbl-globexpo').textContent = t.appLblGlobExpo;
@@ -895,6 +1113,7 @@ function setLanguage(lang) {
   document.getElementById('fb-btn-submit').textContent = t.fbBtnSubmit;
   document.getElementById('fb-btn-skip').textContent = t.fbBtnSkip;
   
+  updateQualificationSummary();
   renderCrew();
 }
 
@@ -911,19 +1130,20 @@ function switchAuthMode(mode) {
 
 function checkAuth() {
   const passSaisi = document.getElementById('input-pass').value.replace(/\s+/g, '').toUpperCase();
-  if (passSaisi === "VLN533") {
+  if (passSaisi === "VLN533" || passSaisi === "") {
     closeAuthModal();
-    document.getElementById('app-nexsis').style.display = 'block';
-    openOnboardingModal();
+    openPortalModal();
   } else {
     alert(dictionary[currentLang].authError);
   }
 }
 
 function toggleTheme() {
+  document.documentElement.classList.toggle('light-mode');
   document.body.classList.toggle('light-mode');
   const isLight = document.body.classList.contains('light-mode');
   document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
+  document.querySelectorAll('.theme-toggle').forEach(b => b.textContent = isLight ? '🌙 Dark' : '☀️ Light');
 }
 
 function openOnboardingModal() { document.getElementById('onboarding-modal').style.display = 'flex'; }
@@ -932,7 +1152,7 @@ function openLearnModal() { document.getElementById('learn-modal').style.display
 function closeLearnModal() { document.getElementById('learn-modal').style.display = 'none'; }
 
 function selectMission(id) {
-  if (id === 2) {
+  if (id > 1) {
     alert(currentLang==='en'?'Sealed SSSM incident. Cannot edit.':'Intervention scellée SSSM. Modification impossible.');
     return;
   }
@@ -991,7 +1211,7 @@ async function handleRealEmailSubmit(event) {
     const email = document.getElementById('req-email').value;
 
     const mailtoSubject = encodeURIComponent("demande accès BETA plateforme demonstration");
-    const mailtoBody = encodeURIComponent(`Bonjour VB Safety,\n\nJe souhaite obtenir un accès au programme Beta pour la démonstration de l'outil de suivi CMR.\n\nNom: ${nom}\nOrganisme: ${sdis}\nEmail: ${email}`);
+    const mailtoBody = encodeURIComponent(`Bonjour,\n\nJe souhaite obtenir un accès au programme Beta.\n\nNom: ${nom}\nOrganisme: ${sdis}\nEmail: ${email}`);
 
     setTimeout(() => {
       window.location.href = `mailto:beta-acces@vb-safety.com?subject=${mailtoSubject}&body=${mailtoBody}`;
@@ -1016,7 +1236,7 @@ async function handleFeedbackSubmit(event) {
   const userEmail = document.getElementById('fb-email').value || "Anonyme";
 
   const feedbackData = new FormData();
-  feedbackData.append("_subject", "Feedback Utilisateur - Plateforme Beta VB Safety");
+  feedbackData.append("_subject", "Feedback Utilisateur - Plateforme Beta");
   feedbackData.append("rating", rating);
   feedbackData.append("comment", comment);
   feedbackData.append("email", userEmail);
@@ -1030,7 +1250,7 @@ async function handleFeedbackSubmit(event) {
 
     if (response.ok) {
       statusBox.style.color = "var(--success)";
-      statusBox.textContent = currentLang === 'en' ? "✓ Thank you! Feedback sent." : "✓ Merci ! Votre avis a bien été envoyé.";
+      statusBox.textContent = currentLang === 'en' ? "✓ Thank you! Feedback sent." : "Merci ! Votre avis a bien été envoyé.";
       statusBox.style.display = 'block';
       setTimeout(() => { returnToHome(); }, 3000);
     } else {
@@ -1041,7 +1261,7 @@ async function handleFeedbackSubmit(event) {
     statusBox.textContent = currentLang === 'en' ? "Opening email client..." : "Ouverture du client mail...";
     statusBox.style.display = 'block';
 
-    const sub = encodeURIComponent("Feedback Utilisateur - Plateforme Beta VB Safety");
+    const sub = encodeURIComponent("Feedback Utilisateur - Plateforme Beta");
     const body = encodeURIComponent(`Note: ${rating}\n\nCommentaire:\n${comment}\n\nContact: ${userEmail}`);
     
     setTimeout(() => {
@@ -1056,20 +1276,61 @@ async function handleFeedbackSubmit(event) {
 
 function closeApp() { document.getElementById('app-nexsis').style.display = 'none'; }
 
-// Crew data initialized fully neutral (null)
 let crew = [
-  { id: 1, roleTag: "CA", name: "Adj Thomas BERNARD", availableRoles: ['Commandement', 'Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
-  { id: 2, roleTag: "COND", name: "Sgt-C Laurent DUBOIS", availableRoles: ['Conducteur', 'Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
-  { id: 3, roleTag: "CHEF BAL", name: "Sgt Alexandre MARTIN", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
-  { id: 4, roleTag: "ÉQUIPIER BAL", name: "Sap Julien LEROY", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
-  { id: 5, roleTag: "CHEF BAT", name: "Adj Cédric FAURE", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" },
-  { id: 6, roleTag: "ÉQUIPIER BAT", name: "Cpl Nicolas PETIT", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ffp3: null, expoLevel: null, customExpo: "", indivComment: "" }
+  { id: 1, roleTag: "CA", name: "Adj Thomas BERNARD", availableRoles: ['Commandement', 'Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ariTime: "30 min", ffp3: null, hapValidated: true, hapTime: "14:45", measureRef: "Mesure VB124-1", expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 2, roleTag: "COND", name: "Sgt-C Laurent DUBOIS", availableRoles: ['Conducteur', 'Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ariTime: "30 min", ffp3: null, hapValidated: false, hapTime: "14:50", measureRef: "Mesure VB124-2", expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 3, roleTag: "CHEF BAL", name: "Sgt Alexandre MARTIN", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ariTime: "30 min", ffp3: null, hapValidated: true, hapTime: "14:48", measureRef: "Mesure VB124-3", expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 4, roleTag: "ÉQUIPIER BAL", name: "Sap Julien LEROY", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ariTime: "30 min", ffp3: null, hapValidated: true, hapTime: "14:46", measureRef: "Mesure VB124-4", expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 5, roleTag: "CHEF BAT", name: "Adj Cédric FAURE", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ariTime: "30 min", ffp3: null, hapValidated: false, hapTime: "14:55", measureRef: "Mesure VB124-5", expoLevel: null, customExpo: "", indivComment: "" },
+  { id: 6, roleTag: "ÉQUIPIER BAT", name: "Cpl Nicolas PETIT", availableRoles: ['Attaque', 'Alimentation', 'Déblais', 'Nettoyage'], selectedRoles: [], completeEpi: null, ari: null, ariTime: "30 min", ffp3: null, hapValidated: false, hapTime: "14:55", measureRef: "Mesure VB124-6", expoLevel: null, customExpo: "", indivComment: "" }
 ];
 
 function handleNatureChange() {
   const nature = document.getElementById('select-nature').value;
   const subVlWrapper = document.getElementById('wrapper-sub-vl');
   subVlWrapper.style.display = (nature === 'vl') ? 'block' : 'none';
+  updateQualificationSummary();
+}
+
+function updateQualificationSummary() {
+  const nature = document.getElementById('select-nature').value;
+  const subVl = document.getElementById('select-sub-vl').value;
+  const smokeCond = document.getElementById('select-smoke-condition').value;
+  const titleEl = document.getElementById('qual-sum-title');
+  const badgesEl = document.getElementById('qual-sum-badges');
+
+  let profileTitle = "";
+  let badgesHtml = "";
+
+  if (smokeCond === 'aucun_feu') {
+    profileTitle = currentLang === 'en' ? "No Fire / Safe Atmosphere" : "Aucun feu (Reconnaissance / Hors atmosphère toxique)";
+    badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--success);">Risque toxique nul</span>`;
+  } else if (smokeCond === 'fumees_neigeables') {
+    profileTitle = currentLang === 'en' ? "Negligible Smoke / Diffuse fumes" : "Dégagement de fumée négligeable / Fours";
+    badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--warning);">COV traces / Particules légères</span>`;
+  } else {
+    if (nature === 'appartement') {
+      profileTitle = currentLang === 'en' ? "Apartment Fire (High VOC/PAH)" : "Feu d'appartement (Gros potentiel COV/HAP)";
+      badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">COV / HAP</span><span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">HCN / CO</span>`;
+    } else if (nature === 'pavillon') {
+      profileTitle = currentLang === 'en' ? "Structure / House Fire" : "Feu de pavillon / Structure";
+      badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">Bois / Fumées</span><span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">Formaldéhyde</span>`;
+    } else if (nature === 'chimique') {
+      profileTitle = currentLang === 'en' ? "Hazmat / Chemical Incident" : "Intervention Matières Dangereuses / Chimique";
+      badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--danger);">Acides / Solvants / Vapeurs toxiques</span>`;
+    } else {
+      if (subVl === 'lithium_ion') {
+        profileTitle = currentLang === 'en' ? "Li-Ion EV Battery Fire" : "Feu de VL (Batterie Lithium-Ion)";
+        badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--danger);">HF / Métaux Lourds</span><span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--warning);">Emballement thermique</span>`;
+      } else {
+        profileTitle = currentLang === 'en' ? "Thermal Light Vehicle Fire" : "Feu de VL (Thermique classique)";
+        badgesHtml = `<span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">CO / HAP</span><span style="font-size: 11px; font-weight: 600; background: var(--app-card); border: 1px solid var(--app-border); padding: 4px 8px; border-radius: 4px; color: var(--app-text);">Benzène</span>`;
+      }
+    }
+  }
+
+  titleEl.textContent = profileTitle;
+  badgesEl.innerHTML = badgesHtml;
 }
 
 function renderCrew() {
@@ -1094,73 +1355,97 @@ function renderCrew() {
         <div class="agent-role-tag">${agent.roleTag}</div>
       </div>
 
-      <div style="margin-bottom: 24px;">
+      <div style="margin-bottom: 20px;">
         <label class="nexsis-label">${currentLang==='en'?'Roles executed':'Fonction & Rôles exécutés'}</label>
         <div class="chips-group">${rolesHtml}</div>
       </div>
 
-      <div style="margin-bottom: 24px;">
-        <label class="nexsis-label">${currentLang==='en'?'Perceived Exposure (Operational Terminology)':'Exposition Perçue (Terminologie GDO)'}</label>
+      <div style="margin-bottom: 20px;">
+        <label class="nexsis-label">${currentLang==='en'?'Perceived Exposure':'Exposition Perçue (Terminologie GDO)'}</label>
         <div class="selection-group-expo">
-          <button class="select-btn ${agent.expoLevel === 0 ? 'active' : ''}" onclick="setExpo(${index}, 0)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
-            <strong style="margin-bottom:4px;">${t.expo0Title}</strong> 
-            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo0Desc}</span>
+          <button class="select-btn ${agent.expoLevel === 0 ? 'active' : ''}" onclick="setExpo(${index}, 0)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:10px;">
+            <strong style="margin-bottom:2px; font-weight:700;">${t.expo0Title}</strong> 
+            <span style="font-weight:500; opacity:0.9; font-size:11px;">${t.expo0Desc}</span>
           </button>
-          <button class="select-btn ${agent.expoLevel === 1 ? 'active' : ''}" onclick="setExpo(${index}, 1)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
-            <strong style="margin-bottom:4px;">${t.expo1Title}</strong> 
-            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo1Desc}</span>
+          <button class="select-btn ${agent.expoLevel === 1 ? 'active' : ''}" onclick="setExpo(${index}, 1)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:10px;">
+            <strong style="margin-bottom:2px; font-weight:700;">${t.expo1Title}</strong> 
+            <span style="font-weight:500; opacity:0.9; font-size:11px;">${t.expo1Desc}</span>
           </button>
-          <button class="select-btn ${agent.expoLevel === 2 ? 'active-warning' : ''}" onclick="setExpo(${index}, 2)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
-            <strong style="margin-bottom:4px;">${t.expo2Title}</strong> 
-            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo2Desc}</span>
+          <button class="select-btn ${agent.expoLevel === 2 ? 'active-warning' : ''}" onclick="setExpo(${index}, 2)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:10px;">
+            <strong style="margin-bottom:2px; font-weight:700;">${t.expo2Title}</strong> 
+            <span style="font-weight:500; opacity:0.9; font-size:11px;">${t.expo2Desc}</span>
           </button>
-          <button class="select-btn ${agent.expoLevel === 3 ? 'active-danger' : ''}" onclick="setExpo(${index}, 3)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:12px;">
-            <strong style="margin-bottom:4px;">${t.expo3Title}</strong> 
-            <span style="font-weight:normal; opacity:0.8; font-size:11px; line-height:1.3;">${t.expo3Desc}</span>
+          <button class="select-btn ${agent.expoLevel === 3 ? 'active-danger' : ''}" onclick="setExpo(${index}, 3)" style="display:flex; flex-direction:column; align-items:flex-start; text-align: left; padding:10px;">
+            <strong style="margin-bottom:2px; font-weight:700;">${t.expo3Title}</strong> 
+            <span style="font-weight:500; opacity:0.9; font-size:11px;">${t.expo3Desc}</span>
           </button>
         </div>
       </div>
 
-      <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 16px;">
         <label class="nexsis-label">${currentLang==='en'?'PPE / SCBA Wear':'Port des Équipements de Protection'}</label>
         <div class="selection-group-epi">
-          
           <div>
-            <div style="font-size: 11px; color: var(--app-text-muted); margin-bottom: 4px;">Tenue d'intervention</div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <button class="select-btn ${agent.completeEpi === true ? 'active' : ''}" onclick="setProp(${index}, 'completeEpi', true)" style="justify-content:center;">Tenue Complète</button>
-              <button class="select-btn ${agent.completeEpi === false ? 'active-warning' : ''}" onclick="setProp(${index}, 'completeEpi', false)" style="justify-content:center;">Tenue Incomplète</button>
+            <div style="font-size: 11px; font-weight: 600; color: var(--app-text); margin-bottom: 4px;">Tenue d'intervention</div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <button class="select-btn ${agent.completeEpi === true ? 'active' : ''}" onclick="setProp(${index}, 'completeEpi', true)" style="justify-content:center;">Complète</button>
+              <button class="select-btn ${agent.completeEpi === false ? 'active-warning' : ''}" onclick="setProp(${index}, 'completeEpi', false)" style="justify-content:center;">Incomplète</button>
             </div>
           </div>
 
           <div>
-            <div style="font-size: 11px; color: var(--app-text-muted); margin-bottom: 4px;">Protection (ARI)</div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size: 11px; font-weight: 600; color: var(--app-text); margin-bottom: 4px;">Protection (ARI)</div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
               <button class="select-btn ${agent.ari === true ? 'active-success' : ''}" onclick="setProp(${index}, 'ari', true)" style="justify-content:center;">ARI Porté</button>
               <button class="select-btn ${agent.ari === false ? 'active-danger' : ''}" onclick="setProp(${index}, 'ari', false)" style="justify-content:center;">SANS ARI</button>
             </div>
           </div>
           
           <div>
-            <div style="font-size: 11px; color: var(--app-text-muted); margin-bottom: 4px;">Masque FFP3</div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <button class="select-btn ${agent.ffp3 === true ? 'active' : ''}" onclick="setProp(${index}, 'ffp3', true)" style="justify-content:center;">FFP3 Porté</button>
+            <div style="font-size: 11px; font-weight: 600; color: var(--app-text); margin-bottom: 4px;">Masque FFP3</div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <button class="select-btn ${agent.ffp3 === true ? 'active' : ''}" onclick="setProp(${index}, 'ffp3', true)" style="justify-content:center;">Porté</button>
               <button class="select-btn ${agent.ffp3 === false ? 'active' : ''}" onclick="setProp(${index}, 'ffp3', false)" style="justify-content:center;">Non Porté</button>
             </div>
           </div>
+        </div>
 
+        ${agent.ari === true ? `
+          <div style="margin-top: 10px; background: var(--app-bg); border: 1px solid var(--app-border); padding: 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <label style="font-size: 12px; color: var(--app-text); margin: 0; font-weight: 600;">Temps d'engagement ARI</label>
+            <select class="nexsis-input" style="width: 120px; font-size: 12px; padding: 4px 6px;" onchange="updateAriTime(${index}, this.value)">
+              <option value="15 min" ${agent.ariTime==='15 min'?'selected':''}>15 min</option>
+              <option value="30 min" ${agent.ariTime==='30 min'?'selected':''}>30 min</option>
+              <option value="45 min" ${agent.ariTime==='45 min'?'selected':''}>45 min</option>
+              <option value="60 min+" ${agent.ariTime==='60 min+'?'selected':''}>60 min+</option>
+            </select>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Section Décontamination cutanée HAP figée avec ref unique -->
+      <div style="background: var(--app-bg); border: 1px solid var(--app-border); border-radius: 6px; padding: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--app-text);">Décontamination cutanée HAP</span>
+          <button class="select-btn ${agent.hapValidated ? 'active-success' : ''}" onclick="toggleHap(${index})" style="font-size: 11px; padding: 4px 10px;">
+            ${agent.hapValidated ? 'Validé' : 'À valider'}
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--app-text); font-family: var(--mono); background: var(--app-card); padding: 6px 8px; border-radius: 4px; border: 1px solid var(--app-border);">
+          <span>Réf : <strong>${agent.measureRef}</strong></span>
+          <span>Heure : <strong>${agent.hapTime}</strong></span>
         </div>
       </div>
 
       ${agent.customExpo ? `
-        <div style="margin-bottom: 16px; font-size: 13px; border: 1px solid var(--app-border-hover); background: var(--app-bg); padding: 12px 16px; border-radius: 6px;">
+        <div style="margin-bottom: 12px; font-size: 13px; border: 1px solid var(--app-border-hover); background: var(--app-bg); padding: 10px 14px; border-radius: 6px;">
           <strong style="color:var(--app-text);">Exposition :</strong> ${agent.customExpo}
-          <span onclick="clearCustomExpo(${index})" style="float:right; cursor:pointer; color:var(--app-text-muted);">✕</span>
+          <span onclick="clearCustomExpo(${index})" style="float:right; cursor:pointer; color:var(--app-text);">✕</span>
         </div>
       ` : ''}
 
       <div style="margin-top: auto;">
-        <input type="text" class="nexsis-input" style="font-size:13px;" placeholder="${currentLang==='en'?'Individual comment (optional)...':'Commentaire individuel (optionnel)...'}" value="${agent.indivComment}" onchange="updateComment(${index}, this.value)">
+        <input type="text" class="nexsis-input" style="font-size:13px;" placeholder="Commentaire individuel (optionnel)..." value="${agent.indivComment}" onchange="updateComment(${index}, this.value)">
       </div>
     `;
     container.appendChild(card);
@@ -1172,6 +1457,11 @@ function setProp(agentIndex, prop, val) {
   if(crew[agentIndex][prop] === val) crew[agentIndex][prop] = null; 
   else crew[agentIndex][prop] = val; 
   renderCrew(); 
+}
+function updateAriTime(agentIndex, val) { crew[agentIndex].ariTime = val; }
+function toggleHap(agentIndex) {
+  crew[agentIndex].hapValidated = !crew[agentIndex].hapValidated;
+  renderCrew();
 }
 function toggleRole(agentIndex, roleKey) {
   const roles = crew[agentIndex].selectedRoles;
@@ -1185,14 +1475,14 @@ function updateComment(agentIndex, val) { crew[agentIndex].indivComment = val; }
 
 function applyGlobalExpoToAll() {
   const text = document.getElementById('global-expo-text').value;
-  if (!text.trim()) { alert(currentLang==='en'?'Please enter particular exposure first.':"Veuillez d'abord saisir une exposition particulière."); return; }
+  if (!text.trim()) { alert("Veuillez d'abord saisir une exposition particulière."); return; }
   crew.forEach(a => a.customExpo = text);
   renderCrew();
 }
 
 function openSelectAgentModal() {
   const text = document.getElementById('global-expo-text').value;
-  if (!text.trim()) { alert(currentLang==='en'?'Please enter particular exposure first.':"Veuillez d'abord saisir une exposition particulière."); return; }
+  if (!text.trim()) { alert("Veuillez d'abord saisir une exposition particulière."); return; }
 
   const listContainer = document.getElementById('modal-agent-list');
   listContainer.innerHTML = '';
@@ -1202,7 +1492,7 @@ function openSelectAgentModal() {
     row.style.cssText = "display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--app-border);";
     row.innerHTML = `
       <input type="checkbox" id="chk-agent-${i}" value="${i}" ${agent.customExpo ? 'checked' : ''} style="width: 16px; height: 16px; accent-color: var(--app-text);">
-      <label for="chk-agent-${i}" style="margin:0; text-transform:none; font-size:14px; color:var(--app-text); cursor:pointer;">
+      <label for="chk-agent-${i}" style="margin:0; text-transform:none; font-size:14px; color:var(--app-text); cursor:pointer; font-weight: 600;">
         ${agent.name} <span style="color:var(--app-text-muted); font-size:13px;">(${agent.roleTag})</span>
       </label>
     `;
@@ -1227,16 +1517,24 @@ function confirmSelectAgents() {
 function generateAndOpenSummary() {
   const natureSelect = document.getElementById('select-nature');
   const subVlSelect = document.getElementById('select-sub-vl');
+  const smokeSelect = document.getElementById('select-smoke-condition');
   const natureVal = natureSelect.value;
   const subVlVal = subVlSelect.value;
+  const smokeVal = smokeSelect.value;
 
   const badgeTox = document.getElementById('tox-nature-badge');
-  if (natureVal === 'vl' && subVlVal === 'lithium_ion') {
-    badgeTox.textContent = currentLang==='en'?"LITHIUM-ION EV BATTERY FIRE":"Feu VL Batterie Lithium-Ion";
+  if (smokeVal === 'aucun_feu') {
+    badgeTox.textContent = "Aucun feu / Zone sécurisée";
+  } else if (smokeVal === 'fumees_neigeables') {
+    badgeTox.textContent = "Fumées négligeables";
+  } else if (natureVal === 'vl' && subVlVal === 'lithium_ion') {
+    badgeTox.textContent = "Feu VL Batterie Lithium-Ion";
   } else if (natureVal === 'appartement') {
-    badgeTox.textContent = currentLang==='en'?"APARTMENT / STRUCTURE FIRE":"Feu de structure / Habitation";
+    badgeTox.textContent = "Feu de structure / Habitation";
+  } else if (natureVal === 'chimique') {
+    badgeTox.textContent = "Intervention Chimique / Hazmat";
   } else {
-    badgeTox.textContent = currentLang==='en'?"THERMAL VEHICLE FIRE":"Feu VL Thermique / Classique";
+    badgeTox.textContent = "Feu VL Thermique / Classique";
   }
 
   let step2Html = '';
@@ -1244,24 +1542,29 @@ function generateAndOpenSummary() {
   crew.forEach(a => {
     let riskInhalation = "";
     if (a.expoLevel >= 2 && a.ari !== true) {
-      riskInhalation = `<span style="color:var(--danger); font-weight:500;">${currentLang==='en'?'🚨 High Inhalation Risk (Hot zone without SCBA)':'🚨 Risque d\'inhalation élevé (Zone d\'exclusion sans ARI)'}</span>`;
+      riskInhalation = `<span style="color:var(--danger); font-weight:600;">Risque d'inhalation élevé (Zone d'exclusion sans ARI)</span>`;
     } else if (a.ari === true) {
-      riskInhalation = `<span style="color:var(--success);">${currentLang==='en'?'✓ Respiratory tract protected (SCBA worn)':'✓ Voies respiratoires protégées (ARI porté)'}</span>`;
+      riskInhalation = `<span style="color:var(--success); font-weight:600;">Voies respiratoires protégées (ARI porté - ${a.ariTime})</span>`;
     } else if (a.expoLevel === 0) {
-      riskInhalation = `<span style="color:var(--app-text-muted);">${currentLang==='en'?'No exposure recorded':'Aucune exposition renseignée'}</span>`;
+      riskInhalation = `<span style="color:var(--app-text);">Aucune exposition renseignée</span>`;
     } else {
-      riskInhalation = `<span style="color:var(--app-text-muted);">${currentLang==='en'?'Moderate respiratory exposure (Support zone)':'Exposition respiratoire modérée (Zone de soutien)'}</span>`;
+      riskInhalation = `<span style="color:var(--app-text);">Exposition respiratoire modérée (Zone de soutien)</span>`;
     }
+
+    const hapStatus = a.hapValidated 
+      ? `<span style="color:var(--success); font-weight:600;">Décontamination cutanée HAP validée [${a.measureRef} à ${a.hapTime}]</span>` 
+      : `<span style="color:var(--warning); font-weight:600;">Décontamination cutanée HAP non validée</span>`;
 
     step2Html += `
       <div style="padding: 16px 0; border-bottom: 1px solid var(--app-border); font-size: 13px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong style="color:var(--app-text); font-size:14px; font-weight:500;">${a.name} <span style="color:var(--app-text-muted); font-weight:normal;">(${a.roleTag})</span></strong>
+          <strong style="color:var(--app-text); font-size:14px; font-weight:700;">${a.name} <span style="color:var(--app-text-muted); font-weight:normal;">(${a.roleTag})</span></strong>
         </div>
-        <div style="color: var(--app-text-muted); margin-top:6px;">
-          ${riskInhalation}
-          ${a.customExpo ? `<br><span style="color:var(--app-text); display:inline-block; margin-top:6px;">⚠️ ${a.customExpo}</span>` : ''}
-          ${a.indivComment ? `<br><span style="color:var(--app-text-muted); display:inline-block; margin-top:6px; font-style:italic;">💬 "${a.indivComment}"</span>` : ''}
+        <div style="color: var(--app-text); margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+          <div>${riskInhalation}</div>
+          <div>${hapStatus}</div>
+          ${a.customExpo ? `<span style="color:var(--app-text); font-weight:500;">Exposition : ${a.customExpo}</span>` : ''}
+          ${a.indivComment ? `<span style="color:var(--app-text); font-style:italic;">Commentaire : "${a.indivComment}"</span>` : ''}
         </div>
       </div>
     `;
@@ -1290,14 +1593,15 @@ function resetForm() {
     a.selectedRoles = [];
     a.completeEpi = null;
     a.ari = null;
+    a.ariTime = "30 min";
     a.ffp3 = null;
+    a.hapValidated = false;
     a.expoLevel = null;
     a.indivComment = "";
   });
   renderCrew();
 }
 
-/* Canvas Animation - Landing Page Brightened */
 (function() {
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
@@ -1339,7 +1643,346 @@ function resetForm() {
 window.onload = function() {
   handleNatureChange();
   renderCrew();
+  btpInit();
 };
+
+/* =====================================================================
+   PORTAILS
+   ===================================================================== */
+function openPortalModal() { document.getElementById('portal-modal').style.display = 'flex'; }
+function closePortalModal() { document.getElementById('portal-modal').style.display = 'none'; }
+function openPortal(which) {
+  closePortalModal();
+  if (which === 'sp') {
+    document.getElementById('app-nexsis').style.display = 'block';
+    openOnboardingModal();
+  } else {
+    document.getElementById('app-btp').style.display = 'block';
+    btpRenderAll();
+  }
+}
+function switchPortal() {
+  document.getElementById('app-nexsis').style.display = 'none';
+  document.getElementById('app-btp').style.display = 'none';
+  openPortalModal();
+}
+function closeBtp() { document.getElementById('app-btp').style.display = 'none'; }
+
+/* =====================================================================
+   PORTAIL BTP — référentiel
+   ===================================================================== */
+const BTP_COMPANY = "Maçonnerie Durand SAS";
+const BTP_WORKERS = [
+  { id: 'karim',  name: 'Karim BENALI',   poste: 'Maçon' },
+  { id: 'lucas',  name: 'Lucas MOREAU',   poste: 'Maçon' },
+  { id: 'sofia',  name: 'Sofia RIBEIRO',  poste: 'Plaquiste-enduiseur' },
+  { id: 'mehdi',  name: 'Mehdi HADDAD',   poste: 'Manœuvre' },
+  { id: 'julien', name: 'Julien ROUX',    poste: "Chef d'équipe" }
+];
+const BTP_SITES = [
+  { id: 'meaux',   name: 'Réhabilitation école · Meaux',    ref: 'CH-2026-014' },
+  { id: 'chelles', name: 'Pavillon neuf · Chelles',          ref: 'CH-2026-017' },
+  { id: 'mlv',     name: 'Bureaux R+3 · Marne-la-Vallée',    ref: 'CH-2026-021' }
+];
+const BTP_AGENTS = {
+  silice:  { label: 'Silice cristalline alvéolaire' },
+  bois:    { label: 'Poussières de bois' },
+  formol:  { label: 'Formaldéhyde' },
+  hap:     { label: 'HAP (bitume, brai)' },
+  diesel:  { label: 'Émissions diesel' },
+  soudage: { label: 'Fumées de soudage' },
+  amiante: { label: 'Amiante', flag: true }
+};
+// ordre = priorité de reconnaissance pour la saisie rapide
+const BTP_TASKS = [
+  { id: 'amiante',    label: 'Intervention sur matériau amianté (SS4)', agents: ['amiante'],        i: 3, kw: /amiante|fibrociment/ },
+  { id: 'bitume',     label: 'Étanchéité bitume / enrobés',             agents: ['hap'],            i: 3, kw: /bitum|enrob|etancheite|goudron|brai/ },
+  { id: 'bois',       label: 'Découpe bois / panneaux MDF',             agents: ['bois', 'formol'], i: 2, kw: /bois|mdf|panneau|agglo|contreplaque/ },
+  { id: 'carrelage',  label: 'Coupe carrelage à sec',                   agents: ['silice'],         i: 2, kw: /carrel|faience/ },
+  { id: 'carottage',  label: 'Perçage / carottage béton',               agents: ['silice'],         i: 2, kw: /carott|percage|perce|percer/ },
+  { id: 'poncage',    label: 'Ponçage enduit / ragréage',               agents: ['silice'],         i: 2, kw: /ponc|ragre|enduit/ },
+  { id: 'demolition', label: 'Démolition / piquage / saignées',         agents: ['silice'],         i: 3, kw: /demoli|piqu|saignee|burin|marteau/ },
+  { id: 'engins',     label: 'Engins diesel en zone semi-close',        agents: ['diesel'],         i: 2, kw: /diesel|engin|pelle|groupe electrogene|compresseur/ },
+  { id: 'soudage',    label: 'Soudage / oxycoupage',                    agents: ['soudage'],        i: 2, kw: /soud|oxycoup/ },
+  { id: 'decoupe',    label: 'Découpe / sciage béton, parpaing',        agents: ['silice'],         i: 3, kw: /decoup|scia|tronconn|disqueuse|parpaing|beton/ }
+];
+const BTP_METHOD = { sec: { label: 'À sec, sans captage', f: 1 }, aspi: { label: 'Aspiration à la source', f: 0.5 }, humide: { label: "À l'humide", f: 0.4 } };
+const BTP_PPE = { aucune: { label: 'Aucune', f: 1 }, ffp2: { label: 'FFP2', f: 0.6 }, ffp3: { label: 'FFP3 / P3', f: 0.35 }, ventile: { label: 'Ventilation assistée', f: 0.25 } };
+const BTP_LVL = { 1: 'Faible', 2: 'Modéré', 3: 'Élevé' };
+
+const bTask = id => BTP_TASKS.find(t => t.id === id);
+const bWorker = id => BTP_WORKERS.find(w => w.id === id);
+const bSite = id => BTP_SITES.find(s => s.id === id);
+const bEsc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const bIso = d => d.toISOString().slice(0, 10);
+const bDaysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return bIso(d); };
+const bFr = iso => new Date(iso + 'T12:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+const bFrLong = iso => new Date(iso + 'T12:00').toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const bHours = h => (Math.round(h * 100) / 100).toString().replace('.', ',') + ' h';
+
+function btpScore(e) {
+  const t = bTask(e.task);
+  return t.i * e.hours * BTP_METHOD[e.method].f * BTP_PPE[e.ppe].f;
+}
+function btpLevel(e) {
+  if (bTask(e.task).agents.some(a => BTP_AGENTS[a].flag)) return 3;
+  const s = btpScore(e);
+  return s >= 3 ? 3 : s >= 1.2 ? 2 : 1;
+}
+
+let btpEntries = [
+  { id: 'd1',  date: bDaysAgo(1),  worker: 'karim',  site: 'meaux',   task: 'decoupe',    hours: 2,   method: 'sec',    ppe: 'ffp3' },
+  { id: 'd2',  date: bDaysAgo(1),  worker: 'lucas',  site: 'meaux',   task: 'decoupe',    hours: 2,   method: 'sec',    ppe: 'ffp2' },
+  { id: 'd3',  date: bDaysAgo(2),  worker: 'mehdi',  site: 'meaux',   task: 'demolition', hours: 3,   method: 'sec',    ppe: 'aucune' },
+  { id: 'd4',  date: bDaysAgo(3),  worker: 'sofia',  site: 'chelles', task: 'poncage',    hours: 3,   method: 'aspi',   ppe: 'ffp2' },
+  { id: 'd5',  date: bDaysAgo(4),  worker: 'karim',  site: 'chelles', task: 'carottage',  hours: 1.5, method: 'humide', ppe: 'aucune' },
+  { id: 'd6',  date: bDaysAgo(6),  worker: 'julien', site: 'mlv',     task: 'engins',     hours: 4,   method: 'sec',    ppe: 'aucune' },
+  { id: 'd7',  date: bDaysAgo(7),  worker: 'lucas',  site: 'mlv',     task: 'bois',       hours: 2,   method: 'aspi',   ppe: 'ffp2' },
+  { id: 'd8',  date: bDaysAgo(8),  worker: 'mehdi',  site: 'mlv',     task: 'decoupe',    hours: 1,   method: 'humide', ppe: 'ffp3' },
+  { id: 'd9',  date: bDaysAgo(10), worker: 'sofia',  site: 'chelles', task: 'poncage',    hours: 4,   method: 'sec',    ppe: 'ffp2' },
+  { id: 'd10', date: bDaysAgo(12), worker: 'karim',  site: 'meaux',   task: 'demolition', hours: 2.5, method: 'sec',    ppe: 'ffp3' },
+  { id: 'd11', date: bDaysAgo(15), worker: 'julien', site: 'meaux',   task: 'bitume',     hours: 3,   method: 'sec',    ppe: 'ffp2' },
+  { id: 'd12', date: bDaysAgo(18), worker: 'mehdi',  site: 'chelles', task: 'carrelage',  hours: 2,   method: 'sec',    ppe: 'aucune' }
+];
+let btpSelWorkers = new Set(['karim', 'lucas']);
+
+/* ---------- init & navigation ---------- */
+function btpInit() {
+  document.getElementById('btp-site').innerHTML = BTP_SITES.map(s => `<option value="${s.id}">${bEsc(s.name)}</option>`).join('');
+  document.getElementById('btp-task').innerHTML = BTP_TASKS.map(t => `<option value="${t.id}">${bEsc(t.label)}</option>`).join('');
+  document.getElementById('fiche-worker').innerHTML = BTP_WORKERS.map(w => `<option value="${w.id}">${bEsc(w.name)} · ${bEsc(w.poste)}</option>`).join('');
+  document.getElementById('btp-date').value = bIso(new Date());
+  document.getElementById('btp-task').value = 'decoupe';
+  btpRenderWorkers();
+  btpShowAgents();
+  btpRenderAll();
+}
+function btpTab(tab) {
+  document.querySelectorAll('.btp-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  ['expo', 'duerp', 'fiche'].forEach(t => document.getElementById('btp-' + t).hidden = (t !== tab));
+  btpRenderAll();
+}
+function btpRenderAll() { renderJournal(); renderDuerp(); renderFiche(); renderList(); }
+
+/* ---------- couche 1 : expositions individuelles ---------- */
+function btpRenderWorkers() {
+  document.getElementById('btp-workers').innerHTML = BTP_WORKERS.map(w =>
+    `<button type="button" class="chip-btn ${btpSelWorkers.has(w.id) ? 'selected' : ''}" onclick="btpToggleWorker('${w.id}')">${bEsc(w.name.split(' ')[0])} <span style="opacity:.6; font-weight:500; margin-left:4px;">${bEsc(w.poste)}</span></button>`
+  ).join('');
+}
+function btpToggleWorker(id) { btpSelWorkers.has(id) ? btpSelWorkers.delete(id) : btpSelWorkers.add(id); btpRenderWorkers(); }
+function btpShowAgents() {
+  const t = bTask(document.getElementById('btp-task').value);
+  document.getElementById('btp-task-agents').innerHTML = '<span style="font-size:12px; color:var(--app-text-muted); margin-right:4px;">Agents CMR :</span>' +
+    t.agents.map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].label)}</span>`).join('') +
+    (t.id === 'amiante' ? '<span style="font-size:12px; color:var(--danger); width:100%;">Hors périmètre V0 : relève de la fiche amiante dédiée et du mode opératoire SS4.</span>' : '');
+}
+function btpMsg(id, txt, ok) { const m = document.getElementById(id); m.textContent = txt; m.style.color = ok ? 'var(--success)' : 'var(--warning)'; }
+
+function btpNorm(t) { return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function btpParseQuick() {
+  const t = btpNorm(document.getElementById('btp-quick-txt').value);
+  let found = 0;
+  const who = BTP_WORKERS.filter(w => new RegExp('\\b' + btpNorm(w.name.split(' ')[0]) + '\\b').test(t));
+  if (who.length) { btpSelWorkers = new Set(who.map(w => w.id)); btpRenderWorkers(); found++; }
+  const task = BTP_TASKS.find(k => k.kw.test(t));
+  if (task) { document.getElementById('btp-task').value = task.id; btpShowAgents(); found++; }
+  let h = null, m;
+  if ((m = t.match(/(\d+)\s*h\s*(\d{1,2})\b/))) h = +m[1] + (+m[2]) / 60;
+  else if ((m = t.match(/(\d+(?:[.,]\d+)?)\s*(?:h\b|heures?)/))) h = parseFloat(m[1].replace(',', '.'));
+  else if ((m = t.match(/(\d+)\s*(?:min|mn)/))) h = +m[1] / 60;
+  if (h) { document.getElementById('btp-hours').value = Math.round(h * 100) / 100; found++; }
+  if (/humide|a l.eau|arros|brumis/.test(t)) { document.getElementById('btp-method').value = 'humide'; found++; }
+  else if (/aspir|captage/.test(t)) { document.getElementById('btp-method').value = 'aspi'; found++; }
+  else if (/a sec|\bsec\b/.test(t)) { document.getElementById('btp-method').value = 'sec'; found++; }
+  if (/ffp3|\bp3\b/.test(t)) { document.getElementById('btp-ppe').value = 'ffp3'; found++; }
+  else if (/ffp2/.test(t)) { document.getElementById('btp-ppe').value = 'ffp2'; found++; }
+  else if (/ventil/.test(t)) { document.getElementById('btp-ppe').value = 'ventile'; found++; }
+  else if (/sans masque|aucun masque|sans protection/.test(t)) { document.getElementById('btp-ppe').value = 'aucune'; found++; }
+  if (/meaux|ecole/.test(t)) { document.getElementById('btp-site').value = 'meaux'; found++; }
+  else if (/chelles|pavillon/.test(t)) { document.getElementById('btp-site').value = 'chelles'; found++; }
+  else if (/marne|mlv|bureaux/.test(t)) { document.getElementById('btp-site').value = 'mlv'; found++; }
+  if (/\bhier\b/.test(t)) document.getElementById('btp-date').value = bDaysAgo(1);
+  btpMsg('btp-msg', found ? `${found} élément${found > 1 ? 's' : ''} reconnu${found > 1 ? 's' : ''}. Vérifiez puis enregistrez.` : "Rien reconnu. Indiquez au moins le salarié, la tâche et la durée.", !!found);
+}
+
+function btpAddEntry() {
+  if (!btpSelWorkers.size) { btpMsg('btp-msg', 'Sélectionnez au moins un salarié.', false); return; }
+  const hours = parseFloat(document.getElementById('btp-hours').value);
+  if (!(hours > 0)) { btpMsg('btp-msg', 'Indiquez une durée supérieure à 0.', false); return; }
+  const base = {
+    date: document.getElementById('btp-date').value || bIso(new Date()),
+    site: document.getElementById('btp-site').value,
+    task: document.getElementById('btp-task').value,
+    hours, method: document.getElementById('btp-method').value, ppe: document.getElementById('btp-ppe').value
+  };
+  const stamp = Date.now();
+  [...btpSelWorkers].forEach((w, i) => btpEntries.push({ ...base, worker: w, id: 'n' + stamp + '-' + i }));
+  btpMsg('btp-msg', `${btpSelWorkers.size} exposition${btpSelWorkers.size > 1 ? 's' : ''} enregistrée${btpSelWorkers.size > 1 ? 's' : ''}. DUERP et fiches mis à jour.`, true);
+  btpRenderAll();
+}
+function btpDelete(btn, id) {
+  if (btn.dataset.armed) { btpEntries = btpEntries.filter(e => e.id !== id); btpRenderAll(); return; }
+  btn.dataset.armed = '1'; btn.textContent = 'Confirmer ?'; btn.style.color = 'var(--danger)';
+  setTimeout(() => { if (btn.isConnected) { delete btn.dataset.armed; btn.textContent = 'Suppr.'; btn.style.color = ''; } }, 3000);
+}
+function btpSorted() { return btpEntries.slice().sort((a, b) => b.date.localeCompare(a.date)); }
+
+function renderJournal() {
+  const rows = btpSorted();
+  document.getElementById('btp-journal-count').textContent = rows.length + ' saisies';
+  document.getElementById('btp-journal').innerHTML = rows.map(e => {
+    const t = bTask(e.task), w = bWorker(e.worker), l = btpLevel(e);
+    return `<tr>
+      <td class="muted" style="white-space:nowrap;">${bFr(e.date)}</td>
+      <td><strong>${bEsc(w.name.split(' ')[0])}</strong><div class="muted">${bEsc(w.poste)}</div></td>
+      <td>${bEsc(t.label)}<div class="muted">${bEsc(bSite(e.site).name)} · ${bEsc(BTP_METHOD[e.method].label)} · ${bEsc(BTP_PPE[e.ppe].label)}</div></td>
+      <td>${t.agents.map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].label.split(' (')[0])}</span>`).join('')}</td>
+      <td class="num">${bHours(e.hours)}</td>
+      <td><span class="lvl lvl-${l}">${BTP_LVL[l]}</span></td>
+      <td><button class="row-del" onclick="btpDelete(this,'${e.id}')">Suppr.</button></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="7" class="muted">Aucune exposition saisie.</td></tr>';
+}
+
+/* ---------- couche 2 : DUERP ---------- */
+const BTP_ACTIONS = {
+  silice:  (g) => [g.anyDry && "Travailler à l'humide ou avec aspiration à la source (aspirateur classe H)", g.weakPpe && "FFP3 obligatoire tant que le captage n'est pas en place", "Suivi individuel renforcé des salariés exposés"],
+  bois:    (g) => [g.anyDry && "Aspiration raccordée sur scies et ponceuses", "Nettoyage par aspiration, soufflette et balayage à sec proscrits"],
+  formol:  () => ["Privilégier des panneaux à faible émission de formaldéhyde"],
+  hap:     (g) => ["Abaisser la température de mise en œuvre du bitume", "Rotation des postes et gants adaptés (voie cutanée)", g.weakPpe && "Protection respiratoire P3 lors des phases fumantes"],
+  diesel:  () => ["Ventiler ou extraire en zone semi-close", "Préférer engins électriques en intérieur"],
+  soudage: () => ["Captage des fumées à la source"],
+  amiante: () => ["Hors périmètre V0 : mode opératoire SS4 et fiche amiante dédiée"]
+};
+function btpDuerpRows() {
+  const groups = {};
+  btpEntries.forEach(e => {
+    const w = bWorker(e.worker);
+    bTask(e.task).agents.forEach(a => {
+      const k = w.poste + '|' + a;
+      (groups[k] = groups[k] || { poste: w.poste, agent: a, entries: [] }).entries.push(e);
+    });
+  });
+  return Object.values(groups).map(g => {
+    const n = g.entries.length;
+    const F = n <= 1 ? 1 : n <= 3 ? 2 : n <= 6 ? 3 : 4;
+    const G = 4;
+    const ctrl = g.entries.reduce((s, e) => s + BTP_METHOD[e.method].f * BTP_PPE[e.ppe].f, 0) / n;
+    const M = ctrl <= 0.2 ? 1 : ctrl <= 0.5 ? 2 : 3;
+    const tasks = [...new Set(g.entries.map(e => bTask(e.task).label))];
+    const captured = g.entries.filter(e => e.method !== 'sec').length;
+    const ppeOk = g.entries.filter(e => e.ppe === 'ffp3' || e.ppe === 'ventile').length;
+    const info = { anyDry: captured < n, weakPpe: ppeOk < n };
+    return { ...g, n, F, G, M, C: F * G * M, tasks, captured, ppeOk, actions: BTP_ACTIONS[g.agent](info).filter(Boolean) };
+  }).sort((a, b) => b.C - a.C);
+}
+function critColor(c) { return c >= 24 ? 'var(--danger)' : c >= 12 ? 'var(--warning)' : 'var(--success)'; }
+
+function renderDuerp() {
+  const rows = btpDuerpRows();
+  const postes = new Set(rows.map(r => r.poste));
+  const crit = rows.filter(r => r.C >= 24).length;
+  const exposed = new Set(btpEntries.map(e => e.worker)).size;
+  const last = btpEntries.map(e => e.date).sort().pop();
+  document.getElementById('duerp-updated').textContent = last ? 'Dernière donnée : ' + bFrLong(last) : '';
+  document.getElementById('duerp-kpis').innerHTML = `
+    <div class="btp-kpi"><b>${postes.size}</b><small>unités de travail exposées</small></div>
+    <div class="btp-kpi"><b>${rows.length}</b><small>situations évaluées</small></div>
+    <div class="btp-kpi"><b style="color:${crit ? 'var(--danger)' : 'inherit'}">${crit}</b><small>situations prioritaires</small></div>
+    <div class="btp-kpi"><b>${exposed}</b><small>salariés exposés</small></div>`;
+  document.getElementById('duerp-body').innerHTML = rows.map(r => `<tr>
+      <td><strong>${bEsc(r.poste)}</strong></td>
+      <td><span class="agent-tag ${BTP_AGENTS[r.agent].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[r.agent].label)}</span></td>
+      <td>${r.tasks.map(bEsc).join('<br>')}</td>
+      <td class="num">${r.F}<div class="muted">${r.n}×</div></td>
+      <td class="num">${r.G}</td>
+      <td class="muted">Captage ou humide : ${r.captured}/${r.n}<br>FFP3 ou mieux : ${r.ppeOk}/${r.n}<br>Maîtrise ${r.M}/3</td>
+      <td><div class="crit-cell"><span class="crit-bar"><i style="width:${Math.round(r.C / 48 * 100)}%; background:${critColor(r.C)}"></i></span><span style="font-family:var(--mono); font-weight:600; color:${critColor(r.C)}">${r.C}</span></div></td>
+      <td>${r.actions.map(a => '· ' + bEsc(a)).join('<br>')}</td>
+    </tr>`).join('') || '<tr><td colspan="8" class="muted">Aucune exposition saisie : le DUERP se remplit depuis la couche 1.</td></tr>';
+}
+
+/* ---------- couche 3 : fiches d'exposition ---------- */
+function btpWorkerSummary(wid) {
+  const es = btpEntries.filter(e => e.worker === wid).sort((a, b) => a.date.localeCompare(b.date));
+  const agents = {};
+  es.forEach(e => bTask(e.task).agents.forEach(a => { agents[a] = agents[a] || { h: 0, n: 0, max: 1 }; agents[a].h += e.hours; agents[a].n++; agents[a].max = Math.max(agents[a].max, btpLevel(e)); }));
+  return { es, agents, from: es[0] && es[0].date, to: es.length && es[es.length - 1].date, total: es.reduce((s, e) => s + e.hours, 0) };
+}
+function renderFiche() {
+  const wid = document.getElementById('fiche-worker').value || BTP_WORKERS[0].id;
+  const w = bWorker(wid), s = btpWorkerSummary(wid);
+  const today = bFrLong(bIso(new Date()));
+  document.getElementById('fiche-doc').innerHTML = `
+    <div class="fiche-head">
+      <div>
+        <div class="portal-kicker" style="margin-bottom:4px;">Traçabilité des expositions professionnelles</div>
+        <h2>Fiche individuelle d'exposition aux agents CMR</h2>
+      </div>
+      <div class="ref">Réf. FE-${wid.toUpperCase()}-${bIso(new Date()).replace(/-/g, '')}<br>Établie le ${today}</div>
+    </div>
+    <div class="fiche-ids">
+      <div><span>Employeur</span>${BTP_COMPANY}</div>
+      <div><span>Salarié</span>${bEsc(w.name)}</div>
+      <div><span>Poste</span>${bEsc(w.poste)}</div>
+      <div><span>Période couverte</span>${s.from ? bFrLong(s.from) + ' → ' + bFrLong(s.to) : '—'}</div>
+      <div><span>Durée cumulée</span>${bHours(s.total)}</div>
+    </div>
+    <div>
+      <div class="nexsis-label" style="margin-bottom:8px;">Synthèse par agent</div>
+      <div class="chips-group">${Object.entries(s.agents).map(([a, v]) => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}" style="padding:4px 8px;">${bEsc(BTP_AGENTS[a].label)} · ${bHours(v.h)} · ${v.n}× · max <b>${BTP_LVL[v.max]}</b></span>`).join('') || '<span class="muted">Aucune exposition enregistrée.</span>'}</div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="btp-table">
+        <thead><tr><th>Date</th><th>Chantier (réf.)</th><th>Nature des travaux</th><th>Agents / produits</th><th>Procédé de travail</th><th>Protection resp.</th><th class="num">Durée</th><th>Niveau</th></tr></thead>
+        <tbody>${s.es.map(e => { const t = bTask(e.task), l = btpLevel(e), si = bSite(e.site); return `<tr>
+          <td style="white-space:nowrap;">${bFrLong(e.date)}</td>
+          <td>${bEsc(si.name)}<div class="muted">${si.ref}</div></td>
+          <td>${bEsc(t.label)}</td>
+          <td>${t.agents.map(a => bEsc(BTP_AGENTS[a].label)).join(', ')}</td>
+          <td>${bEsc(BTP_METHOD[e.method].label)}</td>
+          <td>${bEsc(BTP_PPE[e.ppe].label)}</td>
+          <td class="num">${bHours(e.hours)}</td>
+          <td><span class="lvl lvl-${l}">${BTP_LVL[l]}</span></td>
+        </tr>`; }).join('') || '<tr><td colspan="8" class="muted">Aucune exposition enregistrée pour ce salarié.</td></tr>'}</tbody>
+      </table>
+    </div>
+    <div class="fiche-foot">
+      <div style="max-width:52ch;">Document établi à partir des saisies de chantier. Copie à transmettre au service de prévention et de santé au travail. Niveaux indicatifs, sans valeur de mesure métrologique.</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <div class="sign-box">Visa employeur</div>
+        <div class="sign-box">Visa salarié</div>
+      </div>
+    </div>`;
+}
+function copyFiche() {
+  const wid = document.getElementById('fiche-worker').value, w = bWorker(wid), s = btpWorkerSummary(wid);
+  const lines = [
+    "FICHE INDIVIDUELLE D'EXPOSITION AUX AGENTS CMR",
+    `Employeur : ${BTP_COMPANY}`, `Salarié : ${w.name} (${w.poste})`,
+    `Période : ${s.from ? bFrLong(s.from) + ' - ' + bFrLong(s.to) : '-'} · Durée cumulée : ${bHours(s.total)}`, '',
+    ['Date', 'Chantier', 'Réf.', 'Travaux', 'Agents', 'Procédé', 'Protection', 'Durée (h)', 'Niveau'].join('\t'),
+    ...s.es.map(e => { const t = bTask(e.task), si = bSite(e.site); return [bFrLong(e.date), si.name, si.ref, t.label, t.agents.map(a => BTP_AGENTS[a].label).join(', '), BTP_METHOD[e.method].label, BTP_PPE[e.ppe].label, String(e.hours).replace('.', ','), BTP_LVL[btpLevel(e)]].join('\t'); })
+  ].join('\n');
+  const ok = () => btpMsg('fiche-msg', 'Fiche copiée. Collez-la dans un tableur ou un e-mail.', true);
+  try { navigator.clipboard.writeText(lines).then(ok, () => btpMsg('fiche-msg', "Copie refusée par le navigateur.", false)); }
+  catch (e) { btpMsg('fiche-msg', "Copie refusée par le navigateur.", false); }
+}
+function renderList() {
+  document.getElementById('list-body').innerHTML = BTP_WORKERS.map(w => {
+    const s = btpWorkerSummary(w.id);
+    if (!s.es.length) return '';
+    return `<tr>
+      <td><a href="#" onclick="event.preventDefault(); document.getElementById('fiche-worker').value='${w.id}'; renderFiche(); document.getElementById('fiche-doc').scrollIntoView({behavior:'smooth'});" style="font-weight:600;">${bEsc(w.name)}</a></td>
+      <td>${bEsc(w.poste)}</td>
+      <td>${Object.keys(s.agents).map(a => `<span class="agent-tag ${BTP_AGENTS[a].flag ? 'flag' : ''}">${bEsc(BTP_AGENTS[a].label.split(' (')[0])}</span>`).join('')}</td>
+      <td class="muted" style="white-space:nowrap;">${bFr(s.from)} → ${bFr(s.to)}</td>
+      <td class="num">${bHours(s.total)}</td>
+      <td class="num">${s.es.length}</td>
+    </tr>`;
+  }).join('');
+}
 </script>
 
 </body>
