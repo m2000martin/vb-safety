@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.vb-safety.com; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#17191D">
+<title>Mon espace · Carnet Expo CMR · VB Safety</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/css/vbs.css">
+<link rel="stylesheet" href="assets/css/espace.css">
+</head>
+<body class="app-body">
+
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2Z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+  <symbol id="i-steth" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 12 0v-4"/><circle cx="20" cy="10" r="2"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.9.7-1.9 1-3 1s-2.1-.3-3-1ZM2 16l3-8 3 8c-.9.7-1.9 1-3 1s-2.1-.3-3-1ZM7 21h10M12 3v18M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3ZM12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3.3.2 1.5 1.2 2.8 2.5 2.8z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 19A2 2 0 0 0 6.3 22h11.4a2 2 0 0 0 1.8-3L14 9V3M7 15h10"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <aside class="side" aria-label="Menu">
+    <a class="brand" href="./" aria-label="Accueil du Carnet Expo CMR">
+      <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
+        <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
+        <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
+        <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
+        <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">VB Safety<span class="brand-sub">Carnet Expo CMR</span></span>
+    </a>
+    <div class="side-role" id="side-role"></div>
+    <nav aria-label="Navigation de l'espace"><ul class="nav-list" id="nav"></ul></nav>
+    <div class="side-foot">
+      <button class="side-link" type="button" id="tour-open"><svg class="icon" aria-hidden="true"><use href="#i-help"/></svg>Revoir la visite</button>
+      <button class="side-link" type="button" id="logout"><svg class="icon" aria-hidden="true"><use href="#i-logout"/></svg>Se déconnecter</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="demo-banner" role="note" id="demo-banner">Version de démonstration · données fictives</div>
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" type="button" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
+      <h1 id="page-title">Tableau de bord</h1>
+      <div class="topbar-right">
+        <button class="icon-btn" type="button" id="bell" aria-label="Alertes"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></button>
+        <div class="user-chip"><span class="avatar" id="user-initials">--</span><div><b id="user-name">—</b><small id="user-role">—</small></div></div>
+      </div>
+    </header>
+    <main class="view" id="view" tabindex="-1"><p class="loading">Chargement de vos données…</p></main>
+  </div>
+</div>
+
+<!-- Visite guidée de premier usage -->
+<section class="tour" id="tour" hidden aria-labelledby="tour-title">
+  <div class="tour-top">
+    <span class="tour-count" id="tour-count"></span>
+    <div class="tour-bar" id="tour-bar" aria-hidden="true"></div>
+    <button class="btn btn-secondary tour-skip" type="button" id="tour-skip">Passer la visite <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </div>
+  <div class="tour-body">
+    <ol class="tour-steps" id="tour-steps"></ol>
+    <div class="tour-right">
+      <h2 id="tour-title">Découvrez votre espace VB Safety</h2>
+      <p id="tour-lead"></p>
+      <div class="tour-preview" aria-hidden="true"><div class="tour-preview-inner" id="tour-preview"></div></div>
+    </div>
+  </div>
+  <div class="tour-foot">
+    <button class="btn btn-secondary" type="button" id="tour-prev"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>Précédent</button>
+    <div class="tour-dots" id="tour-dots" aria-hidden="true"></div>
+    <button class="btn btn-primary" type="button" id="tour-next"><span>Suivant</span><svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </div>
+</section>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/espace.js"></script>
+</body>
+</html>

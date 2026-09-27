@@ -1,0 +1,118 @@
+/* Page de connexion */
+.login-body { background: var(--ink); }
+.login { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); min-height: 100vh; min-height: 100svh; }
+
+/* ---------- Panneau gauche ---------- */
+.login-side { position: relative; isolation: isolate; overflow: hidden; color: #fff; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: clamp(28px, 4vw, 56px); }
+.login-side-media { position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(55% 60% at 80% 40%, rgba(215, 38, 30, 0.38), rgba(215, 38, 30, 0) 70%),
+    radial-gradient(40% 45% at 100% 100%, rgba(255, 140, 60, 0.2), rgba(255, 140, 60, 0) 70%),
+    var(--ink); }
+.login-side-media::before { content: ""; position: absolute; inset: 0; background: url("../img/login.webp") center / cover no-repeat; }
+.login-side-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23, 25, 29, 0.92) 0%, rgba(23, 25, 29, 0.7) 45%, rgba(23, 25, 29, 0.25) 100%); }
+.brand-dark .brand-name { color: #fff; }
+.brand-dark .brand-sub { color: #A9AEB6; }
+.side-main { max-width: 520px; }
+.side-rule { display: block; width: 44px; height: 3px; background: var(--red); border-radius: 2px; margin-bottom: 28px; }
+.side-main h1 { font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.06; }
+.side-main h1 em { font-style: normal; color: #FF4A3F; }
+.side-main p { color: #D5D8DD; font-size: 17px; margin-top: 18px; max-width: 42ch; line-height: 1.6; }
+.side-facts { list-style: none; margin: 36px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 28px; }
+.side-facts li { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 600; }
+.side-facts .icon { color: #FF4A3F; width: 22px; height: 22px; }
+.side-secure { display: flex; gap: 14px; align-items: center; max-width: 440px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: var(--radius-lg); padding: 16px 18px; backdrop-filter: blur(6px); }
+.side-secure-icon { width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.side-secure strong { display: block; font-size: 14.5px; }
+.side-secure div > span { display: block; font-size: 13px; color: #A9AEB6; margin-top: 2px; line-height: 1.45; }
+
+/* ---------- Panneau droit ---------- */
+.login-panel { background: var(--bg); display: flex; flex-direction: column; }
+.login-inner { width: 100%; max-width: 560px; margin: auto; padding: clamp(28px, 4vw, 56px) clamp(20px, 4vw, 48px); }
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; margin-bottom: 20px; min-height: 32px; }
+.back-link:hover { color: var(--text); }
+.back-link .icon { width: 16px; height: 16px; }
+.login-inner h2 { font-size: clamp(30px, 3.4vw, 38px); font-weight: 800; }
+.login-lead { color: var(--muted); margin-top: 8px; font-size: 15.5px; }
+
+.roles-pick { border: 0; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.roles-pick legend { margin-bottom: 12px; padding: 0; }
+.pick { position: relative; display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius-lg); padding: 16px 16px 16px 16px; cursor: pointer; transition: border-color .15s, background-color .15s, box-shadow .15s; min-height: 132px; }
+.pick:hover { border-color: var(--line-strong); }
+.pick input { position: absolute; top: 14px; right: 14px; width: 18px; height: 18px; margin: 0; accent-color: var(--red); cursor: pointer; }
+.pick-icon { width: 40px; height: 40px; border-radius: 50%; background: #F4F1EC; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 6px; transition: background-color .15s, color .15s; }
+.pick-title { font-weight: 700; font-size: 15px; line-height: 1.25; padding-right: 20px; }
+.pick-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.pick:has(input:checked) { border-color: var(--red); background: #FFF8F7; box-shadow: 0 0 0 3px rgba(215, 38, 30, 0.12); }
+.pick:has(input:checked) .pick-icon { background: var(--red); color: #fff; }
+.pick:has(input:focus-visible) { outline: 3px solid var(--red); outline-offset: 2px; }
+
+.creds { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 12px; }
+.input-icon { position: relative; }
+.input-icon .icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--faint); pointer-events: none; }
+.input-icon .input { padding-left: 40px; background: #F4F1EC; border-color: var(--line); color: var(--text); font-weight: 500; cursor: default; }
+.input-icon .input:focus { box-shadow: none; border-color: var(--line-strong); }
+.creds-note { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.creds-note .icon { width: 15px; height: 15px; }
+
+#login-form .btn-block { margin-top: 22px; }
+.login-msg { margin-top: 12px; font-size: 14px; font-weight: 500; padding: 10px 12px; border-radius: var(--radius); }
+.login-msg.error { background: var(--danger-soft); color: var(--danger); }
+.login-msg.warn { background: var(--warn-soft); color: var(--warn); }
+.text-link { display: block; margin: 10px auto 0; background: none; border: 0; padding: 6px; font: 600 14px var(--font); color: var(--text); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--red); cursor: pointer; }
+.text-link[hidden] { display: none; }
+.login-foot { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+.login-foot a { color: var(--text); font-weight: 600; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .login { grid-template-columns: 1fr; }
+  .login-side { gap: 24px; padding-bottom: 32px; }
+  .side-main h1 { font-size: clamp(28px, 7vw, 38px); }
+  .side-facts, .side-secure { display: none; }
+  .side-main p { font-size: 15.5px; }
+  .login-panel .demo-banner { order: -1; }
+}
+@media (max-width: 480px) {
+  .roles-pick { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pick { min-height: 0; padding: 14px 12px; }
+  .pick-desc { font-size: 12px; }
+  .pick-icon { width: 34px; height: 34px; }
+  .pick-icon .icon { width: 18px; height: 18px; }
+  .creds { grid-template-columns: 1fr; }
+}
+
+/* ---------- Téléphone : tout tient dans l'écran ---------- */
+@media (max-width: 600px) {
+  .login { min-height: 100svh; }
+  .login-side { padding: 14px 16px 16px; gap: 10px; }
+  .login-side .brand-mark { width: 30px; height: 33px; }
+  .login-side .brand-name { font-size: 16px; }
+  .side-rule, .side-main p { display: none; }
+  .side-main h1 { font-size: 21px; line-height: 1.15; }
+  .login-panel .demo-banner { font-size: 12px; padding: 5px 16px; }
+  .login-inner { margin: 0; padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .back-link { display: none; }
+  .login-inner h2 { font-size: 24px; }
+  .login-lead { font-size: 13.5px; margin-top: 4px; }
+  .roles-pick { margin-top: 12px; gap: 8px; }
+  .roles-pick legend { display: none; }
+  .pick { padding: 10px; gap: 2px; min-height: 0; border-radius: 12px; }
+  .pick input { top: 10px; right: 10px; width: 16px; height: 16px; }
+  .pick-icon { width: 30px; height: 30px; margin-bottom: 4px; }
+  .pick-icon .icon { width: 16px; height: 16px; }
+  .pick-title { font-size: 14px; }
+  .pick-desc { font-size: 11.5px; line-height: 1.3; }
+  .creds { margin-top: 12px; grid-template-columns: 1fr 1fr; gap: 6px 8px; }
+  .creds .label { font-size: 12.5px; }
+  .creds .field { gap: 4px; }
+  .input-icon .input { min-height: 40px; padding: 8px 8px 8px 32px; font-size: 14px !important; }
+  .input-icon .icon { left: 9px; width: 15px; height: 15px; }
+  .creds-note { font-size: 11.5px; }
+  #login-form .btn-block { margin-top: 12px; min-height: 48px; }
+  .login-foot { margin-top: 12px; padding-top: 10px; font-size: 11.5px; }
+}
+@media (max-width: 600px) and (max-height: 720px) {
+  .pick-desc, .login-lead, .creds-note { display: none; }
+  .login-foot { font-size: 11px; }
+}

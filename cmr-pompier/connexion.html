@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.vb-safety.com; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#17191D">
+<title>Connexion · Carnet Expo CMR · VB Safety</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/css/vbs.css">
+<link rel="stylesheet" href="assets/css/connexion.css">
+</head>
+<body class="login-body">
+
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/></symbol>
+  <symbol id="i-steth" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 12 0v-4"/><circle cx="20" cy="10" r="2"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/></symbol>
+</svg>
+
+<main class="login">
+  <!-- Panneau gauche : message -->
+  <section class="login-side" aria-labelledby="side-title">
+    <div class="login-side-media" aria-hidden="true"></div>
+    <a class="brand brand-dark" href="./" aria-label="Retour à l'accueil du Carnet Expo CMR">
+      <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
+        <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
+        <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
+        <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
+        <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">VB Safety<span class="brand-sub">Carnet Expo CMR</span></span>
+    </a>
+
+    <div class="side-main">
+      <span class="side-rule" aria-hidden="true"></span>
+      <h1 id="side-title">Tracer aujourd'hui pour mieux protéger <em>demain.</em></h1>
+      <p>Une traçabilité simple et sécurisée des expositions CMR des sapeurs-pompiers, intervention après intervention.</p>
+      <ul class="side-facts">
+        <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>Accès cloisonné par rôle</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span>Suivi sur toute la carrière</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><span>Au service de votre santé</span></li>
+      </ul>
+    </div>
+
+    <div class="side-secure">
+      <span class="side-secure-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
+      <div><strong>Environnement sécurisé</strong><span>Connexion chiffrée, données hébergées en France. Usage réservé aux professionnels habilités.</span></div>
+    </div>
+  </section>
+
+  <!-- Panneau droit : connexion -->
+  <section class="login-panel" aria-labelledby="login-title">
+    <div class="demo-banner" role="note">Version de démonstration · données fictives</div>
+    <div class="login-inner">
+      <a class="back-link" href="./"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>Accueil</a>
+      <h2 id="login-title">Connexion</h2>
+      <p class="login-lead">Choisissez un profil pour découvrir sa vue. Les identifiants de démonstration sont déjà remplis.</p>
+
+      <form id="login-form" novalidate>
+        <fieldset class="roles-pick">
+          <legend class="label">Choisissez votre profil</legend>
+          <label class="pick">
+            <input type="radio" name="role" value="agent" checked>
+            <span class="pick-icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
+            <span class="pick-title">Agent</span>
+            <span class="pick-desc">Consulter mes expositions et mon historique</span>
+          </label>
+          <label class="pick">
+            <input type="radio" name="role" value="cos">
+            <span class="pick-icon"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg></span>
+            <span class="pick-title">CA / COS</span>
+            <span class="pick-desc">Rédiger le rapport de contamination de l'équipage</span>
+          </label>
+          <label class="pick">
+            <input type="radio" name="role" value="commandement">
+            <span class="pick-icon"><svg class="icon" aria-hidden="true"><use href="#i-building"/></svg></span>
+            <span class="pick-title">Chef CI / commandement</span>
+            <span class="pick-desc">Vérifier que les rapports sont à jour</span>
+          </label>
+          <label class="pick">
+            <input type="radio" name="role" value="sssm">
+            <span class="pick-icon"><svg class="icon" aria-hidden="true"><use href="#i-steth"/></svg></span>
+            <span class="pick-title">SSSM</span>
+            <span class="pick-desc">Consulter, corriger et suivre les rapports</span>
+          </label>
+        </fieldset>
+
+        <div class="creds">
+          <div class="field">
+            <label class="label" for="matricule">Matricule</label>
+            <div class="input-icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg><input class="input" id="matricule" name="matricule" type="text" autocomplete="username" readonly></div>
+          </div>
+          <div class="field">
+            <label class="label" for="password">Mot de passe</label>
+            <div class="input-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><input class="input" id="password" name="password" type="password" autocomplete="current-password" readonly></div>
+          </div>
+          <p class="creds-note"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg>Pré-remplis pour la démonstration</p>
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" id="login-btn" type="submit"><span>Se connecter</span><svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="login-msg" id="login-msg" role="status" hidden></p>
+        <button class="text-link" id="offline-link" type="button" hidden>Continuer en aperçu, sans serveur</button>
+      </form>
+
+      <p class="login-foot">Accès réel sur votre SDIS : identifiants personnels fournis par votre administrateur. <a href="mailto:contact@vb-safety.com">Nous contacter</a></p>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/connexion.js"></script>
+</body>
+</html>
