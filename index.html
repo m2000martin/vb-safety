@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1E30">
 <title id="meta-title">VB Safety</title>
 <meta id="meta-desc" name="description" content="VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle.">
 
@@ -10,7 +11,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@0,300;0,400;0,600;0,700;1,300&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -55,7 +56,8 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--nuit); }
 
   body {
     background: var(--nuit);
@@ -92,6 +94,7 @@
     position: relative;
     z-index: 2;
     min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -134,14 +137,6 @@
   .bas { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); font-size: 13px; color: #A1A1AA; }
   .courriel { font-family: var(--serif); font-size: clamp(16px, 2vw, 20px); color: #FAFAFA; text-decoration: none; border-bottom: 1px solid rgba(224, 108, 52, 0.5); padding-bottom: 2px; }
   .courriel:hover { border-color: var(--signal); }
-  .footer-sub-links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-
-  .lien-cmr {
-    color: #FAFAFA; text-decoration: none; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); min-height: 38px; display: inline-flex; align-items: center;
-    transition: all 0.2s;
-  }
-  .lien-cmr:hover { border-color: var(--signal); background: rgba(224, 108, 52, 0.1); }
 
   .modal-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); z-index: 1000;
@@ -400,6 +395,116 @@
   .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; justify-content: space-between; }
 
   [hidden] { display: none !important; }
+
+  /* =====================================================================
+     PAGE D'ACCUEIL — navigation, appels à l'action, sections, pied de page
+     ===================================================================== */
+  .haut-nav { display: flex; align-items: center; gap: 24px; }
+  .haut-nav a { font-size: 14px; color: #A1A1AA; text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; }
+  .haut-nav a:hover { color: #fff; border-bottom-color: var(--signal); }
+
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  .btn-hero { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 6px; font: 600 14px var(--sans); text-decoration: none; cursor: pointer; border: 1px solid transparent; }
+  .btn-hero.primary { background: var(--signal); color: #fff; box-shadow: 0 8px 24px -10px rgba(224, 108, 52, 0.7); }
+  .btn-hero.primary:hover { background: #EA7A44; }
+  .btn-hero.ghost { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.22); color: #FAFAFA; }
+  .btn-hero.ghost:hover { border-color: var(--signal); background: rgba(224, 108, 52, 0.08); }
+  .btn-hero:focus-visible, .space-card:focus-visible, .scroll-cue:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .btn-hero .tag { font: 600 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.2); }
+  .arr { display: inline-block; transition: transform .2s; }
+  .btn-hero:hover .arr, .space-card:hover .arr { transform: translateX(3px); }
+
+  .scroll-cue { background: none; border: none; color: #A1A1AA; font: 500 13px var(--sans); cursor: pointer; display: inline-flex; align-items: center; gap: 10px; padding: 8px 0; }
+  .scroll-cue:hover { color: #fff; }
+  .scroll-cue .line { width: 1px; height: 22px; background: linear-gradient(var(--signal), rgba(224, 108, 52, 0)); }
+
+  .section { position: relative; z-index: 2; padding: clamp(72px, 10vw, 128px) clamp(16px, 5vw, 76px); border-top: 1px solid rgba(255, 255, 255, 0.07); scroll-margin-top: 0; }
+  .section-inner { max-width: 1296px; margin: 0; }
+  .kicker { font: 500 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--signal); }
+  .section-title { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4.4vw, 48px); line-height: 1.12; letter-spacing: -0.01em; color: #FAFAFA; margin: 14px 0 0; max-width: 22ch; }
+  .section-lead { color: #A1A1AA; font-size: clamp(15px, 1.8vw, 17px); line-height: 1.65; max-width: 60ch; margin: 18px 0 0; }
+
+  .pillars { display: grid; grid-template-columns: 1fr; gap: 1px; margin-top: 52px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden; }
+  @media (min-width: 820px) { .pillars { grid-template-columns: repeat(3, 1fr); } }
+  .pillar { background: rgba(10, 23, 37, 0.82); padding: 30px 28px 34px; display: flex; flex-direction: column; gap: 10px; }
+  .pillar .num { font: 500 12px var(--mono); letter-spacing: .08em; color: var(--signal); }
+  .pillar h3 { font: 600 18px var(--sans); letter-spacing: -0.01em; color: #FAFAFA; margin: 6px 0 0; }
+  .pillar p { margin: 0; color: #A1A1AA; font-size: 14.5px; line-height: 1.6; }
+
+  .spaces { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 52px; }
+  @media (min-width: 820px) { .spaces { grid-template-columns: 1fr 1fr; gap: 20px; } }
+  .space-card { text-align: left; background: rgba(10, 23, 37, 0.82); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 30px; display: flex; flex-direction: column; gap: 12px; cursor: pointer; color: #FAFAFA; font-family: var(--sans); transition: border-color .2s, transform .2s, background-color .2s; }
+  .space-card:hover { border-color: var(--signal); transform: translateY(-2px); background: rgba(14, 30, 48, 0.95); }
+  .space-card h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.15; margin: 0; }
+  .space-card p { margin: 0; color: #A1A1AA; font-size: 14.5px; line-height: 1.55; }
+  .space-card ul { list-style: none; margin: 8px 0 0; padding: 16px 0 0; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; flex-direction: column; gap: 9px; }
+  .space-card li { display: flex; gap: 12px; font-size: 14px; color: #D4D4D8; }
+  .space-card li::before { content: ''; width: 6px; height: 6px; border-radius: 1px; background: var(--signal); margin-top: 8px; flex-shrink: 0; }
+  .space-open { margin-top: auto; padding-top: 14px; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+  .spaces-note { margin: 20px 0 0; font-size: 14px; color: #A1A1AA; }
+  .text-btn { background: none; border: none; padding: 0; color: #FAFAFA; font: 600 14px var(--sans); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(224, 108, 52, 0.6); text-underline-offset: 4px; }
+  .text-btn:hover { text-decoration-color: var(--signal); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start; }
+  @media (min-width: 900px) { .contact-grid { grid-template-columns: 5fr 7fr; gap: 64px; } }
+  .contact-direct { margin-top: 36px; display: flex; flex-direction: column; gap: 20px; }
+  .contact-direct span { display: block; font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #71717A; margin-bottom: 6px; }
+  .contact-direct a, .contact-direct strong { font-family: var(--serif); font-size: 20px; font-weight: 400; color: #FAFAFA; text-decoration: none; }
+  .contact-direct a { border-bottom: 1px solid rgba(224, 108, 52, 0.5); padding-bottom: 2px; }
+  .contact-direct a:hover { border-color: var(--signal); }
+
+  .cf { position: relative; background: rgba(10, 23, 37, 0.88); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: clamp(20px, 3vw, 32px); display: grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 600px) { .cf { grid-template-columns: 1fr 1fr; } .cf .full { grid-column: 1 / -1; } }
+  .cf label { display: block; font: 600 13px var(--sans); color: #E4E4E7; margin-bottom: 7px; }
+  .cf label i { font-style: normal; color: var(--signal); }
+  .cf-input { width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.15); color: #FAFAFA; border-radius: 6px; padding: 11px 12px; font: 15px var(--sans); outline: none; -webkit-appearance: none; appearance: none; transition: border-color .2s, box-shadow .2s; }
+  .cf-input::placeholder { color: #71717A; }
+  .cf-input:focus { border-color: var(--signal); box-shadow: 0 0 0 3px rgba(224, 108, 52, 0.2); }
+  select.cf-input { padding-right: 36px; background-repeat: no-repeat; background-position: right 12px center; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23A1A1AA' stroke-width='1.6'/%3E%3C/svg%3E"); }
+  select.cf-input option { color: #09090b; background: #fff; }
+  textarea.cf-input { resize: vertical; min-height: 132px; line-height: 1.5; }
+  .cf label.cf-consent { display: flex; gap: 12px; align-items: flex-start; font: 400 13px var(--sans); margin: 0; line-height: 1.5; color: #A1A1AA; }
+  .cf-consent input[type=checkbox] { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--signal); flex-shrink: 0; }
+  .cf-consent a { color: #FAFAFA; }
+  .cf-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; }
+  .cf-foot small { font-size: 12px; color: #71717A; }
+  .cf-submit { background: var(--signal); color: #fff; border: none; border-radius: 6px; min-height: 48px; padding: 0 24px; font: 600 14px var(--sans); cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+  .cf-submit:hover { background: #EA7A44; }
+  .cf-submit:disabled { opacity: .6; cursor: wait; }
+  .cf-msg { margin: 0; font-size: 13.5px; font-weight: 600; }
+  .cf-msg.ok { color: #34D399; }
+  .cf-msg.warn { color: #FBBF24; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .site-foot { position: relative; z-index: 2; background: rgba(10, 23, 37, 0.92); border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 56px clamp(16px, 5vw, 76px) calc(28px + env(safe-area-inset-bottom, 0px)); }
+  .foot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 24px; }
+  @media (min-width: 820px) { .foot-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+  .foot-brand { grid-column: 1 / -1; }
+  @media (min-width: 820px) { .foot-brand { grid-column: auto; } }
+  .foot-brand p { margin: 14px 0 0; max-width: 36ch; color: #A1A1AA; font-size: 14px; line-height: 1.6; }
+  .foot-col { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .foot-col h3 { font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #71717A; margin: 0 0 8px; }
+  .foot-col a, .foot-col button { background: none; border: none; padding: 3px 0; color: #A1A1AA; font: 14px var(--sans); text-align: left; text-decoration: none; cursor: pointer; }
+  .foot-col a:hover, .foot-col button:hover { color: #fff; }
+  .foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 12.5px; color: #71717A; }
+
+  /* Mentions légales & confidentialité */
+  .legal-card { width: 100%; max-width: 760px; max-height: min(88vh, 900px); margin: auto; display: flex; flex-direction: column; background: var(--nuit-profond); color: #D4D4D8; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6); }
+  .legal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 26px 28px 0; }
+  .legal-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 3vw, 30px); color: #FAFAFA; margin: 6px 0 0; }
+  .legal-close { flex-shrink: 0; width: 36px; height: 36px; border-radius: 6px; background: none; border: 1px solid rgba(255, 255, 255, 0.15); color: #FAFAFA; cursor: pointer; font-size: 15px; }
+  .legal-close:hover { border-color: var(--signal); }
+  .legal-tabs { display: flex; margin-top: 18px; padding: 0 28px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+  .legal-tabs button { background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 14px 12px; color: #A1A1AA; font: 600 14px var(--sans); cursor: pointer; }
+  .legal-tabs button:first-child { padding-left: 0; }
+  .legal-tabs button.active { color: #FAFAFA; border-bottom-color: var(--signal); }
+  .legal-body { padding: 4px 28px 30px; overflow-y: auto; font-size: 14.5px; line-height: 1.65; }
+  .legal-body h3 { font: 600 12.5px var(--sans); letter-spacing: .07em; text-transform: uppercase; color: #FAFAFA; margin: 26px 0 6px; }
+  .legal-body p { margin: 0; }
+  .legal-body a { color: #FAFAFA; }
+  .legal-meta { margin-top: 18px !important; font: 12px var(--mono); color: #71717A; }
+  .ph { background: rgba(224, 108, 52, 0.16); color: #F5A77F; border-radius: 3px; padding: 0 4px; }
+
   /* ===== RESPONSIVE ===== */
   .lbl-short { display: none; }
   .btp-grid > * { min-width: 0; }
@@ -418,6 +523,29 @@
     .brand-long, .lbl-long { display: none; }
     .lbl-short { display: inline; }
     input, select, textarea, .nexsis-input, .input-field { font-size: 16px !important; } /* évite le zoom iOS */
+
+    /* Accueil */
+    .haut-nav { display: none; }
+    .actions-group { gap: 12px; }
+    .marque { font-size: 13px; letter-spacing: .16em; }
+    .centre { padding: 28px 0 36px; }
+    .enonce { font-size: clamp(34px, 10.4vw, 46px); line-height: 1.08; }
+    .trait { margin: 20px 0; }
+    .note { font-size: 15.5px; }
+    .hero-cta { flex-direction: column; align-items: stretch; margin-top: 28px; }
+    .btn-hero { justify-content: center; min-height: 52px; }
+    .bas { gap: 8px 16px; }
+    .courriel { font-size: 16px; }
+    .section-title { max-width: none; }
+    .pillars, .spaces { margin-top: 36px; }
+    .pillar { padding: 24px 20px 26px; }
+    .space-card { padding: 22px 20px; }
+    .space-card h3 { font-size: 26px; }
+    .cf-submit { width: 100%; justify-content: center; min-height: 52px; }
+    .foot-bottom { flex-direction: column; }
+    .legal-head { padding: 20px 20px 0; }
+    .legal-tabs { padding: 0 20px; }
+    .legal-body { padding: 4px 20px calc(24px + env(safe-area-inset-bottom, 0px)); }
 
     .nexsis-header { padding: 10px 16px; gap: 8px; }
     .nexsis-header button { padding: 6px 10px !important; }
@@ -482,6 +610,15 @@
     .fiche-foot > div:last-child { width: 100%; }
     .sign-box { flex: 1; min-width: 0; }
   }
+
+  @media (max-width: 380px) {
+    .lang-btn { padding: 4px 9px; }
+    .ecrire { font-size: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-hero, .space-card, .arr { transition: none; }
+  }
 </style>
 </head>
 <body class="light-mode">
@@ -494,11 +631,15 @@
   <header class="haut">
     <span class="marque">VB SAFETY</span>
     <div class="actions-group">
+      <nav class="haut-nav" aria-label="Navigation principale">
+        <a href="#approche" onclick="return goSection(event, 'approche')" data-i18n="navApproach">Approche</a>
+        <a href="#plateforme" onclick="return goSection(event, 'plateforme')" data-i18n="navPlatform">Plateforme</a>
+      </nav>
       <div class="lang-switcher">
         <button id="btn-fr" class="lang-btn active" onclick="setLanguage('fr')">FR</button>
         <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
       </div>
-      <a id="txt-write" class="ecrire" href="mailto:contact@vb-safety.com">Nous écrire</a>
+      <a id="txt-write" class="ecrire" href="#contact" onclick="return goSection(event, 'contact')">Nous écrire</a>
     </div>
   </header>
 
@@ -512,16 +653,230 @@
       <p id="txt-description" class="note">
         VB Safety développe des solutions de mesure de l'exposition professionnelle, pour les services de secours et les environnements industriels.
       </p>
+      <div class="hero-cta">
+        <button type="button" class="btn-hero primary" onclick="openAuthModal()"><span id="txt-btn-cmr">Accéder à l'outil CMR</span><span class="tag" data-i18n="betaTag">Bêta</span></button>
+        <a class="btn-hero ghost" href="#contact" onclick="return goSection(event, 'contact')"><span data-i18n="ctaContact">Nous contacter</span><span class="arr" aria-hidden="true">→</span></a>
+      </div>
     </div>
   </main>
 
   <footer class="bas">
-    <a class="courriel" href="https://vb-safety.com">vb-safety.com</a>
-    <div class="footer-sub-links">
-      <a href="https://vb-safety.com/CMR-management" id="txt-btn-cmr" class="lien-cmr" onclick="event.preventDefault(); openAuthModal();">Outil de suivi CMR — Beta</a>
-      <span>VB SAFETY — France</span>
-    </div>
+    <a class="courriel" href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
+    <button type="button" class="scroll-cue" onclick="goSection(event, 'approche')"><span data-i18n="scrollCue">Découvrir</span><span class="line" aria-hidden="true"></span></button>
   </footer>
+</div>
+
+<!-- APPROCHE -->
+<section class="section" id="approche">
+  <div class="section-inner">
+    <span class="kicker" data-i18n="apKicker">Notre approche</span>
+    <h2 class="section-title" data-i18n="apTitle">Rendre l'exposition mesurable, traçable, transmissible.</h2>
+    <p class="section-lead" data-i18n="apLead">Les effets des agents cancérogènes apparaissent des années après l'exposition. Ce qui n'est pas enregistré le jour même est perdu pour le suivi médical comme pour la reconnaissance.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="num" data-i18n="p1k">01 · Sécurité &amp; Industrie</span>
+        <h3 data-i18n="p1t">Mesurer sur le terrain</h3>
+        <p data-i18n="p1d">Qualifier l'exposition là où elle se produit : en intervention, sur chantier, en atelier.</p>
+      </div>
+      <div class="pillar">
+        <span class="num" data-i18n="p2k">02 · Santé</span>
+        <h3 data-i18n="p2t">Relier au suivi médical</h3>
+        <p data-i18n="p2d">Chaque exposition rattachée à la personne, transmise au service de santé et conservée dans la durée.</p>
+      </div>
+      <div class="pillar">
+        <span class="num" data-i18n="p3k">03 · Conformité</span>
+        <h3 data-i18n="p3t">Tenir les obligations à jour</h3>
+        <p data-i18n="p3d">DUERP, fiches d'exposition et liste des travailleurs exposés, produits à partir d'une seule saisie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATEFORME -->
+<section class="section" id="plateforme">
+  <div class="section-inner">
+    <span class="kicker" data-i18n="plKicker">Outil de suivi CMR · Bêta</span>
+    <h2 class="section-title" data-i18n="plTitle">Un moteur d'exposition, deux espaces métier.</h2>
+    <p class="section-lead" data-i18n="plLead">La plateforme est ouverte en bêta à nos partenaires. Choisissez votre espace : un code d'accès vous sera demandé.</p>
+    <div class="spaces">
+      <button type="button" class="space-card" onclick="openAuthModal('pompiers')">
+        <span class="portal-kicker">SDIS · SSSM</span>
+        <h3 data-i18n="spName">Sapeur-pompier</h3>
+        <p data-i18n="spDesc">La traçabilité de l'équipage en fin d'intervention, en quelques minutes.</p>
+        <ul>
+          <li data-i18n="spB1">Rôles, ARI et EPI renseignés par agent</li>
+          <li data-i18n="spB2">Contrôle de décontamination cutanée HAP</li>
+          <li data-i18n="spB3">Transmission au service de santé (SSSM)</li>
+        </ul>
+        <span class="space-open"><span data-i18n="openSpace">Ouvrir l'espace</span><span class="arr" aria-hidden="true">→</span></span>
+      </button>
+      <button type="button" class="space-card" onclick="openAuthModal('btp-expositions')">
+        <span class="portal-kicker" data-i18n="btpKicker">Entreprise · Chantier</span>
+        <h3 data-i18n="btpName">BTP &amp; industrie</h3>
+        <p data-i18n="btpDesc">Les expositions individuelles aux agents CMR, saisies depuis le chantier.</p>
+        <ul>
+          <li data-i18n="btpB1">Saisie rapide par le chef d'équipe</li>
+          <li data-i18n="btpB2">DUERP mis à jour à chaque saisie</li>
+          <li data-i18n="btpB3">Fiche d'exposition par salarié, prête à transmettre</li>
+        </ul>
+        <span class="space-open"><span data-i18n="openSpace">Ouvrir l'espace</span><span class="arr" aria-hidden="true">→</span></span>
+      </button>
+    </div>
+    <p class="spaces-note"><span data-i18n="plNoCode">Pas encore de code ?</span> <button type="button" class="text-btn" onclick="openAuthModal(null, 'request')" data-i18n="plRequest">Demander un accès bêta</button></p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-inner contact-grid">
+    <div>
+      <span class="kicker" data-i18n="ctKicker">Contact</span>
+      <h2 class="section-title" data-i18n="ctTitle">Parlons de vos expositions.</h2>
+      <p class="section-lead" data-i18n="ctLead">SDIS, service de santé au travail, entreprise ou investisseur : décrivez-nous votre contexte, nous revenons vers vous rapidement.</p>
+      <div class="contact-direct">
+        <div><span data-i18n="ctDirect">Écrire directement</span><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></div>
+        <div><span data-i18n="ctBased">Basés en</span><strong>France</strong></div>
+      </div>
+    </div>
+
+    <form class="cf" id="contact-form" onsubmit="handleContactSubmit(event)" novalidate>
+      <div>
+        <label for="cf-nom"><span data-i18n="fName">Nom et prénom</span> <i>*</i></label>
+        <input class="cf-input" id="cf-nom" name="nom" type="text" autocomplete="name" required>
+      </div>
+      <div>
+        <label for="cf-org"><span data-i18n="fOrg">Organisation</span> <i>*</i></label>
+        <input class="cf-input" id="cf-org" name="organisation" type="text" autocomplete="organization" required>
+      </div>
+      <div>
+        <label for="cf-email"><span data-i18n="fEmail">Email professionnel</span> <i>*</i></label>
+        <input class="cf-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+      </div>
+      <div>
+        <label for="cf-profil" data-i18n="fProfile">Vous êtes</label>
+        <select class="cf-input" id="cf-profil" name="profil">
+          <option value="SDIS" data-i18n="fo1">Service d'incendie et de secours</option>
+          <option value="Santé au travail" data-i18n="fo2">Service de santé / médecine du travail</option>
+          <option value="Entreprise" data-i18n="fo3">Entreprise · BTP · industrie</option>
+          <option value="Investisseur / partenaire" data-i18n="fo4">Investisseur · partenaire</option>
+          <option value="Presse" data-i18n="fo5">Presse</option>
+          <option value="Autre" data-i18n="fo6">Autre</option>
+        </select>
+      </div>
+      <div class="full">
+        <label for="cf-message"><span data-i18n="fMsg">Message</span> <i>*</i></label>
+        <textarea class="cf-input" id="cf-message" name="message" rows="5" required data-i18n-ph="fMsgPh" placeholder="Votre besoin, votre contexte, le nombre d'agents ou de salariés concernés…"></textarea>
+      </div>
+      <div class="hp" aria-hidden="true"><label for="cf-gotcha">Ne pas remplir</label><input id="cf-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
+      <label class="cf-consent full" for="cf-consent">
+        <input type="checkbox" id="cf-consent" name="consentement" value="oui" required>
+        <span data-i18n="fConsent">J'accepte que VB Safety utilise ces informations pour répondre à ma demande. <a href="#" onclick="event.preventDefault(); nav('confidentialite');">Politique de confidentialité</a></span>
+      </label>
+      <div class="cf-foot full">
+        <small data-i18n="fRequired">* Champs obligatoires</small>
+        <button type="submit" class="cf-submit" id="cf-submit"><span data-i18n="fSubmit">Envoyer le message</span><span class="arr" aria-hidden="true">→</span></button>
+      </div>
+      <p class="cf-msg full" id="cf-msg" role="status" hidden></p>
+    </form>
+  </div>
+</section>
+
+<!-- PIED DE PAGE -->
+<footer class="site-foot">
+  <div class="section-inner foot-grid">
+    <div class="foot-brand">
+      <span class="marque">VB SAFETY</span>
+      <p data-i18n="footTag">Mesure de l'exposition professionnelle pour les services de secours et l'industrie.</p>
+    </div>
+    <div class="foot-col">
+      <h3 data-i18n="footPlatform">Plateforme</h3>
+      <button type="button" onclick="openAuthModal('pompiers')" data-i18n="footSp">Espace sapeur-pompier</button>
+      <button type="button" onclick="openAuthModal('btp-expositions')" data-i18n="footBtp">Espace BTP</button>
+      <button type="button" onclick="openAuthModal(null, 'request')" data-i18n="plRequest">Demander un accès bêta</button>
+    </div>
+    <div class="foot-col">
+      <h3 data-i18n="ctKicker">Contact</h3>
+      <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
+      <a href="#contact" onclick="return goSection(event, 'contact')" data-i18n="footForm">Formulaire de contact</a>
+    </div>
+    <div class="foot-col">
+      <h3 data-i18n="footLegal">Légal</h3>
+      <button type="button" onclick="nav('mentions-legales')" data-i18n="legalMentions">Mentions légales</button>
+      <button type="button" onclick="nav('confidentialite')" data-i18n="legalPrivacy">Confidentialité</button>
+    </div>
+  </div>
+  <div class="section-inner foot-bottom">
+    <span>© <span id="foot-year">2026</span> VB Safety SAS · <span data-i18n="footRights">Tous droits réservés.</span></span>
+    <span data-i18n="footDemo">Les données de l'outil de démonstration sont fictives.</span>
+  </div>
+</footer>
+
+<!-- MENTIONS LÉGALES & CONFIDENTIALITÉ -->
+<div id="legal-modal" class="modal-overlay" onclick="if (event.target === this) nav('')">
+  <div class="legal-card" role="dialog" aria-modal="true" aria-labelledby="legal-title">
+    <div class="legal-head">
+      <div>
+        <span class="kicker">VB Safety</span>
+        <h2 id="legal-title">Mentions légales</h2>
+      </div>
+      <button type="button" class="legal-close" onclick="nav('')" aria-label="Fermer">✕</button>
+    </div>
+    <div class="legal-tabs" role="tablist">
+      <button type="button" role="tab" data-legal="mentions-legales" onclick="nav('mentions-legales', 'replace')" data-i18n="legalMentions">Mentions légales</button>
+      <button type="button" role="tab" data-legal="confidentialite" onclick="nav('confidentialite', 'replace')" data-i18n="legalPrivacy">Confidentialité</button>
+    </div>
+
+    <div class="legal-body" id="legal-mentions">
+      <h3>Éditeur du site</h3>
+      <p>VB Safety, société par actions simplifiée au capital de <span class="ph">[montant] €</span><br>
+      Siège social : <span class="ph">[adresse complète]</span><br>
+      RCS <span class="ph">[ville]</span> <span class="ph">[n° SIREN]</span> · TVA intracommunautaire <span class="ph">[FR…]</span><br>
+      Contact : <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></p>
+
+      <h3>Directeur de la publication</h3>
+      <p><span class="ph">[Prénom Nom]</span>, Président de VB Safety.</p>
+
+      <h3>Hébergement</h3>
+      <p>GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.</p>
+
+      <h3>Propriété intellectuelle</h3>
+      <p>Les contenus de ce site (textes, visuels, marque, logiciel de démonstration) sont la propriété de VB Safety, sauf mention contraire. Toute reproduction sans autorisation écrite préalable est interdite.</p>
+
+      <h3>Outil de démonstration</h3>
+      <p>L'outil de suivi CMR est fourni en version bêta, à des fins de démonstration. Les personnes, interventions, entreprises et chantiers qui y figurent sont fictifs. Les niveaux d'exposition affichés sont indicatifs : ils ne constituent ni une mesure métrologique ni un avis médical.</p>
+
+      <h3>Responsabilité</h3>
+      <p>VB Safety s'efforce d'assurer l'exactitude des informations publiées sans pouvoir la garantir. Les liens vers des sites tiers n'engagent pas sa responsabilité.</p>
+    </div>
+
+    <div class="legal-body" id="legal-confidentialite" hidden>
+      <p class="legal-meta">Dernière mise à jour : septembre 2026</p>
+
+      <h3>Responsable du traitement</h3>
+      <p>VB Safety, joignable à <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>.</p>
+
+      <h3>Données collectées</h3>
+      <p>Via le formulaire de contact et la demande d'accès bêta : nom, organisation, adresse email professionnelle, profil et contenu du message. Aucune autre donnée n'est demandée.</p>
+
+      <h3>Finalité et base légale</h3>
+      <p>Répondre à votre demande et, le cas échéant, organiser un accès à l'outil de démonstration. Base légale : votre consentement et l'intérêt légitime de VB Safety à répondre aux sollicitations reçues.</p>
+
+      <h3>Durée de conservation</h3>
+      <p>Trois ans à compter du dernier échange, puis suppression.</p>
+
+      <h3>Destinataires</h3>
+      <p>Les seules personnes habilitées de VB Safety. Aucune donnée n'est vendue ni cédée. <span class="ph">[Si un service d'envoi de formulaire est utilisé (ex. Formspree), le citer ici comme sous-traitant, avec le pays d'hébergement des données.]</span></p>
+
+      <h3>Outil de démonstration</h3>
+      <p>Les saisies effectuées dans l'outil de démonstration restent dans votre navigateur et ne sont pas transmises à VB Safety, à l'exception du questionnaire d'avis que vous choisissez d'envoyer.</p>
+
+      <h3>Cookies et traceurs</h3>
+      <p>Ce site ne dépose aucun cookie publicitaire ni de mesure d'audience. Les polices de caractères sont chargées depuis Google Fonts, ce qui transmet votre adresse IP à Google.</p>
+
+      <h3>Vos droits</h3>
+      <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition et de limitation du traitement de vos données. Écrivez à <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>. En cas de difficulté, vous pouvez saisir la CNIL (cnil.fr).</p>
+    </div>
+  </div>
 </div>
 
 <!-- MODALE D'AUTHENTIFICATION & DEMANDE -->
@@ -1078,6 +1433,22 @@
 
 <script>
 let currentLang = 'fr';
+let appOpen = false;       // une application plein écran est ouverte : on met les particules en pause
+let pendingPortal = null;  // espace demandé avant la saisie du code
+
+/* =====================================================================
+   ENVOI DES FORMULAIRES
+   Renseignez l'adresse Formspree (https://formspree.io/f/<identifiant>).
+   Tant qu'elle est vide, les formulaires ouvrent la messagerie de l'utilisateur.
+   ===================================================================== */
+const FORM_ENDPOINT = '';
+const CONTACT_EMAIL = 'contact@vb-safety.com';
+
+async function postForm(data) {
+  if (!FORM_ENDPOINT) throw new Error('Aucun point d\'envoi configuré');
+  const r = await fetch(FORM_ENDPOINT, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+}
 
 const dictionary = {
   fr: {
@@ -1087,7 +1458,7 @@ const dictionary = {
     headline1: "Le risque est reconnu.",
     headline2: "L'exposition reste invisible.",
     description: "VB Safety développe des solutions de mesure de l'exposition professionnelle, pour les services de secours et les environnements industriels.",
-    btnCmr: "Outil de suivi CMR — Beta",
+    btnCmr: "Accéder à l'outil CMR",
     authTitle: "Accès Partenaire SSSM",
     authSub: "Veuillez saisir le code d'accès ou mot de passe fourni.",
     inputPassPlaceholder: "Mot de passe ou Code PIN",
@@ -1150,7 +1521,41 @@ const dictionary = {
     expo0Title: "Nulle", expo0Desc: "Aucun engagement en zone d'exclusion",
     expo1Title: "Faible", expo1Desc: "Évolution en zone de soutien",
     expo2Title: "Moyenne", expo2Desc: "Évolution en atmosphère viciée",
-    expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion)"
+    expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion)",
+
+    // Page d'accueil
+    navApproach: "Approche", navPlatform: "Plateforme",
+    betaTag: "Bêta", ctaContact: "Nous contacter", scrollCue: "Découvrir",
+    apKicker: "Notre approche",
+    apTitle: "Rendre l'exposition mesurable, traçable, transmissible.",
+    apLead: "Les effets des agents cancérogènes apparaissent des années après l'exposition. Ce qui n'est pas enregistré le jour même est perdu pour le suivi médical comme pour la reconnaissance.",
+    p1k: "01 · Sécurité &amp; Industrie", p1t: "Mesurer sur le terrain", p1d: "Qualifier l'exposition là où elle se produit : en intervention, sur chantier, en atelier.",
+    p2k: "02 · Santé", p2t: "Relier au suivi médical", p2d: "Chaque exposition rattachée à la personne, transmise au service de santé et conservée dans la durée.",
+    p3k: "03 · Conformité", p3t: "Tenir les obligations à jour", p3d: "DUERP, fiches d'exposition et liste des travailleurs exposés, produits à partir d'une seule saisie.",
+    plKicker: "Outil de suivi CMR · Bêta",
+    plTitle: "Un moteur d'exposition, deux espaces métier.",
+    plLead: "La plateforme est ouverte en bêta à nos partenaires. Choisissez votre espace : un code d'accès vous sera demandé.",
+    spName: "Sapeur-pompier", spDesc: "La traçabilité de l'équipage en fin d'intervention, en quelques minutes.",
+    spB1: "Rôles, ARI et EPI renseignés par agent", spB2: "Contrôle de décontamination cutanée HAP", spB3: "Transmission au service de santé (SSSM)",
+    btpKicker: "Entreprise · Chantier", btpName: "BTP &amp; industrie", btpDesc: "Les expositions individuelles aux agents CMR, saisies depuis le chantier.",
+    btpB1: "Saisie rapide par le chef d'équipe", btpB2: "DUERP mis à jour à chaque saisie", btpB3: "Fiche d'exposition par salarié, prête à transmettre",
+    openSpace: "Ouvrir l'espace", plNoCode: "Pas encore de code ?", plRequest: "Demander un accès bêta",
+    ctKicker: "Contact", ctTitle: "Parlons de vos expositions.",
+    ctLead: "SDIS, service de santé au travail, entreprise ou investisseur : décrivez-nous votre contexte, nous revenons vers vous rapidement.",
+    ctDirect: "Écrire directement", ctBased: "Basés en",
+    fName: "Nom et prénom", fOrg: "Organisation", fEmail: "Email professionnel", fProfile: "Vous êtes", fMsg: "Message",
+    fo1: "Service d'incendie et de secours", fo2: "Service de santé / médecine du travail", fo3: "Entreprise · BTP · industrie", fo4: "Investisseur · partenaire", fo5: "Presse", fo6: "Autre",
+    fMsgPh: "Votre besoin, votre contexte, le nombre d'agents ou de salariés concernés…",
+    fConsent: "J'accepte que VB Safety utilise ces informations pour répondre à ma demande. <a href=\"#\" onclick=\"event.preventDefault(); nav('confidentialite');\">Politique de confidentialité</a>",
+    fRequired: "* Champs obligatoires", fSubmit: "Envoyer le message", fSending: "Envoi en cours…",
+    fOk: "Message envoyé. Merci, nous revenons vers vous rapidement.",
+    fFallback: "Ouverture de votre messagerie…",
+    fInvalid: "Merci de compléter les champs obligatoires et d'accepter la politique de confidentialité.",
+    footTag: "Mesure de l'exposition professionnelle pour les services de secours et l'industrie.",
+    footPlatform: "Plateforme", footSp: "Espace sapeur-pompier", footBtp: "Espace BTP", footForm: "Formulaire de contact",
+    footLegal: "Légal", legalMentions: "Mentions légales", legalPrivacy: "Confidentialité",
+    legalTitleMentions: "Mentions légales", legalTitlePrivacy: "Politique de confidentialité",
+    footRights: "Tous droits réservés.", footDemo: "Les données de l'outil de démonstration sont fictives."
   },
   en: {
     pageTitle: "VB Safety",
@@ -1159,7 +1564,7 @@ const dictionary = {
     headline1: "The risk is known.",
     headline2: "Exposure remains invisible.",
     description: "VB Safety develops occupational exposure measurement solutions for emergency services and industry.",
-    btnCmr: "CMR Tracking Tool — Beta",
+    btnCmr: "Open the CMR tool",
     authTitle: "Medical Service Partner Access",
     authSub: "Please enter the access code.",
     inputPassPlaceholder: "Password or PIN Code",
@@ -1222,13 +1627,48 @@ const dictionary = {
     expo0Title: "None", expo0Desc: "No entry in hot zone",
     expo1Title: "Low", expo1Desc: "Operating in support zone",
     expo2Title: "Medium", expo2Desc: "Operating in vitiated atmosphere",
-    expo3Title: "High", expo3Desc: "Operating in smoke-filled environment"
+    expo3Title: "High", expo3Desc: "Operating in smoke-filled environment",
+
+    // Home page
+    navApproach: "Approach", navPlatform: "Platform",
+    betaTag: "Beta", ctaContact: "Get in touch", scrollCue: "Discover",
+    apKicker: "Our approach",
+    apTitle: "Making exposure measurable, traceable, transferable.",
+    apLead: "Carcinogens take effect years after exposure. Whatever is not recorded on the day is lost, for medical follow-up and for recognition alike.",
+    p1k: "01 · Safety &amp; Industry", p1t: "Measure in the field", p1d: "Qualify exposure where it happens: on incidents, on building sites, in workshops.",
+    p2k: "02 · Health", p2t: "Link to medical follow-up", p2d: "Every exposure tied to the person, passed on to the health service and kept over time.",
+    p3k: "03 · Compliance", p3t: "Keep obligations up to date", p3d: "Risk assessment, exposure sheets and the list of exposed workers, generated from a single entry.",
+    plKicker: "CMR tracking tool · Beta",
+    plTitle: "One exposure engine, two workspaces.",
+    plLead: "The platform is open in beta to our partners. Choose your workspace: you will be asked for an access code.",
+    spName: "Firefighters", spDesc: "Crew traceability at the end of an incident, in a few minutes.",
+    spB1: "Roles, SCBA and PPE recorded per firefighter", spB2: "PAH skin decontamination check", spB3: "Transmission to the medical service",
+    btpKicker: "Company · Building site", btpName: "Construction &amp; industry", btpDesc: "Individual exposure to CMR agents, recorded from the site.",
+    btpB1: "Quick entry by the team leader", btpB2: "Risk assessment updated with each entry", btpB3: "Exposure sheet per employee, ready to send",
+    openSpace: "Open workspace", plNoCode: "No code yet?", plRequest: "Request beta access",
+    ctKicker: "Contact", ctTitle: "Let's talk about your exposures.",
+    ctLead: "Fire service, occupational health service, company or investor: tell us about your context and we will get back to you shortly.",
+    ctDirect: "Write directly", ctBased: "Based in",
+    fName: "Full name", fOrg: "Organisation", fEmail: "Work email", fProfile: "You are", fMsg: "Message",
+    fo1: "Fire and rescue service", fo2: "Occupational health service", fo3: "Company · construction · industry", fo4: "Investor · partner", fo5: "Press", fo6: "Other",
+    fMsgPh: "Your need, your context, how many firefighters or employees are concerned…",
+    fConsent: "I agree that VB Safety may use this information to reply to my request. <a href=\"#\" onclick=\"event.preventDefault(); nav('confidentialite');\">Privacy policy</a>",
+    fRequired: "* Required fields", fSubmit: "Send message", fSending: "Sending…",
+    fOk: "Message sent. Thank you, we will get back to you shortly.",
+    fFallback: "Opening your email client…",
+    fInvalid: "Please fill in the required fields and accept the privacy policy.",
+    footTag: "Occupational exposure measurement for emergency services and industry.",
+    footPlatform: "Platform", footSp: "Firefighter workspace", footBtp: "Construction workspace", footForm: "Contact form",
+    footLegal: "Legal", legalMentions: "Legal notice", legalPrivacy: "Privacy",
+    legalTitleMentions: "Legal notice", legalTitlePrivacy: "Privacy policy",
+    footRights: "All rights reserved.", footDemo: "Data in the demo tool is fictitious."
   }
 };
 
 function setLanguage(lang) {
   currentLang = lang;
   const t = dictionary[lang];
+  document.documentElement.lang = lang;
   document.getElementById('meta-title').textContent = t.pageTitle;
   document.getElementById('meta-desc').setAttribute('content', t.metaDesc);
   document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
@@ -1300,12 +1740,76 @@ function setLanguage(lang) {
   document.getElementById('fb-lbl-email').textContent = t.fbLblEmail;
   document.getElementById('fb-btn-submit').textContent = t.fbBtnSubmit;
   document.getElementById('fb-btn-skip').textContent = t.fbBtnSkip;
+
+  // Textes de la page d'accueil (attributs data-i18n / data-i18n-ph)
+  document.querySelectorAll('[data-i18n]').forEach(el => { const v = t[el.dataset.i18n]; if (v != null) el.innerHTML = v; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = t[el.dataset.i18nPh]; if (v != null) el.placeholder = v; });
+  if (document.getElementById('legal-modal').style.display === 'flex') showLegal(currentRoute());
   
   updateQualificationSummary();
   renderCrew();
 }
 
-function openAuthModal() { nav('acces'); }
+/* =====================================================================
+   PAGE D'ACCUEIL
+   ===================================================================== */
+function goSection(ev, id) {
+  if (ev) ev.preventDefault();
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.getElementById(id).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  return false;
+}
+
+async function handleContactSubmit(event) {
+  event.preventDefault();
+  const form = event.target, t = dictionary[currentLang];
+  const btn = document.getElementById('cf-submit'), msg = document.getElementById('cf-msg');
+  if (form.elements['_gotcha'].value) return; // robot
+  if (!form.checkValidity()) {
+    msg.className = 'cf-msg full warn'; msg.textContent = t.fInvalid; msg.hidden = false;
+    const first = form.querySelector(':invalid'); if (first) first.focus();
+    return;
+  }
+  const data = new FormData(form);
+  data.append('_subject', 'Contact site · ' + data.get('organisation'));
+  btn.disabled = true; btn.firstElementChild.textContent = t.fSending; msg.hidden = true;
+  try {
+    await postForm(data);
+    msg.className = 'cf-msg full ok'; msg.textContent = t.fOk; msg.hidden = false;
+    form.reset();
+  } catch (e) {
+    msg.className = 'cf-msg full warn'; msg.textContent = t.fFallback; msg.hidden = false;
+    const body = `${data.get('message')}\n\n—\n${data.get('nom')}\n${data.get('organisation')}\n${data.get('email')}\nProfil : ${data.get('profil')}`;
+    setTimeout(() => {
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Contact site · ' + data.get('organisation'))}&body=${encodeURIComponent(body)}`;
+    }, 600);
+  } finally {
+    btn.disabled = false; btn.firstElementChild.textContent = t.fSubmit;
+  }
+}
+
+function showLegal(route) {
+  const privacy = route === 'confidentialite', t = dictionary[currentLang];
+  document.getElementById('legal-modal').style.display = 'flex';
+  document.getElementById('legal-mentions').hidden = privacy;
+  document.getElementById('legal-confidentialite').hidden = !privacy;
+  document.getElementById('legal-title').textContent = privacy ? t.legalTitlePrivacy : t.legalTitleMentions;
+  document.querySelectorAll('.legal-tabs button').forEach(b => {
+    const on = b.dataset.legal === route;
+    b.classList.toggle('active', on); b.setAttribute('aria-selected', on);
+  });
+  document.getElementById(privacy ? 'legal-confidentialite' : 'legal-mentions').scrollTop = 0;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && ['acces', 'espace', 'mentions-legales', 'confidentialite'].includes(currentRoute())) nav('');
+});
+
+function openAuthModal(portal, mode) {
+  pendingPortal = portal || null;
+  switchAuthMode(mode || 'login');
+  nav('acces');
+}
 function closeAuthModal() { nav(''); }
 function switchAuthMode(mode) {
   document.getElementById('form-login').style.display = mode === 'login' ? 'block' : 'none';
@@ -1315,7 +1819,9 @@ function switchAuthMode(mode) {
 function checkAuth() {
   const passSaisi = document.getElementById('input-pass').value.replace(/\s+/g, '').toUpperCase();
   if (passSaisi === "VLN533" || passSaisi === "") {
-    nav('espace', 'replace'); // le mot de passe ne revient pas avec « Précédent »
+    const target = pendingPortal || 'espace';
+    pendingPortal = null;
+    nav(target, 'replace'); // le mot de passe ne revient pas avec « Précédent »
   } else {
     alert(dictionary[currentLang].authError);
   }
@@ -1370,21 +1876,12 @@ async function handleRealEmailSubmit(event) {
   const formData = new FormData(event.target);
 
   try {
-    const response = await fetch("https://formspree.io/f/beta-acces@vb-safety.com", {
-      method: "POST",
-      body: formData,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (response.ok) {
-      msgBox.style.color = "var(--success)";
-      msgBox.textContent = t.reqSuccess;
-      msgBox.style.display = 'block';
-      event.target.reset();
-      setTimeout(() => { closeAuthModal(); }, 3500);
-    } else {
-      throw new Error("HTTP error");
-    }
+    await postForm(formData);
+    msgBox.style.color = "var(--success)";
+    msgBox.textContent = t.reqSuccess;
+    msgBox.style.display = 'block';
+    event.target.reset();
+    setTimeout(() => { closeAuthModal(); }, 3500);
   } catch (error) {
     msgBox.style.color = "var(--warning)";
     msgBox.textContent = t.reqFallback;
@@ -1426,20 +1923,11 @@ async function handleFeedbackSubmit(event) {
   feedbackData.append("email", userEmail);
 
   try {
-    const response = await fetch("https://formspree.io/f/beta-acces@vb-safety.com", {
-      method: "POST",
-      body: feedbackData,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (response.ok) {
-      statusBox.style.color = "var(--success)";
-      statusBox.textContent = currentLang === 'en' ? "✓ Thank you! Feedback sent." : "Merci ! Votre avis a bien été envoyé.";
-      statusBox.style.display = 'block';
-      setTimeout(() => { returnToHome(); }, 3000);
-    } else {
-      throw new Error("Network error");
-    }
+    await postForm(feedbackData);
+    statusBox.style.color = "var(--success)";
+    statusBox.textContent = currentLang === 'en' ? "✓ Thank you! Feedback sent." : "Merci ! Votre avis a bien été envoyé.";
+    statusBox.style.display = 'block';
+    setTimeout(() => { returnToHome(); }, 3000);
   } catch (err) {
     statusBox.style.color = "var(--warning)";
     statusBox.textContent = currentLang === 'en' ? "Opening email client..." : "Ouverture du client mail...";
@@ -1782,49 +2270,62 @@ function resetForm() {
   renderCrew();
 }
 
+/* ---------- Particules (fond) ---------- */
 (function() {
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
-  let width, height, particles = [];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let width = 0, height = 0, particles = [];
 
-  function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+  function resize(force) {
+    const w = window.innerWidth, h = window.innerHeight;
+    // Sur mobile, l'apparition/disparition de la barre d'adresse ne relance pas l'animation
+    if (!force && w === width && Math.abs(h - height) < 160) return;
+    width = w; height = h;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(60, Math.max(24, (w * h) / 20000)));
+    particles = Array.from({ length: n }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.8 + 0.8,
+      vy: -(Math.random() * 0.4 + 0.15)
+    }));
+    if (reduce) draw();
+  }
 
-  function init() {
-    resize();
-    particles = [];
-    for(let i=0; i<60; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 1.8 + 0.8,
-        vy: -(Math.random() * 0.4 + 0.15)
-      });
-    }
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
 
   function animate() {
-    ctx.clearRect(0,0,width,height);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    particles.forEach(p => {
-      p.y += p.vy;
-      if (p.y < 0) p.y = height;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fill();
-    });
+    if (!appOpen) {
+      particles.forEach(p => { p.y += p.vy; if (p.y < 0) p.y = height; });
+      draw();
+    }
     requestAnimationFrame(animate);
   }
 
-  window.addEventListener('resize', resize);
-  init();
-  animate();
+  window.addEventListener('resize', () => resize(false));
+  resize(true);
+  if (!reduce) animate();
 })();
 
 window.onload = function() {
   handleNatureChange();
   renderCrew();
   btpInit();
-  nav(currentRoute(), 'replace'); // un lien direct (#btp-duerp…) ouvre le bon écran
+  document.getElementById('foot-year').textContent = new Date().getFullYear();
+  const r = currentRoute();
+  if (r) nav(r, 'replace'); // un lien direct (#btp-duerp…) ouvre le bon écran
+  else showRoute('');
 };
 
 /* =====================================================================
@@ -1832,7 +2333,8 @@ window.onload = function() {
    ===================================================================== */
 const BTP_TAB_ROUTES = { expo: 'btp-expositions', duerp: 'btp-duerp', fiche: 'btp-fiches' };
 const ROUTE_TITLES = { '': 'VB Safety', acces: 'Accès · VB Safety', espace: 'Choisir un espace · VB Safety', pompiers: 'Sapeur-pompier · VB Safety',
-  'btp-expositions': 'BTP · Expositions · VB Safety', 'btp-duerp': 'BTP · DUERP · VB Safety', 'btp-fiches': "BTP · Fiches d'exposition · VB Safety", merci: 'Merci · VB Safety' };
+  'btp-expositions': 'BTP · Expositions · VB Safety', 'btp-duerp': 'BTP · DUERP · VB Safety', 'btp-fiches': "BTP · Fiches d'exposition · VB Safety", merci: 'Merci · VB Safety',
+  'mentions-legales': 'Mentions légales · VB Safety', confidentialite: 'Confidentialité · VB Safety' };
 let onboardingSeen = false;
 
 function currentRoute() {
@@ -1846,17 +2348,21 @@ function nav(route, mode) {
   showRoute(route);
 }
 function showRoute(route) {
-  ['auth-modal', 'portal-modal', 'onboarding-modal', 'learn-modal', 'select-modal', 'summary-modal', 'feedback-screen']
+  ['auth-modal', 'portal-modal', 'legal-modal', 'onboarding-modal', 'learn-modal', 'select-modal', 'summary-modal', 'feedback-screen']
     .forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('app-nexsis').style.display = 'none';
   document.getElementById('app-btp').style.display = 'none';
   document.title = ROUTE_TITLES[route] || 'VB Safety';
+  appOpen = route === 'pompiers' || route === 'merci' || route.startsWith('btp-');
+  document.body.style.overflow = route ? 'hidden' : ''; // la page d'accueil ne défile pas derrière un écran ouvert
 
   if (route === 'acces') {
     document.getElementById('auth-modal').style.display = 'flex';
     setTimeout(() => document.getElementById('input-pass').focus(), 100);
   } else if (route === 'espace') {
     document.getElementById('portal-modal').style.display = 'flex';
+  } else if (route === 'mentions-legales' || route === 'confidentialite') {
+    showLegal(route);
   } else if (route === 'pompiers') {
     document.getElementById('app-nexsis').style.display = 'block';
     if (!onboardingSeen) { onboardingSeen = true; openOnboardingModal(); }
@@ -2082,7 +2588,7 @@ function btpShowAgents() {
 }
 function btpMsg(id, txt, ok) { const m = document.getElementById(id); m.textContent = txt; m.style.color = ok ? 'var(--success)' : 'var(--warning)'; }
 
-function btpNorm(t) { return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function btpNorm(t) { return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
 function btpParseQuick(silent) {
   const t = btpNorm(document.getElementById('btp-quick-txt').value);
   let found = 0;
