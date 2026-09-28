@@ -1,0 +1,12 @@
+# VB Safety
+
+> VB Safety (SAS, France) conçoit des solutions de mesure et de traçabilité de l'exposition professionnelle aux agents dangereux, en commençant par les sapeurs-pompiers.
+
+## Carnet Expo CMR
+- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : outil web de traçabilité des expositions CMR (cancérogènes, mutagènes, reprotoxiques) des sapeurs-pompiers après intervention. Le chef d'agrès ou le COS rédige le rapport de contamination de son équipage, le commandement suit les rapports manquants, le SSSM contrôle et complète, chaque agent consulte son historique. Accès cloisonné par rôle, hébergement en France. Configurable pour chaque SDIS.
+
+## Guides
+- [Santé des sapeurs-pompiers : fumées d'incendie, cancers et traçabilité CMR](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : composition des fumées, classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux 16 bis et 30), décret n° 2024-307 (liste des travailleurs exposés, conservation 40 ans), proposition de loi du Sénat sur le relevé d'exposition (mars 2025), gestes de décontamination, suivi médical.
+
+## Contact
+- [vb-safety.com](https://vb-safety.com)
