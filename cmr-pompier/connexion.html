@@ -65,7 +65,7 @@
     <div class="login-inner">
       <a class="back-link" href="./"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>Accueil</a>
       <h2 id="login-title">Connexion</h2>
-      <p class="login-lead">Choisissez un profil pour découvrir sa vue. Les identifiants de démonstration sont déjà remplis.</p>
+      <p class="login-lead">Choisissez un profil et saisissez le code d'accès qui vous a été transmis.</p>
 
       <form id="login-form" novalidate>
         <fieldset class="roles-pick">
@@ -108,9 +108,9 @@
           <p class="creds-note"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg>Pré-remplis pour la démonstration</p>
         </div>
 
-        <div class="field code-field" id="code-field" hidden>
-          <label class="label" for="code">Code d'accès à la démo</label>
-          <div class="input-icon"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg><input class="input" id="code" name="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Code reçu par e-mail ou en rendez-vous"></div>
+        <div class="field code-field" id="code-field">
+          <div class="code-head"><label class="label" for="code">Code d'accès à la démo</label><a class="code-ask" href="#demande" data-demande="acces">Demander un accès</a></div>
+          <div class="input-icon"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg><input class="input" id="code" name="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Code reçu par e-mail ou en rendez-vous" required></div>
         </div>
 
         <button class="btn btn-primary btn-lg btn-block" id="login-btn" type="submit"><span>Se connecter</span><svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
@@ -118,12 +118,13 @@
         <button class="text-link" id="offline-link" type="button" hidden>Continuer en aperçu, sans serveur</button>
       </form>
 
-      <p class="login-foot">Accès réel sur votre SDIS : identifiants personnels fournis par votre administrateur. <a href="mailto:contact@vb-safety.com">Nous contacter</a></p>
+      <p class="login-foot">Pas encore de code ? <a href="#demande" data-demande="acces">Demander un accès</a> · Une question ? <a href="#demande" data-demande="contact">Nous contacter</a></p>
     </div>
   </section>
 </main>
 
 <script src="assets/js/api.js"></script>
 <script src="assets/js/connexion.js"></script>
+  <script src="assets/js/demande.js"></script>
 </body>
 </html>

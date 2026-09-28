@@ -16,7 +16,11 @@
   var offline = document.getElementById('offline-link');
   var codeField = document.getElementById('code-field'), codeInput = document.getElementById('code');
   var qc = new URLSearchParams(location.search).get('code');
-  if (qc) { codeInput.value = qc; codeField.hidden = false; }
+  if (qc) codeInput.value = qc;
+  // Empreinte du code, pour l'aperçu sans serveur uniquement (le serveur vérifie le code lui-même)
+  var CODE_HASH = '1f25a3f79dc7cbc6a54cd05250b81875c13d1f455bbeb72d926f96e347d01ac3';
+  async function sha256(t) { var b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return Array.prototype.map.call(new Uint8Array(b), function (x) { return x.toString(16).padStart(2, '0'); }).join(''); }
+  function codeValue() { return codeInput.value.trim().toUpperCase().replace(/\s+/g, ''); }
 
   function current() {
     var r = form.querySelector('input[name="role"]:checked');
@@ -40,18 +44,20 @@
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     var p = current();
+    if (!codeValue()) { show("Saisissez le code d'accès qui vous a été transmis.", 'warn'); codeInput.setAttribute('aria-invalid', 'true'); codeInput.focus(); return; }
+    codeInput.removeAttribute('aria-invalid');
     btn.disabled = true; btn.firstElementChild.textContent = 'Connexion…';
     try {
-      var s = await VBS.login(p.matricule, p.password, p.role, codeField.hidden ? '' : codeInput.value);
+      var s = await VBS.login(p.matricule, p.password, p.role, codeValue());
       location.href = VBS.HOME[s.role];
     } catch (err) {
       var em = String(err.message || '').toLowerCase();
       if (em.indexOf('code_requis') !== -1) {
-        codeField.hidden = false; codeInput.focus();
+        codeInput.focus();
         show("Cette démonstration est réservée : saisissez le code d'accès qui vous a été transmis.", 'warn');
       } else if (em.indexOf('code_invalide') !== -1) {
-        codeField.hidden = false; codeInput.select();
-        show("Code d'accès inconnu ou expiré. Vérifiez-le ou demandez-en un.", 'error');
+        codeInput.setAttribute('aria-invalid', 'true'); codeInput.select();
+        show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error');
       } else if (err.status === 400 || err.status === 403) {
         show('Identifiants refusés par le serveur de démonstration.', 'error');
       } else {
@@ -63,7 +69,9 @@
     }
   });
 
-  offline.addEventListener('click', function () {
+  offline.addEventListener('click', async function () {
+    var ok = false; try { ok = (await sha256(codeValue())) === CODE_HASH; } catch (e) {}
+    if (!ok) { show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error'); codeInput.focus(); return; }
     var s = VBS.offlinePreview(current());
     location.href = VBS.HOME[s.role];
   });

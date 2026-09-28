@@ -9,7 +9,9 @@
 
   // Indice d'exposition indicatif (même formule partout)
   function indice(typeFeu, p) {
-    var raw = (W[typeFeu] || 1) * ((+p.ari_min || 0) * 0.3 + (+p.sans_ari_min || 0));
+    // Sans durée hors ARI saisie, l'exposition hors ARI est estimée à partir de l'exposition perçue (GDO)
+    var hors = +p.sans_ari_min || ({ nulle: 0, faible: 10, moyenne: 25, forte: 45 }[p.contamination] || 0);
+    var raw = (W[typeFeu] || 1) * ((+p.ari_min || 0) * 0.3 + hors);
     var gestes = [p.douche, p.tenue_changee, p.lingettes].filter(Boolean).length;
     return Math.round(raw * Math.max(0.55, 1 - 0.15 * gestes));
   }

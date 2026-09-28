@@ -60,6 +60,7 @@
       <a href="#roles">Rôles</a>
       <a href="#confidentialite">Confidentialité</a>
       <a href="#demo">Démo</a>
+      <a href="#demande" data-demande="contact">Nous contacter</a>
     </nav>
     <a class="btn btn-primary header-cta" href="connexion.html">Se connecter <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     <button class="menu-btn" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Ouvrir le menu">
@@ -153,7 +154,7 @@
       <div class="soon">
         <span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-shirt"/></svg></span>
         <div class="soon-text">
-          <span class="soon-tag">Prochainement · en développement</span>
+          <span class="soon-tag">En développement</span>
           <strong>Suivi des EPI</strong>
           <span>Contamination des tenues, nettoyage et remise en service, rattachés à chaque intervention.</span>
         </div>
@@ -237,9 +238,10 @@
           </ul>
         </div>
         <div class="demo-actions">
-          <a class="btn btn-primary btn-lg btn-block" href="mailto:contact@vb-safety.com?subject=Version%20Carnet%20Expo%20CMR%20pour%20notre%20SDIS"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Demander une version pour mon SDIS</a>
+          <a class="btn btn-primary btn-lg btn-block" href="#demande" data-demande="version"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Demander une version pour mon SDIS</a>
           <a class="btn btn-ghost-dark btn-lg btn-block" href="connexion.html"><svg class="icon" aria-hidden="true"><use href="#i-login"/></svg>Se connecter à la démo</a>
-          <small>Démo : un centre fictif, un compte par rôle. Identifiants fournis sur demande.</small>
+          <div class="demo-links"><a href="#demande" data-demande="acces">Demander un code d'accès</a><span aria-hidden="true">·</span><a href="#demande" data-demande="contact">Nous contacter</a></div>
+          <small>Démo : un centre fictif, un compte par rôle. Accès avec le code transmis par VB Safety.</small>
         </div>
       </div>
       <p class="disclaimer">L'indice d'exposition est indicatif : il ne constitue ni une mesure métrologique ni un avis médical. Cette version de démonstration n'est pas destinée à recevoir de données réelles.</p>
@@ -276,7 +278,7 @@
           <li><a href="https://vb-safety.com">vb-safety.com</a></li>
           <li><a href="https://vb-safety.com/#mentions-legales">Mentions légales</a></li>
           <li><a href="https://vb-safety.com/#confidentialite">Politique de confidentialité</a></li>
-          <li><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></li>
+          <li><a href="#demande" data-demande="contact">Nous contacter</a></li>
         </ul>
       </div>
     </div>
@@ -288,5 +290,6 @@
 </footer>
 
 <script src="assets/js/site.js"></script>
+  <script src="assets/js/demande.js"></script>
 </body>
 </html>
