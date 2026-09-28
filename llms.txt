@@ -1,14 +1,18 @@
 # VB Safety
 
-> VB Safety (SAS, France) conçoit des solutions de mesure et de traçabilité de l'exposition professionnelle aux agents dangereux, en commençant par les sapeurs-pompiers.
+> VB Safety (SAS, France) mesure et trace l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR), pour les services d'incendie et de secours, le BTP et l'industrie.
 
-## Carnet Expo CMR
-- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : outil web de traçabilité des expositions CMR (cancérogènes, mutagènes, reprotoxiques) des sapeurs-pompiers après intervention. Le chef d'agrès ou le COS rédige le rapport de contamination de son équipage, le commandement suit les rapports manquants, le SSSM contrôle et complète, chaque agent consulte son historique. Accès cloisonné par rôle, hébergement en France. Configurable pour chaque SDIS.
+## Secteurs
+- [Sapeurs-pompiers](https://vb-safety.com/sapeurs-pompiers/) : traçabilité individuelle des expositions aux fumées d'incendie, contrôle de la décontamination, transmission au SSSM, suivi des tenues de feu. Outil Carnet Expo CMR en démonstration.
+- [BTP](https://vb-safety.com/btp/) : traçabilité des expositions CMR sur chantier (silice cristalline, poussières de bois, émissions diesel, HAP) saisie en une phrase par le chef d'équipe ; liste des travailleurs exposés, fiches individuelles, base DUERP. Espace BTP en bêta.
+- [Industrie](https://vb-safety.com/industrie/) : traçabilité réglementaire des expositions CMR pour les équipes HSE et mesure de contamination chimique sur site (en développement, sites pilotes).
 
-- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : module en développement pour suivre la contamination, le nettoyage et la remise en service des EPI des sapeurs-pompiers (tenue de feu, casque, gants, cagoule, ARI, bottes), relié aux rapports d'intervention.
+## Outils
+- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : rapport de contamination par le chef d'agrès ou le COS, suivi du commandement, contrôle SSSM, historique par agent. Accès cloisonné par rôle, hébergement en France.
+- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du nettoyage et de la remise en service des vestes et pantalons de feu (en développement).
 
 ## Guides
-- [Santé des sapeurs-pompiers : fumées d'incendie, cancers et traçabilité CMR](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : composition des fumées, classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux 16 bis et 30), décret n° 2024-307 (liste des travailleurs exposés, conservation 40 ans), proposition de loi du Sénat sur le relevé d'exposition (mars 2025), gestes de décontamination, suivi médical.
+- [Santé des sapeurs-pompiers : fumées d'incendie, cancers et traçabilité CMR](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux 16 bis et 30), décret n° 2024-307 (liste des travailleurs exposés, 40 ans), proposition de loi du Sénat (mars 2025), décontamination.
 
 ## Contact
-- [vb-safety.com](https://vb-safety.com)
+- [Formulaire de contact](https://vb-safety.com/#contact) · contact@vb-safety.com

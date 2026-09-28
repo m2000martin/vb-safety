@@ -4,10 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E1E30">
-<title id="meta-title">VB Safety</title>
-<meta id="meta-desc" name="description" content="VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle.">
+<title id="meta-title">VB Safety · Mesure et traçabilité de l'exposition aux agents CMR</title>
+<meta id="meta-desc" name="description" content="VB Safety mesure et trace l'exposition professionnelle aux agents cancérogènes (CMR) : sapeurs-pompiers, BTP et industrie. Traçabilité individuelle, décontamination, liste des travailleurs exposés et DUERP.">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230E1E30'/><rect x='2' y='2' width='60' height='60' rx='12' fill='none' stroke='%23D9713C' stroke-width='2.5' opacity='0.7'/><text x='32' y='42' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='28' fill='%23E8EFF4' text-anchor='middle' letter-spacing='-0.5'>VB</text></svg>">
+<link rel="canonical" href="https://vb-safety.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VB Safety">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="VB Safety · Mesure et traçabilité de l'exposition aux agents CMR">
+<meta property="og:description" content="VB Safety mesure et trace l'exposition professionnelle aux agents cancérogènes (CMR) : sapeurs-pompiers, BTP et industrie. Traçabilité individuelle, décontamination, liste des travailleurs exposés et DUERP.">
+<meta property="og:url" content="https://vb-safety.com/">
+<meta property="og:image" content="https://vb-safety.com/favicon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "VB Safety", "alternateName": "VB SAFETY", "url": "https://vb-safety.com/", "inLanguage": ["fr-FR", "en"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "VB Safety", "legalName": "VB Safety SAS", "url": "https://vb-safety.com/", "logo": "https://vb-safety.com/favicon-512.png", "email": "contact@vb-safety.com", "description": "Mesure et traçabilité de l'exposition professionnelle aux agents CMR pour les services de secours, le BTP et l'industrie.", "areaServed": "FR"}</script>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -506,7 +519,7 @@
 
   .site-foot { position: relative; z-index: 2; background: rgba(10, 23, 37, 0.92); border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 56px clamp(16px, 5vw, 76px) calc(28px + env(safe-area-inset-bottom, 0px)); }
   .foot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 24px; }
-  @media (min-width: 820px) { .foot-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+  @media (min-width: 820px) { .foot-grid { grid-template-columns: 2fr 1fr 1fr 1fr 1fr; } }
   .foot-brand { grid-column: 1 / -1; }
   @media (min-width: 820px) { .foot-brand { grid-column: auto; } }
   .foot-brand p { margin: 14px 0 0; max-width: 36ch; color: #A1A1AA; font-size: 14px; line-height: 1.6; }
@@ -647,6 +660,18 @@
   @media (prefers-reduced-motion: reduce) {
     .btn-hero, .space-card, .arr { transition: none; }
   }
+  /* Onglets secteurs */
+  .haut > .haut-nav { margin-left: auto; margin-right: 8px; gap: 26px; }
+  .haut-nav a { font-weight: 500; }
+  .dive-more { font-size: 14px; color: #D4D4D8; text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 4px; }
+  .dive-more:hover { color: #fff; }
+  @media (max-width: 700px) {
+    .haut { flex-wrap: wrap; row-gap: 10px; }
+    .haut > .haut-nav { display: flex; order: 3; width: 100%; margin: 0; gap: 20px; overflow-x: auto; scrollbar-width: none; border-top: 1px solid rgba(255,255,255,.08); padding-top: 8px; }
+    .haut > .haut-nav::-webkit-scrollbar { display: none; }
+    .haut-nav a { font-size: 14px; white-space: nowrap; color: #D4D4D8; }
+  }
+
 </style>
 </head>
 <body class="light-mode">
@@ -658,11 +683,13 @@
 <div class="scene">
   <header class="haut">
     <span class="marque">VB SAFETY</span>
+    <nav class="haut-nav" aria-label="Secteurs">
+      <a href="/industrie/" data-i18n="navInd">Industrie</a>
+      <a href="/btp/" data-i18n="navBtp">BTP</a>
+      <a href="/sapeurs-pompiers/" data-i18n="navSp">Sapeurs-pompiers</a>
+    </nav>
     <div class="actions-group">
-      <nav class="haut-nav" aria-label="Navigation principale">
-        <a href="#approche" onclick="return goSection(event, 'approche')" data-i18n="navApproach">Approche</a>
-        <a href="#plateforme" onclick="return goSection(event, 'plateforme')" data-i18n="navPlatform">Plateforme</a>
-      </nav>
+
       <div class="lang-switcher">
         <button id="btn-fr" class="lang-btn active" onclick="setLanguage('fr')">FR</button>
         <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
@@ -734,6 +761,7 @@
           <h3 data-i18n="spName">Sapeurs-pompiers</h3>
           <p data-i18n="spDesc">Chaque intervention laisse une trace. L'espace pompier la rattache à chaque agent, et vérifie qu'elle ne rentre pas à la caserne.</p>
           <a class="btn-hero primary dive-cta" href="/cmr-pompier/"><span data-i18n="openSpaceSp">Ouvrir l'espace pompier</span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="dive-more" href="/sapeurs-pompiers/" data-i18n="moreSp">Tout ce que nous faisons pour les SDIS</a>
         </div>
         <div class="dive-body">
           <div class="focus-grid">
@@ -763,6 +791,7 @@
           <h3 data-i18n="btpName">BTP &amp; industrie</h3>
           <p data-i18n="btpDesc">L'obligation de traçabilité des agents CMR repose souvent sur des souvenirs de fin d'année. Ici, elle se construit au fil des chantiers, à partir de ce que l'équipe a réellement fait.</p>
           <button type="button" class="btn-hero primary dive-cta" onclick="openAuthModal('btp-expositions')"><span data-i18n="openSpaceBtp">Ouvrir l'espace BTP</span><span class="arr" aria-hidden="true">→</span></button>
+          <a class="dive-more" href="/btp/" data-i18n="moreBtp">Tout ce que nous faisons pour le BTP et l'industrie</a>
         </div>
         <div class="dive-body">
           <ol class="steps">
@@ -866,6 +895,12 @@
       <h3 data-i18n="ctKicker">Contact</h3>
       <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
       <a href="#contact" onclick="return goSection(event, 'contact')" data-i18n="footForm">Formulaire de contact</a>
+    </div>
+    <div class="foot-col">
+      <h3 data-i18n="footSectors">Secteurs</h3>
+      <a href="/industrie/" data-i18n="navInd">Industrie</a>
+      <a href="/btp/" data-i18n="navBtp">BTP</a>
+      <a href="/sapeurs-pompiers/" data-i18n="navSp">Sapeurs-pompiers</a>
     </div>
     <div class="foot-col">
       <h3 data-i18n="footLegal">Légal</h3>
@@ -1530,8 +1565,8 @@ async function postForm(data) {
 
 const dictionary = {
   fr: {
-    pageTitle: "VB Safety",
-    metaDesc: "VB Safety développe des solutions innovantes de mesure de l'exposition professionnelle.",
+    pageTitle: "VB Safety · Mesure et traçabilité de l'exposition aux agents CMR",
+    metaDesc: "VB Safety mesure et trace l'exposition professionnelle aux agents cancérogènes (CMR) : sapeurs-pompiers, BTP et industrie. Traçabilité individuelle, décontamination, liste des travailleurs exposés et DUERP.",
     write: "Nous écrire",
     headline1: "Le risque est reconnu.",
     headline2: "L'exposition reste invisible.",
@@ -1602,7 +1637,7 @@ const dictionary = {
     expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion)",
 
     // Page d'accueil
-    navApproach: "Approche", navPlatform: "Plateforme",
+    navApproach: "Approche", navPlatform: "Plateforme", navInd: "Industrie", navBtp: "BTP", navSp: "Sapeurs-pompiers", moreSp: "Tout ce que nous faisons pour les SDIS", moreBtp: "Tout ce que nous faisons pour le BTP et l'industrie", footSectors: "Secteurs",
     betaTag: "Bêta", ctaContact: "Nous contacter", scrollCue: "Découvrir",
     apKicker: "Notre approche",
     apTitle: "Rendre l'exposition mesurable, traçable, transmissible.",
@@ -1642,8 +1677,8 @@ const dictionary = {
     footRights: "Tous droits réservés.", footDemo: "Les données de l'outil de démonstration sont fictives."
   },
   en: {
-    pageTitle: "VB Safety",
-    metaDesc: "VB Safety develops innovative occupational exposure measurement solutions.",
+    pageTitle: "VB Safety · Measuring and tracking occupational exposure to carcinogens",
+    metaDesc: "VB Safety measures and tracks occupational exposure to carcinogenic (CMR) agents for firefighters, construction and industry.",
     write: "Contact us",
     headline1: "The risk is known.",
     headline2: "Exposure remains invisible.",
@@ -1714,7 +1749,7 @@ const dictionary = {
     expo3Title: "High", expo3Desc: "Operating in smoke-filled environment",
 
     // Home page
-    navApproach: "Approach", navPlatform: "Platform",
+    navApproach: "Approach", navPlatform: "Platform", navInd: "Industry", navBtp: "Construction", navSp: "Firefighters", moreSp: "Everything we do for fire services", moreBtp: "Everything we do for construction and industry", footSectors: "Sectors",
     betaTag: "Beta", ctaContact: "Get in touch", scrollCue: "Discover",
     apKicker: "Our approach",
     apTitle: "Making exposure measurable, traceable, transferable.",
@@ -2413,6 +2448,7 @@ window.onload = function() {
   renderCrew();
   btpInit();
   document.getElementById('foot-year').textContent = new Date().getFullYear();
+  if (location.hash === '#acces-btp') { history.replaceState(null, '', location.pathname + location.search); showRoute(''); openAuthModal('btp-expositions'); return; }
   const r = currentRoute();
   if (r) nav(r, 'replace'); // un lien direct (#btp-duerp…) ouvre le bon écran
   else showRoute('');
@@ -2422,7 +2458,7 @@ window.onload = function() {
    NAVIGATION — chaque écran a sa propre adresse, « Précédent » fonctionne
    ===================================================================== */
 const BTP_TAB_ROUTES = { expo: 'btp-expositions', duerp: 'btp-duerp', fiche: 'btp-fiches' };
-const ROUTE_TITLES = { '': 'VB Safety', acces: 'Accès · VB Safety', espace: 'Choisir un espace · VB Safety', pompiers: 'Sapeur-pompier · VB Safety',
+const ROUTE_TITLES = { '': "VB Safety · Mesure et traçabilité de l'exposition aux agents CMR", acces: 'Accès · VB Safety', espace: 'Choisir un espace · VB Safety', pompiers: 'Sapeur-pompier · VB Safety',
   'btp-expositions': 'BTP · Expositions · VB Safety', 'btp-duerp': 'BTP · DUERP · VB Safety', 'btp-fiches': "BTP · Fiches d'exposition · VB Safety", merci: 'Merci · VB Safety',
   'mentions-legales': 'Mentions légales · VB Safety', confidentialite: 'Confidentialité · VB Safety' };
 let onboardingSeen = false;
