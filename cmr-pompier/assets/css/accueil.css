@@ -30,7 +30,7 @@
 .hero-facts span { display: block; font-size: 13px; color: #A9AEB6; margin-top: 2px; line-height: 1.4; }
 
 /* Aperçu produit flottant */
-.preview { margin: 0; justify-self: end; width: 100%; max-width: 400px; background: var(--surface); color: var(--text); border-radius: var(--radius-lg); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06); overflow: hidden; transform: rotate(-1.2deg); }
+.preview { margin: 0; justify-self: end; width: 100%; max-width: 400px; background: var(--surface); color: var(--text); border-radius: var(--radius-lg); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06); overflow: hidden; }
 .preview-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 16px 18px 12px; border-bottom: 1px solid var(--line); }
 .preview-kicker { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
 .preview-title { font-weight: 800; font-size: 16.5px; margin-top: 3px; }
@@ -120,3 +120,10 @@
 .role-link .icon { width: 16px; height: 16px; transition: transform .15s; }
 .role-link:hover .icon { transform: translateX(3px); }
 .role .role-not { margin-top: 0; padding-top: 10px; }
+/* Bientôt : mise en avant */
+.soon { background: linear-gradient(90deg, #FFF3F1 0%, var(--surface) 70%); border: 1px solid var(--red-line); border-left: 4px solid var(--red); }
+.soon .icon-tile { width: 48px; height: 48px; }
+.soon-text strong { font-size: 17px; margin-top: 4px; }
+.soon .soon-tag { display: inline-flex !important; align-items: center; gap: 6px; margin: 0 !important; font-size: 11.5px !important; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff !important; background: var(--red); padding: 3px 10px; border-radius: 999px; }
+.soon .soon-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: soon-pulse 1.6s ease-in-out infinite; }
+@keyframes soon-pulse { 50% { opacity: .3; } }

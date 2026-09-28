@@ -14,6 +14,9 @@
   var btn = document.getElementById('login-btn');
   var msg = document.getElementById('login-msg');
   var offline = document.getElementById('offline-link');
+  var codeField = document.getElementById('code-field'), codeInput = document.getElementById('code');
+  var qc = new URLSearchParams(location.search).get('code');
+  if (qc) { codeInput.value = qc; codeField.hidden = false; }
 
   function current() {
     var r = form.querySelector('input[name="role"]:checked');
@@ -39,10 +42,17 @@
     var p = current();
     btn.disabled = true; btn.firstElementChild.textContent = 'Connexion…';
     try {
-      var s = await VBS.login(p.matricule, p.password, p.role);
+      var s = await VBS.login(p.matricule, p.password, p.role, codeField.hidden ? '' : codeInput.value);
       location.href = VBS.HOME[s.role];
     } catch (err) {
-      if (err.status === 400 || err.status === 403) {
+      var em = String(err.message || '').toLowerCase();
+      if (em.indexOf('code_requis') !== -1) {
+        codeField.hidden = false; codeInput.focus();
+        show("Cette démonstration est réservée : saisissez le code d'accès qui vous a été transmis.", 'warn');
+      } else if (em.indexOf('code_invalide') !== -1) {
+        codeField.hidden = false; codeInput.select();
+        show("Code d'accès inconnu ou expiré. Vérifiez-le ou demandez-en un.", 'error');
+      } else if (err.status === 400 || err.status === 403) {
         show('Identifiants refusés par le serveur de démonstration.', 'error');
       } else {
         show('Le serveur de démonstration ne répond pas pour le moment.', 'warn');

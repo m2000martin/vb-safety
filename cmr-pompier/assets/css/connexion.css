@@ -116,3 +116,4 @@
   .pick-desc, .login-lead, .creds-note { display: none; }
   .login-foot { font-size: 11px; }
 }
+.code-field { margin-top: 12px; } .code-field[hidden] { display: none; }

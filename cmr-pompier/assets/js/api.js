@@ -34,11 +34,25 @@
     return data;
   }
 
+  // Envoi d'un fichier (multipart) : FormData préparée par l'appelant
+  async function upload(path, formData) {
+    var s = getSession();
+    var r = await fetch(API_BASE + path, { method: 'POST', headers: s && s.token ? { 'Authorization': s.token } : {}, body: formData, credentials: 'omit' });
+    var data = await r.json().catch(function () { return {}; });
+    if (!r.ok) { var err = new Error(data.message || ('HTTP ' + r.status)); err.status = r.status; err.data = data; throw err; }
+    return data;
+  }
+  // Lien de téléchargement d'un fichier protégé (jeton court)
+  async function fileUrl(col, id, name) {
+    var t = await request('/api/files/token', { method: 'POST' });
+    return API_BASE + '/api/files/' + col + '/' + id + '/' + encodeURIComponent(name) + '?token=' + encodeURIComponent(t.token) + '&download=1';
+  }
+
   // Connexion : matricule + mot de passe sur la collection « users »
-  async function login(matricule, password, expectedRole) {
-    var data = await request('/api/collections/users/auth-with-password', {
-      method: 'POST', body: { identity: matricule, password: password }
-    });
+  async function login(matricule, password, expectedRole, code) {
+    var body = { identity: matricule, password: password };
+    if (code) body.code = String(code).trim().toUpperCase();
+    var data = await request('/api/collections/users/auth-with-password', { method: 'POST', body: body });
     var u = data.record || {};
     if (expectedRole && u.role && u.role !== expectedRole) {
       var e = new Error('Rôle inattendu pour ce compte.'); e.status = 403; throw e;
@@ -55,7 +69,7 @@
     return session;
   }
 
-  function logout() { clearSession(); w.location.href = 'connexion.html'; }
+  function logout() { clearSession(); try { sessionStorage.removeItem('vbs-offline-db-v4'); } catch (e) {} w.location.href = 'connexion.html'; }
 
   // À appeler en haut de chaque page protégée
   function requireRole(roles) {
@@ -64,5 +78,5 @@
     return s;
   }
 
-  w.VBS = { API_BASE: API_BASE, HOME: HOME, request: request, login: login, offlinePreview: offlinePreview, logout: logout, getSession: getSession, requireRole: requireRole };
+  w.VBS = { API_BASE: API_BASE, HOME: HOME, request: request, upload: upload, fileUrl: fileUrl, login: login, offlinePreview: offlinePreview, logout: logout, getSession: getSession, requireRole: requireRole };
 })(window);
