@@ -130,78 +130,21 @@
 .demo-links a:hover { text-decoration-color: #fff; }
 .demo-links span { color: #8F949B; }
 
-/* ---------- Module EPI (en développement) ---------- */
-.epi-band { margin-top: 24px; background: var(--ink); color: #fff; border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 40px); display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; position: relative; overflow: hidden; }
-.epi-band::before { content: ""; position: absolute; left: -15%; bottom: -80%; width: 60%; height: 200%; background: radial-gradient(closest-side, rgba(215, 38, 30, 0.28), rgba(215, 38, 30, 0)); pointer-events: none; }
-.epi-band > * { position: relative; }
-@media (min-width: 900px) { .epi-band { grid-template-columns: 1.25fr 1fr; gap: 40px; } }
-.epi-band h2 { font-size: clamp(24px, 3vw, 30px); font-weight: 800; margin-top: 6px; }
-.epi-copy p { color: #C9CCD1; margin-top: 10px; max-width: 58ch; }
-.epi-card { margin: 0; background: #fff; color: var(--text); border-radius: var(--radius-lg); padding: 18px 20px 14px; box-shadow: 0 20px 40px -24px rgba(0, 0, 0, .6); }
-.epi-card-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
-.epi-card-head > div { flex: 1; min-width: 0; }
-.epi-card-head strong { display: block; font-size: 15.5px; }
-.epi-card-head span:not(.badge):not(.epi-ico) { display: block; font-size: 13px; color: var(--muted); }
-.epi-ico { width: 40px; height: 40px; border-radius: 10px; background: #F4F1EC; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.epi-ico .icon { width: 20px; height: 20px; }
-.epi-steps { list-style: none; margin: 14px 0 0; padding: 0; }
-.epi-steps li { position: relative; padding: 0 0 14px 30px; }
-.epi-steps li::before { content: ""; position: absolute; left: 4px; top: 4px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--line-strong); background: #fff; }
-.epi-steps li:not(:last-child)::after { content: ""; position: absolute; left: 10px; top: 20px; bottom: 0; width: 2px; background: var(--line); }
-.epi-steps li.done::before { background: var(--ok); border-color: var(--ok); }
-.epi-steps li.done:not(:last-child)::after { background: #B9DDBB; }
-.epi-steps li.now::before { background: #fff; border-color: var(--warn); box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 6px var(--warn); }
-.epi-steps strong { display: block; font-size: 14.5px; }
-.epi-steps span { display: block; font-size: 13px; color: var(--muted); }
-.epi-steps li:last-child { padding-bottom: 4px; }
-.epi-steps li:last-child strong { color: var(--muted); font-weight: 600; }
-.epi-card figcaption { font-size: 12px; color: var(--faint); text-align: right; margin-top: 4px; }
-
-/* ---------- Onglets santé et réglementation ---------- */
-.tab-list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line-strong); margin-bottom: 0; }
-.tab-list::-webkit-scrollbar { display: none; }
-.tabs:not(.is-ready) .tab-list { display: none; }
-.tab { flex-shrink: 0; min-height: var(--tap); padding: 0 16px; background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; font: 600 15px/1 var(--font); color: var(--muted); cursor: pointer; }
-.tab:hover { color: var(--text); }
-.tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--red); }
-.tab-panel { display: grid; grid-template-columns: 1fr; gap: 20px; background: var(--surface); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: clamp(20px, 3vw, 32px); }
-.tabs:not(.is-ready) .tab-panel { border-top: 1px solid var(--line); border-radius: var(--radius-lg); margin-bottom: 16px; }
-.tab-panel[hidden] { display: none; }
-@media (min-width: 900px) { .tab-panel { grid-template-columns: 1.6fr 1fr; gap: 36px; } }
-.tp-main h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
-.tp-main p { color: var(--muted); margin: 0 0 12px; max-width: 68ch; }
-.tp-list { margin: 0 0 14px; padding-left: 20px; color: var(--muted); }
-.tp-list li { margin-bottom: 6px; }
-.tp-list strong { color: var(--text); }
-.tp-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-weight: 600; color: var(--red-strong); text-decoration: none; }
-.tp-link:hover { text-decoration: underline; }
-.tp-link .icon { width: 16px; height: 16px; }
-.tp-side { background: var(--ink); color: #fff; border-radius: var(--radius); padding: 20px 22px; align-self: start; }
-.tp-side-title { display: block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #FF8A82; margin-bottom: 14px; }
-.tp-facts { margin: 0; display: grid; gap: 12px; }
-.tp-facts div { border-left: 2px solid rgba(255, 255, 255, .18); padding-left: 12px; }
-.tp-facts dt { font-weight: 700; }
-.tp-facts dd { margin: 2px 0 0; color: #C9CCD1; font-size: 14px; }
-.tp-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.tp-stats.one { grid-template-columns: 1fr; }
-.tp-stats b { display: block; font-size: 34px; font-weight: 800; line-height: 1.05; letter-spacing: -.02em; }
-.tp-stats span { display: block; color: #C9CCD1; font-size: 14px; margin-top: 4px; }
-.tp-note { font-size: 12.5px; color: #9EA3AA; margin: 14px 0 0; }
-.tp-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.tp-checks li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; color: #E4E6E9; }
-.tp-checks .icon { width: 18px; height: 18px; color: #FF4A3F; flex-shrink: 0; margin-top: 2px; }
-.tp-timeline { list-style: none; margin: 4px 0 14px; padding: 0; }
-.tp-timeline li { position: relative; padding: 0 0 14px 22px; border-left: 2px solid var(--line); margin-left: 5px; }
-.tp-timeline li:last-child { border-left-color: transparent; }
-.tp-timeline li::before { content: ""; position: absolute; left: -7px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--red); border: 2px solid var(--surface); }
-.tp-timeline span { display: block; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red-strong); }
-.tp-timeline p { margin: 2px 0 0; }
-.tabs-more { margin-top: 18px; }
-.tabs-more a { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line-strong); padding-bottom: 2px; }
-.tabs-more a:hover { border-color: var(--text); }
-.tabs-more .icon { width: 16px; height: 16px; flex-shrink: 0; }
-@media (max-width: 480px) {
-  .epi-card-head { flex-wrap: wrap; }
-  .epi-card-head > div { flex: 1 1 160px; }
-  .epi-card-head .badge { margin-left: 52px; }
+/* ---------- Ligne module EPI ---------- */
+.epi-line { margin-top: 20px; display: flex; align-items: center; gap: 18px; background: var(--ink); color: #fff; border-radius: var(--radius-lg); padding: 18px 22px; text-decoration: none; position: relative; overflow: hidden; transition: transform .15s, box-shadow .15s; }
+.epi-line::before { content: ""; position: absolute; right: -5%; top: -120%; width: 40%; height: 340%; background: radial-gradient(closest-side, rgba(215, 38, 30, .32), rgba(215, 38, 30, 0)); pointer-events: none; }
+.epi-line:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -18px rgba(23, 25, 29, .7); }
+.epi-line > * { position: relative; }
+.epi-line-ico { width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; background: rgba(215, 38, 30, .16); border: 1px solid rgba(215, 38, 30, .45); color: #FF6A60; }
+.epi-line-ico .icon { width: 22px; height: 22px; }
+.epi-line-text { flex: 1; min-width: 0; }
+.epi-line-tag { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #FF8A82; }
+.epi-line-text strong { display: block; font-size: 16px; font-weight: 600; margin-top: 3px; }
+.epi-line-cta { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; font-weight: 600; font-size: 15px; padding: 10px 16px; border: 1px solid rgba(255, 255, 255, .25); border-radius: var(--radius); }
+.epi-line:hover .epi-line-cta { border-color: #fff; }
+.epi-line-cta .icon { width: 16px; height: 16px; }
+@media (max-width: 640px) {
+  .epi-line { flex-wrap: wrap; }
+  .epi-line-text { flex: 1 1 200px; }
+  .epi-line-cta { width: 100%; justify-content: center; }
 }
