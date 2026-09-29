@@ -197,3 +197,10 @@ p { margin: 0; }
   .req-body { padding: 6px 18px 4px; gap: 12px; }
   .req-foot { padding: 14px 18px 18px; }
 }
+
+/* ---------- Téléphone (v8) ---------- */
+.btn-block { white-space: normal; text-align: center; line-height: 1.25; }
+@media (max-width: 640px) {
+  .btn { white-space: normal; text-align: center; line-height: 1.25; }
+  .brand { min-height: 44px; }
+}

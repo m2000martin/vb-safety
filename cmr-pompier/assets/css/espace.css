@@ -314,3 +314,15 @@ dialog.modal.wide { width: min(880px, calc(100vw - 24px)); }
 .doc { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
 .doc .icon { width: 15px; height: 15px; color: var(--muted); }
 @media (max-width: 600px) { .dtable.meas .input { max-width: none; } .ca-row { flex-wrap: wrap; } }
+
+/* ---------- Téléphone : cibles tactiles et filtres (v8) ---------- */
+@media (max-width: 640px) {
+  .seg { display: flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .seg::-webkit-scrollbar { display: none; }
+  .seg button { flex-shrink: 0; white-space: nowrap; min-height: 42px; }
+  .btn-sm { min-height: 42px; }
+  .cal-nav { min-width: 42px; min-height: 42px; }
+  .icon-btn.sm { width: 42px; height: 42px; }
+  .back-link, .link-btn { min-height: 42px; display: inline-flex; align-items: center; }
+  .card-head a, .panel-head a, .section-head a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 4px; }
+}

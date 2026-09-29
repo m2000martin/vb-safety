@@ -153,3 +153,4 @@
 /* Phases numérotées */
 .g-phases span { display: flex !important; align-items: center; gap: 8px; }
 .g-phases i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; background: var(--red); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; letter-spacing: 0; }
+@media (max-width: 640px) { .g-agents span, .gl-st, .g-phases span { font-size: 12.5px; } }

@@ -433,7 +433,7 @@
 
   .section { position: relative; z-index: 2; padding: clamp(72px, 10vw, 128px) clamp(16px, 5vw, 76px); border-top: 1px solid rgba(255, 255, 255, 0.07); scroll-margin-top: 0; }
   .section-inner { max-width: 1296px; margin: 0; }
-  .kicker { font: 500 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--signal); }
+  .kicker { font: 700 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--signal); }
   .section-title { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4.4vw, 48px); line-height: 1.12; letter-spacing: -0.01em; color: #FAFAFA; margin: 14px 0 0; max-width: 22ch; }
   .section-lead { color: #A1A1AA; font-size: clamp(15px, 1.8vw, 17px); line-height: 1.65; max-width: 60ch; margin: 18px 0 0; }
 
@@ -751,8 +751,8 @@
 <section class="section" id="plateforme">
   <div class="section-inner">
     <span class="kicker" data-i18n="plKicker">Outil de suivi CMR · Bêta</span>
-    <h2 class="section-title" data-i18n="plTitle">Un moteur d'exposition, deux espaces métier.</h2>
-    <p class="section-lead" data-i18n="plLead">Une même approche, adaptée à deux métiers. La plateforme est ouverte en bêta à nos partenaires : un code d'accès vous sera demandé.</p>
+    <h2 class="section-title" data-i18n="plTitle">Un moteur d'exposition, trois métiers.</h2>
+    <p class="section-lead" data-i18n="plLead">Une même approche, adaptée à chaque métier. L'espace sapeur-pompier est ouvert en démonstration avec un code d'accès ; l'espace industrie, pour les entreprises et le BTP, est en préparation.</p>
     <div class="dives">
       <!-- SAPEURS-POMPIERS -->
       <article class="dive">
@@ -784,15 +784,43 @@
         </div>
       </article>
 
-      <!-- BTP & INDUSTRIE -->
+      <!-- INDUSTRIE -->
       <article class="dive">
         <div class="dive-head">
-          <span class="portal-kicker" data-i18n="btpKicker">Entreprise · Chantier · Atelier</span>
-          <h3 data-i18n="btpName">BTP &amp; industrie</h3>
+          <span class="portal-kicker" data-i18n="indKicker">Industrie · HSE · Santé au travail</span>
+          <h3 data-i18n="indName">Industrie</h3>
+          <p data-i18n="indDesc">Toutes les obligations de l'employeur face aux agents CMR, au même endroit : inventaire, liste des salariés exposés, contrôles VLEP, suivi individuel renforcé et hiérarchie de prévention.</p>
+          <a class="btn-hero primary dive-cta" href="/cmr-industrie/"><span data-i18n="openSpaceInd">Ouvrir l'espace industrie</span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="dive-more" href="/industrie/" data-i18n="moreInd2">Tout ce que nous faisons pour l'industrie</a>
+        </div>
+        <div class="dive-body">
+          <div class="focus-grid">
+            <div class="focus">
+              <span class="focus-num">01</span>
+              <h4 data-i18n="indF1t">Évaluation et traçabilité</h4>
+              <p data-i18n="indF1d">Inventaire des substances, procédés et sous-produits CMR, liste nominative des salariés exposés (nature, durée, degré), conservée 40 ans et transmise au service de santé au travail.</p>
+            </div>
+            <div class="focus">
+              <span class="focus-num">02</span>
+              <h4 data-i18n="indF2t">Hiérarchie de prévention</h4>
+              <p data-i18n="indF2d">Substitution, système clos, réduction de l'exposition, protections collectives puis EPI : chaque mesure documentée, dans l'ordre imposé par le code du travail.</p>
+            </div>
+          </div>
+          <ul class="dive-list">
+            <li data-i18n="indB1">Contrôles VLEP annuels planifiés, rapports archivés, alertes avant échéance</li>
+            <li data-i18n="indB2">Échéances du suivi individuel renforcé, sans aucune donnée médicale stockée</li>
+            <li data-i18n="indB3">Exports prêts pour le SPST et le CSE, restrictions d'affectation rappelées</li>
+          </ul>
+        </div>
+      </article>
+      <!-- BTP -->
+      <article class="dive">
+        <div class="dive-head">
+          <span class="portal-kicker" data-i18n="btpKicker">Entreprise · Chantier · Chef d'équipe</span>
+          <h3 data-i18n="btpName">BTP</h3>
           <p data-i18n="btpDesc">L'obligation de traçabilité des agents CMR repose souvent sur des souvenirs de fin d'année. Ici, elle se construit au fil des chantiers, à partir de ce que l'équipe a réellement fait.</p>
-          <button type="button" class="btn-hero primary dive-cta" onclick="openAuthModal('btp-expositions')"><span data-i18n="openSpaceBtp">Ouvrir l'espace BTP</span><span class="arr" aria-hidden="true">→</span></button>
-          <a class="dive-more" href="/cmr-industrie/" data-i18n="moreInd">Découvrir le portail CMR Industrie</a>
-          <a class="dive-more" href="/btp/" data-i18n="moreBtp">Tout ce que nous faisons pour le BTP et l'industrie</a>
+          <a class="btn-hero primary dive-cta" href="/cmr-industrie/"><span data-i18n="openSpaceInd">Ouvrir l'espace industrie</span><span class="arr" aria-hidden="true">→</span></a>
+          <a class="dive-more" href="/btp/" data-i18n="moreBtp">Tout ce que nous faisons pour le BTP</a>
         </div>
         <div class="dive-body">
           <ol class="steps">
@@ -889,8 +917,7 @@
     <div class="foot-col">
       <h3 data-i18n="footPlatform">Plateforme</h3>
       <a href="/cmr-pompier/" data-i18n="footSp">Espace sapeur-pompier</a>
-      <a href="/cmr-industrie/">Portail CMR Industrie</a>
-      <button type="button" onclick="openAuthModal('btp-expositions')" data-i18n="footBtp">Espace BTP</button>
+      <a href="/cmr-industrie/" data-i18n="footInd">Espace industrie</a>
       <button type="button" onclick="openAuthModal(null, 'request')" data-i18n="plRequest">Demander un accès bêta</button>
     </div>
     <div class="foot-col">
@@ -1639,7 +1666,7 @@ const dictionary = {
     expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion)",
 
     // Page d'accueil
-    navApproach: "Approche", navPlatform: "Plateforme", navInd: "Industrie", navBtp: "BTP", navSp: "Sapeurs-pompiers", moreSp: "Tout ce que nous faisons pour les SDIS", moreBtp: "Tout ce que nous faisons pour le BTP et l'industrie", footSectors: "Secteurs", moreInd: "Découvrir le portail CMR Industrie",
+    navApproach: "Approche", navPlatform: "Plateforme", navInd: "Industrie", navBtp: "BTP", navSp: "Sapeurs-pompiers", moreSp: "Tout ce que nous faisons pour les SDIS", moreBtp: "Tout ce que nous faisons pour le BTP", footSectors: "Secteurs", moreInd: "Découvrir le portail CMR Industrie",
     betaTag: "Bêta", ctaContact: "Nous contacter", scrollCue: "Découvrir",
     apKicker: "Notre approche",
     apTitle: "Rendre l'exposition mesurable, traçable, transmissible.",
@@ -1648,13 +1675,17 @@ const dictionary = {
     p2k: "02 · Santé", p2t: "Relier au suivi médical", p2d: "Chaque exposition rattachée à la personne, transmise au service de santé et conservée dans la durée.",
     p3k: "03 · Conformité", p3t: "Tenir les obligations à jour", p3d: "Liste des travailleurs exposés, fiches individuelles et base de travail pour le DUERP, issues des saisies terrain.",
     plKicker: "Outil de suivi CMR · Bêta",
-    plTitle: "Un moteur d'exposition, deux espaces métier.",
-    plLead: "Une même approche, adaptée à deux métiers. La plateforme est ouverte en bêta à nos partenaires : un code d'accès vous sera demandé.",
+    plTitle: "Un moteur d'exposition, trois métiers.",
+    plLead: "Une même approche, adaptée à chaque métier. L'espace sapeur-pompier est ouvert en démonstration avec un code d'accès ; l'espace industrie, pour les entreprises et le BTP, est en préparation.",
     spName: "Sapeurs-pompiers", spDesc: "Chaque intervention laisse une trace. L'espace pompier la rattache à chaque agent, et vérifie qu'elle ne rentre pas à la caserne.",
     spB1: "Saisie en fin d'intervention par le chef d'agrès ou le COS, en quelques minutes", spB2: "Synthèse toxicologique et bilan de l'équipage générés automatiquement", spB3: "Transmission au SSSM et verrouillage de l'intervention une fois validée",
-    btpKicker: "Entreprise · Chantier · Atelier", btpName: "BTP &amp; industrie", btpDesc: "L'obligation de traçabilité des agents CMR repose souvent sur des souvenirs de fin d'année. Ici, elle se construit au fil des chantiers, à partir de ce que l'équipe a réellement fait.",
+    btpKicker: "Entreprise · Chantier · Chef d'équipe", btpName: "BTP", btpDesc: "L'obligation de traçabilité des agents CMR repose souvent sur des souvenirs de fin d'année. Ici, elle se construit au fil des chantiers, à partir de ce que l'équipe a réellement fait.",
     openSpace: "Ouvrir l'espace", plNoCode: "Pas encore de code ?", plRequest: "Demander un accès bêta",
-    openSpaceSp: "Ouvrir l'espace pompier", openSpaceBtp: "Ouvrir l'espace BTP",
+    openSpaceSp: "Ouvrir l'espace pompier", openSpaceBtp: "Ouvrir l'espace BTP", openSpaceInd: "Ouvrir l'espace industrie", moreInd2: "Tout ce que nous faisons pour l'industrie", footInd: "Espace industrie",
+    indKicker: "Industrie · HSE · Santé au travail", indName: "Industrie", indDesc: "Toutes les obligations de l'employeur face aux agents CMR, au même endroit : inventaire, liste des salariés exposés, contrôles VLEP, suivi individuel renforcé et hiérarchie de prévention.",
+    indF1t: "Évaluation et traçabilité", indF1d: "Inventaire des substances, procédés et sous-produits CMR, liste nominative des salariés exposés (nature, durée, degré), conservée 40 ans et transmise au service de santé au travail.",
+    indF2t: "Hiérarchie de prévention", indF2d: "Substitution, système clos, réduction de l'exposition, protections collectives puis EPI : chaque mesure documentée, dans l'ordre imposé par le code du travail.",
+    indB1: "Contrôles VLEP annuels planifiés, rapports archivés, alertes avant échéance", indB2: "Échéances du suivi individuel renforcé, sans aucune donnée médicale stockée", indB3: "Exports prêts pour le SPST et le CSE, restrictions d'affectation rappelées",
     spF1t: "Traçabilité individuelle de l'exposition", spF1d: "Pas un compte rendu d'intervention : une exposition par agent. Rôle réellement tenu, port de l'ARI et durée d'engagement, tenue complète ou non, ambiance fumées et profil des contaminants selon la nature du feu.",
     spF2t: "Contrôle de la décontamination", spF2d: "La décontamination cutanée HAP est vérifiée et horodatée pour chaque agent, avec la référence de la mesure. Ce qui n'est pas validé reste visible avant la transmission.",
     btpS1t: "Saisir depuis le chantier", btpS1d: "Le chef d'équipe écrit une phrase : « Karim et Lucas, découpe parpaing 2 h à sec, FFP3 ». L'outil reconnaît les salariés, la tâche, la durée, le procédé et la protection.",
@@ -1751,7 +1782,7 @@ const dictionary = {
     expo3Title: "High", expo3Desc: "Operating in smoke-filled environment",
 
     // Home page
-    navApproach: "Approach", navPlatform: "Platform", navInd: "Industry", navBtp: "Construction", navSp: "Firefighters", moreSp: "Everything we do for fire services", moreBtp: "Everything we do for construction and industry", footSectors: "Sectors", moreInd: "Discover the CMR portal for industry",
+    navApproach: "Approach", navPlatform: "Platform", navInd: "Industry", navBtp: "Construction", navSp: "Firefighters", moreSp: "Everything we do for fire services", moreBtp: "Everything we do for construction", footSectors: "Sectors", moreInd: "Discover the CMR portal for industry",
     betaTag: "Beta", ctaContact: "Get in touch", scrollCue: "Discover",
     apKicker: "Our approach",
     apTitle: "Making exposure measurable, traceable, transferable.",
@@ -1760,13 +1791,17 @@ const dictionary = {
     p2k: "02 · Health", p2t: "Link to medical follow-up", p2d: "Every exposure tied to the person, passed on to the health service and kept over time.",
     p3k: "03 · Compliance", p3t: "Keep obligations up to date", p3d: "List of exposed workers, individual exposure sheets and a working basis for the risk assessment, built from field entries.",
     plKicker: "CMR tracking tool · Beta",
-    plTitle: "One exposure engine, two workspaces.",
-    plLead: "One approach, adapted to two trades. The platform is open in beta to our partners: you will be asked for an access code.",
+    plTitle: "One exposure engine, three trades.",
+    plLead: "One approach, adapted to each trade. The firefighter workspace is open as a demo with an access code; the industry workspace, for companies and construction, is in preparation.",
     spName: "Firefighters", spDesc: "Every incident leaves a trace. The firefighter workspace ties it to each firefighter, and checks that it does not come back to the station.",
     spB1: "Entered at the end of the incident by the crew or incident commander, in a few minutes", spB2: "Toxicological summary and crew report generated automatically", spB3: "Transmission to the medical service, incident locked once validated",
-    btpKicker: "Company · Building site · Workshop", btpName: "Construction &amp; industry", btpDesc: "CMR traceability often relies on end-of-year recollections. Here it builds up site after site, from what the team actually did.",
+    btpKicker: "Company · Building site · Team leader", btpName: "Construction", btpDesc: "CMR traceability often relies on end-of-year recollections. Here it builds up site after site, from what the team actually did.",
     openSpace: "Open workspace", plNoCode: "No code yet?", plRequest: "Request beta access",
-    openSpaceSp: "Open firefighter workspace", openSpaceBtp: "Open construction workspace",
+    openSpaceSp: "Open firefighter workspace", openSpaceBtp: "Open construction workspace", openSpaceInd: "Open industry workspace", moreInd2: "Everything we do for industry", footInd: "Industry workspace",
+    indKicker: "Industry · HSE · Occupational health", indName: "Industry", indDesc: "Every employer obligation regarding carcinogenic, mutagenic and reprotoxic agents in one place: inventory, list of exposed workers, exposure limit checks, enhanced medical follow-up and the prevention hierarchy.",
+    indF1t: "Assessment and traceability", indF1d: "Inventory of CMR substances, processes and by-products, named list of exposed workers (nature, duration, level), kept for 40 years and sent to the occupational health service.",
+    indF2t: "Prevention hierarchy", indF2d: "Substitution, closed systems, exposure reduction, collective then personal protection: each measure documented, in the order required by French labour law.",
+    indB1: "Annual exposure limit checks planned, reports archived, alerts before deadlines", indB2: "Enhanced medical follow-up deadlines, with no medical data stored", indB3: "Exports ready for the occupational health service and works council, assignment restrictions flagged",
     spF1t: "Individual exposure traceability", spF1d: "Not an incident report: one exposure record per firefighter. Role actually held, SCBA use and duration, full or partial turnout gear, smoke conditions and contaminant profile based on the type of fire.",
     spF2t: "Decontamination check", spF2d: "PAH skin decontamination is checked and time-stamped for each firefighter, with the measurement reference. Anything not validated stays visible before transmission.",
     btpS1t: "Enter it from the site", btpS1d: "The team leader types one sentence: “Karim and Lucas, cutting blocks 2 h dry, FFP3”. The tool recognises the workers, task, duration, method and protection.",
@@ -2450,7 +2485,7 @@ window.onload = function() {
   renderCrew();
   btpInit();
   document.getElementById('foot-year').textContent = new Date().getFullYear();
-  if (location.hash === '#acces-btp') { history.replaceState(null, '', location.pathname + location.search); showRoute(''); openAuthModal('btp-expositions'); return; }
+  if (location.hash === '#acces-btp') { location.replace('/cmr-industrie/'); return; }
   const r = currentRoute();
   if (r) nav(r, 'replace'); // un lien direct (#btp-duerp…) ouvre le bon écran
   else showRoute('');

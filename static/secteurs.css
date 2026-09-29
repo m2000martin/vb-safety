@@ -158,3 +158,14 @@ h3, h4 { margin: 0; }
 .pied a { text-decoration: none; color: #DCE3EA; }
 .pied a:hover { color: #fff; text-decoration: underline; }
 .pied-bas { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--ligne); color: var(--faible); font-size: 13px; }
+
+/* Téléphone */
+.marque { display: inline-flex; align-items: center; min-height: 44px; }
+.ecrire { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 640px) {
+  .statut, .textes .d span { font-size: 12px; }
+  .btn { white-space: normal; text-align: center; line-height: 1.25; padding: 12px 20px; }
+  .cta .btn { width: 100%; }
+  .hero h1 { font-size: clamp(34px, 9.6vw, 44px); }
+  .enjeu, .offre { padding: 22px 20px; }
+}

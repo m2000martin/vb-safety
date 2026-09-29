@@ -122,3 +122,11 @@
 .code-ask { font-size: 13.5px; font-weight: 600; color: var(--red); text-decoration: none; }
 .code-ask:hover { text-decoration: underline; }
 @media (max-width: 600px) { .creds { display: none; } .code-field { margin-top: 12px; } }
+
+/* ---------- Téléphone (v8) ---------- */
+.code-ask { display: inline-flex; align-items: center; min-height: 40px; padding: 0 2px; }
+@media (max-width: 640px) {
+  .pick-desc { font-size: 12.5px !important; }
+  .login-foot { font-size: 13px !important; line-height: 1.9; }
+  .login-foot a { display: inline-block; padding: 4px 0; }
+}

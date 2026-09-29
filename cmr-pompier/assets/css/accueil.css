@@ -148,3 +148,11 @@
   .epi-line-text { flex: 1 1 200px; }
   .epi-line-cta { width: 100%; justify-content: center; }
 }
+
+/* ---------- Téléphone (v8) ---------- */
+.demo-band > * { min-width: 0; }
+.demo-links a { display: inline-block; padding: 10px 4px; }
+@media (max-width: 640px) {
+  .demo-links { flex-wrap: wrap; gap: 0 10px; }
+  .role-tag, .epi-line-tag { font-size: 12px; }
+}
