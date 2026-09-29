@@ -119,3 +119,42 @@
 .epi-roles-sec { padding-bottom: 0; }
 .epi-steps-wrap { padding-bottom: 8px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
 .epi-stepper li > span:last-child { max-width: 30ch; }
+.epi-kinds ul.two { grid-template-columns: 1fr 1fr; gap: 12px; }
+.epi-kinds ul.two li { text-align: left; padding: 22px 20px; }
+.epi-kinds ul.two .icon { width: 44px; height: 44px; }
+.epi-kinds ul.two strong { font-size: 17px; margin-top: 12px; }
+.epi-kinds ul.two li > span { font-size: 13.5px; margin-top: 4px; }
+@media (max-width: 420px) { .epi-kinds ul.two { grid-template-columns: 1fr; } }
+
+/* Mini-illustrations EPI (v8) */
+.pic { display: block; }
+.epi-row { grid-template-columns: 34px minmax(0, 1fr) 96px 92px !important; gap: 12px !important; }
+.epi-row .ei { width: 34px !important; height: 34px !important; background: #F6F4F0; border-radius: 7px; }
+.epi-row .ei .pic { width: 28px; height: 28px; }
+.epi-row .stc { display: flex; }
+.epi-row .ed { font-size: 9px; line-height: 1.25; }
+.epi-row .ed b { display: block; font-size: 10.5px; color: var(--text); font-weight: 600; }
+.ph-item .pic { width: 72px; height: 72px; margin: 0 auto; }
+.epi-kinds ul.kinds5 { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.epi-kinds ul.kinds5 li { display: grid; grid-template-columns: 56px 1fr; grid-template-rows: auto auto; column-gap: 12px; align-items: center; text-align: left; padding: 14px 14px; }
+.kpic { grid-row: span 2; width: 56px; height: 56px; border-radius: 10px; background: #F6F4F0; display: flex; align-items: center; justify-content: center; }
+.kpic .pic { width: 46px; height: 46px; }
+.epi-kinds ul.kinds5 strong { margin: 0; font-size: 15px; align-self: end; }
+.epi-kinds ul.kinds5 li > span:not(.kpic) { font-size: 12.5px; align-self: start; margin-top: 2px; }
+.epi-row { grid-template-columns: 30px minmax(0, 1fr) 84px 72px !important; gap: 9px !important; }
+.epi-row .ei { width: 30px !important; height: 30px !important; }
+.epi-row .ei .pic { width: 25px; height: 25px; }
+.epi-row .en b { white-space: normal !important; overflow: visible !important; line-height: 1.2; font-size: 10.5px !important; }
+.epi-kinds ul.kinds5 { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.epi-kinds ul.kinds5 li { display: block; padding: 16px 16px 14px; }
+.epi-kinds ul.kinds5 .kpic { margin-bottom: 12px; }
+.epi-kinds ul.kinds5 strong { display: block; }
+.epi-kinds ul.kinds5 li > span:not(.kpic) { display: block; margin-top: 4px; }
+@media (min-width: 900px) {
+  .epi-health, .epi-kinds { grid-column: 1 / -1; }
+  .epi-health { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; padding: 6px 28px; }
+  .eh-block + .eh-block { border-top: 0; border-left: 1px solid var(--red-line); padding-left: 28px; }
+  .epi-kinds ul.kinds5 { grid-template-columns: repeat(5, 1fr); }
+}
+.epi-kinds ul.kinds5 .kpic { width: 64px; height: 64px; }
+.epi-kinds ul.kinds5 .kpic .pic { width: 52px; height: 52px; }

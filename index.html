@@ -709,7 +709,7 @@
         VB Safety développe des solutions de mesure et de suivi de l'exposition professionnelle, pour les services de secours et les environnements industriels.
       </p>
       <div class="hero-cta">
-        <a class="btn-hero primary" href="/cmr-pompier/"><span id="txt-btn-cmr">Accéder à l'outil CMR</span><span class="tag" data-i18n="betaTag">Bêta</span></a>
+        <a class="btn-hero primary" href="#plateforme" onclick="return goSection(event, 'plateforme')"><span id="txt-btn-cmr">Découvrez nos outils CMR</span><span class="arr" aria-hidden="true">→</span></a>
         <a class="btn-hero ghost" href="#contact" onclick="return goSection(event, 'contact')"><span data-i18n="ctaContact">Nous contacter</span><span class="arr" aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -791,6 +791,7 @@
           <h3 data-i18n="btpName">BTP &amp; industrie</h3>
           <p data-i18n="btpDesc">L'obligation de traçabilité des agents CMR repose souvent sur des souvenirs de fin d'année. Ici, elle se construit au fil des chantiers, à partir de ce que l'équipe a réellement fait.</p>
           <button type="button" class="btn-hero primary dive-cta" onclick="openAuthModal('btp-expositions')"><span data-i18n="openSpaceBtp">Ouvrir l'espace BTP</span><span class="arr" aria-hidden="true">→</span></button>
+          <a class="dive-more" href="/cmr-industrie/" data-i18n="moreInd">Découvrir le portail CMR Industrie</a>
           <a class="dive-more" href="/btp/" data-i18n="moreBtp">Tout ce que nous faisons pour le BTP et l'industrie</a>
         </div>
         <div class="dive-body">
@@ -888,6 +889,7 @@
     <div class="foot-col">
       <h3 data-i18n="footPlatform">Plateforme</h3>
       <a href="/cmr-pompier/" data-i18n="footSp">Espace sapeur-pompier</a>
+      <a href="/cmr-industrie/">Portail CMR Industrie</a>
       <button type="button" onclick="openAuthModal('btp-expositions')" data-i18n="footBtp">Espace BTP</button>
       <button type="button" onclick="openAuthModal(null, 'request')" data-i18n="plRequest">Demander un accès bêta</button>
     </div>
@@ -1571,7 +1573,7 @@ const dictionary = {
     headline1: "Le risque est reconnu.",
     headline2: "L'exposition reste invisible.",
     description: "VB Safety développe des solutions de mesure et de suivi de l'exposition professionnelle, pour les services de secours et les environnements industriels.",
-    btnCmr: "Accéder à l'outil CMR",
+    btnCmr: "Découvrez nos outils CMR",
     authTitle: "Accès Partenaire SSSM",
     authSub: "Veuillez saisir le code d'accès ou mot de passe fourni.",
     inputPassPlaceholder: "Mot de passe ou Code PIN",
@@ -1637,7 +1639,7 @@ const dictionary = {
     expo3Title: "Forte", expo3Desc: "Évolution en milieu enfumé (Zone d'exclusion)",
 
     // Page d'accueil
-    navApproach: "Approche", navPlatform: "Plateforme", navInd: "Industrie", navBtp: "BTP", navSp: "Sapeurs-pompiers", moreSp: "Tout ce que nous faisons pour les SDIS", moreBtp: "Tout ce que nous faisons pour le BTP et l'industrie", footSectors: "Secteurs",
+    navApproach: "Approche", navPlatform: "Plateforme", navInd: "Industrie", navBtp: "BTP", navSp: "Sapeurs-pompiers", moreSp: "Tout ce que nous faisons pour les SDIS", moreBtp: "Tout ce que nous faisons pour le BTP et l'industrie", footSectors: "Secteurs", moreInd: "Découvrir le portail CMR Industrie",
     betaTag: "Bêta", ctaContact: "Nous contacter", scrollCue: "Découvrir",
     apKicker: "Notre approche",
     apTitle: "Rendre l'exposition mesurable, traçable, transmissible.",
@@ -1683,7 +1685,7 @@ const dictionary = {
     headline1: "The risk is known.",
     headline2: "Exposure remains invisible.",
     description: "VB Safety develops solutions to measure and track occupational exposure, for emergency services and industrial environments.",
-    btnCmr: "Open the CMR tool",
+    btnCmr: "Discover our CMR tools",
     authTitle: "Medical Service Partner Access",
     authSub: "Please enter the access code.",
     inputPassPlaceholder: "Password or PIN Code",
@@ -1749,7 +1751,7 @@ const dictionary = {
     expo3Title: "High", expo3Desc: "Operating in smoke-filled environment",
 
     // Home page
-    navApproach: "Approach", navPlatform: "Platform", navInd: "Industry", navBtp: "Construction", navSp: "Firefighters", moreSp: "Everything we do for fire services", moreBtp: "Everything we do for construction and industry", footSectors: "Sectors",
+    navApproach: "Approach", navPlatform: "Platform", navInd: "Industry", navBtp: "Construction", navSp: "Firefighters", moreSp: "Everything we do for fire services", moreBtp: "Everything we do for construction and industry", footSectors: "Sectors", moreInd: "Discover the CMR portal for industry",
     betaTag: "Beta", ctaContact: "Get in touch", scrollCue: "Discover",
     apKicker: "Our approach",
     apTitle: "Making exposure measurable, traceable, transferable.",

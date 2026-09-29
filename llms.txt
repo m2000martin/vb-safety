@@ -9,9 +9,11 @@
 
 ## Outils
 - [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : rapport de contamination par le chef d'agrès ou le COS, suivi du commandement, contrôle SSSM, historique par agent. Accès cloisonné par rôle, hébergement en France.
-- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du nettoyage et de la remise en service des vestes et pantalons de feu (en développement).
+- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du nettoyage et de la remise en service de la tenue de feu : veste, pantalon, cagoule de feu, casque F1, rangers incendie (en développement).
+- [Portail CMR Industrie](https://vb-safety.com/cmr-industrie/) : portail (en préparation) pour tenir toutes les obligations de l'employeur face aux agents CMR : inventaire, liste nominative des salariés exposés conservée 40 ans, transmission au SPST, hiérarchie de prévention (substitution, système clos, réduction, protection), contrôles VLEP annuels, suivi individuel renforcé, interdictions d'affectation.
 
 ## Guides
+- [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020, sanctions (art. L. 4741-1).
 - [Santé des sapeurs-pompiers : fumées d'incendie, cancers et traçabilité CMR](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux 16 bis et 30), décret n° 2024-307 (liste des travailleurs exposés, 40 ans), proposition de loi du Sénat (mars 2025), décontamination.
 
 ## Contact
