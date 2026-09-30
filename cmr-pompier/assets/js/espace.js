@@ -2,6 +2,8 @@
 (function () {
   var S = VBS.requireRole(['agent', 'cos', 'commandement', 'sssm', 'habillement']);
   if (!S) return;
+  // L'indicateur d'exposition (équivalents-feu) n'est affiché qu'au médecin du SSSM
+  var DOC = S.role === 'sssm';
 
   // =================================================================== libellés
   var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM', habillement: 'Référent EPI' };
@@ -37,7 +39,7 @@
   function item(base, tour) { return Object.assign({}, base, { tour: tour }); }
   var MENUS = {
     agent: [
-      item(M.tdb, "Vos dernières interventions, votre indice d'exposition cumulé et votre prochain rendez-vous au SSSM."),
+      item(M.tdb, "Vos dernières interventions, vos compteurs et votre prochain rendez-vous au SSSM."),
       item(M.dossier, "L'historique complet de vos expositions, intervention par intervention, votre fiche individuelle d'exposition et vos rendez-vous SSSM."),
       item(M.exp, 'Exportez vos propres données en PDF ou CSV, pour votre médecin ou vos archives.')
     ],
@@ -155,7 +157,7 @@
   function interventionRows(parts, limit) {
     if (!parts.length) return '<p class="empty">Aucune intervention enregistrée à votre nom.</p>';
     return '<ul class="rows">' + parts.slice(0, limit || 5).map(function (p) {
-      return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(TYPE[p.it.type_feu]) + '</b><small>' + esc(p.it.precision || '') + ' · ' + esc(p.it.commune || '') + '</small></span><span class="right">' + cont(p) + (filled(p) && p.it.ambiance !== 'aucun_feu' ? '<span class="ef-mini">' + R.fmt(p.indice) + ' EF</span>' : '') + '</span></li>';
+      return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(TYPE[p.it.type_feu]) + '</b><small>' + esc(p.it.precision || '') + ' · ' + esc(p.it.commune || '') + '</small></span><span class="right">' + cont(p) + (DOC && filled(p) && p.it.ambiance !== 'aucun_feu' ? '<span class="ef-mini">' + R.fmt(p.indice) + ' EF</span>' : '') + '</span></li>';
     }).join('') + '</ul>';
   }
   function nextRdv(db, userId) {
@@ -200,11 +202,11 @@
     var html = head('Bonjour ' + esc(S.name || '') + ',', 'Voici le résumé de vos expositions et de vos dernières interventions.', '<span class="page-date">' + esc(fmtLong(now)) + '</span>') +
       '<div class="grid grid-3">' +
         kpi('flame', '', 'Interventions ce mois-ci', thisM, (diff >= 0 ? '+' : '') + diff + ' par rapport au mois dernier') +
-        kpi('chart', 'warn', 'Indicateur d\'exposition · 12 mois glissants', R.fmt(c.ef) + ' <small class="unit">EF</small>', 'Équivalents-feu · indicateur conventionnel, ce n\'est pas une dose') +
+        kpi('clock', 'warn', 'Heures de feu · 12 mois glissants', String(Math.round(c.heures * 10) / 10).replace('.', ',') + ' <small class="unit">h</small>', c.feux + ' interventions avec fumées, dont ' + c.att + ' en attaque') +
         k3 +
       '</div>' +
       '<div class="grid grid-main">' +
-        '<section class="panel"><div class="panel-head"><h3>Évolution de votre indicateur</h3></div>' + lineChart(monthly(mine.filter(filled), function (p) { return p.it.dateObj; }, function (p) { return +p.indice || 0; }), ' EF') + '<p class="note">Somme mensuelle, en équivalents-feu. 1 équivalent-feu = 30 minutes en attaque sur un feu d\'habitation, sans décontamination.</p></section>' +
+        '<section class="panel"><div class="panel-head"><h3>Interventions avec fumées, par mois</h3></div>' + lineChart(monthly(mine.filter(function (p) { return filled(p) && p.it.ambiance !== 'aucun_feu'; }), function (p) { return p.it.dateObj; }, function () { return 1; }), ' intervention(s)') + '</section>' +
         '<section class="panel"><div class="panel-head"><h3>Dernières interventions</h3><a href="#dossier">Voir tout ' + icon('arrow') + '</a></div>' + interventionRows(mine, 5) + '</section>' +
       '</div>' + countersPanel(c, 'Vos compteurs · 12 mois glissants') +
       '<div class="grid grid-2">' + rdvCallout(nextRdv(db, db.meId)) + (extra || '<div class="callout"><span class="icon-tile">' + icon('download') + '</span><div><strong>Fiche individuelle d\'exposition</strong><span class="sub">Par année, sur 12 mois glissants ou sur toute votre carrière.</span></div><a class="btn btn-secondary btn-sm" href="#dossier">Ouvrir</a></div>') + '</div>';
@@ -367,12 +369,12 @@
   }
   function historyTable(parts, empty) {
     if (!parts.length) return '<p class="empty">' + (empty || 'Aucune intervention sur cette période.') + '</p>';
-    return '<table class="dtable"><thead><tr><th>Date</th><th>Intervention</th><th>Nature (agents CMR)</th><th>Position · poste</th><th>Zone</th><th>Durée</th><th>Décontamination</th><th class="num">Indicateur</th></tr></thead><tbody>' +
+    return '<table class="dtable"><thead><tr><th>Date</th><th>Intervention</th><th>Nature (agents CMR)</th><th>Position · poste</th><th>Zone</th><th>Durée</th><th>Décontamination</th>' + (DOC ? '<th class="num">Indicateur</th>' : '') + '</tr></thead><tbody>' +
       parts.map(function (p) { var f = filled(p);
         return '<tr><td data-l="Date">' + fmtD(p.it.dateObj) + '</td><td data-l="Intervention"><b>' + esc(TYPE[p.it.type_feu] || p.it.type_feu) + '</b><br><span class="note">' + esc(p.it.numero) + '</span></td>' +
           '<td data-l="Nature" class="nat">' + (f ? natureCourte(p.it) : '<span class="note">Rapport en cours</span>') + '</td>' +
           '<td data-l="Position">' + (f ? esc(posTxt(p)) : esc(ROLE_TENU[p.role_tenu] || '')) + '<br><span class="note">' + esc(ROLE_TENU[p.role_tenu] || '') + (p.engin ? ' · ' + esc(p.engin) : '') + '</span></td>' +
-          '<td data-l="Zone">' + cont(p) + '</td><td data-l="Durée">' + (f ? durTxt(p.duree_min) : '—') + (p.ari_retire_deb ? '<br><span class="note">ARI retiré au déblai</span>' : '') + '</td><td data-l="Décontamination">' + decon(p) + '</td><td class="num" data-l="Indicateur">' + efTxt(p) + '</td></tr>';
+          '<td data-l="Zone">' + cont(p) + '</td><td data-l="Durée">' + (f ? durTxt(p.duree_min) : '—') + (p.ari_retire_deb ? '<br><span class="note">ARI retiré au déblai</span>' : '') + '</td><td data-l="Décontamination">' + decon(p) + '</td>' + (DOC ? '<td class="num" data-l="Indicateur">' + efTxt(p) + '</td>' : '') + '</tr>';
       }).join('') + '</tbody></table>';
   }
   function natureCourte(it) {
@@ -392,7 +394,7 @@
       '<h2>Synthèse</h2><table class="fi-sum"><tr><td><b>' + c.feux + '</b> interventions avec fumées</td><td><b>' + c.att + '</b> en position d\'attaque</td><td><b>' + String(Math.round(c.heures * 10) / 10).replace('.', ',') + ' h</b> de feu</td></tr><tr><td><b>' + c.dec1h + '</b> décontaminations dans l\'heure</td><td><b>' + c.decNon + '</b> sans décontamination</td><td><b>' + c.ariRet + '</b> ARI retiré au déblai</td></tr></table>' +
       '<h2>Détail des expositions</h2>' + (rows ? '<table class="fi-tab"><thead><tr><th>Date · n°</th><th>Intervention</th><th>Nature</th><th>Durée</th><th>Degré (position, zone, décontamination)</th></tr></thead><tbody>' + rows + '</tbody></table>' : '<p>Aucune exposition enregistrée sur la période.</p>') +
       '<h2>Substances présumées</h2><table class="fi-leg"><tr><td><b>Socle feu de structure</b> : ' + R.SOCLE.map(function (x) { return esc(x.nom) + (x.cas ? ' (CAS ' + x.cas + ', ' + esc(x.cls) + ')' : ''); }).join(' ; ') + '.</td></tr><tr><td><b>Socle végétation</b> : ' + R.SOCLE.filter(function (x) { return R.SOCLE_VEG.indexOf(x.code) !== -1; }).map(function (x) { return esc(x.nom); }).join(', ') + ' ; 1,3-butadiène si véhicules impliqués.</td></tr></table>' +
-      '<div class="fi-ind">' + esc(R.bloc(c.ef)) + ' Méthode : note méthodologique du référentiel.</div>' +
+      (DOC ? '<div class="fi-ind">' + esc(R.bloc(c.ef)) + ' Méthode : note méthodologique du référentiel.</div>' : '') +
       '<p class="fi-note">Nature : procédés cancérogènes de l\'arrêté du 26 octobre 2020 et substances présumées du référentiel (classification CLP, annexe VI). Durée : durée d\'engagement. Degré : position tenue, zone d\'engagement et décontamination réalisée. Données fictives de démonstration.</p>' +
       '<div class="fi-sign"><div>Visa du médecin du SSSM</div><div>Date et signature de l\'agent</div></div></article>';
     var area = $('print-area'); area.innerHTML = html;
@@ -410,7 +412,7 @@
     root.innerHTML = head('Dossier personnel', esc((me.grade ? me.grade + ' ' : '') + (me.name || S.name)) + ' · ' + esc(me.matricule || S.matricule) + ' · ' + esc(centreName())) +
       '<div class="grid grid-3">' +
         kpi('flame', '', 'Interventions enregistrées', mine.length, 'Depuis le début du suivi') +
-        kpi('chart', 'warn', 'Indicateur · 12 mois glissants', R.fmt(c12.ef) + ' <small class="unit">EF</small>', 'Carrière : ' + R.fmt(call.ef) + ' EF · ce n\'est pas une dose') +
+        kpi('clock', 'warn', 'Heures de feu · 12 mois glissants', String(Math.round(c12.heures * 10) / 10).replace('.', ',') + ' <small class="unit">h</small>', 'Carrière : ' + String(Math.round(call.heures * 10) / 10).replace('.', ',') + ' h') +
         kpi('cal', 'info', 'Rendez-vous SSSM', rdvs.filter(function (r) { return r.statut === 'prevu' && r.dateObj >= new Date(); }).length + ' prévu', rdvs.filter(function (r) { return r.statut === 'realise'; })[0] ? 'Dernier : ' + fmtD(rdvs.filter(function (r) { return r.statut === 'realise'; })[0].dateObj) : 'Aucun rendez-vous passé') +
       '</div>' +
       '<section class="panel"><div class="panel-head wrap"><h3>Historique des expositions · ' + esc(periodLabel()) + '</h3>' + periodBar(mine) + '</div>' + historyTable(parts, 'Aucune intervention enregistrée sur cette période.') + '</section>' +
@@ -425,9 +427,9 @@
     var crew = it.crew.slice().sort(function (a, b) { return (a.engin || '').localeCompare(b.engin || '') || (a.role_tenu === 'chef_agres' ? -1 : 1); });
     var prel = function (p) { return (db.prelevements || []).filter(function (x) { return x.participation === p.id; }).map(function (x) { return '<span class="badge badge-info">' + esc(PREL[x.type]) + ' : ' + x.valeur + ' ' + esc(x.unite || '') + '</span>'; }).join(' '); };
     function rows(list) { return list.map(function (p) {
-      return '<tr><td data-l="Agent"><b>' + esc(p.user ? p.user.name : '—') + '</b>' + (opts.byEngin ? '' : (p.engin ? '<br><span class="note">' + esc(p.engin) + '</span>' : '')) + '<br><span class="note">' + esc(ROLE_TENU[p.role_tenu]) + '</span></td><td data-l="Position">' + (filled(p) ? esc(posTxt(p)) : '—') + '</td><td data-l="Zone">' + cont(p) + '</td><td data-l="Durée">' + (filled(p) ? durTxt(p.duree_min) : '—') + '</td><td data-l="Décontamination">' + decon(p) + '</td><td class="num" data-l="Indicateur">' + efTxt(p) + '</td>' + (opts.sssm ? '<td>' + (prel(p) || '<span class="note">—</span>') + '</td>' : '') + '</tr>';
+      return '<tr><td data-l="Agent"><b>' + esc(p.user ? p.user.name : '—') + '</b>' + (opts.byEngin ? '' : (p.engin ? '<br><span class="note">' + esc(p.engin) + '</span>' : '')) + '<br><span class="note">' + esc(ROLE_TENU[p.role_tenu]) + '</span></td><td data-l="Position">' + (filled(p) ? esc(posTxt(p)) : '—') + '</td><td data-l="Zone">' + cont(p) + '</td><td data-l="Durée">' + (filled(p) ? durTxt(p.duree_min) : '—') + '</td><td data-l="Décontamination">' + decon(p) + '</td>' + (DOC ? '<td class="num" data-l="Indicateur">' + efTxt(p) + '</td>' : '') + (opts.sssm ? '<td>' + (prel(p) || '<span class="note">—</span>') + '</td>' : '') + '</tr>';
     }).join(''); }
-    var th = '<thead><tr><th>Agent</th><th>Position</th><th>Zone</th><th>Durée</th><th>Décontamination</th><th class="num">Indicateur</th>' + (opts.sssm ? '<th>Prélèvements</th>' : '') + '</tr></thead>';
+    var th = '<thead><tr><th>Agent</th><th>Position</th><th>Zone</th><th>Durée</th><th>Décontamination</th>' + (DOC ? '<th class="num">Indicateur</th>' : '') + (opts.sssm ? '<th>Prélèvements</th>' : '') + '</tr></thead>';
     if (!opts.byEngin) return '<table class="dtable">' + th + '<tbody>' + rows(crew) + '</tbody></table>';
     var groups = {}; crew.forEach(function (p) { (groups[p.engin || '—'] = groups[p.engin || '—'] || []).push(p); });
     return Object.keys(groups).map(function (g) { return '<div class="crew-group"><h4>' + esc(g) + '</h4><table class="dtable">' + th + '<tbody>' + rows(groups[g]) + '</tbody></table></div>'; }).join('');
@@ -537,8 +539,8 @@
 
   function viewExport(root) {
     var opts = [];
-    var expoHead = ['Date', 'Numéro', 'Type de sinistre', 'Précision', 'Commune', 'Nature (procédés et substances CMR)', 'Circonstances', 'Rôle', 'Engin', 'Position', 'Tactique', 'Zone', 'Durée (min)', 'ARI', 'ARI retiré au déblai', 'Décontamination', 'Indicateur (EF)', 'Référentiel'];
-    var expoRow = function (p) { var f = filled(p); return [fmtD(p.it.dateObj), p.it.numero, TYPE[p.it.type_feu], p.it.precision, p.it.commune, f ? R.natureTexte(p.it) : 'Rapport en cours', (p.it.circonstances || []).filter(function (k) { return R.CIRC[k]; }).map(function (k) { return R.CIRC[k].nom; }).join(', '), ROLE_TENU[p.role_tenu], p.engin, f ? R.posLabel(p.position) : '', p.tactique ? R.TAC[p.tactique].label : '', f ? (CONT[p.contamination] || [''])[0] : '', f ? p.duree_min : '', ariTxt(p), p.ari_retire_deb ? 'oui' : 'non', f ? (R.DEC[p.decon_type] || { label: '' }).label : '', f ? String(p.indice).replace('.', ',') : '', 'v' + R.version]; };
+    var expoHead = ['Date', 'Numéro', 'Type de sinistre', 'Précision', 'Commune', 'Nature (procédés et substances CMR)', 'Circonstances', 'Rôle', 'Engin', 'Position', 'Tactique', 'Zone', 'Durée (min)', 'ARI', 'ARI retiré au déblai', 'Décontamination'].concat(DOC ? ['Indicateur (EF)', 'Référentiel'] : []);
+    var expoRow = function (p) { var f = filled(p); return [fmtD(p.it.dateObj), p.it.numero, TYPE[p.it.type_feu], p.it.precision, p.it.commune, f ? R.natureTexte(p.it) : 'Rapport en cours', (p.it.circonstances || []).filter(function (k) { return R.CIRC[k]; }).map(function (k) { return R.CIRC[k].nom; }).join(', '), ROLE_TENU[p.role_tenu], p.engin, f ? R.posLabel(p.position) : '', p.tactique ? R.TAC[p.tactique].label : '', f ? (CONT[p.contamination] || [''])[0] : '', f ? p.duree_min : '', ariTxt(p), p.ari_retire_deb ? 'oui' : 'non', f ? (R.DEC[p.decon_type] || { label: '' }).label : ''].concat(DOC ? [f ? String(p.indice).replace('.', ',') : '', 'v' + R.version] : []); };
     if (S.role === 'agent' || S.role === 'cos' || S.role === 'commandement') {
       opts.push(['perso', 'Mes expositions (CSV)', 'Votre historique complet, avec la nature des agents CMR de chaque intervention.', function () { csvDownload('mes-expositions.csv', [expoHead].concat(db.mine.map(expoRow))); }]);
       opts.push(['pdf', 'Ma fiche individuelle d\'exposition (PDF)', 'Toute votre carrière : nature, durée et degré de chaque exposition.', function () { var m = PER.mode; PER.mode = 'carriere'; printFiche(db.me || {}, db.mine); PER.mode = m; }]);
@@ -924,7 +926,6 @@
     if (!m.position || !set[m.position]) { m.position = R.defaultPosition(it, m.role_tenu); m.auto = true; }
     if (m.contamination === null || m.contamination === undefined) m.contamination = set[m.position].zone;
     if (m.position === 'POS_ATT' && !m.tactique) m.tactique = 'TAC_INT';
-    if (!m.duree_min && +it.duree_min) m.duree_min = +it.duree_min;
     if (m.tenue_complete === null || m.tenue_complete === undefined) m.tenue_complete = true;
     if (m.ari_porte === null || m.ari_porte === undefined) m.ari_porte = m.position === 'POS_ATT' || m.position === 'POS_DEB';
     return m;
@@ -935,14 +936,14 @@
   function editorState(id) {
     if (id === 'nouveau') {
       var me = db.me || {};
-      ed = { isNew: true, it: { operation: '', numero: 'INT-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000), date: localInput(new Date()), type_feu: 'habitation', precision: '', commune: '', motorisation: '', ambiance: 'feu_fumee', duree_min: 0, circonstances: [], zone_deshabillage: false, epi_ensaches: false, exposition_globale: '', observations: '', statut: 'brouillon', centre: me.centre, cos: db.meId }, crew: [], removed: [] };
+      ed = { isNew: true, it: { operation: '', numero: 'INT-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000), date: localInput(new Date()), fin: '', type_feu: 'habitation', precision: '', commune: '', motorisation: '', ambiance: 'feu_fumee', duree_min: 0, circonstances: [], zone_deshabillage: false, epi_ensaches: false, exposition_globale: '', observations: '', statut: 'brouillon', centre: me.centre, cos: db.meId }, crew: [], removed: [] };
       ed.crew.push(blankMember(db.meId, 'chef_agres', 'FPT'));
       return ed;
     }
     var x = db.inter[id];
     if (!x) return null;
     if (S.role === 'cos' && x.cos !== db.meId) return null;
-    var it = { operation: x.operation || '', numero: x.numero, date: localInput(x.dateObj), type_feu: x.type_feu, precision: x.precision || '', commune: x.commune || '', motorisation: x.motorisation || '', ambiance: x.ambiance || 'feu_fumee', duree_min: +x.duree_min || 0,
+    var it = { operation: x.operation || '', numero: x.numero, date: localInput(x.dateObj), type_feu: x.type_feu, precision: x.precision || '', commune: x.commune || '', motorisation: x.motorisation || '', ambiance: x.ambiance || 'feu_fumee', duree_min: +x.duree_min || 0, fin: finFromDur(localInput(x.dateObj), x.duree_min),
       circonstances: (x.circonstances || []).slice().concat(x.suspicion_amiante && (x.circonstances || []).indexOf('AMIANTE') === -1 ? ['AMIANTE'] : []), zone_deshabillage: !!x.zone_deshabillage, epi_ensaches: !!x.epi_ensaches, exposition_globale: x.exposition_globale || '', observations: x.observations || '', statut: x.statut, centre: x.centre, cos: x.cos };
     var st0 = { isNew: false, id: x.id, it: it, crew: x.crew.map(function (p) { return memberFrom(p, it); }).sort(function (a, b) { return (a.role_tenu === 'chef_agres' ? 0 : 1) - (b.role_tenu === 'chef_agres' ? 0 : 1); }), removed: [] };
     ed = st0;
@@ -954,25 +955,54 @@
     var cur = ed.crew[i][field];
     return '<div class="pair" role="group"><button type="button" class="opt' + (cur === true ? ' on' : '') + '" data-set="' + i + '|' + field + '|1" aria-pressed="' + (cur === true) + '">' + a + '</button><button type="button" class="opt' + (cur === false ? ' on warn' : '') + '" data-set="' + i + '|' + field + '|0" aria-pressed="' + (cur === false) + '">' + b + '</button></div>';
   }
-  function memberCard(i) {
+  // Rapport en 4 étapes : intervention, CA et conducteur, binôme 1, binôme 2. Une fiche par personne, deux par ligne.
+  var STEPS = [
+    { n: 1, t: 'Intervention', s: 'Éléments généraux' },
+    { n: 2, t: 'CA et conducteur', roles: ['chef_agres', 'conducteur'] },
+    { n: 3, t: 'Binôme 1', s: 'Attaque', roles: ['binome_attaque'] },
+    { n: 4, t: 'Binôme 2', s: 'Alimentation, soutien', roles: ['binome_alimentation', 'soutien', 'autre'] }
+  ];
+  var SHARED = ['position', 'tactique', 'contamination', 'duree_min', 'tenue_complete', 'ari_porte', 'ari_retire_deb', 'ffp3', 'decon_type', 'exposition_particuliere'];
+  function stepOf(m) { for (var k = 1; k < STEPS.length; k++) if (STEPS[k].roles.indexOf(m.role_tenu) !== -1) return STEPS[k].n; return 4; }
+  function idxIn(step) { var out = []; ed.crew.forEach(function (m, i) { if (stepOf(m) === step) out.push(i); }); return out; }
+  function sameOn(step) { return (step === 3 || step === 4) && ed.same && ed.same[step] && idxIn(step).length > 1; }
+  function syncFrom(i) {
+    var st = stepOf(ed.crew[i]); if (!sameOn(st)) return;
+    var src = ed.crew[i];
+    idxIn(st).forEach(function (j) { if (j !== i) { SHARED.forEach(function (k) { ed.crew[j][k] = src[k]; }); ed.crew[j].auto = src.auto; } });
+  }
+  function initSame() {
+    ed.same = {};
+    [3, 4].forEach(function (st) { var ix = idxIn(st); ed.same[st] = ix.length > 1 && ix.every(function (j) { return SHARED.every(function (k) { return ed.crew[j][k] === ed.crew[ix[0]][k]; }); }); });
+  }
+  function finFromDur(date, dur) { if (!date || !+dur) return ''; var d = new Date(new Date(date).getTime() + dur * 60000); return d2(d.getHours()) + ':' + d2(d.getMinutes()); }
+  function durFromFin(date, fin) {
+    if (!date || !/^\d{2}:\d{2}$/.test(fin || '')) return 0;
+    var s = new Date(date), e = new Date(s), p = fin.split(':'); e.setHours(+p[0], +p[1], 0, 0);
+    var m = Math.round((e - s) / 60000); if (m <= 0) m += 1440; return m;
+  }
+  function memberCard(i, group) {
     var m = ed.crew[i], u = db.byId[m.agent] || {}, ro = edReadOnly(), fire = ed.it.ambiance !== 'aucun_feu';
-    var calc = R.calcul(ed.it, m), set = R.positions(ed.it);
-    return '<article class="agent-card" data-card="' + i + '"><div class="agent-top"><div><b>' + esc(u.name || '—') + '</b><small>' + esc([u.grade, u.matricule].filter(Boolean).join(' · ')) + '</small></div>' +
-      (ro ? '' : '<button type="button" class="icon-btn sm" data-remove="' + i + '" aria-label="Retirer ' + esc(u.name || '') + ' de l\'équipage">✕</button>') + '</div>' +
-      '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
-      '<div class="field"><label class="label">Engin</label><select class="select" data-f="' + i + '|engin">' + ENGINS.map(function (k) { return '<option' + (m.engin === k ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></div></div>' +
+    var calc = R.calcul(ed.it, m), set = R.positions(ed.it), whole = +ed.it.duree_min;
+    var names = group ? group.map(function (j) { return (db.byId[ed.crew[j].agent] || {}).name || '—'; }) : null;
+    var chips = (whole ? [[whole, 'Toute l\'intervention (' + durTxt(whole) + ')']] : []).concat([[30, '30 min'], [60, '1 h'], [120, '2 h'], [180, '3 h']].filter(function (c) { return c[0] !== whole; }));
+    return '<article class="agent-card' + (group ? ' group' : '') + '" data-card="' + i + '"><div class="agent-top"><div>' +
+        (group ? '<b>' + esc(names.join(' + ')) + '</b><small>Saisie commune · une fiche est enregistrée pour chacun</small>' : '<b>' + esc(u.name || '—') + '</b><small>' + esc([u.grade, u.matricule].filter(Boolean).join(' · ')) + '</small>') + '</div>' +
+        (ro || group ? '' : '<button type="button" class="icon-btn sm" data-remove="' + i + '" aria-label="Retirer ' + esc(u.name || '') + ' de l\'équipage">✕</button>') + '</div>' +
+      (group ? '' : '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
+        '<div class="field"><label class="label">Engin</label><select class="select" data-f="' + i + '|engin">' + ENGINS.map(function (k) { return '<option' + (m.engin === k ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></div></div>') +
       (fire ? '<div class="block"><span class="label">Position tenue la plus longtemps' + (m.auto ? ' <span class="auto-tag">proposée d\'après le poste</span>' : '') + '</span><div class="pos-pick">' + Object.keys(set).map(function (k) { return '<button type="button" class="opt' + (m.position === k ? ' on' : '') + '" data-pos="' + i + '|' + k + '" aria-pressed="' + (m.position === k) + '">' + esc(set[k].label) + '</button>'; }).join('') + '</div>' +
         (m.position === 'POS_ATT' ? '<div class="sub-pick"><span class="label sm">Tactique d\'attaque</span><div class="pair" role="group">' + Object.keys(R.TAC).map(function (k) { return '<button type="button" class="opt' + (m.tactique === k ? ' on' : '') + '" data-tac="' + i + '|' + k + '" aria-pressed="' + (m.tactique === k) + '">' + (k === 'TAC_INT' ? 'Intérieure directe' : 'Transitoire (abattage extérieur d\'abord)') + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
       '<div class="block"><span class="label">Exposition perçue</span><div class="gdo gdo-3">' + ['nulle', 'moyenne', 'forte'].map(function (z) { return '<button type="button" class="opt gdo-' + z + (m.contamination === z ? ' on' : '') + '" data-set="' + i + '|contamination|' + z + '" aria-pressed="' + (m.contamination === z) + '"><b>' + R.ZONES[z][0] + '</b><small>' + R.ZONES[z][1].split(' : ')[1] + '</small></button>'; }).join('') + '</div></div>' : '') +
-      '<div class="block"><div class="form-2"><div class="field"><label class="label">Durée d\'engagement</label><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" data-f="' + i + '|duree_min" value="' + (m.duree_min || '') + '"><span>min</span></div></div>' +
-        '<div class="field"><span class="label">Équipements</span><div class="epi-mini">' + pairBtns(i, 'tenue_complete', 'Tenue complète', 'Incomplète') + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div></div></div>' +
+      '<div class="block"><span class="label">Durée d\'engagement</span><div class="dur-row"><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" data-f="' + i + '|duree_min" value="' + (m.duree_min || '') + '" aria-label="Durée en minutes"><span>min</span></div><div class="chips-pick">' + chips.map(function (c) { return '<button type="button" class="opt' + (+m.duree_min === c[0] ? ' on' : '') + '" data-mdur="' + i + '|' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div></div>' +
+      '<div class="block"><span class="label">Équipements</span><div class="epi-mini">' + pairBtns(i, 'tenue_complete', 'Tenue complète', 'Incomplète') + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div>' +
         '<div class="chips-pick">' + (m.position === 'POS_ATT' || m.position === 'POS_DEB' ? '<button type="button" class="opt' + (m.ari_retire_deb ? ' on warn' : '') + '" data-toggle="' + i + '|ari_retire_deb">ARI retiré pendant le déblai</button>' : '') + '<button type="button" class="opt' + (m.ffp3 ? ' on' : '') + '" data-toggle="' + i + '|ffp3">Masque FFP3 au déblai</button></div>' +
         (m.position === 'POS_ATT' && m.ari_porte === false ? '<p class="warn-line">' + icon('alert') + 'Attaque sans ARI : événement anormal, signalé au SSSM.</p>' : '') + '</div>' +
-      (fire ? '<div class="block decon-box"><span class="label">Décontamination</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div>' +
-        '<div class="field"><label class="label sm">Réf. de mesure (dispositif VB Safety, facultatif)</label><input class="input" type="text" maxlength="40" data-f="' + i + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. Mesure VB124-1"></div></div>' : '') +
+      (fire ? '<div class="block decon-box"><span class="label">Décontamination' + (group ? '' : ' de ' + esc(first(u.name) || 'l\'agent')) + '</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div>' +
+        (group ? '' : '<div class="field"><label class="label sm">Réf. de mesure (dispositif VB Safety, facultatif)</label><input class="input" type="text" maxlength="40" data-f="' + i + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. Mesure VB124-1"></div>') + '</div>' : '') +
       '<div class="form-2"><div class="field"><label class="label">Exposition particulière</label><input class="input" type="text" maxlength="300" data-f="' + i + '|exposition_particuliere" value="' + esc(m.exposition_particuliere) + '" placeholder="Ex. présence de batterie de trottinette"></div>' +
-      '<div class="field"><label class="label">Commentaire individuel</label><input class="input" type="text" maxlength="500" data-f="' + i + '|commentaire" value="' + esc(m.commentaire) + '" placeholder="Faits uniquement, sans donnée médicale"></div></div>' +
-      '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div></article>';
+      (group ? '' : '<div class="field"><label class="label">Commentaire individuel</label><input class="input" type="text" maxlength="500" data-f="' + i + '|commentaire" value="' + esc(m.commentaire) + '" placeholder="Faits uniquement, sans donnée médicale"></div>') + '</div>' +
+      (DOC && !group ? '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div>' : '') + '</article>';
   }
   function missing(m) {
     var out = [], fire = ed.it.ambiance !== 'aucun_feu';
@@ -1001,52 +1031,72 @@
       n.substances.map(function (x) { return '<span class="chip">' + esc(x.nom.split(' (')[0]) + '</span>'; }).join('') +
       n.circ.map(function (k) { return '<span class="chip chip-circ">' + esc(R.CIRC[k].nom) + '</span>'; }).join('') + '</div></div>';
   }
+  function step1Missing() { return !ed.it.numero || !ed.it.date || !ed.it.fin; }
+  function stepNav() {
+    return '<ol class="ed-steps">' + STEPS.map(function (st) {
+      var ix = st.n === 1 ? [] : idxIn(st.n), bad = st.n === 1 ? step1Missing() : !ix.length || ix.some(function (i) { return missing(ed.crew[i]).length; });
+      var sub = st.n === 1 ? st.s : ix.length ? ix.map(function (i) { return first((db.byId[ed.crew[i].agent] || {}).name); }).join(', ') : 'Personne';
+      return '<li><button type="button" data-step="' + st.n + '" class="' + (ed.step === st.n ? 'on' : '') + (bad ? '' : ' ok') + '" aria-current="' + (ed.step === st.n ? 'step' : 'false') + '"><span class="num">' + (bad ? st.n : '✓') + '</span><span class="txt"><b>' + st.t + '</b><small>' + esc(sub) + '</small></span></button></li>';
+    }).join('') + '</ol>';
+  }
+  function stepIntervention(x) {
+    return '<section class="panel"><div class="panel-head"><h3>1. Intervention</h3>' + (!ed.isNew && db.inter[ed.id] && db.inter[ed.id].op ? opChip(db.inter[ed.id]) : '') + '</div>' +
+      (ed.isNew ? '<div class="field"><label class="label" for="ed-op">Opération</label><select class="select" id="ed-op" data-it="operation" data-rerender><option value="">Intervention simple : je suis CA et COS</option>' + db.operations.filter(function (o) { return within(o.dateObj, 3); }).map(function (o) { return '<option value="' + o.id + '"' + (x.operation === o.id ? ' selected' : '') + '>' + esc(opLabel(o) + ' · COS : ' + (o.cosUser ? o.cosUser.name : '—')) + '</option>'; }).join('') + '</select><span class="hint">Sur une opération à plusieurs agrès, rattachez votre rapport : le COS verra que vous l\'avez rempli.</span></div>' : '') +
+      '<div class="form-3"><div class="field"><label class="label" for="ed-num">N° d\'intervention</label><input class="input" id="ed-num" data-it="numero" value="' + esc(x.numero) + '" maxlength="32"></div>' +
+      '<div class="field"><label class="label" for="ed-date">Départ (date et heure)</label><input class="input" id="ed-date" type="datetime-local" data-it="date" value="' + esc(x.date) + '"></div>' +
+      '<div class="field"><label class="label" for="ed-fin">Fin d\'intervention</label><div class="dur-in"><input class="input" id="ed-fin" type="time" data-it="fin" value="' + esc(x.fin || '') + '"><span id="ed-dur-txt">' + (+x.duree_min ? 'soit ' + durTxt(x.duree_min) : '') + '</span></div></div></div>' +
+      '<div class="form-3"><div class="field"><label class="label" for="ed-type">Type de sinistre</label><select class="select" id="ed-type" data-it="type_feu" data-rerender>' + Object.keys(TYPE).map(function (k) { return '<option value="' + k + '"' + (x.type_feu === k ? ' selected' : '') + '>' + TYPE[k] + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label class="label" for="ed-prec">Précision</label><input class="input" id="ed-prec" data-it="precision" value="' + esc(x.precision) + '" maxlength="160" placeholder="Ex. VL en parking souterrain"></div>' +
+      '<div class="field"><label class="label" for="ed-commune">Commune</label><input class="input" id="ed-commune" data-it="commune" value="' + esc(x.commune) + '" maxlength="80"></div></div>' +
+      '<div class="form-2">' + (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-motor">Motorisation</label><select class="select" id="ed-motor" data-it="motorisation" data-rerender><option value="">—</option>' + Object.keys(MOTOR).map(function (k) { return '<option value="' + k + '"' + (x.motorisation === k ? ' selected' : '') + '>' + MOTOR[k] + '</option>'; }).join('') + '</select></div>' : '') +
+        '<div class="field"><label class="label" for="ed-amb">Fumées et feu</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div></div>' +
+      (x.ambiance !== 'aucun_feu' ? circHtml() + natureHtml() : natureHtml()) +
+      '<div class="chips-pick">' + [['zone_deshabillage', 'Zone de déshabillage mise en place'], ['epi_ensaches', 'EPI souillés ensachés']].map(function (g) { return '<button type="button" class="opt' + (x[g[0]] ? ' on' : '') + '" data-ittoggle="' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="field"><label class="label" for="ed-obs">Observations</label><textarea class="textarea" id="ed-obs" data-it="observations" rows="2" maxlength="1000"></textarea></div></section>';
+  }
+  function stepCrew(n, ro) {
+    var st = STEPS[n - 1], ix = idxIn(n), inCrew = ed.crew.map(function (m) { return m.agent; });
+    var candidates = db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && inCrew.indexOf(u.id) === -1; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+    return '<section class="panel"><div class="panel-head wrap"><h3>' + n + '. ' + st.t + (st.s ? ' · ' + st.s : '') + '</h3>' +
+        (n >= 3 && ix.length > 1 && !ro ? '<label class="check same-tgl"><input type="checkbox" id="ed-same"' + (ed.same[n] ? ' checked' : '') + '> Même saisie pour tout le binôme</label>' : '') + '</div>' +
+      (ix.length ? '<div class="crew-grid">' + (sameOn(n) ? memberCard(ix[0], ix) : ix.map(function (i) { return memberCard(i); }).join('')) + '</div>' : '<p class="empty">Personne dans cette partie' + (ro ? '.' : ' : ajoutez un membre ci-dessous.') + '</p>') +
+      (ro ? '' : '<div class="add-member"><select class="select" id="ed-add" aria-label="Ajouter un membre"><option value="">Ajouter un membre d\'équipage…</option>' + candidates.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + (u.grade || '') + ' · ' + u.matricule) + '</option>'; }).join('') + '</select><button type="button" class="btn btn-secondary" id="ed-add-btn" data-addstep="' + n + '">Ajouter</button></div>') +
+      '</section>';
+  }
   function viewEditor(root, id) {
     if (!ed || (id === 'nouveau' ? !ed.isNew : ed.id !== id)) ed = editorState(id);
     if (!ed) { root.innerHTML = '<p class="empty">Rapport introuvable ou non accessible.</p>'; return; }
-    var ro = edReadOnly(), x = ed.it, st = ed.isNew ? 'attente' : VBSData.reportState(Object.assign({ dateObj: new Date(x.date) }, x));
-    var inCrew = ed.crew.map(function (m) { return m.agent; });
-    var candidates = db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && inCrew.indexOf(u.id) === -1; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
-    var fire = x.ambiance !== 'aucun_feu';
+    if (!ed.step) ed.step = 1;
+    if (!ed.same) initSame();
+    var ro = edReadOnly(), x = ed.it, st = ed.isNew ? 'attente' : VBSData.reportState(Object.assign({ dateObj: new Date(x.date) }, x)), n = ed.step;
     root.innerHTML = '<div class="ed-wrap"><a class="back-link" href="#rapports">' + icon('back') + 'Rapports</a>' +
-      head(ed.isNew ? 'Nouveau rapport de contamination' : 'Rapport ' + esc(x.numero), S.role === 'sssm' ? 'Correction par le SSSM : chaque modification est journalisée.' : 'Trois choses à vérifier : les positions (proposées d\'après les postes), la décontamination de l\'équipage et les circonstances particulières.', ed.isNew ? badge(['Brouillon', 'badge-pending']) : (ro ? '<span class="lock">' + icon('lock') + 'Lecture seule</span> ' : '') + badge(x.statut === 'brouillon' ? ['Brouillon', 'badge-pending'] : STATE[st])) +
-      '<fieldset class="ed-fs"' + (ro ? ' disabled' : '') + '>' +
-      '<section class="panel"><div class="panel-head"><h3>1. Intervention</h3>' + (!ed.isNew && db.inter[ed.id] && db.inter[ed.id].op ? opChip(db.inter[ed.id]) : '') + '</div>' +
-        (ed.isNew ? '<div class="field"><label class="label" for="ed-op">Opération</label><select class="select" id="ed-op" data-it="operation" data-rerender><option value="">Intervention simple : je suis CA et COS</option>' + db.operations.filter(function (o) { return within(o.dateObj, 3); }).map(function (o) { return '<option value="' + o.id + '"' + (x.operation === o.id ? ' selected' : '') + '>' + esc(opLabel(o) + ' · COS : ' + (o.cosUser ? o.cosUser.name : '—')) + '</option>'; }).join('') + '</select><span class="hint">Sur une opération à plusieurs agrès, rattachez votre rapport : le COS verra que vous l\'avez rempli.</span></div>' : '') +
-        '<div class="form-3"><div class="field"><label class="label" for="ed-num">N° d\'intervention</label><input class="input" id="ed-num" data-it="numero" value="' + esc(x.numero) + '" maxlength="32"></div>' +
-        '<div class="field"><label class="label" for="ed-date">Date et heure</label><input class="input" id="ed-date" type="datetime-local" data-it="date" value="' + esc(x.date) + '"></div>' +
-        '<div class="field"><label class="label" for="ed-commune">Commune</label><input class="input" id="ed-commune" data-it="commune" value="' + esc(x.commune) + '" maxlength="80"></div></div>' +
-        '<div class="form-3"><div class="field"><label class="label" for="ed-type">Type de sinistre</label><select class="select" id="ed-type" data-it="type_feu" data-rerender>' + Object.keys(TYPE).map(function (k) { return '<option value="' + k + '"' + (x.type_feu === k ? ' selected' : '') + '>' + TYPE[k] + '</option>'; }).join('') + '</select></div>' +
-        '<div class="field"><label class="label" for="ed-prec">Précision</label><input class="input" id="ed-prec" data-it="precision" value="' + esc(x.precision) + '" maxlength="160" placeholder="Ex. VL en parking souterrain"></div>' +
-        (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-motor">Motorisation</label><select class="select" id="ed-motor" data-it="motorisation" data-rerender><option value="">—</option>' + Object.keys(MOTOR).map(function (k) { return '<option value="' + k + '"' + (x.motorisation === k ? ' selected' : '') + '>' + MOTOR[k] + '</option>'; }).join('') + '</select></div>' : '<div class="field"><label class="label" for="ed-amb">Fumées et feu</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div>') + '</div>' +
-        (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-amb">Fumées et feu</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div>' : '') +
-        '<div class="field"><span class="label">Durée d\'engagement de l\'équipage</span><div class="dur-row"><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" id="ed-dur" data-itdur value="' + (x.duree_min || '') + '" aria-label="Durée en minutes"><span>min</span></div><div class="chips-pick">' + DUREES.map(function (d) { return '<button type="button" class="opt' + (+x.duree_min === d ? ' on' : '') + '" data-dur="' + d + '">' + durTxt(d) + '</button>'; }).join('') + '</div></div><span class="hint">De l\'arrivée sur les lieux au désengagement. Appliquée à tout l\'équipage, modifiable agent par agent.</span></div>' +
-        (fire ? circHtml() + natureHtml() : natureHtml()) +
-        '<div class="chips-pick">' + [['zone_deshabillage', 'Zone de déshabillage mise en place'], ['epi_ensaches', 'EPI souillés ensachés']].map(function (g) { return '<button type="button" class="opt' + (x[g[0]] ? ' on' : '') + '" data-ittoggle="' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' +
-        '<div class="field"><label class="label" for="ed-obs">Observations</label><textarea class="textarea" id="ed-obs" data-it="observations" rows="2" maxlength="1000"></textarea></div>' +
-      '</section>' +
-      '<section class="panel"><div class="panel-head"><h3>2. Équipage · ' + ed.crew.length + ' engagé' + (ed.crew.length > 1 ? 's' : '') + '</h3></div>' +
-        (fire && !ro ? '<div class="crew-dec"><span class="label">Décontamination de tout l\'équipage, en un appui</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { var all = ed.crew.length && ed.crew.every(function (m) { return m.decon_type === k; }); return '<button type="button" class="opt' + (all ? ' on' : '') + '" data-decall="' + k + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div><span class="hint">Pas besoin de l\'heure : choisissez simplement le délai. Modifiable ensuite agent par agent.</span></div>' : '') +
-        '<div class="crew-grid" id="crew">' + ed.crew.map(function (_, i) { return memberCard(i); }).join('') + '</div>' +
-        (ro ? '' : '<div class="add-member"><select class="select" id="ed-add"><option value="">Ajouter un membre d\'équipage…</option>' + candidates.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + (u.grade || '') + ' · ' + u.matricule) + '</option>'; }).join('') + '</select><button type="button" class="btn btn-secondary" id="ed-add-btn">Ajouter</button></div>') +
-      '</section></fieldset>' +
+      head(ed.isNew ? 'Nouveau rapport de contamination' : 'Rapport ' + esc(x.numero), S.role === 'sssm' ? 'Correction par le SSSM : chaque modification est journalisée.' : 'Quatre étapes. Une fiche par personne, avec sa décontamination.', ed.isNew ? badge(['Brouillon', 'badge-pending']) : (ro ? '<span class="lock">' + icon('lock') + 'Lecture seule</span> ' : '') + badge(x.statut === 'brouillon' ? ['Brouillon', 'badge-pending'] : STATE[st])) +
+      stepNav() +
+      '<fieldset class="ed-fs"' + (ro ? ' disabled' : '') + '>' + (n === 1 ? stepIntervention(x) : stepCrew(n, ro)) + '</fieldset>' +
+      '<div class="ed-nav">' + (n > 1 ? '<button type="button" class="btn btn-secondary" data-step="' + (n - 1) + '">' + icon('back') + 'Précédent</button>' : '<span></span>') + (n < 4 ? '<button type="button" class="btn btn-primary" data-step="' + (n + 1) + '">Suivant : ' + STEPS[n].t + icon('arrow', 'icon-arrow') + '</button>' : '') + '</div>' +
       (S.role === 'cos' && !ed.isNew ? (function () { var sg = db.signalements.filter(function (z) { return z.intervention === ed.id; })[0]; return '<div class="actions-row sig-row">' + (sg ? '<span class="note">Signalement envoyé au SSSM (' + ({ ouvert: 'ouvert', pris_en_charge: 'pris en charge', clos: 'clos' })[sg.statut] + ').</span>' : '<button type="button" class="btn btn-secondary btn-sm" id="ed-sig">Signaler une forte exposition au SSSM</button>') + '</div>'; })() : '') +
       (ro ? '' : '<div class="action-bar"><span class="note" id="ed-status"></span>' +
         (S.role === 'cos' ? '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer le brouillon</button><button type="button" class="btn btn-primary" id="ed-send">' + icon('send') + 'Transmettre au SSSM</button>'
           : '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer les corrections</button>' + (x.statut !== 'controle_sssm' ? '<button type="button" class="btn btn-primary" id="ed-validate">' + icon('lock') + 'Enregistrer et valider</button>' : '')) + '</div>') + '</div>';
-    root.querySelector('#ed-obs').value = x.observations || '';
+    var obs = root.querySelector('#ed-obs'); if (obs) obs.value = x.observations || '';
     bindEditor(root.firstElementChild, root);
   }
   function reDefault() { ed.crew.forEach(function (m) { if (m.auto || !R.positions(ed.it)[m.position]) { m.position = ''; m.contamination = null; m.tactique = ''; withDefaults(m, ed.it); } }); }
   function bindEditor(root, host) {
-    var redraw = function () { var y = window.scrollY; viewEditor(host, ed.isNew ? 'nouveau' : ed.id); window.scrollTo(0, y); };
-    var redrawCard = function (i) { var c = root.querySelector('[data-card="' + i + '"]'); if (c) c.outerHTML = memberCard(i); };
+    var redraw = function (top) { var y = window.scrollY; viewEditor(host, ed.isNew ? 'nouveau' : ed.id); window.scrollTo(0, top ? 0 : y); };
+    var redrawCard = function (i) { var c = root.querySelector('[data-card="' + i + '"]'); if (!c) return; var st = stepOf(ed.crew[i]); c.outerHTML = sameOn(st) ? memberCard(i, idxIn(st)) : memberCard(i); var nav = root.querySelector('.ed-steps'); if (nav) nav.outerHTML = stepNav(); };
     var redrawSug = function () { var box = root.querySelector('#ed-sug'); if (!box) return; var tmp = document.createElement('div'); tmp.innerHTML = circHtml(); box.innerHTML = tmp.querySelector('#ed-sug').innerHTML; };
+    var changed = function (i) { syncFrom(i); redrawCard(i); };
     root.addEventListener('input', function (e) {
       var t = e.target;
-      if (t.dataset.it) { ed.it[t.dataset.it] = t.value; if (t.dataset.it === 'exposition_globale') redrawSug(); }
-      if (t.hasAttribute('data-itdur')) { var old = +ed.it.duree_min || 0, v = +t.value || 0; ed.it.duree_min = v; ed.crew.forEach(function (m, i) { if (!m.duree_min || m.duree_min === old) { m.duree_min = v; var inp = root.querySelector('[data-f="' + i + '|duree_min"]'); if (inp) inp.value = v || ''; var f = root.querySelector('[data-card="' + i + '"] .agent-foot b'); if (f) f.textContent = R.fmt(R.calcul(ed.it, m).ef) + ' EF'; } }); root.querySelectorAll('[data-dur]').forEach(function (b) { b.classList.toggle('on', +b.dataset.dur === v); }); }
-      if (t.dataset.f) { var p = t.dataset.f.split('|'), m = ed.crew[+p[0]]; m[p[1]] = p[1] === 'duree_min' ? (+t.value || 0) : t.value; if (p[1] === 'duree_min') { var f2 = root.querySelector('[data-card="' + p[0] + '"] .agent-foot b'); if (f2) f2.textContent = R.fmt(R.calcul(ed.it, m).ef) + ' EF'; } if (p[1] === 'exposition_particuliere') redrawSug(); }
+      if (t.dataset.it) {
+        ed.it[t.dataset.it] = t.value;
+        if (t.dataset.it === 'exposition_globale') redrawSug();
+        if (t.dataset.it === 'fin' || t.dataset.it === 'date') { ed.it.duree_min = durFromFin(ed.it.date, ed.it.fin); var dt = root.querySelector('#ed-dur-txt'); if (dt) dt.textContent = ed.it.duree_min ? 'soit ' + durTxt(ed.it.duree_min) : ''; }
+      }
+      if (t.dataset.f) { var p = t.dataset.f.split('|'), i = +p[0], m = ed.crew[i]; m[p[1]] = p[1] === 'duree_min' ? (+t.value || 0) : t.value; syncFrom(i);
+        if (p[1] === 'duree_min') root.querySelectorAll('[data-mdur^="' + i + '|"]').forEach(function (b) { b.classList.toggle('on', +b.dataset.mdur.split('|')[1] === m.duree_min); });
+        if (p[1] === 'exposition_particuliere') redrawSug(); }
     });
     root.addEventListener('change', function (e) {
       var t = e.target;
@@ -1058,37 +1108,51 @@
         if (t.dataset.it === 'operation' && t.value && db.ops[t.value]) { var o = db.ops[t.value]; ed.it.type_feu = o.type_feu; ed.it.commune = o.commune || ''; ed.it.precision = o.precision || ''; ed.it.date = localInput(o.dateObj); ed.it.numero = o.numero.replace(/^OP/, 'INT') + '-' + (ed.crew[0] ? ed.crew[0].engin : 'FPT'); reDefault(); }
         redraw();
       }
-      if (t.dataset.f && t.hasAttribute('data-redraw')) { var q = t.dataset.f.split('|'), mm = ed.crew[+q[0]]; mm[q[1]] = t.value; if (mm.auto) { mm.position = ''; mm.contamination = null; mm.tactique = ''; mm.ari_porte = null; withDefaults(mm, ed.it); } redrawCard(+q[0]); }
+      if (t.dataset.f && t.hasAttribute('data-redraw')) {
+        var q = t.dataset.f.split('|'), mm = ed.crew[+q[0]], before = stepOf(mm); mm[q[1]] = t.value;
+        if (mm.auto) { mm.position = ''; mm.contamination = null; mm.tactique = ''; mm.ari_porte = null; withDefaults(mm, ed.it); }
+        var after = stepOf(mm);
+        if (after !== before) { toast((db.byId[mm.agent] || {}).name + ' est passé dans « ' + STEPS[after - 1].t + ' ».'); }
+        redraw();
+      }
+      if (t.id === 'ed-same') { ed.same[ed.step] = t.checked; if (t.checked) syncFrom(idxIn(ed.step)[0]); redraw(); }
     });
     root.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b || b.disabled) return;
       var d = b.dataset;
-      if (d.set) { var p = d.set.split('|'), m = ed.crew[+p[0]]; var v = p[2] === '1' ? true : p[2] === '0' ? false : p[2]; m[p[1]] = v; redrawCard(+p[0]); }
-      else if (d.pos) { var a = d.pos.split('|'), mp = ed.crew[+a[0]]; mp.position = a[1]; mp.auto = false; mp.contamination = R.positions(ed.it)[a[1]].zone; if (a[1] === 'POS_ATT' && !mp.tactique) mp.tactique = 'TAC_INT'; if (a[1] !== 'POS_ATT') mp.tactique = ''; if (a[1] !== 'POS_ATT' && a[1] !== 'POS_DEB') mp.ari_retire_deb = false; redrawCard(+a[0]); }
-      else if (d.tac) { var tc = d.tac.split('|'); ed.crew[+tc[0]].tactique = tc[1]; redrawCard(+tc[0]); }
-      else if (d.dec) { var dc = d.dec.split('|'); ed.crew[+dc[0]].decon_type = dc[1]; redrawCard(+dc[0]); }
-      else if (d.decall) { ed.crew.forEach(function (m) { m.decon_type = d.decall; }); redraw(); toast('Décontamination appliquée à tout l\'équipage.'); }
-      else if (d.dur) { var dv = +d.dur, old = +ed.it.duree_min || 0; ed.it.duree_min = dv; ed.crew.forEach(function (m) { if (!m.duree_min || m.duree_min === old) m.duree_min = dv; }); redraw(); }
+      if (d.step) { ed.step = +d.step; redraw(true); }
+      else if (d.set) { var p = d.set.split('|'), m = ed.crew[+p[0]]; var v = p[2] === '1' ? true : p[2] === '0' ? false : p[2]; m[p[1]] = v; changed(+p[0]); }
+      else if (d.pos) { var a = d.pos.split('|'), mp = ed.crew[+a[0]]; mp.position = a[1]; mp.auto = false; mp.contamination = R.positions(ed.it)[a[1]].zone; if (a[1] === 'POS_ATT' && !mp.tactique) mp.tactique = 'TAC_INT'; if (a[1] !== 'POS_ATT') mp.tactique = ''; if (a[1] !== 'POS_ATT' && a[1] !== 'POS_DEB') mp.ari_retire_deb = false; changed(+a[0]); }
+      else if (d.tac) { var tc = d.tac.split('|'); ed.crew[+tc[0]].tactique = tc[1]; changed(+tc[0]); }
+      else if (d.dec) { var dc = d.dec.split('|'); ed.crew[+dc[0]].decon_type = dc[1]; changed(+dc[0]); }
+      else if (d.mdur) { var md = d.mdur.split('|'); ed.crew[+md[0]].duree_min = +md[1]; changed(+md[0]); }
       else if (d.circ) { var c = ed.it.circonstances, k = c.indexOf(d.circ); if (k === -1) c.push(d.circ); else c.splice(k, 1); if (d.circ === 'bascule') reDefault(); redraw(); }
       else if (d.circadd) { if (ed.it.circonstances.indexOf(d.circadd) === -1) ed.it.circonstances.push(d.circadd); redraw(); }
-      else if (d.toggle) { var q = d.toggle.split('|'); ed.crew[+q[0]][q[1]] = !ed.crew[+q[0]][q[1]]; redrawCard(+q[0]); }
+      else if (d.toggle) { var q = d.toggle.split('|'); ed.crew[+q[0]][q[1]] = !ed.crew[+q[0]][q[1]]; changed(+q[0]); }
       else if (d.ittoggle) { ed.it[d.ittoggle] = !ed.it[d.ittoggle]; b.classList.toggle('on'); }
       else if (d.remove) { var gone = ed.crew.splice(+d.remove, 1)[0]; if (gone.id) ed.removed.push(gone.id); redraw(); }
-      else if (b.id === 'ed-apply-all') { var g = ed.it.exposition_globale.trim(); if (!g) { toast("Saisissez d'abord l'exposition particulière."); return; } ed.crew.forEach(function (m) { m.exposition_particuliere = g; }); redraw(); toast("Exposition appliquée à tout l'équipage."); }
-      else if (b.id === 'ed-add-btn') { var sel = root.querySelector('#ed-add'); if (!sel.value) return; var u = db.byId[sel.value]; ed.crew.push(blankMember(sel.value, u && u.role === 'cos' ? 'chef_agres' : 'binome_attaque', ed.crew[0] ? ed.crew[0].engin : 'FPT')); redraw(); }
+      else if (b.id === 'ed-apply-all') { var g = ed.it.exposition_globale.trim(); if (!g) { toast("Saisissez d'abord l'exposition particulière."); return; } ed.crew.forEach(function (m) { m.exposition_particuliere = g; }); toast("Exposition appliquée à tout l'équipage."); }
+      else if (b.id === 'ed-add-btn') {
+        var sel = root.querySelector('#ed-add'); if (!sel.value) return;
+        var sn = +d.addstep, role = sn === 2 ? (ed.crew.some(function (m) { return m.role_tenu === 'chef_agres'; }) ? 'conducteur' : 'chef_agres') : sn === 3 ? 'binome_attaque' : 'binome_alimentation';
+        var nm = blankMember(sel.value, role, ed.crew[0] ? ed.crew[0].engin : 'FPT'); ed.crew.push(nm);
+        if (sameOn(sn)) { var src = ed.crew[idxIn(sn)[0]]; SHARED.forEach(function (k) { nm[k] = src[k]; }); }
+        redraw();
+      }
       else if (b.id === 'ed-save') saveEditor(null).catch(function () {});
       else if (b.id === 'ed-send') confirmTransmit();
-      else if (b.id === 'ed-sig') openSignalement(db.inter[ed.id]);
       else if (b.id === 'ed-validate') saveEditor('valider').catch(function () {});
+      else if (b.id === 'ed-sig') openSignalement(db.inter[ed.id]);
     });
   }
   function confirmTransmit() {
     var probs = ed.crew.map(function (m) { var miss = missing(m); return miss.length ? (db.byId[m.agent] || {}).name + ' : ' + miss.join(', ') : null; }).filter(Boolean);
     if (!ed.crew.length) probs.push("Aucun membre d'équipage.");
+    if (!ed.it.fin) probs.unshift("Intervention : heure de fin");
     var fire = ed.it.ambiance !== 'aucun_feu';
     var rows = ed.crew.map(function (m) {
       var u = db.byId[m.agent] || {};
-      return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
+      return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + (DOC ? ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
     }).join('');
     modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Le référent EPI du centre est prévenu pour le changement des tenues.</p>') +
       '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p><p class="note"><b>Nature :</b> ' + esc(R.natureTexte(ed.it)) + '</p><ul class="summary-list">' + rows + '</ul>',

@@ -131,3 +131,34 @@
   .login-foot a { display: inline-block; padding: 4px 0; }
 }
 .roles-pick .pick:nth-child(6):last-child { grid-column: 1 / -1; }
+
+/* ---------- Ordinateur : tout tient dans l'écran (v9) ---------- */
+@media (min-width: 961px) {
+  .login { height: 100vh; height: 100svh; min-height: 0; }
+  .login-panel { overflow-y: auto; }
+  .login-inner { padding: 20px 40px; max-width: 540px; }
+  .back-link { margin-bottom: 6px; }
+  .login-inner h2 { font-size: 30px; }
+  .login-lead { font-size: 14.5px; margin-top: 4px; }
+  .roles-pick { margin-top: 16px; gap: 8px; }
+  .roles-pick legend { margin-bottom: 8px; }
+  .pick { display: grid; grid-template-columns: 32px minmax(0, 1fr); grid-template-rows: auto auto; align-content: center; column-gap: 10px; row-gap: 1px; align-items: center; padding: 10px 30px 10px 12px; border-radius: 12px; min-height: 0; }
+  .pick-title { padding-right: 0; }
+  .pick-icon { grid-row: 1 / span 2; width: 32px; height: 32px; margin: 0; }
+  .pick-icon .icon { width: 16px; height: 16px; }
+  .pick-title { font-size: 14.5px; }
+  .pick-desc { font-size: 12.5px; line-height: 1.3; }
+  .pick input { top: 10px; right: 10px; width: 16px; height: 16px; }
+  .creds { display: none; }
+  .code-field { margin-top: 14px; }
+  #login-form .btn-block { margin-top: 14px; }
+  .login-foot { margin-top: 16px; padding-top: 12px; }
+  .side-main p { margin-top: 12px; }
+  .side-facts { margin-top: 24px; }
+}
+@media (min-width: 961px) and (max-height: 700px) {
+  .pick-desc, .login-lead { display: none; }
+  .login-side { gap: 20px; }
+  .side-main h1 { font-size: 36px; }
+}
+@media (min-width: 961px) { .login-foot { font-size: 12.5px; } .login-inner { padding-top: 12px; padding-bottom: 12px; } }

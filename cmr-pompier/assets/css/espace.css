@@ -482,3 +482,51 @@ ul.plain { margin: 0 0 8px; padding-left: 18px; font-size: 14px; }
   .ref-table .t-act { text-align: left; }
   details.fold > :not(summary) { margin-left: 14px; margin-right: 14px; }
 }
+
+/* ---------- V9 : rapport en 4 étapes ---------- */
+.ed-steps { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.ed-steps button { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; font: inherit; color: var(--text); min-height: 56px; }
+.ed-steps button:hover { border-color: var(--line-strong); }
+.ed-steps button.on { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.ed-steps .num { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; background: #EEEAE3; color: var(--muted); }
+.ed-steps button.on .num { background: var(--ink); color: #fff; }
+.ed-steps button.ok .num { background: var(--ok-soft); color: var(--ok); }
+.ed-steps .txt { min-width: 0; }
+.ed-steps b { display: block; font-size: 14px; line-height: 1.2; }
+.ed-steps small { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ed-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; }
+.same-tgl { font-size: 14px; font-weight: 600; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.agent-card.group { border-color: var(--ink); border-width: 1.5px; }
+.agent-card .dur-row { margin-top: 4px; }
+@media (max-width: 700px) {
+  .ed-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; position: sticky; top: 56px; z-index: 20; background: var(--bg); padding: 6px 0; margin-bottom: 10px; }
+  .ed-steps button { flex-direction: column; gap: 4px; padding: 6px 4px; min-height: 0; text-align: center; }
+  .ed-steps small { display: none; }
+  .ed-steps b { font-size: 11.5px; }
+  .ed-nav .btn { flex: 1; }
+}
+.agent-card.group .form-2 { grid-template-columns: 1fr; }
+
+/* ---------- V9 : fiche d'exposition, toujours dans la page A4 ---------- */
+@media print {
+  @page { size: A4 portrait; margin: 12mm 10mm 14mm; }
+  html, body.printing { width: auto !important; min-width: 0 !important; height: auto !important; overflow: visible !important; }
+  body.printing .print-area { width: 100% !important; max-width: 190mm; margin: 0 auto; padding: 0; box-sizing: border-box; }
+  .fiche, .fiche * { box-sizing: border-box; }
+  .fiche { width: 100%; max-width: 190mm; font: 8.5pt/1.35 var(--font); }
+  .fi-head { gap: 8mm; }
+  .fi-head h1 { font-size: 13pt; line-height: 1.2; }
+  .fi-head p { font-size: 7.5pt; }
+  .fi-brand { font-size: 7.5pt; }
+  .fi-id { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 3mm 0; }
+  .fi-id dt { font-size: 7pt; } .fi-id dd { font-size: 8.5pt; }
+  .fiche h2 { font-size: 10pt; margin: 4mm 0 1.5mm; }
+  .fi-tab th, .fi-tab td, .fi-sum td, .fi-leg td { font-size: 7.5pt; padding: 1.2mm 1.5mm; }
+  .fi-tab th { font-size: 7pt; text-transform: uppercase; letter-spacing: .02em; }
+  .fi-tab thead { display: table-header-group; }
+  .fi-tab th:nth-child(1) { width: 15%; } .fi-tab th:nth-child(2) { width: 20%; } .fi-tab th:nth-child(3) { width: 29%; } .fi-tab th:nth-child(4) { width: 8%; } .fi-tab th:nth-child(5) { width: 28%; }
+  .fi-tab td:nth-child(4) { white-space: nowrap; }
+  .fi-tab small { font-size: 6.5pt; }
+  .fi-note, .fi-ind { font-size: 7pt; }
+  .fi-sign div { font-size: 7.5pt; height: 16mm; }
+}
