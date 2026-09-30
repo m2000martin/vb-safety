@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.vb-safety.com; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#17191D">
+<title>Évaluation du risque chimique en ligne, gratuite et sans installation · VB Safety</title>
+<meta name="description" content="Évaluez gratuitement le risque chimique de votre entreprise : inventaire des produits, classes de danger d'après les mentions H, hiérarchisation, risque par inhalation, repérage des agents CMR et plan d'action. Méthode inspirée de l'INRS, données conservées dans votre navigateur.">
+<link rel="canonical" href="https://vb-safety.com/cmr-industrie/evaluation.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VB Safety">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Évaluation du risque chimique en ligne, gratuite">
+<meta property="og:description" content="Évaluez gratuitement le risque chimique de votre entreprise : inventaire des produits, classes de danger d'après les mentions H, hiérarchisation, risque par inhalation, repérage des agents CMR et plan d'action. Méthode inspirée de l'INRS, données conservées dans votre navigateur.">
+<meta property="og:url" content="https://vb-safety.com/cmr-industrie/evaluation.html">
+<meta property="og:image" content="https://vb-safety.com/favicon-512.png">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/css/vbs.css?v=1">
+<link rel="stylesheet" href="assets/css/industrie.css?v=3">
+<link rel="stylesheet" href="assets/css/eval.css?v=3">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Évaluation du risque chimique en ligne", "url": "https://vb-safety.com/cmr-industrie/evaluation.html", "applicationCategory": "BusinessApplication", "operatingSystem": "Navigateur web", "inLanguage": "fr-FR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Évaluez gratuitement le risque chimique de votre entreprise : inventaire des produits, classes de danger d'après les mentions H, hiérarchisation, risque par inhalation, repérage des agents CMR et plan d'action. Méthode inspirée de l'INRS, données conservées dans votre navigateur.", "publisher": {"@type": "Organization", "name": "VB Safety", "url": "https://vb-safety.com/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "VB Safety", "item": "https://vb-safety.com/"}, {"@type": "ListItem", "position": 2, "name": "VB Safety Industrie & BTP", "item": "https://vb-safety.com/cmr-industrie/"}, {"@type": "ListItem", "position": 3, "name": "Évaluation du risque chimique", "item": "https://vb-safety.com/cmr-industrie/evaluation.html"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "L'évaluation du risque chimique est-elle obligatoire ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui. L'employeur doit évaluer les risques liés aux agents chimiques dangereux présents dans l'entreprise et en transcrire les résultats dans le document unique d'évaluation des risques professionnels (DUERP). Pour les agents CMR, l'évaluation porte en plus sur la nature, le degré et la durée des expositions."}}, {"@type": "Question", "name": "D'où viennent les valeurs limites d'exposition ?", "acceptedAnswer": {"@type": "Answer", "text": "Du tableau des valeurs limites contraignantes de l'article R. 4412-149 du code du travail, repris tel quel depuis Légifrance et mis à jour chaque mois. Les valeurs indicatives fixées par arrêté et les valeurs recommandées ne sont pas encore intégrées."}}, {"@type": "Question", "name": "Où trouver les mentions de danger d'un produit ?", "acceptedAnswer": {"@type": "Answer", "text": "Dans la section 2 de la fiche de données de sécurité (FDS) et sur l'étiquette du produit. Les mentions commencent par H (par exemple H350) ou EUH. La température d'ébullition figure en section 9."}}, {"@type": "Question", "name": "Mes données sont-elles envoyées quelque part ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. L'évaluation est enregistrée uniquement dans votre navigateur, sur votre appareil. Elle disparaît si vous videz les données du navigateur : pensez à l'exporter."}}, {"@type": "Question", "name": "Quelle différence avec le logiciel Seirich de l'INRS ?", "acceptedAnswer": {"@type": "Answer", "text": "Seirich est un logiciel complet et gratuit de l'INRS, qui permet une évaluation détaillée (inhalation, contact cutané, incendie et explosion). Cet outil en ligne propose un premier diagnostic rapide inspiré de la même démarche, centré sur l'inhalation et les obligations liées aux agents CMR."}}, {"@type": "Question", "name": "Les résultats remplacent-ils des mesures d'exposition ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Il s'agit d'une estimation qui sert à hiérarchiser les actions. Pour les agents qui ont une valeur limite d'exposition professionnelle, des contrôles par un organisme accrédité restent obligatoires, au moins une fois par an."}}, {"@type": "Question", "name": "Que faire si un agent CMR est repéré ?", "acceptedAnswer": {"@type": "Answer", "text": "Étudier sa substitution en priorité, à défaut travailler en système clos, réduire l'exposition au plus bas, inscrire les salariés concernés sur la liste des travailleurs exposés, organiser leur suivi individuel renforcé et contrôler les VLEP."}}]}</script>
+</head>
+<body>
+
+<!-- Icônes (tracés inspirés de Lucide, licence ISC) -->
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.5L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9.5V2M8.5 2h7M7 16h10"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m22 17-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></symbol>
+  <symbol id="i-mask" viewBox="0 0 24 24"><path d="M12 3c4.2 0 7 2.6 7 7 0 5-3 9-7 11-4-2-7-6-7-11 0-4.4 2.8-7 7-7Z"/><path d="M8 8.5h8v4H8Z"/><circle cx="12" cy="16.5" r="2"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M12 14l4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/></symbol>
+  <symbol id="i-steth" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 12 0v-4"/><circle cx="20" cy="10" r="2"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-factory" viewBox="0 0 24 24"><path d="M2 20V9l6 4V9l6 4V4h6v16Z"/><path d="M2 20h20M6 17h2M11 17h2M16 17h2"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><path d="M3 12h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5"/></symbol>
+  <symbol id="i-crane" viewBox="0 0 24 24"><path d="M6 21V3M3 21h6M6 3h15M10 3v4M19 3v6M17 9h4v3h-4ZM6 7l4-4M6 11l4-4"/></symbol>
+  <symbol id="i-fork" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 2 6 10h3l-4 6h14l-4-6h3Z"/><path d="M12 16v6"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 24 24"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6Z"/></symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><path d="M16.5 9.4 7.5 4.2M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7Z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-cdown" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+</svg>
+
+<header class="site-header" id="top">
+  <div class="container">
+    <a class="brand" href="./" aria-label="VB Safety Industrie &amp; BTP, accueil">
+      <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
+        <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
+        <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
+        <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
+        <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">VB Safety<span class="brand-sub">Industrie &amp; BTP</span></span>
+    </a>
+    <nav class="nav" id="main-nav" aria-label="Navigation principale">
+      <a href="./#obligations">Obligations</a>
+      <a href="./#prevention">Prévention</a>
+      <a href="./#suivi">Suivi</a>
+      <a href="./#reglementation">Réglementation</a>
+      <a href="evaluation.html" aria-current="page">Évaluation gratuite</a>
+      <a href="./#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#demande" data-demande="version">Accès anticipé</a>
+    <button class="menu-btn" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Ouvrir le menu">
+      <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="ev-hero" aria-labelledby="ev-title">
+    <div class="container ev-hero-grid">
+      <div>
+        <nav class="ev-crumbs" aria-label="Fil d'Ariane"><a href="./">VB Safety Industrie &amp; BTP</a><span aria-hidden="true">/</span><span aria-current="page">Évaluation du risque chimique</span></nav>
+        <p class="tagline"><span>Outil gratuit</span><span>Sans installation</span><span>Sans compte</span></p>
+        <h1 id="ev-title">Évaluation du risque chimique <em>en ligne</em></h1>
+        <p class="ih-lead">Inventoriez vos produits et procédés, retrouvez leurs valeurs limites officielles, hiérarchisez les risques, estimez l'exposition par inhalation et obtenez un plan d'action conforme à la hiérarchie de prévention. Les agents CMR sont repérés automatiquement.</p>
+        <div class="ih-cta">
+          <a class="btn btn-primary btn-lg" href="#outil" data-go="inv">Commencer l'évaluation <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <button type="button" class="btn btn-secondary btn-lg" data-act="demo">Voir un exemple</button>
+        </div>
+      </div>
+      <ul class="ev-promise">
+        <li><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><div><b>Vos données restent chez vous</b><span>Tout est enregistré dans votre navigateur. Rien n'est envoyé à nos serveurs.</span></div></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-flask"/></svg><div><b>Collez votre FDS</b><span>Mentions de danger H et numéros CAS sont détectés dans le texte de la fiche de données de sécurité, puis rapprochés des valeurs limites officielles.</span></div></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><div><b>Textes officiels intégrés</b><span>Valeurs limites contraignantes du code du travail et tableaux de maladies professionnelles, mis à jour automatiquement.</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ev-app" id="outil" aria-label="Outil d'évaluation">
+    <div class="app" id="ev-app">
+      <aside class="app-side">
+        <nav class="app-nav" aria-label="Sections de l'outil">
+          <button type="button" class="app-nav-i" data-view="dash"><svg class="icon" aria-hidden="true"><use href="#i-gauge"/></svg><span>Tableau de bord</span></button>
+          <button type="button" class="app-nav-i" data-view="inv"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg><span>Inventaire</span><em data-n="inv"></em></button>
+          <button type="button" class="app-nav-i" data-view="hier"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span>Hiérarchisation</span></button>
+          <button type="button" class="app-nav-i" data-view="inh"><svg class="icon" aria-hidden="true"><use href="#i-mask"/></svg><span>Inhalation</span></button>
+          <button type="button" class="app-nav-i" data-view="plan"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span>Plan d'action</span><em data-n="plan"></em></button>
+          <button type="button" class="app-nav-i" data-view="cmr"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><span>Agents CMR</span><em data-n="cmr"></em></button>
+          <button type="button" class="app-nav-i" data-view="sal"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span>Salariés exposés</span><em data-n="sal"></em></button>
+          <button type="button" class="app-nav-i" data-view="export"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span>Export &amp; rapports</span></button>
+        </nav>
+        <nav class="app-nav app-nav-foot" aria-label="Réglages">
+          <button type="button" class="app-nav-i" data-view="set"><svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg><span>Paramètres</span></button>
+          <button type="button" class="app-nav-i" data-view="ref"><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span>Référentiel</span></button>
+        </nav>
+      </aside>
+      <div class="app-main">
+        <div class="app-top">
+          <label class="app-site"><svg class="icon" aria-hidden="true"><use href="#i-factory"/></svg><span class="sr-only">Site ou unité de travail</span><input id="ev-site" placeholder="Nom du site ou de l'atelier" maxlength="80"></label>
+          <p class="app-refv" id="ev-ref">Référentiel : chargement…</p>
+          <div class="app-top-links"><a href="#methode">Aide</a><a href="#sources">Documentation</a></div>
+        </div>
+        <div class="app-content">
+          <div class="ev-alert" id="ev-alert" role="status" hidden></div>
+          <div class="app-kpirow">
+            <div class="ev-kpis" id="ev-kpis" aria-live="polite"></div>
+            <div class="app-actions">
+              <details class="ev-menu">
+                <summary class="btn btn-primary"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Ajouter un produit<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
+                <div class="ev-menu-list"><button type="button" data-act="add">Produit chimique</button><button type="button" data-act="addproc">Procédé émissif (bois, silice, fumées…)</button></div>
+              </details>
+              <details class="ev-menu">
+                <summary class="btn btn-secondary">Exporter<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
+                <div class="ev-menu-list"><button type="button" data-act="csv">Tableur (CSV)</button><button type="button" data-act="json">Sauvegarde complète (JSON)</button></div>
+              </details>
+              <details class="ev-menu">
+                <summary class="btn btn-secondary">Imprimer<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
+                <div class="ev-menu-list"><button type="button" data-act="print">Rapport complet</button><button type="button" data-act="printview">Vue en cours</button></div>
+              </details>
+            </div>
+          </div>
+        <section class="ev-view" id="v-dash" aria-labelledby="h-dash" hidden>
+          <header class="ev-vh"><h2 id="h-dash">Tableau de bord</h2><p>Synthèse de l'évaluation du site : priorités, avancement du plan d'action et échéances.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-inv" aria-labelledby="h-inv" hidden>
+          <header class="ev-vh"><h2 id="h-inv">Inventaire des agents chimiques</h2><p>Produits et procédés utilisés sur le site, avec leur score d'exposition par inhalation. Cliquez sur une ligne pour ouvrir le détail.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-hier" aria-labelledby="h-hier" hidden>
+          <header class="ev-vh"><h2 id="h-hier">Hiérarchisation des risques potentiels</h2><p>Danger × exposition potentielle (quantité relative et fréquence). Priorité forte à partir de 10 000, moyenne à partir de 100.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-inh" aria-labelledby="h-inh" hidden>
+          <header class="ev-vh"><h2 id="h-inh">Risque par inhalation</h2><p>Danger × volatilité × procédé × protection collective, et gain attendu des mesures techniques.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-plan" aria-labelledby="h-plan" hidden>
+          <header class="ev-vh"><h2 id="h-plan">Plan d'action</h2><p>Mesures classées dans l'ordre du code du travail : substitution, système clos, réduction et protection collective, suivi, puis EPI.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-cmr" aria-labelledby="h-cmr" hidden>
+          <header class="ev-vh"><h2 id="h-cmr">Agents CMR</h2><p>Agents cancérogènes, mutagènes ou toxiques pour la reproduction repérés par leurs mentions H340, H350, H360 et les procédés cancérogènes.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-sal" aria-labelledby="h-sal" hidden>
+          <header class="ev-vh"><h2 id="h-sal">Salariés exposés aux agents CMR</h2><p>Postes à inscrire sur la liste des travailleurs exposés (art. R. 4412-93-1), à transmettre au SPST et à conserver 40 ans.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-export" aria-labelledby="h-export" hidden>
+          <header class="ev-vh"><h2 id="h-export">Export et rapports</h2><p>Vos données restent dans ce navigateur : exportez-les pour les archiver, les partager ou les joindre au document unique.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-set" aria-labelledby="h-set" hidden>
+          <header class="ev-vh"><h2 id="h-set">Paramètres</h2><p>Site évalué et gestion des données enregistrées dans ce navigateur.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        <section class="ev-view" id="v-ref" aria-labelledby="h-ref" hidden>
+          <header class="ev-vh"><h2 id="h-ref">Référentiel réglementaire</h2><p>Valeurs limites contraignantes du code du travail (art. R. 4412-149), tableaux de maladies professionnelles et classifications européennes.</p></header>
+          <div class="ev-body"></div>
+        </section>
+        </div>
+      </div>
+      <aside class="app-drawer" id="ev-drawer" aria-label="Détail" hidden></aside>
+    </div>
+    <div class="container"><p class="ev-note">Résultats indicatifs, qui ne remplacent ni une évaluation par un préventeur ni des mesures d'exposition. <span id="ev-live" class="sr-only" aria-live="polite"></span></p></div>
+  </section>
+
+  <!-- Formulaire produit -->
+  <dialog class="ev-dialog" id="ev-dialog" aria-labelledby="ev-dialog-title">
+    <form id="ev-form" novalidate>
+      <div class="ev-dh"><h2 id="ev-dialog-title">Ajouter un produit</h2><button type="button" class="req-close" id="ev-cancel" aria-label="Fermer">✕</button></div>
+      <div class="ev-db">
+        <div class="ev-seg" role="radiogroup" aria-label="Type">
+          <label><input type="radio" name="type" value="produit" checked><span>Produit chimique</span></label>
+          <label><input type="radio" name="type" value="procede"><span>Procédé émissif</span></label>
+        </div>
+        <div class="field only-proc" hidden><label class="label" for="f-procede">Procédé</label><select class="input" id="f-procede" name="procede"></select></div>
+        <div class="field"><label class="label" for="f-name">Nom</label><input class="input" id="f-name" name="name" maxlength="120" placeholder="Nom commercial du produit"></div>
+        <div class="field only-prod ev-subfield">
+          <label class="label" for="f-sub">Substances contenues <span class="req-opt">(nom ou n° CAS)</span></label>
+          <input class="input" id="f-sub" name="sub" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ev-sug" placeholder="Ex. formaldéhyde, toluène, 50-00-0">
+          <ul class="ev-sug" id="ev-sug" role="listbox" hidden></ul>
+          <div class="ev-subs" id="ev-subs"></div>
+          <p class="ev-subwarn" id="ev-subwarn" role="alert" hidden></p>
+        </div>
+        <div class="field only-prod">
+          <label class="label" for="f-htext">Mentions de danger H</label>
+          <div class="ev-hin"><input class="input" id="f-htext" name="htext" placeholder="H350, H317… ou collez un extrait de la FDS (sections 2 et 3)"><button type="button" class="btn btn-secondary" id="ev-hadd">Ajouter</button></div>
+          <div class="ev-chips" id="ev-chips"></div>
+          <p class="ev-dc-preview" id="ev-dc-preview"></p>
+          <p class="ev-hint" id="ev-casmiss"></p>
+        </div>
+        <div class="ev-grid2">
+          <div class="field only-prod"><label class="label" for="f-etat">État physique</label><select class="input" id="f-etat" name="etat"><option value="liquide">Liquide</option><option value="solide">Solide, poudre</option><option value="gaz">Gaz, vapeur, fumée</option></select></div>
+          <div class="field only-liq"><label class="label" for="f-teb">Température d'ébullition (°C)</label><input class="input" id="f-teb" name="teb" inputmode="decimal" placeholder="Section 9 de la FDS"></div>
+          <div class="field only-liq"><label class="label" for="f-vol">Volatilité</label><select class="input" id="f-vol" name="vol"></select></div>
+          <div class="field only-sol"><label class="label" for="f-pulv">Pulvérulence</label><select class="input" id="f-pulv" name="pulv"></select></div>
+          <div class="field only-prod"><label class="label" for="f-qte">Quantité utilisée par an</label><div class="ev-qte"><input class="input" id="f-qte" name="qte" inputmode="decimal" placeholder="Ex. 250"><select class="input" name="unite" aria-label="Unité"><option value="kg">kg</option><option value="L">L</option></select></div></div>
+          <div class="field only-proc" hidden><label class="label" for="f-int">Intensité des émissions</label><select class="input" id="f-int" name="intensite"><option value="2">Faible</option><option value="3">Moyenne</option><option value="5">Forte</option></select></div>
+          <div class="field ev-span2"><label class="label" for="f-freq">Durée d'utilisation par salarié</label><select class="input" id="f-freq" name="freq"></select></div>
+          <div class="field"><label class="label" for="f-poste">Poste ou atelier</label><input class="input" id="f-poste" name="poste" maxlength="80" placeholder="Ex. Cabine de peinture"></div>
+          <div class="field"><label class="label" for="f-nb">Salariés exposés</label><input class="input" id="f-nb" name="nb" type="number" min="0" inputmode="numeric" placeholder="Nombre"></div>
+          <div class="field ev-span2"><label class="label" for="f-proc">Type de procédé</label><select class="input" id="f-proc" name="proc"></select></div>
+          <div class="field ev-span2"><label class="label" for="f-prot">Protection collective</label><select class="input" id="f-prot" name="prot"></select></div>
+        </div>
+        <p class="req-err" id="ev-form-err" role="alert" hidden></p>
+      </div>
+      <div class="ev-df"><button type="submit" class="btn btn-primary btn-block">Enregistrer</button></div>
+    </form>
+  </dialog>
+
+  <!-- MÉTHODE -->
+  <section class="section alt" id="methode" aria-labelledby="m-title">
+    <div class="container">
+      <div class="ob-head">
+        <div><span class="ob-num">Méthode</span><h2 id="m-title">Comment l'évaluation est calculée</h2></div>
+        <p>La méthode reprend les principes de l'évaluation simplifiée du risque chimique publiée par l'INRS : d'abord hiérarchiser les risques potentiels, puis estimer le risque réel aux postes prioritaires.</p>
+      </div>
+      <div class="ev-method">
+        <article class="ob">
+          <h3>1. Classe de danger</h3>
+          <p>Elle est déduite des mentions de danger santé de l'étiquette ou de la FDS. La mention la plus grave l'emporte.</p>
+          <table class="ev-mt"><thead><tr><th>Classe</th><th>Exemples de mentions</th><th>Score</th></tr></thead><tbody>
+            <tr><td>5</td><td>H300, H310, H330, H340, H350, H360, H370, procédés cancérogènes</td><td>10 000</td></tr>
+            <tr><td>4</td><td>H301, H311, H331, H314, H372</td><td>1 000</td></tr>
+            <tr><td>3</td><td>H302, H312, H332, H317, H318, H334, H341, H351, H361, H373</td><td>100</td></tr>
+            <tr><td>2</td><td>H315, H319, H335, H336, EUH066</td><td>10</td></tr>
+            <tr><td>1</td><td>Aucune mention santé</td><td>1</td></tr>
+          </tbody></table>
+          <p class="ev-small">Choix VB Safety : les agents CMR avérés ou présumés sont placés en classe 5, compte tenu de leurs obligations spécifiques.</p>
+        </article>
+        <article class="ob">
+          <h3>2. Exposition potentielle</h3>
+          <p>La quantité annuelle de chaque produit est rapportée à celle du produit le plus utilisé (classes 1 à 5 : moins de 1 %, 5 %, 12 %, 33 %, puis plus de 33 %), puis combinée à la durée d'utilisation.</p>
+          <table class="ev-mt"><thead><tr><th>Quantité</th><th>Occas.</th><th>Interm.</th><th>Fréq.</th><th>Perm.</th></tr></thead><tbody>
+            <tr><td>5</td><td>2</td><td>4</td><td>5</td><td>5</td></tr><tr><td>4</td><td>2</td><td>3</td><td>4</td><td>4</td></tr><tr><td>3</td><td>2</td><td>3</td><td>3</td><td>3</td></tr><tr><td>2</td><td>1</td><td>2</td><td>2</td><td>2</td></tr><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          </tbody></table>
+          <p class="ev-small">Score de risque potentiel = score de danger × score d'exposition (1, 10, 100, 1 000 ou 10 000). Priorité forte à partir de 10 000, moyenne à partir de 100.</p>
+        </article>
+        <article class="ob">
+          <h3>3. Risque par inhalation</h3>
+          <p>Score = danger × volatilité × procédé × protection collective. Au-delà de 1 000, le risque est probablement élevé ; entre 100 et 1 000, il est modéré.</p>
+          <table class="ev-mt"><thead><tr><th>Facteur</th><th>Valeurs</th></tr></thead><tbody>
+            <tr><td>Volatilité ou pulvérulence</td><td>1 · 10 · 100 (gaz et poudres fines : 100)</td></tr>
+            <tr><td>Procédé</td><td>clos 0,001 · clos ouvert 0,05 · ouvert 0,5 · dispersif 1</td></tr>
+            <tr><td>Protection collective</td><td>captage enveloppant 0,001 · captage localisé 0,1 · ventilation générale 0,7 · aucune 1</td></tr>
+          </tbody></table>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARAISON -->
+  <section class="section" aria-labelledby="c-title">
+    <div class="container">
+      <div class="section-head"><span class="kicker">Pourquoi cet outil</span><h2 id="c-title">L'essentiel de l'évaluation, en quelques minutes</h2><p>Le logiciel Seirich de l'INRS reste la référence pour une évaluation approfondie. Cet outil en ligne vise un premier diagnostic rapide, orienté vers les obligations CMR.</p></div>
+      <div class="feat-grid">
+        <article class="feat"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></span><h3>Aucune installation</h3><p>Dans le navigateur, sur ordinateur, tablette ou téléphone. Rien à télécharger, aucun compte à créer.</p></article>
+        <article class="feat"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-flask"/></svg></span><h3>Mentions H détectées</h3><p>Collez un extrait de la fiche de données de sécurité : les mentions de danger sont reconnues et la classe de danger calculée.</p></article>
+        <article class="feat"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg></span><h3>CMR repérés d'emblée</h3><p>Agents avérés, présumés ou suspectés, procédés cancérogènes : l'outil rappelle les obligations associées, article par article.</p></article>
+        <article class="feat"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-swap"/></svg></span><h3>Plan d'action dans l'ordre légal</h3><p>Substitution, système clos, réduction, protection collective, puis EPI, avec responsable, échéance et avancement.</p></article>
+        <article class="feat"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-gauge"/></svg></span><h3>Effet des mesures chiffré</h3><p>Pour chaque poste, le gain d'un système clos ou d'un captage à la source est calculé.</p></article>
+        <article class="feat"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span><h3>Export immédiat</h3><p>Export CSV compatible avec les tableurs, et version imprimable ou PDF pour votre document unique.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCES DES DONNÉES -->
+  <section class="section" id="sources" aria-labelledby="src-title">
+    <div class="container">
+      <div class="ob-head">
+        <div><span class="ob-num">Sources des données</span><h2 id="src-title">Un référentiel construit sur les textes officiels</h2></div>
+        <p>Les données de référence proviennent uniquement de sources publiques et réutilisables. Elles sont vérifiées et mises à jour chaque mois ; chaque évolution qui concerne votre inventaire vous est signalée à l'ouverture de l'outil.</p>
+      </div>
+      <div class="ev-sources">
+        <article class="ob"><h3>Valeurs limites contraignantes</h3><p>Tableau de l'article R. 4412-149 du code du travail : valeurs sur 8 heures et court terme, mentions « peau », « bruit » et sensibilisation, mesures transitoires.</p><span class="law">Légifrance · Licence Ouverte</span></article>
+        <article class="ob"><h3>Maladies professionnelles</h3><p>Tableaux de l'annexe II du code de la sécurité sociale, rattachés aux agents concernés : plomb, benzène, chrome VI, formaldéhyde, poussières de bois, silice…</p><span class="law">Légifrance · Licence Ouverte</span></article>
+        <article class="ob"><h3>Classification européenne</h3><p>Classifications harmonisées de l'annexe VI du règlement CLP : catégories cancérogène, mutagène et reprotoxique, mentions de danger officielles.</p><span class="law">EUR-Lex · réutilisation autorisée</span></article>
+        <article class="ob"><h3>Procédés cancérogènes</h3><p>Liste de l'arrêté du 26 octobre 2020 : poussières de bois, silice cristalline alvéolaire, HAP, émissions de moteurs diesel, huiles minérales usagées.</p><span class="law">Journal officiel</span></article>
+      </div>
+      <p class="ev-small">La fiche de données de sécurité du fournisseur et les textes publiés au Journal officiel font foi. Noms et synonymes complémentaires : Wikidata (CC0).</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section alt" id="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-head"><span class="kicker">Questions fréquentes</span><h2 id="faq-title">Évaluation du risque chimique : vos questions</h2></div>
+      <div class="faq">
+        <details><summary>L'évaluation du risque chimique est-elle obligatoire ?</summary><p>Oui. L'employeur doit évaluer les risques liés aux agents chimiques dangereux présents dans l'entreprise et en transcrire les résultats dans le document unique d'évaluation des risques professionnels (DUERP). Pour les agents CMR, l'évaluation porte en plus sur la nature, le degré et la durée des expositions.</p></details>
+        <details><summary>D'où viennent les valeurs limites d'exposition ?</summary><p>Du tableau des valeurs limites contraignantes de l'article R. 4412-149 du code du travail, repris tel quel depuis Légifrance et mis à jour chaque mois. Les valeurs indicatives fixées par arrêté et les valeurs recommandées ne sont pas encore intégrées.</p></details>
+        <details><summary>Où trouver les mentions de danger d'un produit ?</summary><p>Dans la section 2 de la fiche de données de sécurité (FDS) et sur l'étiquette du produit. Les mentions commencent par H (par exemple H350) ou EUH. La température d'ébullition figure en section 9.</p></details>
+        <details><summary>Mes données sont-elles envoyées quelque part ?</summary><p>Non. L'évaluation est enregistrée uniquement dans votre navigateur, sur votre appareil. Elle disparaît si vous videz les données du navigateur : pensez à l'exporter.</p></details>
+        <details><summary>Quelle différence avec le logiciel Seirich de l'INRS ?</summary><p>Seirich est un logiciel complet et gratuit de l'INRS, qui permet une évaluation détaillée (inhalation, contact cutané, incendie et explosion). Cet outil en ligne propose un premier diagnostic rapide inspiré de la même démarche, centré sur l'inhalation et les obligations liées aux agents CMR.</p></details>
+        <details><summary>Les résultats remplacent-ils des mesures d'exposition ?</summary><p>Non. Il s'agit d'une estimation qui sert à hiérarchiser les actions. Pour les agents qui ont une valeur limite d'exposition professionnelle, des contrôles par un organisme accrédité restent obligatoires, au moins une fois par an.</p></details>
+        <details><summary>Que faire si un agent CMR est repéré ?</summary><p>Étudier sa substitution en priorité, à défaut travailler en système clos, réduire l'exposition au plus bas, inscrire les salariés concernés sur la liste des travailleurs exposés, organiser leur suivi individuel renforcé et contrôler les VLEP.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-flush ev-final">
+    <div class="container">
+      <div class="demo-band">
+        <div>
+          <span class="kicker">VB Safety Industrie &amp; BTP</span>
+          <h2>Allez plus loin que l'évaluation</h2>
+          <p>Liste nominative des salariés exposés, archivage 40 ans, contrôles VLEP, suivi individuel renforcé et transmission au SPST : VB Safety Industrie &amp; BTP tiendra toutes vos obligations au même endroit.</p>
+        </div>
+        <div class="demo-actions">
+          <a class="btn btn-primary btn-lg btn-block" href="#demande" data-demande="version">Demander un accès anticipé</a>
+          <a class="btn btn-ghost-dark btn-lg btn-block" href="./">Découvrir le portail</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a class="brand" href="./" aria-label="Accueil du portail">
+          <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
+            <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
+            <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
+            <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
+            <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+          <span class="brand-name footer-brand">VB Safety<span class="brand-sub">Industrie &amp; BTP</span></span>
+        </a>
+        <p class="footer-tag">Mesure et traçabilité de l'exposition professionnelle aux agents CMR.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Obligations</h4>
+        <ul>
+          <li><a href="./#obligations">Évaluation et traçabilité</a></li>
+          <li><a href="./#prevention">Hiérarchie de prévention</a></li>
+          <li><a href="./#suivi">Suivi et interdictions</a></li>
+          <li><a href="./#reglementation">Réglementation</a></li>
+          <li><a href="evaluation.html">Évaluation gratuite du risque chimique</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>VB Safety</h4>
+        <ul>
+          <li><a href="https://vb-safety.com/">vb-safety.com</a></li>
+          <li><a href="https://vb-safety.com/industrie/">Industrie</a></li>
+          <li><a href="https://vb-safety.com/cmr-pompier/">VB Safety Sapeur-pompier</a></li>
+          <li><a href="https://vb-safety.com/#mentions-legales">Mentions légales</a></li>
+          <li><a href="#demande" data-demande="contact">Nous contacter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> VB Safety SAS</span>
+      <span>Portail en préparation · maquette avec données fictives</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js?v=1"></script>
+<script src="assets/js/eval.js?v=3"></script>
+<script src="assets/js/demande-config.js?v=1"></script>
+<script src="assets/js/demande.js?v=1"></script>
+</body>
+</html>
