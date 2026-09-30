@@ -481,7 +481,7 @@
   .evolve { margin-top: 20px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 10px; padding: clamp(20px, 3vw, 28px) clamp(22px, 3.4vw, 40px); display: grid; grid-template-columns: 1fr; gap: 10px 48px; align-items: center; }
   @media (min-width: 960px) { .evolve { grid-template-columns: 4fr 7fr; } }
   .evolve p { margin: 0; color: #D4D4D8; font-size: 15.5px; line-height: 1.6; }
-  .evolve .kicker { font: 700 clamp(28px, 4vw, 46px)/1.02 var(--mono); letter-spacing: .02em; }
+  .evolve-title { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.2; color: #FAFAFA; margin: 10px 0 0; }
   @media (max-width: 700px) { .dive-cta { width: 100%; justify-content: center; } .focus { padding: 16px; } }
   .spaces-note { margin: 20px 0 0; font-size: 14px; color: #A1A1AA; }
   .text-btn { background: none; border: none; padding: 0; color: #FAFAFA; font: 600 14px var(--sans); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(224, 108, 52, 0.6); text-underline-offset: 4px; }
@@ -846,8 +846,9 @@
     </div>
 
     <div class="evolve">
-      <span class="kicker" data-i18n="evKicker">Outil évolutif</span>
-      <p data-i18n="evText">La plateforme se construit avec les équipes qui l'utilisent. Chaque version bêta ajoute des agents, des métiers et des modules, sans changer les habitudes de saisie. Vos retours décident des prochaines.</p>
+      <div><span class="kicker" data-i18n="evKicker">Outil évolutif</span>
+      <h3 class="evolve-title" data-i18n="evTitle">Construit avec les équipes qui l'utilisent.</h3></div>
+      <p data-i18n="evText">Chaque version bêta ajoute des agents, des métiers et des modules, sans changer les habitudes de saisie. Vos retours décident des prochaines.</p>
     </div>
     <p class="spaces-note"><span data-i18n="plNoCode">Pas encore de code ?</span> <button type="button" class="text-btn" onclick="openAuthModal(null, 'request')" data-i18n="plRequest">Demander un accès bêta</button></p>
   </div>
@@ -1692,7 +1693,7 @@ const dictionary = {
     btpS1t: "Saisir depuis le chantier", btpS1d: "Le chef d'équipe écrit une phrase : « Karim et Lucas, découpe parpaing 2 h à sec, FFP3 ». L'outil reconnaît les salariés, la tâche, la durée, le procédé et la protection.",
     btpS2t: "Tracer par salarié", btpS2d: "Chaque tâche est rattachée aux agents CMR concernés (silice, poussières de bois, HAP, émissions diesel…) et reçoit un niveau d'exposition indicatif. Un calendrier montre les jours non renseignés.",
     btpS3t: "Documenter", btpS3d: "Liste des travailleurs exposés et fiche individuelle d'exposition prêtes à transmettre au service de santé au travail. L'évaluation du risque chimique est pré-remplie comme base de travail pour la mise à jour du DUERP, que l'employeur valide.",
-    evKicker: "Outil évolutif", evText: "La plateforme se construit avec les équipes qui l'utilisent. Chaque version bêta ajoute des agents, des métiers et des modules, sans changer les habitudes de saisie. Vos retours décident des prochaines.",
+    evKicker: "Outil évolutif", evTitle: "Construit avec les équipes qui l'utilisent.", evText: "Chaque version bêta ajoute des agents, des métiers et des modules, sans changer les habitudes de saisie. Vos retours décident des prochaines.",
     ctKicker: "Contact", ctTitle: "Parlons de vos expositions.",
     ctLead: "SDIS, service de santé au travail, entreprise ou investisseur : décrivez-nous votre contexte, nous revenons vers vous rapidement.",
     ctDirect: "Écrire directement", ctBased: "Basés en",
@@ -1808,7 +1809,7 @@ const dictionary = {
     btpS1t: "Enter it from the site", btpS1d: "The team leader types one sentence: “Karim and Lucas, cutting blocks 2 h dry, FFP3”. The tool recognises the workers, task, duration, method and protection.",
     btpS2t: "Track per employee", btpS2d: "Each task is linked to the CMR agents involved (silica, wood dust, PAHs, diesel exhaust…) and gets an indicative exposure level. A calendar shows the days with no entry.",
     btpS3t: "Document", btpS3d: "List of exposed workers and individual exposure sheets, ready to send to the occupational health service. The chemical risk assessment is pre-filled as a working basis for updating the risk assessment document, which the employer validates.",
-    evKicker: "An evolving tool", evText: "The platform is built with the teams who use it. Each beta release adds agents, trades and modules without changing how people enter data. Your feedback decides what comes next.",
+    evKicker: "An evolving tool", evTitle: "Built with the teams who use it.", evText: "Each beta release adds agents, trades and modules without changing how people enter data. Your feedback decides what comes next.",
     ctKicker: "Contact", ctTitle: "Let's talk about your exposures.",
     ctLead: "Fire service, occupational health service, company or investor: tell us about your context and we will get back to you shortly.",
     ctDirect: "Write directly", ctBased: "Based in",

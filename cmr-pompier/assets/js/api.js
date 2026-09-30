@@ -10,7 +10,8 @@
     agent: 'espace.html',
     cos: 'espace.html',
     commandement: 'espace.html',
-    sssm: 'espace.html'
+    sssm: 'espace.html',
+    habillement: 'espace.html'
   };
 
   function saveSession(s) { try { sessionStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
@@ -69,7 +70,7 @@
     return session;
   }
 
-  function logout() { clearSession(); try { sessionStorage.removeItem('vbs-offline-db-v4'); } catch (e) {} w.location.href = 'connexion.html'; }
+  function logout() { clearSession(); try { sessionStorage.removeItem('vbs-offline-db-v5'); } catch (e) {} w.location.href = 'connexion.html'; }
 
   // À appeler en haut de chaque page protégée
   function requireRole(roles) {

@@ -1,13 +1,17 @@
 // Espace connecté : menu par rôle, visite guidée, tableaux de bord et vues.
 (function () {
-  var S = VBS.requireRole(['agent', 'cos', 'commandement', 'sssm']);
+  var S = VBS.requireRole(['agent', 'cos', 'commandement', 'sssm', 'habillement']);
   if (!S) return;
 
   // =================================================================== libellés
-  var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM' };
-  var TYPE = { habitation: "Feu d'habitation", vehicule: 'Feu de véhicule', industriel: 'Feu industriel', vegetation: 'Feu de végétation', conteneur: 'Feu de conteneur', chimique: 'Matières dangereuses / chimique', autre: 'Autre feu' };
+  var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM', habillement: 'Service habillement' };
+  var R = VBSRef;
+  var TYPE = { habitation: "Feu d'habitation, de structure", industriel: 'Feu industriel ou entrepôt', clos: 'Feu en volume clos (cave, sous-sol, parking)', vehicule: 'Feu de véhicule', cheminee: 'Feu de cheminée', vegetation: 'Feu de végétation', conteneur: 'Feu de conteneur, de poubelle', chimique: 'Matières dangereuses, chimique', autre: 'Autre intervention avec fumées' };
   var ROLE_TENU = { chef_agres: "Chef d'agrès", binome_attaque: "Binôme d'attaque", binome_alimentation: "Binôme d'alimentation", conducteur: 'Conducteur', soutien: 'Soutien', autre: 'Autre' };
-  var CONT = { nulle: ['Nulle', 'badge-neutral'], faible: ['Faible', 'badge-low'], moyenne: ['Moyenne', 'badge-mod'], forte: ['Forte', 'badge-high'] };
+  var CONT = { nulle: ['Zone de soutien', 'badge-neutral'], faible: ['Zone de soutien', 'badge-neutral'], moyenne: ['Zone contrôlée', 'badge-mod'], forte: ["Zone d'exclusion", 'badge-high'] };
+  var TENUE = { veste: 'Veste de feu', surpantalon: 'Pantalon de feu', cagoule: 'Cagoule' };
+  var TST = { en_service: ['En service', 'badge-ok'], contaminee: ['Contaminée', 'badge-late'], au_lavage: ['Au lavage', 'badge-info'], en_stock: ['En stock', 'badge-neutral'], reformee: ['Réformée', 'badge-neutral'] };
+  var DST = { envoyee: ['À traiter', 'badge-pending'], traitee: ['Traitée', 'badge-ok'], annulee: ['Annulée', 'badge-neutral'] };
   var STATE = { attente: ['En attente', 'badge-pending'], retard: ['En retard', 'badge-late'], transmis: ['Transmis SSSM', 'badge-info'], controle: ['Validé SSSM', 'badge-ok'] };
   var PHASE = { attaque: 'Attaque', deblai: 'Déblai', soutien: 'Soutien / alimentation' };
   var PROT = { ari: 'Sous ARI', epi_sans_ari: 'EPI sans ARI', sans_epi: 'Sans EPI' };
@@ -25,19 +29,25 @@
     suivi: { id: 'suivi', label: 'Suivi individuel', icon: 'users' },
     exp: { id: 'export', label: 'Export', icon: 'download' },
     ref: { id: 'referentiel', label: 'Base de données centrale', icon: 'db' },
-    regl: { id: 'reglementation', label: 'Suivi réglementation', icon: 'scale' }
+    regl: { id: 'reglementation', label: 'Suivi réglementation', icon: 'scale' },
+    epi: { id: 'epi', label: 'Mes EPI', icon: 'shield' },
+    tdbHab: { id: 'tableau-de-bord', label: 'Tableau de bord', icon: 'home' },
+    tenues: { id: 'tenues', label: 'Tenues de feu', icon: 'list' },
+    demandes: { id: 'demandes', label: 'Demandes des agents', icon: 'send' }
   };
   function item(base, tour) { return Object.assign({}, base, { tour: tour }); }
   var MENUS = {
     agent: [
       item(M.tdb, "Vos dernières interventions, votre indice d'exposition cumulé et votre prochain rendez-vous au SSSM."),
-      item(M.dossier, "L'historique complet de vos expositions, intervention par intervention, et vos rendez-vous SSSM."),
+      item(M.dossier, "L'historique complet de vos expositions, intervention par intervention, votre fiche individuelle d'exposition et vos rendez-vous SSSM."),
+      item(M.epi, "Vos tenues de feu : après une intervention, signalez leur changement au centre ou demandez-en une nouvelle au service habillement."),
       item(M.exp, 'Exportez vos propres données en PDF ou CSV, pour votre médecin ou vos archives.')
     ],
     cos: [
       item(M.tdb, "Vos expositions récentes, votre prochain rendez-vous SSSM et les rapports qu'il vous reste à compléter."),
       item(M.dossier, "L'historique complet de vos propres expositions et vos rendez-vous SSSM."),
-      item(M.rapportsCos, "Rédigez le rapport de contamination de votre équipage après chaque intervention. Sur une opération à plusieurs agrès, chaque CA remplit le sien et le COS suit qui l'a fait. Les rapports validés par le SSSM sont verrouillés."),
+      item(M.rapportsCos, "Rédigez le rapport de contamination de votre équipage après chaque intervention : trois appuis suffisent, le reste est proposé d'office. Sur une opération à plusieurs agrès, chaque CA remplit le sien."),
+      item(M.epi, 'Vos propres tenues de feu et vos demandes au service habillement.'),
       item(M.exp, 'Exportez vos propres données en PDF ou CSV.')
     ],
     commandement: [
@@ -49,10 +59,16 @@
     sssm: [
       item(M.tdb, 'Dossiers à jour ou non, alertes sur les cas particuliers, feux des dernières 24 h et tendance de contamination.'),
       item(M.rapportsSssm, "Toutes les interventions, engin par engin ou agent par agent. Corrigez un rapport, et importez les mesures (ex. CO sanguin) de toute une opération depuis un fichier."),
-      item(M.suivi, "Le dossier de chaque agent : historique d'exposition, prélèvements, derniers et prochains rendez-vous."),
+      item(M.suivi, "Le dossier de chaque agent et sa fiche individuelle d'exposition, par année, sur 12 mois glissants ou sur toute la carrière."),
       item(M.exp, 'Tous les exports : interventions, expositions, référentiel.'),
-      item(M.ref, "Pour chaque motif de départ, phase et protection, vous décidez du type d'exposition associé. L'IA propose à partir des études, vous validez."),
+      item(Object.assign({}, M.ref, { label: 'Référentiel CMR' }), 'Les agents CMR retenus et la méthode de calcul en équivalents-feu, avec la source et le statut de chaque coefficient.'),
       item(M.regl, 'Les évolutions réglementaires qui concernent le suivi des expositions, avec leur niveau d\'impact.')
+    ],
+    habillement: [
+      item(M.tdbHab, 'Tenues contaminées à récupérer, demandes des agents et alertes de seuil.'),
+      item(M.demandes, "Les demandes de changement de tenue envoyées par les agents, ou créées automatiquement quand une tenue atteint le seuil d'alerte."),
+      item(M.tenues, 'Toutes les tenues du centre : numéro, agent, état, nombre de feux et de lavages. Vous pouvez modifier les numéros et attribuer une tenue.'),
+      item(M.exp, 'Export de l\'état des tenues du centre.')
     ]
   };
   var MENU = MENUS[S.role];
@@ -66,10 +82,18 @@
   function fmtDT(d) { return fmtD(d) + ' · ' + d2(d.getHours()) + 'h' + d2(d.getMinutes()); }
   function fmtLong(d) { return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
   function badge(pair) { return '<span class="badge ' + pair[1] + '">' + esc(pair[0]) + '</span>'; }
-  function cont(p) { return badge(CONT[p.contamination] || ['—', 'badge-neutral']); }
-  function decon(p) { return p.decon_validee ? '<span class="badge badge-ok">Décon. validée</span>' : '<span class="badge badge-pending">Décon. à valider</span>'; }
-  function ariTxt(p) { return (p.ari_porte || +p.ari_min > 0) ? 'Porté · ' + (+p.ari_min >= 60 ? '60 min et +' : (p.ari_min || 0) + ' min') : 'Sans ARI'; }
-  function cumulLevel(v) { return v < 150 ? ['Faible', 'badge-low'] : v < 400 ? ['Modéré', 'badge-mod'] : ['Élevé', 'badge-high']; }
+  function filled(p) { return !!p.position || !!(p.it && p.it.statut !== 'brouillon'); }
+  function cont(p) { if (!filled(p)) return badge(['Rapport en cours', 'badge-pending']); return badge(CONT[p.contamination] || ['—', 'badge-neutral']); }
+  function decon(p) {
+    if (!filled(p)) return '<span class="note">—</span>';
+    var dcx = R.DEC[p.decon_type];
+    if (dcx) return badge([dcx.court, p.decon_type === 'DEC_AUCUNE' ? 'badge-late' : 'badge-ok']);
+    return p.decon_validee ? '<span class="badge badge-ok">Décon. validée</span>' : '<span class="badge badge-pending">Décon. à valider</span>';
+  }
+  function efTxt(p) { return filled(p) ? R.fmt(p.indice) : '—'; }
+  function durTxt(m) { m = +m || 0; if (!m) return '—'; var h = Math.floor(m / 60), mm = m % 60; return h ? h + ' h' + (mm ? ' ' + d2(mm) : '') : mm + ' min'; }
+  function posTxt(p) { return p.position ? R.posLabel(p.position) + (p.position === 'POS_ATT' && p.tactique === 'TAC_TRANS' ? ' (attaque transitoire)' : '') : ROLE_TENU[p.role_tenu] || '—'; }
+  function ariTxt(p) { return p.ari_porte || +p.ari_min > 0 ? 'ARI porté' : 'Sans ARI'; }
   function sum(a, f) { return a.reduce(function (s, x) { return s + (f(x) || 0); }, 0); }
   function first(name) { return String(name || '').split(' ').slice(-1)[0]; }
   function within(d, days) { return Date.now() - d <= days * VBSData.DAY; }
@@ -91,7 +115,7 @@
       var m = new Date(now.getFullYear(), now.getMonth() - k, 1), n = new Date(now.getFullYear(), now.getMonth() - k + 1, 1);
       var inM = items.filter(function (x) { var d = dateOf(x); return d >= m && d < n; });
       var v = sum(inM, valueOf);
-      out.push({ label: MONTHS[m.getMonth()], full: MONTHS[m.getMonth()] + ' ' + m.getFullYear(), value: avg ? (inM.length ? Math.round(v / inM.length) : 0) : v, n: inM.length });
+      out.push({ label: MONTHS[m.getMonth()], full: MONTHS[m.getMonth()] + ' ' + m.getFullYear(), value: avg ? (inM.length ? Math.round(v / inM.length * 100) / 100 : 0) : Math.round(v * 100) / 100, n: inM.length });
     }
     return out;
   }
@@ -99,16 +123,18 @@
   // Courbe simple (une seule série, pas de légende) avec info-bulle au survol
   function lineChart(pts, unit) {
     var W = 560, H = 220, L = 36, R = 12, T = 12, B = 28;
-    var max = Math.max(10, Math.max.apply(null, pts.map(function (p) { return p.value; })));
-    var step = Math.pow(10, Math.floor(Math.log10(max))); var top = Math.ceil(max / step) * step; if (top / step > 6) { step *= 2; top = Math.ceil(max / step) * step; }
+    var max = Math.max(0.5, Math.max.apply(null, pts.map(function (p) { return p.value; })));
+    var rawStep = max / 4, mag = Math.pow(10, Math.floor(Math.log10(rawStep))), nr = rawStep / mag;
+    var step = (nr <= 1 ? 1 : nr <= 2 ? 2 : nr <= 5 ? 5 : 10) * mag, top = Math.ceil(max / step - 1e-9) * step;
+    var nf = function (v) { return (Math.round(v * 100) / 100).toLocaleString('fr-FR'); };
     var x = function (i) { return L + i * (W - L - R) / (pts.length - 1); }, y = function (v) { return T + (H - T - B) * (1 - v / top); };
     var grid = '', ticks = Math.round(top / step);
-    for (var g = 0; g <= ticks; g++) { var gv = g * step; grid += '<line class="grid-line" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(gv) + '" y2="' + y(gv) + '"/><text class="axis" x="' + (L - 6) + '" y="' + (y(gv) + 4) + '" text-anchor="end">' + gv + '</text>'; }
+    for (var g = 0; g <= ticks; g++) { var gv = g * step; grid += '<line class="grid-line" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(gv) + '" y2="' + y(gv) + '"/><text class="axis" x="' + (L - 6) + '" y="' + (y(gv) + 4) + '" text-anchor="end">' + nf(gv) + '</text>'; }
     var path = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.value).toFixed(1); }).join(' ');
     var area = path + ' L' + x(pts.length - 1) + ' ' + y(0) + ' L' + x(0) + ' ' + y(0) + ' Z';
     var labels = pts.map(function (p, i) { return (i % 2 === (pts.length - 1) % 2) ? '<text class="axis" x="' + x(i) + '" y="' + (H - 8) + '" text-anchor="middle">' + p.label + '</text>' : ''; }).join('');
     var slot = (W - L - R) / (pts.length - 1);
-    var hits = pts.map(function (p, i) { return '<rect class="hit" x="' + (x(i) - slot / 2) + '" y="' + T + '" width="' + slot + '" height="' + (H - T - B) + '" data-tip="' + esc(p.full + ' : ' + p.value + (unit || '')) + '" data-x="' + x(i) + '" data-y="' + y(p.value) + '"/><circle class="pt" cx="' + x(i) + '" cy="' + y(p.value) + '" r="4"/>'; }).join('');
+    var hits = pts.map(function (p, i) { return '<rect class="hit" x="' + (x(i) - slot / 2) + '" y="' + T + '" width="' + slot + '" height="' + (H - T - B) + '" data-tip="' + esc(p.full + ' : ' + nf(p.value) + (unit || '')) + '" data-x="' + x(i) + '" data-y="' + y(p.value) + '"/><circle class="pt" cx="' + x(i) + '" cy="' + y(p.value) + '" r="4"/>'; }).join('');
     return '<div class="chart-wrap"><svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Évolution sur 12 mois">' + grid + '<path class="area" d="' + area + '"/><path class="line" d="' + path + '"/>' + labels + hits + '</svg><div class="chart-tip"></div></div>';
   }
   function bindCharts(root) {
@@ -132,7 +158,7 @@
   function interventionRows(parts, limit) {
     if (!parts.length) return '<p class="empty">Aucune intervention enregistrée à votre nom.</p>';
     return '<ul class="rows">' + parts.slice(0, limit || 5).map(function (p) {
-      return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(TYPE[p.it.type_feu]) + '</b><small>' + esc(p.it.precision || '') + ' · ' + esc(p.it.commune || '') + '</small></span><span class="right">' + cont(p) + '</span></li>';
+      return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(TYPE[p.it.type_feu]) + '</b><small>' + esc(p.it.precision || '') + ' · ' + esc(p.it.commune || '') + '</small></span><span class="right">' + cont(p) + (filled(p) && p.it.ambiance !== 'aucun_feu' ? '<span class="ef-mini">' + R.fmt(p.indice) + ' EF</span>' : '') + '</span></li>';
     }).join('') + '</ul>';
   }
   function nextRdv(db, userId) {
@@ -147,33 +173,49 @@
   // =================================================================== vues
   var db = null;
 
+  function counters(parts) {
+    var f = parts.filter(function (p) { return filled(p) && p.it && p.it.ambiance !== 'aucun_feu'; });
+    return { feux: f.length, att: f.filter(function (p) { return p.position === 'POS_ATT' || p.position === 'VEG_LISIERE'; }).length, heures: sum(f, function (p) { return +p.duree_min || 0; }) / 60,
+      decOk: f.filter(function (p) { return p.decon_type ? p.decon_type !== 'DEC_AUCUNE' : p.decon_validee; }).length, decNon: f.filter(function (p) { return p.decon_type === 'DEC_AUCUNE'; }).length,
+      dec1h: f.filter(function (p) { return /LING_DOUCHE|LING_1H/.test(p.decon_type || ''); }).length, ariRet: f.filter(function (p) { return p.ari_retire_deb; }).length, ef: Math.round(sum(f, function (p) { return +p.indice || 0; }) * 100) / 100 };
+  }
+  function countersPanel(c, title) {
+    var f = function (v, l) { return '<div class="fact"><b>' + v + '</b><span>' + l + '</span></div>'; };
+    return '<section class="panel"><div class="panel-head"><h3>' + title + '</h3></div><div class="facts">' +
+      f(c.feux, 'interventions avec fumées') + f(c.att, 'en position d\'attaque') + f(String(Math.round(c.heures * 10) / 10).replace('.', ','), 'heures de feu') +
+      f(c.dec1h, 'décontaminations dans l\'heure') + f(c.decNon, 'sans décontamination') + f(c.ariRet, 'ARI retiré au déblai') + '</div>' +
+      '<p class="note">Des faits d\'abord : ces compteurs ne dépendent d\'aucun calcul.</p></section>';
+  }
+  function epiCallout() {
+    var dirty = (db.tenues || []).filter(function (t) { return t.agent === db.meId && t.statut === 'contaminee'; });
+    if (!dirty.length) return '';
+    return '<div class="callout red"><span class="icon-tile">' + icon('shield') + '</span><div><strong>Tenue à changer</strong><span class="sub">' + esc(dirty.map(function (t) { return TENUE[t.type] + ' ' + t.numero; }).join(', ')) + (dirty.length > 1 ? ' sont considérées' : ' est considérée') + ' comme contaminée' + (dirty.length > 1 ? 's' : '') + ' après votre dernière intervention sur feu.</span></div><a class="btn btn-primary btn-sm" href="#epi">Changer ma tenue</a></div>';
+  }
   function viewDashPerso(root, extra) {
     var mine = db.mine, now = new Date();
     var thisM = mine.filter(function (p) { return p.it.dateObj.getMonth() === now.getMonth() && p.it.dateObj.getFullYear() === now.getFullYear(); }).length;
     var prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     var prevM = mine.filter(function (p) { return p.it.dateObj.getMonth() === prev.getMonth() && p.it.dateObj.getFullYear() === prev.getFullYear(); }).length;
-    var y = mine.filter(function (p) { return within(p.it.dateObj, 365); }), cumul = sum(y, function (p) { return p.indice; });
-    var diff = thisM - prevM;
-    var k3;
+    var c = counters(mine.filter(function (p) { return within(p.it.dateObj, 365); }));
+    var diff = thisM - prevM, k3;
     if (S.role === 'cos') {
       var pend = db.interventions.filter(function (x) { return x.cos === db.meId && x.statut === 'brouillon'; });
       var late = pend.filter(function (x) { return VBSData.reportState(x) === 'retard'; }).length;
       k3 = kpi('file', '', 'Rapports à compléter', pend.length, late ? '<span class="badge badge-late">' + late + ' en retard</span>' : 'À jour');
     } else {
-      var ok = mine.length ? Math.round(100 * mine.filter(function (p) { return p.decon_validee; }).length / mine.length) : 0;
-      k3 = kpi('shield', 'ok', 'Décontamination validée', ok + ' %', 'Sur toutes vos interventions');
+      k3 = kpi('shield', 'ok', 'Décontaminations réalisées', (c.feux ? Math.round(100 * c.decOk / c.feux) : 0) + ' %', c.dec1h + ' dans l\'heure, sur ' + c.feux + ' interventions (12 mois)');
     }
-    var html = head('Bonjour ' + esc(S.name || '') + ',', 'Voici le résumé de vos expositions et de vos dernières interventions.', '<span class="page-date">' + esc(fmtLong(now)) + '</span>') +
+    var html = head('Bonjour ' + esc(S.name || '') + ',', 'Voici le résumé de vos expositions et de vos dernières interventions.', '<span class="page-date">' + esc(fmtLong(now)) + '</span>') + epiCallout() +
       '<div class="grid grid-3">' +
         kpi('flame', '', 'Interventions ce mois-ci', thisM, (diff >= 0 ? '+' : '') + diff + ' par rapport au mois dernier') +
-        kpi('chart', 'warn', "Indice d'exposition cumulé (12 mois)", cumul, badge(cumulLevel(cumul)) + 'Indicatif, non médical') +
+        kpi('chart', 'warn', 'Indicateur d\'exposition · 12 mois glissants', R.fmt(c.ef) + ' <small class="unit">EF</small>', 'Équivalents-feu · indicateur conventionnel, ce n\'est pas une dose') +
         k3 +
       '</div>' +
       '<div class="grid grid-main">' +
-        '<section class="panel"><div class="panel-head"><h3>Évolution de votre indice d\'exposition</h3></div>' + lineChart(monthly(mine, function (p) { return p.it.dateObj; }, function (p) { return p.indice; })) + '<p class="note">Somme mensuelle des indices de vos interventions.</p></section>' +
+        '<section class="panel"><div class="panel-head"><h3>Évolution de votre indicateur</h3></div>' + lineChart(monthly(mine.filter(filled), function (p) { return p.it.dateObj; }, function (p) { return +p.indice || 0; }), ' EF') + '<p class="note">Somme mensuelle, en équivalents-feu. 1 équivalent-feu = 30 minutes en attaque sur un feu d\'habitation, sans décontamination.</p></section>' +
         '<section class="panel"><div class="panel-head"><h3>Dernières interventions</h3><a href="#dossier">Voir tout ' + icon('arrow') + '</a></div>' + interventionRows(mine, 5) + '</section>' +
-      '</div>' +
-      '<div class="grid grid-2">' + rdvCallout(nextRdv(db, db.meId)) + (extra || '<div class="callout"><span class="icon-tile">' + icon('download') + '</span><div><strong>Export rapide</strong><span class="sub">Vos données en PDF ou CSV.</span></div><a class="btn btn-secondary btn-sm" href="#export">Exporter</a></div>') + '</div>';
+      '</div>' + countersPanel(c, 'Vos compteurs · 12 mois glissants') +
+      '<div class="grid grid-2">' + rdvCallout(nextRdv(db, db.meId)) + (extra || '<div class="callout"><span class="icon-tile">' + icon('download') + '</span><div><strong>Fiche individuelle d\'exposition</strong><span class="sub">Par année, sur 12 mois glissants ou sur toute votre carrière.</span></div><a class="btn btn-secondary btn-sm" href="#dossier">Ouvrir</a></div>') + '</div>';
     root.innerHTML = html; bindCharts(root);
   }
 
@@ -271,66 +313,119 @@
     var ctrl = its.filter(function (x) { return x.statut === 'controle_sssm'; }).length, toCheck = its.filter(function (x) { return x.statut === 'transmis'; }).length;
     var upToDate = its.length ? Math.round(100 * ctrl / its.length) : 0;
     var openSig = db.signalements.filter(function (s) { return s.statut !== 'clos'; });
-    var fortes = P.filter(function (p) { return p.contamination === 'forte' && !p.decon_validee && p.it; });
+    var fortes = P.filter(function (p) { return p.it && filled(p) && ((p.contamination === 'forte' && p.decon_type === 'DEC_AUCUNE') || (p.position === 'POS_ATT' && !p.ari_porte)); });
     var last24 = its.filter(function (x) { return within(x.dateObj, 1); });
     var recent = last24.length ? last24 : its.filter(function (x) { return within(x.dateObj, 3); });
-    var m30 = P.filter(function (p) { return p.it && within(p.it.dateObj, 30); }), m60 = P.filter(function (p) { return p.it && within(p.it.dateObj, 60) && !within(p.it.dateObj, 30); });
-    var avg30 = m30.length ? Math.round(sum(m30, function (p) { return p.indice; }) / m30.length) : 0, avg60 = m60.length ? Math.round(sum(m60, function (p) { return p.indice; }) / m60.length) : 0;
-    var trend = avg30 - avg60;
-    var dist = { nulle: 0, faible: 0, moyenne: 0, forte: 0 }; m30.forEach(function (p) { dist[p.contamination]++; });
-    var colors = { nulle: '#C9C2B8', faible: 'var(--ok)', moyenne: 'var(--warn)', forte: 'var(--danger)' };
+    var m30 = P.filter(function (p) { return p.it && filled(p) && within(p.it.dateObj, 30); }), m60 = P.filter(function (p) { return p.it && filled(p) && within(p.it.dateObj, 60) && !within(p.it.dateObj, 30); });
+    var avg30 = m30.length ? sum(m30, function (p) { return +p.indice || 0; }) / m30.length : 0, avg60 = m60.length ? sum(m60, function (p) { return +p.indice || 0; }) / m60.length : 0;
+    var trend = Math.round((avg30 - avg60) * 100) / 100;
+    var dist = { nulle: 0, moyenne: 0, forte: 0 }; m30.forEach(function (p) { dist[p.contamination === 'faible' ? 'nulle' : p.contamination]++; });
+    var colors = { nulle: '#C9C2B8', moyenne: 'var(--warn)', forte: 'var(--danger)' };
     var stack = '<div class="stack" role="img" aria-label="Répartition des contaminations sur 30 jours">' + Object.keys(dist).filter(function (k) { return dist[k]; }).map(function (k) { return '<i style="flex:' + dist[k] + ';background:' + colors[k] + '" title="' + CONT[k][0] + ' : ' + dist[k] + '"></i>'; }).join('') + '</div>' +
       '<div class="legend">' + Object.keys(dist).map(function (k) { return '<span><i style="background:' + colors[k] + '"></i>' + CONT[k][0] + ' · <b>' + dist[k] + '</b></span>'; }).join('') + '</div>';
-    // Agents à surveiller : indice cumulé sur 90 jours
+    // Agents les plus exposés : cumul sur 12 mois glissants, affiché en relatif (jamais de seuil absolu)
     var byAgent = {};
-    P.forEach(function (p) { if (p.it && within(p.it.dateObj, 90)) { byAgent[p.agent] = (byAgent[p.agent] || 0) + p.indice; } });
-    var top = Object.keys(byAgent).sort(function (a, b) { return byAgent[b] - byAgent[a]; }).slice(0, 5);
+    P.forEach(function (p) { if (p.it && filled(p) && within(p.it.dateObj, 365)) { byAgent[p.agent] = (byAgent[p.agent] || 0) + (+p.indice || 0); } });
+    var ranked = Object.keys(byAgent).sort(function (a, b) { return byAgent[b] - byAgent[a]; }), top = ranked.slice(0, 5), top10 = Math.max(1, Math.ceil(ranked.length * 0.1));
     var alerts = openSig.map(function (s) {
       return '<li><span class="when">' + (s.it ? fmtD(s.it.dateObj) : '') + '</span><span class="what"><b>Signalement ' + (s.niveau === 'critique' ? 'critique' : 'forte exposition') + '</b><small>' + esc(s.it ? TYPE[s.it.type_feu] + ' · ' + s.it.numero : '') + ' · ' + esc(s.motif) + '</small></span><span class="right">' + badge(s.statut === 'ouvert' ? ['Ouvert', 'badge-late'] : ['Pris en charge', 'badge-info']) + (s.statut === 'ouvert' ? '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|pris_en_charge">Prendre en charge</button>' : '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|clos">Clore</button>') + '</span></li>';
     }).concat(fortes.slice(0, 4).map(function (p) {
-      return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(p.user ? p.user.name : 'Agent') + ' · contamination forte</b><small>' + esc(TYPE[p.it.type_feu]) + ' · décontamination non validée</small></span><span class="right">' + badge(['À vérifier', 'badge-pending']) + '</span></li>';
+      return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(p.user ? p.user.name : 'Agent') + (p.position === 'POS_ATT' && !p.ari_porte ? ' · attaque sans ARI' : ' · zone d\'exclusion sans décontamination') + '</b><small>' + esc(TYPE[p.it.type_feu]) + ' · ' + esc(p.it.numero) + '</small></span><span class="right">' + badge(['À vérifier', 'badge-pending']) + '</span></li>';
     }));
     root.innerHTML = head('Tableau de bord SSSM', 'État des dossiers, cas particuliers et tendance des expositions.', '<span class="page-date">' + esc(fmtLong(new Date())) + '</span>') +
       '<div class="grid grid-4">' +
         kpi('check', 'ok', 'Dossiers à jour', upToDate + ' %', toCheck + ' rapport' + (toCheck > 1 ? 's' : '') + ' à contrôler') +
-        kpi('alert', '', 'Alertes cas particuliers', openSig.length + fortes.length, openSig.length + ' signalement' + (openSig.length > 1 ? 's' : '') + ' · ' + fortes.length + ' décon. à vérifier') +
+        kpi('alert', '', 'Alertes cas particuliers', openSig.length + fortes.length, openSig.length + ' signalement' + (openSig.length > 1 ? 's' : '') + ' · ' + fortes.length + ' écart' + (fortes.length > 1 ? 's' : '') + ' au protocole') +
         kpi('flame', 'warn', 'Feux des dernières 24 h', last24.length, last24.length ? sum(last24, function (x) { return x.crew.length; }) + ' agents engagés' : 'Aucun feu sur 24 h') +
-        kpi('chart', 'info', 'Indice moyen (30 j)', avg30, (trend > 0 ? '▲ +' : trend < 0 ? '▼ ' : '= ') + trend + ' vs les 30 jours précédents') +
+        kpi('chart', 'info', 'Indicateur moyen par engagement (30 j)', R.fmt(avg30) + ' <small class="unit">EF</small>', (trend > 0 ? '▲ +' : trend < 0 ? '▼ ' : '= ') + R.fmt(trend) + ' par rapport aux 30 jours précédents') +
       '</div>' +
       '<div class="grid grid-main">' +
-        '<section class="panel"><div class="panel-head"><h3>Tendance : indice moyen par agent engagé</h3></div>' + lineChart(monthly(P.filter(function (p) { return p.it; }), function (p) { return p.it.dateObj; }, function (p) { return p.indice; }, true)) + '</section>' +
+        '<section class="panel"><div class="panel-head"><h3>Tendance : indicateur moyen par agent engagé</h3></div>' + lineChart(monthly(P.filter(function (p) { return p.it && filled(p); }), function (p) { return p.it.dateObj; }, function (p) { return +p.indice || 0; }, true), ' EF') + '<p class="note">En équivalents-feu, référentiel v' + R.version + '.</p></section>' +
         '<section class="panel"><div class="panel-head"><h3>Alertes</h3><a href="#rapports">Rapports ' + icon('arrow') + '</a></div>' + (alerts.length ? '<ul class="rows">' + alerts.join('') + '</ul>' : '<p class="empty">Aucune alerte.</p>') + '</section>' +
       '</div>' +
       '<div class="grid grid-2">' +
         '<section class="panel"><div class="panel-head"><h3>' + (last24.length ? 'Feux des dernières 24 h' : 'Aucun feu sur 24 h · 72 dernières heures') + '</h3></div>' +
-          (recent.length ? '<ul class="rows">' + recent.map(function (x) { var worst = x.crew.map(function (p) { return p.contamination; }).sort(function (a, b) { return ['nulle', 'faible', 'moyenne', 'forte'].indexOf(b) - ['nulle', 'faible', 'moyenne', 'forte'].indexOf(a); })[0]; return '<li><span class="when">' + fmtDT(x.dateObj).split(' · ')[1] + '</span><span class="what"><b>' + esc(TYPE[x.type_feu]) + '</b><small>' + esc(x.commune) + ' · ' + x.crew.length + ' agents</small></span><span class="right">' + (worst ? badge(CONT[worst]) : '') + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Aucune intervention récente.</p>') + '</section>' +
-        '<section class="panel"><div class="panel-head"><h3>État de contamination des agents (30 j)</h3></div>' + stack + '<p class="note">' + m30.length + ' expositions enregistrées sur 30 jours.</p></section>' +
+          (recent.length ? '<ul class="rows">' + recent.map(function (x) { var worst = x.crew.filter(filled).map(function (p) { return p.contamination; }).sort(function (a, b) { return ['nulle', 'faible', 'moyenne', 'forte'].indexOf(b) - ['nulle', 'faible', 'moyenne', 'forte'].indexOf(a); })[0]; return '<li><span class="when">' + fmtDT(x.dateObj).split(' · ')[1] + '</span><span class="what"><b>' + esc(TYPE[x.type_feu]) + '</b><small>' + esc(x.commune) + ' · ' + x.crew.length + ' agents</small></span><span class="right">' + (worst ? badge(CONT[worst]) : '') + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Aucune intervention récente.</p>') + '</section>' +
+        '<section class="panel"><div class="panel-head"><h3>Zones d\'engagement des agents (30 j)</h3></div>' + stack + '<p class="note">' + m30.length + ' engagements enregistrés sur 30 jours.</p></section>' +
       '</div>' +
-      '<section class="panel"><div class="panel-head"><h3>Agents à surveiller (indice cumulé 90 j)</h3><a href="#suivi">Suivi individuel ' + icon('arrow') + '</a></div>' +
-        '<table class="dtable"><thead><tr><th>Agent</th><th>Matricule</th><th class="num">Indice 90 j</th><th>Niveau</th><th>Dernier rendez-vous</th></tr></thead><tbody>' +
-        top.map(function (id) { var u = db.byId[id] || {}; var lastR = db.rdv.filter(function (r) { return r.agent === id && r.statut === 'realise'; }).sort(function (a, b) { return b.dateObj - a.dateObj; })[0];
-          return '<tr><td data-l="Agent"><b>' + esc(u.name) + '</b></td><td data-l="Matricule">' + esc(u.matricule) + '</td><td class="num" data-l="Indice">' + byAgent[id] + '</td><td>' + badge(byAgent[id] < 120 ? NIV.faible : byAgent[id] < 250 ? NIV.moyen : NIV.eleve) + '</td><td data-l="Dernier RDV">' + (lastR ? fmtD(lastR.dateObj) : '—') + '</td></tr>'; }).join('') +
-        '</tbody></table></section>';
+      '<section class="panel"><div class="panel-head"><h3>Agents les plus exposés (12 mois glissants)</h3><a href="#suivi">Suivi individuel ' + icon('arrow') + '</a></div>' +
+        '<table class="dtable"><thead><tr><th>Agent</th><th>Matricule</th><th class="num">Indicateur 12 mois</th><th>Position relative</th><th>Dernier rendez-vous</th></tr></thead><tbody>' +
+        top.map(function (id, k) { var u = db.byId[id] || {}; var lastR = db.rdv.filter(function (r) { return r.agent === id && r.statut === 'realise'; }).sort(function (a, b) { return b.dateObj - a.dateObj; })[0];
+          return '<tr><td data-l="Agent"><b>' + esc(u.name) + '</b></td><td data-l="Matricule">' + esc(u.matricule) + '</td><td class="num" data-l="Indicateur">' + R.fmt(byAgent[id]) + ' EF</td><td data-l="Position">' + (k < top10 ? badge(['Parmi les 10 % les plus exposés', 'badge-mod']) : '<span class="note">' + (k + 1) + '<sup>e</sup> sur ' + ranked.length + '</span>') + '</td><td data-l="Dernier RDV">' + (lastR ? fmtD(lastR.dateObj) : '—') + '</td></tr>'; }).join('') +
+        '</tbody></table><p class="note">Aucun seuil absolu : l\'indicateur se lit en comparaison avec les autres agents. ' + esc(R.MENTION) + '</p></section>';
     bindCharts(root);
     root.querySelectorAll('[data-sig]').forEach(function (b) { var q = b.dataset.sig.split('|'); b.onclick = function () { setSignalement(q[0], q[1], b); }; });
   }
 
+  // ---------- Fiche individuelle d'exposition (nature, durée, degré) ----------
+  var PER = { mode: '12m', year: new Date().getFullYear() };
+  function inPeriod(p) { return PER.mode === 'carriere' ? true : PER.mode === 'annee' ? p.it.dateObj.getFullYear() === PER.year : within(p.it.dateObj, 365); }
+  function periodLabel() { return PER.mode === 'carriere' ? 'Toute la carrière au SDIS' : PER.mode === 'annee' ? 'Année ' + PER.year : '12 mois glissants (au ' + fmtD(new Date()) + ')'; }
+  function periodBar(parts) {
+    var years = []; parts.forEach(function (p) { var y = p.it.dateObj.getFullYear(); if (years.indexOf(y) === -1) years.push(y); }); years.sort(function (a, b) { return b - a; });
+    if (!years.length) years = [new Date().getFullYear()];
+    return '<div class="period"><div class="seg" role="group" aria-label="Période"><button type="button" data-per="12m" aria-pressed="' + (PER.mode === '12m') + '">12 mois glissants</button><button type="button" data-per="annee" aria-pressed="' + (PER.mode === 'annee') + '">Année</button><button type="button" data-per="carriere" aria-pressed="' + (PER.mode === 'carriere') + '">Carrière</button></div>' +
+      (PER.mode === 'annee' ? '<select class="select sel-sm" id="per-year" aria-label="Année">' + years.map(function (y) { return '<option' + (y === PER.year ? ' selected' : '') + '>' + y + '</option>'; }).join('') + '</select>' : '') +
+      '<button type="button" class="btn btn-primary btn-sm" data-fiche>' + icon('download') + 'Fiche d\'exposition (PDF)</button></div>';
+  }
+  function bindPeriod(root, parts, u) {
+    root.querySelectorAll('[data-per]').forEach(function (b) { b.onclick = function () { PER.mode = b.dataset.per; if (PER.mode === 'annee' && !parts.some(function (p) { return p.it.dateObj.getFullYear() === PER.year; }) && parts[0]) PER.year = parts[0].it.dateObj.getFullYear(); route(); }; });
+    var ys = root.querySelector('#per-year'); if (ys) ys.onchange = function () { PER.year = +ys.value; route(); };
+    root.querySelectorAll('[data-fiche]').forEach(function (b) { b.onclick = function () { printFiche(u, parts); }; });
+  }
+  function historyTable(parts, empty) {
+    if (!parts.length) return '<p class="empty">' + (empty || 'Aucune intervention sur cette période.') + '</p>';
+    return '<table class="dtable"><thead><tr><th>Date</th><th>Intervention</th><th>Nature (agents CMR)</th><th>Position · poste</th><th>Zone</th><th>Durée</th><th>Décontamination</th><th class="num">Indicateur</th></tr></thead><tbody>' +
+      parts.map(function (p) { var f = filled(p);
+        return '<tr><td data-l="Date">' + fmtD(p.it.dateObj) + '</td><td data-l="Intervention"><b>' + esc(TYPE[p.it.type_feu] || p.it.type_feu) + '</b><br><span class="note">' + esc(p.it.numero) + '</span></td>' +
+          '<td data-l="Nature" class="nat">' + (f ? natureCourte(p.it) : '<span class="note">Rapport en cours</span>') + '</td>' +
+          '<td data-l="Position">' + (f ? esc(posTxt(p)) : esc(ROLE_TENU[p.role_tenu] || '')) + '<br><span class="note">' + esc(ROLE_TENU[p.role_tenu] || '') + (p.engin ? ' · ' + esc(p.engin) : '') + '</span></td>' +
+          '<td data-l="Zone">' + cont(p) + '</td><td data-l="Durée">' + (f ? durTxt(p.duree_min) : '—') + (p.ari_retire_deb ? '<br><span class="note">ARI retiré au déblai</span>' : '') + '</td><td data-l="Décontamination">' + decon(p) + '</td><td class="num" data-l="Indicateur">' + efTxt(p) + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  function natureCourte(it) {
+    var n = R.nature(it); if (!n.procedes.length) return 'Aucun (pas de fumée)';
+    return '<span title="' + esc(R.natureTexte(it)) + '">' + n.procedes.map(function (k) { return esc(R.PROCEDES[k].court); }).join(', ') + ' + ' + n.substances.length + ' substances' + (n.circ.length ? '<br><b>' + n.circ.map(function (k) { return esc(R.CIRC[k].nom); }).join(', ') + '</b>' : '') + '</span>';
+  }
+  function printFiche(u, allParts) {
+    var parts = allParts.filter(inPeriod).filter(filled), c = counters(parts), today = new Date();
+    var rows = parts.map(function (p) {
+      var n = R.nature(p.it);
+      return '<tr><td>' + fmtD(p.it.dateObj) + '<br>' + esc(p.it.numero) + '</td><td>' + esc(TYPE[p.it.type_feu] || '') + '<br><small>' + esc(p.it.precision || '') + '</small></td>' +
+        '<td>' + (n.procedes.length ? n.procedes.map(function (k) { return esc(R.PROCEDES[k].court); }).join(', ') + '<br><small>Substances : ' + (R.profil(p.it) === 'vegetation' ? 'socle végétation' : 'socle feu de structure') + ' (' + n.substances.length + ')</small>' + (n.circ.length ? '<br><b>+ ' + n.circ.map(function (k) { return esc(R.CIRC[k].nom); }).join(', ') + '</b>' : '') : 'Aucun procédé cancérogène') + '</td>' +
+        '<td>' + durTxt(p.duree_min) + '</td><td>' + esc(posTxt(p)) + '<br>' + esc((CONT[p.contamination] || [''])[0]) + '<br>' + esc((R.DEC[p.decon_type] || { label: p.decon_validee ? 'Décontamination réalisée' : 'Non renseignée' }).label) + (p.ari_retire_deb ? '<br>ARI retiré au déblai' : '') + '</td></tr>';
+    }).join('');
+    var html = '<article class="fiche"><header class="fi-head"><div><h1>Fiche individuelle d\'exposition aux agents CMR</h1><p>Art. R. 4412-93-1 à R. 4412-93-4 du code du travail · nature, durée et degré de l\'exposition · à conserver 40 ans</p></div><span class="fi-brand">VB Safety · Sapeur-pompier</span></header>' +
+      '<dl class="fi-id"><div><dt>Agent</dt><dd>' + esc((u.grade ? u.grade + ' ' : '') + (u.name || '')) + '</dd></div><div><dt>Matricule</dt><dd>' + esc(u.matricule || '') + '</dd></div><div><dt>Centre</dt><dd>' + esc(centreName()) + '</dd></div><div><dt>Période</dt><dd>' + esc(periodLabel()) + '</dd></div><div><dt>Édition</dt><dd>' + fmtD(today) + '</dd></div><div><dt>Référentiel</dt><dd>VB Safety v' + R.version + '</dd></div></dl>' +
+      '<h2>Synthèse</h2><table class="fi-sum"><tr><td><b>' + c.feux + '</b> interventions avec fumées</td><td><b>' + c.att + '</b> en position d\'attaque</td><td><b>' + String(Math.round(c.heures * 10) / 10).replace('.', ',') + ' h</b> de feu</td></tr><tr><td><b>' + c.dec1h + '</b> décontaminations dans l\'heure</td><td><b>' + c.decNon + '</b> sans décontamination</td><td><b>' + c.ariRet + '</b> ARI retiré au déblai</td></tr></table>' +
+      '<h2>Détail des expositions</h2>' + (rows ? '<table class="fi-tab"><thead><tr><th>Date · n°</th><th>Intervention</th><th>Nature</th><th>Durée</th><th>Degré (position, zone, décontamination)</th></tr></thead><tbody>' + rows + '</tbody></table>' : '<p>Aucune exposition enregistrée sur la période.</p>') +
+      '<h2>Substances présumées</h2><table class="fi-leg"><tr><td><b>Socle feu de structure</b> : ' + R.SOCLE.map(function (x) { return esc(x.nom) + (x.cas ? ' (CAS ' + x.cas + ', ' + esc(x.cls) + ')' : ''); }).join(' ; ') + '.</td></tr><tr><td><b>Socle végétation</b> : ' + R.SOCLE.filter(function (x) { return R.SOCLE_VEG.indexOf(x.code) !== -1; }).map(function (x) { return esc(x.nom); }).join(', ') + ' ; 1,3-butadiène si véhicules impliqués.</td></tr></table>' +
+      '<div class="fi-ind">' + esc(R.bloc(c.ef)) + ' Méthode : note méthodologique du référentiel.</div>' +
+      '<p class="fi-note">Nature : procédés cancérogènes de l\'arrêté du 26 octobre 2020 et substances présumées du référentiel (classification CLP, annexe VI). Durée : durée d\'engagement. Degré : position tenue, zone d\'engagement et décontamination réalisée. Données fictives de démonstration.</p>' +
+      '<div class="fi-sign"><div>Visa du médecin du SSSM</div><div>Date et signature de l\'agent</div></div></article>';
+    var area = $('print-area'); area.innerHTML = html;
+    document.body.classList.add('printing');
+    var t = document.title; document.title = 'Fiche exposition ' + (u.matricule || '') + ' ' + periodLabel();
+    window.print();
+    document.title = t;
+    setTimeout(function () { document.body.classList.remove('printing'); area.innerHTML = ''; }, 300);
+  }
+
   function viewDossier(root) {
-    var me = db.me || {}, mine = db.mine, y = mine.filter(function (p) { return within(p.it.dateObj, 365); });
-    var cumul = sum(y, function (p) { return p.indice; }), all = sum(mine, function (p) { return p.indice; });
+    var me = db.me || {}, mine = db.mine, c12 = counters(mine.filter(function (p) { return within(p.it.dateObj, 365); })), call = counters(mine);
     var rdvs = db.rdv.filter(function (r) { return r.agent === db.meId; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
+    var parts = mine.filter(inPeriod);
     root.innerHTML = head('Dossier personnel', esc((me.grade ? me.grade + ' ' : '') + (me.name || S.name)) + ' · ' + esc(me.matricule || S.matricule) + ' · ' + esc(centreName())) +
       '<div class="grid grid-3">' +
         kpi('flame', '', 'Interventions enregistrées', mine.length, 'Depuis le début du suivi') +
-        kpi('chart', 'warn', 'Indice cumulé (12 mois)', cumul, badge(cumulLevel(cumul)) + 'Total : ' + all) +
+        kpi('chart', 'warn', 'Indicateur · 12 mois glissants', R.fmt(c12.ef) + ' <small class="unit">EF</small>', 'Carrière : ' + R.fmt(call.ef) + ' EF · ce n\'est pas une dose') +
         kpi('cal', 'info', 'Rendez-vous SSSM', rdvs.filter(function (r) { return r.statut === 'prevu' && r.dateObj >= new Date(); }).length + ' prévu', rdvs.filter(function (r) { return r.statut === 'realise'; })[0] ? 'Dernier : ' + fmtD(rdvs.filter(function (r) { return r.statut === 'realise'; })[0].dateObj) : 'Aucun rendez-vous passé') +
       '</div>' +
-      '<section class="panel"><div class="panel-head"><h3>Historique des expositions</h3><a href="#export">Exporter ' + icon('arrow') + '</a></div>' +
-        (mine.length ? '<table class="dtable"><thead><tr><th>Date</th><th>Intervention</th><th>Rôle · engin</th><th>ARI</th><th>Contamination</th><th>Décontamination</th><th class="num">Indice</th></tr></thead><tbody>' +
-          mine.map(function (p) { return '<tr><td data-l="Date">' + fmtD(p.it.dateObj) + '</td><td data-l="Intervention"><b>' + esc(TYPE[p.it.type_feu]) + '</b><br><span class="note">' + esc(p.it.precision) + ' · ' + esc(p.it.numero) + '</span></td><td data-l="Rôle">' + esc(ROLE_TENU[p.role_tenu]) + (p.engin ? ' · ' + esc(p.engin) : '') + '</td><td data-l="ARI">' + ariTxt(p) + '</td><td>' + cont(p) + '</td><td>' + decon(p) + '</td><td class="num" data-l="Indice">' + p.indice + '</td></tr>'; }).join('') +
-          '</tbody></table>' : '<p class="empty">Aucune intervention enregistrée à votre nom.</p>') + '</section>' +
+      '<section class="panel"><div class="panel-head wrap"><h3>Historique des expositions · ' + esc(periodLabel()) + '</h3>' + periodBar(mine) + '</div>' + historyTable(parts, 'Aucune intervention enregistrée sur cette période.') + '</section>' +
+      countersPanel(counters(parts.filter(filled)), 'Compteurs · ' + periodLabel()) +
       '<section class="panel"><div class="panel-head"><h3>Rendez-vous SSSM</h3></div>' + (rdvs.length ? '<ul class="rows">' + rdvs.map(function (r) {
         return '<li><span class="when">' + fmtD(r.dateObj) + '</span><span class="what"><b>' + esc(r.motif) + '</b><small>' + esc(r.lieu || '') + '</small></span><span class="right">' + badge(r.statut === 'prevu' ? ['Prévu', 'badge-info'] : r.statut === 'realise' ? ['Réalisé', 'badge-ok'] : ['Annulé', 'badge-neutral']) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Aucun rendez-vous.</p>') + '</section>';
+    bindPeriod(root, mine, me);
   }
 
   function crewTable(it, opts) {
@@ -338,16 +433,16 @@
     var crew = it.crew.slice().sort(function (a, b) { return (a.engin || '').localeCompare(b.engin || '') || (a.role_tenu === 'chef_agres' ? -1 : 1); });
     var prel = function (p) { return (db.prelevements || []).filter(function (x) { return x.participation === p.id; }).map(function (x) { return '<span class="badge badge-info">' + esc(PREL[x.type]) + ' : ' + x.valeur + ' ' + esc(x.unite || '') + '</span>'; }).join(' '); };
     function rows(list) { return list.map(function (p) {
-      return '<tr><td data-l="Agent"><b>' + esc(p.user ? p.user.name : '—') + '</b>' + (opts.byEngin ? '' : (p.engin ? '<br><span class="note">' + esc(p.engin) + '</span>' : '')) + '</td><td data-l="Rôle">' + esc(ROLE_TENU[p.role_tenu]) + '</td><td data-l="ARI">' + ariTxt(p) + '</td><td>' + cont(p) + '</td><td>' + decon(p) + '</td>' + (opts.sssm ? '<td>' + (prel(p) || '<span class="note">—</span>') + '</td>' : '') + '</tr>';
+      return '<tr><td data-l="Agent"><b>' + esc(p.user ? p.user.name : '—') + '</b>' + (opts.byEngin ? '' : (p.engin ? '<br><span class="note">' + esc(p.engin) + '</span>' : '')) + '<br><span class="note">' + esc(ROLE_TENU[p.role_tenu]) + '</span></td><td data-l="Position">' + (filled(p) ? esc(posTxt(p)) : '—') + '</td><td data-l="Zone">' + cont(p) + '</td><td data-l="Durée">' + (filled(p) ? durTxt(p.duree_min) : '—') + '</td><td data-l="Décontamination">' + decon(p) + '</td><td class="num" data-l="Indicateur">' + efTxt(p) + '</td>' + (opts.sssm ? '<td>' + (prel(p) || '<span class="note">—</span>') + '</td>' : '') + '</tr>';
     }).join(''); }
-    var th = '<thead><tr><th>Agent</th><th>Rôle</th><th>ARI</th><th>Contamination</th><th>Décontamination</th>' + (opts.sssm ? '<th>Prélèvements</th>' : '') + '</tr></thead>';
+    var th = '<thead><tr><th>Agent</th><th>Position</th><th>Zone</th><th>Durée</th><th>Décontamination</th><th class="num">Indicateur</th>' + (opts.sssm ? '<th>Prélèvements</th>' : '') + '</tr></thead>';
     if (!opts.byEngin) return '<table class="dtable">' + th + '<tbody>' + rows(crew) + '</tbody></table>';
     var groups = {}; crew.forEach(function (p) { (groups[p.engin || '—'] = groups[p.engin || '—'] || []).push(p); });
     return Object.keys(groups).map(function (g) { return '<div class="crew-group"><h4>' + esc(g) + '</h4><table class="dtable">' + th + '<tbody>' + rows(groups[g]) + '</tbody></table></div>'; }).join('');
   }
   function reportMeta(it) {
-    var bits = [it.ambiance === 'feu_fumee' ? 'Feu et fumées' : it.ambiance === 'fumees_faibles' ? 'Fumées faibles' : it.ambiance === 'aucun_feu' ? 'Aucun feu' : '', it.motorisation ? 'Motorisation : ' + it.motorisation : '', it.zone_deshabillage ? 'Zone de déshabillage' : '', it.epi_ensaches ? 'EPI ensachés' : '', it.suspicion_amiante ? 'Suspicion d\'amiante' : ''].filter(Boolean);
-    return '<div class="chips">' + bits.map(function (b) { return '<span class="chip">' + esc(b) + '</span>'; }).join('') + '</div>';
+    var bits = [it.ambiance === 'feu_fumee' ? 'Feu et fumées' : it.ambiance === 'fumees_faibles' ? 'Fumées faibles' : it.ambiance === 'aucun_feu' ? 'Aucun feu' : '', it.duree_min ? 'Durée ' + durTxt(it.duree_min) : '', it.motorisation ? 'Motorisation : ' + it.motorisation : '', it.zone_deshabillage ? 'Zone de déshabillage' : '', it.epi_ensaches ? 'EPI ensachés' : ''].filter(Boolean);
+    return '<div class="chips">' + bits.map(function (b) { return '<span class="chip">' + esc(b) + '</span>'; }).join('') + '</div><p class="nat-line"><b>Nature :</b> ' + esc(R.natureTexte(it)) + (it.exposition_globale ? ' · <b>Exposition particulière :</b> ' + esc(it.exposition_globale) : '') + '</p>';
   }
 
   function viewRapportsCos(root) {
@@ -418,65 +513,73 @@
   function viewSuivi(root) {
     var people = db.users.filter(function (u) { return u.role === 'agent' || u.role === 'cos'; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
     suiviId = suiviId || (people[0] && people[0].id);
-    var u = db.byId[suiviId] || {}, parts = db.participations.filter(function (p) { return p.agent === suiviId && p.it; }).sort(function (a, b) { return b.it.dateObj - a.it.dateObj; });
+    var u = db.byId[suiviId] || {}, all = db.participations.filter(function (p) { return p.agent === suiviId && p.it; }).sort(function (a, b) { return b.it.dateObj - a.it.dateObj; });
+    var parts = all.filter(inPeriod);
     var rdvs = db.rdv.filter(function (r) { return r.agent === suiviId; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
-    var prels = db.prelevements.filter(function (x) { return parts.some(function (p) { return p.id === x.participation; }); });
-    var c12 = sum(parts.filter(function (p) { return within(p.it.dateObj, 365); }), function (p) { return p.indice; });
+    var prels = db.prelevements.filter(function (x) { return all.some(function (p) { return p.id === x.participation; }); });
+    var cP = counters(parts.filter(filled));
+    // Position relative sur 12 mois (jamais de seuil absolu)
+    var tot = {}; db.participations.forEach(function (p) { if (p.it && filled(p) && within(p.it.dateObj, 365)) tot[p.agent] = (tot[p.agent] || 0) + (+p.indice || 0); });
+    var ranked = Object.keys(tot).sort(function (a, b) { return tot[b] - tot[a]; }), rank = ranked.indexOf(suiviId);
+    var rel = rank === -1 ? 'Aucune exposition sur 12 mois' : rank < Math.max(1, Math.ceil(ranked.length * 0.1)) ? 'Parmi les 10 % les plus exposés' : (rank + 1) + 'e sur ' + ranked.length + ' agents';
     var lastR = rdvs.filter(function (r) { return r.statut === 'realise'; })[0], nextR = rdvs.filter(function (r) { return r.statut === 'prevu' && r.dateObj >= new Date(); }).sort(function (a, b) { return a.dateObj - b.dateObj; })[0];
-    root.innerHTML = head('Suivi individuel', 'Dossier de chaque agent : expositions, prélèvements et rendez-vous.',
+    root.innerHTML = head('Suivi individuel', 'Dossier de chaque agent : expositions, fiche individuelle, prélèvements et rendez-vous.',
       '<div class="field"><label class="label" for="agent-pick">Agent</label><select class="select" id="agent-pick">' + people.map(function (p) { return '<option value="' + p.id + '"' + (p.id === suiviId ? ' selected' : '') + '>' + esc(p.name + ' · ' + p.matricule) + '</option>'; }).join('') + '</select></div>') +
       '<div class="grid grid-4">' +
         kpi('user', '', esc(u.grade || ''), esc(u.name || ''), esc(u.matricule || '')) +
-        kpi('chart', 'warn', 'Indice cumulé (12 mois)', c12, badge(cumulLevel(c12))) +
+        kpi('chart', 'warn', 'Indicateur · ' + (PER.mode === '12m' ? '12 mois' : PER.mode === 'annee' ? PER.year : 'carrière'), R.fmt(cP.ef) + ' <small class="unit">EF</small>', esc(rel)) +
         kpi('cal', 'info', 'Dernier rendez-vous', lastR ? fmtD(lastR.dateObj) : '—', nextR ? 'Prochain : ' + fmtD(nextR.dateObj) : 'Aucun rendez-vous prévu') +
         kpi('flask', '', 'Prélèvements', prels.length, prels[0] ? 'Dernier : ' + esc(PREL[prels[0].type]) + ' ' + prels[0].valeur + ' ' + esc(prels[0].unite) : 'Aucun') +
       '</div>' +
-      '<section class="panel"><div class="panel-head"><h3>Évolution de l\'indice</h3></div>' + lineChart(monthly(parts, function (p) { return p.it.dateObj; }, function (p) { return p.indice; })) + '</section>' +
-      '<section class="panel"><div class="panel-head"><h3>Historique des expositions</h3><button class="link-btn" type="button" id="plan-rdv">' + icon('cal') + 'Planifier un rendez-vous</button></div>' +
-        (parts.length ? '<table class="dtable"><thead><tr><th>Date</th><th>Intervention</th><th>Rôle · engin</th><th>ARI</th><th>Contamination</th><th>Décontamination</th><th class="num">Indice</th></tr></thead><tbody>' + parts.map(function (p) {
-          return '<tr><td data-l="Date">' + fmtD(p.it.dateObj) + '</td><td data-l="Intervention">' + esc(TYPE[p.it.type_feu]) + '<br><span class="note">' + esc(p.it.numero) + '</span></td><td data-l="Rôle">' + esc(ROLE_TENU[p.role_tenu]) + (p.engin ? ' · ' + esc(p.engin) : '') + '</td><td data-l="ARI">' + ariTxt(p) + '</td><td>' + cont(p) + '</td><td>' + decon(p) + '</td><td class="num" data-l="Indice">' + p.indice + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="empty">Aucune exposition.</p>') + '</section>';
-    bindCharts(root); bindSoon(root);
+      '<section class="panel"><div class="panel-head"><h3>Évolution de l\'indicateur (12 mois)</h3></div>' + lineChart(monthly(all.filter(filled), function (p) { return p.it.dateObj; }, function (p) { return +p.indice || 0; }), ' EF') + '</section>' +
+      '<section class="panel"><div class="panel-head wrap"><h3>Expositions · ' + esc(periodLabel()) + '</h3>' + periodBar(all) + '</div>' + historyTable(parts, 'Aucune exposition sur cette période.') +
+      '<div class="actions-row"><button class="link-btn" type="button" id="plan-rdv">' + icon('cal') + 'Planifier un rendez-vous</button></div></section>' +
+      countersPanel(cP, 'Compteurs · ' + periodLabel());
+    bindCharts(root); bindSoon(root); bindPeriod(root, all, u);
     root.querySelector('#plan-rdv').onclick = function () { openRdv(u); };
     var pick = root.querySelector('#agent-pick'); if (pick) pick.onchange = function () { suiviId = pick.value; route(); };
   }
 
   function viewExport(root) {
     var opts = [];
-    var mineRows = function () { return [['Date', 'Numéro', 'Type', 'Précision', 'Commune', 'Rôle', 'Engin', 'ARI', 'Contamination', 'Décontamination validée', 'Indice']].concat(db.mine.map(function (p) { return [fmtD(p.it.dateObj), p.it.numero, TYPE[p.it.type_feu], p.it.precision, p.it.commune, ROLE_TENU[p.role_tenu], p.engin, ariTxt(p), CONT[p.contamination][0], p.decon_validee ? 'oui' : 'non', p.indice]; })); };
-    if (S.role !== 'sssm') opts.push(['perso', 'Mes expositions (CSV)', 'Votre historique complet, à ouvrir dans un tableur.', function () { csvDownload('mes-expositions.csv', mineRows()); }]);
-    if (S.role !== 'sssm') opts.push(['pdf', 'Mon dossier (PDF)', "Ouvre votre dossier personnel prêt à imprimer ou à enregistrer en PDF.", function () { location.hash = 'dossier'; setTimeout(function () { window.print(); }, 400); }]);
+    var expoHead = ['Date', 'Numéro', 'Type de sinistre', 'Précision', 'Commune', 'Nature (procédés et substances CMR)', 'Circonstances', 'Rôle', 'Engin', 'Position', 'Tactique', 'Zone', 'Durée (min)', 'ARI', 'ARI retiré au déblai', 'Décontamination', 'Indicateur (EF)', 'Référentiel'];
+    var expoRow = function (p) { var f = filled(p); return [fmtD(p.it.dateObj), p.it.numero, TYPE[p.it.type_feu], p.it.precision, p.it.commune, f ? R.natureTexte(p.it) : 'Rapport en cours', (p.it.circonstances || []).filter(function (k) { return R.CIRC[k]; }).map(function (k) { return R.CIRC[k].nom; }).join(', '), ROLE_TENU[p.role_tenu], p.engin, f ? R.posLabel(p.position) : '', p.tactique ? R.TAC[p.tactique].label : '', f ? (CONT[p.contamination] || [''])[0] : '', f ? p.duree_min : '', ariTxt(p), p.ari_retire_deb ? 'oui' : 'non', f ? (R.DEC[p.decon_type] || { label: '' }).label : '', f ? String(p.indice).replace('.', ',') : '', 'v' + R.version]; };
+    if (S.role === 'agent' || S.role === 'cos' || S.role === 'commandement') {
+      opts.push(['perso', 'Mes expositions (CSV)', 'Votre historique complet, avec la nature des agents CMR de chaque intervention.', function () { csvDownload('mes-expositions.csv', [expoHead].concat(db.mine.map(expoRow))); }]);
+      opts.push(['pdf', 'Ma fiche individuelle d\'exposition (PDF)', 'Toute votre carrière : nature, durée et degré de chaque exposition.', function () { var m = PER.mode; PER.mode = 'carriere'; printFiche(db.me || {}, db.mine); PER.mode = m; }]);
+    }
     if (S.role === 'commandement' || S.role === 'sssm') opts.push(['etat', 'État des rapports du centre (CSV)', 'Statut de chaque rapport : en attente, en retard, transmis, validé.', function () { csvDownload('etat-rapports.csv', [['Date', 'Numéro', 'Type', 'Commune', 'CA/COS', 'Statut']].concat(db.interventions.map(function (x) { return [fmtD(x.dateObj), x.numero, TYPE[x.type_feu], x.commune, x.cosUser ? x.cosUser.name : '', STATE[VBSData.reportState(x)][0]]; }))); }]);
     if (S.role === 'sssm') {
-      opts.push(['expo', 'Toutes les expositions (CSV)', 'Une ligne par agent et par intervention.', function () { csvDownload('expositions.csv', [['Date', 'Numéro', 'Type', 'Agent', 'Matricule', 'Rôle', 'Engin', 'ARI', 'Contamination', 'Décon. validée', 'Indice']].concat(db.participations.filter(function (p) { return p.it; }).map(function (p) { return [fmtD(p.it.dateObj), p.it.numero, TYPE[p.it.type_feu], p.user ? p.user.name : '', p.user ? p.user.matricule : '', ROLE_TENU[p.role_tenu], p.engin, ariTxt(p), CONT[p.contamination][0], p.decon_validee ? 'oui' : 'non', p.indice]; }))); }]);
-      opts.push(['ref', 'Référentiel des expositions (CSV)', 'La base de données centrale validée par le SSSM.', function () { csvDownload('referentiel.csv', [['Motif', 'Phase', 'Protection', 'Agents CMR', 'Niveau', 'Statut']].concat(db.referentiel.map(function (r) { return [TYPE[r.type_feu], PHASE[r.phase], PROT[r.protection], r.agents_cmr, NIV[r.niveau][0], r.statut === 'valide' ? 'Validé' : 'Suggestion IA']; }))); }]);
+      opts.push(['expo', 'Toutes les expositions (CSV)', 'Une ligne par agent et par intervention, avec la nature des agents CMR.', function () { csvDownload('expositions.csv', [['Agent', 'Matricule'].concat(expoHead)].concat(db.participations.filter(function (p) { return p.it; }).map(function (p) { return [p.user ? p.user.name : '', p.user ? p.user.matricule : ''].concat(expoRow(p)); }))); }]);
+      opts.push(['ref', 'Référentiel CMR v' + R.version + ' (CSV)', 'Tous les coefficients, avec leur statut.', function () {
+        var rows = [['Famille', 'Code', 'Libellé', 'Valeur', 'Statut']];
+        [['Position', R.POS, 'coef'], ['Position (végétation)', R.POS_VEG, 'coef'], ['Tactique', R.TAC, 'coef'], ['Type de sinistre', R.FEU, 'coef'], ['Décontamination (fraction retirée)', R.DEC, 'd']].forEach(function (g) { Object.keys(g[1]).forEach(function (k) { rows.push([g[0], k, g[1][k].label, String(g[1][k][g[2]]).replace('.', ','), R.STATUTS[g[1][k].statut]]); }); });
+        csvDownload('referentiel-cmr-v' + R.version + '.csv', rows);
+      }]);
     }
-    root.innerHTML = head('Export', S.role === 'sssm' ? 'Tous les exports sont disponibles pour le SSSM.' : S.role === 'commandement' ? 'Vos données personnelles et l\'état des rapports de votre centre.' : 'Vos données personnelles uniquement.',
+    if (S.role === 'habillement') opts.push(['tenues', 'État des tenues du centre (CSV)', 'Numéro, type, agent, état, feux et lavages.', function () { csvDownload('tenues.csv', [['Numéro', 'Type', 'Agent', 'Matricule', 'État', 'Feux depuis la mise en service', 'Feux depuis le dernier lavage', 'Lavages', 'Seuil d\'alerte']].concat((db.tenues || []).map(function (t) { return [t.numero, TENUE[t.type], t.user ? t.user.name : '', t.user ? t.user.matricule : '', TST[t.statut][0], t.nb_feux, t.feux_depuis_lavage, t.nb_lavages, t.seuil_feux]; }))); }]);
+    root.innerHTML = head('Export', S.role === 'sssm' ? 'Tous les exports sont disponibles pour le SSSM.' : S.role === 'commandement' ? 'Vos données personnelles et l\'état des rapports de votre centre.' : S.role === 'habillement' ? 'Les données des tenues de votre centre.' : 'Vos données personnelles uniquement.',
       S.role === 'commandement' ? '<div class="field"><label class="label" for="zone">Périmètre</label><select class="select" id="zone"><option>' + esc(centreName()) + '</option><option disabled>Autres centres du groupement (version SDIS)</option></select></div>' : '') +
       '<div class="grid grid-2">' + opts.map(function (o) { return '<div class="callout"><span class="icon-tile">' + icon('download') + '</span><div><strong>' + o[1] + '</strong><span class="sub">' + o[2] + '</span></div><button class="btn btn-secondary btn-sm" type="button" data-exp="' + o[0] + '">Télécharger</button></div>'; }).join('') + '</div>' +
       '<p class="note">Les fichiers sont générés dans votre navigateur. Ils contiennent des données personnelles : conservez-les en lieu sûr.</p>';
     opts.forEach(function (o) { var b = root.querySelector('[data-exp="' + o[0] + '"]'); if (b) b.onclick = o[3]; });
   }
 
-  var rType = 'tous';
+  // ---------- Référentiel CMR (lecture seule, commun à tous les services) ----------
   function viewReferentiel(root) {
-    var rows = db.referentiel.filter(function (r) { return rType === 'tous' || r.type_feu === rType; });
-    var sug = db.referentiel.filter(function (r) { return r.statut === 'suggestion_ia'; }).length;
-    root.innerHTML = head('Base de données centrale', "Pour chaque motif de départ, phase et protection, le type d'exposition retenu. L'IA propose à partir des études ; le SSSM décide. Tous les rapports s'appuient sur ce référentiel.",
-      '<div class="field"><label class="label" for="rtype">Motif de départ</label><select class="select" id="rtype"><option value="tous">Tous les motifs</option>' + Object.keys(TYPE).map(function (k) { return '<option value="' + k + '"' + (rType === k ? ' selected' : '') + '>' + TYPE[k] + '</option>'; }).join('') + '</select></div>') +
-      (sug ? '<div class="callout red"><span class="icon-tile">' + icon('alert') + '</span><div><strong>' + sug + ' suggestion' + (sug > 1 ? 's' : '') + ' de l\'IA à valider</strong><span class="sub">Elles ne s\'appliquent aux rapports qu\'après votre validation.</span></div></div>' : '') +
-      '<section class="panel"><table class="dtable"><thead><tr><th>Motif</th><th>Phase</th><th>Protection</th><th>Agents CMR</th><th>Niveau</th><th>Statut</th><th></th></tr></thead><tbody>' +
-      rows.map(function (r) { return '<tr><td data-l="Motif">' + esc(TYPE[r.type_feu]) + '</td><td data-l="Phase">' + esc(PHASE[r.phase]) + '</td><td data-l="Protection">' + esc(PROT[r.protection]) + '</td><td data-l="Agents CMR">' + esc(r.agents_cmr) + '</td><td>' + badge(NIV[r.niveau]) + '</td><td>' + (r.statut === 'valide' ? badge(['Validé SSSM', 'badge-ok']) : badge(['Suggestion IA', 'badge-info'])) + '</td><td>' + (r.statut === 'suggestion_ia' ? '<button class="btn btn-primary btn-sm" type="button" data-validate="' + r.id + '">' + icon('check') + 'Valider</button>' : '') + '</td></tr>'; }).join('') +
-      '</tbody></table></section>';
-    root.querySelector('#rtype').onchange = function (e) { rType = e.target.value; route(); };
-    root.querySelectorAll('[data-validate]').forEach(function (b) {
-      b.onclick = async function () {
-        var r = db.referentiel.find(function (x) { return x.id === b.dataset.validate; }); b.disabled = true;
-        try {
-          if (!S.offline) await VBS.request('/api/collections/referentiel/records/' + r.id, { method: 'PATCH', body: { statut: 'valide', valide_par: db.meId, source: 'Validé par le SSSM' } });
-          r.statut = 'valide'; toast('Ligne validée : elle s\'applique désormais aux nouveaux rapports.'); route();
-        } catch (e) { b.disabled = false; toast('Validation impossible : ' + e.message); }
-      };
-    });
+    var st = function (k) { return '<span class="st st-' + k + '">' + R.STATUTS[k] + '</span>'; };
+    var coefTable = function (title, obj, key, fmt) { return '<section class="panel"><div class="panel-head"><h3>' + title + '</h3></div><table class="dtable"><thead><tr><th>Code</th><th>Libellé</th><th class="num">' + (key === 'd' ? 'Fraction retirée' : 'Coefficient') + '</th><th>Statut</th></tr></thead><tbody>' + Object.keys(obj).map(function (k) { return '<tr><td data-l="Code"><code>' + k + '</code></td><td data-l="Libellé">' + esc(obj[k].label) + '</td><td class="num" data-l="Valeur">' + String(obj[k][key]).replace('.', ',') + '</td><td data-l="Statut">' + st(obj[k].statut) + '</td></tr>'; }).join('') + '</tbody></table>' + (fmt || '') + '</section>'; };
+    root.innerHTML = head('Référentiel CMR', 'Agents retenus et méthode de calcul, version ' + R.version + ' du ' + R.date.split('-').reverse().join('/') + '. Commun à tous les services : il n\'est pas paramétrable localement.', '<span class="badge ' + (R.validateur ? 'badge-ok' : 'badge-pending') + '">' + (R.validateur ? 'Validé par ' + esc(R.validateur) : 'Validation médicale en attente') + '</span>') +
+      '<div class="callout"><span class="icon-tile">' + icon('scale') + '</span><div><strong>E = position × tactique × type de sinistre × (durée / 30) × (1 − décontamination)</strong><span class="sub">Résultat en équivalents-feu : 1 EF = un agent en attaque sur un feu d\'habitation pendant 30 minutes, sans décontamination. Plafond : ' + R.PLAFOND + ' EF par intervention. ' + esc(R.MENTION) + '</span></div></div>' +
+      '<section class="panel"><div class="panel-head"><h3>Nature : procédés cancérogènes (toute intervention sur feu)</h3>' + st('reglementaire') + '</div><ul class="rows">' + Object.keys(R.PROCEDES).map(function (k) { return '<li><span class="when"><code>' + k + '</code></span><span class="what"><b>' + esc(R.PROCEDES[k].label) + '</b><small>' + (k === 'PROC_SIL' ? 'Déblai, démolition, effondrement' : 'Toute intervention sur feu') + '</small></span><span class="right"></span></li>'; }).join('') + '</ul></section>' +
+      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>Substances présumées sur feu de structure</h3>' + st('reglementaire') + '</div><table class="dtable"><thead><tr><th>Substance</th><th>N° CAS</th><th>Classification</th></tr></thead><tbody>' + R.SOCLE.map(function (x) { return '<tr><td data-l="Substance"><b>' + esc(x.nom) + '</b></td><td data-l="CAS">' + esc(x.cas || '—') + '</td><td data-l="Classification">' + esc(x.cls) + '</td></tr>'; }).join('') + '</tbody></table></section>' +
+      '<section class="panel"><div class="panel-head"><h3>Substances circonstancielles</h3>' + st('reglementaire') + '</div><table class="dtable"><thead><tr><th>Substance</th><th>Classification</th><th>Déclencheur</th></tr></thead><tbody>' + Object.keys(R.CIRC).map(function (k) { var x = R.CIRC[k]; return '<tr><td data-l="Substance"><b>' + esc(x.nom) + '</b></td><td data-l="Classification">' + esc(x.cls) + '</td><td data-l="Déclencheur">' + esc(x.decl) + '</td></tr>'; }).join('') + '</tbody></table></section></div>' +
+      coefTable('Position dominante (saisie par le chef d\'agrès)', R.POS, 'coef', '<p class="note">Une seule variable : la position intègre déjà la zone et la phase. Ne jamais multiplier zone × phase × rôle.</p>') +
+      '<div class="grid grid-2">' + coefTable('Tactique d\'attaque (position attaque uniquement)', R.TAC, 'coef') + coefTable('Type de sinistre (déduit du motif)', R.FEU, 'coef') + '</div>' +
+      coefTable('Décontamination', R.DEC, 'd', '<p class="note">Valeur retirée : elle intervient sous la forme (1 − valeur). Le délai se compte depuis le désengagement.</p>') +
+      coefTable('Profil feu de végétation', R.POS_VEG, 'coef', '<p class="note">Le type de sinistre et la tactique ne s\'appliquent pas. Plafond de 4 EF par tranche de 12 heures. Si des habitations ou des véhicules brûlent, l\'intervention bascule sur le profil structure.</p>') +
+      '<section class="panel"><div class="panel-head"><h3>Hors calcul : compteurs bruts</h3></div><p>Les équipements de protection n\'entrent pas dans la formule (aucun facteur de protection chiffré n\'est défendable aujourd\'hui). L\'ARI est déjà inclus dans les coefficients de position. Sont tenus en compteurs : feux avec équipements non nettoyés, ARI retiré au déblai, décontaminations non réalisées, interventions en attaque, heures de feu.</p></section>' +
+      '<section class="panel"><div class="panel-head"><h3>Sources</h3></div><ol class="src">' + R.SOURCES.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol></section>';
   }
 
   function viewReglementation(root) {
@@ -751,74 +854,98 @@
   }
 
   // =================================================================== éditeur de rapport
-  var FONCTIONS = [['commandement', 'Commandement'], ['conduite', 'Conduite'], ['attaque', 'Attaque'], ['alimentation', 'Alimentation'], ['deblai', 'Déblai'], ['nettoyage', 'Nettoyage']];
   var ENGINS = ['FPT', 'FPTL', 'EPA', 'CCF', 'VSAV', 'VL'];
   var MOTOR = { thermique: 'Thermique (essence, gazole)', gpl: 'GPL', hybride: 'Hybride', electrique: 'Électrique', lithium_ion: 'Batterie lithium-ion en emballement (HF)' };
   var AMB = { feu_fumee: 'Présence de feu et de fumée (incendie actif)', fumees_faibles: 'Fumées négligeables ou diffuses', aucun_feu: 'Aucun feu (reconnaissance, hors atmosphère toxique)' };
-  var GDO = [['nulle', 'Nulle', "Aucun engagement en zone d'exclusion"], ['faible', 'Faible', 'Évolution en zone de soutien'], ['moyenne', 'Moyenne', 'Évolution en atmosphère viciée'], ['forte', 'Forte', "Évolution en milieu enfumé (zone d'exclusion)"]];
+  var DUREES = [30, 60, 90, 120, 180, 240];
   var ed = null;
 
+  function memberFrom(p, it) {
+    var m = { id: p.id, agent: p.agent, role_tenu: p.role_tenu, engin: p.engin || '', fonctions: (p.fonctions || []).slice(), position: p.position || '', tactique: p.tactique || '', duree_min: +p.duree_min || 0,
+      contamination: p.position ? (p.contamination === 'faible' ? 'nulle' : p.contamination) : null, tenue_complete: p.position ? !!p.tenue_complete : null, ari_porte: p.position ? !!p.ari_porte || (+p.ari_min > 0) : null, ari_min: +p.ari_min || 0, ffp3: !!p.ffp3,
+      ari_retire_deb: !!p.ari_retire_deb, decon_type: p.decon_type || '', decon_ref: p.decon_ref || '', exposition_particuliere: p.exposition_particuliere || '', commentaire: p.commentaire || '' };
+    return withDefaults(m, it);
+  }
+  // Pré-remplissage : la position suit le poste tenu dans l'engin ; le chef d'agrès corrige les exceptions.
+  function withDefaults(m, it) {
+    var set = R.positions(it);
+    if (!m.position || !set[m.position]) { m.position = R.defaultPosition(it, m.role_tenu); m.auto = true; }
+    if (m.contamination === null || m.contamination === undefined) m.contamination = set[m.position].zone;
+    if (m.position === 'POS_ATT' && !m.tactique) m.tactique = 'TAC_INT';
+    if (!m.duree_min && +it.duree_min) m.duree_min = +it.duree_min;
+    if (m.tenue_complete === null || m.tenue_complete === undefined) m.tenue_complete = true;
+    if (m.ari_porte === null || m.ari_porte === undefined) m.ari_porte = m.position === 'POS_ATT' || m.position === 'POS_DEB';
+    return m;
+  }
+  function blankMember(agent, role, engin) {
+    return withDefaults({ agent: agent, role_tenu: role || 'binome_attaque', engin: engin || 'FPT', fonctions: [], position: '', tactique: '', duree_min: 0, contamination: null, tenue_complete: null, ari_porte: null, ari_min: 0, ffp3: false, ari_retire_deb: false, decon_type: '', decon_ref: '', exposition_particuliere: '', commentaire: '' }, ed ? ed.it : { type_feu: 'habitation', duree_min: 0 });
+  }
   function editorState(id) {
     if (id === 'nouveau') {
       var me = db.me || {};
-      return { isNew: true, it: { operation: '', numero: 'INT-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000), date: localInput(new Date()), type_feu: 'habitation', precision: '', commune: '', motorisation: '', ambiance: 'feu_fumee', zone_deshabillage: false, epi_ensaches: false, suspicion_amiante: false, exposition_globale: '', observations: '', statut: 'brouillon', centre: me.centre, cos: db.meId },
-        crew: [blankMember(db.meId, 'chef_agres', 'FPT')], removed: [] };
+      ed = { isNew: true, it: { operation: '', numero: 'INT-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000), date: localInput(new Date()), type_feu: 'habitation', precision: '', commune: '', motorisation: '', ambiance: 'feu_fumee', duree_min: 0, circonstances: [], zone_deshabillage: false, epi_ensaches: false, exposition_globale: '', observations: '', statut: 'brouillon', centre: me.centre, cos: db.meId }, crew: [], removed: [] };
+      ed.crew.push(blankMember(db.meId, 'chef_agres', 'FPT'));
+      return ed;
     }
     var x = db.inter[id];
     if (!x) return null;
     if (S.role === 'cos' && x.cos !== db.meId) return null;
-    var st0 = { isNew: false, id: x.id, it: { operation: x.operation || '', numero: x.numero, date: localInput(x.dateObj), type_feu: x.type_feu, precision: x.precision || '', commune: x.commune || '', motorisation: x.motorisation || '', ambiance: x.ambiance || 'feu_fumee', zone_deshabillage: !!x.zone_deshabillage, epi_ensaches: !!x.epi_ensaches, suspicion_amiante: !!x.suspicion_amiante, exposition_globale: x.exposition_globale || '', observations: x.observations || '', statut: x.statut, centre: x.centre, cos: x.cos },
-      crew: x.crew.map(function (p) { return { id: p.id, agent: p.agent, role_tenu: p.role_tenu, engin: p.engin || '', fonctions: (p.fonctions || []).slice(), contamination: p.contamination || 'nulle', tenue_complete: !!p.tenue_complete, ari_porte: !!p.ari_porte || (+p.ari_min > 0), ari_min: +p.ari_min || 0, sans_ari_min: +p.sans_ari_min || 0, ffp3: !!p.ffp3, douche: !!p.douche, tenue_changee: !!p.tenue_changee, lingettes: !!p.lingettes, decon_validee: !!p.decon_validee, decon_ref: p.decon_ref || '', decon_heure: p.decon_heure || '', exposition_particuliere: p.exposition_particuliere || '', commentaire: p.commentaire || '' }; })
-        .sort(function (a, b) { return (a.role_tenu === 'chef_agres' ? 0 : 1) - (b.role_tenu === 'chef_agres' ? 0 : 1); }),
-      removed: [] };
-    // Rapport ouvert par le COS pour ce CA : le CA est ajouté d'office comme chef d'agrès
+    var it = { operation: x.operation || '', numero: x.numero, date: localInput(x.dateObj), type_feu: x.type_feu, precision: x.precision || '', commune: x.commune || '', motorisation: x.motorisation || '', ambiance: x.ambiance || 'feu_fumee', duree_min: +x.duree_min || 0,
+      circonstances: (x.circonstances || []).slice().concat(x.suspicion_amiante && (x.circonstances || []).indexOf('AMIANTE') === -1 ? ['AMIANTE'] : []), zone_deshabillage: !!x.zone_deshabillage, epi_ensaches: !!x.epi_ensaches, exposition_globale: x.exposition_globale || '', observations: x.observations || '', statut: x.statut, centre: x.centre, cos: x.cos };
+    var st0 = { isNew: false, id: x.id, it: it, crew: x.crew.map(function (p) { return memberFrom(p, it); }).sort(function (a, b) { return (a.role_tenu === 'chef_agres' ? 0 : 1) - (b.role_tenu === 'chef_agres' ? 0 : 1); }), removed: [] };
+    ed = st0;
     if (!st0.crew.length && x.cos === db.meId) st0.crew.push(blankMember(db.meId, 'chef_agres', engOf(x) !== '—' ? engOf(x) : 'FPT'));
     return st0;
   }
-  function blankMember(agent, role, engin) {
-    return { agent: agent, role_tenu: role || 'binome_attaque', engin: engin || 'FPT', fonctions: [], contamination: null, tenue_complete: null, ari_porte: null, ari_min: 0, sans_ari_min: 0, ffp3: null, douche: false, tenue_changee: false, lingettes: false, decon_validee: false, decon_ref: '', decon_heure: '', exposition_particuliere: '', commentaire: '' };
-  }
   function edReadOnly() { return S.role === 'cos' ? ed.it.statut !== 'brouillon' : S.role !== 'sssm'; }
-  function toxProfile() {
-    var ref = db.referentiel.filter(function (r) { return r.type_feu === ed.it.type_feu; })[0];
-    var list = ref ? ref.agents_cmr.split(',').map(function (x) { return x.trim(); }) : [];
-    if (ed.it.type_feu === 'vehicule' && ed.it.motorisation === 'lithium_ion') list = list.concat(['Acide fluorhydrique (HF)', 'Lithium']);
-    if (ed.it.ambiance === 'aucun_feu') list = [];
-    return list;
-  }
-  function opt(v, cur) { return v === cur ? ' on' : ''; }
   function pairBtns(i, field, a, b) {
     var cur = ed.crew[i][field];
-    return '<div class="pair" role="group"><button type="button" class="opt' + (cur === true ? ' on' : '') + '" data-set="' + i + '|' + field + '|1">' + a + '</button><button type="button" class="opt' + (cur === false ? ' on warn' : '') + '" data-set="' + i + '|' + field + '|0">' + b + '</button></div>';
+    return '<div class="pair" role="group"><button type="button" class="opt' + (cur === true ? ' on' : '') + '" data-set="' + i + '|' + field + '|1" aria-pressed="' + (cur === true) + '">' + a + '</button><button type="button" class="opt' + (cur === false ? ' on warn' : '') + '" data-set="' + i + '|' + field + '|0" aria-pressed="' + (cur === false) + '">' + b + '</button></div>';
   }
   function memberCard(i) {
-    var m = ed.crew[i], u = db.byId[m.agent] || {}, ro = edReadOnly();
-    var idx = VBSData.indice(ed.it.type_feu, m);
+    var m = ed.crew[i], u = db.byId[m.agent] || {}, ro = edReadOnly(), fire = ed.it.ambiance !== 'aucun_feu';
+    var calc = R.calcul(ed.it, m), set = R.positions(ed.it);
     return '<article class="agent-card" data-card="' + i + '"><div class="agent-top"><div><b>' + esc(u.name || '—') + '</b><small>' + esc([u.grade, u.matricule].filter(Boolean).join(' · ')) + '</small></div>' +
       (ro ? '' : '<button type="button" class="icon-btn sm" data-remove="' + i + '" aria-label="Retirer ' + esc(u.name || '') + ' de l\'équipage">✕</button>') + '</div>' +
-      '<div class="form-2"><div class="field"><label class="label">Poste</label><select class="select" data-f="' + i + '|role_tenu">' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
+      '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
       '<div class="field"><label class="label">Engin</label><select class="select" data-f="' + i + '|engin">' + ENGINS.map(function (k) { return '<option' + (m.engin === k ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></div></div>' +
-      '<div class="block"><span class="label">Fonctions et rôles exécutés</span><div class="chips-pick">' + FONCTIONS.map(function (f) { return '<button type="button" class="opt' + (m.fonctions.indexOf(f[0]) !== -1 ? ' on' : '') + '" data-fct="' + i + '|' + f[0] + '">' + f[1] + '</button>'; }).join('') + '</div></div>' +
-      '<div class="block"><span class="label">Exposition perçue (terminologie GDO)</span><div class="gdo">' + GDO.map(function (g) { return '<button type="button" class="opt gdo-' + g[0] + opt(g[0], m.contamination) + '" data-set="' + i + '|contamination|' + g[0] + '"><b>' + g[1] + '</b><small>' + g[2] + '</small></button>'; }).join('') + '</div></div>' +
-      '<div class="block"><span class="label">Port des équipements de protection</span><div class="epi">' +
-        '<div><small>Tenue d\'intervention</small>' + pairBtns(i, 'tenue_complete', 'Complète', 'Incomplète') + '</div>' +
-        '<div><small>Protection respiratoire (ARI)</small>' + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div>' +
-        '<div><small>Masque FFP3 (déblai)</small>' + pairBtns(i, 'ffp3', 'Porté', 'Non porté') + '</div></div>' +
-        '<div class="form-2">' + (m.ari_porte ? '<div class="field"><label class="label">Temps d\'engagement sous ARI</label><select class="select" data-f="' + i + '|ari_min">' + [15, 30, 45, 60].map(function (v) { return '<option value="' + v + '"' + (+m.ari_min === v ? ' selected' : '') + '>' + (v === 60 ? '60 min et plus' : v + ' min') + '</option>'; }).join('') + '</select></div><div></div>' : '') + '</div></div>' +
-      '<div class="block decon-box"><div class="decon-head"><span class="label">Décontamination</span><button type="button" class="opt' + (m.decon_validee ? ' on ok' : '') + '" data-toggle="' + i + '|decon_validee">' + (m.decon_validee ? icon('check') + 'Décontamination cutanée HAP validée' : 'Décontamination cutanée HAP à valider') + '</button></div>' +
-        '<div class="chips-pick">' + [['douche', 'Douche'], ['tenue_changee', 'Tenue changée'], ['lingettes', 'Lingettes']].map(function (g) { return '<button type="button" class="opt' + (m[g[0]] ? ' on' : '') + '" data-toggle="' + i + '|' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' +
-        '<div class="form-2"><div class="field"><label class="label">Réf. de mesure</label><input class="input" type="text" maxlength="40" data-f="' + i + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. Mesure VB124-1"></div><div class="field"><label class="label">Heure</label><input class="input" type="time" data-f="' + i + '|decon_heure" value="' + esc(m.decon_heure) + '"></div></div></div>' +
-      '<div class="form-2"><div class="field"><label class="label">Exposition particulière</label><input class="input" type="text" maxlength="300" data-f="' + i + '|exposition_particuliere" value="' + esc(m.exposition_particuliere) + '"></div>' +
+      (fire ? '<div class="block"><span class="label">Position tenue la plus longtemps' + (m.auto ? ' <span class="auto-tag">proposée d\'après le poste</span>' : '') + '</span><div class="pos-pick">' + Object.keys(set).map(function (k) { return '<button type="button" class="opt' + (m.position === k ? ' on' : '') + '" data-pos="' + i + '|' + k + '" aria-pressed="' + (m.position === k) + '">' + esc(set[k].label) + '</button>'; }).join('') + '</div>' +
+        (m.position === 'POS_ATT' ? '<div class="sub-pick"><span class="label sm">Tactique d\'attaque</span><div class="pair" role="group">' + Object.keys(R.TAC).map(function (k) { return '<button type="button" class="opt' + (m.tactique === k ? ' on' : '') + '" data-tac="' + i + '|' + k + '" aria-pressed="' + (m.tactique === k) + '">' + (k === 'TAC_INT' ? 'Intérieure directe' : 'Transitoire (abattage extérieur d\'abord)') + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
+      '<div class="block"><span class="label">Exposition perçue</span><div class="gdo gdo-3">' + ['nulle', 'moyenne', 'forte'].map(function (z) { return '<button type="button" class="opt gdo-' + z + (m.contamination === z ? ' on' : '') + '" data-set="' + i + '|contamination|' + z + '" aria-pressed="' + (m.contamination === z) + '"><b>' + R.ZONES[z][0] + '</b><small>' + R.ZONES[z][1].split(' : ')[1] + '</small></button>'; }).join('') + '</div></div>' : '') +
+      '<div class="block"><div class="form-2"><div class="field"><label class="label">Durée d\'engagement</label><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" data-f="' + i + '|duree_min" value="' + (m.duree_min || '') + '"><span>min</span></div></div>' +
+        '<div class="field"><span class="label">Équipements</span><div class="epi-mini">' + pairBtns(i, 'tenue_complete', 'Tenue complète', 'Incomplète') + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div></div></div>' +
+        '<div class="chips-pick">' + (m.position === 'POS_ATT' || m.position === 'POS_DEB' ? '<button type="button" class="opt' + (m.ari_retire_deb ? ' on warn' : '') + '" data-toggle="' + i + '|ari_retire_deb">ARI retiré pendant le déblai</button>' : '') + '<button type="button" class="opt' + (m.ffp3 ? ' on' : '') + '" data-toggle="' + i + '|ffp3">Masque FFP3 au déblai</button></div>' +
+        (m.position === 'POS_ATT' && m.ari_porte === false ? '<p class="warn-line">' + icon('alert') + 'Attaque sans ARI : événement anormal, signalé au SSSM.</p>' : '') + '</div>' +
+      (fire ? '<div class="block decon-box"><span class="label">Décontamination</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div>' +
+        '<div class="field"><label class="label sm">Réf. de mesure (dispositif VB Safety, facultatif)</label><input class="input" type="text" maxlength="40" data-f="' + i + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. Mesure VB124-1"></div></div>' : '') +
+      '<div class="form-2"><div class="field"><label class="label">Exposition particulière</label><input class="input" type="text" maxlength="300" data-f="' + i + '|exposition_particuliere" value="' + esc(m.exposition_particuliere) + '" placeholder="Ex. présence de batterie de trottinette"></div>' +
       '<div class="field"><label class="label">Commentaire individuel</label><input class="input" type="text" maxlength="500" data-f="' + i + '|commentaire" value="' + esc(m.commentaire) + '" placeholder="Faits uniquement, sans donnée médicale"></div></div>' +
-      '<div class="agent-foot"><span>Indice d\'exposition estimé</span><b>' + idx + '</b></div></article>';
+      '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div></article>';
   }
   function missing(m) {
-    var out = [];
-    if (!m.fonctions.length) out.push('fonctions');
-    if (m.contamination === null) out.push('exposition perçue');
-    if (m.tenue_complete === null) out.push('tenue');
-    if (m.ari_porte === null) out.push('ARI');
+    var out = [], fire = ed.it.ambiance !== 'aucun_feu';
+    if (fire && !m.position) out.push('position');
+    if (fire && !m.contamination) out.push('exposition perçue');
+    if (!+m.duree_min) out.push('durée');
+    if (fire && !m.decon_type) out.push('décontamination');
     return out;
+  }
+  function circHtml() {
+    var c = ed.it.circonstances, veg = ed.it.type_feu === 'vegetation';
+    var sug = R.suggestions(ed.it.exposition_globale + ' ' + ed.crew.map(function (m) { return m.exposition_particuliere; }).join(' '), c);
+    return '<div class="circ"><span class="label">Circonstances particulières <span class="note">(cochez seulement si c\'est le cas)</span></span><div class="chips-pick">' +
+      (veg ? '<button type="button" class="opt' + (c.indexOf('bascule') !== -1 ? ' on' : '') + '" data-circ="bascule">Habitations ou véhicules impliqués</button>' : '') +
+      Object.keys(R.CIRC).map(function (k) { return '<button type="button" class="opt' + (c.indexOf(k) !== -1 ? ' on' : '') + '" data-circ="' + k + '" title="' + esc(R.CIRC[k].decl) + '">' + esc(R.CIRC[k].nom) + '<small>' + esc(R.CIRC[k].decl) + '</small></button>'; }).join('') + '</div>' +
+      '<div class="form-2 glob"><div class="field"><label class="label" for="ed-glob">Exposition particulière</label><input class="input" id="ed-glob" data-it="exposition_globale" value="' + esc(ed.it.exposition_globale) + '" maxlength="300" placeholder="Ex. présence de batterie de trottinette"></div><button type="button" class="btn btn-secondary" id="ed-apply-all">Appliquer à tout l\'équipage</button></div>' +
+      '<div id="ed-sug">' + (sug.length ? '<p class="sug-line">' + icon('alert') + '<span>D\'après votre texte, pensez à : ' + sug.map(function (k) { return '<button type="button" class="link-btn" data-circadd="' + k + '">' + esc(R.CIRC[k].nom) + ' (ajouter)</button>'; }).join(' · ') + '</span></p>' : '') + '<p class="note">Suggestions par mots-clés, sans intelligence artificielle : rien n\'est ajouté au rapport sans votre accord.</p></div></div>';
+  }
+  function natureHtml() {
+    var n = R.nature(ed.it);
+    if (!n.procedes.length) return '<div class="tox"><span class="label">Agents CMR portés sur la fiche d\'exposition</span><p class="note">Aucun : intervention sans feu ni fumée.</p></div>';
+    return '<div class="tox"><span class="label">Agents CMR portés sur la fiche d\'exposition (référentiel v' + R.version + ')</span><div class="chips">' +
+      n.procedes.map(function (k) { return '<span class="chip chip-proc">' + esc(R.PROCEDES[k].court) + '</span>'; }).join('') +
+      n.substances.map(function (x) { return '<span class="chip">' + esc(x.nom.split(' (')[0]) + '</span>'; }).join('') +
+      n.circ.map(function (k) { return '<span class="chip chip-circ">' + esc(R.CIRC[k].nom) + '</span>'; }).join('') + '</div></div>';
   }
   function viewEditor(root, id) {
     if (!ed || (id === 'nouveau' ? !ed.isNew : ed.id !== id)) ed = editorState(id);
@@ -826,25 +953,26 @@
     var ro = edReadOnly(), x = ed.it, st = ed.isNew ? 'attente' : VBSData.reportState(Object.assign({ dateObj: new Date(x.date) }, x));
     var inCrew = ed.crew.map(function (m) { return m.agent; });
     var candidates = db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && inCrew.indexOf(u.id) === -1; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
-    var tox = toxProfile();
+    var fire = x.ambiance !== 'aucun_feu';
     root.innerHTML = '<div class="ed-wrap"><a class="back-link" href="#rapports">' + icon('back') + 'Rapports</a>' +
-      head(ed.isNew ? 'Nouveau rapport de contamination' : 'Rapport ' + esc(x.numero), S.role === 'sssm' ? 'Correction par le SSSM : chaque modification est journalisée.' : 'Compte rendu de contamination et de décontamination de votre équipage.', ed.isNew ? badge(['Brouillon', 'badge-pending']) : (ro ? '<span class="lock">' + icon('lock') + 'Lecture seule</span> ' : '') + badge(x.statut === 'brouillon' ? ['Brouillon', 'badge-pending'] : STATE[st])) +
+      head(ed.isNew ? 'Nouveau rapport de contamination' : 'Rapport ' + esc(x.numero), S.role === 'sssm' ? 'Correction par le SSSM : chaque modification est journalisée.' : 'Trois choses à vérifier : les positions (proposées d\'après les postes), la décontamination de l\'équipage et les circonstances particulières.', ed.isNew ? badge(['Brouillon', 'badge-pending']) : (ro ? '<span class="lock">' + icon('lock') + 'Lecture seule</span> ' : '') + badge(x.statut === 'brouillon' ? ['Brouillon', 'badge-pending'] : STATE[st])) +
       '<fieldset class="ed-fs"' + (ro ? ' disabled' : '') + '>' +
-      '<section class="panel"><div class="panel-head"><h3>Typologie du sinistre</h3>' + (!ed.isNew && db.inter[ed.id] && db.inter[ed.id].op ? opChip(db.inter[ed.id]) : '') + '</div>' +
+      '<section class="panel"><div class="panel-head"><h3>1. Intervention</h3>' + (!ed.isNew && db.inter[ed.id] && db.inter[ed.id].op ? opChip(db.inter[ed.id]) : '') + '</div>' +
         (ed.isNew ? '<div class="field"><label class="label" for="ed-op">Opération</label><select class="select" id="ed-op" data-it="operation" data-rerender><option value="">Intervention simple : je suis CA et COS</option>' + db.operations.filter(function (o) { return within(o.dateObj, 3); }).map(function (o) { return '<option value="' + o.id + '"' + (x.operation === o.id ? ' selected' : '') + '>' + esc(opLabel(o) + ' · COS : ' + (o.cosUser ? o.cosUser.name : '—')) + '</option>'; }).join('') + '</select><span class="hint">Sur une opération à plusieurs agrès, rattachez votre rapport : le COS verra que vous l\'avez rempli.</span></div>' : '') +
         '<div class="form-3"><div class="field"><label class="label" for="ed-num">N° d\'intervention</label><input class="input" id="ed-num" data-it="numero" value="' + esc(x.numero) + '" maxlength="32"></div>' +
         '<div class="field"><label class="label" for="ed-date">Date et heure</label><input class="input" id="ed-date" type="datetime-local" data-it="date" value="' + esc(x.date) + '"></div>' +
         '<div class="field"><label class="label" for="ed-commune">Commune</label><input class="input" id="ed-commune" data-it="commune" value="' + esc(x.commune) + '" maxlength="80"></div></div>' +
-        '<div class="form-3"><div class="field"><label class="label" for="ed-type">Nature / motif de départ</label><select class="select" id="ed-type" data-it="type_feu" data-rerender>' + Object.keys(TYPE).map(function (k) { return '<option value="' + k + '"' + (x.type_feu === k ? ' selected' : '') + '>' + TYPE[k] + '</option>'; }).join('') + '</select></div>' +
+        '<div class="form-3"><div class="field"><label class="label" for="ed-type">Type de sinistre</label><select class="select" id="ed-type" data-it="type_feu" data-rerender>' + Object.keys(TYPE).map(function (k) { return '<option value="' + k + '"' + (x.type_feu === k ? ' selected' : '') + '>' + TYPE[k] + '</option>'; }).join('') + '</select></div>' +
         '<div class="field"><label class="label" for="ed-prec">Précision</label><input class="input" id="ed-prec" data-it="precision" value="' + esc(x.precision) + '" maxlength="160" placeholder="Ex. VL en parking souterrain"></div>' +
-        (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-motor">Motorisation / carburation</label><select class="select" id="ed-motor" data-it="motorisation" data-rerender><option value="">—</option>' + Object.keys(MOTOR).map(function (k) { return '<option value="' + k + '"' + (x.motorisation === k ? ' selected' : '') + '>' + MOTOR[k] + '</option>'; }).join('') + '</select></div>' : '<div></div>') + '</div>' +
-        '<div class="field"><label class="label" for="ed-amb">Ambiance opérationnelle (fumées et feu)</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div>' +
-        '<div class="tox"><span class="label">Profil toxicologique (référentiel SSSM)</span><div class="chips">' + (tox.length ? tox.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') : '<span class="note">Aucun agent CMR attendu</span>') + '</div></div>' +
-        '<div class="chips-pick">' + [['zone_deshabillage', 'Zone de déshabillage mise en place'], ['epi_ensaches', 'EPI souillés ensachés'], ['suspicion_amiante', "Suspicion d'amiante"]].map(function (g) { return '<button type="button" class="opt' + (x[g[0]] ? ' on' : '') + '" data-ittoggle="' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' +
-        '<div class="form-2 glob"><div class="field"><label class="label" for="ed-glob">Exposition particulière globale</label><input class="input" id="ed-glob" data-it="exposition_globale" value="' + esc(x.exposition_globale) + '" maxlength="300" placeholder="Ex. fumées de plastiques brûlés"></div><button type="button" class="btn btn-secondary" id="ed-apply-all">Appliquer à tout l\'équipage</button></div>' +
+        (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-motor">Motorisation</label><select class="select" id="ed-motor" data-it="motorisation" data-rerender><option value="">—</option>' + Object.keys(MOTOR).map(function (k) { return '<option value="' + k + '"' + (x.motorisation === k ? ' selected' : '') + '>' + MOTOR[k] + '</option>'; }).join('') + '</select></div>' : '<div class="field"><label class="label" for="ed-amb">Fumées et feu</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div>') + '</div>' +
+        (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-amb">Fumées et feu</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div>' : '') +
+        '<div class="field"><span class="label">Durée d\'engagement de l\'équipage</span><div class="dur-row"><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" id="ed-dur" data-itdur value="' + (x.duree_min || '') + '" aria-label="Durée en minutes"><span>min</span></div><div class="chips-pick">' + DUREES.map(function (d) { return '<button type="button" class="opt' + (+x.duree_min === d ? ' on' : '') + '" data-dur="' + d + '">' + durTxt(d) + '</button>'; }).join('') + '</div></div><span class="hint">De l\'arrivée sur les lieux au désengagement. Appliquée à tout l\'équipage, modifiable agent par agent.</span></div>' +
+        (fire ? circHtml() + natureHtml() : natureHtml()) +
+        '<div class="chips-pick">' + [['zone_deshabillage', 'Zone de déshabillage mise en place'], ['epi_ensaches', 'EPI souillés ensachés']].map(function (g) { return '<button type="button" class="opt' + (x[g[0]] ? ' on' : '') + '" data-ittoggle="' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' +
         '<div class="field"><label class="label" for="ed-obs">Observations</label><textarea class="textarea" id="ed-obs" data-it="observations" rows="2" maxlength="1000"></textarea></div>' +
       '</section>' +
-      '<section class="panel"><div class="panel-head"><h3>Engagements et protection · ' + ed.crew.length + ' engagé' + (ed.crew.length > 1 ? 's' : '') + '</h3></div>' +
+      '<section class="panel"><div class="panel-head"><h3>2. Équipage · ' + ed.crew.length + ' engagé' + (ed.crew.length > 1 ? 's' : '') + '</h3></div>' +
+        (fire && !ro ? '<div class="crew-dec"><span class="label">Décontamination de tout l\'équipage, en un appui</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { var all = ed.crew.length && ed.crew.every(function (m) { return m.decon_type === k; }); return '<button type="button" class="opt' + (all ? ' on' : '') + '" data-decall="' + k + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div><span class="hint">Pas besoin de l\'heure : choisissez simplement le délai. Modifiable ensuite agent par agent.</span></div>' : '') +
         '<div class="crew-grid" id="crew">' + ed.crew.map(function (_, i) { return memberCard(i); }).join('') + '</div>' +
         (ro ? '' : '<div class="add-member"><select class="select" id="ed-add"><option value="">Ajouter un membre d\'équipage…</option>' + candidates.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + (u.grade || '') + ' · ' + u.matricule) + '</option>'; }).join('') + '</select><button type="button" class="btn btn-secondary" id="ed-add-btn">Ajouter</button></div>') +
       '</section></fieldset>' +
@@ -852,35 +980,46 @@
         (S.role === 'cos' ? '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer le brouillon</button><button type="button" class="btn btn-primary" id="ed-send">' + icon('send') + 'Transmettre au SSSM</button>'
           : '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer les corrections</button>' + (x.statut !== 'controle_sssm' ? '<button type="button" class="btn btn-primary" id="ed-validate">' + icon('lock') + 'Enregistrer et valider</button>' : '')) + '</div>') + '</div>';
     root.querySelector('#ed-obs').value = x.observations || '';
-    // Les écouteurs sont posés sur l'élément recréé à chaque rendu : pas d'accumulation.
     bindEditor(root.firstElementChild, root);
   }
+  function reDefault() { ed.crew.forEach(function (m) { if (m.auto || !R.positions(ed.it)[m.position]) { m.position = ''; m.contamination = null; m.tactique = ''; withDefaults(m, ed.it); } }); }
   function bindEditor(root, host) {
     var redraw = function () { var y = window.scrollY; viewEditor(host, ed.isNew ? 'nouveau' : ed.id); window.scrollTo(0, y); };
     var redrawCard = function (i) { var c = root.querySelector('[data-card="' + i + '"]'); if (c) c.outerHTML = memberCard(i); };
+    var redrawSug = function () { var box = root.querySelector('#ed-sug'); if (!box) return; var tmp = document.createElement('div'); tmp.innerHTML = circHtml(); box.innerHTML = tmp.querySelector('#ed-sug').innerHTML; };
     root.addEventListener('input', function (e) {
       var t = e.target;
-      if (t.dataset.it) ed.it[t.dataset.it] = t.value;
-      if (t.dataset.f) { var p = t.dataset.f.split('|'), m = ed.crew[+p[0]]; m[p[1]] = (p[1] === 'sans_ari_min' || p[1] === 'ari_min') ? (+t.value || 0) : t.value; if (p[1] === 'sans_ari_min') { var f = root.querySelector('[data-card="' + p[0] + '"] .agent-foot b'); if (f) f.textContent = VBSData.indice(ed.it.type_feu, m); } }
+      if (t.dataset.it) { ed.it[t.dataset.it] = t.value; if (t.dataset.it === 'exposition_globale') redrawSug(); }
+      if (t.hasAttribute('data-itdur')) { var old = +ed.it.duree_min || 0, v = +t.value || 0; ed.it.duree_min = v; ed.crew.forEach(function (m, i) { if (!m.duree_min || m.duree_min === old) { m.duree_min = v; var inp = root.querySelector('[data-f="' + i + '|duree_min"]'); if (inp) inp.value = v || ''; var f = root.querySelector('[data-card="' + i + '"] .agent-foot b'); if (f) f.textContent = R.fmt(R.calcul(ed.it, m).ef) + ' EF'; } }); root.querySelectorAll('[data-dur]').forEach(function (b) { b.classList.toggle('on', +b.dataset.dur === v); }); }
+      if (t.dataset.f) { var p = t.dataset.f.split('|'), m = ed.crew[+p[0]]; m[p[1]] = p[1] === 'duree_min' ? (+t.value || 0) : t.value; if (p[1] === 'duree_min') { var f2 = root.querySelector('[data-card="' + p[0] + '"] .agent-foot b'); if (f2) f2.textContent = R.fmt(R.calcul(ed.it, m).ef) + ' EF'; } if (p[1] === 'exposition_particuliere') redrawSug(); }
     });
     root.addEventListener('change', function (e) {
       var t = e.target;
       if (t.dataset.it && t.hasAttribute('data-rerender')) {
+        var prevType = ed.it.type_feu;
         ed.it[t.dataset.it] = t.value;
         if (t.dataset.it === 'type_feu' && t.value !== 'vehicule') ed.it.motorisation = '';
-        if (t.dataset.it === 'operation' && t.value && db.ops[t.value]) { var o = db.ops[t.value]; ed.it.type_feu = o.type_feu; ed.it.commune = o.commune || ''; ed.it.precision = o.precision || ''; ed.it.date = localInput(o.dateObj); ed.it.numero = o.numero.replace(/^OP/, 'INT') + '-' + (ed.crew[0] ? ed.crew[0].engin : 'FPT'); }
+        if (t.dataset.it === 'type_feu' && (prevType === 'vegetation') !== (t.value === 'vegetation')) { ed.it.circonstances = ed.it.circonstances.filter(function (k) { return k !== 'bascule'; }); reDefault(); }
+        if (t.dataset.it === 'operation' && t.value && db.ops[t.value]) { var o = db.ops[t.value]; ed.it.type_feu = o.type_feu; ed.it.commune = o.commune || ''; ed.it.precision = o.precision || ''; ed.it.date = localInput(o.dateObj); ed.it.numero = o.numero.replace(/^OP/, 'INT') + '-' + (ed.crew[0] ? ed.crew[0].engin : 'FPT'); reDefault(); }
         redraw();
       }
-      if (t.dataset.f && t.dataset.f.split('|')[1] === 'ari_min') redrawCard(+t.dataset.f.split('|')[0]);
+      if (t.dataset.f && t.hasAttribute('data-redraw')) { var q = t.dataset.f.split('|'), mm = ed.crew[+q[0]]; mm[q[1]] = t.value; if (mm.auto) { mm.position = ''; mm.contamination = null; mm.tactique = ''; mm.ari_porte = null; withDefaults(mm, ed.it); } redrawCard(+q[0]); }
     });
     root.addEventListener('click', function (e) {
       var b = e.target.closest('button'); if (!b || b.disabled) return;
-      if (b.dataset.set) { var p = b.dataset.set.split('|'), m = ed.crew[+p[0]]; var v = p[2] === '1' ? true : p[2] === '0' ? false : p[2]; m[p[1]] = m[p[1]] === v && typeof v === 'boolean' ? null : v; if (p[1] === 'ari_porte') m.ari_min = m.ari_porte ? (m.ari_min || 30) : 0; redrawCard(+p[0]); }
-      else if (b.dataset.toggle) { var q = b.dataset.toggle.split('|'); ed.crew[+q[0]][q[1]] = !ed.crew[+q[0]][q[1]]; if (q[1] === 'decon_validee' && ed.crew[+q[0]].decon_validee && !ed.crew[+q[0]].decon_heure) { var n = new Date(); ed.crew[+q[0]].decon_heure = d2(n.getHours()) + ':' + d2(n.getMinutes()); } redrawCard(+q[0]); }
-      else if (b.dataset.fct) { var r = b.dataset.fct.split('|'), fs = ed.crew[+r[0]].fonctions, k = fs.indexOf(r[1]); if (k === -1) fs.push(r[1]); else fs.splice(k, 1); redrawCard(+r[0]); }
-      else if (b.dataset.ittoggle) { ed.it[b.dataset.ittoggle] = !ed.it[b.dataset.ittoggle]; b.classList.toggle('on'); }
-      else if (b.dataset.remove) { var gone = ed.crew.splice(+b.dataset.remove, 1)[0]; if (gone.id) ed.removed.push(gone.id); redraw(); }
-      else if (b.id === 'ed-apply-all') { var g = ed.it.exposition_globale.trim(); if (!g) { toast("Saisissez d'abord l'exposition particulière globale."); return; } ed.crew.forEach(function (m) { m.exposition_particuliere = g; }); redraw(); toast("Exposition appliquée à tout l'équipage."); }
+      var d = b.dataset;
+      if (d.set) { var p = d.set.split('|'), m = ed.crew[+p[0]]; var v = p[2] === '1' ? true : p[2] === '0' ? false : p[2]; m[p[1]] = v; redrawCard(+p[0]); }
+      else if (d.pos) { var a = d.pos.split('|'), mp = ed.crew[+a[0]]; mp.position = a[1]; mp.auto = false; mp.contamination = R.positions(ed.it)[a[1]].zone; if (a[1] === 'POS_ATT' && !mp.tactique) mp.tactique = 'TAC_INT'; if (a[1] !== 'POS_ATT') mp.tactique = ''; if (a[1] !== 'POS_ATT' && a[1] !== 'POS_DEB') mp.ari_retire_deb = false; redrawCard(+a[0]); }
+      else if (d.tac) { var tc = d.tac.split('|'); ed.crew[+tc[0]].tactique = tc[1]; redrawCard(+tc[0]); }
+      else if (d.dec) { var dc = d.dec.split('|'); ed.crew[+dc[0]].decon_type = dc[1]; redrawCard(+dc[0]); }
+      else if (d.decall) { ed.crew.forEach(function (m) { m.decon_type = d.decall; }); redraw(); toast('Décontamination appliquée à tout l\'équipage.'); }
+      else if (d.dur) { var dv = +d.dur, old = +ed.it.duree_min || 0; ed.it.duree_min = dv; ed.crew.forEach(function (m) { if (!m.duree_min || m.duree_min === old) m.duree_min = dv; }); redraw(); }
+      else if (d.circ) { var c = ed.it.circonstances, k = c.indexOf(d.circ); if (k === -1) c.push(d.circ); else c.splice(k, 1); if (d.circ === 'bascule') reDefault(); redraw(); }
+      else if (d.circadd) { if (ed.it.circonstances.indexOf(d.circadd) === -1) ed.it.circonstances.push(d.circadd); redraw(); }
+      else if (d.toggle) { var q = d.toggle.split('|'); ed.crew[+q[0]][q[1]] = !ed.crew[+q[0]][q[1]]; redrawCard(+q[0]); }
+      else if (d.ittoggle) { ed.it[d.ittoggle] = !ed.it[d.ittoggle]; b.classList.toggle('on'); }
+      else if (d.remove) { var gone = ed.crew.splice(+d.remove, 1)[0]; if (gone.id) ed.removed.push(gone.id); redraw(); }
+      else if (b.id === 'ed-apply-all') { var g = ed.it.exposition_globale.trim(); if (!g) { toast("Saisissez d'abord l'exposition particulière."); return; } ed.crew.forEach(function (m) { m.exposition_particuliere = g; }); redraw(); toast("Exposition appliquée à tout l'équipage."); }
       else if (b.id === 'ed-add-btn') { var sel = root.querySelector('#ed-add'); if (!sel.value) return; var u = db.byId[sel.value]; ed.crew.push(blankMember(sel.value, u && u.role === 'cos' ? 'chef_agres' : 'binome_attaque', ed.crew[0] ? ed.crew[0].engin : 'FPT')); redraw(); }
       else if (b.id === 'ed-save') saveEditor(null).catch(function () {});
       else if (b.id === 'ed-send') confirmTransmit();
@@ -890,12 +1029,13 @@
   function confirmTransmit() {
     var probs = ed.crew.map(function (m) { var miss = missing(m); return miss.length ? (db.byId[m.agent] || {}).name + ' : ' + miss.join(', ') : null; }).filter(Boolean);
     if (!ed.crew.length) probs.push("Aucun membre d'équipage.");
+    var fire = ed.it.ambiance !== 'aucun_feu';
     var rows = ed.crew.map(function (m) {
-      var u = db.byId[m.agent] || {}, resp = m.ari_porte ? 'Voies respiratoires protégées (ARI ' + m.ari_min + ' min)' : (m.contamination === 'moyenne' || m.contamination === 'forte') ? "Risque d'inhalation élevé : engagé sans ARI" : 'Exposition respiratoire faible ou nulle';
-      return '<li><b>' + esc(u.name || '—') + '</b> ' + (m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(resp) + ' · ' + (m.decon_validee ? 'Décontamination HAP validée' + (m.decon_ref ? ' [' + esc(m.decon_ref) + (m.decon_heure ? ' à ' + esc(m.decon_heure) : '') + ']' : '') : 'Décontamination HAP non validée') + (m.exposition_particuliere ? ' · ' + esc(m.exposition_particuliere) : '') + '</span></li>';
+      var u = db.byId[m.agent] || {};
+      return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
     }).join('');
-    modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider.</p>') +
-      '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p><ul class="summary-list">' + rows + '</ul>',
+    modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Les tenues des agents engagés seront considérées comme contaminées.</p>') +
+      '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p><p class="note"><b>Nature :</b> ' + esc(R.natureTexte(ed.it)) + '</p><ul class="summary-list">' + rows + '</ul>',
       probs.length ? [] : [{ label: icon('send') + 'Confirmer la transmission', primary: true, run: function () { return saveEditor('transmettre'); } }]);
   }
   async function saveEditor(action) {
@@ -904,14 +1044,19 @@
     try {
       var x = ed.it;
       need(x.numero, "Indiquez le numéro d'intervention."); need(x.date, 'Indiquez la date.');
-      var itData = { numero: x.numero.trim(), date: VBSData.toApiDate(new Date(x.date)), type_feu: x.type_feu, precision: x.precision, commune: x.commune, motorisation: x.type_feu === 'vehicule' ? x.motorisation : '', ambiance: x.ambiance, zone_deshabillage: x.zone_deshabillage, epi_ensaches: x.epi_ensaches, suspicion_amiante: x.suspicion_amiante, exposition_globale: x.exposition_globale, observations: x.observations };
+      var circ = x.circonstances.filter(function (k) { return R.CIRC[k] || k === 'bascule'; });
+      var itData = { numero: x.numero.trim(), date: VBSData.toApiDate(new Date(x.date)), type_feu: x.type_feu, precision: x.precision, commune: x.commune, motorisation: x.type_feu === 'vehicule' ? x.motorisation : '', ambiance: x.ambiance, duree_min: +x.duree_min || 0, circonstances: circ, zone_deshabillage: x.zone_deshabillage, epi_ensaches: x.epi_ensaches, suspicion_amiante: circ.indexOf('AMIANTE') !== -1, exposition_globale: x.exposition_globale, observations: x.observations };
       if (ed.isNew) { var rec = await VBSData.create(S, 'interventions', Object.assign(itData, { centre: x.centre, cos: db.meId, statut: 'brouillon' }, x.operation ? { operation: x.operation } : {})); ed.id = rec.id; ed.isNew = false; }
       else await VBSData.update(S, 'interventions', ed.id, itData);
       for (var r = 0; r < ed.removed.length; r++) await VBSData.remove(S, 'participations', ed.removed[r]);
       ed.removed = [];
+      var fire = x.ambiance !== 'aucun_feu', itc = Object.assign({}, x, { circonstances: circ });
       for (var i = 0; i < ed.crew.length; i++) {
-        var m = ed.crew[i];
-        var pd = { intervention: ed.id, agent: m.agent, role_tenu: m.role_tenu, engin: m.engin, fonctions: m.fonctions, contamination: m.contamination || 'nulle', tenue_complete: !!m.tenue_complete, ari_porte: !!m.ari_porte, ari_min: m.ari_porte ? +m.ari_min : 0, sans_ari_min: +m.sans_ari_min || 0, ffp3: !!m.ffp3, douche: m.douche, tenue_changee: m.tenue_changee, lingettes: m.lingettes, decon_validee: m.decon_validee, decon_ref: m.decon_ref, decon_heure: m.decon_heure, exposition_particuliere: m.exposition_particuliere, commentaire: m.commentaire, indice: VBSData.indice(x.type_feu, m) };
+        var m = ed.crew[i], dt = fire ? m.decon_type : 'DEC_AUCUNE';
+        var pd = { intervention: ed.id, agent: m.agent, role_tenu: m.role_tenu, engin: m.engin, fonctions: m.fonctions || [], position: m.position, tactique: m.position === 'POS_ATT' ? m.tactique : '', duree_min: +m.duree_min || 0,
+          contamination: fire ? (m.contamination || 'nulle') : 'nulle', tenue_complete: !!m.tenue_complete, ari_porte: !!m.ari_porte, ari_min: m.ari_porte ? (+m.ari_min || 0) : 0, ari_retire_deb: !!m.ari_retire_deb, ffp3: !!m.ffp3,
+          decon_type: dt || '', decon_validee: !!dt && dt !== 'DEC_AUCUNE', lingettes: /LING/.test(dt || ''), douche: /DOUCHE/.test(dt || ''), decon_ref: m.decon_ref,
+          exposition_particuliere: m.exposition_particuliere, commentaire: m.commentaire, indice: VBSData.indice(itc, m) };
         if (S.role === 'sssm') pd.modifie_par = db.meId;
         if (m.id) await VBSData.update(S, 'participations', m.id, pd);
         else { var pr = await VBSData.create(S, 'participations', pd); m.id = pr.id; }
@@ -929,15 +1074,239 @@
     }
   }
 
+  // =================================================================== EPI : tenues de feu
+  function tenueLine(t) { return TENUE[t.type] + ' ' + t.numero; }
+  function seuilBar(t) {
+    var s = +t.seuil_feux || VBSData.SEUIL, pct = Math.min(100, Math.round((+t.nb_feux || 0) / s * 100)), over = (+t.nb_feux || 0) >= s;
+    return '<div class="seuil' + (over ? ' over' : '') + '" title="' + t.nb_feux + ' feux sur un seuil de ' + s + '"><i style="width:' + pct + '%"></i></div>';
+  }
+  function myTenues() { return (db.tenues || []).filter(function (t) { return t.agent === db.meId && t.statut !== 'reformee'; }).sort(function (a, b) { return Object.keys(TENUE).indexOf(a.type) - Object.keys(TENUE).indexOf(b.type); }); }
+  function viewEpi(root) {
+    var mine = myTenues(), dirty = mine.filter(function (t) { return t.statut === 'contaminee'; });
+    var mv = (db.mouvements_epi || []).filter(function (m) { return m.agent === db.meId; }).sort(function (a, b) { return b.createdObj - a.createdObj; });
+    var open = mv.filter(function (m) { return m.type === 'demande' && m.statut === 'envoyee'; });
+    root.innerHTML = head('Mes EPI', 'Vos tenues de feu. Après une intervention sur feu, elles sont considérées comme contaminées d\'après le rapport du chef d\'agrès.',
+      '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" data-epi="demande">' + icon('send') + 'Demander une tenue</button><button class="btn btn-primary" type="button" data-epi="changement">' + icon('check') + 'J\'ai changé de tenue</button></div>') +
+      (dirty.length ? '<div class="callout red"><span class="icon-tile">' + icon('alert') + '</span><div><strong>' + (dirty.length > 1 ? 'Tenues à changer' : 'Tenue à changer') + ' : ' + esc(dirty.map(tenueLine).join(', ') ) + '</strong><span class="sub">S\'il y a une tenue de rechange à votre centre, prenez-la et indiquez son numéro. Sinon, demandez-en une au service habillement : la tenue souillée partira au lavage dès réception de la nouvelle.</span></div></div>' : '<div class="callout"><span class="icon-tile ok">' + icon('check') + '</span><div><strong>Vos tenues sont propres</strong><span class="sub">Aucune intervention sur feu depuis votre dernier changement.</span></div></div>') +
+      (open.length ? '<div class="callout"><span class="icon-tile">' + icon('clock') + '</span><div><strong>Demande en cours au service habillement</strong><span class="sub">' + esc(open.map(function (m) { return (m.types || []).map(function (x) { return TENUE[x]; }).join(', ') + ' · envoyée le ' + fmtD(m.createdObj); }).join(' · ')) + '</span></div></div>' : '') +
+      '<div class="grid grid-3">' + (mine.length ? mine.map(function (t) {
+        return '<section class="panel tenue-card"><div class="panel-head"><h3>' + TENUE[t.type] + '</h3>' + badge(TST[t.statut]) + '</div><p class="tenue-num">' + esc(t.numero) + '</p>' +
+          '<dl class="mini-kv"><div><dt>Feux depuis le dernier lavage</dt><dd>' + (t.feux_depuis_lavage || 0) + '</dd></div><div><dt>Feux depuis la mise en service</dt><dd>' + (t.nb_feux || 0) + ' / ' + (t.seuil_feux || VBSData.SEUIL) + '</dd></div><div><dt>Lavages</dt><dd>' + (t.nb_lavages || 0) + '</dd></div></dl>' + seuilBar(t) + '</section>';
+      }).join('') : '<p class="empty">Aucune tenue enregistrée à votre nom. Demandez au service habillement de les renseigner.</p>') + '</div>' +
+      '<section class="panel"><div class="panel-head"><h3>Historique</h3></div>' + (mv.length ? '<ul class="rows">' + mv.map(function (m) {
+        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + (m.type === 'changement' ? 'Changement au centre' : m.auto ? 'Demande automatique (seuil atteint)' : 'Demande au service habillement') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + badge(m.type === 'changement' ? ['Enregistré', 'badge-ok'] : DST[m.statut] || DST.envoyee) + '</span></li>';
+      }).join('') + '</ul>' : '<p class="empty">Aucun changement ni demande pour le moment.</p>') + '</section>';
+    root.querySelectorAll('[data-epi]').forEach(function (b) { b.onclick = function () { b.dataset.epi === 'changement' ? openChangement() : openDemande(); }; });
+  }
+  function typeChecks(pre, withNum) {
+    return Object.keys(TENUE).map(function (ty) {
+      var cur = myTenues().filter(function (t) { return t.type === ty; })[0], on = pre.indexOf(ty) !== -1;
+      return '<div class="ty-row"><label class="check"><input type="checkbox" name="ty" value="' + ty + '"' + (on ? ' checked' : '') + '> ' + TENUE[ty] + (cur ? ' <span class="note">(actuelle : ' + esc(cur.numero) + ', ' + TST[cur.statut][0].toLowerCase() + ')</span>' : '') + '</label>' +
+        (withNum ? '<input class="input" data-num="' + ty + '" maxlength="20" placeholder="N° de la nouvelle ' + (ty === 'surpantalon' ? 'tenue' : ty) + '" aria-label="Numéro de la nouvelle ' + TENUE[ty] + '">' : '') + '</div>';
+    }).join('');
+  }
+  function openChangement() {
+    var pre = myTenues().filter(function (t) { return t.statut === 'contaminee'; }).map(function (t) { return t.type; });
+    modal('J\'ai changé de tenue', '<p class="note">Vous avez pris une tenue de rechange à votre centre : cochez ce que vous avez changé et indiquez le numéro inscrit sur l\'étiquette de la nouvelle tenue. L\'ancienne est signalée au service habillement pour le lavage.</p>' +
+      '<fieldset class="fs"><legend class="label">Éléments changés</legend>' + typeChecks(pre, true) + '</fieldset>',
+      [{ label: icon('check') + 'Enregistrer', primary: true, run: async function (d) {
+        var types = Array.prototype.map.call(d.querySelectorAll('[name=ty]:checked'), function (c) { return c.value; });
+        if (!types.length) throw new Error('Cochez au moins un élément.');
+        var numeros = {}; types.forEach(function (ty) { var v = d.querySelector('[data-num="' + ty + '"]').value.trim().toUpperCase(); if (!v) throw new Error('Indiquez le numéro de la nouvelle ' + TENUE[ty].toLowerCase() + '.'); numeros[ty] = v; });
+        await VBSData.create(S, 'mouvements_epi', { type: 'changement', agent: db.meId, centre: (db.me || {}).centre, types: types, numeros: numeros, statut: 'traitee', auto: false, motif: 'Changement au centre après intervention' });
+        toast('Changement enregistré : le service habillement est informé.'); await reload();
+      } }]);
+  }
+  function openDemande() {
+    var pre = myTenues().filter(function (t) { return t.statut === 'contaminee'; }).map(function (t) { return t.type; });
+    modal('Demander une tenue au service habillement', '<p class="note">Le service habillement reçoit votre demande dans son espace et vous attribue une nouvelle tenue. Dès que vous la recevez, la tenue souillée part au lavage.</p>' +
+      '<fieldset class="fs"><legend class="label">Éléments demandés</legend>' + typeChecks(pre.length ? pre : [], false) + '</fieldset>' +
+      '<div class="field"><label class="label" for="dm-motif">Motif</label><select class="select" id="dm-motif"><option>Pas de tenue de rechange au centre</option><option>Tenue abîmée</option><option>Taille inadaptée</option><option>Autre</option></select></div>' +
+      '<div class="field"><label class="label" for="dm-com">Précision (facultatif)</label><input class="input" id="dm-com" maxlength="200" placeholder="Ex. taille L, veste déchirée à la manche"></div>',
+      [{ label: icon('send') + 'Envoyer la demande', primary: true, run: async function (d) {
+        var types = Array.prototype.map.call(d.querySelectorAll('[name=ty]:checked'), function (c) { return c.value; });
+        if (!types.length) throw new Error('Cochez au moins un élément.');
+        var com = d.querySelector('#dm-com').value.trim();
+        await VBSData.create(S, 'mouvements_epi', { type: 'demande', agent: db.meId, centre: (db.me || {}).centre, types: types, statut: 'envoyee', auto: false, motif: d.querySelector('#dm-motif').value + (com ? ' · ' + com : '') });
+        toast('Demande envoyée au service habillement.'); await reload();
+      } }]);
+  }
+
+  // ---------- Service habillement ----------
+  function habStats() {
+    var T = db.tenues || [], M = db.mouvements_epi || [];
+    return { service: T.filter(function (t) { return t.statut === 'en_service'; }).length, dirty: T.filter(function (t) { return t.statut === 'contaminee'; }), lavage: T.filter(function (t) { return t.statut === 'au_lavage'; }), stock: T.filter(function (t) { return t.statut === 'en_stock'; }),
+      demandes: M.filter(function (m) { return m.type === 'demande' && m.statut === 'envoyee'; }).sort(function (a, b) { return a.createdObj - b.createdObj; }),
+      seuil: T.filter(function (t) { return t.statut !== 'reformee' && (+t.nb_feux || 0) >= (+t.seuil_feux || VBSData.SEUIL); }) };
+  }
+  function demandeRow(m) {
+    return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x]; }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + (m.auto ? badge(['Automatique', 'badge-info']) + ' ' : '') + '<button class="btn btn-primary btn-sm" type="button" data-traiter="' + m.id + '">Traiter</button></span></li>';
+  }
+  function tenueActions(t) {
+    var a = [];
+    if (t.statut === 'contaminee') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="lavage|' + t.id + '">Réceptionner au lavage</button>');
+    if (t.statut === 'au_lavage') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="retour|' + t.id + '">Retour de lavage</button>');
+    if (t.statut === 'en_stock') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="attribuer|' + t.id + '">Attribuer</button>');
+    a.push('<button class="link-btn" type="button" data-tact="modifier|' + t.id + '">Modifier</button>');
+    return a.join(' ');
+  }
+  function viewDashHab(root) {
+    var s = habStats();
+    root.innerHTML = head('Service habillement', 'Tenues de feu du centre : ce qui est à récupérer, à laver et à remplacer.', '<span class="page-date">' + esc(fmtLong(new Date())) + '</span>') +
+      '<div class="grid grid-4">' + kpi('send', '', 'Demandes à traiter', s.demandes.length, s.demandes.filter(function (m) { return m.auto; }).length + ' automatique(s)') + kpi('alert', '', 'Tenues contaminées', s.dirty.length, 'À récupérer pour le lavage') + kpi('clock', 'info', 'Au lavage', s.lavage.length, s.stock.length + ' en stock au centre') + kpi('chart', 'warn', 'Alertes de seuil', s.seuil.length, 'Tenues au-dessus du seuil de feux') + '</div>' +
+      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>Demandes des agents</h3><a href="#demandes">Toutes ' + icon('arrow') + '</a></div>' + (s.demandes.length ? '<ul class="rows">' + s.demandes.slice(0, 6).map(demandeRow).join('') + '</ul>' : '<p class="empty">Aucune demande en attente.</p>') + '</section>' +
+      '<section class="panel"><div class="panel-head"><h3>Tenues contaminées à récupérer</h3><a href="#tenues">Toutes les tenues ' + icon('arrow') + '</a></div>' + (s.dirty.length ? '<ul class="rows">' + s.dirty.slice(0, 8).map(function (t) { return '<li><span class="when"><b>' + esc(t.numero) + '</b></span><span class="what"><b>' + TENUE[t.type] + '</b><small>' + (t.user ? 'Portée par ' + esc(t.user.name) : 'Déposée au centre') + ' · ' + (t.feux_depuis_lavage || 0) + ' feu(x) depuis le lavage</small></span><span class="right">' + tenueActions(t) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Aucune tenue contaminée.</p>') + '</section></div>' +
+      '<section class="panel"><div class="panel-head"><h3>Alertes de seuil</h3></div>' + (s.seuil.length ? '<table class="dtable"><thead><tr><th>N°</th><th>Type</th><th>Agent</th><th>Feux</th><th>État</th><th></th></tr></thead><tbody>' + s.seuil.map(function (t) { return '<tr><td data-l="N°"><b>' + esc(t.numero) + '</b></td><td data-l="Type">' + TENUE[t.type] + '</td><td data-l="Agent">' + esc(t.user ? t.user.name : '—') + '</td><td data-l="Feux">' + t.nb_feux + ' / ' + (t.seuil_feux || VBSData.SEUIL) + seuilBar(t) + '</td><td>' + badge(TST[t.statut]) + '</td><td><button class="btn btn-secondary btn-sm" type="button" data-tact="reformer|' + t.id + '">Réformer</button></td></tr>'; }).join('') + '</tbody></table>' : '<p class="empty">Aucune tenue au-dessus du seuil.</p>') +
+      '<p class="note">Quand une tenue atteint le seuil, une demande de remplacement est créée automatiquement. Le seuil est fixé par votre service : il ne fait pas partie du calcul d\'exposition.</p></section>';
+    bindHab(root);
+  }
+  var tFilter = 'tous', tType = '', tQ = '';
+  function viewTenues(root) {
+    var T = (db.tenues || []).slice().sort(function (a, b) { return a.numero.localeCompare(b.numero); });
+    var F = [['tous', 'Toutes'], ['en_service', 'En service'], ['contaminee', 'Contaminées'], ['au_lavage', 'Au lavage'], ['en_stock', 'En stock'], ['reformee', 'Réformées']];
+    var list = T.filter(function (t) { return (tFilter === 'tous' ? t.statut !== 'reformee' : t.statut === tFilter) && (!tType || t.type === tType) && (!tQ || (t.numero + ' ' + (t.user ? t.user.name + ' ' + t.user.matricule : '')).toLowerCase().indexOf(tQ.toLowerCase()) !== -1); });
+    root.innerHTML = head('Tenues de feu', 'Numéro, agent, état, feux et lavages de chaque tenue du centre.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="t-seuil">Seuil d\'alerte : ' + ((T[0] && T[0].seuil_feux) || VBSData.SEUIL) + ' feux</button><button class="btn btn-primary" type="button" id="t-new">' + icon('check') + 'Ajouter une tenue</button></div>') +
+      '<div class="filters"><div class="seg" role="group" aria-label="État">' + F.map(function (f) { var n = f[0] === 'tous' ? T.filter(function (t) { return t.statut !== 'reformee'; }).length : T.filter(function (t) { return t.statut === f[0]; }).length; return '<button type="button" data-tf="' + f[0] + '" aria-pressed="' + (tFilter === f[0]) + '">' + f[1] + ' (' + n + ')</button>'; }).join('') + '</div>' +
+      '<select class="select sel-sm" id="t-type" aria-label="Type"><option value="">Tous les types</option>' + Object.keys(TENUE).map(function (k) { return '<option value="' + k + '"' + (tType === k ? ' selected' : '') + '>' + TENUE[k] + '</option>'; }).join('') + '</select><input class="input sel-sm" id="t-q" placeholder="N°, agent, matricule" value="' + esc(tQ) + '"></div>' +
+      '<section class="panel"><table class="dtable"><thead><tr><th>N°</th><th>Type</th><th>Agent</th><th>État</th><th class="num">Depuis lavage</th><th>Feux / seuil</th><th class="num">Lavages</th><th></th></tr></thead><tbody>' +
+      (list.length ? list.map(function (t) { return '<tr><td data-l="N°"><b>' + esc(t.numero) + '</b></td><td data-l="Type">' + TENUE[t.type] + '</td><td data-l="Agent">' + esc(t.user ? t.user.name : '—') + '</td><td data-l="État">' + badge(TST[t.statut]) + '</td><td class="num" data-l="Depuis lavage">' + (t.feux_depuis_lavage || 0) + '</td><td data-l="Feux">' + (t.nb_feux || 0) + ' / ' + (t.seuil_feux || VBSData.SEUIL) + seuilBar(t) + '</td><td class="num" data-l="Lavages">' + (t.nb_lavages || 0) + '</td><td class="t-act">' + tenueActions(t) + '</td></tr>'; }).join('') : '<tr><td colspan="8" class="empty">Aucune tenue.</td></tr>') + '</tbody></table></section>';
+    root.querySelectorAll('[data-tf]').forEach(function (b) { b.onclick = function () { tFilter = b.dataset.tf; route(); }; });
+    root.querySelector('#t-type').onchange = function (e) { tType = e.target.value; route(); };
+    var q = root.querySelector('#t-q'); q.oninput = function () { tQ = q.value; var pos = q.selectionStart; route(); var n2 = document.getElementById('t-q'); n2.focus(); n2.setSelectionRange(pos, pos); };
+    root.querySelector('#t-seuil').onclick = openSeuil; root.querySelector('#t-new').onclick = function () { openTenue(null); };
+    bindHab(root);
+  }
+  var dFilter = 'envoyee';
+  function viewDemandes(root) {
+    var M = (db.mouvements_epi || []).slice().sort(function (a, b) { return b.createdObj - a.createdObj; });
+    var list = M.filter(function (m) { return dFilter === 'tous' ? true : dFilter === 'changement' ? m.type === 'changement' : m.type === 'demande' && m.statut === dFilter; });
+    root.innerHTML = head('Demandes des agents', 'Demandes de tenue, et changements déclarés par les agents au centre.', '<div class="seg" role="group" aria-label="Filtre">' + [['envoyee', 'À traiter'], ['traitee', 'Traitées'], ['changement', 'Changements au centre'], ['tous', 'Tout']].map(function (f) { return '<button type="button" data-df="' + f[0] + '" aria-pressed="' + (dFilter === f[0]) + '">' + f[1] + '</button>'; }).join('') + '</div>') +
+      '<section class="panel">' + (list.length ? '<ul class="rows">' + list.map(function (m) {
+        if (m.type === 'demande' && m.statut === 'envoyee') return demandeRow(m);
+        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + ' · ' + (m.type === 'changement' ? 'changement au centre' : 'demande') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + badge(m.type === 'changement' ? ['Enregistré', 'badge-ok'] : DST[m.statut] || DST.envoyee) + '</span></li>';
+      }).join('') + '</ul>' : '<p class="empty">Rien dans cette catégorie.</p>') + '</section>';
+    root.querySelectorAll('[data-df]').forEach(function (b) { b.onclick = function () { dFilter = b.dataset.df; route(); }; });
+    bindHab(root);
+  }
+  function bindHab(root) {
+    root.querySelectorAll('[data-traiter]').forEach(function (b) { b.onclick = function () { openTraiter((db.mouvements_epi || []).find(function (m) { return m.id === b.dataset.traiter; })); }; });
+    root.querySelectorAll('[data-tact]').forEach(function (b) { b.onclick = function () { var q = b.dataset.tact.split('|'); tenueAct(q[0], (db.tenues || []).find(function (t) { return t.id === q[1]; }), b); }; });
+  }
+  async function tenueAct(act, t, btn) {
+    if (!t) return;
+    if (act === 'modifier') return openTenue(t);
+    if (act === 'attribuer') return openAttribuer(t);
+    var data = act === 'lavage' ? { statut: 'au_lavage', agent: '' } : act === 'retour' ? { statut: 'en_stock', agent: '', nb_lavages: (+t.nb_lavages || 0) + 1, feux_depuis_lavage: 0 } : act === 'reformer' ? { statut: 'reformee', agent: '' } : null;
+    if (!data) return;
+    if (act === 'lavage' && t.agent && !confirm((t.user ? t.user.name : 'L\'agent') + ' n\'aura plus de ' + TENUE[t.type].toLowerCase() + ' attribuée. Continuer ?')) return;
+    if (act === 'reformer' && !confirm('Réformer la tenue ' + t.numero + ' ?')) return;
+    btn.disabled = true;
+    try { await VBSData.update(S, 'tenues', t.id, data); toast(act === 'lavage' ? 'Tenue ' + t.numero + ' réceptionnée au lavage.' : act === 'retour' ? 'Tenue ' + t.numero + ' de retour en stock.' : 'Tenue ' + t.numero + ' réformée.'); await reload(); }
+    catch (e) { btn.disabled = false; toast('Mise à jour impossible : ' + e.message); }
+  }
+  function agentOptions(sel) { return db.users.filter(function (u) { return u.role === 'agent' || u.role === 'cos'; }).sort(function (a, b) { return a.name.localeCompare(b.name); }).map(function (u) { return '<option value="' + u.id + '"' + (u.id === sel ? ' selected' : '') + '>' + esc(u.name + ' · ' + u.matricule) + '</option>'; }).join(''); }
+  async function assign(t, agentId) {
+    var cur = (db.tenues || []).filter(function (x) { return x.agent === agentId && x.type === t.type && x.id !== t.id && x.statut !== 'reformee'; });
+    for (var i = 0; i < cur.length; i++) await VBSData.update(S, 'tenues', cur[i].id, { agent: '', statut: cur[i].statut === 'en_service' ? 'en_stock' : cur[i].statut });
+    await VBSData.update(S, 'tenues', t.id, { agent: agentId, statut: 'en_service' });
+  }
+  function openAttribuer(t) {
+    modal('Attribuer la tenue ' + t.numero, '<p class="note">' + TENUE[t.type] + ' · ' + (t.nb_feux || 0) + ' feux depuis la mise en service.</p><div class="field"><label class="label" for="at-agent">Agent</label><select class="select" id="at-agent">' + agentOptions('') + '</select><span class="hint">Si l\'agent a déjà une tenue de ce type, elle repasse en stock (ou reste à laver si elle est contaminée).</span></div>',
+      [{ label: 'Attribuer', primary: true, run: async function (d) { await assign(t, d.querySelector('#at-agent').value); toast('Tenue ' + t.numero + ' attribuée.'); await reload(); } }]);
+  }
+  function openTenue(t) {
+    var isNew = !t; t = t || { numero: '', type: 'veste', statut: 'en_stock', agent: '', seuil_feux: VBSData.SEUIL, nb_feux: 0 };
+    modal(isNew ? 'Ajouter une tenue' : 'Modifier la tenue ' + t.numero, '<div class="form-2"><div class="field"><label class="label" for="tn-num">Numéro</label><input class="input" id="tn-num" maxlength="20" value="' + esc(t.numero) + '"></div><div class="field"><label class="label" for="tn-type">Type</label><select class="select" id="tn-type">' + Object.keys(TENUE).map(function (k) { return '<option value="' + k + '"' + (t.type === k ? ' selected' : '') + '>' + TENUE[k] + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="form-2"><div class="field"><label class="label" for="tn-agent">Agent</label><select class="select" id="tn-agent"><option value="">— Aucun (stock) —</option>' + agentOptions(t.agent) + '</select></div><div class="field"><label class="label" for="tn-st">État</label><select class="select" id="tn-st">' + Object.keys(TST).map(function (k) { return '<option value="' + k + '"' + (t.statut === k ? ' selected' : '') + '>' + TST[k][0] + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="form-2"><div class="field"><label class="label" for="tn-feux">Feux depuis la mise en service</label><input class="input" id="tn-feux" type="number" min="0" value="' + (t.nb_feux || 0) + '"></div><div class="field"><label class="label" for="tn-seuil">Seuil d\'alerte (feux)</label><input class="input" id="tn-seuil" type="number" min="1" value="' + (t.seuil_feux || VBSData.SEUIL) + '"></div></div>',
+      [{ label: 'Enregistrer', primary: true, run: async function (d) {
+        var data = { numero: need(d.querySelector('#tn-num').value, 'Indiquez le numéro.').trim().toUpperCase(), type: d.querySelector('#tn-type').value, agent: d.querySelector('#tn-agent').value, statut: d.querySelector('#tn-st').value, nb_feux: +d.querySelector('#tn-feux').value || 0, seuil_feux: +d.querySelector('#tn-seuil').value || VBSData.SEUIL };
+        if (data.agent && data.statut === 'en_stock') data.statut = 'en_service';
+        if (isNew) await VBSData.create(S, 'tenues', Object.assign({ centre: (db.me || {}).centre, feux_depuis_lavage: 0, nb_lavages: 0, ef_cumul: 0 }, data)); else await VBSData.update(S, 'tenues', t.id, data);
+        toast('Tenue enregistrée.'); await reload();
+      } }]);
+  }
+  function openSeuil() {
+    modal('Seuil d\'alerte des tenues', '<p class="note">Nombre de feux depuis la mise en service à partir duquel une tenue est signalée et une demande de remplacement créée automatiquement. Fixé par votre service (préconisations du fabricant, politique d\'habillement).</p><div class="field"><label class="label" for="se-v">Seuil (feux)</label><input class="input" id="se-v" type="number" min="1" value="' + (((db.tenues || [])[0] || {}).seuil_feux || VBSData.SEUIL) + '"></div>',
+      [{ label: 'Appliquer à toutes les tenues', primary: true, run: async function (d) { var v = +d.querySelector('#se-v').value; if (!v) throw new Error('Indiquez un seuil.'); var T = db.tenues || []; for (var i = 0; i < T.length; i++) if (+T[i].seuil_feux !== v) await VBSData.update(S, 'tenues', T[i].id, { seuil_feux: v }); toast('Seuil appliqué.'); await reload(); } }]);
+  }
+  function openTraiter(m) {
+    if (!m) return;
+    var stock = function (ty) { return (db.tenues || []).filter(function (t) { return t.type === ty && t.statut === 'en_stock'; }); };
+    modal('Traiter la demande', '<p class="note">' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : '') + ' · ' + fmtD(m.createdObj) + (m.motif ? ' · ' + esc(m.motif) : '') + '</p>' +
+      (m.types || []).map(function (ty) { var cur = (db.tenues || []).filter(function (t) { return t.agent === m.agent && t.type === ty && t.statut !== 'reformee'; })[0], st = stock(ty);
+        return '<div class="field"><label class="label" for="tr-' + ty + '">' + TENUE[ty] + (cur ? ' <span class="note">(remplace ' + esc(cur.numero) + ')</span>' : '') + '</label><select class="select" id="tr-' + ty + '">' + st.map(function (t) { return '<option value="' + t.id + '">' + esc(t.numero) + ' · ' + t.nb_feux + ' feux</option>'; }).join('') + '<option value="new">Nouvelle tenue (saisir le numéro)…</option></select><input class="input tr-new" id="trn-' + ty + '" maxlength="20" placeholder="Numéro de la nouvelle tenue"' + (st.length ? ' hidden' : '') + '></div>';
+      }).join('') + '<p class="note">L\'ancienne tenue passe « contaminée » : réceptionnez-la au lavage quand l\'agent vous la renvoie.</p>',
+      [{ label: 'Refuser', run: async function () { await VBSData.update(S, 'mouvements_epi', m.id, { statut: 'annulee', traite_par: db.meId }); toast('Demande annulée.'); await reload(); } },
+       { label: icon('check') + 'Attribuer et clore', primary: true, run: async function (d) {
+        var numeros = {};
+        for (var i = 0; i < (m.types || []).length; i++) {
+          var ty = m.types[i], v = d.querySelector('#tr-' + ty).value, t;
+          if (v === 'new') { var num = need(d.querySelector('#trn-' + ty).value, 'Indiquez le numéro de la nouvelle ' + TENUE[ty].toLowerCase() + '.').trim().toUpperCase(); t = await VBSData.create(S, 'tenues', { numero: num, type: ty, centre: m.centre, statut: 'en_stock', agent: '', nb_feux: 0, feux_depuis_lavage: 0, nb_lavages: 0, ef_cumul: 0, seuil_feux: VBSData.SEUIL }); }
+          else t = (db.tenues || []).find(function (x) { return x.id === v; });
+          var olds = (db.tenues || []).filter(function (x) { return x.agent === m.agent && x.type === ty && x.statut !== 'reformee' && x.id !== t.id; });
+          for (var k = 0; k < olds.length; k++) await VBSData.update(S, 'tenues', olds[k].id, { agent: '', statut: 'contaminee' });
+          await VBSData.update(S, 'tenues', t.id, { agent: m.agent, statut: 'en_service' });
+          numeros[ty] = t.numero;
+        }
+        await VBSData.update(S, 'mouvements_epi', m.id, { statut: 'traitee', traite_par: db.meId, numeros: numeros });
+        toast('Tenue attribuée : l\'agent la voit dans son espace.'); await reload();
+      } }]);
+    document.querySelectorAll('dialog [id^="tr-"]').forEach(function (sel) { sel.onchange = function () { var inp = document.getElementById('trn-' + sel.id.slice(3)); if (inp) inp.hidden = sel.value !== 'new'; }; });
+  }
+
+  // =================================================================== cloche de notifications
+  function notifications() {
+    var out = [], soon = function (r) { return r && (r.dateObj - Date.now()) < 30 * VBSData.DAY; };
+    if (S.role === 'agent' || S.role === 'cos' || S.role === 'commandement') {
+      myTenues().filter(function (t) { return t.statut === 'contaminee'; }).forEach(function (t) { out.push({ ic: 'shield', tone: 'red', t: TENUE[t.type] + ' ' + t.numero + ' à changer', s: 'Considérée comme contaminée après votre dernière intervention sur feu.', href: '#epi' }); });
+      (db.mouvements_epi || []).filter(function (m) { return m.agent === db.meId && m.type === 'demande' && m.statut === 'traitee' && within(m.createdObj, 14); }).forEach(function (m) { out.push({ ic: 'check', t: 'Demande de tenue traitée', s: Object.keys(m.numeros || {}).map(function (k) { return TENUE[k] + ' ' + m.numeros[k]; }).join(', ') || 'Voir vos EPI', href: '#epi' }); });
+      var r = nextRdv(db, db.meId); if (soon(r)) out.push({ ic: 'cal', t: 'Rendez-vous SSSM le ' + fmtD(r.dateObj), s: r.motif, href: '#dossier' });
+    }
+    if (S.role === 'cos') {
+      var pend = db.interventions.filter(function (x) { return x.cos === db.meId && x.statut === 'brouillon'; });
+      if (pend.length) out.push({ ic: 'clip', tone: 'red', t: pend.length + ' rapport' + (pend.length > 1 ? 's' : '') + ' à compléter', s: pend.slice(0, 3).map(function (x) { return TYPE[x.type_feu] + ' du ' + fmtD(x.dateObj); }).join(' · '), href: '#rapports' });
+      myRappels().forEach(function (rp) { out.push({ ic: 'bell', tone: 'red', t: 'Relance de ' + ((db.byId[rp.de] || {}).name || 'votre Chef CI'), s: rp.message, href: '#rapport/' + rp.intervention }); });
+    }
+    if (S.role === 'commandement') { var late = db.interventions.filter(function (x) { return VBSData.reportState(x) === 'retard'; }); if (late.length) out.push({ ic: 'clock', tone: 'red', t: late.length + ' rapport' + (late.length > 1 ? 's' : '') + ' en retard', s: 'Brouillons de plus de 72 heures.', href: '#gestion' }); }
+    if (S.role === 'sssm') {
+      db.signalements.filter(function (x) { return x.statut === 'ouvert'; }).forEach(function (x) { out.push({ ic: 'alert', tone: 'red', t: 'Signalement ' + (x.niveau === 'critique' ? 'critique' : 'forte exposition'), s: x.motif, href: '#tableau-de-bord' }); });
+      var tc = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; if (tc) out.push({ ic: 'clip', t: tc + ' rapport' + (tc > 1 ? 's' : '') + ' à contrôler', s: 'Transmis par les CA.', href: '#rapports' });
+      db.reglementation.filter(function (x) { return x.impact === 'action_requise'; }).forEach(function (x) { out.push({ ic: 'scale', t: x.titre, s: 'Action requise', href: '#reglementation' }); });
+    }
+    if (S.role === 'habillement') {
+      var hs = habStats();
+      if (hs.demandes.length) out.push({ ic: 'send', tone: 'red', t: hs.demandes.length + ' demande' + (hs.demandes.length > 1 ? 's' : '') + ' à traiter', s: hs.demandes.slice(0, 3).map(function (m) { return (m.user ? m.user.name : '') + ' · ' + (m.types || []).map(function (x) { return TENUE[x]; }).join(', '); }).join(' · '), href: '#demandes' });
+      if (hs.dirty.length) out.push({ ic: 'alert', t: hs.dirty.length + ' tenue' + (hs.dirty.length > 1 ? 's' : '') + ' contaminée' + (hs.dirty.length > 1 ? 's' : ''), s: 'À récupérer pour le lavage.', href: '#tableau-de-bord' });
+      if (hs.seuil.length) out.push({ ic: 'chart', t: hs.seuil.length + ' tenue' + (hs.seuil.length > 1 ? 's' : '') + ' au-dessus du seuil', s: 'Remplacement à prévoir.', href: '#tableau-de-bord' });
+    }
+    return out;
+  }
+  function drawBell() {
+    var list = notifications(), bell = $('bell'), dot = bell.querySelector('.dot'); if (dot) dot.remove();
+    if (list.length) bell.insertAdjacentHTML('beforeend', '<span class="dot"></span>');
+    bell.setAttribute('aria-label', list.length ? list.length + ' notification' + (list.length > 1 ? 's' : '') : 'Aucune notification');
+    var pop = $('bell-pop');
+    pop.innerHTML = '<div class="pop-head"><b>Notifications</b><span class="note">' + (list.length || 'Aucune') + '</span></div>' + (list.length ? '<ul>' + list.map(function (n) { return '<li><a href="' + n.href + '" class="' + (n.tone || '') + '"><span class="icon-tile sm">' + icon(n.ic) + '</span><span><b>' + esc(n.t) + '</b><small>' + esc(n.s || '') + '</small></span></a></li>'; }).join('') + '</ul>' : '<p class="empty">Vous êtes à jour.</p>');
+  }
+  (function () {
+    var bell = $('bell'), pop = $('bell-pop');
+    bell.setAttribute('aria-haspopup', 'true'); bell.setAttribute('aria-expanded', 'false'); bell.setAttribute('aria-controls', 'bell-pop');
+    bell.onclick = function (e) { e.stopPropagation(); var open = pop.hidden; if (open && db) drawBell(); pop.hidden = !open; bell.setAttribute('aria-expanded', open); };
+    document.addEventListener('click', function (e) { if (!pop.hidden && !e.target.closest('#bell-pop')) { pop.hidden = true; bell.setAttribute('aria-expanded', 'false'); } });
+    pop.addEventListener('click', function (e) { if (e.target.closest('a')) { pop.hidden = true; bell.setAttribute('aria-expanded', 'false'); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { pop.hidden = true; bell.setAttribute('aria-expanded', 'false'); bell.focus(); } });
+  })();
+
   async function reload() {
     try { db = await VBSData.load(S); counts(); route(); }
     catch (e) { toast('Rechargement impossible : ' + e.message); }
   }
 
   var VIEWS = {
-    'tableau-de-bord': { agent: viewDashPerso, cos: viewDashCos, commandement: viewDashCmd, sssm: viewDashSssm },
+    'tableau-de-bord': { agent: viewDashPerso, cos: viewDashCos, commandement: viewDashCmd, sssm: viewDashSssm, habillement: viewDashHab },
     dossier: viewDossier, rapports: { cos: viewRapportsCos, sssm: viewRapportsSssm }, gestion: viewGestion,
-    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation
+    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, epi: viewEpi, tenues: viewTenues, demandes: viewDemandes
   };
   function renderInto(id, root) {
     var v = VIEWS[id]; if (v && typeof v === 'object') v = v[S.role];
@@ -978,15 +1347,12 @@
     var c = {};
     if (S.role === 'cos') c.rapports = db.interventions.filter(function (x) { return x.cos === db.meId && x.statut === 'brouillon'; }).length;
     if (S.role === 'commandement') c.gestion = db.interventions.filter(function (x) { return VBSData.reportState(x) === 'retard'; }).length;
-    if (S.role === 'sssm') { c.rapports = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; c.referentiel = db.referentiel.filter(function (r) { return r.statut === 'suggestion_ia'; }).length; c.reglementation = db.reglementation.filter(function (r) { return r.impact === 'action_requise'; }).length; }
+    if (S.role === 'sssm') { c.rapports = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; c.reglementation = db.reglementation.filter(function (r) { return r.impact === 'action_requise'; }).length; }
+    if (S.role === 'habillement') { var hs = habStats(); c.demandes = hs.demandes.length; c.tenues = hs.dirty.length; }
+    if (S.role === 'agent' || S.role === 'cos') c.epi = myTenues().filter(function (t) { return t.statut === 'contaminee'; }).length;
     nav.querySelectorAll('[data-count]').forEach(function (el) { el.hidden = true; });
     Object.keys(c).forEach(function (k) { var el = nav.querySelector('[data-count="' + k + '"]'); if (el && c[k]) { el.textContent = c[k]; el.hidden = false; } });
-    var alerts = S.role === 'sssm' ? db.signalements.filter(function (s) { return s.statut === 'ouvert'; }).length + (c.reglementation || 0)
-      : S.role === 'cos' ? (c.rapports || 0) + myRappels().length : S.role === 'commandement' ? c.gestion : (nextRdv(db, db.meId) && (nextRdv(db, db.meId).dateObj - Date.now()) < 14 * VBSData.DAY ? 1 : 0);
-    var bell = $('bell'), dot = bell.querySelector('.dot'); if (dot) dot.remove();
-    if (alerts) bell.insertAdjacentHTML('beforeend', '<span class="dot"></span>');
-    bell.setAttribute('aria-label', alerts ? alerts + ' alerte' + (alerts > 1 ? 's' : '') : 'Aucune alerte');
-    bell.onclick = function () { location.hash = S.role === 'sssm' ? 'tableau-de-bord' : S.role === 'cos' ? 'rapports' : S.role === 'commandement' ? 'gestion' : 'dossier'; };
+    drawBell();
   }
 
   // =================================================================== visite guidée

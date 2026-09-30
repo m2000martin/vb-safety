@@ -130,3 +130,4 @@
   .login-foot { font-size: 13px !important; line-height: 1.9; }
   .login-foot a { display: inline-block; padding: 4px 0; }
 }
+.roles-pick .pick:nth-child(6):last-child { grid-column: 1 / -1; }
