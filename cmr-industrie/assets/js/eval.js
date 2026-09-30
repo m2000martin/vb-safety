@@ -242,6 +242,45 @@
   function cmrBadge(l) { return l === 'cmr' ? badge('CMR', 'cmr') : l === 'susp' ? badge('Suspecté', 'susp') : ''; }
   function lvl(r) { return '<span class="ev-lvl ' + INH[r.inh][1] + '">' + INH[r.inh][0] + '</span>'; }
   function plural(n, w) { return n + ' ' + w + (n > 1 ? 's' : ''); }
+  function onboarding() {
+    return '<div class="ev-start"><h3>Avant de commencer, rassemblez :</h3><ol><li><b>Les fiches de données de sécurité (FDS)</b> de chaque produit chimique utilisé, demandées au fournisseur si besoin.</li><li><b>Les quantités achetées sur un an</b>, d\'après les factures ou bons de commande.</li><li><b>La liste des postes de travail</b> et le nombre de salariés à chaque poste.</li></ol>' +
+      '<p>Comptez environ 5 minutes par produit. L\'évaluation est enregistrée au fur et à mesure dans ce navigateur : vous pouvez la reprendre plus tard.</p><div class="ev-empty-cta"><button type="button" class="btn btn-primary" data-act="add">Ajouter le premier produit</button><button type="button" class="btn btn-secondary" data-act="demo">Voir un exemple rempli</button></div></div>';
+  }
+  var STEPS = [
+    ['inv', 'Inventaire', 'Listez vos produits', 'Pour chaque produit chimique, cliquez sur « Ajouter un produit » et remplissez les 3 étapes à partir de sa FDS. Ajoutez aussi les procédés qui émettent des agents cancérogènes sans FDS : poussières de bois, silice, gaz d\'échappement diesel.'],
+    ['hier', 'Priorités', 'Vérifiez les priorités', 'Rien à saisir : l\'outil classe les produits selon leur danger, la quantité et la fréquence d\'utilisation. Vérifiez que le classement vous paraît juste ; sinon, corrigez la quantité ou la fréquence dans l\'inventaire.'],
+    ['inh', 'Inhalation', 'Contrôlez l\'exposition', 'Rien à saisir : l\'outil estime le risque par inhalation à chaque poste. Pour les risques élevés, les deux colonnes de droite indiquent le gain d\'un système clos ou d\'un captage à la source.'],
+    ['plan', 'Plan d\'action', 'Planifiez les actions', 'Pour chaque mesure proposée, indiquez un responsable et une échéance, puis mettez le statut à jour au fil de l\'année. Ce plan se reporte dans votre programme annuel de prévention (PAPRIPACT) ou dans le DUERP.'],
+    ['sal', 'Salariés CMR', 'Vérifiez les salariés exposés', 'Contrôlez les postes et le nombre de salariés exposés aux agents CMR. Ces salariés doivent figurer sur la liste des travailleurs exposés, transmise au service de santé au travail (SPST) et conservée 40 ans.'],
+    ['export', 'Rapport', 'Éditez les documents', 'Imprimez ou enregistrez en PDF le rapport d\'évaluation et annexez-le à votre document unique. Refaites l\'évaluation au moins une fois par an, et à chaque nouveau produit ou changement de procédé.']
+  ];
+  function stepDone(id) {
+    var seen = S.seen || {};
+    if (id === 'inv') return S.products.length > 0;
+    if (!S.products.length) return false;
+    if (id === 'plan') { var it = planItems(ROWS); return it.length > 0 && it.every(function (x) { var st = S.actions[x.k] || {}; return st.statut === 'fait' || (st.resp && st.date); }); }
+    if (id === 'sal') return !!seen.sal || !ROWS.some(function (r) { return r.cmr === 'cmr'; });
+    if (id === 'export') return !!S.exported;
+    return !!seen[id];
+  }
+  function renderSteps() {
+    var ol = $('#ev-steps'), g = $('#ev-guide'), idx = -1;
+    STEPS.forEach(function (st, i) { if (st[0] === UI.view) idx = i; });
+    ol.innerHTML = STEPS.map(function (st, i) {
+      var d = stepDone(st[0]), cls = (i === idx ? 'on' : '') + (d ? ' done' : '');
+      return '<li class="' + cls.trim() + '"><button type="button" data-go="' + st[0] + '"' + (i === idx ? ' aria-current="step"' : '') + '><i>' + (d ? '<svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Terminé : </span>' : i + 1) + '</i><span>' + st[1] + '</span></button></li>';
+    }).join('');
+    if (S.hideGuide || idx < 0) {
+      g.innerHTML = idx < 0 ? '' : '<button type="button" class="ev-link ev-guide-show" data-act="guide">Afficher l\'aide de l\'étape</button>';
+      return;
+    }
+    var st = STEPS[idx], next = STEPS[idx + 1], extra = '';
+    if (st[0] === 'plan') { var it = planItems(ROWS), ok = it.filter(function (x) { var a = S.actions[x.k] || {}; return a.statut === 'fait' || (a.resp && a.date); }).length; extra = it.length ? '<span class="ev-guide-prog">' + ok + ' mesure' + (ok > 1 ? 's' : '') + ' planifiée' + (ok > 1 ? 's' : '') + ' sur ' + it.length + '</span>' : ''; }
+    if (st[0] === 'inv' && S.products.length) extra = '<span class="ev-guide-prog">' + S.products.length + ' produit' + (S.products.length > 1 ? 's' : '') + ' ou procédé' + (S.products.length > 1 ? 's' : '') + ' saisi' + (S.products.length > 1 ? 's' : '') + '</span>';
+    g.innerHTML = '<div class="ev-guide-txt"><b>Étape ' + (idx + 1) + ' sur 6 · ' + st[2] + '</b><p>' + st[3] + '</p>' + extra + '</div><div class="ev-guide-act">' +
+      (next ? '<button type="button" class="btn btn-primary" data-go="' + next[0] + '"' + (st[0] === 'inv' && !S.products.length ? ' disabled' : '') + '>Étape suivante : ' + next[1].toLowerCase() + '<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>' : '<button type="button" class="btn btn-primary" data-act="print" data-mode="report">Imprimer le rapport</button>') +
+      '<button type="button" class="ev-link" data-act="guide">Masquer l\'aide</button></div>';
+  }
   function empty(msg) { return '<div class="ev-empty"><p>' + msg + '</p><div class="ev-empty-cta"><button type="button" class="btn btn-primary" data-act="add">Ajouter un produit</button><button type="button" class="btn btn-secondary" data-act="demo">Charger un exemple</button></div></div>'; }
   function volTxt(p) {
     if (p.etat === 'gaz') return 'Gaz, fumée';
@@ -267,7 +306,9 @@
   function render() {
     ROWS = compute();
     if ($('#ev-site').value !== (S.site || '')) $('#ev-site').value = S.site || '';
+    if (S.products.length && ['hier', 'inh', 'sal'].indexOf(UI.view) >= 0) { S.seen = S.seen || {}; S.seen[UI.view] = 1; }
     renderKpis();
+    renderSteps();
     ({ dash: renderDash, inv: renderInv, hier: renderHier, inh: renderInh, plan: renderPlan, cmr: renderCmr, sal: renderSal, export: renderExport, set: renderSet, ref: renderRef })[UI.view]();
     renderDrawer();
     save();
@@ -283,7 +324,7 @@
 
   function renderDash() {
     var el = body('dash');
-    if (!ROWS.length) { el.innerHTML = empty('Commencez par lister les produits chimiques utilisés et les procédés qui émettent des polluants (poussières de bois, silice, fumées…).'); return; }
+    if (!ROWS.length) { el.innerHTML = onboarding(); return; }
     var top = ROWS.slice(0, 5), pl = planState(), byG = {};
     pl.items.forEach(function (it) { byG[it.group] = byG[it.group] || [0, 0]; byG[it.group][1]++; if ((S.actions[it.k] || {}).statut === 'fait') byG[it.group][0]++; });
     var dated = pl.items.filter(function (it) { var st = S.actions[it.k] || {}; return st.date && st.statut !== 'fait'; }).sort(function (a, b) { return S.actions[a.k].date < S.actions[b.k].date ? -1 : 1; }).slice(0, 5);
@@ -312,7 +353,7 @@
   }
   function renderInv() {
     var el = body('inv');
-    if (!ROWS.length) { el.innerHTML = empty('Commencez par lister les produits chimiques utilisés et les procédés qui émettent des polluants (poussières de bois, silice, fumées…).'); return; }
+    if (!ROWS.length) { el.innerHTML = onboarding(); return; }
     var postes = []; ROWS.forEach(function (r) { if (r.p.poste && postes.indexOf(r.p.poste) === -1) postes.push(r.p.poste); }); postes.sort();
     if (UI.poste && postes.indexOf(UI.poste) === -1) UI.poste = '';
     var opt = function (v, t, cur) { return '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(t) + '</option>'; };
@@ -421,10 +462,15 @@
   }
 
   function renderExport() {
-    body('export').innerHTML = '<ul class="ev-exp">' +
-      '<li><div><b>Tableur (CSV)</b><span>Une ligne par produit : substances, VLEP, mentions H, scores, priorités et actions. S\'ouvre dans Excel ou LibreOffice.</span></div><button type="button" class="btn btn-secondary" data-act="csv">Télécharger</button></li>' +
-      '<li><div><b>Rapport imprimable ou PDF</b><span>Inventaire, hiérarchisation, risque par inhalation, plan d\'action et agents CMR, prêts à joindre au document unique.</span></div><button type="button" class="btn btn-secondary" data-act="print">Imprimer</button></li>' +
-      '<li><div><b>Sauvegarde complète (JSON)</b><span>Toute l\'évaluation, y compris le plan d\'action. Permet de la reprendre sur un autre ordinateur.</span></div><button type="button" class="btn btn-secondary" data-act="json">Télécharger</button></li>' +
+    var none = !S.products.length ? ' disabled' : '';
+    body('export').innerHTML = '<h3 class="ev-h3">Documents réglementaires</h3><ul class="ev-exp">' +
+      '<li><div><b>Rapport d\'évaluation des risques chimiques</b><span>À annexer au document unique (DUERP, art. R. 4121-1). Contient l\'inventaire, les priorités, le risque par inhalation, les agents CMR, les salariés exposés et le plan d\'action.</span></div><button type="button" class="btn btn-primary" data-act="print" data-mode="report"' + none + '>Imprimer ou PDF</button></li>' +
+      '<li><div><b>Liste des travailleurs exposés aux agents CMR</b><span>Art. R. 4412-93-1. Trame par poste, pré-remplie avec les agents et la durée d\'exposition, à compléter avec le nom des salariés. À transmettre au SPST et à conserver 40 ans.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="liste"' + none + '>Imprimer ou PDF</button></li>' +
+      '<li><div><b>Plan d\'action de prévention</b><span>Mesures, références, responsables et échéances. À reporter dans le PAPRIPACT (50 salariés et plus, art. L. 4121-3-1) ou dans le DUERP.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="plan"' + none + '>Imprimer ou PDF</button></li></ul>' +
+      '<p class="ev-small">Pour obtenir un PDF, choisissez « Enregistrer au format PDF » comme imprimante.</p>' +
+      '<h3 class="ev-h3">Données</h3><ul class="ev-exp">' +
+      '<li><div><b>Inventaire des produits chimiques (tableur)</b><span>Fichier CSV, une ligne par produit : substances, VLEP, mentions H, scores et actions. S\'ouvre dans Excel ou LibreOffice.</span></div><button type="button" class="btn btn-secondary" data-act="csv"' + none + '>Télécharger</button></li>' +
+      '<li><div><b>Sauvegarde de l\'évaluation</b><span>Fichier JSON avec toute l\'évaluation, pour la reprendre sur un autre ordinateur ou l\'an prochain.</span></div><button type="button" class="btn btn-secondary" data-act="json"' + none + '>Télécharger</button></li>' +
       '<li><div><b>Restaurer une sauvegarde</b><span>Remplace l\'évaluation en cours par un fichier JSON exporté depuis cet outil.</span></div><label class="btn btn-secondary ev-file">Choisir un fichier<input type="file" accept="application/json,.json" data-act-file="import"></label></li></ul>';
   }
   function renderSet() {
@@ -552,6 +598,7 @@
     hList = (p.h || []).slice(); form.htext.value = '';
     subList = (p.subs || []).slice(); form.sub.value = ''; $('#ev-sug').hidden = true; drawSubs();
     syncForm(); $('#ev-form-err').hidden = true;
+    wzEdit = !!form.dataset.id; wzStep(1);
     dlg.showModal(); setTimeout(function () { form.name.focus(); }, 30);
   }
   form.addEventListener('change', function (e) { if (e.target.name === 'type' || e.target.name === 'etat') syncForm(); if (e.target.name === 'procede' && !form.name.value) form.name.value = PROCEDES[form.procede.value].label; });
@@ -581,8 +628,29 @@
   $('#ev-chips').addEventListener('click', function (e) { var b = e.target.closest('[data-h]'); if (b) { hList.splice(hList.indexOf(b.dataset.h), 1); drawChips(); } });
   $('#ev-cancel').addEventListener('click', function () { dlg.close(); });
   dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  var wzCur = 1, wzEdit = false;
+  function wzStep(n) {
+    wzCur = n;
+    $$('.ev-step', form).forEach(function (f) { f.hidden = +f.dataset.step !== n; });
+    $$('.ev-wz li').forEach(function (li) { var k = +li.dataset.wz; li.className = k < n ? 'done' : k === n ? 'on' : ''; });
+    $('#ev-wz-n').textContent = 'Étape ' + n + ' sur 3';
+    $('#ev-prev').hidden = n === 1; $('#ev-next').hidden = n === 3; $('#ev-save').hidden = n < 3 && !wzEdit;
+    $('#ev-form-err').hidden = true;
+    var db = $('.ev-db', form); if (db) db.scrollTop = 0;
+  }
+  function wzValid() {
+    if (wzCur !== 1) return true;
+    if (form.htext.value.trim()) $('#ev-hadd').click();
+    if (form.type.value === 'procede' && !form.name.value.trim()) form.name.value = PROCEDES[form.procede.value].label;
+    if (!form.name.value.trim()) { $('#ev-form-err').textContent = 'Indiquez le nom du produit.'; $('#ev-form-err').hidden = false; form.name.focus(); return false; }
+    return true;
+  }
+  $('#ev-next').addEventListener('click', function () { if (wzValid()) { wzStep(wzCur + 1); var f = $('.ev-step[data-step="' + wzCur + '"] .input:not([hidden])', form); if (f) f.focus(); } });
+  $('#ev-prev').addEventListener('click', function () { wzStep(wzCur - 1); });
+  $$('.ev-wz li').forEach(function (li) { li.addEventListener('click', function () { var n = +li.dataset.wz; if (n < wzCur || wzEdit || wzValid()) wzStep(n); }); });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!wzEdit && wzCur < 3) { $('#ev-next').click(); return; }
     if (form.htext.value.trim()) $('#ev-hadd').click();
     var proc = form.type.value === 'procede';
     if (proc && !form.name.value.trim()) form.name.value = PROCEDES[form.procede.value].label;
@@ -620,13 +688,35 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   }
   function slug() { return S.site ? '-' + S.site.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : ''; }
-  function printAll(only) {
-    var prev = UI.view;
-    document.body.classList.toggle('ev-print-view', !!only);
-    if (!only) ['dash', 'inv', 'hier', 'inh', 'plan', 'cmr', 'sal'].forEach(function (v) { UI.view = v; ({ dash: renderDash, inv: renderInv, hier: renderHier, inh: renderInh, plan: renderPlan, cmr: renderCmr, sal: renderSal })[v](); });
+  var DOCS = {
+    report: ['Rapport d\'évaluation des risques chimiques', 'Annexe au document unique d\'évaluation des risques professionnels (art. R. 4121-1 et R. 4412-5 du code du travail)', ['inv', 'hier', 'inh', 'cmr', 'sal', 'plan']],
+    liste: ['Liste des travailleurs exposés aux agents CMR', 'Art. R. 4412-93-1 du code du travail · à transmettre au service de prévention et de santé au travail et à conserver 40 ans', []],
+    plan: ['Plan d\'action de prévention du risque chimique', 'À reporter dans le programme annuel de prévention (PAPRIPACT) ou dans le document unique', ['plan']]
+  };
+  function printDoc(mode) {
+    var doc = DOCS[mode] || DOCS.report, prev = UI.view, today = new Date().toLocaleDateString('fr-FR');
+    var v = REF ? ((REF.meta.sources || {}).vlep || {}).en_vigueur_depuis : '';
+    var head = '<h1>' + doc[0] + '</h1><p class="ph-sub">' + doc[1] + '</p><dl class="ph-meta"><div><dt>Établissement ou unité de travail</dt><dd>' + esc(S.site || '………………………………') + '</dd></div><div><dt>Date d\'édition</dt><dd>' + today + '</dd></div><div><dt>Référentiel</dt><dd>Code du travail, art. R. 4412-149' + (v ? ' (version du ' + frDate(v) + ')' : '') + '</dd></div><div><dt>Évaluation réalisée par</dt><dd>………………………………</dd></div></dl>';
+    if (mode === 'report') head += '<p class="ph-meth">Méthode : évaluation simplifiée du risque chimique inspirée de la démarche de l\'INRS (hiérarchisation des risques potentiels, puis estimation du risque par inhalation). Résultats indicatifs, à confirmer par des mesurages pour les agents soumis à une valeur limite.</p>';
+    if (mode === 'liste') {
+      var ps = postesCmr(), keys = Object.keys(ps);
+      head += '<table class="ph-list"><thead><tr><th>Nom et prénom</th><th>Poste</th><th>Agents CMR</th><th>Durée d\'utilisation</th><th>Niveau d\'exposition estimé</th><th>Exposé du</th><th>au</th></tr></thead><tbody>' +
+        (keys.length ? keys.map(function (k) {
+          var n = Math.max(ps[k].nb || 0, 2), f = Math.max.apply(null, ps[k].rows.map(function (r) { return r.fc; })), lv = Math.min.apply(null, ps[k].rows.map(function (r) { return r.inh; })), rows = '';
+          for (var i = 0; i < n; i++) rows += '<tr><td></td><td>' + esc(k) + '</td><td>' + ps[k].agents.map(esc).join(', ') + '</td><td>' + FREQ_S[f - 1] + '</td><td>' + INH[lv][0] + '</td><td></td><td></td></tr>';
+          return rows;
+        }).join('') : '<tr><td colspan="7">Aucun agent CMR avéré ou présumé dans l\'inventaire.</td></tr>') + '</tbody></table><p class="ph-meth">Pour chaque salarié : nature, durée et degré de l\'exposition, et résultats des contrôles de l\'exposition au poste lorsqu\'ils existent.</p>';
+    }
+    $('#ev-print-head').innerHTML = head;
+    var R = { dash: renderDash, inv: renderInv, hier: renderHier, inh: renderInh, plan: renderPlan, cmr: renderCmr, sal: renderSal };
+    $$('.ev-view').forEach(function (el) { var id = el.id.slice(2); el.hidden = doc[2].indexOf(id) < 0; if (!el.hidden && R[id]) { UI.view = id; R[id](); } });
     UI.view = prev;
+    var t = document.title; document.title = doc[0] + (S.site ? ' - ' + S.site : '') + ' - ' + today;
+    document.body.classList.add('ev-printing'); document.body.setAttribute('data-print', mode);
+    S.exported = 1; save();
     window.print();
-    document.body.classList.remove('ev-print-view');
+    document.title = t; document.body.classList.remove('ev-printing'); document.body.removeAttribute('data-print');
+    showView(prev);
   }
 
   document.addEventListener('click', function (e) {
@@ -654,10 +744,10 @@
     else if (act === 'addproc') openForm(null, 'procede');
     else if (act === 'demo') { if (!S.products.length || confirm('Remplacer l\'évaluation actuelle par l\'exemple ?')) { S = demo(); UI.sel = null; showView('inv', 'force'); } }
     else if (act === 'clear') { if (confirm('Effacer toutes les données de cette évaluation ? Cette action est définitive.')) { S = blank(); UI.sel = null; render(); } }
-    else if (act === 'csv') exportCsv();
-    else if (act === 'json') download('evaluation-risque-chimique' + slug() + '.json', JSON.stringify({ format: 'vbs-eval', version: 1, exporte_le: new Date().toISOString(), data: S }, null, 1), 'application/json');
-    else if (act === 'print') printAll(false);
-    else if (act === 'printview') printAll(true);
+    else if (act === 'csv') { exportCsv(); S.exported = 1; save(); renderSteps(); }
+    else if (act === 'json') download('sauvegarde-evaluation-risques-chimiques' + slug() + '.json', JSON.stringify({ format: 'vbs-eval', version: 1, exporte_le: new Date().toISOString(), data: S }, null, 1), 'application/json');
+    else if (act === 'print') printDoc(t.dataset.mode || 'report');
+    else if (act === 'guide') { S.hideGuide = !S.hideGuide; save(); renderSteps(); }
     else if (act === 'close') closeDetail();
     else if (act === 'ackref') { S.refSeen = S.refSeen || {}; S.products.forEach(function (p) { subsOf(p).forEach(function (x) { S.refSeen[x.id] = x.fp; }); }); save(); $('#ev-alert').hidden = true; }
   });
@@ -685,7 +775,7 @@
     if (d.k) {
       S.actions[d.k] = S.actions[d.k] || {}; S.actions[d.k][d.f] = e.target.value; save();
       var tr = e.target.closest('.ev-action'); if (tr && d.f === 'statut') tr.classList.toggle('done', e.target.value === 'fait');
-      renderKpis();
+      renderKpis(); renderSteps();
       if (UI.view === 'plan' && d.f === 'statut' && e.target.closest('.app-drawer')) renderPlan();
     }
   });
@@ -697,7 +787,7 @@
       var p = r.p;
       lines.push([S.site, p.name, p.type === 'procede' ? 'Procédé' : 'Produit', r.subs.map(function (x) { return x.nom + (x.cas && x.cas[0] ? ' (' + x.cas[0] + ')' : ''); }).join(' | '), r.vleps.map(function (x) { return x.nom + ' : ' + vlepTxt(x, true); }).join(' | '), r.mp.join(', '), (p.h || []).join(' '), r.cmr === 'cmr' ? 'Oui' : r.cmr === 'susp' ? 'Suspecté' : 'Non', r.dc, p.qte || '', p.type === 'procede' ? '' : p.unite, FREQ_S[r.fc - 1], p.poste, p.nb, PRIO[r.prio][0], Math.round(r.pot), INH[r.inh][0], +r.sinh.toPrecision(3), actionsFor(r).map(function (a) { var st = S.actions['g:' + (a[0] === 'fds' ? 'fds:' + a[1] : a[0])] || {}; return a[1] + (st.statut === 'fait' ? ' (fait)' : st.statut === 'cours' ? ' (en cours)' : ''); }).join(' | ')]);
     });
-    download('evaluation-risque-chimique' + slug() + '.csv', '﻿' + lines.map(function (l) { return l.map(csvCell).join(';'); }).join('\n'), 'text/csv;charset=utf-8');
+    download('inventaire-produits-chimiques' + slug() + '.csv', '﻿' + lines.map(function (l) { return l.map(csvCell).join(';'); }).join('\n'), 'text/csv;charset=utf-8');
   }
 
   function demo() {
