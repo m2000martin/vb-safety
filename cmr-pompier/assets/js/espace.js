@@ -322,7 +322,7 @@
     P.forEach(function (p) { if (p.it && filled(p) && within(p.it.dateObj, 365)) { byAgent[p.agent] = (byAgent[p.agent] || 0) + (+p.indice || 0); } });
     var ranked = Object.keys(byAgent).sort(function (a, b) { return byAgent[b] - byAgent[a]; }), top = ranked.slice(0, 5), top10 = Math.max(1, Math.ceil(ranked.length * 0.1));
     var alerts = openSig.map(function (s) {
-      return '<li><span class="when">' + (s.it ? fmtD(s.it.dateObj) : '') + '</span><span class="what"><b>Signalement ' + (s.niveau === 'critique' ? 'critique' : 'forte exposition') + '</b><small>' + esc(s.it ? TYPE[s.it.type_feu] + ' · ' + s.it.numero : '') + '</small></span><span class="right">' + badge(s.statut === 'ouvert' ? ['Ouvert', 'badge-late'] : ['Pris en charge', 'badge-info']) + (s.statut === 'ouvert' ? '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|pris_en_charge">Prendre en charge</button>' : '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|clos">Clore</button>') + '</span></li>';
+      return '<li><span class="when">' + (s.it ? fmtD(s.it.dateObj) : '') + '</span><span class="what"><b>' + esc(sigTitle(s)) + '</b><small>' + esc(s.it ? TYPE[s.it.type_feu] + ' · ' + s.it.numero : '') + '</small></span><span class="right">' + badge(s.statut === 'ouvert' ? ['Ouvert', 'badge-late'] : ['Pris en charge', 'badge-info']) + (s.statut === 'ouvert' ? '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|pris_en_charge">Prendre en charge</button>' : '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|clos">Clore</button>') + '</span></li>';
     }).concat(fortes.slice(0, 4).map(function (p) {
       return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(p.user ? p.user.name : 'Agent') + (p.position === 'POS_ATT' && !p.ari_porte ? ' · attaque sans ARI' : ' · zone d\'exclusion sans décontamination') + '</b><small>' + esc(TYPE[p.it.type_feu]) + ' · ' + esc(p.it.numero) + '</small></span><span class="right">' + badge(['À vérifier', 'badge-pending']) + '</span></li>';
     }));
@@ -960,10 +960,15 @@
     { n: 1, t: 'Intervention', s: 'Éléments généraux' },
     { n: 2, t: 'CA et conducteur', roles: ['chef_agres', 'conducteur'] },
     { n: 3, t: 'Binôme 1', s: 'Attaque', roles: ['binome_attaque'] },
-    { n: 4, t: 'Binôme 2', s: 'Alimentation, soutien', roles: ['binome_alimentation', 'soutien', 'autre'] }
+    { n: 4, t: 'Binôme 2', s: 'Alimentation, soutien', roles: ['binome_alimentation', 'soutien', 'autre'] },
+    { n: 5, t: 'Signaler', s: 'Élément particulier' }
   ];
+  var SIGT = { doute: 'Doute sur la présence d\'autres éléments toxiques', intox: 'Signes d\'intoxication résiduelle', autre: 'Autre élément particulier' };
+  var SIGH = { doute: 'Ex. odeur inhabituelle, fûts ou produits non identifiés, fumées de couleur anormale.', intox: 'Ex. un agent a encore des maux de tête, des nausées ou une toux le lendemain.', autre: 'Tout ce que le SSSM doit savoir sur cette intervention.' };
+  function sigParse(sg) { var m = /^\[(doute|intox|autre)\]\s*/.exec(sg.motif || ''); return { type: m ? m[1] : null, texte: m ? sg.motif.slice(m[0].length) : (sg.motif || '') }; }
+  function sigTitle(sg) { var q = sigParse(sg); return q.type ? SIGT[q.type] : 'Signalement ' + (sg.niveau === 'critique' ? 'critique' : 'forte exposition'); }
   var SHARED = ['position', 'tactique', 'contamination', 'duree_min', 'tenue_complete', 'ari_porte', 'ari_retire_deb', 'ffp3', 'decon_type', 'exposition_particuliere'];
-  function stepOf(m) { for (var k = 1; k < STEPS.length; k++) if (STEPS[k].roles.indexOf(m.role_tenu) !== -1) return STEPS[k].n; return 4; }
+  function stepOf(m) { for (var k = 1; k < STEPS.length; k++) if (STEPS[k].roles && STEPS[k].roles.indexOf(m.role_tenu) !== -1) return STEPS[k].n; return 4; }
   function idxIn(step) { var out = []; ed.crew.forEach(function (m, i) { if (stepOf(m) === step) out.push(i); }); return out; }
   function sameOn(step) { return (step === 3 || step === 4) && ed.same && ed.same[step] && idxIn(step).length > 1; }
   function syncFrom(i) {
@@ -989,20 +994,20 @@
     return '<article class="agent-card' + (group ? ' group' : '') + '" data-card="' + i + '"><div class="agent-top"><div>' +
         (group ? '<b>' + esc(names.join(' + ')) + '</b><small>Saisie commune · une fiche est enregistrée pour chacun</small>' : '<b>' + esc(u.name || '—') + '</b><small>' + esc([u.grade, u.matricule].filter(Boolean).join(' · ')) + '</small>') + '</div>' +
         (ro || group ? '' : '<button type="button" class="icon-btn sm" data-remove="' + i + '" aria-label="Retirer ' + esc(u.name || '') + ' de l\'équipage">✕</button>') + '</div>' +
-      (group ? '' : '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
+      '<div class="ac-cols"><div class="ac-col">' + (group ? '' : '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
         '<div class="field"><label class="label">Engin</label><select class="select" data-f="' + i + '|engin">' + ENGINS.map(function (k) { return '<option' + (m.engin === k ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></div></div>') +
       (fire ? '<div class="block"><span class="label">Position tenue la plus longtemps' + (m.auto ? ' <span class="auto-tag">proposée d\'après le poste</span>' : '') + '</span><div class="pos-pick">' + Object.keys(set).map(function (k) { return '<button type="button" class="opt' + (m.position === k ? ' on' : '') + '" data-pos="' + i + '|' + k + '" aria-pressed="' + (m.position === k) + '">' + esc(set[k].label) + '</button>'; }).join('') + '</div>' +
         (m.position === 'POS_ATT' ? '<div class="sub-pick"><span class="label sm">Tactique d\'attaque</span><div class="pair" role="group">' + Object.keys(R.TAC).map(function (k) { return '<button type="button" class="opt' + (m.tactique === k ? ' on' : '') + '" data-tac="' + i + '|' + k + '" aria-pressed="' + (m.tactique === k) + '">' + (k === 'TAC_INT' ? 'Intérieure directe' : 'Transitoire (abattage extérieur d\'abord)') + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
-      '<div class="block"><span class="label">Exposition perçue</span><div class="gdo gdo-3">' + ['nulle', 'moyenne', 'forte'].map(function (z) { return '<button type="button" class="opt gdo-' + z + (m.contamination === z ? ' on' : '') + '" data-set="' + i + '|contamination|' + z + '" aria-pressed="' + (m.contamination === z) + '"><b>' + R.ZONES[z][0] + '</b><small>' + R.ZONES[z][1].split(' : ')[1] + '</small></button>'; }).join('') + '</div></div>' : '') +
+      '</div><div class="ac-col">' + '<div class="block"><span class="label">Exposition perçue</span><div class="gdo gdo-3">' + ['nulle', 'moyenne', 'forte'].map(function (z) { return '<button type="button" class="opt gdo-' + z + (m.contamination === z ? ' on' : '') + '" data-set="' + i + '|contamination|' + z + '" aria-pressed="' + (m.contamination === z) + '"><b>' + R.ZONES[z][0] + '</b><small>' + R.ZONES[z][1].split(' : ')[1] + '</small></button>'; }).join('') + '</div></div>' : '</div><div class="ac-col">') +
       '<div class="block"><span class="label">Durée d\'engagement</span><div class="dur-row"><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" data-f="' + i + '|duree_min" value="' + (m.duree_min || '') + '" aria-label="Durée en minutes"><span>min</span></div><div class="chips-pick">' + chips.map(function (c) { return '<button type="button" class="opt' + (+m.duree_min === c[0] ? ' on' : '') + '" data-mdur="' + i + '|' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div></div>' +
       '<div class="block"><span class="label">Équipements</span><div class="epi-mini">' + pairBtns(i, 'tenue_complete', 'Tenue complète', 'Incomplète') + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div>' +
         '<div class="chips-pick">' + (m.position === 'POS_ATT' || m.position === 'POS_DEB' ? '<button type="button" class="opt' + (m.ari_retire_deb ? ' on warn' : '') + '" data-toggle="' + i + '|ari_retire_deb">ARI retiré pendant le déblai</button>' : '') + '<button type="button" class="opt' + (m.ffp3 ? ' on' : '') + '" data-toggle="' + i + '|ffp3">Masque FFP3 au déblai</button></div>' +
         (m.position === 'POS_ATT' && m.ari_porte === false ? '<p class="warn-line">' + icon('alert') + 'Attaque sans ARI : événement anormal, signalé au SSSM.</p>' : '') + '</div>' +
-      (fire ? '<div class="block decon-box"><span class="label">Décontamination' + (group ? '' : ' de ' + esc(first(u.name) || 'l\'agent')) + '</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div>' +
+      '</div><div class="ac-col">' + (fire ? '<div class="block decon-box"><span class="label">Décontamination' + (group ? '' : ' de ' + esc(first(u.name) || 'l\'agent')) + '</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div>' +
         (group ? '' : '<div class="field"><label class="label sm">Réf. de mesure (dispositif VB Safety, facultatif)</label><input class="input" type="text" maxlength="40" data-f="' + i + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. Mesure VB124-1"></div>') + '</div>' : '') +
       '<div class="form-2"><div class="field"><label class="label">Exposition particulière</label><input class="input" type="text" maxlength="300" data-f="' + i + '|exposition_particuliere" value="' + esc(m.exposition_particuliere) + '" placeholder="Ex. présence de batterie de trottinette"></div>' +
       (group ? '' : '<div class="field"><label class="label">Commentaire individuel</label><input class="input" type="text" maxlength="500" data-f="' + i + '|commentaire" value="' + esc(m.commentaire) + '" placeholder="Faits uniquement, sans donnée médicale"></div>') + '</div>' +
-      (DOC && !group ? '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div>' : '') + '</article>';
+      '</div></div>' + (DOC && !group ? '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div>' : '') + '</article>';
   }
   function missing(m) {
     var out = [], fire = ed.it.ambiance !== 'aucun_feu';
@@ -1034,6 +1039,7 @@
   function step1Missing() { return !ed.it.numero || !ed.it.date || !ed.it.fin; }
   function stepNav() {
     return '<ol class="ed-steps">' + STEPS.map(function (st) {
+      if (st.n === 5) { var ns = ed.isNew ? 0 : db.signalements.filter(function (z) { return z.intervention === ed.id; }).length; return '<li><button type="button" data-step="5" class="opt5' + (ed.step === 5 ? ' on' : '') + '" aria-current="' + (ed.step === 5 ? 'step' : 'false') + '"><span class="num">5</span><span class="txt"><b>' + st.t + '</b><small>' + (ns ? ns + ' envoyé' + (ns > 1 ? 's' : '') : 'Facultatif') + '</small></span></button></li>'; }
       var ix = st.n === 1 ? [] : idxIn(st.n), bad = st.n === 1 ? step1Missing() : !ix.length || ix.some(function (i) { return missing(ed.crew[i]).length; });
       var sub = st.n === 1 ? st.s : ix.length ? ix.map(function (i) { return first((db.byId[ed.crew[i].agent] || {}).name); }).join(', ') : 'Personne';
       return '<li><button type="button" data-step="' + st.n + '" class="' + (ed.step === st.n ? 'on' : '') + (bad ? '' : ' ok') + '" aria-current="' + (ed.step === st.n ? 'step' : 'false') + '"><span class="num">' + (bad ? st.n : '✓') + '</span><span class="txt"><b>' + st.t + '</b><small>' + esc(sub) + '</small></span></button></li>';
@@ -1050,7 +1056,7 @@
       '<div class="field"><label class="label" for="ed-commune">Commune</label><input class="input" id="ed-commune" data-it="commune" value="' + esc(x.commune) + '" maxlength="80"></div></div>' +
       '<div class="form-2">' + (x.type_feu === 'vehicule' ? '<div class="field"><label class="label" for="ed-motor">Motorisation</label><select class="select" id="ed-motor" data-it="motorisation" data-rerender><option value="">—</option>' + Object.keys(MOTOR).map(function (k) { return '<option value="' + k + '"' + (x.motorisation === k ? ' selected' : '') + '>' + MOTOR[k] + '</option>'; }).join('') + '</select></div>' : '') +
         '<div class="field"><label class="label" for="ed-amb">Fumées et feu</label><select class="select" id="ed-amb" data-it="ambiance" data-rerender>' + Object.keys(AMB).map(function (k) { return '<option value="' + k + '"' + (x.ambiance === k ? ' selected' : '') + '>' + AMB[k] + '</option>'; }).join('') + '</select></div></div>' +
-      (x.ambiance !== 'aucun_feu' ? circHtml() + natureHtml() : natureHtml()) +
+      (x.ambiance !== 'aucun_feu' ? circHtml() : '') + (DOC ? natureHtml() : '') +
       '<div class="chips-pick">' + [['zone_deshabillage', 'Zone de déshabillage mise en place'], ['epi_ensaches', 'EPI souillés ensachés']].map(function (g) { return '<button type="button" class="opt' + (x[g[0]] ? ' on' : '') + '" data-ittoggle="' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' +
       '<div class="field"><label class="label" for="ed-obs">Observations</label><textarea class="textarea" id="ed-obs" data-it="observations" rows="2" maxlength="1000"></textarea></div></section>';
   }
@@ -1059,9 +1065,33 @@
     var candidates = db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && inCrew.indexOf(u.id) === -1; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
     return '<section class="panel"><div class="panel-head wrap"><h3>' + n + '. ' + st.t + (st.s ? ' · ' + st.s : '') + '</h3>' +
         (n >= 3 && ix.length > 1 && !ro ? '<label class="check same-tgl"><input type="checkbox" id="ed-same"' + (ed.same[n] ? ' checked' : '') + '> Même saisie pour tout le binôme</label>' : '') + '</div>' +
+      (n === 2 ? (function () { var miss = ['chef_agres', 'conducteur'].filter(function (r) { return !ed.crew.some(function (m) { return m.role_tenu === r; }); }); return miss.length && !ro ? '<p class="warn-line">' + icon('alert') + 'Pas de ' + miss.map(function (r) { return r === 'chef_agres' ? 'chef d\'agrès' : 'conducteur'; }).join(' ni de ') + ' dans ce rapport : ajoutez-le ci-dessous.</p>' : ''; })() : '') +
       (ix.length ? '<div class="crew-grid">' + (sameOn(n) ? memberCard(ix[0], ix) : ix.map(function (i) { return memberCard(i); }).join('')) + '</div>' : '<p class="empty">Personne dans cette partie' + (ro ? '.' : ' : ajoutez un membre ci-dessous.') + '</p>') +
       (ro ? '' : '<div class="add-member"><select class="select" id="ed-add" aria-label="Ajouter un membre"><option value="">Ajouter un membre d\'équipage…</option>' + candidates.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + (u.grade || '') + ' · ' + u.matricule) + '</option>'; }).join('') + '</select><button type="button" class="btn btn-secondary" id="ed-add-btn" data-addstep="' + n + '">Ajouter</button></div>') +
       '</section>';
+  }
+  function stepSignal() {
+    var list = ed.isNew ? [] : db.signalements.filter(function (z) { return z.intervention === ed.id; });
+    var ST = { ouvert: 'Envoyé', pris_en_charge: 'Pris en charge par le SSSM', clos: 'Clos' };
+    var h = '<section class="panel"><div class="panel-head"><h3>5. Signaler un élément particulier</h3><span class="note">Facultatif</span></div>' +
+      '<p class="note">Le SSSM reçoit le signalement, même après la transmission du rapport (par exemple si un agent ne va pas bien le lendemain).</p>' +
+      (list.length ? '<ul class="rows nw sig-list">' + list.map(function (sg) { var q = sigParse(sg); return '<li><span class="what"><b>' + esc(sigTitle(sg)) + '</b><small>' + esc((sg.agents || []).map(function (a) { return (db.byId[a] || {}).name; }).filter(Boolean).join(', ')) + (q.texte ? ' · ' + esc(q.texte) : '') + '</small></span><span class="right"><span class="stt' + (sg.statut === 'ouvert' ? ' warn' : ' ok') + '">' + (ST[sg.statut] || '') + '</span></span></li>'; }).join('') + '</ul>' : '');
+    if (S.role !== 'cos') return h + (list.length ? '' : '<p class="empty">Aucun signalement pour cette intervention.</p>') + '</section>';
+    if (ed.isNew) return h + '<p class="empty">Enregistrez d\'abord le brouillon pour pouvoir envoyer un signalement.</p></section>';
+    return h + '<fieldset class="fs"><legend class="label">Quel élément ?</legend><div class="sig-pick">' + Object.keys(SIGT).map(function (k, i) { return '<label class="sig-opt"><input type="radio" name="sg-type" value="' + k + '"' + (i === 0 ? ' checked' : '') + '><span><b>' + SIGT[k] + '</b><small>' + SIGH[k] + '</small></span></label>'; }).join('') + '</div></fieldset>' +
+      '<fieldset class="fs"><legend class="label">Agents concernés</legend><div class="sig-agents">' + ed.crew.map(function (m) { return '<label class="check"><input type="checkbox" name="sg-ag" value="' + m.agent + '"> ' + esc((db.byId[m.agent] || {}).name || '—') + '</label>'; }).join('') + '</div></fieldset>' +
+      '<div class="field"><label class="label" for="sg-txt">Explication</label><textarea class="textarea" id="sg-txt" rows="3" maxlength="600" placeholder="Décrivez les faits, sans diagnostic."></textarea></div>' +
+      '<div class="actions-row"><button type="button" class="btn btn-primary" id="sg-send">' + icon('send') + 'Envoyer au SSSM</button></div></section>';
+  }
+  async function sendSignal(root, btn) {
+    var type = (root.querySelector('[name=sg-type]:checked') || {}).value, agents = Array.prototype.map.call(root.querySelectorAll('[name=sg-ag]:checked'), function (c) { return c.value; }), txt = root.querySelector('#sg-txt').value.trim();
+    if (!agents.length) { toast('Cochez au moins un agent concerné.'); return; }
+    if (!txt) { toast('Ajoutez une explication.'); return; }
+    btn.disabled = true;
+    try {
+      await VBSData.create(S, 'signalements', { intervention: ed.id, agents: agents, auteur: db.meId, niveau: type === 'intox' ? 'critique' : 'eleve', motif: '[' + type + '] ' + txt, statut: 'ouvert' });
+      toast('Signalement envoyé au SSSM.'); await reload();
+    } catch (e) { btn.disabled = false; toast('Envoi impossible : ' + e.message); }
   }
   function viewEditor(root, id) {
     if (!ed || (id === 'nouveau' ? !ed.isNew : ed.id !== id)) ed = editorState(id);
@@ -1070,11 +1100,10 @@
     if (!ed.same) initSame();
     var ro = edReadOnly(), x = ed.it, st = ed.isNew ? 'attente' : VBSData.reportState(Object.assign({ dateObj: new Date(x.date) }, x)), n = ed.step;
     root.innerHTML = '<div class="ed-wrap"><a class="back-link" href="#rapports">' + icon('back') + 'Rapports</a>' +
-      head(ed.isNew ? 'Nouveau rapport de contamination' : 'Rapport ' + esc(x.numero), S.role === 'sssm' ? 'Correction par le SSSM : chaque modification est journalisée.' : 'Quatre étapes. Une fiche par personne, avec sa décontamination.', ed.isNew ? badge(['Brouillon', 'badge-pending']) : (ro ? '<span class="lock">' + icon('lock') + 'Lecture seule</span> ' : '') + badge(x.statut === 'brouillon' ? ['Brouillon', 'badge-pending'] : STATE[st])) +
+      head(ed.isNew ? 'Nouveau rapport de contamination' : 'Rapport ' + esc(x.numero), S.role === 'sssm' ? 'Correction par le SSSM : chaque modification est journalisée.' : 'Cinq étapes. Une fiche par personne, avec sa décontamination.', ed.isNew ? badge(['Brouillon', 'badge-pending']) : (ro ? '<span class="lock">' + icon('lock') + 'Lecture seule</span> ' : '') + badge(x.statut === 'brouillon' ? ['Brouillon', 'badge-pending'] : STATE[st])) +
       stepNav() +
-      '<fieldset class="ed-fs"' + (ro ? ' disabled' : '') + '>' + (n === 1 ? stepIntervention(x) : stepCrew(n, ro)) + '</fieldset>' +
-      '<div class="ed-nav">' + (n > 1 ? '<button type="button" class="btn btn-secondary" data-step="' + (n - 1) + '">' + icon('back') + 'Précédent</button>' : '<span></span>') + (n < 4 ? '<button type="button" class="btn btn-primary" data-step="' + (n + 1) + '">Suivant : ' + STEPS[n].t + icon('arrow', 'icon-arrow') + '</button>' : '') + '</div>' +
-      (S.role === 'cos' && !ed.isNew ? (function () { var sg = db.signalements.filter(function (z) { return z.intervention === ed.id; })[0]; return '<div class="actions-row sig-row">' + (sg ? '<span class="note">Signalement envoyé au SSSM (' + ({ ouvert: 'ouvert', pris_en_charge: 'pris en charge', clos: 'clos' })[sg.statut] + ').</span>' : '<button type="button" class="btn btn-secondary btn-sm" id="ed-sig">Signaler une forte exposition au SSSM</button>') + '</div>'; })() : '') +
+      (n === 5 ? stepSignal() : '<fieldset class="ed-fs"' + (ro ? ' disabled' : '') + '>' + (n === 1 ? stepIntervention(x) : stepCrew(n, ro)) + '</fieldset>') +
+      '<div class="ed-nav">' + (n > 1 ? '<button type="button" class="btn btn-secondary" data-step="' + (n - 1) + '">' + icon('back') + 'Précédent</button>' : '<span></span>') + (n < 5 ? '<button type="button" class="btn btn-primary" data-step="' + (n + 1) + '">Suivant : ' + STEPS[n].t + icon('arrow', 'icon-arrow') + '</button>' : '') + '</div>' +
       (ro ? '' : '<div class="action-bar"><span class="note" id="ed-status"></span>' +
         (S.role === 'cos' ? '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer le brouillon</button><button type="button" class="btn btn-primary" id="ed-send">' + icon('send') + 'Transmettre au SSSM</button>'
           : '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer les corrections</button>' + (x.statut !== 'controle_sssm' ? '<button type="button" class="btn btn-primary" id="ed-validate">' + icon('lock') + 'Enregistrer et valider</button>' : '')) + '</div>') + '</div>';
@@ -1142,7 +1171,7 @@
       else if (b.id === 'ed-save') saveEditor(null).catch(function () {});
       else if (b.id === 'ed-send') confirmTransmit();
       else if (b.id === 'ed-validate') saveEditor('valider').catch(function () {});
-      else if (b.id === 'ed-sig') openSignalement(db.inter[ed.id]);
+      else if (b.id === 'sg-send') sendSignal(root, b);
     });
   }
   function confirmTransmit() {
@@ -1155,7 +1184,7 @@
       return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + (DOC ? ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
     }).join('');
     modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Le référent EPI du centre est prévenu pour le changement des tenues.</p>') +
-      '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p><p class="note"><b>Nature :</b> ' + esc(R.natureTexte(ed.it)) + '</p><ul class="summary-list">' + rows + '</ul>',
+      '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p>' + (DOC ? '<p class="note"><b>Nature :</b> ' + esc(R.natureTexte(ed.it)) + '</p>' : '') + '<ul class="summary-list">' + rows + '</ul>',
       probs.length ? [] : [{ label: icon('send') + 'Confirmer la transmission', primary: true, run: function () { return saveEditor('transmettre'); } }]);
   }
   async function saveEditor(action) {
@@ -1372,7 +1401,7 @@
     }
     if (S.role === 'commandement') { var late = db.interventions.filter(function (x) { return VBSData.reportState(x) === 'retard'; }); if (late.length) out.push({ ic: 'clock', tone: 'red', t: late.length + ' rapport' + (late.length > 1 ? 's' : '') + ' en retard', s: 'Brouillons de plus de 72 heures.', href: '#gestion' }); }
     if (S.role === 'sssm') {
-      db.signalements.filter(function (x) { return x.statut === 'ouvert'; }).forEach(function (x) { out.push({ ic: 'alert', tone: 'red', t: 'Signalement ' + (x.niveau === 'critique' ? 'critique' : 'forte exposition'), s: x.motif, href: '#tableau-de-bord' }); });
+      db.signalements.filter(function (x) { return x.statut === 'ouvert'; }).forEach(function (x) { out.push({ ic: 'alert', tone: 'red', t: sigTitle(x), s: sigParse(x).texte, href: '#tableau-de-bord' }); });
       var tc = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; if (tc) out.push({ ic: 'clip', t: tc + ' rapport' + (tc > 1 ? 's' : '') + ' à contrôler', s: 'Transmis par les CA.', href: '#rapports' });
       db.reglementation.filter(function (x) { return x.impact === 'action_requise'; }).forEach(function (x) { out.push({ ic: 'scale', t: x.titre, s: 'Action requise', href: '#reglementation' }); });
     }

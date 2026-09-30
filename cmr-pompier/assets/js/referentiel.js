@@ -33,7 +33,7 @@
       SILICE: { nom: 'Silice cristalline alvéolaire', cls: 'Procédé listé', decl: 'Déblai, démolition, effondrement de maçonnerie', mots: ['effondr', 'demoli', 'maconn', 'beton', 'parpaing', 'pierre', 'platre'] },
       PB: { nom: 'Plomb et composés', cls: 'Repr. 1A', decl: 'Peintures anciennes, bâti ancien, batteries', mots: ['plomb', 'batterie', 'accumulateur', 'peinture ancienne', 'bati ancien', 'ancien'] },
       CRVI: { nom: 'Chrome VI', cls: 'Carc. 1A ou 1B selon le composé', decl: 'Structures et revêtements métalliques traités', mots: ['chrom', 'galva', 'metal traite', 'revetement metal'] },
-      CD: { nom: 'Cadmium et composés', cls: 'Carc. 1B, Muta. 2, Repr. 2', decl: 'Batteries, revêtements, pigments', mots: ['cadmium', 'batterie', 'accumulateur', 'pigment'] },
+      CD: { nom: 'Cadmium et composés', cls: 'Carc. 1B, Muta. 2, Repr. 2', decl: 'Batteries nickel-cadmium, revêtements, pigments', mots: ['cadmium', 'ni-cd', 'nicd', 'nickel-cadmium', 'pigment'] },
       NI: { nom: 'Composés du nickel', cls: 'Carc. 1A selon le composé', decl: 'Structures métalliques, aciers alliés', mots: ['nickel', 'acier', 'inox', 'structure metal', 'charpente metal'] },
       VCM: { nom: 'Chlorure de vinyle monomère', cls: 'Carc. 1A', decl: 'Présence importante de PVC', mots: ['pvc', 'vinyle', 'menuiserie plastique', 'canalisation', 'gaine'] },
       PFAS: { nom: 'PFOA et PFAS apparentés', cls: 'Carc. 1B, Repr. 1B', decl: 'Mousses extinctrices, textiles techniques', mots: ['mousse', 'emulseur', 'pfas', 'pfoa', 'textile technique'] }

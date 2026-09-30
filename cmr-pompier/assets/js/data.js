@@ -44,7 +44,7 @@
   }
 
   // ---------------------------------------------------------------- hors ligne
-  var OFF_KEY = 'vbs-offline-db-v6', offline = null;
+  var OFF_KEY = 'vbs-offline-db-v7', offline = null;
   function saveOffline() { try { sessionStorage.setItem(OFF_KEY, JSON.stringify(offline)); } catch (e) {} }
   function loadOffline() { try { return JSON.parse(sessionStorage.getItem(OFF_KEY) || 'null'); } catch (e) { return null; } }
   var idn = 0;
@@ -75,7 +75,7 @@
       chimique: { c: ["Zone d'activités Fictive"], p: ['Fuite de produit en entrepôt'], e: ['FPT', 'VL'], d: [60, 180] }
     };
     var bag = ['habitation', 'habitation', 'habitation', 'vehicule', 'vehicule', 'industriel', 'clos', 'cheminee', 'vegetation', 'vegetation', 'conteneur', 'conteneur', 'chimique'];
-    var CREW = ['binome_attaque', 'binome_attaque', 'binome_alimentation', 'binome_alimentation', 'conducteur', 'soutien'];
+    var CREW = ['conducteur', 'binome_attaque', 'binome_attaque', 'binome_alimentation', 'binome_alimentation', 'soutien'];
     var FCT = { chef_agres: ['commandement'], binome_attaque: ['attaque', 'deblai'], binome_alimentation: ['alimentation'], conducteur: ['conduite'], soutien: ['nettoyage'] };
     var DECS = ['DEC_LING_DOUCHE', 'DEC_LING_DOUCHE', 'DEC_LING_DOUCHE', 'DEC_LING_1H', 'DEC_LING_1H', 'DEC_DOUCHE_2H', 'DEC_DOUCHE_2H', 'DEC_LING_TARD', 'DEC_DOUCHE_TARD', 'DEC_AUCUNE'];
     var CIRCS = { industriel: ['AMIANTE', 'CRVI', 'NI'], habitation: ['PB', 'AMIANTE', 'VCM'], clos: ['VCM', 'SILICE'], vehicule: ['PB', 'CD'] };
@@ -102,8 +102,8 @@
       var cc = CIRCS[type] && rnd() < 0.3 ? [pick(CIRCS[type])] : [];
       if (type === 'vegetation' && rnd() < 0.2) cc.push('bascule');
       var it = { id: id(), numero: 'INT-' + d.getFullYear() + '-' + String(4200 - i).padStart(5, '0'), date: d.toISOString(), type_feu: type, precision: i === 0 ? 'VL sur voie publique' : pick(t.p), commune: pick(t.c), centre: centre, cos: cos.id,
-        zone_deshabillage: rnd() < 0.7, epi_ensaches: rnd() < 0.75, suspicion_amiante: cc.indexOf('AMIANTE') !== -1, statut: statut, ambiance: type === 'conteneur' && rnd() < 0.3 ? 'fumees_faibles' : type === 'chimique' ? 'aucun_feu' : 'feu_fumee',
-        motorisation: type === 'vehicule' ? (rnd() < 0.2 ? 'lithium_ion' : 'thermique') : '', exposition_globale: cc.indexOf('PB') !== -1 && type === 'vehicule' ? 'Présence de batteries au plomb' : '', circonstances: cc, duree_min: ri(t.d[0], t.d[1]) };
+        zone_deshabillage: rnd() < 0.7 && statut !== 'brouillon', epi_ensaches: rnd() < 0.75 && statut !== 'brouillon', suspicion_amiante: statut !== 'brouillon' && cc.indexOf('AMIANTE') !== -1, statut: statut, ambiance: type === 'conteneur' && rnd() < 0.3 ? 'fumees_faibles' : type === 'chimique' ? 'aucun_feu' : 'feu_fumee',
+        motorisation: type === 'vehicule' ? (rnd() < 0.2 ? 'lithium_ion' : 'thermique') : '', exposition_globale: statut !== 'brouillon' && cc.indexOf('PB') !== -1 && type === 'vehicule' ? 'Présence de batteries au plomb' : '', circonstances: statut === 'brouillon' ? [] : cc, duree_min: ri(t.d[0], t.d[1]) };
       interventions.push(it);
       var crew = [], pool = agents.slice();
       if (i % 2 === 0) crew.push(pool.splice(0, 1)[0]); else pool.splice(0, 1);
