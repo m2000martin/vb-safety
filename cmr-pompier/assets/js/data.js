@@ -4,7 +4,7 @@
 // filtré avec les mêmes règles que le serveur.
 (function (w) {
   var DAY = 86400000;
-  var COLS = ['users', 'operations', 'interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'referentiel', 'reglementation', 'rappels', 'tenues', 'mouvements_epi'];
+  var COLS = ['users', 'operations', 'interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'referentiel', 'reglementation', 'rappels', 'tenues', 'mouvements_epi', 'ref_motifs'];
 
   // Indicateur conventionnel en équivalents-feu (référentiel VB Safety v1.0, voir referentiel.js)
   function indice(it, p) { return VBSRef.calcul(it || {}, p || {}).ef; }
@@ -34,15 +34,17 @@
     if (role === 'sssm') jobs.prelevements = list('prelevements', { sort: '-date' });
     if (role === 'sssm' || role === 'commandement') jobs.reglementation = list('reglementation', { sort: '-date' });
     if (role === 'cos' || role === 'commandement') jobs.rappels = list('rappels', { sort: '-created' });
-    if (role === 'agent' || role === 'cos' || role === 'habillement' || role === 'sssm') jobs.tenues = list('tenues', { sort: 'numero' });
-    if (role === 'agent' || role === 'cos' || role === 'habillement') jobs.mouvements_epi = list('mouvements_epi', { sort: '-created' });
+    // Module EPI : réservé au référent EPI de la caserne
+    if (role === 'habillement') { jobs.tenues = list('tenues', { sort: 'numero' }); jobs.mouvements_epi = list('mouvements_epi', { sort: '-created' }); }
+    // Référentiel validé par le SSSM, motif par motif (sans lui, les valeurs VB Safety s'appliquent)
+    if (role !== 'habillement') jobs.ref_motifs = list('ref_motifs', { sort: 'motif' }).catch(function () { return []; });
     var keys = Object.keys(jobs), vals = await Promise.all(keys.map(function (k) { return jobs[k]; }));
     var raw = {}; COLS.forEach(function (c) { raw[c] = []; }); keys.forEach(function (k, i) { raw[k] = vals[i]; });
     return normalise(raw, s.id);
   }
 
   // ---------------------------------------------------------------- hors ligne
-  var OFF_KEY = 'vbs-offline-db-v5', offline = null;
+  var OFF_KEY = 'vbs-offline-db-v6', offline = null;
   function saveOffline() { try { sessionStorage.setItem(OFF_KEY, JSON.stringify(offline)); } catch (e) {} }
   function loadOffline() { try { return JSON.parse(sessionStorage.getItem(OFF_KEY) || 'null'); } catch (e) { return null; } }
   var idn = 0;
@@ -151,10 +153,10 @@
     var late = interventions.filter(function (x) { return x.statut === 'brouillon' && x.cos === cosDemo.id && now - new Date(x.date) > 3 * DAY; })[0];
     var rappels = late ? [{ id: id(), intervention: late.id, de: ci.id, a: cosDemo.id, message: 'Merci de compléter ce rapport de contamination au plus vite.', created: new Date(now - DAY).toISOString() }] : [];
     var reglementation = [
-      { id: id(), titre: "Fiche d'exposition après intervention à risque", resume: "Proposition de loi sur le suivi de l'exposition des sapeurs-pompiers aux agents CMR. Adoptée par le Sénat en mars 2025, examen en cours. Exemple de démonstration : statut à vérifier.", date: new Date(now - 20 * DAY).toISOString(), impact: 'a_suivre', source: 'Sénat · proposition de loi (2025)' },
-      { id: id(), titre: 'Référentiel VB Safety v1.0 : validation médicale', resume: "Nouvelle méthode de calcul en équivalents-feu (position, tactique, type de sinistre, durée, décontamination). Les coefficients conventionnels doivent être validés par un médecin de sapeurs-pompiers avant mise en production.", date: new Date(now - 3 * DAY).toISOString(), impact: 'action_requise', source: 'Référentiel VB Safety v1.0' },
-      { id: id(), titre: 'Tableaux de maladies professionnelles 16 bis et 30', resume: "Le décret n° 2025-1349 intègre les activités de lutte contre l'incendie (y compris formations, déblai et nettoyage du matériel) pour les sapeurs-pompiers professionnels et volontaires.", date: new Date(now - 60 * DAY).toISOString(), impact: 'info', source: 'Décret n° 2025-1349' },
-      { id: id(), titre: 'Activité de sapeur-pompier classée cancérogène (groupe 1)', resume: 'Classement par le CIRC en 2022.', date: new Date(now - 400 * DAY).toISOString(), impact: 'info', source: 'CIRC · Monographie 132' }
+      { id: id(), titre: "Fiche d'exposition après intervention à risque", resume: "Proposition de loi sur le suivi de l'exposition des sapeurs-pompiers aux agents CMR. Adoptée par le Sénat en mars 2025, examen en cours. Exemple de démonstration : statut à vérifier.", date: new Date(now - 20 * DAY).toISOString(), impact: 'a_suivre', source: 'Sénat · proposition de loi (2025)', lien: 'https://www.senat.fr/leg/tas24-084.html' },
+      { id: id(), titre: 'Référentiel VB Safety v1.0 : validation médicale', resume: "Nouvelle méthode de calcul en équivalents-feu (position, tactique, type de sinistre, durée, décontamination). Les coefficients conventionnels doivent être validés par un médecin de sapeurs-pompiers avant mise en production.", date: new Date(now - 3 * DAY).toISOString(), impact: 'action_requise', source: 'Référentiel VB Safety v1.0', lien: '#referentiel' },
+      { id: id(), titre: 'Tableaux de maladies professionnelles 16 bis et 30', resume: "Le décret n° 2025-1349 intègre les activités de lutte contre l'incendie (y compris formations, déblai et nettoyage du matériel) pour les sapeurs-pompiers professionnels et volontaires.", date: new Date(now - 60 * DAY).toISOString(), impact: 'info', source: 'Décret n° 2025-1349', lien: 'https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053176919' },
+      { id: id(), titre: 'Activité de sapeur-pompier classée cancérogène (groupe 1)', resume: 'Classement par le CIRC en 2022.', date: new Date(now - 400 * DAY).toISOString(), impact: 'info', source: 'CIRC · Monographie 132', lien: 'https://www.ncbi.nlm.nih.gov/books/NBK597253/' }
     ];
     // Tenues de feu : une veste, un surpantalon et une cagoule par agent, plus un stock au centre
     var tenues = [], mouv = [], num = 1000;
@@ -170,9 +172,13 @@
     Object.keys(TT).forEach(function (ty) { for (var q = 0; q < 4; q++) tenue(ty, null, 'en_stock', ri(0, 12), 0); tenue(ty, null, 'au_lavage', ri(4, 20), 1); });
     var kM = agents.filter(function (a) { return a.matricule === 'SP-0157'; })[0], lD = agents.filter(function (a) { return a.matricule === 'SP-0151'; })[0];
     mouv.push({ id: id(), type: 'demande', agent: kM.id, centre: centre, types: ['veste'], statut: 'envoyee', auto: true, motif: 'Seuil d\'alerte atteint : 31 feux depuis la mise en service (seuil 30).', created: new Date(now - DAY).toISOString() });
-    mouv.push({ id: id(), type: 'demande', agent: lD.id, centre: centre, types: ['veste', 'surpantalon'], statut: 'envoyee', auto: false, motif: 'Pas de tenue de rechange au centre après le feu d\'entrepôt.', created: new Date(now - 3 * DAY).toISOString() });
-    mouv.push({ id: id(), type: 'changement', agent: agentDemo.id, centre: centre, types: ['cagoule'], statut: 'traitee', numeros: { cagoule: 'C-0998' }, motif: 'Cagoule changée au centre après le feu d\'immeuble.', created: new Date(now - 9 * DAY).toISOString() });
-    return { users: users, operations: operations, documents: documents, interventions: interventions, participations: participations, rendez_vous: rdv, signalements: signalements, prelevements: prelevements.concat(opPrel), referentiel: [], reglementation: reglementation, rappels: rappels, tenues: tenues, mouvements_epi: mouv,
+    mouv.push({ id: id(), type: 'changement', agent: lD.id, centre: centre, types: ['veste', 'surpantalon'], statut: 'traitee', auto: false, numeros: { veste: 'V-0987', surpantalon: 'P-0988' }, traite_par: hab.id, motif: 'Changement après intervention', created: new Date(now - 3 * DAY).toISOString() });
+    mouv.push({ id: id(), type: 'changement', agent: agentDemo.id, centre: centre, types: ['cagoule'], statut: 'traitee', numeros: { cagoule: 'C-0998' }, traite_par: hab.id, motif: 'Changement après intervention', created: new Date(now - 9 * DAY).toISOString() });
+    var ref_motifs = [
+      { id: id(), motif: 'habitation', coef: 1, substances: ['HAP', 'BENZ', 'FORM', 'BUTA', 'DIOX', 'SUIE', 'CO'], circonstances: ['PB', 'AMIANTE'], statut: 'valide', valide_par: med.id, valide_le: new Date(now - 10 * DAY).toISOString(), commentaire: '' },
+      { id: id(), motif: 'vehicule', coef: 0.6, substances: ['HAP', 'BENZ', 'FORM', 'BUTA', 'DIOX', 'SUIE', 'CO'], circonstances: ['PB', 'CD'], statut: 'valide', valide_par: med.id, valide_le: new Date(now - 10 * DAY).toISOString(), commentaire: '' }
+    ];
+    return { ref_motifs: ref_motifs, users: users, operations: operations, documents: documents, interventions: interventions, participations: participations, rendez_vous: rdv, signalements: signalements, prelevements: prelevements.concat(opPrel), referentiel: [], reglementation: reglementation, rappels: rappels, tenues: tenues, mouvements_epi: mouv,
       demo: { agent: agentDemo.id, cos: cosDemo.id, commandement: ci.id, sssm: med.id, habillement: hab.id } };
   }
 
@@ -188,7 +194,7 @@
       v.interventions = all.interventions.filter(function (x) { return ids.indexOf(x.id) !== -1; });
       v.rendez_vous = all.rendez_vous.filter(function (r) { return r.agent === meId; }); v.users = [me];
       v.signalements = []; v.prelevements = []; v.reglementation = []; v.rappels = []; v.operations = []; v.documents = [];
-      v.tenues = all.tenues.filter(function (t) { return t.agent === meId; }); v.mouvements_epi = all.mouvements_epi.filter(function (m) { return m.agent === meId; });
+      v.tenues = []; v.mouvements_epi = [];
     } else if (role === 'cos') {
       var myOps = all.operations.filter(function (o) { return o.cos === meId; }).map(function (o) { return o.id; });
       v.interventions = all.interventions.filter(function (x) { return x.cos === meId || myOps.indexOf(x.operation) !== -1; });
@@ -199,9 +205,9 @@
       v.signalements = all.signalements.filter(function (s) { return s.auteur === meId; });
       v.users = all.users.filter(function (u) { return u.centre === me.centre; });
       v.prelevements = []; v.reglementation = []; v.rappels = all.rappels.filter(function (r) { return r.a === meId || r.de === meId; });
-      v.tenues = all.tenues.filter(function (t) { return t.agent === meId; }); v.mouvements_epi = all.mouvements_epi.filter(function (m) { return m.agent === meId; });
+      v.tenues = []; v.mouvements_epi = [];
     } else if (role === 'habillement') {
-      ['interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'reglementation', 'rappels', 'operations', 'referentiel'].forEach(function (c) { v[c] = []; });
+      ['interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'reglementation', 'rappels', 'operations', 'referentiel', 'ref_motifs'].forEach(function (c) { v[c] = []; });
       v.users = all.users.filter(function (u) { return u.centre === me.centre; });
       v.tenues = all.tenues.filter(function (t) { return t.centre === me.centre; }); v.mouvements_epi = all.mouvements_epi.filter(function (m) { return m.centre === me.centre; });
     } else if (role === 'commandement') {
@@ -210,7 +216,7 @@
       v.users = all.users.filter(function (u) { return u.centre === me.centre; });
       v.rappels = all.rappels.filter(function (r) { return r.a === meId || r.de === meId; });
     } else {
-      v.rappels = []; v.mouvements_epi = [];
+      v.rappels = []; v.mouvements_epi = []; v.tenues = [];
     }
     v.interventions.sort(function (a, b) { return parseD(b.date) - parseD(a.date); });
     return v;
@@ -238,6 +244,8 @@
     db.documents.forEach(function (d) { d.createdObj = parseD(d.created); d.op = ops[d.operation] || null; });
     (db.tenues || []).forEach(function (t) { t.user = byId[t.agent] || null; });
     (db.mouvements_epi || []).forEach(function (m) { m.user = byId[m.agent] || null; m.createdObj = parseD(m.created); });
+    db.ref_motifs = db.ref_motifs || [];
+    if (VBSRef.setMotifs) VBSRef.setMotifs(db.ref_motifs, byId);
     db.ops = ops; db.byId = byId; db.inter = inter; db.meId = meId; db.me = byId[meId] || null;
     db.mine = db.participations.filter(function (p) { return p.agent === meId && p.it; }).sort(function (a, b) { return b.it.dateObj - a.it.dateObj; });
     return db;

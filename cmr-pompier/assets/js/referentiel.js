@@ -1,7 +1,8 @@
 // VB Safety · Référentiel d'évaluation de l'exposition aux CMR, version 1.0 (septembre 2026).
 // Source : spécification interne « Référentiel d'évaluation de l'exposition aux CMR ».
 // Aucun coefficient conventionnel ne doit être utilisé en production avant validation par un médecin de sapeurs-pompiers.
-// Le référentiel n'est pas paramétrable par le service : il est commun à tous les services.
+// Pour chaque motif de départ, le SSSM du service valide ou ajuste le coefficient, les substances retenues
+// et les circonstances proposées au chef d'agrès (collection « ref_motifs ») ; sans validation, les valeurs ci-dessous s'appliquent.
 (function (w) {
   var REG = 'reglementaire', DOC = 'documente', CONV = 'conventionnel';
   var R = {
@@ -92,6 +93,26 @@
     ]
   };
 
+  // Motifs de départ : valeurs VB Safety par défaut, surchargées par la validation du SSSM
+  R.MOTIFS = { habitation: "Feu d'habitation, de structure", industriel: 'Feu industriel ou entrepôt', clos: 'Feu en volume clos (cave, sous-sol, parking)', vehicule: 'Feu de véhicule', cheminee: 'Feu de cheminée', vegetation: 'Feu de végétation', conteneur: 'Feu de conteneur, de poubelle', chimique: 'Matières dangereuses, chimique', autre: 'Autre intervention avec fumées' };
+  R.CIRC_DEFAUT = { industriel: ['AMIANTE', 'CRVI', 'NI'], habitation: ['PB', 'AMIANTE'], clos: ['VCM'], vehicule: ['PB', 'CD'] };
+  R.valid = {};
+  R.defautMotif = function (m) {
+    var veg = m === 'vegetation';
+    return { motif: m, coef: veg ? null : R.FEU[R.TYPE_FEU[m] || 'FEU_HAB'].coef, substances: R.SOCLE.filter(function (s) { return !veg || R.SOCLE_VEG.indexOf(s.code) !== -1; }).map(function (s) { return s.code; }), circonstances: (R.CIRC_DEFAUT[m] || []).slice(), statut: 'a_valider' };
+  };
+  R.motif = function (m) { return R.valid[m] || R.defautMotif(m); };
+  R.setMotifs = function (recs, users) {
+    R.valid = {}; var last = null;
+    (recs || []).forEach(function (r) {
+      var d = R.defautMotif(r.motif), subs = Array.isArray(r.substances) ? r.substances : d.substances, circ = Array.isArray(r.circonstances) ? r.circonstances : d.circonstances;
+      R.valid[r.motif] = { id: r.id, motif: r.motif, coef: r.motif === 'vegetation' ? null : (r.coef === '' || r.coef == null ? d.coef : +r.coef), substances: subs, circonstances: circ, statut: r.statut || 'a_valider', valide_par: r.valide_par, valide_le: r.valide_le, commentaire: r.commentaire || '', par: users && users[r.valide_par] ? users[r.valide_par].name : '' };
+      if (r.statut === 'valide' && (!last || String(r.valide_le) > String(last.valide_le))) last = R.valid[r.motif];
+    });
+    var all = Object.keys(R.MOTIFS).every(function (m) { return R.valid[m] && R.valid[m].statut === 'valide'; });
+    R.validateur = all && last ? last.par : '';
+  };
+
   function isFire(it) { return it && it.ambiance !== 'aucun_feu'; }
   function circ(it) { return (it && it.circonstances) || []; }
   // Profil de calcul : végétation, sauf si des habitations ou des véhicules brûlent
@@ -109,7 +130,7 @@
     var dur = +p.duree_min || 0; if (!dur) return out;
     var veg = out.profil === 'vegetation', pos = (veg ? R.POS_VEG : R.POS)[p.position] || (veg ? R.POS_VEG.VEG_SURV : R.POS.POS_DEB);
     var tac = !veg && p.position === 'POS_ATT' ? (R.TAC[p.tactique] || R.TAC.TAC_INT) : null;
-    var feu = veg ? null : R.FEU[R.feuCode(it)];
+    var feu = veg ? null : (it.ambiance === 'fumees_faibles' ? R.FEU.FEU_AUTRE : { coef: R.motif(it.type_feu).coef });
     var dec = R.DEC[p.decon_type] || R.DEC.DEC_AUCUNE;
     var e = pos.coef * (tac ? tac.coef : 1) * (feu ? feu.coef : 1) * (dur / 30) * (1 - dec.d);
     var cap = veg ? R.PLAFOND * Math.max(1, Math.ceil(dur / 720)) : R.PLAFOND;
@@ -123,8 +144,9 @@
     if (!isFire(it)) return { procedes: [], substances: [], circ: [] };
     var c = circ(it).filter(function (k) { return R.CIRC[k]; }), veg = R.profil(it) === 'vegetation';
     var procs = ['PROC_HAP', 'PROC_FORM']; if (c.indexOf('SILICE') !== -1) procs.push('PROC_SIL');
-    var subs = R.SOCLE.filter(function (s) { return !veg || R.SOCLE_VEG.indexOf(s.code) !== -1; });
-    if (veg && (it.motorisation || c.indexOf('bascule') !== -1)) subs = subs.concat(R.SOCLE.filter(function (s) { return s.code === 'BUTA'; }));
+    // Végétation qui bascule (habitations ou véhicules touchés) : substances du feu de structure
+    var codes = it.type_feu === 'vegetation' && !veg ? R.motif('habitation').substances : R.motif(it.type_feu).substances;
+    var subs = R.SOCLE.filter(function (s) { return codes.indexOf(s.code) !== -1; });
     return { procedes: procs, substances: subs, circ: c };
   };
   R.natureTexte = function (it) {

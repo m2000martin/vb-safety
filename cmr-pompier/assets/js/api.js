@@ -70,7 +70,7 @@
     return session;
   }
 
-  function logout() { clearSession(); try { sessionStorage.removeItem('vbs-offline-db-v5'); } catch (e) {} w.location.href = 'connexion.html'; }
+  function logout() { clearSession(); try { sessionStorage.removeItem('vbs-offline-db-v6'); } catch (e) {} w.location.href = 'connexion.html'; }
 
   // À appeler en haut de chaque page protégée
   function requireRole(roles) {

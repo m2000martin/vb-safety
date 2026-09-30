@@ -4,7 +4,7 @@
   if (!S) return;
 
   // =================================================================== libellés
-  var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM', habillement: 'Service habillement' };
+  var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM', habillement: 'Référent EPI' };
   var R = VBSRef;
   var TYPE = { habitation: "Feu d'habitation, de structure", industriel: 'Feu industriel ou entrepôt', clos: 'Feu en volume clos (cave, sous-sol, parking)', vehicule: 'Feu de véhicule', cheminee: 'Feu de cheminée', vegetation: 'Feu de végétation', conteneur: 'Feu de conteneur, de poubelle', chimique: 'Matières dangereuses, chimique', autre: 'Autre intervention avec fumées' };
   var ROLE_TENU = { chef_agres: "Chef d'agrès", binome_attaque: "Binôme d'attaque", binome_alimentation: "Binôme d'alimentation", conducteur: 'Conducteur', soutien: 'Soutien', autre: 'Autre' };
@@ -30,24 +30,21 @@
     exp: { id: 'export', label: 'Export', icon: 'download' },
     ref: { id: 'referentiel', label: 'Base de données centrale', icon: 'db' },
     regl: { id: 'reglementation', label: 'Suivi réglementation', icon: 'scale' },
-    epi: { id: 'epi', label: 'Mes EPI', icon: 'shield' },
     tdbHab: { id: 'tableau-de-bord', label: 'Tableau de bord', icon: 'home' },
     tenues: { id: 'tenues', label: 'Tenues de feu', icon: 'list' },
-    demandes: { id: 'demandes', label: 'Demandes des agents', icon: 'send' }
+    changements: { id: 'changements', label: 'Changements de tenue', icon: 'send' }
   };
   function item(base, tour) { return Object.assign({}, base, { tour: tour }); }
   var MENUS = {
     agent: [
       item(M.tdb, "Vos dernières interventions, votre indice d'exposition cumulé et votre prochain rendez-vous au SSSM."),
       item(M.dossier, "L'historique complet de vos expositions, intervention par intervention, votre fiche individuelle d'exposition et vos rendez-vous SSSM."),
-      item(M.epi, "Vos tenues de feu : après une intervention, signalez leur changement au centre ou demandez-en une nouvelle au service habillement."),
       item(M.exp, 'Exportez vos propres données en PDF ou CSV, pour votre médecin ou vos archives.')
     ],
     cos: [
       item(M.tdb, "Vos expositions récentes, votre prochain rendez-vous SSSM et les rapports qu'il vous reste à compléter."),
       item(M.dossier, "L'historique complet de vos propres expositions et vos rendez-vous SSSM."),
       item(M.rapportsCos, "Rédigez le rapport de contamination de votre équipage après chaque intervention : trois appuis suffisent, le reste est proposé d'office. Sur une opération à plusieurs agrès, chaque CA remplit le sien."),
-      item(M.epi, 'Vos propres tenues de feu et vos demandes au service habillement.'),
       item(M.exp, 'Exportez vos propres données en PDF ou CSV.')
     ],
     commandement: [
@@ -61,12 +58,12 @@
       item(M.rapportsSssm, "Toutes les interventions, engin par engin ou agent par agent. Corrigez un rapport, et importez les mesures (ex. CO sanguin) de toute une opération depuis un fichier."),
       item(M.suivi, "Le dossier de chaque agent et sa fiche individuelle d'exposition, par année, sur 12 mois glissants ou sur toute la carrière."),
       item(M.exp, 'Tous les exports : interventions, expositions, référentiel.'),
-      item(Object.assign({}, M.ref, { label: 'Référentiel CMR' }), 'Les agents CMR retenus et la méthode de calcul en équivalents-feu, avec la source et le statut de chaque coefficient.'),
+      item(Object.assign({}, M.ref, { label: 'Référentiel CMR' }), "Pour chaque motif de départ, validez ou modifiez le coefficient, les agents CMR retenus et les circonstances proposées au chef d'agrès."),
       item(M.regl, 'Les évolutions réglementaires qui concernent le suivi des expositions, avec leur niveau d\'impact.')
     ],
     habillement: [
-      item(M.tdbHab, 'Tenues contaminées à récupérer, demandes des agents et alertes de seuil.'),
-      item(M.demandes, "Les demandes de changement de tenue envoyées par les agents, ou créées automatiquement quand une tenue atteint le seuil d'alerte."),
+      item(M.tdbHab, 'Les agents dont la tenue est à changer après une intervention sur feu, les tenues à laver et les alertes de seuil.'),
+      item(M.changements, "Vous enregistrez chaque changement de tenue : l'ancienne part au lavage, la nouvelle est attribuée à l'agent. Les remplacements au seuil d'alerte arrivent ici aussi."),
       item(M.tenues, 'Toutes les tenues du centre : numéro, agent, état, nombre de feux et de lavages. Vous pouvez modifier les numéros et attribuer une tenue.'),
       item(M.exp, 'Export de l\'état des tenues du centre.')
     ]
@@ -184,12 +181,7 @@
     return '<section class="panel"><div class="panel-head"><h3>' + title + '</h3></div><div class="facts">' +
       f(c.feux, 'interventions avec fumées') + f(c.att, 'en position d\'attaque') + f(String(Math.round(c.heures * 10) / 10).replace('.', ','), 'heures de feu') +
       f(c.dec1h, 'décontaminations dans l\'heure') + f(c.decNon, 'sans décontamination') + f(c.ariRet, 'ARI retiré au déblai') + '</div>' +
-      '<p class="note">Des faits d\'abord : ces compteurs ne dépendent d\'aucun calcul.</p></section>';
-  }
-  function epiCallout() {
-    var dirty = (db.tenues || []).filter(function (t) { return t.agent === db.meId && t.statut === 'contaminee'; });
-    if (!dirty.length) return '';
-    return '<div class="callout red"><span class="icon-tile">' + icon('shield') + '</span><div><strong>Tenue à changer</strong><span class="sub">' + esc(dirty.map(function (t) { return TENUE[t.type] + ' ' + t.numero; }).join(', ')) + (dirty.length > 1 ? ' sont considérées' : ' est considérée') + ' comme contaminée' + (dirty.length > 1 ? 's' : '') + ' après votre dernière intervention sur feu.</span></div><a class="btn btn-primary btn-sm" href="#epi">Changer ma tenue</a></div>';
+      '</section>';
   }
   function viewDashPerso(root, extra) {
     var mine = db.mine, now = new Date();
@@ -205,7 +197,7 @@
     } else {
       k3 = kpi('shield', 'ok', 'Décontaminations réalisées', (c.feux ? Math.round(100 * c.decOk / c.feux) : 0) + ' %', c.dec1h + ' dans l\'heure, sur ' + c.feux + ' interventions (12 mois)');
     }
-    var html = head('Bonjour ' + esc(S.name || '') + ',', 'Voici le résumé de vos expositions et de vos dernières interventions.', '<span class="page-date">' + esc(fmtLong(now)) + '</span>') + epiCallout() +
+    var html = head('Bonjour ' + esc(S.name || '') + ',', 'Voici le résumé de vos expositions et de vos dernières interventions.', '<span class="page-date">' + esc(fmtLong(now)) + '</span>') +
       '<div class="grid grid-3">' +
         kpi('flame', '', 'Interventions ce mois-ci', thisM, (diff >= 0 ? '+' : '') + diff + ' par rapport au mois dernier') +
         kpi('chart', 'warn', 'Indicateur d\'exposition · 12 mois glissants', R.fmt(c.ef) + ' <small class="unit">EF</small>', 'Équivalents-feu · indicateur conventionnel, ce n\'est pas une dose') +
@@ -328,7 +320,7 @@
     P.forEach(function (p) { if (p.it && filled(p) && within(p.it.dateObj, 365)) { byAgent[p.agent] = (byAgent[p.agent] || 0) + (+p.indice || 0); } });
     var ranked = Object.keys(byAgent).sort(function (a, b) { return byAgent[b] - byAgent[a]; }), top = ranked.slice(0, 5), top10 = Math.max(1, Math.ceil(ranked.length * 0.1));
     var alerts = openSig.map(function (s) {
-      return '<li><span class="when">' + (s.it ? fmtD(s.it.dateObj) : '') + '</span><span class="what"><b>Signalement ' + (s.niveau === 'critique' ? 'critique' : 'forte exposition') + '</b><small>' + esc(s.it ? TYPE[s.it.type_feu] + ' · ' + s.it.numero : '') + ' · ' + esc(s.motif) + '</small></span><span class="right">' + badge(s.statut === 'ouvert' ? ['Ouvert', 'badge-late'] : ['Pris en charge', 'badge-info']) + (s.statut === 'ouvert' ? '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|pris_en_charge">Prendre en charge</button>' : '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|clos">Clore</button>') + '</span></li>';
+      return '<li><span class="when">' + (s.it ? fmtD(s.it.dateObj) : '') + '</span><span class="what"><b>Signalement ' + (s.niveau === 'critique' ? 'critique' : 'forte exposition') + '</b><small>' + esc(s.it ? TYPE[s.it.type_feu] + ' · ' + s.it.numero : '') + '</small></span><span class="right">' + badge(s.statut === 'ouvert' ? ['Ouvert', 'badge-late'] : ['Pris en charge', 'badge-info']) + (s.statut === 'ouvert' ? '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|pris_en_charge">Prendre en charge</button>' : '<button class="btn btn-secondary btn-sm" type="button" data-sig="' + s.id + '|clos">Clore</button>') + '</span></li>';
     }).concat(fortes.slice(0, 4).map(function (p) {
       return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(p.user ? p.user.name : 'Agent') + (p.position === 'POS_ATT' && !p.ari_porte ? ' · attaque sans ARI' : ' · zone d\'exclusion sans décontamination') + '</b><small>' + esc(TYPE[p.it.type_feu]) + ' · ' + esc(p.it.numero) + '</small></span><span class="right">' + badge(['À vérifier', 'badge-pending']) + '</span></li>';
     }));
@@ -441,29 +433,32 @@
     return Object.keys(groups).map(function (g) { return '<div class="crew-group"><h4>' + esc(g) + '</h4><table class="dtable">' + th + '<tbody>' + rows(groups[g]) + '</tbody></table></div>'; }).join('');
   }
   function reportMeta(it) {
-    var bits = [it.ambiance === 'feu_fumee' ? 'Feu et fumées' : it.ambiance === 'fumees_faibles' ? 'Fumées faibles' : it.ambiance === 'aucun_feu' ? 'Aucun feu' : '', it.duree_min ? 'Durée ' + durTxt(it.duree_min) : '', it.motorisation ? 'Motorisation : ' + it.motorisation : '', it.zone_deshabillage ? 'Zone de déshabillage' : '', it.epi_ensaches ? 'EPI ensachés' : ''].filter(Boolean);
+    var bits = [it.ambiance === 'feu_fumee' ? 'Feu et fumées' : it.ambiance === 'fumees_faibles' ? 'Fumées faibles' : it.ambiance === 'aucun_feu' ? 'Aucun feu' : '', it.duree_min ? 'Durée ' + durTxt(it.duree_min) : '', it.motorisation ? (MOTOR[it.motorisation] || it.motorisation) : '', it.zone_deshabillage ? 'Zone de déshabillage' : '', it.epi_ensaches ? 'EPI ensachés' : ''].filter(Boolean);
     return '<div class="chips">' + bits.map(function (b) { return '<span class="chip">' + esc(b) + '</span>'; }).join('') + '</div><p class="nat-line"><b>Nature :</b> ' + esc(R.natureTexte(it)) + (it.exposition_globale ? ' · <b>Exposition particulière :</b> ' + esc(it.exposition_globale) : '') + '</p>';
   }
 
+  function repState(x) {
+    var st = VBSData.reportState(x);
+    if (x.statut === 'brouillon') return st === 'retard' ? '<span class="stt bad">En retard</span>' : '<span class="stt warn">À faire</span>';
+    return x.statut === 'controle_sssm' ? '<span class="stt ok">Validé SSSM</span>' : '<span class="stt">Transmis</span>';
+  }
+  var repAll = false;
   function viewRapportsCos(root) {
-    var its = db.interventions.filter(function (x) { return x.cos === db.meId; });
-    var sigBy = {}; db.signalements.forEach(function (sg) { sigBy[sg.intervention] = sg; });
-    var SIGST = { ouvert: 'ouvert', pris_en_charge: 'pris en charge', clos: 'clos' };
+    var its = db.interventions.filter(function (x) { return x.cos === db.meId; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
+    var todo = its.filter(function (x) { return x.statut === 'brouillon'; }), done = its.filter(function (x) { return x.statut !== 'brouillon'; });
     var myOps = db.operations.filter(function (o) { return o.cos === db.meId; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
-    root.innerHTML = head("Rapports d'interventions", 'Le compte rendu de contamination et de décontamination de votre équipage, après chaque intervention. Sur une opération à plusieurs agrès, chaque CA remplit celui de son équipage.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="new-op">' + icon('users') + 'Opération à plusieurs agrès</button><a class="btn btn-primary" href="#rapport/nouveau">' + icon('clip') + 'Nouveau rapport</a></div>') +
-      viewOpsCos(myOps) + (myOps.length ? '<h3 class="list-title">Mes rapports</h3>' : '') +
-      '<div>' + its.map(function (x) {
-        var st = VBSData.reportState(x), locked = x.statut === 'controle_sssm', sig = sigBy[x.id], rap = lastRappel(x.id);
-        var stateBadge = x.statut === 'brouillon' ? badge(st === 'retard' ? ['À compléter · en retard', 'badge-late'] : ['À compléter', 'badge-pending']) : badge(STATE[st]);
-        return '<details class="report"' + (x.statut === 'brouillon' ? ' open' : '') + '><summary><span class="when">' + fmtDT(x.dateObj) + '</span><span class="what"><b>' + esc(TYPE[x.type_feu]) + ' · ' + esc(x.precision) + '</b><br><span class="note">' + esc(x.numero) + ' · ' + esc(x.commune) + ' · ' + x.crew.length + ' engagés</span></span><span class="right">' + (locked ? '<span class="lock">' + icon('lock') + 'Verrouillé</span> ' : '') + stateBadge + '</span></summary>' +
-          '<div class="body">' + (rap && x.statut === 'brouillon' ? '<p class="note">' + icon('bell') + ' Relance le ' + fmtD(rap.createdObj) + (db.byId[rap.de] ? ' par ' + esc(db.byId[rap.de].name) : '') + '</p>' : '') + (x.op ? '<div class="chips">' + opChip(x) + '</div>' : '') + reportMeta(x) + (x.crew.length ? crewTable(x) : '<p class="empty">Équipage à renseigner.</p>') +
-          '<div class="actions-row">' +
-            (x.statut === 'brouillon' ? '<a class="btn btn-primary btn-sm" href="#rapport/' + x.id + '">' + icon('clip') + 'Compléter le rapport</a>' : '<a class="btn btn-secondary btn-sm" href="#rapport/' + x.id + '">Voir le rapport</a>') +
-            (sig ? '<span class="badge badge-info">Signalement SSSM : ' + esc(SIGST[sig.statut]) + '</span>' : '<button class="btn btn-secondary btn-sm" type="button" data-signal="' + x.id + '">' + icon('alert') + 'Signalement SSSM</button>') +
-          '</div></div></details>';
-      }).join('') + '</div>';
-    root.querySelectorAll('[data-signal]').forEach(function (btn) { btn.onclick = function () { openSignalement(db.inter[btn.dataset.signal]); }; });
+    var row = function (x) {
+      var t = x.statut === 'brouillon', rap = t ? lastRappel(x.id) : null;
+      return '<li><span class="when">' + fmtD(x.dateObj) + '<small>' + d2(x.dateObj.getHours()) + 'h' + d2(x.dateObj.getMinutes()) + '</small></span><span class="what"><b>' + esc(TYPE[x.type_feu]) + (x.precision ? ' · ' + esc(x.precision) : '') + '</b><small>' + esc(x.numero) + (x.commune ? ' · ' + esc(x.commune) : '') + (rap ? ' · relancé le ' + fmtD(rap.createdObj) : '') + '</small></span>' +
+        '<span class="right">' + repState(x) + (t ? '<a class="btn btn-primary btn-sm" href="#rapport/' + x.id + '">Faire mon rapport</a>' : '<a class="btn btn-secondary btn-sm" href="#rapport/' + x.id + '">Voir</a>') + '</span></li>';
+    };
+    var shown = repAll ? done : done.slice(0, 8);
+    root.innerHTML = head("Rapports d'interventions", 'Le rapport de contamination de votre équipage, après chaque intervention.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="new-op">Opération à plusieurs agrès</button><a class="btn btn-primary" href="#rapport/nouveau">Nouveau rapport</a></div>') +
+      '<section class="panel"><div class="panel-head"><h3>À faire</h3></div>' + (todo.length ? '<ul class="rows rep-list">' + todo.map(row).join('') + '</ul>' : '<p class="empty">Tous vos rapports sont faits.</p>') + '</section>' +
+      viewOpsCos(myOps) +
+      '<section class="panel"><div class="panel-head"><h3>Déjà transmis</h3><span class="note">' + done.length + '</span></div>' + (done.length ? '<ul class="rows rep-list">' + shown.map(row).join('') + '</ul>' + (done.length > shown.length ? '<div class="actions-row"><button class="link-btn" type="button" id="rep-more">Afficher les ' + (done.length - shown.length) + ' plus anciens</button></div>' : '') : '<p class="empty">Aucun rapport transmis.</p>') + '</section>';
     root.querySelector('#new-op').onclick = openNewOperation;
+    var more = root.querySelector('#rep-more'); if (more) more.onclick = function () { repAll = true; route(); };
     bindRemind(root);
   }
 
@@ -565,28 +560,85 @@
     opts.forEach(function (o) { var b = root.querySelector('[data-exp="' + o[0] + '"]'); if (b) b.onclick = o[3]; });
   }
 
-  // ---------- Référentiel CMR (lecture seule, commun à tous les services) ----------
+  // ---------- Référentiel CMR : validé par le SSSM, motif de départ par motif de départ ----------
+  function nf2(v) { return (Math.round((+v || 0) * 100) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }); }
+  function motifStatut(v) {
+    if (v.statut === 'valide') return '<span class="stt ok">Validé</span><small>' + esc(v.par || 'SSSM') + (v.valide_le ? ' · ' + fmtD(new Date(String(v.valide_le).replace(' ', 'T'))) : '') + '</small>';
+    return '<span class="stt warn">À valider</span><small>Valeurs VB Safety</small>';
+  }
   function viewReferentiel(root) {
     var st = function (k) { return '<span class="st st-' + k + '">' + R.STATUTS[k] + '</span>'; };
-    var coefTable = function (title, obj, key, fmt) { return '<section class="panel"><div class="panel-head"><h3>' + title + '</h3></div><table class="dtable"><thead><tr><th>Code</th><th>Libellé</th><th class="num">' + (key === 'd' ? 'Fraction retirée' : 'Coefficient') + '</th><th>Statut</th></tr></thead><tbody>' + Object.keys(obj).map(function (k) { return '<tr><td data-l="Code"><code>' + k + '</code></td><td data-l="Libellé">' + esc(obj[k].label) + '</td><td class="num" data-l="Valeur">' + String(obj[k][key]).replace('.', ',') + '</td><td data-l="Statut">' + st(obj[k].statut) + '</td></tr>'; }).join('') + '</tbody></table>' + (fmt || '') + '</section>'; };
-    root.innerHTML = head('Référentiel CMR', 'Agents retenus et méthode de calcul, version ' + R.version + ' du ' + R.date.split('-').reverse().join('/') + '. Commun à tous les services : il n\'est pas paramétrable localement.', '<span class="badge ' + (R.validateur ? 'badge-ok' : 'badge-pending') + '">' + (R.validateur ? 'Validé par ' + esc(R.validateur) : 'Validation médicale en attente') + '</span>') +
-      '<div class="callout"><span class="icon-tile">' + icon('scale') + '</span><div><strong>E = position × tactique × type de sinistre × (durée / 30) × (1 − décontamination)</strong><span class="sub">Résultat en équivalents-feu : 1 EF = un agent en attaque sur un feu d\'habitation pendant 30 minutes, sans décontamination. Plafond : ' + R.PLAFOND + ' EF par intervention. ' + esc(R.MENTION) + '</span></div></div>' +
-      '<section class="panel"><div class="panel-head"><h3>Nature : procédés cancérogènes (toute intervention sur feu)</h3>' + st('reglementaire') + '</div><ul class="rows">' + Object.keys(R.PROCEDES).map(function (k) { return '<li><span class="when"><code>' + k + '</code></span><span class="what"><b>' + esc(R.PROCEDES[k].label) + '</b><small>' + (k === 'PROC_SIL' ? 'Déblai, démolition, effondrement' : 'Toute intervention sur feu') + '</small></span><span class="right"></span></li>'; }).join('') + '</ul></section>' +
-      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>Substances présumées sur feu de structure</h3>' + st('reglementaire') + '</div><table class="dtable"><thead><tr><th>Substance</th><th>N° CAS</th><th>Classification</th></tr></thead><tbody>' + R.SOCLE.map(function (x) { return '<tr><td data-l="Substance"><b>' + esc(x.nom) + '</b></td><td data-l="CAS">' + esc(x.cas || '—') + '</td><td data-l="Classification">' + esc(x.cls) + '</td></tr>'; }).join('') + '</tbody></table></section>' +
-      '<section class="panel"><div class="panel-head"><h3>Substances circonstancielles</h3>' + st('reglementaire') + '</div><table class="dtable"><thead><tr><th>Substance</th><th>Classification</th><th>Déclencheur</th></tr></thead><tbody>' + Object.keys(R.CIRC).map(function (k) { var x = R.CIRC[k]; return '<tr><td data-l="Substance"><b>' + esc(x.nom) + '</b></td><td data-l="Classification">' + esc(x.cls) + '</td><td data-l="Déclencheur">' + esc(x.decl) + '</td></tr>'; }).join('') + '</tbody></table></section></div>' +
-      coefTable('Position dominante (saisie par le chef d\'agrès)', R.POS, 'coef', '<p class="note">Une seule variable : la position intègre déjà la zone et la phase. Ne jamais multiplier zone × phase × rôle.</p>') +
-      '<div class="grid grid-2">' + coefTable('Tactique d\'attaque (position attaque uniquement)', R.TAC, 'coef') + coefTable('Type de sinistre (déduit du motif)', R.FEU, 'coef') + '</div>' +
-      coefTable('Décontamination', R.DEC, 'd', '<p class="note">Valeur retirée : elle intervient sous la forme (1 − valeur). Le délai se compte depuis le désengagement.</p>') +
-      coefTable('Profil feu de végétation', R.POS_VEG, 'coef', '<p class="note">Le type de sinistre et la tactique ne s\'appliquent pas. Plafond de 4 EF par tranche de 12 heures. Si des habitations ou des véhicules brûlent, l\'intervention bascule sur le profil structure.</p>') +
-      '<section class="panel"><div class="panel-head"><h3>Hors calcul : compteurs bruts</h3></div><p>Les équipements de protection n\'entrent pas dans la formule (aucun facteur de protection chiffré n\'est défendable aujourd\'hui). L\'ARI est déjà inclus dans les coefficients de position. Sont tenus en compteurs : feux avec équipements non nettoyés, ARI retiré au déblai, décontaminations non réalisées, interventions en attaque, heures de feu.</p></section>' +
-      '<section class="panel"><div class="panel-head"><h3>Sources</h3></div><ol class="src">' + R.SOURCES.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol></section>';
+    var keys = Object.keys(R.MOTIFS), nOk = keys.filter(function (m) { return R.motif(m).statut === 'valide'; }).length;
+    var coefTable = function (title, obj, key, fmt) { return '<h4 class="fold-h">' + title + '</h4><table class="dtable"><thead><tr><th>Libellé</th><th class="num">' + (key === 'd' ? 'Fraction retirée' : 'Coefficient') + '</th><th>Statut</th></tr></thead><tbody>' + Object.keys(obj).map(function (k) { return '<tr><td data-l="Libellé">' + esc(obj[k].label) + '</td><td class="num" data-l="Valeur">' + String(obj[k][key]).replace('.', ',') + '</td><td data-l="Statut">' + st(obj[k].statut) + '</td></tr>'; }).join('') + '</tbody></table>' + (fmt || ''); };
+    root.innerHTML = head('Référentiel CMR', 'Pour chaque motif de départ, validez ou modifiez ce qui est retenu. Les rapports rédigés ensuite utilisent vos valeurs.', '<span class="ref-count"><b>' + nOk + '</b> / ' + keys.length + ' motifs validés</span>') +
+      '<section class="panel"><div class="panel-head"><h3>Par motif de départ</h3>' + (nOk < keys.length ? '<button class="btn btn-secondary btn-sm" type="button" id="ref-all">Valider les ' + (keys.length - nOk) + ' motifs restants</button>' : '') + '</div>' +
+      '<table class="dtable ref-table"><thead><tr><th>Motif de départ</th><th class="num">Coefficient</th><th>Agents CMR retenus</th><th>Proposé au CA</th><th>Statut</th><th></th></tr></thead><tbody>' +
+      keys.map(function (m) {
+        var v = R.motif(m), subs = R.SOCLE.filter(function (x) { return v.substances.indexOf(x.code) !== -1; }).map(function (x) { return x.nom.split(' (')[0]; });
+        var dft = R.defautMotif(m).substances, same = dft.length === v.substances.length && dft.every(function (c) { return v.substances.indexOf(c) !== -1; });
+        var subsTxt = same ? (m === 'vegetation' ? 'Socle végétation (' + subs.length + ')' : 'Socle des fumées (' + subs.length + ')') : subs.join(', ');
+        return '<tr><td data-l="Motif"><b>' + esc(R.MOTIFS[m]) + '</b>' + (v.commentaire ? '<br><span class="note">' + esc(v.commentaire) + '</span>' : '') + '</td>' +
+          '<td class="num" data-l="Coefficient">' + (v.coef == null ? '<span class="note">par position</span>' : nf2(v.coef)) + '</td>' +
+          '<td data-l="Agents CMR"><span title="' + esc(subs.join(', ')) + '">' + esc(subsTxt) + '</span></td>' +
+          '<td data-l="Proposé au CA">' + (v.circonstances.length ? esc(v.circonstances.map(function (k) { return R.CIRC[k] ? R.CIRC[k].nom : k; }).join(', ')) : '<span class="note">—</span>') + '</td>' +
+          '<td data-l="Statut" class="ref-st">' + motifStatut(v) + '</td>' +
+          '<td class="t-act">' + (v.statut !== 'valide' ? '<button class="btn btn-secondary btn-sm" type="button" data-mval="' + m + '">Valider</button> ' : '') + '<button class="link-btn" type="button" data-medit="' + m + '">Modifier</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<p class="note">Indicateur : position × tactique × coefficient du motif × (durée / 30) × (1 − décontamination), en équivalents-feu, plafonné à ' + R.PLAFOND + ' par intervention. ' + esc(R.MENTION) + '</p></section>' +
+      '<details class="panel fold"><summary>Coefficients communs à tous les motifs</summary>' +
+        coefTable('Position tenue (saisie par le chef d\'agrès)', R.POS, 'coef', '<p class="note">La position intègre déjà la zone et la phase.</p>') +
+        coefTable('Tactique d\'attaque', R.TAC, 'coef') +
+        coefTable('Décontamination', R.DEC, 'd', '<p class="note">Intervient sous la forme (1 − valeur).</p>') +
+        coefTable('Feu de végétation : position', R.POS_VEG, 'coef', '<p class="note">Plafond de 4 EF par tranche de 12 heures. Si des habitations ou des véhicules brûlent, le calcul du feu de structure s\'applique.</p>') +
+      '</details>' +
+      '<details class="panel fold"><summary>Agents CMR et procédés de référence</summary>' +
+        '<h4 class="fold-h">Procédés cancérogènes (arrêté du 26 octobre 2020)</h4><ul class="plain">' + Object.keys(R.PROCEDES).map(function (k) { return '<li>' + esc(R.PROCEDES[k].label) + '</li>'; }).join('') + '</ul>' +
+        '<h4 class="fold-h">Substances des feux</h4><table class="dtable"><thead><tr><th>Substance</th><th>N° CAS</th><th>Classification</th></tr></thead><tbody>' + R.SOCLE.map(function (x) { return '<tr><td data-l="Substance">' + esc(x.nom) + '</td><td data-l="CAS">' + esc(x.cas || '—') + '</td><td data-l="Classification">' + esc(x.cls) + '</td></tr>'; }).join('') + '</tbody></table>' +
+        '<h4 class="fold-h">Circonstances particulières</h4><table class="dtable"><thead><tr><th>Substance</th><th>Classification</th><th>Quand</th></tr></thead><tbody>' + Object.keys(R.CIRC).map(function (k) { var x = R.CIRC[k]; return '<tr><td data-l="Substance">' + esc(x.nom) + '</td><td data-l="Classification">' + esc(x.cls) + '</td><td data-l="Quand">' + esc(x.decl) + '</td></tr>'; }).join('') + '</tbody></table>' +
+      '</details>' +
+      '<details class="panel fold"><summary>Sources</summary><ol class="src">' + R.SOURCES.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol></details>';
+    root.querySelectorAll('[data-medit]').forEach(function (b) { b.onclick = function () { openMotif(b.dataset.medit); }; });
+    root.querySelectorAll('[data-mval]').forEach(function (b) { b.onclick = function () { b.disabled = true; saveMotif(R.motif(b.dataset.mval), {}).then(function () { toast('« ' + R.MOTIFS[b.dataset.mval] + ' » validé.'); }).catch(function (e) { b.disabled = false; toast('Validation impossible : ' + e.message); }); }; });
+    var all = root.querySelector('#ref-all');
+    if (all) all.onclick = async function () {
+      if (!confirm('Valider les valeurs actuelles des ' + (keys.length - nOk) + ' motifs restants ?')) return;
+      all.disabled = true;
+      try { for (var i = 0; i < keys.length; i++) { var v = R.motif(keys[i]); if (v.statut !== 'valide') await saveMotif(v, {}, true); } await reload(); toast('Tous les motifs sont validés.'); }
+      catch (e) { all.disabled = false; toast('Validation impossible : ' + e.message); }
+    };
+  }
+  async function saveMotif(v, changes, noReload) {
+    var data = Object.assign({ motif: v.motif, coef: v.coef == null ? 0 : v.coef, substances: v.substances, circonstances: v.circonstances, commentaire: v.commentaire || '' }, changes, { statut: 'valide', valide_par: db.meId, valide_le: VBSData.toApiDate(new Date()) });
+    if (v.id) await VBSData.update(S, 'ref_motifs', v.id, data); else await VBSData.create(S, 'ref_motifs', data);
+    if (!noReload) await reload();
+  }
+  function openMotif(m) {
+    var v = R.motif(m), d0 = R.defautMotif(m), veg = m === 'vegetation';
+    modal(R.MOTIFS[m], (veg ? '<p class="note">Feu de végétation : pas de coefficient de motif, le calcul se fait par position.</p>' :
+        '<div class="field"><label class="label" for="mo-coef">Coefficient du motif</label><input class="input" id="mo-coef" type="number" min="0" max="3" step="0.05" inputmode="decimal" value="' + v.coef + '"><span class="hint">Valeur VB Safety : ' + nf2(d0.coef) + '. 1 = feu d\'habitation.</span></div>') +
+      '<fieldset class="fs"><legend class="label">Agents CMR retenus</legend>' + R.SOCLE.map(function (x) { return '<label class="check"><input type="checkbox" name="mo-sub" value="' + x.code + '"' + (v.substances.indexOf(x.code) !== -1 ? ' checked' : '') + '> ' + esc(x.nom) + ' <span class="note">' + esc(x.cls) + '</span></label>'; }).join('') + '</fieldset>' +
+      '<fieldset class="fs"><legend class="label">Circonstances proposées au chef d\'agrès</legend>' + Object.keys(R.CIRC).map(function (k) { return '<label class="check"><input type="checkbox" name="mo-circ" value="' + k + '"' + (v.circonstances.indexOf(k) !== -1 ? ' checked' : '') + '> ' + esc(R.CIRC[k].nom) + ' <span class="note">' + esc(R.CIRC[k].decl) + '</span></label>'; }).join('') + '<span class="hint">Le chef d\'agrès les voit en suggestion ; il coche seulement si c\'est le cas.</span></fieldset>' +
+      '<div class="field"><label class="label" for="mo-com">Commentaire (facultatif)</label><input class="input" id="mo-com" maxlength="300" value="' + esc(v.commentaire || '') + '"></div>',
+      [{ label: 'Valeurs VB Safety', run: function (dlg) {
+          var c = dlg.querySelector('#mo-coef'); if (c) c.value = d0.coef;
+          dlg.querySelectorAll('[name=mo-sub]').forEach(function (x) { x.checked = d0.substances.indexOf(x.value) !== -1; });
+          dlg.querySelectorAll('[name=mo-circ]').forEach(function (x) { x.checked = d0.circonstances.indexOf(x.value) !== -1; });
+          return false; } },
+       { label: 'Enregistrer et valider', primary: true, run: async function (dlg) {
+          var subs = Array.prototype.map.call(dlg.querySelectorAll('[name=mo-sub]:checked'), function (x) { return x.value; });
+          if (!subs.length) throw new Error('Retenez au moins un agent CMR.');
+          var ch = { substances: subs, circonstances: Array.prototype.map.call(dlg.querySelectorAll('[name=mo-circ]:checked'), function (x) { return x.value; }), commentaire: dlg.querySelector('#mo-com').value.trim() };
+          if (!veg) { var c = parseFloat(String(dlg.querySelector('#mo-coef').value).replace(',', '.')); if (!(c >= 0 && c <= 3)) throw new Error('Coefficient entre 0 et 3.'); ch.coef = c; }
+          await saveMotif(v, ch); toast('« ' + R.MOTIFS[m] + ' » enregistré et validé.');
+        } }]);
   }
 
   function viewReglementation(root) {
     var IMP = { info: ['Information', 'badge-neutral'], a_suivre: ['À suivre', 'badge-info'], action_requise: ['Action requise', 'badge-late'] };
+    var link = function (u) { u = String(u || ''); if (u.charAt(0) === '#') return '<a class="more" href="' + esc(u) + '">Ouvrir ' + icon('arrow') + '</a>'; return /^https:\/\//.test(u) ? '<a class="more" href="' + esc(u) + '" target="_blank" rel="noopener">En savoir plus ' + icon('arrow') + '</a>' : ''; };
     root.innerHTML = head('Suivi réglementation', 'Les évolutions qui concernent le suivi des expositions des sapeurs-pompiers.') +
       db.reglementation.map(function (a) { var d = new Date(String(a.date).replace(' ', 'T'));
-        return '<section class="panel"><div class="panel-head"><h3>' + esc(a.titre) + '</h3>' + badge(IMP[a.impact] || IMP.info) + '</div><p>' + esc(a.resume) + '</p><p class="note">' + fmtD(d) + ' · ' + esc(a.source) + '</p></section>'; }).join('') +
+        return '<section class="panel news"><div class="panel-head"><h3>' + esc(a.titre) + '</h3>' + badge(IMP[a.impact] || IMP.info) + '</div><p>' + esc(a.resume) + '</p><div class="news-foot"><span class="note">' + fmtD(d) + ' · ' + esc(a.source) + '</span>' + link(a.lien) + '</div></section>'; }).join('') +
       '<p class="note">Contenus de démonstration. Dans la version SDIS, cette veille est alimentée et vérifiée par VB Safety.</p>';
   }
 
@@ -933,11 +985,13 @@
   function circHtml() {
     var c = ed.it.circonstances, veg = ed.it.type_feu === 'vegetation';
     var sug = R.suggestions(ed.it.exposition_globale + ' ' + ed.crew.map(function (m) { return m.exposition_particuliere; }).join(' '), c);
+    var prop = veg ? [] : R.motif(ed.it.type_feu).circonstances.filter(function (k) { return R.CIRC[k] && c.indexOf(k) === -1 && sug.indexOf(k) === -1; });
+    var addBtn = function (k) { return '<button type="button" class="link-btn" data-circadd="' + k + '">' + esc(R.CIRC[k].nom) + ' (ajouter)</button>'; };
     return '<div class="circ"><span class="label">Circonstances particulières <span class="note">(cochez seulement si c\'est le cas)</span></span><div class="chips-pick">' +
       (veg ? '<button type="button" class="opt' + (c.indexOf('bascule') !== -1 ? ' on' : '') + '" data-circ="bascule">Habitations ou véhicules impliqués</button>' : '') +
       Object.keys(R.CIRC).map(function (k) { return '<button type="button" class="opt' + (c.indexOf(k) !== -1 ? ' on' : '') + '" data-circ="' + k + '" title="' + esc(R.CIRC[k].decl) + '">' + esc(R.CIRC[k].nom) + '<small>' + esc(R.CIRC[k].decl) + '</small></button>'; }).join('') + '</div>' +
       '<div class="form-2 glob"><div class="field"><label class="label" for="ed-glob">Exposition particulière</label><input class="input" id="ed-glob" data-it="exposition_globale" value="' + esc(ed.it.exposition_globale) + '" maxlength="300" placeholder="Ex. présence de batterie de trottinette"></div><button type="button" class="btn btn-secondary" id="ed-apply-all">Appliquer à tout l\'équipage</button></div>' +
-      '<div id="ed-sug">' + (sug.length ? '<p class="sug-line">' + icon('alert') + '<span>D\'après votre texte, pensez à : ' + sug.map(function (k) { return '<button type="button" class="link-btn" data-circadd="' + k + '">' + esc(R.CIRC[k].nom) + ' (ajouter)</button>'; }).join(' · ') + '</span></p>' : '') + '<p class="note">Suggestions par mots-clés, sans intelligence artificielle : rien n\'est ajouté au rapport sans votre accord.</p></div></div>';
+      '<div id="ed-sug">' + (sug.length ? '<p class="sug-line"><span>D\'après votre texte, pensez à : ' + sug.map(addBtn).join(' · ') + '</span></p>' : '') + (prop.length ? '<p class="sug-line"><span>Fréquent sur ce type de sinistre (SSSM) : ' + prop.map(addBtn).join(' · ') + '</span></p>' : '') + '</div></div>';
   }
   function natureHtml() {
     var n = R.nature(ed.it);
@@ -976,6 +1030,7 @@
         '<div class="crew-grid" id="crew">' + ed.crew.map(function (_, i) { return memberCard(i); }).join('') + '</div>' +
         (ro ? '' : '<div class="add-member"><select class="select" id="ed-add"><option value="">Ajouter un membre d\'équipage…</option>' + candidates.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + (u.grade || '') + ' · ' + u.matricule) + '</option>'; }).join('') + '</select><button type="button" class="btn btn-secondary" id="ed-add-btn">Ajouter</button></div>') +
       '</section></fieldset>' +
+      (S.role === 'cos' && !ed.isNew ? (function () { var sg = db.signalements.filter(function (z) { return z.intervention === ed.id; })[0]; return '<div class="actions-row sig-row">' + (sg ? '<span class="note">Signalement envoyé au SSSM (' + ({ ouvert: 'ouvert', pris_en_charge: 'pris en charge', clos: 'clos' })[sg.statut] + ').</span>' : '<button type="button" class="btn btn-secondary btn-sm" id="ed-sig">Signaler une forte exposition au SSSM</button>') + '</div>'; })() : '') +
       (ro ? '' : '<div class="action-bar"><span class="note" id="ed-status"></span>' +
         (S.role === 'cos' ? '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer le brouillon</button><button type="button" class="btn btn-primary" id="ed-send">' + icon('send') + 'Transmettre au SSSM</button>'
           : '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer les corrections</button>' + (x.statut !== 'controle_sssm' ? '<button type="button" class="btn btn-primary" id="ed-validate">' + icon('lock') + 'Enregistrer et valider</button>' : '')) + '</div>') + '</div>';
@@ -1023,6 +1078,7 @@
       else if (b.id === 'ed-add-btn') { var sel = root.querySelector('#ed-add'); if (!sel.value) return; var u = db.byId[sel.value]; ed.crew.push(blankMember(sel.value, u && u.role === 'cos' ? 'chef_agres' : 'binome_attaque', ed.crew[0] ? ed.crew[0].engin : 'FPT')); redraw(); }
       else if (b.id === 'ed-save') saveEditor(null).catch(function () {});
       else if (b.id === 'ed-send') confirmTransmit();
+      else if (b.id === 'ed-sig') openSignalement(db.inter[ed.id]);
       else if (b.id === 'ed-validate') saveEditor('valider').catch(function () {});
     });
   }
@@ -1034,7 +1090,7 @@
       var u = db.byId[m.agent] || {};
       return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
     }).join('');
-    modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Les tenues des agents engagés seront considérées comme contaminées.</p>') +
+    modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Le référent EPI du centre est prévenu pour le changement des tenues.</p>') +
       '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p><p class="note"><b>Nature :</b> ' + esc(R.natureTexte(ed.it)) + '</p><ul class="summary-list">' + rows + '</ul>',
       probs.length ? [] : [{ label: icon('send') + 'Confirmer la transmission', primary: true, run: function () { return saveEditor('transmettre'); } }]);
   }
@@ -1074,90 +1130,75 @@
     }
   }
 
-  // =================================================================== EPI : tenues de feu
+  // =================================================================== EPI : tenues de feu (référent EPI de la caserne uniquement)
   function tenueLine(t) { return TENUE[t.type] + ' ' + t.numero; }
   function seuilBar(t) {
     var s = +t.seuil_feux || VBSData.SEUIL, pct = Math.min(100, Math.round((+t.nb_feux || 0) / s * 100)), over = (+t.nb_feux || 0) >= s;
     return '<div class="seuil' + (over ? ' over' : '') + '" title="' + t.nb_feux + ' feux sur un seuil de ' + s + '"><i style="width:' + pct + '%"></i></div>';
   }
-  function myTenues() { return (db.tenues || []).filter(function (t) { return t.agent === db.meId && t.statut !== 'reformee'; }).sort(function (a, b) { return Object.keys(TENUE).indexOf(a.type) - Object.keys(TENUE).indexOf(b.type); }); }
-  function viewEpi(root) {
-    var mine = myTenues(), dirty = mine.filter(function (t) { return t.statut === 'contaminee'; });
-    var mv = (db.mouvements_epi || []).filter(function (m) { return m.agent === db.meId; }).sort(function (a, b) { return b.createdObj - a.createdObj; });
-    var open = mv.filter(function (m) { return m.type === 'demande' && m.statut === 'envoyee'; });
-    root.innerHTML = head('Mes EPI', 'Vos tenues de feu. Après une intervention sur feu, elles sont considérées comme contaminées d\'après le rapport du chef d\'agrès.',
-      '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" data-epi="demande">' + icon('send') + 'Demander une tenue</button><button class="btn btn-primary" type="button" data-epi="changement">' + icon('check') + 'J\'ai changé de tenue</button></div>') +
-      (dirty.length ? '<div class="callout red"><span class="icon-tile">' + icon('alert') + '</span><div><strong>' + (dirty.length > 1 ? 'Tenues à changer' : 'Tenue à changer') + ' : ' + esc(dirty.map(tenueLine).join(', ') ) + '</strong><span class="sub">S\'il y a une tenue de rechange à votre centre, prenez-la et indiquez son numéro. Sinon, demandez-en une au service habillement : la tenue souillée partira au lavage dès réception de la nouvelle.</span></div></div>' : '<div class="callout"><span class="icon-tile ok">' + icon('check') + '</span><div><strong>Vos tenues sont propres</strong><span class="sub">Aucune intervention sur feu depuis votre dernier changement.</span></div></div>') +
-      (open.length ? '<div class="callout"><span class="icon-tile">' + icon('clock') + '</span><div><strong>Demande en cours au service habillement</strong><span class="sub">' + esc(open.map(function (m) { return (m.types || []).map(function (x) { return TENUE[x]; }).join(', ') + ' · envoyée le ' + fmtD(m.createdObj); }).join(' · ')) + '</span></div></div>' : '') +
-      '<div class="grid grid-3">' + (mine.length ? mine.map(function (t) {
-        return '<section class="panel tenue-card"><div class="panel-head"><h3>' + TENUE[t.type] + '</h3>' + badge(TST[t.statut]) + '</div><p class="tenue-num">' + esc(t.numero) + '</p>' +
-          '<dl class="mini-kv"><div><dt>Feux depuis le dernier lavage</dt><dd>' + (t.feux_depuis_lavage || 0) + '</dd></div><div><dt>Feux depuis la mise en service</dt><dd>' + (t.nb_feux || 0) + ' / ' + (t.seuil_feux || VBSData.SEUIL) + '</dd></div><div><dt>Lavages</dt><dd>' + (t.nb_lavages || 0) + '</dd></div></dl>' + seuilBar(t) + '</section>';
-      }).join('') : '<p class="empty">Aucune tenue enregistrée à votre nom. Demandez au service habillement de les renseigner.</p>') + '</div>' +
-      '<section class="panel"><div class="panel-head"><h3>Historique</h3></div>' + (mv.length ? '<ul class="rows">' + mv.map(function (m) {
-        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + (m.type === 'changement' ? 'Changement au centre' : m.auto ? 'Demande automatique (seuil atteint)' : 'Demande au service habillement') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + badge(m.type === 'changement' ? ['Enregistré', 'badge-ok'] : DST[m.statut] || DST.envoyee) + '</span></li>';
-      }).join('') + '</ul>' : '<p class="empty">Aucun changement ni demande pour le moment.</p>') + '</section>';
-    root.querySelectorAll('[data-epi]').forEach(function (b) { b.onclick = function () { b.dataset.epi === 'changement' ? openChangement() : openDemande(); }; });
+  function stockOf(ty) { return (db.tenues || []).filter(function (t) { return t.type === ty && t.statut === 'en_stock'; }).sort(function (a, b) { return (+a.nb_feux || 0) - (+b.nb_feux || 0); }); }
+  function tenuesOf(agentId) { return (db.tenues || []).filter(function (t) { return t.agent === agentId && t.statut !== 'reformee'; }); }
+  // Agents qui portent au moins une tenue contaminée
+  function aChanger() {
+    var by = {};
+    (db.tenues || []).forEach(function (t) { if (t.agent && t.statut === 'contaminee') (by[t.agent] = by[t.agent] || []).push(t); });
+    return Object.keys(by).map(function (id) { return { agent: id, user: db.byId[id] || {}, tenues: by[id] }; }).sort(function (a, b) { return String(a.user.name).localeCompare(String(b.user.name)); });
   }
-  function typeChecks(pre, withNum) {
+  function chgRows(agentId) {
+    var cur = tenuesOf(agentId);
     return Object.keys(TENUE).map(function (ty) {
-      var cur = myTenues().filter(function (t) { return t.type === ty; })[0], on = pre.indexOf(ty) !== -1;
-      return '<div class="ty-row"><label class="check"><input type="checkbox" name="ty" value="' + ty + '"' + (on ? ' checked' : '') + '> ' + TENUE[ty] + (cur ? ' <span class="note">(actuelle : ' + esc(cur.numero) + ', ' + TST[cur.statut][0].toLowerCase() + ')</span>' : '') + '</label>' +
-        (withNum ? '<input class="input" data-num="' + ty + '" maxlength="20" placeholder="N° de la nouvelle ' + (ty === 'surpantalon' ? 'tenue' : ty) + '" aria-label="Numéro de la nouvelle ' + TENUE[ty] + '">' : '') + '</div>';
+      var t = cur.filter(function (x) { return x.type === ty; })[0], st = stockOf(ty), on = t && t.statut === 'contaminee';
+      return '<div class="ty-row"><label class="check"><input type="checkbox" name="ty" value="' + ty + '"' + (on ? ' checked' : '') + '> ' + TENUE[ty] + (t ? ' <span class="note">(' + esc(t.numero) + ', ' + TST[t.statut][0].toLowerCase() + ')</span>' : '') + '</label>' +
+        '<select class="select" data-new="' + ty + '" aria-label="Nouvelle ' + TENUE[ty] + '">' + st.map(function (x) { return '<option value="' + esc(x.numero) + '">' + esc(x.numero) + ' (' + (x.nb_feux || 0) + ' feux)</option>'; }).join('') + '<option value="">Autre numéro…</option></select>' +
+        '<input class="input" data-num="' + ty + '" maxlength="20" placeholder="N° de la nouvelle tenue"' + (st.length ? ' hidden' : '') + '></div>';
     }).join('');
   }
-  function openChangement() {
-    var pre = myTenues().filter(function (t) { return t.statut === 'contaminee'; }).map(function (t) { return t.type; });
-    modal('J\'ai changé de tenue', '<p class="note">Vous avez pris une tenue de rechange à votre centre : cochez ce que vous avez changé et indiquez le numéro inscrit sur l\'étiquette de la nouvelle tenue. L\'ancienne est signalée au service habillement pour le lavage.</p>' +
-      '<fieldset class="fs"><legend class="label">Éléments changés</legend>' + typeChecks(pre, true) + '</fieldset>',
-      [{ label: icon('check') + 'Enregistrer', primary: true, run: async function (d) {
+  function openChangement(agentId) {
+    agentId = agentId || (aChanger()[0] || {}).agent || '';
+    var dlg = modal('Enregistrer un changement de tenue', '<div class="field"><label class="label" for="ch-agent">Agent</label><select class="select" id="ch-agent">' + agentOptions(agentId) + '</select></div>' +
+      '<fieldset class="fs"><legend class="label">Éléments changés et nouvelle tenue</legend><div id="ch-rows">' + chgRows(agentId || (db.users.filter(function (u) { return u.role === 'agent' || u.role === 'cos'; })[0] || {}).id) + '</div></fieldset>' +
+      '<p class="note">L\'ancienne tenue passe « à laver », la nouvelle est attribuée à l\'agent.</p>',
+      [{ label: 'Enregistrer', primary: true, run: async function (d) {
+        var agent = d.querySelector('#ch-agent').value;
         var types = Array.prototype.map.call(d.querySelectorAll('[name=ty]:checked'), function (c) { return c.value; });
         if (!types.length) throw new Error('Cochez au moins un élément.');
-        var numeros = {}; types.forEach(function (ty) { var v = d.querySelector('[data-num="' + ty + '"]').value.trim().toUpperCase(); if (!v) throw new Error('Indiquez le numéro de la nouvelle ' + TENUE[ty].toLowerCase() + '.'); numeros[ty] = v; });
-        await VBSData.create(S, 'mouvements_epi', { type: 'changement', agent: db.meId, centre: (db.me || {}).centre, types: types, numeros: numeros, statut: 'traitee', auto: false, motif: 'Changement au centre après intervention' });
-        toast('Changement enregistré : le service habillement est informé.'); await reload();
+        var numeros = {};
+        types.forEach(function (ty) { var v = d.querySelector('[data-new="' + ty + '"]').value || d.querySelector('[data-num="' + ty + '"]').value.trim().toUpperCase(); if (!v) throw new Error('Indiquez le numéro de la nouvelle ' + TENUE[ty].toLowerCase() + '.'); numeros[ty] = v; });
+        await VBSData.create(S, 'mouvements_epi', { type: 'changement', agent: agent, centre: (db.me || {}).centre, types: types, numeros: numeros, statut: 'traitee', auto: false, motif: 'Changement après intervention', traite_par: db.meId });
+        toast('Changement enregistré : l\'ancienne tenue est à laver.'); await reload();
       } }]);
-  }
-  function openDemande() {
-    var pre = myTenues().filter(function (t) { return t.statut === 'contaminee'; }).map(function (t) { return t.type; });
-    modal('Demander une tenue au service habillement', '<p class="note">Le service habillement reçoit votre demande dans son espace et vous attribue une nouvelle tenue. Dès que vous la recevez, la tenue souillée part au lavage.</p>' +
-      '<fieldset class="fs"><legend class="label">Éléments demandés</legend>' + typeChecks(pre.length ? pre : [], false) + '</fieldset>' +
-      '<div class="field"><label class="label" for="dm-motif">Motif</label><select class="select" id="dm-motif"><option>Pas de tenue de rechange au centre</option><option>Tenue abîmée</option><option>Taille inadaptée</option><option>Autre</option></select></div>' +
-      '<div class="field"><label class="label" for="dm-com">Précision (facultatif)</label><input class="input" id="dm-com" maxlength="200" placeholder="Ex. taille L, veste déchirée à la manche"></div>',
-      [{ label: icon('send') + 'Envoyer la demande', primary: true, run: async function (d) {
-        var types = Array.prototype.map.call(d.querySelectorAll('[name=ty]:checked'), function (c) { return c.value; });
-        if (!types.length) throw new Error('Cochez au moins un élément.');
-        var com = d.querySelector('#dm-com').value.trim();
-        await VBSData.create(S, 'mouvements_epi', { type: 'demande', agent: db.meId, centre: (db.me || {}).centre, types: types, statut: 'envoyee', auto: false, motif: d.querySelector('#dm-motif').value + (com ? ' · ' + com : '') });
-        toast('Demande envoyée au service habillement.'); await reload();
-      } }]);
+    function bindRows() { dlg.querySelectorAll('[data-new]').forEach(function (sel) { sel.onchange = function () { dlg.querySelector('[data-num="' + sel.dataset.new + '"]').hidden = !!sel.value; }; }); }
+    dlg.querySelector('#ch-agent').onchange = function (e) { dlg.querySelector('#ch-rows').innerHTML = chgRows(e.target.value); bindRows(); };
+    bindRows();
   }
 
-  // ---------- Service habillement ----------
   function habStats() {
     var T = db.tenues || [], M = db.mouvements_epi || [];
-    return { service: T.filter(function (t) { return t.statut === 'en_service'; }).length, dirty: T.filter(function (t) { return t.statut === 'contaminee'; }), lavage: T.filter(function (t) { return t.statut === 'au_lavage'; }), stock: T.filter(function (t) { return t.statut === 'en_stock'; }),
+    return { service: T.filter(function (t) { return t.statut === 'en_service'; }).length, dirty: T.filter(function (t) { return t.statut === 'contaminee'; }), aLaver: T.filter(function (t) { return t.statut === 'contaminee' && !t.agent; }), lavage: T.filter(function (t) { return t.statut === 'au_lavage'; }), stock: T.filter(function (t) { return t.statut === 'en_stock'; }),
       demandes: M.filter(function (m) { return m.type === 'demande' && m.statut === 'envoyee'; }).sort(function (a, b) { return a.createdObj - b.createdObj; }),
       seuil: T.filter(function (t) { return t.statut !== 'reformee' && (+t.nb_feux || 0) >= (+t.seuil_feux || VBSData.SEUIL); }) };
   }
   function demandeRow(m) {
-    return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x]; }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + (m.auto ? badge(['Automatique', 'badge-info']) + ' ' : '') + '<button class="btn btn-primary btn-sm" type="button" data-traiter="' + m.id + '">Traiter</button></span></li>';
+    return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x]; }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right"><button class="btn btn-primary btn-sm" type="button" data-traiter="' + m.id + '">Remplacer</button></span></li>';
   }
   function tenueActions(t) {
     var a = [];
-    if (t.statut === 'contaminee') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="lavage|' + t.id + '">Réceptionner au lavage</button>');
+    if (t.statut === 'contaminee' && t.agent) a.push('<button class="btn btn-primary btn-sm" type="button" data-chg="' + t.agent + '">Changer</button>');
+    if (t.statut === 'contaminee' && !t.agent) a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="lavage|' + t.id + '">Envoyer au lavage</button>');
     if (t.statut === 'au_lavage') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="retour|' + t.id + '">Retour de lavage</button>');
     if (t.statut === 'en_stock') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="attribuer|' + t.id + '">Attribuer</button>');
     a.push('<button class="link-btn" type="button" data-tact="modifier|' + t.id + '">Modifier</button>');
     return a.join(' ');
   }
   function viewDashHab(root) {
-    var s = habStats();
-    root.innerHTML = head('Service habillement', 'Tenues de feu du centre : ce qui est à récupérer, à laver et à remplacer.', '<span class="page-date">' + esc(fmtLong(new Date())) + '</span>') +
-      '<div class="grid grid-4">' + kpi('send', '', 'Demandes à traiter', s.demandes.length, s.demandes.filter(function (m) { return m.auto; }).length + ' automatique(s)') + kpi('alert', '', 'Tenues contaminées', s.dirty.length, 'À récupérer pour le lavage') + kpi('clock', 'info', 'Au lavage', s.lavage.length, s.stock.length + ' en stock au centre') + kpi('chart', 'warn', 'Alertes de seuil', s.seuil.length, 'Tenues au-dessus du seuil de feux') + '</div>' +
-      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>Demandes des agents</h3><a href="#demandes">Toutes ' + icon('arrow') + '</a></div>' + (s.demandes.length ? '<ul class="rows">' + s.demandes.slice(0, 6).map(demandeRow).join('') + '</ul>' : '<p class="empty">Aucune demande en attente.</p>') + '</section>' +
-      '<section class="panel"><div class="panel-head"><h3>Tenues contaminées à récupérer</h3><a href="#tenues">Toutes les tenues ' + icon('arrow') + '</a></div>' + (s.dirty.length ? '<ul class="rows">' + s.dirty.slice(0, 8).map(function (t) { return '<li><span class="when"><b>' + esc(t.numero) + '</b></span><span class="what"><b>' + TENUE[t.type] + '</b><small>' + (t.user ? 'Portée par ' + esc(t.user.name) : 'Déposée au centre') + ' · ' + (t.feux_depuis_lavage || 0) + ' feu(x) depuis le lavage</small></span><span class="right">' + tenueActions(t) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Aucune tenue contaminée.</p>') + '</section></div>' +
-      '<section class="panel"><div class="panel-head"><h3>Alertes de seuil</h3></div>' + (s.seuil.length ? '<table class="dtable"><thead><tr><th>N°</th><th>Type</th><th>Agent</th><th>Feux</th><th>État</th><th></th></tr></thead><tbody>' + s.seuil.map(function (t) { return '<tr><td data-l="N°"><b>' + esc(t.numero) + '</b></td><td data-l="Type">' + TENUE[t.type] + '</td><td data-l="Agent">' + esc(t.user ? t.user.name : '—') + '</td><td data-l="Feux">' + t.nb_feux + ' / ' + (t.seuil_feux || VBSData.SEUIL) + seuilBar(t) + '</td><td>' + badge(TST[t.statut]) + '</td><td><button class="btn btn-secondary btn-sm" type="button" data-tact="reformer|' + t.id + '">Réformer</button></td></tr>'; }).join('') + '</tbody></table>' : '<p class="empty">Aucune tenue au-dessus du seuil.</p>') +
-      '<p class="note">Quand une tenue atteint le seuil, une demande de remplacement est créée automatiquement. Le seuil est fixé par votre service : il ne fait pas partie du calcul d\'exposition.</p></section>';
+    var s = habStats(), ac = aChanger();
+    root.innerHTML = head('Tenues de feu · ' + esc(centreName()), 'Après une intervention sur feu, les tenues des agents engagés sont à changer. Enregistrez chaque changement ici.', '<button class="btn btn-primary" type="button" data-chg="">Enregistrer un changement</button>') +
+      '<div class="grid grid-4">' + kpi('users', '', 'Agents à rééquiper', ac.length, ac.length ? 'Tenue contaminée après un feu' : 'Tout le monde est rééquipé') + kpi('alert', '', 'À envoyer au lavage', s.aLaver.length, 'Tenues déposées au centre') + kpi('clock', 'info', 'Au lavage', s.lavage.length, 'En attente de retour') + kpi('list', '', 'En stock', s.stock.length, 'Disponibles au centre') + '</div>' +
+      '<section class="panel"><div class="panel-head"><h3>Agents à rééquiper</h3></div>' + (ac.length ? '<ul class="rows nw">' + ac.map(function (a) {
+        return '<li><span class="what"><b>' + esc((a.user.grade ? a.user.grade + ' ' : '') + (a.user.name || '—')) + '</b><small>' + esc(a.user.matricule || '') + ' · ' + esc(a.tenues.map(tenueLine).join(', ')) + '</small></span><span class="right"><button class="btn btn-primary btn-sm" type="button" data-chg="' + a.agent + '">Enregistrer le changement</button></span></li>';
+      }).join('') + '</ul>' : '<p class="empty">Aucune tenue à changer.</p>') + '</section>' +
+      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>À envoyer au lavage</h3><a href="#tenues">Toutes les tenues ' + icon('arrow') + '</a></div>' + (s.aLaver.length ? '<ul class="rows nw">' + s.aLaver.slice(0, 8).map(function (t) { return '<li><span class="what"><b>' + esc(tenueLine(t)) + '</b><small>' + (t.feux_depuis_lavage || 0) + ' feu(x) depuis le dernier lavage</small></span><span class="right">' + tenueActions(t) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Rien à envoyer.</p>') + '</section>' +
+      '<section class="panel"><div class="panel-head"><h3>Remplacements (seuil d\'alerte)</h3><a href="#changements">Historique ' + icon('arrow') + '</a></div>' + (s.demandes.length ? '<ul class="rows">' + s.demandes.map(demandeRow).join('') + '</ul>' : '<p class="empty">Aucune tenue au seuil.</p>') + '<p class="note">Créés automatiquement quand une tenue atteint ' + ((db.tenues || [])[0] || {}).seuil_feux + ' feux. Seuil réglable dans « Tenues de feu ».</p></section></div>';
     bindHab(root);
   }
   var tFilter = 'tous', tType = '', tQ = '';
@@ -1176,20 +1217,19 @@
     root.querySelector('#t-seuil').onclick = openSeuil; root.querySelector('#t-new').onclick = function () { openTenue(null); };
     bindHab(root);
   }
-  var dFilter = 'envoyee';
-  function viewDemandes(root) {
+  function viewChangements(root) {
     var M = (db.mouvements_epi || []).slice().sort(function (a, b) { return b.createdObj - a.createdObj; });
-    var list = M.filter(function (m) { return dFilter === 'tous' ? true : dFilter === 'changement' ? m.type === 'changement' : m.type === 'demande' && m.statut === dFilter; });
-    root.innerHTML = head('Demandes des agents', 'Demandes de tenue, et changements déclarés par les agents au centre.', '<div class="seg" role="group" aria-label="Filtre">' + [['envoyee', 'À traiter'], ['traitee', 'Traitées'], ['changement', 'Changements au centre'], ['tous', 'Tout']].map(function (f) { return '<button type="button" data-df="' + f[0] + '" aria-pressed="' + (dFilter === f[0]) + '">' + f[1] + '</button>'; }).join('') + '</div>') +
-      '<section class="panel">' + (list.length ? '<ul class="rows">' + list.map(function (m) {
-        if (m.type === 'demande' && m.statut === 'envoyee') return demandeRow(m);
-        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + ' · ' + (m.type === 'changement' ? 'changement au centre' : 'demande') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + badge(m.type === 'changement' ? ['Enregistré', 'badge-ok'] : DST[m.statut] || DST.envoyee) + '</span></li>';
-      }).join('') + '</ul>' : '<p class="empty">Rien dans cette catégorie.</p>') + '</section>';
-    root.querySelectorAll('[data-df]').forEach(function (b) { b.onclick = function () { dFilter = b.dataset.df; route(); }; });
+    var open = M.filter(function (m) { return m.type === 'demande' && m.statut === 'envoyee'; }), hist = M.filter(function (m) { return !(m.type === 'demande' && m.statut === 'envoyee'); });
+    root.innerHTML = head('Changements de tenue', 'Chaque changement enregistré au centre, et les remplacements au seuil d\'alerte.', '<button class="btn btn-primary" type="button" data-chg="">Enregistrer un changement</button>') +
+      (open.length ? '<section class="panel"><div class="panel-head"><h3>Remplacements à faire</h3></div><ul class="rows">' + open.map(demandeRow).join('') + '</ul></section>' : '') +
+      '<section class="panel"><div class="panel-head"><h3>Historique</h3></div>' + (hist.length ? '<ul class="rows">' + hist.map(function (m) {
+        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + badge(m.statut === 'annulee' ? ['Annulé', 'badge-neutral'] : m.type === 'changement' ? ['Changé', 'badge-ok'] : ['Remplacé', 'badge-ok']) + '</span></li>';
+      }).join('') + '</ul>' : '<p class="empty">Aucun changement enregistré.</p>') + '</section>';
     bindHab(root);
   }
   function bindHab(root) {
     root.querySelectorAll('[data-traiter]').forEach(function (b) { b.onclick = function () { openTraiter((db.mouvements_epi || []).find(function (m) { return m.id === b.dataset.traiter; })); }; });
+    root.querySelectorAll('[data-chg]').forEach(function (b) { b.onclick = function () { openChangement(b.dataset.chg); }; });
     root.querySelectorAll('[data-tact]').forEach(function (b) { b.onclick = function () { var q = b.dataset.tact.split('|'); tenueAct(q[0], (db.tenues || []).find(function (t) { return t.id === q[1]; }), b); }; });
   }
   async function tenueAct(act, t, btn) {
@@ -1233,10 +1273,10 @@
   function openTraiter(m) {
     if (!m) return;
     var stock = function (ty) { return (db.tenues || []).filter(function (t) { return t.type === ty && t.statut === 'en_stock'; }); };
-    modal('Traiter la demande', '<p class="note">' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : '') + ' · ' + fmtD(m.createdObj) + (m.motif ? ' · ' + esc(m.motif) : '') + '</p>' +
+    modal('Remplacer la tenue', '<p class="note">' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : '') + ' · ' + fmtD(m.createdObj) + (m.motif ? ' · ' + esc(m.motif) : '') + '</p>' +
       (m.types || []).map(function (ty) { var cur = (db.tenues || []).filter(function (t) { return t.agent === m.agent && t.type === ty && t.statut !== 'reformee'; })[0], st = stock(ty);
         return '<div class="field"><label class="label" for="tr-' + ty + '">' + TENUE[ty] + (cur ? ' <span class="note">(remplace ' + esc(cur.numero) + ')</span>' : '') + '</label><select class="select" id="tr-' + ty + '">' + st.map(function (t) { return '<option value="' + t.id + '">' + esc(t.numero) + ' · ' + t.nb_feux + ' feux</option>'; }).join('') + '<option value="new">Nouvelle tenue (saisir le numéro)…</option></select><input class="input tr-new" id="trn-' + ty + '" maxlength="20" placeholder="Numéro de la nouvelle tenue"' + (st.length ? ' hidden' : '') + '></div>';
-      }).join('') + '<p class="note">L\'ancienne tenue passe « contaminée » : réceptionnez-la au lavage quand l\'agent vous la renvoie.</p>',
+      }).join('') + '<p class="note">L\'ancienne tenue passe « à laver ».</p>',
       [{ label: 'Refuser', run: async function () { await VBSData.update(S, 'mouvements_epi', m.id, { statut: 'annulee', traite_par: db.meId }); toast('Demande annulée.'); await reload(); } },
        { label: icon('check') + 'Attribuer et clore', primary: true, run: async function (d) {
         var numeros = {};
@@ -1250,7 +1290,7 @@
           numeros[ty] = t.numero;
         }
         await VBSData.update(S, 'mouvements_epi', m.id, { statut: 'traitee', traite_par: db.meId, numeros: numeros });
-        toast('Tenue attribuée : l\'agent la voit dans son espace.'); await reload();
+        toast('Tenue remplacée.'); await reload();
       } }]);
     document.querySelectorAll('dialog [id^="tr-"]').forEach(function (sel) { sel.onchange = function () { var inp = document.getElementById('trn-' + sel.id.slice(3)); if (inp) inp.hidden = sel.value !== 'new'; }; });
   }
@@ -1259,8 +1299,6 @@
   function notifications() {
     var out = [], soon = function (r) { return r && (r.dateObj - Date.now()) < 30 * VBSData.DAY; };
     if (S.role === 'agent' || S.role === 'cos' || S.role === 'commandement') {
-      myTenues().filter(function (t) { return t.statut === 'contaminee'; }).forEach(function (t) { out.push({ ic: 'shield', tone: 'red', t: TENUE[t.type] + ' ' + t.numero + ' à changer', s: 'Considérée comme contaminée après votre dernière intervention sur feu.', href: '#epi' }); });
-      (db.mouvements_epi || []).filter(function (m) { return m.agent === db.meId && m.type === 'demande' && m.statut === 'traitee' && within(m.createdObj, 14); }).forEach(function (m) { out.push({ ic: 'check', t: 'Demande de tenue traitée', s: Object.keys(m.numeros || {}).map(function (k) { return TENUE[k] + ' ' + m.numeros[k]; }).join(', ') || 'Voir vos EPI', href: '#epi' }); });
       var r = nextRdv(db, db.meId); if (soon(r)) out.push({ ic: 'cal', t: 'Rendez-vous SSSM le ' + fmtD(r.dateObj), s: r.motif, href: '#dossier' });
     }
     if (S.role === 'cos') {
@@ -1275,10 +1313,10 @@
       db.reglementation.filter(function (x) { return x.impact === 'action_requise'; }).forEach(function (x) { out.push({ ic: 'scale', t: x.titre, s: 'Action requise', href: '#reglementation' }); });
     }
     if (S.role === 'habillement') {
-      var hs = habStats();
-      if (hs.demandes.length) out.push({ ic: 'send', tone: 'red', t: hs.demandes.length + ' demande' + (hs.demandes.length > 1 ? 's' : '') + ' à traiter', s: hs.demandes.slice(0, 3).map(function (m) { return (m.user ? m.user.name : '') + ' · ' + (m.types || []).map(function (x) { return TENUE[x]; }).join(', '); }).join(' · '), href: '#demandes' });
-      if (hs.dirty.length) out.push({ ic: 'alert', t: hs.dirty.length + ' tenue' + (hs.dirty.length > 1 ? 's' : '') + ' contaminée' + (hs.dirty.length > 1 ? 's' : ''), s: 'À récupérer pour le lavage.', href: '#tableau-de-bord' });
-      if (hs.seuil.length) out.push({ ic: 'chart', t: hs.seuil.length + ' tenue' + (hs.seuil.length > 1 ? 's' : '') + ' au-dessus du seuil', s: 'Remplacement à prévoir.', href: '#tableau-de-bord' });
+      var hs = habStats(), ac = aChanger();
+      if (ac.length) out.push({ ic: 'users', tone: 'red', t: ac.length + ' agent' + (ac.length > 1 ? 's' : '') + ' à rééquiper', s: ac.slice(0, 3).map(function (a) { return a.user.name; }).join(', '), href: '#tableau-de-bord' });
+      if (hs.demandes.length) out.push({ ic: 'send', t: hs.demandes.length + ' remplacement' + (hs.demandes.length > 1 ? 's' : '') + ' au seuil', s: 'Tenues arrivées au seuil d\'alerte.', href: '#changements' });
+      if (hs.aLaver.length) out.push({ ic: 'alert', t: hs.aLaver.length + ' tenue' + (hs.aLaver.length > 1 ? 's' : '') + ' à envoyer au lavage', s: 'Déposées au centre.', href: '#tableau-de-bord' });
     }
     return out;
   }
@@ -1306,7 +1344,7 @@
   var VIEWS = {
     'tableau-de-bord': { agent: viewDashPerso, cos: viewDashCos, commandement: viewDashCmd, sssm: viewDashSssm, habillement: viewDashHab },
     dossier: viewDossier, rapports: { cos: viewRapportsCos, sssm: viewRapportsSssm }, gestion: viewGestion,
-    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, epi: viewEpi, tenues: viewTenues, demandes: viewDemandes
+    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, tenues: viewTenues, changements: viewChangements
   };
   function renderInto(id, root) {
     var v = VIEWS[id]; if (v && typeof v === 'object') v = v[S.role];
@@ -1348,8 +1386,7 @@
     if (S.role === 'cos') c.rapports = db.interventions.filter(function (x) { return x.cos === db.meId && x.statut === 'brouillon'; }).length;
     if (S.role === 'commandement') c.gestion = db.interventions.filter(function (x) { return VBSData.reportState(x) === 'retard'; }).length;
     if (S.role === 'sssm') { c.rapports = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; c.reglementation = db.reglementation.filter(function (r) { return r.impact === 'action_requise'; }).length; }
-    if (S.role === 'habillement') { var hs = habStats(); c.demandes = hs.demandes.length; c.tenues = hs.dirty.length; }
-    if (S.role === 'agent' || S.role === 'cos') c.epi = myTenues().filter(function (t) { return t.statut === 'contaminee'; }).length;
+    if (S.role === 'habillement') { c['tableau-de-bord'] = aChanger().length; c.changements = habStats().demandes.length; }
     nav.querySelectorAll('[data-count]').forEach(function (el) { el.hidden = true; });
     Object.keys(c).forEach(function (k) { var el = nav.querySelector('[data-count="' + k + '"]'); if (el && c[k]) { el.textContent = c[k]; el.hidden = false; } });
     drawBell();
