@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.vb-safety.com; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#17191D">
-<title>Évaluation des risques chimiques pour le document unique (DUERP), en ligne et gratuite · VB Safety</title>
+<title>DUERP risque chimique : évaluation obligatoire en ligne, gratuite · VB Safety</title>
 <meta name="description" content="Évaluez gratuitement le risque chimique de votre entreprise : inventaire des produits, classes de danger d'après les mentions H, hiérarchisation, risque par inhalation, repérage des agents CMR et plan d'action. Méthode inspirée de l'INRS, données conservées dans votre navigateur.">
 <link rel="canonical" href="https://vb-safety.com/cmr-industrie/evaluation.html">
 <meta property="og:type" content="website">
@@ -18,8 +18,8 @@
 <meta property="og:image" content="https://vb-safety.com/favicon-512.png">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="stylesheet" href="assets/css/vbs.css?v=1">
-<link rel="stylesheet" href="assets/css/industrie.css?v=3">
-<link rel="stylesheet" href="assets/css/eval.css?v=4">
+<link rel="stylesheet" href="assets/css/industrie.css?v=4">
+<link rel="stylesheet" href="assets/css/eval.css?v=5">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Évaluation du risque chimique en ligne", "url": "https://vb-safety.com/cmr-industrie/evaluation.html", "applicationCategory": "BusinessApplication", "operatingSystem": "Navigateur web", "inLanguage": "fr-FR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Évaluez gratuitement le risque chimique de votre entreprise : inventaire des produits, classes de danger d'après les mentions H, hiérarchisation, risque par inhalation, repérage des agents CMR et plan d'action. Méthode inspirée de l'INRS, données conservées dans votre navigateur.", "publisher": {"@type": "Organization", "name": "VB Safety", "url": "https://vb-safety.com/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "VB Safety", "item": "https://vb-safety.com/"}, {"@type": "ListItem", "position": 2, "name": "VB Safety Industrie & BTP", "item": "https://vb-safety.com/cmr-industrie/"}, {"@type": "ListItem", "position": 3, "name": "Évaluation du risque chimique", "item": "https://vb-safety.com/cmr-industrie/evaluation.html"}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "L'évaluation du risque chimique est-elle obligatoire ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui. L'employeur doit évaluer les risques liés aux agents chimiques dangereux présents dans l'entreprise et en transcrire les résultats dans le document unique d'évaluation des risques professionnels (DUERP). Pour les agents CMR, l'évaluation porte en plus sur la nature, le degré et la durée des expositions."}}, {"@type": "Question", "name": "D'où viennent les valeurs limites d'exposition ?", "acceptedAnswer": {"@type": "Answer", "text": "Du tableau des valeurs limites contraignantes de l'article R. 4412-149 du code du travail, repris tel quel depuis Légifrance et mis à jour chaque mois. Les valeurs indicatives fixées par arrêté et les valeurs recommandées ne sont pas encore intégrées."}}, {"@type": "Question", "name": "Où trouver les mentions de danger d'un produit ?", "acceptedAnswer": {"@type": "Answer", "text": "Dans la section 2 de la fiche de données de sécurité (FDS) et sur l'étiquette du produit. Les mentions commencent par H (par exemple H350) ou EUH. La température d'ébullition figure en section 9."}}, {"@type": "Question", "name": "Mes données sont-elles envoyées quelque part ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. L'évaluation est enregistrée uniquement dans votre navigateur, sur votre appareil. Elle disparaît si vous videz les données du navigateur : pensez à l'exporter."}}, {"@type": "Question", "name": "Quelle différence avec le logiciel Seirich de l'INRS ?", "acceptedAnswer": {"@type": "Answer", "text": "Seirich est un logiciel complet et gratuit de l'INRS, qui permet une évaluation détaillée (inhalation, contact cutané, incendie et explosion). Cet outil en ligne propose un premier diagnostic rapide inspiré de la même démarche, centré sur l'inhalation et les obligations liées aux agents CMR."}}, {"@type": "Question", "name": "Les résultats remplacent-ils des mesures d'exposition ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Il s'agit d'une estimation qui sert à hiérarchiser les actions. Pour les agents qui ont une valeur limite d'exposition professionnelle, des contrôles par un organisme accrédité restent obligatoires, au moins une fois par an."}}, {"@type": "Question", "name": "Que faire si un agent CMR est repéré ?", "acceptedAnswer": {"@type": "Answer", "text": "Étudier sa substitution en priorité, à défaut travailler en système clos, réduire l'exposition au plus bas, inscrire les salariés concernés sur la liste des travailleurs exposés, organiser leur suivi individuel renforcé et contrôler les VLEP."}}]}</script>
@@ -85,7 +85,7 @@
       <a href="./#prevention">Prévention</a>
       <a href="./#suivi">Suivi</a>
       <a href="./#reglementation">Réglementation</a>
-      <a href="evaluation.html" aria-current="page">Risque chimique (DUERP)</a>
+      <a href="evaluation.html" aria-current="page">DUERP</a>
       <a href="./#faq">FAQ</a>
     </nav>
     <a class="btn btn-primary header-cta" href="#demande" data-demande="version">Accès anticipé</a>
@@ -99,28 +99,29 @@
   <section class="ev-hero" aria-labelledby="ev-title">
     <div class="container ev-hero-grid">
       <div>
-        <nav class="ev-crumbs" aria-label="Fil d'Ariane"><a href="./">VB Safety Industrie &amp; BTP</a><span aria-hidden="true">/</span><span aria-current="page">Évaluation des risques chimiques</span></nav>
-        <p class="tagline"><span>Obligation de l'employeur</span><span>Code du travail</span></p>
-        <h1 id="ev-title">Évaluation des risques chimiques <em>pour votre document unique</em></h1>
-        <p class="ih-lead">Tout employeur dont les salariés utilisent des produits chimiques doit évaluer ces risques et les inscrire dans son document unique (DUERP). Cet outil vous guide étape par étape et produit les documents attendus.</p>
+        <nav class="ev-crumbs" aria-label="Fil d'Ariane"><a href="./">VB Safety Industrie &amp; BTP</a><span aria-hidden="true">/</span><span aria-current="page">DUERP risque chimique</span></nav>
+        <p class="tagline"><span>Obligation légale</span><span>Code du travail</span></p>
+        <h1 id="ev-title">Votre DUERP <em>risque chimique</em>, étape par étape</h1>
+        <p class="ih-lead">Le document unique d'évaluation des risques professionnels (DUERP) est obligatoire pour tout employeur, dès le premier salarié. Dès que des produits chimiques sont utilisés, il doit contenir leur évaluation. Cet outil la réalise avec vous en 6 étapes, puis vous téléchargez le dossier complet.</p>
         <div class="ih-cta">
-          <a class="btn btn-primary btn-lg" href="#outil" data-go="inv">Commencer l'évaluation <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <button type="button" class="btn btn-primary btn-lg" data-act="intro">Commencer mon DUERP <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
           <button type="button" class="btn btn-secondary btn-lg" data-act="demo">Voir un exemple rempli</button>
         </div>
         <p class="ev-free">Gratuit, sans compte. Vos données restent dans votre navigateur.</p>
       </div>
       <div class="ev-law-box">
-        <h2>L'obligation</h2>
+        <h2>L'obligation légale</h2>
         <dl>
-          <div><dt>Art. R. 4412-5</dt><dd>Évaluer les risques de tous les agents chimiques dangereux présents dans l'entreprise.</dd></div>
-          <div><dt>Art. R. 4412-61</dt><dd>Pour les agents CMR : préciser la nature, le degré et la durée de l'exposition des salariés.</dd></div>
-          <div><dt>Art. R. 4121-1 et R. 4121-2</dt><dd>Transcrire les résultats dans le document unique, mis à jour au moins une fois par an à partir de 11 salariés.</dd></div>
+          <div><dt>Art. R. 4121-1</dt><dd>Tout employeur consigne l'évaluation des risques dans le DUERP, dès le premier salarié.</dd></div>
+          <div><dt>Art. R. 4121-2</dt><dd>Mise à jour au moins une fois par an à partir de 11 salariés, et à chaque changement important (nouveau produit, nouveau procédé).</dd></div>
+          <div><dt>Art. R. 4412-5 et R. 4412-61</dt><dd>Évaluation des agents chimiques dangereux et, pour les CMR, de la nature, du degré et de la durée d'exposition.</dd></div>
+          <div><dt>Art. R. 4741-1</dt><dd>Sanction : amende de 1 500 €, 3 000 € en cas de récidive.</dd></div>
         </dl>
-        <h2>Les documents produits</h2>
+        <h2>Ce que vous téléchargez à la fin</h2>
         <ol class="ev-docs">
-          <li><b>Rapport d'évaluation des risques chimiques</b><span>À annexer au document unique (DUERP)</span></li>
+          <li><b>Rapport d'évaluation du risque chimique</b><span>À annexer au DUERP</span></li>
           <li><b>Liste des travailleurs exposés aux agents CMR</b><span>Art. R. 4412-93-1, à transmettre au SPST</span></li>
-          <li><b>Plan d'action de prévention</b><span>À reporter dans le PAPRIPACT (50 salariés et plus) ou dans le DUERP</span></li>
+          <li><b>Plan d'action de prévention</b><span>À reporter dans le PAPRIPACT ou dans le DUERP</span></li>
         </ol>
       </div>
     </div>
@@ -137,7 +138,7 @@
           <button type="button" class="app-nav-i" data-view="plan"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span>Plan d'action</span><em data-n="plan"></em></button>
           <button type="button" class="app-nav-i" data-view="cmr"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><span>Agents CMR</span><em data-n="cmr"></em></button>
           <button type="button" class="app-nav-i" data-view="sal"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span>Salariés exposés</span><em data-n="sal"></em></button>
-          <button type="button" class="app-nav-i" data-view="export"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span>Rapports et export</span></button>
+          <button type="button" class="app-nav-i" data-view="export"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span>Dossier DUERP</span></button>
         </nav>
         <nav class="app-nav app-nav-foot" aria-label="Réglages">
           <button type="button" class="app-nav-i" data-view="set"><svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg><span>Paramètres</span></button>
@@ -167,8 +168,8 @@
                 <div class="ev-menu-list"><button type="button" data-act="csv">Inventaire des produits chimiques (tableur)</button><button type="button" data-act="json">Sauvegarde de l'évaluation (fichier JSON)</button></div>
               </details>
               <details class="ev-menu">
-                <summary class="btn btn-secondary">Rapports<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
-                <div class="ev-menu-list"><button type="button" data-act="print" data-mode="report">Rapport d'évaluation des risques chimiques (annexe DUERP)</button><button type="button" data-act="print" data-mode="liste">Liste des travailleurs exposés aux agents CMR</button><button type="button" data-act="print" data-mode="plan">Plan d'action de prévention</button></div>
+                <summary class="btn btn-secondary">Télécharger<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
+                <div class="ev-menu-list"><button type="button" data-act="print" data-mode="all"><b>Dossier DUERP complet (PDF)</b></button><button type="button" data-act="print" data-mode="report">Rapport d'évaluation (annexe DUERP)</button><button type="button" data-act="print" data-mode="liste">Liste des travailleurs exposés aux agents CMR</button><button type="button" data-act="print" data-mode="plan">Plan d'action de prévention</button></div>
               </details>
             </div>
           </div>
@@ -201,7 +202,7 @@
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-export" aria-labelledby="h-export" hidden>
-          <header class="ev-vh"><h2 id="h-export">Rapports et export</h2><p>Vos données restent dans ce navigateur : exportez-les pour les archiver, les partager ou les joindre au document unique.</p></header>
+          <header class="ev-vh"><h2 id="h-export">Dossier DUERP</h2><p>Vos données restent dans ce navigateur : exportez-les pour les archiver, les partager ou les joindre au document unique.</p></header>
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-set" aria-labelledby="h-set" hidden>
@@ -212,12 +213,32 @@
           <header class="ev-vh"><h2 id="h-ref">Référentiel réglementaire</h2><p>Valeurs limites contraignantes du code du travail (art. R. 4412-149), tableaux de maladies professionnelles et classifications européennes.</p></header>
           <div class="ev-body"></div>
         </section>
+          <div class="ev-print-tail" id="ev-print-tail"></div>
         </div>
       </div>
       <aside class="app-drawer" id="ev-drawer" aria-label="Détail" hidden></aside>
     </div>
     <div class="container"><p class="ev-note">Résultats indicatifs, qui ne remplacent ni une évaluation par un préventeur ni des mesures d'exposition. <span id="ev-live" class="sr-only" aria-live="polite"></span></p></div>
   </section>
+
+  <!-- Présentation du parcours -->
+  <dialog class="ev-dialog ev-intro" id="ev-intro" aria-labelledby="ev-intro-title">
+    <div class="ev-dh"><div><p class="ev-intro-k">Obligation légale · DUERP</p><h2 id="ev-intro-title">Votre DUERP risque chimique en 6 étapes</h2></div><button type="button" class="req-close" data-act="introclose" aria-label="Fermer">✕</button></div>
+    <div class="ev-db">
+      <p class="ev-intro-lead">Le DUERP est obligatoire pour tout employeur (art. R. 4121-1 du code du travail). Lorsque vos salariés utilisent des produits chimiques, il doit en contenir l'évaluation. Voici comment se déroule le parcours.</p>
+      <ol class="ev-intro-steps">
+        <li><b>Inventaire des produits</b><span>Saisissez chaque produit à partir de sa fiche de données de sécurité, en 3 écrans. Environ 5 minutes par produit.</span></li>
+        <li><b>Priorités</b><span>Calcul automatique : vous vérifiez le classement.</span></li>
+        <li><b>Inhalation</b><span>Calcul automatique de l'exposition à chaque poste.</span></li>
+        <li><b>Plan d'action</b><span>Un responsable et une échéance pour chaque mesure proposée.</span></li>
+        <li><b>Salariés exposés aux CMR</b><span>Vous vérifiez les postes et le nombre de salariés concernés.</span></li>
+        <li class="last"><b>Téléchargement du dossier DUERP</b><span>Un seul PDF avec le rapport d'évaluation, la liste des travailleurs exposés et le plan d'action, à joindre à votre document unique.</span></li>
+      </ol>
+      <div class="ev-intro-prep"><b>À préparer</b><span>Les fiches de données de sécurité (FDS) de vos produits, les quantités achetées sur un an, la liste des postes et le nombre de salariés par poste.</span></div>
+      <p class="ev-hint">Votre saisie est enregistrée automatiquement dans ce navigateur : vous pouvez vous arrêter et reprendre plus tard.</p>
+    </div>
+    <div class="ev-df"><button type="button" class="btn btn-secondary" data-act="introdemo">Voir un exemple rempli</button><span class="ev-wz-n"></span><button type="button" class="btn btn-primary" data-act="introgo">Commencer l'étape 1</button></div>
+  </dialog>
 
   <!-- Formulaire produit -->
   <dialog class="ev-dialog" id="ev-dialog" aria-labelledby="ev-dialog-title">
@@ -410,7 +431,7 @@
           <li><a href="./#prevention">Hiérarchie de prévention</a></li>
           <li><a href="./#suivi">Suivi et interdictions</a></li>
           <li><a href="./#reglementation">Réglementation</a></li>
-          <li><a href="evaluation.html">Évaluation des risques chimiques (DUERP)</a></li>
+          <li><a href="evaluation.html">DUERP : évaluation du risque chimique</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -432,7 +453,7 @@
 </footer>
 
 <script src="assets/js/site.js?v=1"></script>
-<script src="assets/js/eval.js?v=4"></script>
+<script src="assets/js/eval.js?v=5"></script>
 <script src="assets/js/demande-config.js?v=1"></script>
 <script src="assets/js/demande.js?v=1"></script>
 </body>

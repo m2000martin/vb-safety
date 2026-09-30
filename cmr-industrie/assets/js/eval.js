@@ -252,7 +252,7 @@
     ['inh', 'Inhalation', 'Contrôlez l\'exposition', 'Rien à saisir : l\'outil estime le risque par inhalation à chaque poste. Pour les risques élevés, les deux colonnes de droite indiquent le gain d\'un système clos ou d\'un captage à la source.'],
     ['plan', 'Plan d\'action', 'Planifiez les actions', 'Pour chaque mesure proposée, indiquez un responsable et une échéance, puis mettez le statut à jour au fil de l\'année. Ce plan se reporte dans votre programme annuel de prévention (PAPRIPACT) ou dans le DUERP.'],
     ['sal', 'Salariés CMR', 'Vérifiez les salariés exposés', 'Contrôlez les postes et le nombre de salariés exposés aux agents CMR. Ces salariés doivent figurer sur la liste des travailleurs exposés, transmise au service de santé au travail (SPST) et conservée 40 ans.'],
-    ['export', 'Rapport', 'Éditez les documents', 'Imprimez ou enregistrez en PDF le rapport d\'évaluation et annexez-le à votre document unique. Refaites l\'évaluation au moins une fois par an, et à chaque nouveau produit ou changement de procédé.']
+    ['export', 'Dossier DUERP', 'Téléchargez votre dossier DUERP', 'Téléchargez le dossier complet en PDF : rapport d\'évaluation, liste des travailleurs exposés aux CMR et plan d\'action. Joignez-le à votre document unique, et mettez-le à jour au moins une fois par an et à chaque nouveau produit ou procédé.']
   ];
   function stepDone(id) {
     var seen = S.seen || {};
@@ -278,7 +278,7 @@
     if (st[0] === 'plan') { var it = planItems(ROWS), ok = it.filter(function (x) { var a = S.actions[x.k] || {}; return a.statut === 'fait' || (a.resp && a.date); }).length; extra = it.length ? '<span class="ev-guide-prog">' + ok + ' mesure' + (ok > 1 ? 's' : '') + ' planifiée' + (ok > 1 ? 's' : '') + ' sur ' + it.length + '</span>' : ''; }
     if (st[0] === 'inv' && S.products.length) extra = '<span class="ev-guide-prog">' + S.products.length + ' produit' + (S.products.length > 1 ? 's' : '') + ' ou procédé' + (S.products.length > 1 ? 's' : '') + ' saisi' + (S.products.length > 1 ? 's' : '') + '</span>';
     g.innerHTML = '<div class="ev-guide-txt"><b>Étape ' + (idx + 1) + ' sur 6 · ' + st[2] + '</b><p>' + st[3] + '</p>' + extra + '</div><div class="ev-guide-act">' +
-      (next ? '<button type="button" class="btn btn-primary" data-go="' + next[0] + '"' + (st[0] === 'inv' && !S.products.length ? ' disabled' : '') + '>Étape suivante : ' + next[1].toLowerCase() + '<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>' : '<button type="button" class="btn btn-primary" data-act="print" data-mode="report">Imprimer le rapport</button>') +
+      (next ? '<button type="button" class="btn btn-primary" data-go="' + next[0] + '"' + (st[0] === 'inv' && !S.products.length ? ' disabled' : '') + '>Étape suivante : ' + next[1].toLowerCase() + '<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>' : '<button type="button" class="btn btn-primary" data-act="print" data-mode="all"' + (S.products.length ? '' : ' disabled') + '>Télécharger le dossier DUERP (PDF)</button>') +
       '<button type="button" class="ev-link" data-act="guide">Masquer l\'aide</button></div>';
   }
   function empty(msg) { return '<div class="ev-empty"><p>' + msg + '</p><div class="ev-empty-cta"><button type="button" class="btn btn-primary" data-act="add">Ajouter un produit</button><button type="button" class="btn btn-secondary" data-act="demo">Charger un exemple</button></div></div>'; }
@@ -463,11 +463,12 @@
 
   function renderExport() {
     var none = !S.products.length ? ' disabled' : '';
-    body('export').innerHTML = '<h3 class="ev-h3">Documents réglementaires</h3><ul class="ev-exp">' +
-      '<li><div><b>Rapport d\'évaluation des risques chimiques</b><span>À annexer au document unique (DUERP, art. R. 4121-1). Contient l\'inventaire, les priorités, le risque par inhalation, les agents CMR, les salariés exposés et le plan d\'action.</span></div><button type="button" class="btn btn-primary" data-act="print" data-mode="report"' + none + '>Imprimer ou PDF</button></li>' +
-      '<li><div><b>Liste des travailleurs exposés aux agents CMR</b><span>Art. R. 4412-93-1. Trame par poste, pré-remplie avec les agents et la durée d\'exposition, à compléter avec le nom des salariés. À transmettre au SPST et à conserver 40 ans.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="liste"' + none + '>Imprimer ou PDF</button></li>' +
-      '<li><div><b>Plan d\'action de prévention</b><span>Mesures, références, responsables et échéances. À reporter dans le PAPRIPACT (50 salariés et plus, art. L. 4121-3-1) ou dans le DUERP.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="plan"' + none + '>Imprimer ou PDF</button></li></ul>' +
-      '<p class="ev-small">Pour obtenir un PDF, choisissez « Enregistrer au format PDF » comme imprimante.</p>' +
+    body('export').innerHTML = '<div class="ev-dossier"><div><b>Dossier DUERP complet</b><span>Les 3 documents ci-dessous réunis en un seul PDF, avec une page de garde. À joindre à votre document unique d\'évaluation des risques professionnels.</span></div><button type="button" class="btn btn-primary" data-act="print" data-mode="all"' + none + '>Télécharger le dossier (PDF)</button></div>' +
+      '<h3 class="ev-h3">Ou document par document</h3><ul class="ev-exp">' +
+      '<li><div><b>Rapport d\'évaluation du risque chimique</b><span>À annexer au document unique (DUERP, art. R. 4121-1). Contient l\'inventaire, les priorités, le risque par inhalation, les agents CMR, les salariés exposés et le plan d\'action.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="report"' + none + '>Télécharger (PDF)</button></li>' +
+      '<li><div><b>Liste des travailleurs exposés aux agents CMR</b><span>Art. R. 4412-93-1. Trame par poste, pré-remplie avec les agents et la durée d\'exposition, à compléter avec le nom des salariés. À transmettre au SPST et à conserver 40 ans.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="liste"' + none + '>Télécharger (PDF)</button></li>' +
+      '<li><div><b>Plan d\'action de prévention</b><span>Mesures, références, responsables et échéances. À reporter dans le PAPRIPACT (50 salariés et plus, art. L. 4121-3-1) ou dans le DUERP.</span></div><button type="button" class="btn btn-secondary" data-act="print" data-mode="plan"' + none + '>Télécharger (PDF)</button></li></ul>' +
+      '<p class="ev-small">Dans la fenêtre qui s\'ouvre, choisissez « Enregistrer au format PDF » comme imprimante.</p>' +
       '<h3 class="ev-h3">Données</h3><ul class="ev-exp">' +
       '<li><div><b>Inventaire des produits chimiques (tableur)</b><span>Fichier CSV, une ligne par produit : substances, VLEP, mentions H, scores et actions. S\'ouvre dans Excel ou LibreOffice.</span></div><button type="button" class="btn btn-secondary" data-act="csv"' + none + '>Télécharger</button></li>' +
       '<li><div><b>Sauvegarde de l\'évaluation</b><span>Fichier JSON avec toute l\'évaluation, pour la reprendre sur un autre ordinateur ou l\'an prochain.</span></div><button type="button" class="btn btn-secondary" data-act="json"' + none + '>Télécharger</button></li>' +
@@ -689,7 +690,8 @@
   }
   function slug() { return S.site ? '-' + S.site.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : ''; }
   var DOCS = {
-    report: ['Rapport d\'évaluation des risques chimiques', 'Annexe au document unique d\'évaluation des risques professionnels (art. R. 4121-1 et R. 4412-5 du code du travail)', ['inv', 'hier', 'inh', 'cmr', 'sal', 'plan']],
+    all: ['Dossier DUERP · évaluation du risque chimique', 'Document unique d\'évaluation des risques professionnels (art. R. 4121-1, R. 4412-5 et R. 4412-61 du code du travail) · rapport d\'évaluation, liste des travailleurs exposés aux agents CMR et plan d\'action', ['inv', 'hier', 'inh', 'cmr', 'sal', 'plan']],
+    report: ['DUERP · Rapport d\'évaluation du risque chimique', 'Annexe au document unique d\'évaluation des risques professionnels (art. R. 4121-1 et R. 4412-5 du code du travail)', ['inv', 'hier', 'inh', 'cmr', 'sal', 'plan']],
     liste: ['Liste des travailleurs exposés aux agents CMR', 'Art. R. 4412-93-1 du code du travail · à transmettre au service de prévention et de santé au travail et à conserver 40 ans', []],
     plan: ['Plan d\'action de prévention du risque chimique', 'À reporter dans le programme annuel de prévention (PAPRIPACT) ou dans le document unique', ['plan']]
   };
@@ -697,17 +699,18 @@
     var doc = DOCS[mode] || DOCS.report, prev = UI.view, today = new Date().toLocaleDateString('fr-FR');
     var v = REF ? ((REF.meta.sources || {}).vlep || {}).en_vigueur_depuis : '';
     var head = '<h1>' + doc[0] + '</h1><p class="ph-sub">' + doc[1] + '</p><dl class="ph-meta"><div><dt>Établissement ou unité de travail</dt><dd>' + esc(S.site || '………………………………') + '</dd></div><div><dt>Date d\'édition</dt><dd>' + today + '</dd></div><div><dt>Référentiel</dt><dd>Code du travail, art. R. 4412-149' + (v ? ' (version du ' + frDate(v) + ')' : '') + '</dd></div><div><dt>Évaluation réalisée par</dt><dd>………………………………</dd></div></dl>';
-    if (mode === 'report') head += '<p class="ph-meth">Méthode : évaluation simplifiée du risque chimique inspirée de la démarche de l\'INRS (hiérarchisation des risques potentiels, puis estimation du risque par inhalation). Résultats indicatifs, à confirmer par des mesurages pour les agents soumis à une valeur limite.</p>';
-    if (mode === 'liste') {
-      var ps = postesCmr(), keys = Object.keys(ps);
-      head += '<table class="ph-list"><thead><tr><th>Nom et prénom</th><th>Poste</th><th>Agents CMR</th><th>Durée d\'utilisation</th><th>Niveau d\'exposition estimé</th><th>Exposé du</th><th>au</th></tr></thead><tbody>' +
+    if (mode === 'report' || mode === 'all') head += '<p class="ph-meth">Méthode : évaluation simplifiée du risque chimique inspirée de la démarche de l\'INRS (hiérarchisation des risques potentiels, puis estimation du risque par inhalation). Résultats indicatifs, à confirmer par des mesurages pour les agents soumis à une valeur limite.</p>';
+    var tail = '';
+    if (mode === 'liste' || mode === 'all') {
+      var ps = postesCmr(), keys = Object.keys(ps), lt = '<table class="ph-list"><thead><tr><th>Nom et prénom</th><th>Poste</th><th>Agents CMR</th><th>Durée d\'utilisation</th><th>Niveau d\'exposition estimé</th><th>Exposé du</th><th>au</th></tr></thead><tbody>' +
         (keys.length ? keys.map(function (k) {
           var n = Math.max(ps[k].nb || 0, 2), f = Math.max.apply(null, ps[k].rows.map(function (r) { return r.fc; })), lv = Math.min.apply(null, ps[k].rows.map(function (r) { return r.inh; })), rows = '';
           for (var i = 0; i < n; i++) rows += '<tr><td></td><td>' + esc(k) + '</td><td>' + ps[k].agents.map(esc).join(', ') + '</td><td>' + FREQ_S[f - 1] + '</td><td>' + INH[lv][0] + '</td><td></td><td></td></tr>';
           return rows;
         }).join('') : '<tr><td colspan="7">Aucun agent CMR avéré ou présumé dans l\'inventaire.</td></tr>') + '</tbody></table><p class="ph-meth">Pour chaque salarié : nature, durée et degré de l\'exposition, et résultats des contrôles de l\'exposition au poste lorsqu\'ils existent.</p>';
+      if (mode === 'liste') head += lt; else tail = '<h2 class="ph-h2">Liste des travailleurs exposés aux agents CMR</h2><p class="ph-sub">Art. R. 4412-93-1 · à compléter avec le nom des salariés, à transmettre au SPST et à conserver 40 ans</p>' + lt;
     }
-    $('#ev-print-head').innerHTML = head;
+    $('#ev-print-head').innerHTML = head; $('#ev-print-tail').innerHTML = tail;
     var R = { dash: renderDash, inv: renderInv, hier: renderHier, inh: renderInh, plan: renderPlan, cmr: renderCmr, sal: renderSal };
     $$('.ev-view').forEach(function (el) { var id = el.id.slice(2); el.hidden = doc[2].indexOf(id) < 0; if (!el.hidden && R[id]) { UI.view = id; R[id](); } });
     UI.view = prev;
@@ -747,6 +750,10 @@
     else if (act === 'csv') { exportCsv(); S.exported = 1; save(); renderSteps(); }
     else if (act === 'json') download('sauvegarde-evaluation-risques-chimiques' + slug() + '.json', JSON.stringify({ format: 'vbs-eval', version: 1, exporte_le: new Date().toISOString(), data: S }, null, 1), 'application/json');
     else if (act === 'print') printDoc(t.dataset.mode || 'report');
+    else if (act === 'intro') $('#ev-intro').showModal();
+    else if (act === 'introclose') $('#ev-intro').close();
+    else if (act === 'introgo') { $('#ev-intro').close(); showView('inv', 'force'); if (!S.products.length) openForm(null, 'produit'); }
+    else if (act === 'introdemo') { $('#ev-intro').close(); if (!S.products.length || confirm('Remplacer l\'évaluation actuelle par l\'exemple ?')) { S = demo(); UI.sel = null; } showView('inv', 'force'); }
     else if (act === 'guide') { S.hideGuide = !S.hideGuide; save(); renderSteps(); }
     else if (act === 'close') closeDetail();
     else if (act === 'ackref') { S.refSeen = S.refSeen || {}; S.products.forEach(function (p) { subsOf(p).forEach(function (x) { S.refSeen[x.id] = x.fp; }); }); save(); $('#ev-alert').hidden = true; }
@@ -809,4 +816,6 @@
   loadRef();
   var h0 = (location.hash || '').slice(1);
   showView(VIEWS.indexOf(h0) >= 0 ? h0 : (S.products.length ? 'dash' : 'inv'));
+  $('#ev-intro').addEventListener('click', function (e) { if (e.target === this) this.close(); });
+  if (h0 === 'demarrer') $('#ev-intro').showModal();
 })();

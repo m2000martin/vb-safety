@@ -449,3 +449,35 @@
   .ev-plan .input { border: 0; padding: 0; min-height: 0; background: none; appearance: none; -webkit-appearance: none; }
   .ev-plan .input::placeholder { color: transparent; }
 }
+
+/* Présentation du parcours */
+.ev-intro { width: min(620px, calc(100vw - 16px)); }
+.ev-intro-k { margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--red-strong); }
+.ev-intro .ev-dh { align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.ev-intro .ev-db { padding-top: 14px; }
+.ev-intro-lead { margin: 0; font-size: 14.5px; }
+.ev-intro-steps { list-style: none; margin: 0; padding: 0; counter-reset: st; }
+.ev-intro-steps li { counter-increment: st; display: grid; grid-template-columns: 30px 1fr; column-gap: 12px; padding: 0 0 12px; position: relative; font-size: 14px; }
+.ev-intro-steps li::before { content: counter(st); grid-row: span 2; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line-strong); background: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; color: var(--text); position: relative; z-index: 1; }
+.ev-intro-steps li:not(:last-child)::after { content: ""; position: absolute; left: 13px; top: 26px; bottom: 0; width: 1.5px; background: var(--line-strong); }
+.ev-intro-steps b { font-weight: 700; line-height: 26px; }
+.ev-intro-steps span { color: var(--muted); font-size: 13.5px; }
+.ev-intro-steps li.last::before { background: var(--red); border-color: var(--red); color: #fff; }
+.ev-intro-steps li.last b { color: var(--red-strong); }
+.ev-intro-prep { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13.5px; background: #FBFAF8; }
+.ev-intro-prep b { display: block; }
+.ev-intro-prep span { color: var(--muted); }
+.ev-intro .ev-df { border-top: 1px solid var(--line); }
+
+/* Dossier DUERP */
+.ev-dossier { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; border: 1px solid var(--red-line); background: #FDF6F5; border-radius: 8px; padding: 16px 18px; margin-bottom: 20px; }
+.ev-dossier b { display: block; font-size: 16px; }
+.ev-dossier span { display: block; font-size: 13.5px; color: var(--muted); margin-top: 2px; max-width: 70ch; }
+.ev-dossier .btn { min-height: 44px; }
+.ev-menu-list b { font-weight: 700; }
+.ev-print-tail { display: none; }
+@media print {
+  .ev-print-tail { display: block; break-before: page; }
+  .ph-h2 { font-size: 16px; margin: 0; }
+  .ev-dossier { display: none !important; }
+}

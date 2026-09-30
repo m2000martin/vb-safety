@@ -211,9 +211,9 @@ section[id] { scroll-margin-top: 130px; }
 
 /* Bandeau outil gratuit */
 .tool-band { margin-top: 18px; display: flex; align-items: center; gap: 18px; text-decoration: none; background: var(--ink); color: #fff; border-radius: var(--radius-lg); padding: 20px 24px; position: relative; overflow: hidden; }
-.tool-band::before { content: ""; position: absolute; right: -6%; top: -120%; width: 45%; height: 340%; background: radial-gradient(closest-side, rgba(215, 38, 30, .35), rgba(215, 38, 30, 0)); pointer-events: none; }
+.tool-band::before { content: none; }
 .tool-band > * { position: relative; }
-.tool-ico { width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px; background: rgba(215, 38, 30, .18); border: 1px solid rgba(215, 38, 30, .5); color: #FF6A60; display: flex; align-items: center; justify-content: center; }
+.tool-ico { width: 52px; height: 52px; flex-shrink: 0; border-radius: 8px; background: rgba(215, 38, 30, .18); border: 1px solid rgba(215, 38, 30, .5); color: #FF6A60; display: flex; align-items: center; justify-content: center; }
 .tool-ico .icon { width: 26px; height: 26px; }
 .tool-txt { flex: 1; min-width: 0; }
 .tool-tag { display: block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #FF8A82; }
@@ -223,3 +223,15 @@ section[id] { scroll-margin-top: 130px; }
 .tool-band:hover .tool-cta { background: var(--red-strong); }
 @media (max-width: 720px) { .tool-band { flex-wrap: wrap; } .tool-txt { flex: 1 1 220px; } .tool-cta { width: 100%; justify-content: center; } }
 .demo-band .btn-primary { box-shadow: none; }
+
+/* Secteurs : alignement */
+.sectors ul { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px 4px; }
+@media (min-width: 1100px) { .sectors ul { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
+.sectors li { justify-content: flex-start; gap: 8px; font-size: 13px; line-height: 1.3; padding: 6px 2px; hyphens: manual; overflow-wrap: break-word; }
+.sectors .icon { flex-shrink: 0; display: block; }
+@media (max-width: 699px) {
+  .sectors ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 12px; }
+  .sectors li { flex-direction: row; text-align: left; gap: 10px; padding: 6px 0; }
+  .sectors .icon { width: 22px; height: 22px; }
+}
+.tool-cta { border-radius: 6px; }
