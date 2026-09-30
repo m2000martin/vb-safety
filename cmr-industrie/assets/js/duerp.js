@@ -276,9 +276,10 @@
       '<div class="wl-grid"><ol class="wl-steps">' + STEPS.map(function (s, i) { return '<li><i>' + (i + 1) + '</i><div><b>' + s.t + '</b><span>' + s.d + '</span></div></li>'; }).join('') + '</ol>' +
       '<div class="wl-prep"><h2>Avant de commencer, rassemblez :</h2><ul><li>' + icon('file') + '<span><b>Les fiches de données de sécurité</b> de vos produits (demandez-les à vos fournisseurs si besoin).</span></li><li>' + icon('flask') + '<span><b>Les quantités achetées sur un an</b>, d\'après vos factures.</span></li><li>' + icon('users') + '<span><b>La liste des postes</b> et le nombre de salariés à chaque poste.</span></li></ul>' +
       '<p class="muted small">Tout est enregistré dans ce navigateur, au fur et à mesure. Vous pouvez vous arrêter et reprendre plus tard. Rien n\'est envoyé à nos serveurs.</p></div></div></section>' +
-      '<footer class="du-foot"><button type="button" class="btn btn-secondary" data-act="demo">Voir un exemple rempli</button>' +
+      '<footer class="du-foot">' + (demoMode() ? '<span></span>' : '<button type="button" class="btn btn-secondary" data-act="demo">Voir un exemple rempli</button>') +
       '<button type="button" class="btn btn-primary" data-nav="' + (has ? resumeStep() : 'entreprise') + '">' + (has ? 'Reprendre où j\'en étais' : 'Commencer') + icon('arrow') + '</button></footer>';
   }
+  function enterDemo() { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; save(); }
   function resumeStep() { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id)) return STEPS[i].id; return 'dossier'; }
 
   function viewEntreprise() {
@@ -386,7 +387,7 @@
   var VIEWS = { accueil: viewAccueil, entreprise: viewEntreprise, produits: viewProduits, prio: viewPrio, actions: viewActions, salaries: viewSalaries, dossier: viewDossier };
   function render(focus) {
     var v = $('#du-view');
-    v.innerHTML = UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)();
+    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
     document.body.classList.toggle('du-welcome', !UI.wz && UI.view === 'accueil');
     drawSide();
     $$('[data-w]', v).forEach(function (i) { i.style.width = i.getAttribute('data-w') + '%'; });
@@ -445,7 +446,8 @@
     if (d.act === 'addproc') { startWizard('procede'); return; }
     if (d.act === 'noh') { w.p.noH = !w.p.noH; if (w.p.noH) { w.p.h = []; w.p.fds = ''; } render(); return; }
     if (d.act === 'nofds') { w.p.fds = w.p.fds === 'manquante' ? '' : 'manquante'; if (w.p.fds) w.p.noH = false; render(); return; }
-    if (d.act === 'demo') { if (!S.products.length || confirm('Remplacer votre évaluation par l\'exemple ?')) { S = demo(); S.effectif = '11-49'; S.seen = {}; persist(); go('produits'); } return; }
+    if (d.act === 'demo') { enterDemo(); go('produits'); return; }
+    if (d.act === 'quitdemo') { setDemoMode(false); S = load(); S.seen = S.seen || {}; UI.wz = null; go(S.products.length ? resumeStep() : 'accueil'); return; }
     if (d.act === 'json') { var blob = new Blob([JSON.stringify({ format: 'vbs-eval', version: 1, exporte_le: new Date().toISOString(), data: S }, null, 1)], { type: 'application/json' }); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sauvegarde-duerp-risque-chimique.json'; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 400); return; }
     if (d.rmh) { w.p.h.splice(w.p.h.indexOf(d.rmh), 1); $('#h-chips').innerHTML = hChips(w.p); var cb = $('[data-h="' + d.rmh + '"]'); if (cb) cb.checked = false; refreshNext(); return; }
     if (d.rmsub) { w.p.subs.splice(w.p.subs.indexOf(d.rmsub), 1); $('#sub-list').innerHTML = subList(w.p); refreshNext(); return; }
@@ -502,10 +504,10 @@
   function printDossier(mode) {
     S.exported = 1; persist(); drawSide();
     var mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (mobile) { location.href = 'evaluation.html#imprimer-' + mode; return; }
+    if (mobile) { location.href = 'expert.html#imprimer-' + mode; return; }
     var old = $('.du-print-frame'); if (old) old.remove();
     var f = document.createElement('iframe'); f.className = 'du-print-frame'; f.title = 'Impression du dossier'; f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
-    f.src = 'evaluation.html#imprimer-' + mode; document.body.appendChild(f);
+    f.src = 'expert.html#imprimer-' + mode; document.body.appendChild(f);
     announce('Préparation du document…');
     setTimeout(function () { if (f.parentNode) f.remove(); }, 180000);
   }
@@ -514,7 +516,7 @@
   window.EV_ONREF = function () { if (UI.wz && questions(UI.wz.p)[UI.wz.i] === 'recap') render(); };
   loadRef();
   var h0 = (location.hash || '').slice(1);
-  if (h0 === 'exemple') { S = demo(); S.effectif = '11-49'; S.seen = {}; save(); h0 = 'produits'; }
+  if (h0 === 'exemple') { enterDemo(); h0 = 'produits'; }
   UI.view = VIEWS[h0] ? h0 : 'accueil';
   render();
   window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple') { location.reload(); return; } if (VIEWS[h] && (h !== UI.view || UI.wz)) go(h); });

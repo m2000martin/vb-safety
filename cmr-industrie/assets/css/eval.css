@@ -495,3 +495,5 @@
 .cd-cta { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; border: 1px solid var(--red-line); background: #FDF6F5; border-radius: 12px; padding: 18px 20px; }
 .cd-cta p { margin: 0; font-size: 15.5px; }
 .cd-cta .btn-primary { box-shadow: none; }
+.ex-back { padding-top: 16px; font-size: 14.5px; }
+.ex-back a { color: var(--red-strong); font-weight: 600; text-decoration: none; }

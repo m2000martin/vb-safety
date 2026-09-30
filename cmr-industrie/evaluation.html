@@ -19,7 +19,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="stylesheet" href="assets/css/vbs.css?v=1">
 <link rel="stylesheet" href="assets/css/industrie.css?v=4">
-<link rel="stylesheet" href="assets/css/eval.css?v=6">
+<link rel="stylesheet" href="assets/css/eval.css?v=7">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Évaluation du risque chimique en ligne", "url": "https://vb-safety.com/cmr-industrie/evaluation.html", "applicationCategory": "BusinessApplication", "operatingSystem": "Navigateur web", "inLanguage": "fr-FR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "description": "Évaluez gratuitement le risque chimique de votre entreprise : inventaire des produits, classes de danger d'après les mentions H, hiérarchisation, risque par inhalation, repérage des agents CMR et plan d'action. Méthode inspirée de l'INRS, données conservées dans votre navigateur.", "publisher": {"@type": "Organization", "name": "VB Safety", "url": "https://vb-safety.com/"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "VB Safety", "item": "https://vb-safety.com/"}, {"@type": "ListItem", "position": 2, "name": "VB Safety Industrie & BTP", "item": "https://vb-safety.com/cmr-industrie/"}, {"@type": "ListItem", "position": 3, "name": "Évaluation du risque chimique", "item": "https://vb-safety.com/cmr-industrie/evaluation.html"}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "L'évaluation du risque chimique est-elle obligatoire ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui. L'employeur doit évaluer les risques liés aux agents chimiques dangereux présents dans l'entreprise et en transcrire les résultats dans le document unique d'évaluation des risques professionnels (DUERP). Pour les agents CMR, l'évaluation porte en plus sur la nature, le degré et la durée des expositions."}}, {"@type": "Question", "name": "D'où viennent les valeurs limites d'exposition ?", "acceptedAnswer": {"@type": "Answer", "text": "Du tableau des valeurs limites contraignantes de l'article R. 4412-149 du code du travail, repris tel quel depuis Légifrance et mis à jour chaque mois. Les valeurs indicatives fixées par arrêté et les valeurs recommandées ne sont pas encore intégrées."}}, {"@type": "Question", "name": "Où trouver les mentions de danger d'un produit ?", "acceptedAnswer": {"@type": "Answer", "text": "Dans la section 2 de la fiche de données de sécurité (FDS) et sur l'étiquette du produit. Les mentions commencent par H (par exemple H350) ou EUH. La température d'ébullition figure en section 9."}}, {"@type": "Question", "name": "Mes données sont-elles envoyées quelque part ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. L'évaluation est enregistrée uniquement dans votre navigateur, sur votre appareil. Elle disparaît si vous videz les données du navigateur : pensez à l'exporter."}}, {"@type": "Question", "name": "Quelle différence avec le logiciel Seirich de l'INRS ?", "acceptedAnswer": {"@type": "Answer", "text": "Seirich est un logiciel complet et gratuit de l'INRS, qui permet une évaluation détaillée (inhalation, contact cutané, incendie et explosion). Cet outil en ligne propose un premier diagnostic rapide inspiré de la même démarche, centré sur l'inhalation et les obligations liées aux agents CMR."}}, {"@type": "Question", "name": "Les résultats remplacent-ils des mesures d'exposition ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Il s'agit d'une estimation qui sert à hiérarchiser les actions. Pour les agents qui ont une valeur limite d'exposition professionnelle, des contrôles par un organisme accrédité restent obligatoires, au moins une fois par an."}}, {"@type": "Question", "name": "Que faire si un agent CMR est repéré ?", "acceptedAnswer": {"@type": "Answer", "text": "Étudier sa substitution en priorité, à défaut travailler en système clos, réduire l'exposition au plus bas, inscrire les salariés concernés sur la liste des travailleurs exposés, organiser leur suivi individuel renforcé et contrôler les VLEP."}}]}</script>
@@ -104,7 +104,7 @@
         <h1 id="ev-title">Votre DUERP <em>risque chimique</em>, étape par étape</h1>
         <p class="ih-lead">Le document unique d'évaluation des risques professionnels (DUERP) est obligatoire pour tout employeur, dès le premier salarié. Dès que des produits chimiques sont utilisés, il doit contenir leur évaluation. Cet outil la réalise avec vous en 6 étapes, puis vous téléchargez le dossier complet.</p>
         <div class="ih-cta">
-          <button type="button" class="btn btn-primary btn-lg" data-act="intro">Commencer mon DUERP <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <a class="btn btn-primary btn-lg" href="duerp.html">Commencer mon DUERP <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <a class="btn btn-secondary btn-lg" href="#comprendre">Mieux comprendre le DUERP</a>
         </div>
         <p class="ev-free">Gratuit, sans compte. Vos données restent dans votre navigateur.</p>
@@ -127,180 +127,6 @@
     </div>
   </section>
 
-  <section class="ev-app" id="outil" aria-label="Outil d'évaluation">
-    <div class="app" id="ev-app">
-      <aside class="app-side">
-        <nav class="app-nav" aria-label="Sections de l'outil">
-          <button type="button" class="app-nav-i" data-view="dash"><svg class="icon" aria-hidden="true"><use href="#i-gauge"/></svg><span>Tableau de bord</span></button>
-          <button type="button" class="app-nav-i" data-view="inv"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg><span>Inventaire</span><em data-n="inv"></em></button>
-          <button type="button" class="app-nav-i" data-view="hier"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg><span>Hiérarchisation</span></button>
-          <button type="button" class="app-nav-i" data-view="inh"><svg class="icon" aria-hidden="true"><use href="#i-mask"/></svg><span>Inhalation</span></button>
-          <button type="button" class="app-nav-i" data-view="plan"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg><span>Plan d'action</span><em data-n="plan"></em></button>
-          <button type="button" class="app-nav-i" data-view="cmr"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><span>Agents CMR</span><em data-n="cmr"></em></button>
-          <button type="button" class="app-nav-i" data-view="sal"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span>Salariés exposés</span><em data-n="sal"></em></button>
-          <button type="button" class="app-nav-i" data-view="export"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span>Dossier DUERP</span></button>
-        </nav>
-        <nav class="app-nav app-nav-foot" aria-label="Réglages">
-          <button type="button" class="app-nav-i" data-view="set"><svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg><span>Paramètres</span></button>
-          <button type="button" class="app-nav-i" data-view="ref"><svg class="icon" aria-hidden="true"><use href="#i-archive"/></svg><span>Référentiel</span></button>
-        </nav>
-      </aside>
-      <div class="app-main">
-        <div class="app-top">
-          <label class="app-site"><svg class="icon" aria-hidden="true"><use href="#i-factory"/></svg><span class="sr-only">Site ou unité de travail</span><input id="ev-site" placeholder="Nom du site ou de l'atelier" maxlength="80"></label>
-          <p class="app-refv" id="ev-ref">Référentiel : chargement…</p>
-          <div class="app-top-links"><a href="#methode">Aide</a><a href="#sources">Documentation</a></div>
-        </div>
-        <div class="app-content">
-          <div class="ev-print-head" id="ev-print-head"></div>
-          <ol class="ev-steps" id="ev-steps" aria-label="Étapes de l'évaluation"></ol>
-          <div class="ev-guide" id="ev-guide"></div>
-          <div class="ev-alert" id="ev-alert" role="status" hidden></div>
-          <div class="app-kpirow">
-            <div class="ev-kpis" id="ev-kpis" aria-live="polite"></div>
-            <div class="app-actions">
-              <details class="ev-menu">
-                <summary class="btn btn-primary"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>Ajouter un produit<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
-                <div class="ev-menu-list"><button type="button" data-act="add">Produit chimique</button><button type="button" data-act="addproc">Procédé émissif (bois, silice, fumées…)</button></div>
-              </details>
-              <details class="ev-menu">
-                <summary class="btn btn-secondary">Exporter<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
-                <div class="ev-menu-list"><button type="button" data-act="csv">Inventaire des produits chimiques (tableur)</button><button type="button" data-act="json">Sauvegarde de l'évaluation (fichier JSON)</button></div>
-              </details>
-              <details class="ev-menu">
-                <summary class="btn btn-secondary">Télécharger<svg class="icon ev-caret" aria-hidden="true"><use href="#i-cdown"/></svg></summary>
-                <div class="ev-menu-list"><button type="button" data-act="print" data-mode="all"><b>Dossier DUERP complet (PDF)</b></button><button type="button" data-act="print" data-mode="report">Rapport d'évaluation (annexe DUERP)</button><button type="button" data-act="print" data-mode="liste">Liste des travailleurs exposés aux agents CMR</button><button type="button" data-act="print" data-mode="plan">Plan d'action de prévention</button></div>
-              </details>
-            </div>
-          </div>
-        <section class="ev-view" id="v-dash" aria-labelledby="h-dash" hidden>
-          <header class="ev-vh"><h2 id="h-dash">Tableau de bord</h2><p>Synthèse de l'évaluation du site : priorités, avancement du plan d'action et échéances.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-inv" aria-labelledby="h-inv" hidden>
-          <header class="ev-vh"><h2 id="h-inv">Inventaire des agents chimiques</h2><p>Produits et procédés utilisés sur le site, avec leur score d'exposition par inhalation..</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-hier" aria-labelledby="h-hier" hidden>
-          <header class="ev-vh"><h2 id="h-hier">Hiérarchisation des risques potentiels</h2><p>Danger × exposition potentielle (quantité relative et fréquence). Priorité forte à partir de 10 000, moyenne à partir de 100.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-inh" aria-labelledby="h-inh" hidden>
-          <header class="ev-vh"><h2 id="h-inh">Risque par inhalation</h2><p>Danger × volatilité × procédé × protection collective, et gain attendu des mesures techniques.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-plan" aria-labelledby="h-plan" hidden>
-          <header class="ev-vh"><h2 id="h-plan">Plan d'action</h2><p>Mesures classées dans l'ordre du code du travail : substitution, système clos, réduction et protection collective, suivi, puis EPI.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-cmr" aria-labelledby="h-cmr" hidden>
-          <header class="ev-vh"><h2 id="h-cmr">Agents CMR</h2><p>Agents cancérogènes, mutagènes ou toxiques pour la reproduction repérés par leurs mentions H340, H350, H360 et les procédés cancérogènes.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-sal" aria-labelledby="h-sal" hidden>
-          <header class="ev-vh"><h2 id="h-sal">Salariés exposés aux agents CMR</h2><p>Postes à inscrire sur la liste des travailleurs exposés (art. R. 4412-93-1), à transmettre au SPST et à conserver 40 ans.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-export" aria-labelledby="h-export" hidden>
-          <header class="ev-vh"><h2 id="h-export">Dossier DUERP</h2><p>Vos données restent dans ce navigateur : exportez-les pour les archiver, les partager ou les joindre au document unique.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-set" aria-labelledby="h-set" hidden>
-          <header class="ev-vh"><h2 id="h-set">Paramètres</h2><p>Site évalué et gestion des données enregistrées dans ce navigateur.</p></header>
-          <div class="ev-body"></div>
-        </section>
-        <section class="ev-view" id="v-ref" aria-labelledby="h-ref" hidden>
-          <header class="ev-vh"><h2 id="h-ref">Référentiel réglementaire</h2><p>Valeurs limites contraignantes du code du travail (art. R. 4412-149), tableaux de maladies professionnelles et classifications européennes.</p></header>
-          <div class="ev-body"></div>
-        </section>
-          <div class="ev-print-tail" id="ev-print-tail"></div>
-        </div>
-      </div>
-      <aside class="app-drawer" id="ev-drawer" aria-label="Détail" hidden></aside>
-    </div>
-    <div class="container"><p class="ev-note">Résultats indicatifs, qui ne remplacent ni une évaluation par un préventeur ni des mesures d'exposition. <span id="ev-live" class="sr-only" aria-live="polite"></span></p></div>
-  </section>
-
-  <!-- Présentation du parcours -->
-  <dialog class="ev-dialog ev-intro" id="ev-intro" aria-labelledby="ev-intro-title">
-    <div class="ev-dh"><div><p class="ev-intro-k">Obligation légale · DUERP</p><h2 id="ev-intro-title">Votre DUERP risque chimique en 6 étapes</h2></div><button type="button" class="req-close" data-act="introclose" aria-label="Fermer">✕</button></div>
-    <div class="ev-db">
-      <p class="ev-intro-lead">Le DUERP est obligatoire pour tout employeur (art. R. 4121-1 du code du travail). Lorsque vos salariés utilisent des produits chimiques, il doit en contenir l'évaluation. Voici comment se déroule le parcours.</p>
-      <ol class="ev-intro-steps">
-        <li><b>Inventaire des produits</b><span>Saisissez chaque produit à partir de sa fiche de données de sécurité, en 3 écrans. Environ 5 minutes par produit.</span></li>
-        <li><b>Priorités</b><span>Calcul automatique : vous vérifiez le classement.</span></li>
-        <li><b>Inhalation</b><span>Calcul automatique de l'exposition à chaque poste.</span></li>
-        <li><b>Plan d'action</b><span>Un responsable et une échéance pour chaque mesure proposée.</span></li>
-        <li><b>Salariés exposés aux CMR</b><span>Vous vérifiez les postes et le nombre de salariés concernés.</span></li>
-        <li class="last"><b>Téléchargement du dossier DUERP</b><span>Un seul PDF avec le rapport d'évaluation, la liste des travailleurs exposés et le plan d'action, à joindre à votre document unique.</span></li>
-      </ol>
-      <div class="ev-intro-prep"><b>À préparer</b><span>Les fiches de données de sécurité (FDS) de vos produits, les quantités achetées sur un an, la liste des postes et le nombre de salariés par poste.</span></div>
-      <p class="ev-hint">Votre saisie est enregistrée automatiquement dans ce navigateur : vous pouvez vous arrêter et reprendre plus tard.</p>
-    </div>
-    <div class="ev-df"><a class="btn btn-secondary" href="duerp.html#exemple">Voir un exemple rempli</a><span class="ev-wz-n"></span><a class="btn btn-primary" href="duerp.html#entreprise">Commencer l'étape 1</a></div>
-  </dialog>
-
-  <!-- Formulaire produit -->
-  <dialog class="ev-dialog" id="ev-dialog" aria-labelledby="ev-dialog-title">
-    <form id="ev-form" novalidate>
-      <div class="ev-dh"><h2 id="ev-dialog-title">Ajouter un produit</h2><button type="button" class="req-close" id="ev-cancel" aria-label="Fermer">✕</button></div>
-      <ol class="ev-wz" aria-label="Étapes de saisie">
-        <li data-wz="1"><i>1</i>Identification</li><li data-wz="2"><i>2</i>Quantité et usage</li><li data-wz="3"><i>3</i>Poste de travail</li>
-      </ol>
-      <div class="ev-db">
-        <fieldset class="ev-step" data-step="1">
-          <legend class="sr-only">Étape 1 : identification</legend>
-          <p class="ev-where"><b>Où trouver l'information :</b> fiche de données de sécurité (FDS) du fournisseur. Section 1 : nom du produit. Section 2 : mentions de danger H. Section 3 : substances et n° CAS.</p>
-          <div class="ev-seg" role="radiogroup" aria-label="Type">
-            <label><input type="radio" name="type" value="produit" checked><span>Produit chimique</span></label>
-            <label><input type="radio" name="type" value="procede"><span>Procédé émissif</span></label>
-          </div>
-          <div class="field only-proc" hidden><label class="label" for="f-procede">Procédé</label><select class="input" id="f-procede" name="procede"></select><p class="ev-hint">Procédés classés cancérogènes par l'arrêté du 26 octobre 2020 : ils n'ont pas de FDS, mais doivent figurer dans l'évaluation.</p></div>
-          <div class="field"><label class="label" for="f-name">Nom du produit</label><input class="input" id="f-name" name="name" maxlength="120" placeholder="Nom commercial, tel qu'il figure sur l'étiquette"></div>
-          <div class="field only-prod">
-            <label class="label" for="f-htext">Mentions de danger H <span class="req-opt">(section 2 de la FDS)</span></label>
-            <div class="ev-hin"><input class="input" id="f-htext" name="htext" placeholder="Ex. H350, H317… ou collez le texte des sections 2 et 3"><button type="button" class="btn btn-secondary" id="ev-hadd">Ajouter</button></div>
-            <div class="ev-chips" id="ev-chips"></div>
-            <p class="ev-dc-preview" id="ev-dc-preview"></p>
-            <p class="ev-hint" id="ev-casmiss"></p>
-          </div>
-          <div class="field only-prod ev-subfield">
-            <label class="label" for="f-sub">Substances contenues <span class="req-opt">(section 3, facultatif)</span></label>
-            <input class="input" id="f-sub" name="sub" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ev-sug" placeholder="Nom ou n° CAS, ex. toluène, 50-00-0">
-            <ul class="ev-sug" id="ev-sug" role="listbox" hidden></ul>
-            <div class="ev-subs" id="ev-subs"></div>
-            <p class="ev-subwarn" id="ev-subwarn" role="alert" hidden></p>
-            <p class="ev-hint">Permet de retrouver les valeurs limites d'exposition et les tableaux de maladies professionnelles.</p>
-          </div>
-        </fieldset>
-        <fieldset class="ev-step" data-step="2" hidden>
-          <legend class="sr-only">Étape 2 : quantité et usage</legend>
-          <p class="ev-where"><b>Où trouver l'information :</b> quantités achetées sur les 12 derniers mois (factures ou bons de commande). Température d'ébullition : section 9 de la FDS.</p>
-          <div class="ev-grid2">
-            <div class="field only-prod"><label class="label" for="f-etat">État physique</label><select class="input" id="f-etat" name="etat"><option value="liquide">Liquide</option><option value="solide">Solide, poudre</option><option value="gaz">Gaz, vapeur, fumée</option></select></div>
-            <div class="field only-prod"><label class="label" for="f-qte">Quantité utilisée par an</label><div class="ev-qte"><input class="input" id="f-qte" name="qte" inputmode="decimal" placeholder="Ex. 250"><select class="input" name="unite" aria-label="Unité"><option value="kg">kg</option><option value="L">L</option></select></div></div>
-            <div class="field only-liq"><label class="label" for="f-teb">Température d'ébullition (°C)</label><input class="input" id="f-teb" name="teb" inputmode="decimal" placeholder="Section 9 de la FDS"></div>
-            <div class="field only-liq"><label class="label" for="f-vol">Volatilité</label><select class="input" id="f-vol" name="vol"></select></div>
-            <div class="field only-sol ev-span2"><label class="label" for="f-pulv">Pulvérulence</label><select class="input" id="f-pulv" name="pulv"></select></div>
-            <div class="field only-proc ev-span2" hidden><label class="label" for="f-int">Intensité des émissions</label><select class="input" id="f-int" name="intensite"><option value="2">Faible</option><option value="3">Moyenne</option><option value="5">Forte</option></select></div>
-            <div class="field ev-span2"><label class="label" for="f-freq">Durée d'utilisation par salarié</label><select class="input" id="f-freq" name="freq"></select></div>
-          </div>
-        </fieldset>
-        <fieldset class="ev-step" data-step="3" hidden>
-          <legend class="sr-only">Étape 3 : poste de travail</legend>
-          <p class="ev-where"><b>Où trouver l'information :</b> observation du poste, avec le chef d'équipe. Le nombre de salariés sert à la liste des travailleurs exposés si le produit est CMR.</p>
-          <div class="ev-grid2">
-            <div class="field"><label class="label" for="f-poste">Poste ou atelier</label><input class="input" id="f-poste" name="poste" maxlength="80" placeholder="Ex. Cabine de peinture"></div>
-            <div class="field"><label class="label" for="f-nb">Salariés exposés</label><input class="input" id="f-nb" name="nb" type="number" min="0" inputmode="numeric" placeholder="Nombre"></div>
-            <div class="field ev-span2"><label class="label" for="f-proc">Comment le produit est-il utilisé ?</label><select class="input" id="f-proc" name="proc"></select></div>
-            <div class="field ev-span2"><label class="label" for="f-prot">Quelle protection collective au poste ?</label><select class="input" id="f-prot" name="prot"></select></div>
-          </div>
-        </fieldset>
-        <p class="req-err" id="ev-form-err" role="alert" hidden></p>
-      </div>
-      <div class="ev-df"><button type="button" class="btn btn-secondary" id="ev-prev">Précédent</button><span class="ev-wz-n" id="ev-wz-n">Étape 1 sur 3</span><button type="button" class="btn btn-primary" id="ev-next">Suivant</button><button type="submit" class="btn btn-primary" id="ev-save">Enregistrer</button></div>
-    </form>
-  </dialog>
 
   <!-- COMPRENDRE LE DUERP -->
   <section class="section" id="comprendre" aria-labelledby="cd-title">
@@ -317,7 +143,7 @@
         <article class="cd"><span class="cd-n">5</span><h3>Qui peut le consulter ?</h3><p>Les salariés, le CSE, le médecin du travail, l'inspection du travail et les services de prévention de la sécurité sociale. Ses versions successives sont conservées au moins 40 ans.</p><span class="law">Art. R. 4121-4 et L. 4121-3-1</span></article>
         <article class="cd"><span class="cd-n">6</span><h3>Que risque-t-on sans DUERP ?</h3><p>Une amende de 1 500 €, 3 000 € en cas de récidive. En cas d'accident ou de maladie professionnelle, l'absence d'évaluation peut aussi être retenue contre l'employeur.</p><span class="law">Art. R. 4741-1</span></article>
       </div>
-      <div class="cd-cta"><p><b>Prêt à remplir le volet chimique de votre DUERP ?</b> Six étapes, une question à la fois.</p><button type="button" class="btn btn-primary btn-lg" data-act="intro">Commencer mon DUERP <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
+      <div class="cd-cta"><p><b>Prêt à remplir le volet chimique de votre DUERP ?</b> Six étapes, une question à la fois.</p><a class="btn btn-primary btn-lg" href="duerp.html">Commencer mon DUERP <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
     </div>
   </section>
 
@@ -472,8 +298,6 @@
 </footer>
 
 <script src="assets/js/site.js?v=1"></script>
-<script src="assets/js/eval-core.js?v=1"></script>
-<script src="assets/js/eval.js?v=6"></script>
 <script src="assets/js/demande-config.js?v=1"></script>
 <script src="assets/js/demande.js?v=1"></script>
 </body>

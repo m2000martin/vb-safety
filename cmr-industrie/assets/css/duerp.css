@@ -268,3 +268,5 @@
   .du-nav-open .du-side { display: flex; position: fixed; z-index: 60; top: 0; left: 0; bottom: 0; width: min(320px, 86vw); background: var(--ink); color: #fff; flex-direction: column; gap: 18px; padding: 20px 14px; overflow-y: auto; box-shadow: 12px 0 40px rgba(0, 0, 0, .35); }
   .du-nav-open::after { content: ""; position: fixed; inset: 0; z-index: 55; background: rgba(23, 25, 29, .45); }
 }
+.demo-note { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 16px; margin: 0 0 22px; padding: 12px 14px; border: 1px solid #F0D5A8; background: var(--warn-soft); border-radius: 10px; font-size: 14.5px; }
+.demo-note .btn { min-height: 42px; font-size: 14.5px; }

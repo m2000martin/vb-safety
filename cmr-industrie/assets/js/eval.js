@@ -618,7 +618,6 @@
   loadRef();
   if (printMode) { document.documentElement.classList.add('ev-embed'); setTimeout(autoPrint, 2500); }
   showView(VIEWS.indexOf(h0) >= 0 ? h0 : (S.products.length ? 'dash' : 'inv'));
-  $('#ev-intro').addEventListener('click', function (e) { if (e.target === this) this.close(); });
-  if (h0 === 'demarrer') $('#ev-intro').showModal();
+  if ($('#ev-intro')) $('#ev-intro').addEventListener('click', function (e) { if (e.target === this) this.close(); });
   window.EV_PRINT = printDoc;
 })();

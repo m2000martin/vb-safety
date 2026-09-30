@@ -1,7 +1,10 @@
 // VB Safety · moteur d'évaluation du risque chimique (partagé par evaluation.html et duerp/).
 // Méthode simplifiée inspirée de l'INRS (ND 2233). Données enregistrées dans le navigateur uniquement.
 /* eslint-disable no-unused-vars */
-var KEY = 'vbs-eval-v1';
+// Les exemples sont gardés à part : ils n'écrasent jamais l'évaluation de l'utilisateur.
+var KEY = (function () { try { return sessionStorage.getItem('vbs-du-demo') === '1' ? 'vbs-eval-demo' : 'vbs-eval-v1'; } catch (e) { return 'vbs-eval-v1'; } })();
+function demoMode() { return KEY === 'vbs-eval-demo'; }
+function setDemoMode(on) { try { if (on) sessionStorage.setItem('vbs-du-demo', '1'); else sessionStorage.removeItem('vbs-du-demo'); } catch (e) {} KEY = on ? 'vbs-eval-demo' : 'vbs-eval-v1'; }
 
 // ---------- Référentiels ----------
 // Classes de danger santé (1 à 5) à partir des mentions H.
@@ -51,7 +54,15 @@ var MATRIX = [[1, 1, 1, 1], [1, 2, 2, 2], [2, 3, 3, 3], [2, 3, 4, 4], [2, 4, 5, 
 // ---------- État ----------
 var S = load();
 function blank() { return { site: '', products: [], actions: {}, next: 1 }; }
-function load() { try { var d = JSON.parse(localStorage.getItem(KEY)); if (d && d.products) return d; } catch (e) {} return blank(); }
+function load() {
+  try {
+    var d = JSON.parse(localStorage.getItem(KEY));
+    // Ancien exemple enregistré à la place des données de l'utilisateur : on l'écarte
+    if (d && !demoMode() && (d.isDemo || d.site === 'Atelier de démonstration')) { localStorage.removeItem(KEY); return blank(); }
+    if (d && d.products) return d;
+  } catch (e) {}
+  return blank();
+}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
 // ---------- Utilitaires ----------
@@ -216,7 +227,7 @@ var PROT_T = ['Captage enveloppant', 'Captage localisé', 'Ventilation général
 var GROUPS = { substitution: 'Substitution', clos: 'Système clos', reduction: 'Réduction et protection collective', suivi: 'Traçabilité, contrôles et suivi médical', epi: 'Protection individuelle' };
 var GORDER = { substitution: 1, clos: 2, reduction: 3, suivi: 4, epi: 5 };
 function demo() {
-  var d = blank(); d.site = 'Atelier de démonstration';
+  var d = blank(); d.site = 'Atelier de démonstration'; d.isDemo = true;
   var list = [
     { name: 'Dégraissant au trichloréthylène', subs: ['79-01-6'], h: ['H315', 'H317', 'H319', 'H336', 'H341', 'H350', 'H412'], etat: 'liquide', teb: 87, qte: 400, unite: 'L', freq: 3, poste: 'Dégraissage des pièces', nb: 3, proc: 3, prot: 3 },
     { name: 'Peinture au chromate de zinc', subs: ['fr:chrome-hexavalent-et-ses-composes'], h: ['H317', 'H350', 'H410'], etat: 'liquide', teb: 140, qte: 150, unite: 'L', freq: 2, poste: 'Cabine de peinture', nb: 2, proc: 4, prot: 2 },
