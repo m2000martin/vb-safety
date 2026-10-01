@@ -21,6 +21,9 @@
 - [Cancers des sapeurs-pompiers et fumées d'incendie](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux de maladies professionnelles 16 bis et 30), décret n° 2024-307, proposition de loi adoptée par le Sénat en mars 2025, décontamination.
 - [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020.
 
+## English
+- [VB Safety in English](https://vb-safety.com/en/) · [Firefighters](https://vb-safety.com/en/firefighters/) · [Industry](https://vb-safety.com/en/industry/) · [Construction](https://vb-safety.com/en/construction/). The tools themselves are in French.
+
 ## Contact
 - [Formulaire de contact](https://vb-safety.com/#contact) · contact@vb-safety.com
 - [Mentions légales](https://vb-safety.com/mentions-legales/) · [Confidentialité](https://vb-safety.com/confidentialite/)

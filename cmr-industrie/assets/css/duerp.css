@@ -40,7 +40,7 @@
 .du-save.on { color: #2E7D32; font-weight: 600; }
 
 /* Écran */
-.du-view { padding: clamp(20px, 4vw, 44px) clamp(16px, 4vw, 48px) 120px; max-width: 1180px; width: 100%; }
+.du-view { padding: clamp(20px, 4vw, 44px) clamp(16px, 4vw, 48px) 120px; max-width: 1560px; width: 100%; }
 .du-view:focus { outline: none; }
 .q-k { margin: 0 0 8px; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red-strong); }
 .q-t { font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; margin: 0; max-width: 30ch; }

@@ -6,6 +6,9 @@
   var h = decodeURIComponent(location.hash.slice(1));
   if (OLD[h]) { location.replace(OLD[h]); return; }
 
+  var EN = document.documentElement.lang === 'en';
+  var M = EN ? { invalid: 'Please fill in the required fields and accept the privacy policy.', sending: 'Sending…', ok: 'Message sent. Thank you, we will get back to you quickly.', fallback: 'Opening your email app…', submit: 'Send message', subject: 'Website contact · ' }
+            : { invalid: "Merci de compléter les champs obligatoires et d'accepter la politique de confidentialité.", sending: 'Envoi en cours…', ok: 'Message envoyé. Merci, nous revenons vers vous rapidement.', fallback: 'Ouverture de votre messagerie…', submit: 'Envoyer le message', subject: 'Contact site · ' };
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-goto]'); if (!a) return;
@@ -23,27 +26,27 @@
     var btn = document.getElementById('cf-submit'), msg = document.getElementById('cf-msg');
     if (form.elements.botcheck.value) return;
     if (!form.checkValidity()) {
-      msg.className = 'cf-msg full warn'; msg.textContent = "Merci de compléter les champs obligatoires et d'accepter la politique de confidentialité."; msg.hidden = false;
+      msg.className = 'cf-msg full warn'; msg.textContent = M.invalid; msg.hidden = false;
       var first = form.querySelector(':invalid'); if (first) first.focus();
       return;
     }
-    var data = new FormData(form), subject = 'Contact site · ' + data.get('organisation');
+    var data = new FormData(form), subject = M.subject + data.get('organisation');
     var payload = { access_key: KEY, from_name: 'Site VB Safety', subject: subject };
     data.forEach(function (v, k) { payload[k] = v; });
     if (payload.email) payload.replyto = payload.email;
-    btn.disabled = true; btn.firstElementChild.textContent = 'Envoi en cours…'; msg.hidden = true;
+    btn.disabled = true; btn.firstElementChild.textContent = M.sending; msg.hidden = true;
     try {
       var r = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) });
       var j = await r.json().catch(function () { return {}; });
       if (!r.ok || !j.success) throw new Error(j.message || 'HTTP ' + r.status);
-      msg.className = 'cf-msg full ok'; msg.textContent = 'Message envoyé. Merci, nous revenons vers vous rapidement.'; msg.hidden = false;
+      msg.className = 'cf-msg full ok'; msg.textContent = M.ok; msg.hidden = false;
       form.reset();
     } catch (err) {
-      msg.className = 'cf-msg full warn'; msg.textContent = 'Ouverture de votre messagerie…'; msg.hidden = false;
+      msg.className = 'cf-msg full warn'; msg.textContent = M.fallback; msg.hidden = false;
       var body = data.get('message') + '\n\n—\n' + data.get('nom') + '\n' + data.get('organisation') + '\n' + data.get('email') + '\nProfil : ' + data.get('profil');
       setTimeout(function () { location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }, 600);
     } finally {
-      btn.disabled = false; btn.firstElementChild.textContent = 'Envoyer le message';
+      btn.disabled = false; btn.firstElementChild.textContent = M.submit;
     }
   });
 

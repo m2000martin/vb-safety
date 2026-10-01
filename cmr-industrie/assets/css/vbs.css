@@ -45,8 +45,8 @@
   --shadow: 0 1px 2px rgba(23, 25, 29, 0.05), 0 8px 24px -12px rgba(23, 25, 29, 0.18);
   --shadow-red: 0 10px 24px -10px rgba(215, 38, 30, 0.55);
 
-  --container: 1200px;
-  --gutter: clamp(16px, 4vw, 40px);
+  --container: 1560px;
+  --gutter: clamp(16px, 3.6vw, 64px);
   --tap: 44px;             /* cible tactile minimale (usage avec gants) */
 }
 
