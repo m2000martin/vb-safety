@@ -70,6 +70,13 @@
     dlg.querySelector('#rq-nom').focus();
   }
 
+  // Lien direct vers le formulaire (…/#demande, #acces, #contact) : il s'ouvre au chargement de la page
+  var H = { '#demande': 'contact', '#acces': 'acces', '#contact': 'contact', '#version': 'version' };
+  if (H[location.hash] && !document.getElementById(location.hash.slice(1))) {
+    var go = function () { build(H[location.hash]); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+  }
+
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-demande]');
     if (!a) return;

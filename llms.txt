@@ -1,22 +1,26 @@
 # VB Safety
 
-> VB Safety (SAS, France) mesure et trace l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR), pour les services d'incendie et de secours, le BTP et l'industrie.
+> VB Safety est une société française (SAS) qui mesure et trace l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les services d'incendie et de secours (SDIS) et leur service de santé (SSSM), le Carnet Expo CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, VB Safety aide à tenir la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP. Contenu en français.
 
 ## Secteurs
-- [Sapeurs-pompiers](https://vb-safety.com/sapeurs-pompiers/) : traçabilité individuelle des expositions aux fumées d'incendie, contrôle de la décontamination, transmission au SSSM, suivi des tenues de feu. Outil Carnet Expo CMR en démonstration.
-- [BTP](https://vb-safety.com/btp/) : traçabilité des expositions CMR sur chantier (silice cristalline, poussières de bois, émissions diesel, HAP) saisie en une phrase par le chef d'équipe ; liste des travailleurs exposés, fiches individuelles, base DUERP. Espace BTP en bêta.
-- [Industrie](https://vb-safety.com/industrie/) : traçabilité réglementaire des expositions CMR pour les équipes HSE et mesure de contamination chimique sur site (en développement, sites pilotes).
+- [Sapeurs-pompiers](https://vb-safety.com/sapeurs-pompiers/) : relevé d'exposition des sapeurs-pompiers aux fumées d'incendie, contrôle de la décontamination, transmission au SSSM, suivi des tenues de feu.
+- [BTP](https://vb-safety.com/btp/) : traçabilité CMR sur chantier (silice cristalline, poussières de bois, émissions diesel, HAP), liste des travailleurs exposés et fiches individuelles. Espace en préparation · accès anticipé.
+- [Industrie](https://vb-safety.com/industrie/) : traçabilité des expositions CMR pour les équipes HSE et mesure de contamination chimique sur site (programme pilote).
 
-## Outils
-- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : rapport de contamination par le chef d'agrès ou le COS, suivi du commandement, contrôle SSSM, historique par agent. Accès cloisonné par rôle, hébergement en France.
-- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du nettoyage et de la remise en service de la tenue de feu : veste, pantalon, cagoule de feu, casque F1, rangers incendie (en développement).
-- [Portail CMR Industrie](https://vb-safety.com/cmr-industrie/) : portail (en préparation) pour tenir toutes les obligations de l'employeur face aux agents CMR : inventaire, liste nominative des salariés exposés conservée 40 ans, transmission au SPST, hiérarchie de prévention (substitution, système clos, réduction, protection), contrôles VLEP annuels, suivi individuel renforcé, interdictions d'affectation.
+## Produits
+- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : logiciel de rapport de contamination pour SDIS. Le chef d'agrès ou le COS remplit le rapport de son équipage, le commandement suit, le SSSM contrôle et valide, chaque agent consulte son historique. Démonstration avec données fictives, serveur en France.
+- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du lavage et de la remise en service des tenues de feu, réservé au référent EPI de la caserne.
+- [Espace industrie et BTP](https://vb-safety.com/cmr-industrie/) : obligations de l'employeur face aux agents CMR (inventaire, liste des salariés exposés, contrôles VLEP, suivi individuel renforcé, hiérarchie de prévention). En préparation · accès anticipé.
 
-- [Évaluation des risques chimiques pour le document unique (DUERP)](https://vb-safety.com/cmr-industrie/evaluation.html) : répond aux art. R. 4412-5 et R. 4412-61 du code du travail ; parcours guidé en 6 étapes qui produit le rapport d'évaluation à annexer au DUERP, la liste des travailleurs exposés aux CMR (R. 4412-93-1) et le plan d'action. Outil gratuit, sans installation ni compte. Inventaire des produits et procédés, classe de danger calculée d'après les mentions H (détection automatique dans le texte d'une FDS), hiérarchisation des risques potentiels et estimation du risque par inhalation inspirées de la méthode d'évaluation simplifiée de l'INRS, repérage des agents CMR, plan d'action selon la hiérarchie de prévention, export CSV. Référentiel intégré et mis à jour chaque mois : valeurs limites d'exposition professionnelle contraignantes (code du travail, art. R. 4412-149), tableaux de maladies professionnelles, classifications harmonisées du règlement CLP ; recherche par nom ou numéro CAS et détection des numéros CAS dans une FDS. Les données restent dans le navigateur de l'utilisateur.
+## Outils et ressources gratuits
+- [Évaluation du risque chimique pour le DUERP](https://vb-safety.com/cmr-industrie/evaluation.html) : outil en ligne gratuit, en six étapes, sans compte ; les données restent dans le navigateur. Produit le rapport à annexer au document unique, la liste des travailleurs exposés aux CMR et un plan d'action.
+- [Modèle de liste des travailleurs exposés aux agents CMR](https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/) : Excel et PDF, licence CC BY 4.0, d'après le décret n° 2024-307 du 4 avril 2024 (art. R. 4412-93-1 et suivants du code du travail).
+- [Toutes les ressources](https://vb-safety.com/ressources/)
 
 ## Guides
-- [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020, sanctions (art. L. 4741-1).
-- [Santé des sapeurs-pompiers : fumées d'incendie, cancers et traçabilité CMR](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux 16 bis et 30), décret n° 2024-307 (liste des travailleurs exposés, 40 ans), proposition de loi du Sénat (mars 2025), décontamination.
+- [Cancers des sapeurs-pompiers et fumées d'incendie](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux de maladies professionnelles 16 bis et 30), décret n° 2024-307, proposition de loi adoptée par le Sénat en mars 2025, décontamination.
+- [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020.
 
 ## Contact
 - [Formulaire de contact](https://vb-safety.com/#contact) · contact@vb-safety.com
+- [Mentions légales](https://vb-safety.com/mentions-legales/) · [Confidentialité](https://vb-safety.com/confidentialite/)
