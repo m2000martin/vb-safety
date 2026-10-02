@@ -229,6 +229,7 @@ table.cols th { font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-tran
 .hero-1 .wrap { grid-template-columns: 1fr; }
 .hero-1 h1 { max-width: none; }
 .hero-1 .h1-kw { max-width: none; }
+.hero-1 .chapeau { max-width: none; }
 .innovation-map { --im-line: rgba(190, 202, 213, .22); --im-line2: rgba(190, 202, 213, .12); --im-accent: #e86b2c; position: relative; width: 100%; height: min(760px, 78vw); min-height: 610px; overflow: hidden; border-top: 1px solid var(--ligne); border-bottom: 1px solid var(--ligne);
   background: radial-gradient(circle at 50% 50%, rgba(40, 62, 82, .20), transparent 32%), linear-gradient(180deg, #0c1c2d, #0e1f31); }
 .innovation-map::before { content: ""; position: absolute; inset: 0; opacity: .22; background-image: linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px); background-size: 70px 70px; -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 75%); mask-image: radial-gradient(circle at center, black 20%, transparent 75%); }
