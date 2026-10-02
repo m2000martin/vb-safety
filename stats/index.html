@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E1E30">
-<title>Page introuvable · VB Safety</title>
-<meta name="description" content="Cette page n&#x27;existe pas ou a été déplacée.">
+<title>Visites du site · VB Safety</title>
+<meta name="description" content="Tableau de bord privé.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -31,16 +31,30 @@
   </div>
 </header>
 <main id="contenu">
-<section class="hero"><div class="wrap"><div><span class="kicker">Erreur 404</span><h1>Page introuvable</h1><div class="trait" aria-hidden="true"></div><span class="maj">Mis à jour le 1<sup>er</sup> octobre 2026</span></div></div></section><section class="sec"><div class="wrap prose">
-<p>L'adresse a peut-être changé. Voici les pages les plus consultées :</p>
-<ul>
-  <li><a href="/">Accueil</a></li>
-  <li><a href="/industrie/">Industrie</a> · <a href="/btp/">BTP</a> · <a href="/sapeurs-pompiers/">Sapeurs-pompiers</a></li>
-  <li><a href="/cmr-pompier/sante-sapeurs-pompiers.html">Guide santé des sapeurs-pompiers</a></li>
-  <li><a href="/cmr-industrie/evaluation.html">Évaluation du risque chimique DUERP gratuite</a></li>
-  <li><a href="/ressources/">Ressources gratuites</a></li>
-</ul>
+<section class="sec st-page"><div class="wrap">
+  <h1 class="st-h1">Visites du site</h1>
+  <div id="st-porte">
+    <p class="chapeau">Page réservée à VB Safety. Saisissez le code d'accès affiché à la fin de la mise à jour du serveur.</p>
+    <form class="alerte-form" id="st-form"><label class="sr-only" for="st-code">Code d'accès</label><input id="st-code" type="password" autocomplete="off" placeholder="Code d'accès" required><button class="btn btn-g" type="submit">Afficher</button></form>
+    <p class="dv-msg err" id="st-err" role="alert" hidden></p>
+  </div>
+  <div id="st-tdb" hidden>
+    <div class="st-filtres"><label for="st-jours">Période</label><select id="st-jours"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option><option value="365">12 mois</option></select><span id="st-periode"></span></div>
+    <div class="st-kpis">
+      <div><span>Visiteurs</span><b id="st-k-visiteurs">0</b></div>
+      <div><span>Pages vues</span><b id="st-k-vues">0</b></div>
+      <div><span>Demandes reçues</span><b id="st-k-demandes">0</b></div>
+      <div><span>Clics suivis</span><b id="st-k-clics">0</b></div>
+    </div>
+    <section class="st-bloc large"><h2>Visiteurs par jour</h2><div class="st-graphe" id="st-graphe"></div></section>
+    <div class="st-grille-2">
+      <section class="st-bloc"><h2>Pages les plus vues</h2><div id="st-pages"></div></section><section class="st-bloc"><h2>Provenance</h2><div id="st-sources"></div></section><section class="st-bloc"><h2>Pays</h2><div id="st-fuseaux"></div></section><section class="st-bloc"><h2>Appareils</h2><div id="st-appareils"></div></section><section class="st-bloc"><h2>Boutons cliqués</h2><div id="st-clics"></div></section><section class="st-bloc"><h2>Demandes reçues</h2><div id="st-demandes"></div></section>
+    </div>
+    <div class="st-pied"><label><input type="checkbox" id="st-moi"> Ne pas compter mes propres visites sur cet appareil</label><button type="button" class="st-lien" id="st-oublier">Oublier le code sur cet appareil</button></div>
+    <p class="st-note">Aucun cookie, aucune adresse IP enregistrée. Les demandes elles-mêmes arrivent par e-mail et dans l'administration du serveur.</p>
+  </div>
 </div></section>
+<script src="/static/stats.js?v=1" defer></script>
 </main>
 <footer class="pied">
   <div class="wrap">
@@ -51,9 +65,8 @@
       <div><h2 class="pied-h">Plateforme</h2><ul><li><a href="/cmr-pompier/">Carnet Expo CMR</a></li><li><a href="/cmr-pompier/module-epi.html">Module EPI</a></li><li><a href="/cmr-industrie/">Espace industrie et BTP</a></li><li><a href="/innovation/">Innovation</a></li></ul></div>
       <div><h2 class="pied-h">Contact</h2><ul><li><a href="/devis/">Démonstration ou devis</a></li><li><a href="/#contact">Formulaire de contact</a></li><li><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></li><li><a href="/mentions-legales/">Mentions légales</a></li><li><a href="/confidentialite/">Confidentialité</a></li></ul></div>
     </div>
-    <div class="pied-bas"><span>© 2026 VB Safety SAS</span><span>Mis à jour le 1<sup>er</sup> octobre 2026</span></div>
+    <div class="pied-bas"><span>© 2026 VB Safety SAS</span><span>Mis à jour le 2 octobre 2026</span></div>
   </div>
 </footer>
-<script src="/static/vu.js?v=1" defer></script>
 </body>
 </html>
