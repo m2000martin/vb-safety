@@ -44,7 +44,7 @@
   }
 
   // ---------------------------------------------------------------- hors ligne
-  var OFF_KEY = 'vbs-offline-db-v7', offline = null;
+  var OFF_KEY = 'vbs-offline-db-v8', offline = null;
   function saveOffline() { try { sessionStorage.setItem(OFF_KEY, JSON.stringify(offline)); } catch (e) {} }
   function loadOffline() { try { return JSON.parse(sessionStorage.getItem(OFF_KEY) || 'null'); } catch (e) { return null; } }
   var idn = 0;
@@ -87,7 +87,8 @@
       var p = Object.assign(base, { position: pos, tactique: pos === 'POS_ATT' ? (rnd() < 0.4 ? 'TAC_TRANS' : 'TAC_INT') : '', duree_min: it.duree_min, contamination: zone,
         fonctions: FCT[role] || [], ari_porte: atk || (role === 'binome_alimentation' && rnd() < 0.4), ari_min: atk ? pick([15, 30, 45, 60]) : 0, ari_retire_deb: atk && rnd() < 0.15,
         tenue_complete: rnd() < 0.92, ffp3: role === 'soutien' || rnd() < 0.3, decon_type: dec, decon_validee: dec !== 'DEC_AUCUNE',
-        lingettes: /LING/.test(dec), douche: /DOUCHE/.test(dec), tenue_changee: rnd() < 0.8, decon_ref: rnd() < 0.3 ? 'Mesure VB' + ri(100, 399) + '-' + (k + 1) : '' });
+        lingettes: /LING/.test(dec), douche: /DOUCHE/.test(dec), tenue_changee: rnd() < 0.8, decon_ref: '', decon_heure: '' });
+      if (dec !== 'DEC_AUCUNE' && rnd() < 0.6) { p.decon_ref = 'DS-' + ('000' + ri(1, 9999)).slice(-4); var fin = new Date(new Date(it.date.replace(' ', 'T')).getTime() + ((+it.duree_min || 60) + ri(10, 50)) * 60000); p.decon_heure = ('0' + fin.getHours()).slice(-2) + ':' + ('0' + fin.getMinutes()).slice(-2); }
       p.indice = indice(it, p);
       return p;
     }

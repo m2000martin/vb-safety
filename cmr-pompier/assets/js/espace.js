@@ -86,9 +86,10 @@
   function decon(p) {
     if (!filled(p)) return '<span class="note">—</span>';
     var dcx = R.DEC[p.decon_type];
-    if (dcx) return badge([dcx.court, p.decon_type === 'DEC_AUCUNE' ? 'badge-late' : 'badge-ok']);
+    if (dcx) return badge([dcx.court, p.decon_type === 'DEC_AUCUNE' ? 'badge-late' : 'badge-ok']) + (p.decon_type === 'DEC_AUCUNE' ? '' : confOk(p) ? '<br><span class="conf-tag ok">Validée par mesure · ' + esc(p.decon_heure) + '</span>' : DOC ? '<br><span class="conf-tag">Non confirmée par mesure</span>' : '');
     return p.decon_validee ? '<span class="badge badge-ok">Décon. validée</span>' : '<span class="badge badge-pending">Décon. à valider</span>';
   }
+  function confOk(p) { return !!(p.decon_ref && p.decon_heure) && p.decon_type !== 'DEC_AUCUNE'; }
   function efTxt(p) { return filled(p) ? R.fmt(p.indice) : '—'; }
   function durTxt(m) { m = +m || 0; if (!m) return '—'; var h = Math.floor(m / 60), mm = m % 60; return h ? h + ' h' + (mm ? ' ' + d2(mm) : '') : mm + ' min'; }
   function posTxt(p) { return p.position ? R.posLabel(p.position) + (p.position === 'POS_ATT' && p.tactique === 'TAC_TRANS' ? ' (attaque transitoire)' : '') : ROLE_TENU[p.role_tenu] || '—'; }
@@ -387,7 +388,7 @@
       var n = R.nature(p.it);
       return '<tr><td>' + fmtD(p.it.dateObj) + '<br>' + esc(p.it.numero) + '</td><td>' + esc(TYPE[p.it.type_feu] || '') + '<br><small>' + esc(p.it.precision || '') + '</small></td>' +
         '<td>' + (n.procedes.length ? n.procedes.map(function (k) { return esc(R.PROCEDES[k].court); }).join(', ') + '<br><small>Substances : ' + (R.profil(p.it) === 'vegetation' ? 'socle végétation' : 'socle feu de structure') + ' (' + n.substances.length + ')</small>' + (n.circ.length ? '<br><b>+ ' + n.circ.map(function (k) { return esc(R.CIRC[k].nom); }).join(', ') + '</b>' : '') : 'Aucun procédé cancérogène') + '</td>' +
-        '<td>' + durTxt(p.duree_min) + '</td><td>' + esc(posTxt(p)) + '<br>' + esc((CONT[p.contamination] || [''])[0]) + '<br>' + esc((R.DEC[p.decon_type] || { label: p.decon_validee ? 'Décontamination réalisée' : 'Non renseignée' }).label) + (p.ari_retire_deb ? '<br>ARI retiré au déblai' : '') + '</td></tr>';
+        '<td>' + durTxt(p.duree_min) + '</td><td>' + esc(posTxt(p)) + '<br>' + esc((CONT[p.contamination] || [''])[0]) + '<br>' + esc((R.DEC[p.decon_type] || { label: p.decon_validee ? 'Décontamination réalisée' : 'Non renseignée' }).label) + (confOk(p) ? '<br>Validée par mesure ' + esc(p.decon_ref) + ' à ' + esc(p.decon_heure) : '') + (p.ari_retire_deb ? '<br>ARI retiré au déblai' : '') + '</td></tr>';
     }).join('');
     var html = '<article class="fiche"><header class="fi-head"><div><h1>Fiche individuelle d\'exposition aux agents CMR</h1><p>Art. R. 4412-93-1 à R. 4412-93-4 du code du travail · nature, durée et degré de l\'exposition · à conserver 40 ans</p></div><span class="fi-brand">VB Safety · Sapeur-pompier</span></header>' +
       '<dl class="fi-id"><div><dt>Agent</dt><dd>' + esc((u.grade ? u.grade + ' ' : '') + (u.name || '')) + '</dd></div><div><dt>Matricule</dt><dd>' + esc(u.matricule || '') + '</dd></div><div><dt>Centre</dt><dd>' + esc(centreName()) + '</dd></div><div><dt>Période</dt><dd>' + esc(periodLabel()) + '</dd></div><div><dt>Édition</dt><dd>' + fmtD(today) + '</dd></div><div><dt>Référentiel</dt><dd>VB Safety v' + R.version + '</dd></div></dl>' +
@@ -917,7 +918,7 @@
   function memberFrom(p, it) {
     var m = { id: p.id, agent: p.agent, role_tenu: p.role_tenu, engin: p.engin || '', fonctions: (p.fonctions || []).slice(), position: p.position || '', tactique: p.tactique || '', duree_min: +p.duree_min || 0,
       contamination: p.position ? (p.contamination === 'faible' ? 'nulle' : p.contamination) : null, tenue_complete: p.position ? !!p.tenue_complete : null, ari_porte: p.position ? !!p.ari_porte || (+p.ari_min > 0) : null, ari_min: +p.ari_min || 0, ffp3: !!p.ffp3,
-      ari_retire_deb: !!p.ari_retire_deb, decon_type: p.decon_type || '', decon_ref: p.decon_ref || '', exposition_particuliere: p.exposition_particuliere || '', commentaire: p.commentaire || '' };
+      ari_retire_deb: !!p.ari_retire_deb, decon_type: p.decon_type || '', decon_ref: p.decon_ref || '', decon_heure: p.decon_heure || '', decon_conf: !!(p.decon_ref && p.decon_heure), exposition_particuliere: p.exposition_particuliere || '', commentaire: p.commentaire || '' };
     return withDefaults(m, it);
   }
   // Pré-remplissage : la position suit le poste tenu dans l'engin ; le chef d'agrès corrige les exceptions.
@@ -931,7 +932,7 @@
     return m;
   }
   function blankMember(agent, role, engin) {
-    return withDefaults({ agent: agent, role_tenu: role || 'binome_attaque', engin: engin || 'FPT', fonctions: [], position: '', tactique: '', duree_min: 0, contamination: null, tenue_complete: null, ari_porte: null, ari_min: 0, ffp3: false, ari_retire_deb: false, decon_type: '', decon_ref: '', exposition_particuliere: '', commentaire: '' }, ed ? ed.it : { type_feu: 'habitation', duree_min: 0 });
+    return withDefaults({ agent: agent, role_tenu: role || 'binome_attaque', engin: engin || 'FPT', fonctions: [], position: '', tactique: '', duree_min: 0, contamination: null, tenue_complete: null, ari_porte: null, ari_min: 0, ffp3: false, ari_retire_deb: false, decon_type: '', decon_ref: '', decon_heure: '', decon_conf: false, exposition_particuliere: '', commentaire: '' }, ed ? ed.it : { type_feu: 'habitation', duree_min: 0 });
   }
   function editorState(id) {
     if (id === 'nouveau') {
@@ -986,28 +987,52 @@
     var s = new Date(date), e = new Date(s), p = fin.split(':'); e.setHours(+p[0], +p[1], 0, 0);
     var m = Math.round((e - s) / 60000); if (m <= 0) m += 1440; return m;
   }
+  // Fiche d'une personne en 4 blocs : mission, EPI, décontamination, confirmation par mesure.
+  function confOn(m) { return !!m.decon_conf && !!m.decon_type && m.decon_type !== 'DEC_AUCUNE'; }
+  function nowHM() { var d = new Date(); return d2(d.getHours()) + ':' + d2(d.getMinutes()); }
+  function confRow(j, named) {
+    var m = ed.crew[j], u = db.byId[m.agent] || {};
+    var who = named ? '<b class="conf-who">' + esc(u.name || '—') + '</b>' : '';
+    if (m.decon_type === 'DEC_AUCUNE') return '<div class="conf-row">' + who + '<p class="note">Sans objet : aucune décontamination réalisée.</p></div>';
+    if (confOn(m)) return '<div class="conf-row ok">' + who + '<p class="conf-done">' + icon('check') + '<span><b>Décontamination validée</b><small>' + esc(m.decon_heure) + ' · mesure DECON-SCAN n° ' + esc(m.decon_ref) + '</small></span></p><button type="button" class="link-btn" data-unconf="' + j + '">Modifier</button></div>';
+    return '<div class="conf-row">' + who + '<div class="conf-in"><div class="field"><label class="label sm" for="cf-ref-' + j + '">N° de mesure DECON-SCAN</label><input class="input" id="cf-ref-' + j + '" type="text" maxlength="40" autocomplete="off" data-f="' + j + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. DS-0412"></div>' +
+      '<div class="field"><label class="label sm" for="cf-h-' + j + '">Heure</label><input class="input" id="cf-h-' + j + '" type="time" data-f="' + j + '|decon_heure" value="' + esc(m.decon_heure) + '"></div></div>' +
+      '<button type="button" class="btn btn-secondary conf-btn" data-conf="' + j + '">' + icon('check') + 'Décontamination validée</button></div>';
+  }
   function memberCard(i, group) {
     var m = ed.crew[i], u = db.byId[m.agent] || {}, ro = edReadOnly(), fire = ed.it.ambiance !== 'aucun_feu';
     var calc = R.calcul(ed.it, m), set = R.positions(ed.it), whole = +ed.it.duree_min;
     var names = group ? group.map(function (j) { return (db.byId[ed.crew[j].agent] || {}).name || '—'; }) : null;
     var chips = (whole ? [[whole, 'Toute l\'intervention (' + durTxt(whole) + ')']] : []).concat([[30, '30 min'], [60, '1 h'], [120, '2 h'], [180, '3 h']].filter(function (c) { return c[0] !== whole; }));
+    var bh = function (n, t, extra) { return '<h4 class="ac-h"><span>' + n + '</span>' + t + (extra || '') + '</h4>'; };
+    var ids = group || [i], nConf = ids.filter(function (j) { return confOn(ed.crew[j]); }).length, allNone = m.decon_type === 'DEC_AUCUNE';
     return '<article class="agent-card' + (group ? ' group' : '') + '" data-card="' + i + '"><div class="agent-top"><div>' +
         (group ? '<b>' + esc(names.join(' + ')) + '</b><small>Saisie commune · une fiche est enregistrée pour chacun</small>' : '<b>' + esc(u.name || '—') + '</b><small>' + esc([u.grade, u.matricule].filter(Boolean).join(' · ')) + '</small>') + '</div>' +
         (ro || group ? '' : '<button type="button" class="icon-btn sm" data-remove="' + i + '" aria-label="Retirer ' + esc(u.name || '') + ' de l\'équipage">✕</button>') + '</div>' +
-      '<div class="ac-cols"><div class="ac-col">' + (group ? '' : '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
-        '<div class="field"><label class="label">Engin</label><select class="select" data-f="' + i + '|engin">' + ENGINS.map(function (k) { return '<option' + (m.engin === k ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></div></div>') +
-      (fire ? '<div class="block"><span class="label">Position tenue la plus longtemps' + (m.auto ? ' <span class="auto-tag">proposée d\'après le poste</span>' : '') + '</span><div class="pos-pick">' + Object.keys(set).map(function (k) { return '<button type="button" class="opt' + (m.position === k ? ' on' : '') + '" data-pos="' + i + '|' + k + '" aria-pressed="' + (m.position === k) + '">' + esc(set[k].label) + '</button>'; }).join('') + '</div>' +
-        (m.position === 'POS_ATT' ? '<div class="sub-pick"><span class="label sm">Tactique d\'attaque</span><div class="pair" role="group">' + Object.keys(R.TAC).map(function (k) { return '<button type="button" class="opt' + (m.tactique === k ? ' on' : '') + '" data-tac="' + i + '|' + k + '" aria-pressed="' + (m.tactique === k) + '">' + (k === 'TAC_INT' ? 'Intérieure directe' : 'Transitoire (abattage extérieur d\'abord)') + '</button>'; }).join('') + '</div></div>' : '') + '</div>' +
-      '</div><div class="ac-col">' + '<div class="block"><span class="label">Exposition perçue</span><div class="gdo gdo-3">' + ['nulle', 'moyenne', 'forte'].map(function (z) { return '<button type="button" class="opt gdo-' + z + (m.contamination === z ? ' on' : '') + '" data-set="' + i + '|contamination|' + z + '" aria-pressed="' + (m.contamination === z) + '"><b>' + R.ZONES[z][0] + '</b><small>' + R.ZONES[z][1].split(' : ')[1] + '</small></button>'; }).join('') + '</div></div>' : '</div><div class="ac-col">') +
-      '<div class="block"><span class="label">Durée d\'engagement</span><div class="dur-row"><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" data-f="' + i + '|duree_min" value="' + (m.duree_min || '') + '" aria-label="Durée en minutes"><span>min</span></div><div class="chips-pick">' + chips.map(function (c) { return '<button type="button" class="opt' + (+m.duree_min === c[0] ? ' on' : '') + '" data-mdur="' + i + '|' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div></div>' +
-      '<div class="block"><span class="label">Équipements</span><div class="epi-mini">' + pairBtns(i, 'tenue_complete', 'Tenue complète', 'Incomplète') + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div>' +
+      '<div class="ac-blocks' + (fire ? '' : ' nofire') + '">' +
+      // 1. Mission
+      '<section class="ac-b ac-mission">' + bh(1, 'Mission') + '<div class="ac-m3"><div>' +
+        (group ? '' : '<div class="form-2"><div class="field"><label class="label">Poste dans l\'engin</label><select class="select" data-f="' + i + '|role_tenu" data-redraw>' + Object.keys(ROLE_TENU).map(function (k) { return '<option value="' + k + '"' + (m.role_tenu === k ? ' selected' : '') + '>' + ROLE_TENU[k] + '</option>'; }).join('') + '</select></div>' +
+          '<div class="field"><label class="label">Engin</label><select class="select" data-f="' + i + '|engin">' + ENGINS.map(function (k) { return '<option' + (m.engin === k ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></div></div>') +
+        (fire ? '<div class="block"><span class="label">Position tenue la plus longtemps' + (m.auto ? ' <span class="auto-tag">proposée d\'après le poste</span>' : '') + '</span><div class="pos-pick">' + Object.keys(set).map(function (k) { return '<button type="button" class="opt' + (m.position === k ? ' on' : '') + '" data-pos="' + i + '|' + k + '" aria-pressed="' + (m.position === k) + '">' + esc(set[k].label) + '</button>'; }).join('') + '</div>' +
+          (m.position === 'POS_ATT' ? '<div class="sub-pick"><span class="label sm">Tactique d\'attaque</span><div class="pair" role="group">' + Object.keys(R.TAC).map(function (k) { return '<button type="button" class="opt' + (m.tactique === k ? ' on' : '') + '" data-tac="' + i + '|' + k + '" aria-pressed="' + (m.tactique === k) + '">' + (k === 'TAC_INT' ? 'Intérieure directe' : 'Transitoire (abattage extérieur d\'abord)') + '</button>'; }).join('') + '</div></div>' : '') + '</div>' : '') +
+        '</div>' + (fire ? '<div><div class="block"><span class="label">Exposition perçue</span><div class="gdo gdo-3">' + ['nulle', 'moyenne', 'forte'].map(function (z) { return '<button type="button" class="opt gdo-' + z + (m.contamination === z ? ' on' : '') + '" data-set="' + i + '|contamination|' + z + '" aria-pressed="' + (m.contamination === z) + '"><b>' + R.ZONES[z][0] + '</b><small>' + R.ZONES[z][1].split(' : ')[1] + '</small></button>'; }).join('') + '</div></div></div>' : '') +
+        '<div><div class="block"><span class="label">Durée d\'engagement</span><div class="dur-row"><div class="dur-in"><input class="input" type="number" min="0" max="1440" inputmode="numeric" data-f="' + i + '|duree_min" value="' + (m.duree_min || '') + '" aria-label="Durée en minutes"><span>min</span></div><div class="chips-pick">' + chips.map(function (c) { return '<button type="button" class="opt' + (+m.duree_min === c[0] ? ' on' : '') + '" data-mdur="' + i + '|' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div></div></div>' +
+      '</div></section>' +
+      // 2. EPI
+      '<section class="ac-b">' + bh(2, 'EPI') + '<div class="epi-mini">' + pairBtns(i, 'tenue_complete', 'Tenue complète', 'Incomplète') + pairBtns(i, 'ari_porte', 'ARI porté', 'Sans ARI') + '</div>' +
         '<div class="chips-pick">' + (m.position === 'POS_ATT' || m.position === 'POS_DEB' ? '<button type="button" class="opt' + (m.ari_retire_deb ? ' on warn' : '') + '" data-toggle="' + i + '|ari_retire_deb">ARI retiré pendant le déblai</button>' : '') + '<button type="button" class="opt' + (m.ffp3 ? ' on' : '') + '" data-toggle="' + i + '|ffp3">Masque FFP3 au déblai</button></div>' +
-        (m.position === 'POS_ATT' && m.ari_porte === false ? '<p class="warn-line">' + icon('alert') + 'Attaque sans ARI : événement anormal, signalé au SSSM.</p>' : '') + '</div>' +
-      '</div><div class="ac-col">' + (fire ? '<div class="block decon-box"><span class="label">Décontamination' + (group ? '' : ' de ' + esc(first(u.name) || 'l\'agent')) + '</span><div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div>' +
-        (group ? '' : '<div class="field"><label class="label sm">Réf. de mesure (dispositif VB Safety, facultatif)</label><input class="input" type="text" maxlength="40" data-f="' + i + '|decon_ref" value="' + esc(m.decon_ref) + '" placeholder="Ex. Mesure VB124-1"></div>') + '</div>' : '') +
-      '<div class="form-2"><div class="field"><label class="label">Exposition particulière</label><input class="input" type="text" maxlength="300" data-f="' + i + '|exposition_particuliere" value="' + esc(m.exposition_particuliere) + '" placeholder="Ex. présence de batterie de trottinette"></div>' +
+        (m.position === 'POS_ATT' && m.ari_porte === false ? '<p class="warn-line">' + icon('alert') + 'Attaque sans ARI : événement anormal, signalé au SSSM.</p>' : '') + '</section>' +
+      // 3. Décontamination
+      (fire ? '<section class="ac-b">' + bh(3, 'Décontamination') + '<div class="dec-pick">' + Object.keys(R.DEC).map(function (k) { return '<button type="button" class="opt' + (m.decon_type === k ? ' on' + (k === 'DEC_AUCUNE' ? ' warn' : '') : '') + '" data-dec="' + i + '|' + k + '" aria-pressed="' + (m.decon_type === k) + '">' + esc(R.DEC[k].label) + '</button>'; }).join('') + '</div></section>' +
+      // 4. Confirmation
+        '<section class="ac-b ac-conf' + (!allNone && nConf === ids.length ? ' ok' : '') + '">' + bh(4, 'Confirmation de décontamination', '<em>Facultatif</em>') +
+        ids.map(function (j) { return confRow(j, !!group); }).join('') +
+        (allNone ? '' : '<p class="note conf-note">Numéro affiché par le DECON-SCAN après la mesure. La synchronisation automatique est prévue.</p>') + '</section>' : '') +
+      '</div>' +
+      '<div class="form-2 ac-notes"><div class="field"><label class="label">Exposition particulière</label><input class="input" type="text" maxlength="300" data-f="' + i + '|exposition_particuliere" value="' + esc(m.exposition_particuliere) + '" placeholder="Ex. présence de batterie de trottinette"></div>' +
       (group ? '' : '<div class="field"><label class="label">Commentaire individuel</label><input class="input" type="text" maxlength="500" data-f="' + i + '|commentaire" value="' + esc(m.commentaire) + '" placeholder="Faits uniquement, sans donnée médicale"></div>') + '</div>' +
-      '</div></div>' + (DOC && !group ? '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div>' : '') + '</article>';
+      (DOC && !group ? '<div class="agent-foot"><span>Indicateur conventionnel' + (calc.detail && calc.detail.plafonne ? ' (plafonné)' : '') + '</span><b>' + (fire ? R.fmt(calc.ef) + ' EF' : '—') + '</b></div>' : '') + '</article>';
   }
   function missing(m) {
     var out = [], fire = ed.it.ambiance !== 'aucun_feu';
@@ -1154,6 +1179,16 @@
       else if (d.pos) { var a = d.pos.split('|'), mp = ed.crew[+a[0]]; mp.position = a[1]; mp.auto = false; mp.contamination = R.positions(ed.it)[a[1]].zone; if (a[1] === 'POS_ATT' && !mp.tactique) mp.tactique = 'TAC_INT'; if (a[1] !== 'POS_ATT') mp.tactique = ''; if (a[1] !== 'POS_ATT' && a[1] !== 'POS_DEB') mp.ari_retire_deb = false; changed(+a[0]); }
       else if (d.tac) { var tc = d.tac.split('|'); ed.crew[+tc[0]].tactique = tc[1]; changed(+tc[0]); }
       else if (d.dec) { var dc = d.dec.split('|'); ed.crew[+dc[0]].decon_type = dc[1]; changed(+dc[0]); }
+      else if (d.conf || d.unconf) {
+        var cj = +(d.conf || d.unconf), cm = ed.crew[cj], card = b.closest('[data-card]');
+        if (d.unconf) cm.decon_conf = false;
+        else {
+          if (!cm.decon_type) { toast('Indiquez d\'abord la décontamination réalisée (bloc 3).'); return; }
+          if (!String(cm.decon_ref || '').trim()) { toast('Saisissez d\'abord le numéro de référence de la mesure.'); var inp = root.querySelector('#cf-ref-' + cj); if (inp) inp.focus(); return; }
+          cm.decon_ref = cm.decon_ref.trim(); if (!cm.decon_heure) cm.decon_heure = nowHM(); cm.decon_conf = true;
+        }
+        redrawCard(card ? +card.dataset.card : cj);
+      }
       else if (d.mdur) { var md = d.mdur.split('|'); ed.crew[+md[0]].duree_min = +md[1]; changed(+md[0]); }
       else if (d.circ) { var c = ed.it.circonstances, k = c.indexOf(d.circ); if (k === -1) c.push(d.circ); else c.splice(k, 1); if (d.circ === 'bascule') reDefault(); redraw(); }
       else if (d.circadd) { if (ed.it.circonstances.indexOf(d.circadd) === -1) ed.it.circonstances.push(d.circadd); redraw(); }
@@ -1181,9 +1216,9 @@
     var fire = ed.it.ambiance !== 'aucun_feu';
     var rows = ed.crew.map(function (m) {
       var u = db.byId[m.agent] || {};
-      return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + (DOC ? ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
+      return '<li><b>' + esc(u.name || '—') + '</b> ' + (fire && m.contamination ? badge(CONT[m.contamination]) : '') + '<br><span class="note">' + esc(fire ? R.posLabel(m.position) : ROLE_TENU[m.role_tenu]) + ' · ' + durTxt(m.duree_min) + (fire ? ' · ' + esc((R.DEC[m.decon_type] || { court: 'décontamination non renseignée' }).court) + (m.decon_type && m.decon_type !== 'DEC_AUCUNE' ? (confOn(m) ? ' · validée par mesure à ' + esc(m.decon_heure) : ' · non confirmée par mesure') : '') + (DOC ? ' · ' + R.fmt(R.calcul(ed.it, m).ef) + ' EF' : '') : '') + (m.ari_retire_deb ? ' · ARI retiré au déblai' : '') + (m.position === 'POS_ATT' && m.ari_porte === false ? ' · attaque sans ARI' : '') + '</span></li>';
     }).join('');
-    modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Le référent EPI du centre est prévenu pour le changement des tenues.</p>') +
+    modal('Transmettre au SSSM', (probs.length ? '<div class="callout red"><div><strong>À compléter avant transmission</strong><span class="sub">' + probs.map(esc).join('<br>') + '</span></div></div>' : '<p>Une fois transmis, le rapport n\'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Le référent EPI du centre est prévenu pour le changement des tenues.</p>' + (function () { var nc = fire ? ed.crew.filter(function (m) { return m.decon_type && m.decon_type !== 'DEC_AUCUNE' && !confOn(m); }).length : 0; return nc ? '<p class="note">' + nc + ' décontamination' + (nc > 1 ? 's' : '') + ' non confirmée' + (nc > 1 ? 's' : '') + ' par mesure : le rapport peut être transmis, le SSSM en est informé.</p>' : ''; })()) +
       '<p class="note">' + esc(TYPE[ed.it.type_feu]) + (ed.it.motorisation ? ' · ' + esc(MOTOR[ed.it.motorisation]) : '') + ' · ' + esc(AMB[ed.it.ambiance]) + '</p>' + (DOC ? '<p class="note"><b>Nature :</b> ' + esc(R.natureTexte(ed.it)) + '</p>' : '') + '<ul class="summary-list">' + rows + '</ul>',
       probs.length ? [] : [{ label: icon('send') + 'Confirmer la transmission', primary: true, run: function () { return saveEditor('transmettre'); } }]);
   }
@@ -1204,7 +1239,7 @@
         var m = ed.crew[i], dt = fire ? m.decon_type : 'DEC_AUCUNE';
         var pd = { intervention: ed.id, agent: m.agent, role_tenu: m.role_tenu, engin: m.engin, fonctions: m.fonctions || [], position: m.position, tactique: m.position === 'POS_ATT' ? m.tactique : '', duree_min: +m.duree_min || 0,
           contamination: fire ? (m.contamination || 'nulle') : 'nulle', tenue_complete: !!m.tenue_complete, ari_porte: !!m.ari_porte, ari_min: m.ari_porte ? (+m.ari_min || 0) : 0, ari_retire_deb: !!m.ari_retire_deb, ffp3: !!m.ffp3,
-          decon_type: dt || '', decon_validee: !!dt && dt !== 'DEC_AUCUNE', lingettes: /LING/.test(dt || ''), douche: /DOUCHE/.test(dt || ''), decon_ref: m.decon_ref,
+          decon_type: dt || '', decon_validee: !!dt && dt !== 'DEC_AUCUNE', lingettes: /LING/.test(dt || ''), douche: /DOUCHE/.test(dt || ''), decon_ref: m.decon_ref || '', decon_heure: fire && confOn(m) ? m.decon_heure : '',
           exposition_particuliere: m.exposition_particuliere, commentaire: m.commentaire, indice: VBSData.indice(itc, m) };
         if (S.role === 'sssm') pd.modifie_par = db.meId;
         if (m.id) await VBSData.update(S, 'participations', m.id, pd);

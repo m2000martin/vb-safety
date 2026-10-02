@@ -18,6 +18,40 @@
     history.replaceState(null, '', '#' + el.id);
   });
 
+  // Téléphone : menu repliable, blocs détaillés repliés (le contenu reste dans la page)
+  var L = EN ? { more: 'See details', less: 'Hide details', who: 'Who is VB Safety?' } : { more: 'Voir le détail', less: 'Masquer le détail', who: 'Qui est VB Safety ?' };
+  var haut = document.querySelector('.haut'), mb = document.getElementById('menu-btn');
+  if (haut && mb) {
+    mb.hidden = false; haut.classList.add('has-menu');
+    var setMenu = function (o) { haut.classList.toggle('open', o); mb.setAttribute('aria-expanded', o ? 'true' : 'false'); };
+    mb.addEventListener('click', function () { setMenu(!haut.classList.contains('open')); });
+    haut.querySelector('.haut-nav').addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+  }
+  var nPlie = 0;
+  function plier(el, anchor, where, more, less) {
+    if (!el) return;
+    var b = document.createElement('button'), id = el.id || ('plie-' + (++nPlie));
+    el.id = id; el.classList.add('plie');
+    b.type = 'button'; b.className = 'plie-btn'; b.textContent = more; b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-controls', id);
+    b.addEventListener('click', function () { var o = el.classList.toggle('ouvert'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); b.textContent = o ? less : more; });
+    anchor.insertAdjacentElement(where, b);
+  }
+  document.querySelectorAll('.dive').forEach(function (d) { var body = d.querySelector('.dive-body'), hd = d.querySelector('.dive-head'); if (body && hd) plier(body, hd, 'beforeend', L.more, L.less); });
+  var qui = document.querySelector('p.qui'); if (qui) plier(qui, qui, 'beforebegin', L.who, L.who);
+  var mqTel = window.matchMedia('(max-width: 700px)');
+  function replierDefs() {
+    if (!mqTel.matches) return;
+    document.querySelectorAll('.def:not(.repli)').forEach(function (d, i) {
+      var dt = d.querySelector('dt'), dd = d.querySelector('dd'); if (!dt || !dd) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'def-btn'; b.setAttribute('aria-expanded', 'false');
+      dd.id = dd.id || 'def-' + i; b.setAttribute('aria-controls', dd.id);
+      while (dt.firstChild) b.appendChild(dt.firstChild); dt.appendChild(b); d.classList.add('repli');
+      b.addEventListener('click', function () { b.setAttribute('aria-expanded', d.classList.toggle('ouvert') ? 'true' : 'false'); });
+    });
+  }
+  replierDefs(); if (mqTel.addEventListener) mqTel.addEventListener('change', replierDefs);
+
   // Formulaire de contact (Web3Forms ; si l'envoi échoue, ouverture de la messagerie)
   var ENDPOINT = 'https://api.web3forms.com/submit', KEY = '0752cc8d-b82f-4ae5-ab72-50183aee5216', MAIL = 'contact@vb-safety.com';
   var form = document.getElementById('contact-form');

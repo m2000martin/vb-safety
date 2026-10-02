@@ -131,10 +131,9 @@
 .gl-card::before { content: ""; position: absolute; left: -31px; top: 13px; width: 16px; height: 16px; border-radius: 50%; background: var(--red); border: 3px solid var(--bg); }
 .gl-card h3 { margin: 8px 0 6px !important; font-size: 17px !important; }
 .gl-card p { margin: 0 !important; font-size: 14.5px; }
-.gl-st { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
-.gl-st::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.gl-st.ok { background: var(--ok-soft); color: #256628; }
-.gl-st.wip { background: var(--warn-soft); color: #8A5200; }
+.gl-st { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.gl-st.ok { color: #256628; }
+.gl-st.wip { color: #8A5200; }
 @media (max-width: 640px) {
   .g-law li { grid-template-columns: 1fr; gap: 6px; padding-left: 24px; }
   .g-law li::before { left: 6px; }

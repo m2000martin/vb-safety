@@ -329,6 +329,48 @@
   .lang-link:hover { color: #fff; border-color: #fff; }
   .dive-more + .dive-more { display: inline-block; margin-top: 8px; }
   .qui { margin: 18px 0 0; max-width: 70ch; color: #D4D4D8; font-size: 16px; line-height: 1.65; border-left: 2px solid var(--signal); padding-left: 16px; }
+
+  /* V12 · téléphone : menu, accueil allégé, blocs repliés (rien ne change sur ordinateur) */
+  .menu-btn, .plie-btn, .haut-nav a.nav-ecrire { display: none; }
+  @media (max-width: 700px) {
+    .menu-btn:not([hidden]) { display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 0 12px; background: none; border: 1px solid rgba(255,255,255,.18); border-radius: 6px; color: #FAFAFA; font: 600 13px var(--sans); cursor: pointer; }
+    .menu-ico { position: relative; width: 16px; height: 2px; background: currentColor; }
+    .menu-ico::before, .menu-ico::after { content: ''; position: absolute; left: 0; width: 16px; height: 2px; background: currentColor; }
+    .menu-ico::before { top: -5px; } .menu-ico::after { top: 5px; }
+    .haut.has-menu .ecrire { display: none; }
+    .haut.has-menu > .haut-nav { display: none; }
+    .haut.has-menu.open > .haut-nav { display: flex; flex-direction: column; align-items: stretch; gap: 0; overflow: visible; padding-top: 0; }
+    .haut.has-menu.open .haut-nav a { display: block; padding: 15px 0; font-size: 16px; color: #FAFAFA; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .hero-cta .btn-hero.ghost, .bas { display: none; }
+    .centre { padding: 24px 0 56px; }
+    .section { padding-top: 48px; padding-bottom: 48px; }
+    .section-lead { margin-top: 14px; }
+    .pillars { margin-top: 24px; }
+    .pillar { padding: 18px 18px 20px; gap: 6px; }
+    .dives { margin-top: 28px; gap: 14px; }
+    .dive { gap: 14px; padding: 20px 18px; }
+    .evolve { margin-top: 14px; }
+    .plie-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 4px; padding: 0; background: none; border: 0; color: #FAFAFA; font: 600 14.5px var(--sans); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(224, 108, 52, 0.6); text-underline-offset: 4px; }
+    .plie-btn::after { content: '+'; font: 400 18px var(--mono); color: var(--signal); text-decoration: none; }
+    .plie-btn[aria-expanded="true"]::after { content: '\2212'; }
+    .plie:not(.ouvert) { display: none; }
+    p.qui.plie { margin-top: 8px; }
+    .defs { margin-top: 22px; gap: 10px; grid-template-columns: 1fr; }
+    .def.repli { padding: 0; }
+    .def.repli dt { margin: 0; }
+    .def-btn { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; min-height: 54px; padding: 12px 16px; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+    .def-btn::after { content: '+'; font: 400 20px var(--mono); color: var(--signal); flex: none; }
+    .def-btn[aria-expanded="true"]::after { content: '\2212'; }
+    .def.repli dd { display: none; padding: 0 16px 16px; }
+    .def.repli.ouvert dd { display: block; }
+  }
+  /* Tablette : les onglets passent sur une deuxième ligne */
+  @media (min-width: 701px) and (max-width: 1040px) {
+    .haut { flex-wrap: wrap; row-gap: 10px; }
+    .haut > .haut-nav { order: 3; width: 100%; margin: 0; gap: 24px; overflow-x: auto; scrollbar-width: none; border-top: 1px solid rgba(255,255,255,.08); padding-top: 8px; }
+    .haut > .haut-nav::-webkit-scrollbar { display: none; }
+    .haut-nav a { white-space: nowrap; }
+  }
 </style>
 </head>
 <body>
@@ -339,16 +381,19 @@
 <div class="scene">
   <header class="haut">
     <a class="marque" href="/">VB Safety</a>
-    <nav class="haut-nav" aria-label="Navigation principale">
+    <nav id="menu" class="haut-nav" aria-label="Navigation principale">
       <a href="/industrie/">Industrie</a>
       <a href="/btp/">BTP</a>
       <a href="/sapeurs-pompiers/">Sapeurs-pompiers</a>
       <a href="/cmr-industrie/evaluation.html">DUERP</a>
+      <a href="/innovation/">Innovation</a>
       <a href="/ressources/">Ressources</a>
+      <a class="nav-ecrire" href="#contact" data-goto="contact">Nous écrire</a>
     </nav>
     <div class="actions-group">
       <a class="lang-link" href="/en/" hreflang="en" lang="en">EN</a>
       <a class="ecrire" href="#contact" data-goto="contact">Nous écrire</a>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu" hidden><span class="menu-ico" aria-hidden="true"></span><span>Menu</span></button>
     </div>
   </header>
 
@@ -610,6 +655,7 @@
       <a href="/cmr-pompier/">Carnet Expo CMR</a>
       <a href="/cmr-pompier/module-epi.html">Module EPI</a>
       <a href="/cmr-industrie/">Espace industrie et BTP</a>
+      <a href="/innovation/">Innovation</a>
     </div>
     <div class="foot-col">
       <h2 class="foot-h">Contact</h2>
@@ -625,6 +671,6 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=2" defer></script>
+<script src="/static/accueil.js?v=3" defer></script>
 </body>
 </html>
