@@ -16,6 +16,7 @@
 - [Innovation](https://vb-safety.com/innovation/) : VB Safety développe ses propres technologies de mesure et de détection. Trois sujets en cours, à paraître : capteur de décontamination, détection de feu de forêt, détection d'emballement thermique des batteries lithium-ion. Aucun détail technique publié à ce stade.
 
 ## Outils et ressources gratuits
+- [DUERP : le volet risque chimique](https://vb-safety.com/duerp/) : présentation de l'outil gratuit, obligation légale (art. R. 4121-1, R. 4121-2, R. 4412-5 et R. 4412-61 du code du travail), les six étapes et les documents produits.
 - [Évaluation du risque chimique pour le DUERP](https://vb-safety.com/cmr-industrie/evaluation.html) : outil en ligne gratuit, en six étapes, sans compte ; les données restent dans le navigateur. Produit le rapport à annexer au document unique, la liste des travailleurs exposés aux CMR et un plan d'action.
 - [Modèle de liste des travailleurs exposés aux agents CMR](https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/) : Excel et PDF, licence CC BY 4.0, d'après le décret n° 2024-307 du 4 avril 2024 (art. R. 4412-93-1 et suivants du code du travail).
 - [Toutes les ressources](https://vb-safety.com/ressources/)

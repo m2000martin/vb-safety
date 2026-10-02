@@ -285,3 +285,7 @@ table.cols th { font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-tran
   .node-card, .node-card.top, .node-card.right, .node-card.left { position: relative; left: auto; right: auto; top: auto; width: 100%; transform: none !important; margin: 14px 0; }
 }
 @media (prefers-reduced-motion: reduce) { .innovation-map *, .innovation-map *::before, .innovation-map *::after { animation: none !important; transition: none !important; } }
+
+/* ---------- Page DUERP ---------- */
+@media (min-width: 860px) { .etapes.e6 { grid-template-columns: repeat(3, 1fr); row-gap: 18px; } }
+.hero .maj + .maj { margin-top: 6px; }
