@@ -20,10 +20,11 @@
 - [Évaluation du risque chimique pour le DUERP](https://vb-safety.com/cmr-industrie/evaluation.html) : outil en ligne gratuit, en six étapes, sans compte ; les données restent dans le navigateur. Produit le rapport à annexer au document unique, la liste des travailleurs exposés aux CMR et un plan d'action.
 - [Dossier de preuve CMR](https://vb-safety.com/cmr-industrie/outil/) : suite gratuite de l'évaluation, sans compte, données dans le navigateur. Registre des agents et de leur régime (art. R. 4412-59), révisions datées de l'évaluation, étude de substitution et grille des treize mesures (art. R. 4412-66 à R. 4412-70), liste nominative datée et versionnée des travailleurs exposés avec extrait individuel, version anonyme pour le CSE, extrait pour l'agence d'intérim et bordereau d'envoi au SPST (art. R. 4412-93-1 à R. 4412-93-4), sommaire des 45 obligations CMR.
 - [Modèle de liste des travailleurs exposés aux agents CMR](https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/) : Excel et PDF, licence CC BY 4.0, d'après le décret n° 2024-307 du 4 avril 2024 (art. R. 4412-93-1 et suivants du code du travail).
+- [Affiche : décontamination des sapeurs-pompiers après un feu](https://vb-safety.com/ressources/decontamination-sapeurs-pompiers/) : affiche A3 gratuite (CC BY 4.0), gestes pendant, à la sortie et après l'intervention, d'après la doctrine de la DGSCGC.
 - [Toutes les ressources](https://vb-safety.com/ressources/)
 
 ## Guides
-- [Cancers des sapeurs-pompiers et fumées d'incendie](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), décret n° 2025-1349 (tableaux de maladies professionnelles 16 bis et 30), décret n° 2024-307, proposition de loi adoptée par le Sénat en mars 2025, décontamination.
+- [Cancers des sapeurs-pompiers et fumées d'incendie](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), feux de forêt, PFAS, cancers par organe, volontaires, décret n° 2025-1349 (tableaux de maladies professionnelles 16 bis et 30), décret n° 2024-307, proposition de loi adoptée par le Sénat en mars 2025, décontamination.
 - [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020.
 
 ## English
