@@ -1,0 +1,56 @@
+/* VB Safety · confort sur téléphone, commun à tout le site.
+   Menu déroulant à la place des onglets qui défilent de côté, sections longues repliées (« Voir plus »). */
+
+/* ---------- Pages secteurs, DUERP, ressources… (en-tête .top) ---------- */
+.mm-btn { display: none; }
+.onglets .mm-cta { display: none; }
+@media (max-width: 1040px) {
+  .top .wrap { flex-wrap: nowrap; gap: 10px; padding-top: 0; min-height: 60px; }
+  .top .onglets, .top .ecrire { display: none; }
+  .top .langue { margin-left: auto; }
+  .mm-btn { display: inline-flex; align-items: center; gap: 9px; min-height: 42px; padding: 0 14px; background: none; border: 1px solid rgba(255, 255, 255, .22); border-radius: 8px; color: #fff; font: 600 14px/1 Inter, -apple-system, "Segoe UI", sans-serif; cursor: pointer; }
+  .mm-ico, .mm-ico::before, .mm-ico::after { display: block; width: 16px; height: 2px; background: currentColor; border-radius: 1px; transition: transform .2s, background-color .2s; }
+  .mm-ico { position: relative; }
+  .mm-ico::before, .mm-ico::after { content: ""; position: absolute; left: 0; }
+  .mm-ico::before { top: -5px; } .mm-ico::after { top: 5px; }
+  .mm-open .mm-ico { background: transparent; }
+  .mm-open .mm-ico::before { transform: translateY(5px) rotate(45deg); }
+  .mm-open .mm-ico::after { transform: translateY(-5px) rotate(-45deg); }
+  .top.mm-open .onglets { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; width: auto; margin: 0; padding: 6px max(16px, 4vw) 18px; gap: 0; background: #0E1E30; border-bottom: 1px solid rgba(255, 255, 255, .1); box-shadow: 0 24px 40px -16px rgba(0, 0, 0, .6); overflow: visible; max-height: calc(100vh - 60px); max-height: calc(100svh - 60px); overflow-y: auto; animation: mm-in .18s ease-out; }
+  .top.mm-open .onglets a { padding: 15px 2px; font-size: 16.5px; color: #F2F4F7; border-bottom: 1px solid rgba(255, 255, 255, .08); border-radius: 0; }
+  .top.mm-open .onglets a[aria-current="page"] { color: #fff; font-weight: 700; }
+  .top.mm-open .onglets a[aria-current="page"]::after { left: auto; right: 2px; top: 50%; bottom: auto; width: 8px; height: 8px; border-radius: 50%; transform: translateY(-50%); }
+  .top.mm-open .onglets .mm-cta { display: flex; justify-content: center; margin-top: 16px; padding: 14px; border: 0; border-radius: 8px; background: #C2501C; color: #fff; font-weight: 700; }
+}
+@keyframes mm-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Accueil (en-tête .haut) : le menu s'ouvre par-dessus la page ---------- */
+@media (max-width: 1040px) {
+  .haut.has-menu { position: relative; flex-wrap: nowrap; }
+  .haut.has-menu .menu-btn:not([hidden]) { display: inline-flex; align-items: center; gap: 9px; min-height: 42px; padding: 0 14px; background: none; border: 1px solid rgba(255, 255, 255, .22); border-radius: 8px; color: #FAFAFA; cursor: pointer; }
+  .haut.has-menu > .haut-nav { display: none; }
+  .haut.has-menu .ecrire { display: none; }
+  .haut.has-menu.open > .haut-nav { display: flex; flex-direction: column; align-items: stretch; gap: 0; position: absolute; z-index: 40; top: calc(100% + 10px); left: 0; right: 0; width: auto; margin: 0; padding: 6px 18px 18px; background: #0F1C2E; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .7); overflow: visible; animation: mm-in .18s ease-out; }
+  .haut.has-menu.open > .haut-nav a { display: block; padding: 15px 2px; font-size: 16.5px; color: #FAFAFA; border-bottom: 1px solid rgba(255, 255, 255, .08); white-space: normal; }
+  .haut.has-menu.open > .haut-nav a.nav-ecrire { display: flex; justify-content: center; margin-top: 16px; padding: 14px; border: 0; border-radius: 8px; background: #C2501C; font-weight: 700; }
+}
+@media (max-width: 700px) {
+  .scene { min-height: auto; }
+  .scene .centre { padding: 36px 0 44px; }
+}
+
+/* ---------- Pages outils (barre .vbs-barre au-dessus de l'en-tête) ---------- */
+.nav-autres { display: none; }
+@media (max-width: 900px) {
+  .vbs-barre nav { display: none; }
+  .vbs-barre .container { min-height: 30px; }
+  .nav .nav-autres { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0, 0, 0, .08); }
+  .nav .nav-autres span { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8A9099; padding: 6px 4px; }
+  .nav .nav-autres a { display: block; }
+}
+
+/* ---------- « Voir plus » : listes longues repliées sur téléphone ---------- */
+.vp-cache { display: none !important; }
+.vp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; margin-top: 14px; padding: 0 16px; border-radius: 10px; border: 1px solid currentColor; background: transparent; color: inherit; font: 600 15px/1.2 Inter, -apple-system, "Segoe UI", sans-serif; cursor: pointer; opacity: .9; }
+.vp-btn::after { content: ""; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); }
+.vp-btn[aria-expanded="true"]::after { transform: rotate(-135deg) translateY(-2px); }

@@ -228,6 +228,25 @@ for (const p of pages) {
   await ctx.close();
 }
 
+// Téléphone : pas de défilement horizontal, menu déroulant à la place des onglets, « Voir plus »
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  for (const u of ['/', '/industrie/', '/sapeurs-pompiers/', '/duerp/', '/ressources/', '/cmr-industrie/', '/cmr-pompier/', '/cmr-industrie/evaluation.html', '/en/industry/']) {
+    const pg = await ctx.newPage(); await pg.goto(BASE + u); await pg.waitForTimeout(300);
+    ok(await pg.evaluate(() => document.documentElement.scrollWidth <= 391), 'Téléphone · ' + u + ' sans défilement horizontal');
+    await pg.close();
+  }
+  const pg = await ctx.newPage(); await pg.goto(BASE + '/sapeurs-pompiers/'); await pg.waitForTimeout(300);
+  ok(!(await pg.locator('.onglets').isVisible()), 'Téléphone · onglets masqués derrière le bouton Menu');
+  await pg.tap('.mm-btn'); await pg.waitForTimeout(200);
+  ok(await pg.locator('.onglets a[href="/btp/"]').isVisible() && await pg.locator('.onglets .mm-cta').isVisible(), 'Téléphone · le menu déroulant affiche les pages et « Demander un devis »');
+  await pg.goto(BASE + '/cmr-industrie/'); await pg.waitForTimeout(300);
+  const vp = pg.locator('.vp-btn').first(); const n = await pg.locator('.vp-cache').count();
+  await vp.tap(); await pg.waitForTimeout(200);
+  ok(n > 0 && await pg.locator('.vp-cache').count() < n, 'Téléphone · « Voir plus » déplie la liste');
+  await ctx.close();
+}
+
 await browser.close(); server.close();
 console.log(fails ? `\n${fails} échec(s)` : '\nTout est OK');
 process.exit(fails ? 1 : 0);
