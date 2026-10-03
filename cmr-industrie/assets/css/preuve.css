@@ -1,0 +1,103 @@
+/* VB Safety · Dossier de preuve CMR (dossier.html). Complète duerp.css, sans le modifier. */
+
+.pv-note { margin: 0 0 18px; padding: 10px 14px; border: 1px dashed var(--line-strong); border-radius: 10px; font-size: 13.5px; color: var(--muted); background: #fff; }
+.pv-note b { color: var(--text); }
+.pv-wide .q-grid { grid-template-columns: 1fr; }
+.pv-wide .q-t { max-width: 40ch; }
+
+/* Tableaux */
+.pv-tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.pv-t { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.pv-t th { text-align: left; font-size: 12.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 10px 12px; border-bottom: 1px solid var(--line); background: #FBF9F6; white-space: nowrap; }
+.pv-t td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+.pv-t tr:first-child td { border-top: 0; }
+.pv-t small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.pv-t .input { min-height: 40px; font-size: 14.5px; padding: 6px 10px; }
+.pv-t select.input { padding-right: 28px; }
+@media (max-width: 759px) {
+  .pv-t.stack thead { display: none; }
+  .pv-t.stack tr { display: block; padding: 10px 12px; border-top: 1px solid var(--line); }
+  .pv-t.stack tr:first-child { border-top: 0; }
+  .pv-t.stack td { display: block; border: 0; padding: 4px 0; }
+  .pv-t.stack td[data-l]::before { content: attr(data-l); display: block; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+}
+
+/* Pastilles de statut */
+.pv-st { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 3px 10px; border: 1px solid; white-space: nowrap; }
+.pv-st.outil { color: #2E7D32; background: #F2F9F2; border-color: #BFDDC1; }
+.pv-st.manuel { color: var(--info); background: var(--info-soft); border-color: #C9DCEF; }
+.pv-st.partiel { color: var(--warn); background: #FFF8EC; border-color: #F0D5A8; }
+.pv-st.manquant { color: var(--danger); background: #FDF3F2; border-color: #F3C4C0; }
+.pv-st.sans-objet { color: var(--muted); background: #F4F1EC; border-color: var(--line-strong); }
+.pv-reg { display: inline-block; font-size: 12.5px; font-weight: 700; border-radius: 6px; padding: 2px 8px; border: 1px solid var(--line-strong); background: #F4F1EC; }
+.pv-reg.cmr { color: var(--danger); background: #FDF3F2; border-color: #F3C4C0; }
+.pv-reg.cmr2, .pv-reg.acd { color: var(--warn); background: #FFF8EC; border-color: #F0D5A8; }
+
+/* Chiffres clés */
+.pv-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 0 0 22px; }
+@media (min-width: 760px) { .pv-kpis { grid-template-columns: repeat(5, 1fr); } }
+.pv-kpi { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.pv-kpi span { display: block; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.pv-kpi b { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+.pv-kpi.ok b { color: #2E7D32; } .pv-kpi.bad b { color: var(--danger); } .pv-kpi.mid b { color: var(--warn); }
+
+/* Cartes */
+.pv-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin: 0 0 14px; }
+.pv-card > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.pv-card > summary::-webkit-details-marker { display: none; }
+.pv-card > summary b { font-size: 17px; }
+.pv-card > summary .pv-sum-r { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+.pv-card[open] > summary { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.pv-card h3 { font-size: 15.5px; margin: 18px 0 8px; }
+.pv-card h3 .law { font-weight: 600; font-size: 12.5px; color: var(--muted); margin-left: 6px; }
+.pv-grid2 { display: grid; grid-template-columns: 1fr; gap: 0 14px; }
+@media (min-width: 700px) { .pv-grid2 { grid-template-columns: 1fr 1fr; } .pv-grid3 { grid-template-columns: 1fr 1fr 1fr; } }
+.pv-f { display: block; margin: 0 0 12px; }
+.pv-f > span { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 5px; }
+.pv-f textarea.input { min-height: 84px; padding: 10px 12px; line-height: 1.45; resize: vertical; width: 100%; }
+.pv-f .input { width: 100%; }
+.pv-tiles { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.pv-chk { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 12px; font-size: 14.5px; }
+.pv-chk label { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; }
+.pv-chk input { width: 18px; height: 18px; accent-color: var(--red); }
+.pv-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0 0; }
+.pv-row .btn { min-height: 44px; }
+.pv-inline { display: grid; grid-template-columns: 1fr; gap: 0 12px; align-items: end; }
+@media (min-width: 760px) { .pv-inline { grid-template-columns: repeat(4, minmax(0, 1fr)) auto; } .pv-inline .pv-f { margin-bottom: 0; } }
+.pv-m-statut { min-width: 170px; }
+.pv-empty { background: #fff; border: 1px dashed var(--line-strong); border-radius: 14px; padding: 22px; text-align: center; color: var(--muted); }
+.pv-empty .btn { margin-top: 12px; }
+.pv-alert { margin: 0 0 16px; padding: 12px 14px; border-radius: 10px; border: 1px solid #F0D5A8; background: #FFF8EC; font-size: 14.5px; }
+.pv-alert.red { border-color: #F3C4C0; background: #FDF3F2; }
+.pv-alert b { display: block; margin-bottom: 2px; }
+.pv-bloc { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red-strong); margin: 26px 0 8px; }
+.pv-bloc:first-child { margin-top: 0; }
+.btn-sm { min-height: 38px; padding: 0 12px; font-size: 14px; }
+.pv-link { background: none; border: 0; padding: 0; font: inherit; color: var(--red-strong); text-decoration: underline; cursor: pointer; }
+
+/* Documents imprimés : seul le document est visible */
+.pv-print { display: none; }
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+  body.pv-printing { background: #fff; }
+  body.pv-printing .du, body.pv-printing .du-foot { display: none !important; }
+  body.pv-printing .pv-print { display: block; font: 10.5pt/1.4 var(--font); color: #000; }
+  .pv-doc + .pv-doc { break-before: page; }
+  .pv-doc h1 { font-size: 17pt; margin: 0 0 2mm; }
+  .pv-doc h2 { font-size: 12.5pt; margin: 6mm 0 2mm; }
+  .pv-doc .ph-sub { margin: 0 0 4mm; color: #333; }
+  .pv-doc dl { display: flex; flex-wrap: wrap; gap: 2mm 10mm; margin: 0 0 5mm; padding: 3mm 0; border-top: 1px solid #000; border-bottom: 1px solid #000; }
+  .pv-doc dt { font-size: 8.5pt; text-transform: uppercase; color: #444; }
+  .pv-doc dd { margin: 0; font-weight: 600; }
+  .pv-doc table { width: 100%; border-collapse: collapse; margin: 0 0 4mm; }
+  .pv-doc th, .pv-doc td { border: 1px solid #888; padding: 1.6mm 2mm; text-align: left; vertical-align: top; font-size: 9.5pt; }
+  .pv-doc th { background: #eee; }
+  .pv-doc tr { break-inside: avoid; }
+  .pv-doc .ph-foot { margin-top: 5mm; font-size: 8.5pt; color: #333; border-top: 1px solid #888; padding-top: 2mm; }
+  .pv-doc .ph-sign { display: flex; gap: 20mm; margin-top: 8mm; }
+  .pv-doc .ph-sign div { flex: 1; border-top: 1px solid #000; padding-top: 1.5mm; font-size: 9pt; }
+}
+
+/* Lien vers le dossier de preuve, à l'étape 6 de « Mon DUERP » */
+.dl-next { margin-top: 22px; border-color: var(--line-strong); background: #fff; }
+.dl-next > div > .icon { color: var(--text); }
