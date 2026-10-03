@@ -360,7 +360,7 @@
     else if (lastRev) set('A2', 'outil', 'Évaluation de ' + S.products.length + ' produit(s) ou procédé(s)', lastRev.date);
     else set('A2', 'partiel', 'Évaluation présente mais non datée : enregistrez une révision');
     if (lastRev) set('A3', 'outil', P.revisions.length + ' révision(s) datée(s)', lastRev.date); else set('A3', 'manquant', 'Aucune révision datée');
-    if (lastRev && S.exported) set('A4', 'outil', 'Dossier DUERP risque chimique téléchargé', lastRev.date);
+    if (lastRev && S.exported) set('A4', 'outil', 'DUERP téléchargé', lastRev.date);
     else set('A4', S.products.length ? 'partiel' : 'manquant', 'Téléchargez le dossier DUERP et joignez-le au document unique');
     set('A7', 'sans-objet', 'Le portail national prévu par la loi n\'a jamais été mis en service');
 

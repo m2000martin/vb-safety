@@ -1,4 +1,4 @@
-// Régénère les exemples fictifs : DUERP volet risque chimique (exemple-duerp.pdf) et dossier CMR (exemple-dossier-cmr.pdf).
+// Régénère les exemples fictifs : DUERP (exemple-duerp.pdf) et dossier CMR (exemple-dossier-cmr.pdf).
 // Serveur local sur le port 8765 requis (npx http-server -p 8765), puis : node _outils/generer-exemple-duerp.mjs <dossier de sortie>
 // Aperçus : pdftoppm -r 110 -png <pdf> page, puis conversion en WebP dans static/duerp-exemple/.
 import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);

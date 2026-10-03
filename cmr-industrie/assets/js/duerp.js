@@ -1,4 +1,4 @@
-// VB Safety · Mon DUERP risque chimique : parcours pas à pas, une question par écran.
+// VB Safety · Mon DUERP (risque chimique) : parcours pas à pas, une question par écran.
 // Utilise le moteur partagé (eval-core.js) et les mêmes données que le mode expert (evaluation.html).
 (function () {
   'use strict';
@@ -271,7 +271,7 @@
   // ------------------------------------------------------------------ vues
   function viewAccueil() {
     var has = S.products.length > 0;
-    return '<section class="welcome"><p class="q-k">Obligation légale · DUERP</p><h1 class="q-t">Votre DUERP risque chimique, pas à pas</h1>' +
+    return '<section class="welcome"><p class="q-k">Obligation légale · DUERP</p><h1 class="q-t">Le risque chimique dans votre DUERP, pas à pas</h1>' +
       '<p class="q-s">Le document unique d\'évaluation des risques professionnels (DUERP) est obligatoire dès le premier salarié. Ici, vous répondez à des questions simples, une à la fois. À la fin, vous téléchargez votre dossier.</p>' +
       '<div class="wl-grid"><ol class="wl-steps">' + STEPS.map(function (s, i) { return '<li><i>' + (i + 1) + '</i><div><b>' + s.t + '</b><span>' + s.d + '</span></div></li>'; }).join('') + '</ol>' +
       '<div class="wl-prep"><h2>Avant de commencer, rassemblez :</h2><ul><li>' + icon('file') + '<span><b>Les fiches de données de sécurité</b> de vos produits (demandez-les à vos fournisseurs si besoin).</span></li><li>' + icon('flask') + '<span><b>Les quantités achetées sur un an</b>, d\'après vos factures.</span></li><li>' + icon('users') + '<span><b>La liste des postes</b> et le nombre de salariés à chaque poste.</span></li></ul>' +
@@ -375,8 +375,8 @@
     var none = S.products.length ? '' : ' disabled', hasCmr = compute().some(function (r) { return r.cmr === 'cmr'; });
     return screen({
       kicker: 'Étape 6 sur 6', title: 'Vos documents sont prêts',
-      sub: 'Deux documents distincts : le volet chimique de votre document unique, et le dossier propre aux agents CMR. Gardez-les : l\'inspection du travail, le médecin du travail ou vos salariés peuvent vous les demander.',
-      body: '<div class="dl-main"><div>' + icon('file') + '<span><b>Mon DUERP · volet risque chimique</b><small>Page de garde, inventaire par unité de travail, évaluation des risques, ' + (S.effectif === '50+' ? 'programme annuel de prévention (PAPRIPACT)' : 'liste des actions de prévention') + ', règles de mise à jour, de conservation (40 ans) et d\'accès, historique des versions.</small></span></div><button type="button" class="btn btn-primary btn-lg" data-print="duerp"' + none + '>' + icon('download') + 'Télécharger mon DUERP (PDF)</button></div>' +
+      sub: 'Deux documents distincts : votre document unique (DUERP), et le dossier propre aux agents CMR. Gardez-les : l\'inspection du travail, le médecin du travail ou vos salariés peuvent vous les demander.',
+      body: '<div class="dl-main"><div>' + icon('file') + '<span><b>Mon DUERP</b><small>Page de garde, inventaire par unité de travail, évaluation des risques, ' + (S.effectif === '50+' ? 'programme annuel de prévention (PAPRIPACT)' : 'liste des actions de prévention') + ', règles de mise à jour, de conservation (40 ans) et d\'accès, historique des versions.</small></span></div><button type="button" class="btn btn-primary btn-lg" data-print="duerp"' + none + '>' + icon('download') + 'Télécharger mon DUERP (PDF)</button></div>' +
         '<div class="dl-main dl-cmr"><div>' + icon('users') + '<span><b>Mon dossier CMR</b><small>' + (hasCmr ? 'Agents CMR repérés, salariés exposés, liste des travailleurs exposés à transmettre au service de santé au travail, obligations propres aux CMR.' : 'Aucun agent CMR repéré pour l\'instant : le dossier rappelle les obligations qui s\'appliqueraient.') + '</small></span></div><button type="button" class="btn btn-secondary btn-lg" data-print="cmr"' + none + '>' + icon('download') + 'Télécharger mon dossier CMR (PDF)</button></div>' +
         '<p class="muted small">Dans la fenêtre qui s\'ouvre, choisissez « Enregistrer au format PDF ». Chaque téléchargement du DUERP crée une version datée.</p>' +
         '<h3 class="sub-h">Ou un document à la fois</h3><ul class="dl-list">' +
@@ -396,7 +396,7 @@
   var VIEWS = { accueil: viewAccueil, entreprise: viewEntreprise, produits: viewProduits, prio: viewPrio, actions: viewActions, salaries: viewSalaries, dossier: viewDossier };
   function render(focus) {
     var v = $('#du-view');
-    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><span class="demo-acts"><a class="btn btn-secondary" href="/ressources/exemple-duerp-risque-chimique.pdf" download>Exemple de DUERP (PDF)</a><a class="btn btn-secondary" href="/ressources/exemple-dossier-cmr.pdf" download>Exemple de dossier CMR (PDF)</a><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></span></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
+    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><span class="demo-acts"><a class="btn btn-secondary" href="/ressources/exemple-duerp.pdf" download>Exemple de DUERP (PDF)</a><a class="btn btn-secondary" href="/ressources/exemple-dossier-cmr.pdf" download>Exemple de dossier CMR (PDF)</a><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></span></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
     document.body.classList.toggle('du-welcome', !UI.wz && UI.view === 'accueil');
     drawSide();
     $$('[data-w]', v).forEach(function (i) { i.style.width = i.getAttribute('data-w') + '%'; });
