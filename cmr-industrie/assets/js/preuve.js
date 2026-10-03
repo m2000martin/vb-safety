@@ -557,8 +557,9 @@
   window.EV_ONREF = function () { render(); };
   loadRef();
   var h0 = (location.hash || '').slice(1);
-  if (h0 === 'exemple') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'sommaire'; }
+  // #exemple ouvre l'exemple sur le sommaire ; #demo (après la page de connexion) l'ouvre sur l'accueil
+  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = h0 === 'demo' ? 'accueil' : 'sommaire'; }
   UI.view = VIEWS[h0] ? h0 : 'accueil';
   render();
-  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });
+  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });
 })();

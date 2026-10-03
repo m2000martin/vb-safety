@@ -235,3 +235,9 @@ section[id] { scroll-margin-top: 130px; }
   .sectors .icon { width: 22px; height: 22px; }
 }
 .tool-cta { border-radius: 6px; }
+
+/* Respiration entre les quatre piliers et le bandeau des secteurs */
+.pillars-sec { padding-top: clamp(16px, 2.5vw, 32px); }
+.pillar { padding: clamp(28px, 3vw, 40px) clamp(22px, 2.4vw, 32px); }
+.pillars-sec .sectors { margin-top: clamp(28px, 3.5vw, 48px); padding: 22px 26px; }
+.pillars-sec .tool-band { margin-top: clamp(20px, 2.5vw, 32px); }

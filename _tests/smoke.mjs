@@ -21,7 +21,7 @@ const server = http.createServer((req, res) => {
 const BASE = `http://127.0.0.1:${server.address().port}`;
 
 const pages = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').match(/<loc>[^<]+<\/loc>/g).map(l => l.replace(/<\/?loc>/g, '').replace('https://vb-safety.com', ''));
-['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/dossier.html', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
+['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/dossier.html', '/cmr-industrie/connexion.html', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
 
 const browser = await chromium.launch();
 let fails = 0;
@@ -123,6 +123,24 @@ for (const p of pages) {
   ok(!errs.length, 'Dossier · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();
 }
+
+// Démo industrie : code faux refusé, VLN533 ouvre le dossier de preuve sur l'exemple
+{
+  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto(BASE + '/cmr-industrie/'); await pg.click('.ih-cta a.btn-primary');
+  ok(/connexion\.html$/.test(pg.url()), 'Démo · « Accéder à la démo » ouvre la page de connexion');
+  await pg.fill('#code', 'ABC123'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
+  ok(/incorrect/.test(await pg.locator('#login-msg').textContent()) && /connexion\.html$/.test(pg.url()), 'Démo · un code faux est refusé');
+  await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/dossier\.html#/); await pg.waitForTimeout(600);
+  ok(await pg.locator('.demo-note').count() === 1 && /dossier de preuve/i.test(await pg.locator('#q-title').textContent()), 'Démo · VLN533 ouvre le dossier de preuve avec l\'exemple fictif');
+  ok(await pg.evaluate(() => !localStorage.getItem('vbs-eval-v1')), 'Démo · aucune donnée réelle créée');
+  await pg.goto(BASE + '/cmr-industrie/'); 
+  ok(await pg.locator('.header-cta[href="/devis/"]').count() === 1 && await pg.locator('.ih-note').count() === 0, 'Portail · bouton « Demander un devis » en haut, petit texte retiré');
+  ok(!errs.length, 'Démo · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
+  await ctx.close();
+}
+
 await browser.close(); server.close();
 console.log(fails ? `\n${fails} échec(s)` : '\nTout est OK');
 process.exit(fails ? 1 : 0);
