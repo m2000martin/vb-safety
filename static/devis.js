@@ -7,6 +7,14 @@
   function v(n) { var el = f.elements[n]; return el ? String(el.value || '').trim() : ''; }
   function poster(data) { return fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'omit', body: JSON.stringify(data) }); }
 
+  // Arrivée depuis l'outil CMR (« Faire avec VB Safety ») : besoin pré-rempli
+  var besoin = new URLSearchParams(location.search).get('besoin');
+  if (besoin) {
+    var ty = f.elements.type_org; if (ty && !ty.value) ty.value = 'Industrie';
+    var it = f.querySelector('input[name="interet"][value="Traçabilité CMR industrie et BTP"]'); if (it) it.checked = true;
+    var mg = f.elements.message; if (mg && !mg.value) mg.value = 'Je souhaite être accompagné pour : ' + besoin.slice(0, 300);
+  }
+
   f.addEventListener('submit', async function (e) {
     e.preventDefault();
     if (!f.checkValidity()) {

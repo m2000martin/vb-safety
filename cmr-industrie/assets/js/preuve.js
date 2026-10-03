@@ -58,12 +58,13 @@
     return false;
   }
   function drawSide(c) {
-    $('#du-steps').innerHTML = STEPS.map(function (s, i) {
+    var done = c.cov.filter(function (x) { return x.statut === 'outil' || x.statut === 'manuel'; }).length, on0 = UI.view === 'obligations';
+    $('#du-steps').innerHTML = '<li class="pv-side-ob' + (on0 ? ' on' : '') + '"><a href="#obligations"' + (on0 ? ' aria-current="page"' : '') + '><i>' + icon('list') + '</i><span><b>Mes obligations</b><small>' + done + ' faites sur ' + C.OBLIGATIONS.length + '</small></span></a></li><li class="pv-side-k" aria-hidden="true">Outils VB Safety</li>' + STEPS.map(function (s, i) {
       var d = stepDone(s.id, c), on = s.id === UI.view;
       return '<li class="' + (on ? 'on ' : '') + (d ? 'done' : '') + '"><a href="#' + s.id + '"' + (on ? ' aria-current="step"' : '') + '><i>' + (d ? icon('check') + '<span class="sr-only">Terminé : </span>' : i + 1) + '</i><span><b>' + s.t + '</b><small>' + s.d + '</small></span></a></li>';
     }).join('');
     var k = -1; STEPS.forEach(function (s, i) { if (s.id === UI.view) k = i; });
-    $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : 'Dossier de preuve CMR';
+    $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : UI.view === 'obligations' ? 'Mes obligations CMR' : 'Dossier de preuve CMR';
     $('#du-top-step').textContent = k >= 0 ? 'Étape ' + (k + 1) + ' sur ' + STEPS.length + (S.site ? ' · ' + S.site : '') : (S.site || 'Version 1');
     var n = STEPS.filter(function (s) { return stepDone(s.id, c); }).length;
     $('#du-bar').style.width = Math.round(n / STEPS.length * 100) + '%';
@@ -72,7 +73,7 @@
   // ------------------------------------------------------------------ gabarits
   function screen(o) {
     var k = -1; STEPS.forEach(function (s, i) { if (s.id === o.id) k = i; });
-    var prev = k > 0 ? STEPS[k - 1].id : 'accueil', next = k >= 0 && k < STEPS.length - 1 ? STEPS[k + 1].id : '';
+    var prev = k > 0 ? STEPS[k - 1].id : 'obligations', next = k >= 0 && k < STEPS.length - 1 ? STEPS[k + 1].id : '';
     return '<section class="q pv-wide">' + (o.kicker ? '<p class="q-k">' + o.kicker + '</p>' : '') +
       '<h1 class="q-t" id="q-title">' + o.title + '</h1>' + (o.sub ? '<p class="q-s">' + o.sub + '</p>' : '') +
       '<div class="q-grid' + (o.help ? '' : ' q-solo') + '"><div class="q-main">' + o.body + '</div>' + (o.help ? '<aside class="q-help" aria-label="Aide">' + o.help + '</aside>' : '') + '</div></section>' +
@@ -107,6 +108,82 @@
       (has ? '<button type="button" class="btn btn-primary" data-nav="' + resumeStep(c) + '">' + (P.revisions.length || P.salaries.length ? 'Reprendre' : 'Commencer') + icon('arrow') + '</button>' : '<button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli' + icon('arrow') + '</button>') + '</footer>';
   }
   function resumeStep(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
+
+
+  // ------------------------------------------------------------------ accueil de l'outil : les 45 obligations
+  function viewObligations(c) {
+    var n = { fait: 0, partiel: 0, manquant: 0, so: 0 };
+    c.cov.forEach(function (x) { if (x.statut === 'outil' || x.statut === 'manuel') n.fait++; else if (x.statut === 'partiel') n.partiel++; else if (x.statut === 'manquant') n.manquant++; else n.so++; });
+    var f = UI.obFilter || 'tout', total = C.OBLIGATIONS.length - n.so;
+    var body = legalNote() + entCard() +
+      '<div class="pv-kpis"><div class="pv-kpi ok"><span>Faites</span><b>' + n.fait + '</b></div><div class="pv-kpi mid"><span>À compléter</span><b>' + n.partiel + '</b></div><div class="pv-kpi bad"><span>À faire</span><b>' + n.manquant + '</b></div><div class="pv-kpi"><span>Sans objet</span><b>' + n.so + '</b></div>' +
+      '<div class="pv-kpi"><span>Avancement</span><b>' + (total ? Math.round(n.fait / total * 100) : 0) + ' %</b></div></div>' +
+      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
+      '<div class="pv-filter" role="group" aria-label="Filtrer les obligations">' + [['tout', 'Toutes (' + C.OBLIGATIONS.length + ')'], ['afaire', 'À faire (' + (n.manquant + n.partiel) + ')'], ['fait', 'Faites (' + n.fait + ')']].map(function (t) { return '<button type="button" class="chip-btn' + (f === t[0] ? ' on' : '') + '" data-a="ob-filter" data-f="' + t[0] + '" aria-pressed="' + (f === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
+    var bloc = '', shown = 0;
+    c.cov.forEach(function (x) {
+      var o = x.o, isDone = x.statut === 'outil' || x.statut === 'manuel', todo = x.statut === 'manquant' || x.statut === 'partiel';
+      if ((f === 'fait' && !isDone) || (f === 'afaire' && !todo)) return;
+      shown++;
+      if (o.bloc !== bloc) { if (bloc) body += '</ul>'; bloc = o.bloc; body += '<p class="pv-bloc">' + o.bloc + '. ' + C.BLOCS[o.bloc] + '</p><ul class="ob-list">'; }
+      var open = UI.obOpen === o.id, m = P.pieces[o.id] || {};
+      var doneBtn = x.statut === 'outil' ? '<span class="ob-done is-tool">' + icon('check') + 'Fait avec VB Safety</span>' : x.statut === 'sans-objet' ? '<span class="ob-done is-so">Sans objet</span>' :
+        '<button type="button" class="ob-done' + (m.ok ? ' on' : '') + '" data-a="ob-done" data-id="' + o.id + '" aria-pressed="' + !!m.ok + '">' + icon('check') + (m.ok ? 'Fait' : 'C\'est fait') + '</button>';
+      var vbBtn = x.statut === 'sans-objet' && !o.faire ? '' : '<button type="button" class="btn btn-secondary btn-sm ob-vb" data-a="ob-faire" data-id="' + o.id + '">' + (x.statut === 'outil' ? 'Voir dans l\'outil' : 'Faire avec VB Safety') + icon('arrow') + '</button>';
+      body += '<li class="ob-it st-' + x.statut + (open ? ' open' : '') + '"><div class="ob-row">' +
+        '<button type="button" class="ob-title" data-a="ob-open" data-id="' + o.id + '" aria-expanded="' + open + '" aria-controls="ob-d-' + o.id + '"><span class="ob-id">' + o.id + '</span><span class="ob-txt"><b>' + esc(o.obligation) + '</b><small>' + C.articleLabel(o) + ' · ' + stLabel(x.statut) + '</small></span>' + icon(open ? 'up' : 'down') + '</button>' +
+        '<div class="ob-acts">' + doneBtn + vbBtn + '</div></div>' +
+        (open ? '<div class="ob-detail" id="ob-d-' + o.id + '"><p>' + esc(o.aide) + '</p><dl class="ob-dl"><div><dt>Pièce à produire</dt><dd>' + esc(o.piece) + '</dd></div>' + (o.frequence ? '<div><dt>Fréquence</dt><dd>' + esc(o.frequence) + '</dd></div>' : '') + '<div><dt>Texte</dt><dd>' + C.articleLabel(o) + ' du code du travail</dd></div><div><dt>Où vous en êtes</dt><dd>' + esc(x.detail) + (x.date ? ' · ' + fd(x.date) : '') + '</dd></div></dl>' +
+          (m.ok && x.statut === 'manuel' ? '<div class="pv-grid2">' + field('Fait le', '<input class="input" type="date" data-b="pieces|' + o.id + '|date" value="' + esc(m.date || '') + '">') + field('Où est rangée la pièce ?', inp('pieces|' + o.id + '|lieu', m.lieu, ' placeholder="Ex. classeur HSE, serveur RH, logiciel du SPST"')) + '</div>' : '') +
+          (o.id === 'A7' ? '' : outilPanel(o, x)) + '</div>' : '') + '</li>';
+    });
+    if (bloc) body += '</ul>';
+    if (!shown) body += '<div class="pv-empty">Aucune obligation dans ce filtre.</div>';
+    return '<section class="q pv-wide"><p class="q-k">' + (S.site ? esc(S.site) + ' · ' : '') + 'Code du travail, partie CMR</p><h1 class="q-t" id="q-title">Vos 45 obligations CMR</h1>' +
+      '<p class="q-s">Cliquez sur une obligation pour voir ce qu\'elle demande. Cochez-la quand la pièce existe, ou faites-la avec VB Safety.</p><div class="q-grid q-solo"><div class="q-main">' + body + '</div></div></section>' +
+      '<footer class="du-foot"><button type="button" class="btn btn-secondary" data-a="print" data-doc="sommaire">' + icon('download') + 'Sommaire (PDF)</button><button type="button" class="btn btn-primary" data-nav="' + firstTodoView(c) + '">Continuer mon dossier' + icon('arrow') + '</button></footer>';
+  }
+
+  // ------------------------------------------------------------------ entreprise (saisie une fois) et outils par obligation
+  var ENT = [['nom', 'Raison sociale', ''], ['siren', 'SIREN', '9 chiffres'], ['adresse', 'Adresse', 'Rue, code postal, ville'], ['site', 'Établissement ou site', 'Si différent du siège'], ['effectif', 'Effectif', 'Nombre de salariés'], ['responsable', 'Responsable du dossier', 'Nom, fonction'], ['spst', 'Service de santé au travail', 'Nom du SPST']];
+  function ent() { P.entreprise = P.entreprise || {}; if (!P.entreprise.nom && S.site) P.entreprise.nom = S.site; return P.entreprise; }
+  function entCard() {
+    var e = ent(), filled = ENT.filter(function (f) { return e[f[0]]; }).length, open = UI.entOpen != null ? UI.entOpen : filled < 3;
+    var sirenBad = e.siren && !C.sirenValide(e.siren);
+    return '<details class="pv-card pv-ent"' + (open ? ' open' : '') + ' data-ent><summary><b>Votre entreprise</b><span class="muted small">' + (filled ? esc([e.nom, e.siren ? 'SIREN ' + e.siren : '', e.effectif ? e.effectif + ' salariés' : ''].filter(Boolean).join(' · ')) : 'À remplir une fois : reprise sur tous les justificatifs') + '</span><span class="pv-sum-r">' + stBadge(filled >= 4 ? 'outil' : 'partiel', filled + ' / ' + ENT.length) + '</span></summary>' +
+      '<div class="pv-grid2 pv-grid3">' + ENT.map(function (f) { return field(f[1], '<input class="input" id="ent-' + f[0] + '" data-b="entreprise|' + f[0] + '" value="' + esc(e[f[0]] || '') + '" placeholder="' + esc(f[2]) + '"' + (f[0] === 'siren' ? ' inputmode="numeric" maxlength="11" data-re="1"' : f[0] === 'effectif' ? ' inputmode="numeric"' : '') + '>'); }).join('') + '</div>' +
+      (sirenBad ? '<p class="small pv-warn">Ce numéro SIREN ne semble pas valide (9 chiffres, clé de contrôle). Vérifiez-le sur votre extrait Kbis ou sur annuaire-entreprises.data.gouv.fr.</p>' : '') + '</details>';
+  }
+  function ficheField(id, f, v) {
+    var b = ' data-fi="' + id + '" data-fk="' + f.k + '"';
+    if (f.type === 'x') return field(f.l, '<textarea class="input"' + b + '>' + esc(v || '') + '</textarea>');
+    if (f.type === 'd') return field(f.l, '<input class="input" type="date"' + b + ' value="' + esc(v || '') + '">');
+    if (f.type === 's') return field(f.l, '<select class="input"' + b + '>' + opt('', 'Choisir', v) + f.o.map(function (x) { return opt(x, x, v); }).join('') + '</select>');
+    if (f.type === 'tab') {
+      var rows = Array.isArray(v) && v.length ? v : [f.cols.map(function () { return ''; })];
+      return '<div class="pv-tw"><table class="pv-t stack pv-reg-t"><thead><tr>' + f.cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '<th></th></tr></thead><tbody>' +
+        rows.map(function (r, ri) { return '<tr>' + f.cols.map(function (c, ci) { return '<td data-l="' + esc(c) + '"><input class="input" data-fi="' + id + '" data-fk="' + f.k + '" data-r="' + ri + '" data-c="' + ci + '" value="' + esc(r[ci] || '') + '" aria-label="' + esc(c) + ', ligne ' + (ri + 1) + '"></td>'; }).join('') + '<td><button type="button" class="icon-x" data-a="row-del" data-id="' + id + '" data-r="' + ri + '" aria-label="Supprimer la ligne ' + (ri + 1) + '">' + icon('trash') + '</button></td></tr>'; }).join('') +
+        '</tbody></table></div><button type="button" class="pv-link" data-a="row-add" data-id="' + id + '" data-k="' + f.k + '">+ Ajouter une ligne</button>';
+    }
+    return field(f.l, '<input class="input"' + b + ' value="' + esc(v || '') + '">');
+  }
+  var DOC_LBL = { registre: 'Registre des agents', revisions: 'Historique des révisions', subst: 'Fiches de substitution', liste: 'Liste nominative datée', anonyme: 'Version anonyme CSE', bordereau: 'Bordereau d\'envoi au SPST' };
+  function outilPanel(o, x) {
+    var F = C.FICHES[o.id], fv = (P.fiches || {})[o.id] || {}, html = '<div class="ob-tool">';
+    if (F) {
+      html += '<h4>' + icon('file') + esc(F.doc) + '</h4>' + F.champs.map(function (f) { return ficheField(o.id, f, fv[f.k]); }).join('');
+    }
+    var docs = (C.DOCS_OUTIL[o.id] || []).filter(function (k) { return DOC_LBL[k]; });
+    html += '<div class="ob-files">' +
+      (F ? '<button type="button" class="btn btn-primary btn-sm" data-a="print" data-doc="fiche" data-id="' + o.id + '">' + icon('download') + 'Télécharger le justificatif</button><button type="button" class="btn btn-secondary btn-sm" data-a="print" data-doc="fiche-vierge" data-id="' + o.id + '">Modèle vierge</button>' : '') +
+      docs.map(function (k) { return '<button type="button" class="btn btn-secondary btn-sm" data-a="print" data-doc="' + k + '" data-id="last">' + icon('download') + DOC_LBL[k] + '</button>'; }).join('') +
+      '<label class="btn btn-secondary btn-sm file-btn">' + icon('upload') + 'Déposer un justificatif<input type="file" data-upload="' + o.id + '"></label></div>' +
+      (UI.up && UI.up[o.id] ? '<p class="small pv-warn">« ' + esc(UI.up[o.id]) + ' » n\'a pas été enregistré : le dépôt de fichiers arrive avec la version hébergée. Indiquez en attendant où la pièce est rangée.</p>' : '') +
+      '<p class="ob-refs">Texte : ' + o.articles.split(', ').map(function (a) { return '<a href="' + C.articleUrl(a) + '" target="_blank" rel="noopener">art. ' + esc(a) + '</a>'; }).join(', ') + (F && F.ref ? ' · Référence : <a href="' + F.ref.url + '" target="_blank" rel="noopener">' + esc(F.ref.nom) + '</a>' : '') + '</p></div>';
+    return html;
+  }
+  function stLabel(st) { return { outil: 'faite avec VB Safety', manuel: 'faite', partiel: 'à compléter', manquant: 'à faire', 'sans-objet': 'sans objet' }[st]; }
+  function firstTodoView(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
 
   // ------------------------------------------------------------------ M1 · agents et régimes
   function viewAgents(c) {
@@ -297,7 +374,7 @@
 
   // ------------------------------------------------------------------ documents imprimés
   function head(title, sub, extra) {
-    var meta = [['Établissement ou unité de travail', S.site || '………………………………'], ['Date d\'édition', fd(today())]].concat(extra || []);
+    var e = ent(), meta = [['Entreprise', e.nom || S.site || '………………………………']].concat(e.siren ? [['SIREN', e.siren]] : [], e.adresse ? [['Adresse', e.adresse]] : [], e.site ? [['Établissement', e.site]] : [], e.effectif ? [['Effectif', e.effectif]] : [], [['Date d\'édition', fd(today())]], extra || []);
     return '<h1>' + esc(title) + '</h1><p class="ph-sub">' + esc(sub) + '</p><dl>' + meta.map(function (m) { return '<div><dt>' + esc(m[0]) + '</dt><dd>' + esc(m[1]) + '</dd></div>'; }).join('') + '</dl>';
   }
   function foot(ids, date) {
@@ -309,6 +386,19 @@
   function period(r) { return (r.du ? fd(r.du) : 'non renseigné') + (r.au ? ' → ' + fd(r.au) : ' → en cours'); }
   function verById(n) { return P.versions.filter(function (v) { return v.n === +n; })[0]; }
 
+  function ficheDoc(id, vierge) {
+    var o = C.OBLIGATIONS.filter(function (x) { return x.id === id; })[0], F = C.FICHES[id], fv = vierge ? {} : ((P.fiches || {})[id] || {});
+    if (!o || !F) return '';
+    var html = head(F.doc, 'Obligation ' + o.id + ' · ' + o.obligation + ' · ' + C.articleLabel(o) + ' du code du travail', ent().responsable ? [['Établi par', ent().responsable]] : []);
+    F.champs.forEach(function (f) {
+      if (f.type === 'tab') {
+        var rows = (fv[f.k] || []).filter(function (r) { return r.some(function (c) { return String(c || '').trim(); }); });
+        if (vierge || !rows.length) rows = [0, 1, 2, 3, 4, 5].map(function () { return f.cols.map(function () { return ''; }); });
+        html += table(f.cols, rows);
+      } else html += '<h2>' + esc(f.l) + '</h2><p>' + (fv[f.k] ? esc(f.type === 'd' ? fd(fv[f.k]) : fv[f.k]).replace(/\n/g, '<br>') : '……………………………………………………………………………………') + '</p>';
+    });
+    return doc(html + '<div class="ph-sign"><div>Date</div><div>Nom et fonction</div><div>Signature</div></div>' + foot([id], vierge ? '' : fv.maj));
+  }
   var DOCS = {
     registre: function (c) {
       var d = C.coverage({ S: S, P: P, agents: c.agents, listeRows: c.rows }).filter(function (x) { return x.o.id === 'A1'; })[0].date;
@@ -380,11 +470,17 @@
   };
   function printDocs(kind, id) {
     var c = ctx(), html = '';
-    if (kind === 'manquantes') html = DOCS.sommaire(c, true);
+    if (id === 'last') {
+      var lv = C.lastVersion(P); id = undefined;
+      if (/^(liste|anonyme|bordereau)$/.test(kind)) { if (!lv) { alert('Arrêtez d\'abord une version de la liste (étape « Liste et envois »).'); return; } id = lv.n; }
+    }
+    if (kind === 'fiche' || kind === 'fiche-vierge') html = ficheDoc(id, kind === 'fiche-vierge');
+    else if (kind === 'manquantes') html = DOCS.sommaire(c, true);
     else if (kind === 'extrait') html = DOCS.extrait(c, id, ($('#ex-sal') || {}).value);
     else if (kind === 'tout') {
       var v = C.lastVersion(P);
-      html = DOCS.sommaire(c) + DOCS.registre(c) + (P.revisions.length ? DOCS.revisions(c) : '') + (c.cmr.length ? DOCS.subst(c) : '') + (v ? DOCS.liste(c, v.n) + DOCS.anonyme(c, v.n) : '');
+      html = DOCS.sommaire(c) + DOCS.registre(c) + (P.revisions.length ? DOCS.revisions(c) : '') + (c.cmr.length ? DOCS.subst(c) : '') + (v ? DOCS.liste(c, v.n) + DOCS.anonyme(c, v.n) : '') +
+        Object.keys(C.FICHES).filter(function (k) { return C.ficheRemplie(P, k); }).map(function (k) { return ficheDoc(k); }).join('');
     } else if (DOCS[kind]) html = DOCS[kind](c, id);
     if (!html) { alert('Ce document est vide pour l\'instant.'); return; }
     var box = $('#pv-print'), t = document.title;
@@ -426,8 +522,10 @@
     });
     var v = C.freezeVersion(d, C.listeRows(S, d, C.agents(S, d)), '2026-09-16', 'Responsable HSE', 'Première liste');
     d.envois.push({ id: d.next++, dest: 'spst', version: v.n, date: '2026-09-17', nom: d.spst, moyen: 'Portail adhérent du SPST' });
-    d.pieces.C2 = { ok: true, date: '2026-03-12', lieu: 'Classeur HSE, rapport de l\'organisme accrédité' };
-    d.pieces.D3 = { ok: true, date: '2026-02-03', lieu: 'Feuilles de présence, armoire RH' };
+    d.entreprise = { nom: 'Atelier de démonstration', siren: '999999998', adresse: '1 rue de l\'Exemple, 77100 Meaux', site: 'Atelier principal', effectif: '24', responsable: 'Responsable HSE', spst: 'Service de santé au travail (exemple)' };
+    d.fiches.C2 = { prochain: '2027-03-10', lignes: [['2026-03-12', 'Laboratoire accrédité (exemple)', 'Dégraissage', 'Trichloroéthylène', '28 % de la valeur limite', 'R-2026-031']], maj: '2026-03-15' };
+    d.fiches.D3 = { programme: 'Risques des agents CMR, précautions, hygiène, port des équipements, conduite en cas d\'incident', lignes: [['2026-02-03', 'Risque chimique et CMR', 'Responsable HSE', '9', '2027-02-03']], maj: '2026-02-03' };
+    d.fiches.B8 = { lignes: [['2026-09-02', 'Captage cabine de peinture', 'Débit dans la plage du constructeur', 'Mainteneur (exemple)', '2027-03-02']], maj: '2026-09-02' };
     // Une apprentie arrivée après la version 1 : la liste a changé et doit être actualisée
     var a6 = C.agents(S, d).filter(function (g) { return g.key === 'p:6'; })[0], e6 = C.exposFromEval(a6, rows[6]);
     e6.id = d.next++; e6.sal = 5; e6.agent = 'p:6'; e6.du = '2026-09-01'; d.expos.push(e6);
@@ -435,7 +533,7 @@
   }
 
   // ------------------------------------------------------------------ rendu et navigation
-  var VIEWS = { accueil: viewAccueil, agents: viewAgents, revisions: viewRevisions, substitution: viewSubstitution, salaries: viewSalaries, liste: viewListe, sommaire: viewSommaire };
+  var VIEWS = { obligations: viewObligations, accueil: viewAccueil, agents: viewAgents, revisions: viewRevisions, substitution: viewSubstitution, salaries: viewSalaries, liste: viewListe, sommaire: viewSommaire };
   function render(focus) {
     var c = ctx(), v = $('#du-view'), y = window.scrollY;
     v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><button type="button" class="btn btn-secondary" data-a="quitdemo">Quitter l\'exemple</button></div>' : '') + (VIEWS[UI.view] || viewAccueil)(c);
@@ -445,7 +543,7 @@
     else window.scrollTo(0, y);
   }
   function go(id) {
-    UI.view = VIEWS[id] ? id : 'accueil';
+    UI.view = VIEWS[id] ? id : 'obligations';
     try { history.replaceState(null, '', '#' + UI.view); } catch (e) {}
     render(true);
   }
@@ -475,8 +573,8 @@
     if (d.nav != null) { go(d.nav); return; }
     if (d.set) { setPath(d.set, getPath(d.set) === d.v ? '' : d.v); persist(); render(); return; }
     var a = d.a, n = +d.id;
-    if (a === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); go('sommaire'); return; }
-    if (a === 'quitdemo') { setDemoMode(false); S = load(); S.seen = S.seen || {}; P = loadP(); go('accueil'); return; }
+    if (a === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); go('obligations'); return; }
+    if (a === 'quitdemo') { setDemoMode(false); S = load(); S.seen = S.seen || {}; P = loadP(); go('obligations'); return; }
     if (a === 'confirm-all') { ctx().agents.forEach(function (g) { P.agents[g.key] = P.agents[g.key] || {}; P.agents[g.key].regime = g.regime; if (!P.agents[g.key].date) P.agents[g.key].date = today(); }); persist(); render(); announce('Régimes confirmés.'); return; }
     if (a === 'revision') {
       var date = $('#rv-date').value || today();
@@ -523,9 +621,35 @@
     }
     if (a === 'project') { download('dossier-cmr' + slug() + '-' + today() + '.json', JSON.stringify(C.packProject(S, P), null, 1), 'application/json'); return; }
     if (a === 'print') { printDocs(d.doc, d.id); return; }
+    if (a === 'row-add' || a === 'row-del') {
+      var fid = d.id, F0 = C.FICHES[fid], k0 = d.k || 'lignes', col = F0.champs.filter(function (f) { return f.k === k0; })[0];
+      P.fiches[fid] = P.fiches[fid] || {}; var rows = P.fiches[fid][k0] = (P.fiches[fid][k0] || []).slice();
+      if (!rows.length) rows.push(col.cols.map(function () { return ''; }));
+      if (a === 'row-add') rows.push(col.cols.map(function () { return ''; })); else rows.splice(+d.r, 1);
+      P.fiches[fid].maj = today(); persist(); render(); return;
+    }
+    if (a === 'ob-filter') { UI.obFilter = d.f; render(); return; }
+    if (a === 'ob-open') { UI.obOpen = UI.obOpen === d.id ? null : d.id; render(); var it = $('[aria-controls="ob-d-' + d.id + '"]'); if (it) it.focus({ preventScroll: true }); return; }
+    if (a === 'ob-done') { var pc = P.pieces[d.id] = P.pieces[d.id] || {}; pc.ok = !pc.ok; if (pc.ok && !pc.date) pc.date = today(); persist(); if (pc.ok) UI.obOpen = d.id; render(); announce(pc.ok ? 'Obligation ' + d.id + ' marquée comme faite.' : 'Obligation ' + d.id + ' remise à faire.'); return; }
+    if (a === 'ob-faire') {
+      var ob = C.OBLIGATIONS.filter(function (x) { return x.id === d.id; })[0]; if (!ob) return;
+      if (ob.faire && ob.faire.vue) { go(ob.faire.vue); return; }
+      if (C.FICHES[ob.id] && !(ob.faire && ob.faire.lien)) { UI.obOpen = ob.id; render(); var tl = $('#ob-d-' + ob.id + ' .ob-tool'); if (tl) tl.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
+      if (ob.faire && ob.faire.lien) { location.href = ob.faire.lien; return; }
+      location.href = '/devis/?besoin=' + encodeURIComponent('Obligation ' + ob.id + ' · ' + ob.obligation + ' (' + C.articleLabel(ob) + ')'); return;
+    }
   });
+  document.addEventListener('toggle', function (e) { if (e.target.matches && e.target.matches('[data-ent]')) UI.entOpen = e.target.open; }, true);
   document.addEventListener('toggle', function (e) { var c = e.target.closest && e.target.closest('[data-card]'); if (c && e.target === c) UI.open[c.dataset.card] = c.open; }, true);
 
+  function bindFiche(t) {
+    var id = t.dataset.fi, k = t.dataset.fk; P.fiches = P.fiches || {}; var f = P.fiches[id] = P.fiches[id] || {};
+    if (t.dataset.r != null) {
+      var cols = C.FICHES[id].champs.filter(function (x) { return x.k === k; })[0].cols, rows = f[k] = Array.isArray(f[k]) && f[k].length ? f[k] : [cols.map(function () { return ''; })];
+      rows[+t.dataset.r][+t.dataset.c] = t.value;
+    } else f[k] = t.value;
+    f.maj = today(); persist(); drawSide(ctx());
+  }
   function bind(t, rerender) {
     var path = t.dataset.b; if (!path) return false;
     setPath(path, t.type === 'checkbox' ? t.checked : t.value);
@@ -533,9 +657,11 @@
     if (rerender || t.dataset.re) render(); else drawSide(ctx());
     return true;
   }
-  document.addEventListener('input', function (e) { var t = e.target; if (t.dataset.b && t.tagName !== 'SELECT' && t.type !== 'checkbox' && t.type !== 'date') bind(t, false); });
+  document.addEventListener('input', function (e) { var t = e.target; if (t.dataset.fi) { bindFiche(t); return; } if (t.dataset.b && t.tagName !== 'SELECT' && t.type !== 'checkbox' && t.type !== 'date') bind(t, false); });
   document.addEventListener('change', function (e) {
     var t = e.target, d = t.dataset;
+    if (d.fi) { bindFiche(t); return; }
+    if (d.upload) { UI.up = UI.up || {}; UI.up[d.upload] = t.files && t.files[0] ? t.files[0].name : ''; t.value = ''; render(); return; }
     if (d.b) { bind(t, !!d.re); return; }
     if (d.voie) { var ex = P.expos.filter(function (x) { return String(x.id) === d.voie; })[0]; if (!ex) return; ex.voies = ex.voies || []; var i = ex.voies.indexOf(t.value); if (t.checked && i === -1) ex.voies.push(t.value); if (!t.checked && i !== -1) ex.voies.splice(i, 1); persist(); drawSide(ctx()); return; }
     if (d.aChange === 'ver') { UI.ver = +t.value; render(); return; }
@@ -557,8 +683,9 @@
   window.EV_ONREF = function () { render(); };
   loadRef();
   var h0 = (location.hash || '').slice(1);
-  if (h0 === 'exemple') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'sommaire'; }
-  UI.view = VIEWS[h0] ? h0 : 'accueil';
+  // #exemple ouvre l'exemple sur le sommaire ; #demo (après la page de connexion) l'ouvre sur l'accueil
+  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; }
+  UI.view = VIEWS[h0] ? h0 : 'obligations';
   render();
-  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });
+  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });
 })();

@@ -101,7 +101,7 @@
   var CHAMPS_SALARIE = ['id', 'nom', 'prenom', 'poste', 'contrat', 'agence', 'entree', 'sortie'];
   var CHAMPS_EXPO = ['id', 'sal', 'agent', 'du', 'au', 'voies', 'duree', 'degre', 'source', 'mesure'];
 
-  function blank() { return { v: 1, agents: {}, revisions: [], subst: {}, salaries: [], expos: [], versions: [], envois: [], pieces: {}, next: 1 }; }
+  function blank() { return { v: 1, entreprise: {}, agents: {}, revisions: [], subst: {}, salaries: [], expos: [], versions: [], envois: [], pieces: {}, fiches: {}, next: 1 }; }
   function normalize(P) {
     var b = blank(); P = P && typeof P === 'object' ? P : {};
     Object.keys(b).forEach(function (k) { if (P[k] == null || typeof P[k] !== typeof b[k] || Array.isArray(P[k]) !== Array.isArray(b[k])) P[k] = b[k]; });
@@ -231,8 +231,113 @@
     ['H2', 'Gérer les déchets et émettre les bordereaux', 'R. 4412-70', 'Procédure, bordereaux', 'À chaque enlèvement'],
     ['H3', 'Présenter au CSE un rapport annuel sur l\'exposition', 'L. 2312-27', 'Rapport annuel', 'Chaque année']
   ].map(function (o) { return { id: o[0], bloc: o[0].charAt(0), obligation: o[1], articles: o[2], piece: o[3], frequence: o[4] }; });
+
+  // Pour chaque obligation : explication courte, et où la faire avec VB Safety.
+  // vue : écran du dossier de preuve ; lien : autre page de l'outil ; rien : accompagnement VB Safety (demande de devis).
+  var AIDE = {
+    A1: ['Lister chaque substance, mélange ou procédé présent dans l\'entreprise et dire s\'il relève du régime CMR (catégories 1A ou 1B, ou procédé listé : bois, silice, diesel, HAP, huiles usagées). Les CMR de catégorie 2 restent au régime général des agents chimiques dangereux.', { vue: 'agents' }],
+    A2: ['Pour chaque activité exposant à un CMR, évaluer la nature, le degré et la durée de l\'exposition, par inhalation et par contact cutané. Cette évaluation est faite avant toute activité nouvelle.', { lien: 'duerp.html#produits', t: 'Ouvrir l\'évaluation du risque chimique' }],
+    A3: ['Renouveler l\'évaluation régulièrement et à chaque changement : nouveau produit, nouvelle fiche de sécurité, nouveau procédé, résultat de mesurage. Le texte ne fixe pas de délai : l\'employeur choisit sa périodicité et la justifie.', { vue: 'revisions' }],
+    A4: ['Les résultats de l\'évaluation figurent dans le document unique (DUERP), avec les éléments qui ont servi à l\'établir : fiches de sécurité, inventaires, mesures.', { lien: 'duerp.html#dossier', t: 'Télécharger le volet risque chimique du DUERP' }],
+    A5: ['Mettre à jour le DUERP au moins une fois par an à partir de 11 salariés, conserver chaque version 40 ans et le transmettre au service de prévention et de santé au travail. Depuis le 27 juin 2026, l\'absence de DUERP expose à une amende administrative pouvant atteindre 4 000 € par travailleur.', { lien: 'duerp.html#dossier', t: 'Ouvrir mon dossier DUERP' }],
+    A6: ['Définir les actions de prévention issues de l\'évaluation. À partir de 50 salariés, elles forment un programme annuel (PAPRIPACT) avec indicateurs, coût et calendrier.', { lien: 'duerp.html#actions', t: 'Ouvrir le plan d\'action' }],
+    A7: ['La loi de 2021 prévoyait un dépôt du DUERP sur un portail national. Ce portail n\'a jamais été mis en service : il n\'y a rien à faire à ce jour.', null],
+    B1: ['Remplacer chaque agent CMR par un produit ou un procédé moins dangereux quand c\'est techniquement possible, et consigner le résultat de la recherche dans le DUERP, y compris quand elle échoue.', { vue: 'substitution' }],
+    B2: ['Si la substitution est impossible, travailler en système clos. Si le système clos est lui aussi impossible, le justifier par écrit.', { vue: 'substitution' }],
+    B3: ['À défaut de système clos, réduire l\'exposition au niveau le plus bas techniquement possible et décrire le niveau résiduel.', { vue: 'substitution' }],
+    B4: ['Appliquer dans tous les cas les treize mesures de l\'article R. 4412-70 : quantités, nombre d\'exposés, captage, détection précoce, protections, nettoyage, information, zonage, urgence, récipients étiquetés, déchets…', { vue: 'substitution' }],
+    B5: ['Interdire de manger, boire et fumer dans les zones exposées, fournir et entretenir les vêtements de travail et les équipements de protection, et informer par écrit le prestataire qui les nettoie.', null],
+    B6: ['Délimiter les zones où l\'on peut être exposé, les signaler et en réserver l\'accès aux personnes autorisées.', null],
+    B7: ['Pour les opérations d\'entretien ou de maintenance qui augmentent l\'exposition, rédiger une procédure par type d\'opération, après avis du médecin du travail et du CSE.', null],
+    B8: ['Vérifier régulièrement que la ventilation, le captage et les autres protections collectives fonctionnent, et tenir un registre de ces vérifications.', null],
+    B9: ['Prévoir par écrit ce qui se passe en cas d\'accident ou d\'incident : alarme, évacuation, premiers gestes, personnes à prévenir.', null],
+    B10: ['Le plomb et l\'amiante ont des règles propres. Pour le plomb : deux vestiaires, douches, repas en tenue de ville, et suivi renforcé pour tout poste exposé depuis le décret du 8 avril 2026. L\'amiante relève d\'une section dédiée.', { vue: 'agents' }],
+    C1: ['Mesurer régulièrement la concentration des agents CMR dans l\'air des lieux de travail.', null],
+    C2: ['Quand une valeur limite existe, faire contrôler son respect par un organisme accrédité au moins une fois par an, et à chaque changement susceptible d\'augmenter l\'exposition. C\'est la seule fréquence chiffrée de toute la réglementation CMR.', null],
+    C3: ['Communiquer chaque résultat de mesurage et chaque rapport de contrôle au médecin du travail et au CSE, et les tenir à disposition de l\'inspection du travail et de la Carsat.', null],
+    C4: ['En cas de dépassement d\'une valeur limite contraignante, arrêter le travail aux postes concernés jusqu\'à la mise en place de mesures correctives, puis refaire une mesure.', null],
+    C5: ['Quand le médecin du travail signale un dépassement d\'une valeur biologique (sous forme non nominative), réévaluer le risque, renforcer les mesures et refaire un contrôle.', null],
+    C6: ['Appliquer la table des valeurs limites en vigueur à la date considérée. Plusieurs valeurs ont changé en 2024 et en 2026 (plomb, diesel) et d\'autres changeront jusqu\'en 2029.', null],
+    D1: ['Rédiger une notice pour chaque poste exposé : risques, règles d\'hygiène, consignes, équipements à porter.', null],
+    D2: ['Tenir un dossier d\'information CMR en sept rubriques (activités, quantités, nombre d\'exposés, mesures, équipements, exposition, substitution) à disposition des travailleurs, du CSE, du médecin du travail et de l\'inspection.', null],
+    D3: ['Former et informer les travailleurs exposés, avec le CSE et le médecin du travail, et répéter cette formation régulièrement. Garder le programme et les feuilles de présence.', null],
+    D4: ['Informer sur les effets des agents sur la fertilité, l\'embryon et l\'allaitement, et inciter à déclarer tôt une grossesse.', null],
+    D5: ['Signaler la présence des agents CMR et étiqueter les récipients, y compris les récipients annexes.', null],
+    D6: ['Permettre aux travailleurs et au CSE de vérifier que les règles sont appliquées, en leur donnant accès aux pièces du dossier.', null],
+    D7: ['Informer au plus vite les travailleurs, le CSE et le médecin du travail de toute exposition anormale, de ses causes et des mesures prises, et limiter l\'accès à la zone.', null],
+    E1: ['Tenir la liste des travailleurs susceptibles d\'être exposés aux agents CMR, avec pour chacun les substances et, s\'ils sont connus, la nature, la durée et le degré de l\'exposition. Exigible depuis le 5 juillet 2024 ; la forme est libre.', { vue: 'salaries' }],
+    E2: ['Donner à chaque travailleur accès aux informations qui le concernent, et tenir une version anonyme de la liste à disposition des travailleurs et du CSE.', { vue: 'liste' }],
+    E3: ['Communiquer la liste, et chacune de ses actualisations, au service de prévention et de santé au travail, qui la verse au dossier médical. Le texte ne fixe ni format ni canal : gardez la preuve de chaque envoi.', { vue: 'liste' }],
+    E4: ['Pour un travailleur intérimaire, transmettre ses informations à l\'entreprise de travail temporaire, qui les communique à son propre service de santé au travail.', { vue: 'liste' }],
+    F1: ['Tout travailleur exposé aux CMR, à l\'amiante ou au plomb bénéficie d\'un suivi individuel renforcé, avec un examen d\'aptitude par le médecin du travail avant l\'affectation au poste.', null],
+    F2: ['Le suivi renforcé est renouvelé au plus tous les 4 ans, avec une visite intermédiaire au plus tard 2 ans après.', null],
+    F3: ['Si l\'employeur ajoute des postes à risque à la liste réglementaire, il motive cet ajout par écrit et l\'actualise chaque année.', null],
+    F4: ['Informer sans délai le service de santé au travail de la fin d\'exposition, du départ ou de la retraite d\'un travailleur suivi, et en aviser le travailleur.', null],
+    F5: ['Après une maladie professionnelle liée à un CMR, faire examiner tous les travailleurs qui ont subi une exposition comparable.', null],
+    G1: ['Ne pas affecter ni maintenir une femme enceinte ou allaitante à un poste exposant à des agents reprotoxiques de catégorie 1A ou 1B. L\'outil ne demande jamais l\'état de grossesse : il vous aide à repérer les postes concernés.', null],
+    G2: ['Ne pas affecter un jeune de moins de 18 ans à des travaux exposant à des agents chimiques dangereux, sauf dérogation encadrée pour la formation professionnelle, valable 3 ans.', null],
+    G3: ['Ne pas employer de salarié en CDD ni d\'intérimaire aux travaux dangereux listés par le code du travail, sauf dérogation de la DREETS.', null],
+    H1: ['Établir un plan de prévention écrit, quelle que soit la durée, pour toute intervention d\'une entreprise extérieure qui expose ses salariés à des CMR.', null],
+    H2: ['Collecter, stocker et évacuer les déchets contenant des CMR en sécurité, et émettre les bordereaux de suivi des déchets dangereux.', null],
+    H3: ['Présenter chaque année au CSE un rapport qui traite de l\'exposition aux facteurs de risques, dont les agents chimiques dangereux, et du programme de prévention.', null]
+  };
+  OBLIGATIONS.forEach(function (o) { o.aide = AIDE[o.id][0]; o.faire = AIDE[o.id][1]; });
   function articleLabel(o) { return 'Art. ' + o.articles.replace(/, /g, ' et '); }
 
+
+  // ------------------------------------------------------------------ outils par obligation (formulaires et registres)
+  // Chaque fiche produit un justificatif téléchargeable. Types : t texte, d date, x texte long, s liste, tab tableau (colonnes).
+  // Références : démarche INRS (citée et liée, jamais recopiée) et articles du code du travail.
+  var INRS = { nom: 'INRS · agents CMR', url: 'https://www.inrs.fr/risques/cmr-agents-chimiques/ce-qu-il-faut-retenir.html' };
+  var SEIRICH = { nom: 'Seirich (INRS), logiciel gratuit d\'évaluation du risque chimique', url: 'https://www.seirich.fr' };
+  function T(cols) { return { k: 'lignes', type: 'tab', cols: cols }; }
+  var FICHES = {
+    A5: { doc: 'Registre des versions du DUERP', ref: SEIRICH, champs: [T(['Version', 'Date', 'Motif de la mise à jour', 'Transmis au SPST le', 'Moyen de transmission'])] },
+    A6: { doc: 'Programme d\'actions de prévention', champs: [{ k: 'cadre', type: 's', l: 'Cadre', o: ['Liste d\'actions consignée dans le DUERP (moins de 50 salariés)', 'Programme annuel de prévention, PAPRIPACT (50 salariés et plus)'] }, T(['Action', 'Responsable', 'Échéance', 'Coût estimé', 'Indicateur de suivi'])] },
+    B5: { doc: 'Registre d\'hygiène, vêtements et équipements', champs: [{ k: 'consignes', type: 'x', l: 'Consignes affichées (interdiction de manger, boire et fumer en zone, vestiaires)' }, { k: 'prestataire', type: 't', l: 'Prestataire de nettoyage des vêtements' }, { k: 'infoPresta', type: 'd', l: 'Information écrite du prestataire le' }, T(['Date', 'Équipement ou vêtement', 'Opération (fourniture, nettoyage, vérification)', 'Fait par'])] },
+    B6: { doc: 'Registre des zones à risque', champs: [T(['Zone', 'Agents CMR présents', 'Signalisation en place', 'Personnes autorisées'])] },
+    B7: { doc: 'Procédures de maintenance à exposition accrue', champs: [T(['Opération', 'Mesures de protection', 'Avis du médecin du travail le', 'Avis du CSE le', 'Procédure écrite (référence)'])] },
+    B8: { doc: 'Registre de vérification des protections collectives', champs: [T(['Date', 'Installation (captage, ventilation…)', 'Résultat', 'Vérifié par', 'Prochaine vérification'])] },
+    B9: { doc: 'Consignes en cas d\'accident ou d\'incident', champs: [{ k: 'alarme', type: 'x', l: 'Alarme et alerte' }, { k: 'evacuation', type: 'x', l: 'Évacuation et mise en sécurité de la zone' }, { k: 'secours', type: 'x', l: 'Premiers secours et décontamination' }, { k: 'contacts', type: 'x', l: 'Personnes et services à prévenir' }, { k: 'affiche', type: 'd', l: 'Consignes affichées le' }] },
+    B10: { doc: 'Mesures propres au plomb', champs: [{ k: 'vestiaires', type: 'x', l: 'Vestiaires séparés, douches, repas en tenue de ville' }, { k: 'postes', type: 'x', l: 'Postes exposés au plomb (suivi renforcé depuis le décret du 8 avril 2026)' }] },
+    C1: { doc: 'Registre des mesurages de l\'exposition', ref: INRS, champs: [T(['Date', 'Poste ou groupe d\'exposition', 'Agent', 'Résultat', 'Laboratoire', 'Rapport n°'])] },
+    C2: { doc: 'Échéancier des contrôles des valeurs limites', ref: INRS, champs: [{ k: 'prochain', type: 'd', l: 'Prochain contrôle annuel prévu le' }, T(['Date du contrôle', 'Organisme accrédité', 'Groupe d\'exposition', 'Agent', 'Résultat / valeur limite', 'Rapport n°'])] },
+    C3: { doc: 'Registre de communication des résultats', champs: [T(['Rapport ou mesurage du', 'Transmis au médecin du travail le', 'Transmis au CSE le', 'Moyen'])] },
+    C4: { doc: 'Fiches de dépassement de valeur limite', champs: [T(['Date', 'Poste', 'Valeur mesurée / valeur limite', 'Arrêt du travail le', 'Mesures correctives', 'Nouvelle mesure le'])] },
+    C5: { doc: 'Traitement des alertes du médecin du travail', champs: [T(['Alerte reçue le', 'Objet (forme non nominative)', 'Réévaluation du risque', 'Mesures prises', 'Contrôle refait le'])] },
+    C6: { doc: 'Table des valeurs limites appliquée', champs: [{ k: 'version', type: 't', l: 'Version de la table appliquée (date de mise à jour)' }, { k: 'verifie', type: 'd', l: 'Vérifiée le' }, { k: 'evolutions', type: 'x', l: 'Évolutions à venir suivies (bascules 2026-2029)' }] },
+    D1: { doc: 'Notices de poste', ref: INRS, champs: [T(['Poste', 'Risques', 'Règles d\'hygiène', 'Consignes', 'Équipements de protection', 'Mise à jour le'])] },
+    D2: { doc: 'Dossier d\'information CMR (sept rubriques)', champs: [{ k: 'r1', type: 'x', l: '1. Activités et procédés, raisons de l\'emploi des agents CMR' }, { k: 'r2', type: 'x', l: '2. Quantités fabriquées ou utilisées' }, { k: 'r3', type: 'x', l: '3. Nombre de travailleurs exposés' }, { k: 'r4', type: 'x', l: '4. Mesures de prévention prises' }, { k: 'r5', type: 'x', l: '5. Équipements de protection utilisés' }, { k: 'r6', type: 'x', l: '6. Nature, degré et durée de l\'exposition' }, { k: 'r7', type: 'x', l: '7. Cas de substitution' }] },
+    D3: { doc: 'Registre de formation et d\'information', ref: INRS, champs: [{ k: 'programme', type: 'x', l: 'Programme (risques, précautions, hygiène, équipements, incidents)' }, T(['Date', 'Intitulé', 'Formateur', 'Participants', 'Recyclage prévu le'])] },
+    D4: { doc: 'Information fertilité, grossesse, allaitement', champs: [{ k: 'contenu', type: 'x', l: 'Contenu de l\'information délivrée' }, { k: 'date', type: 'd', l: 'Délivrée le' }, { k: 'public', type: 't', l: 'Travailleurs concernés (postes)' }] },
+    D5: { doc: 'Registre de signalisation et d\'étiquetage', champs: [T(['Zone ou récipient', 'Signalisation ou étiquetage', 'Contrôlé le', 'Par'])] },
+    D6: { doc: 'Modalités d\'accès aux pièces du dossier', champs: [{ k: 'modalites', type: 'x', l: 'Où et comment les travailleurs et le CSE consultent les pièces' }, { k: 'affiche', type: 'd', l: 'Modalités affichées le' }] },
+    D7: { doc: 'Registre des expositions anormales', champs: [T(['Date', 'Zone', 'Cause', 'Mesures prises', 'Travailleurs, CSE et médecin informés le'])] },
+    F1: { doc: 'Postes relevant du suivi individuel renforcé', champs: [T(['Poste', 'Agent CMR, plomb ou amiante', 'Nombre de salariés', 'Visite avant affectation organisée'])] },
+    F2: { doc: 'Échéancier des visites de suivi renforcé', champs: [T(['Poste ou salarié', 'Dernière visite le', 'Visite intermédiaire (2 ans) le', 'Renouvellement (4 ans) le'])] },
+    F3: { doc: 'Liste motivée des postes à risque ajoutés', champs: [T(['Poste ajouté', 'Motif', 'Transmis au SPST le'])] },
+    F4: { doc: 'Notifications de fin d\'exposition', champs: [T(['Salarié', 'Motif (fin d\'exposition, départ, retraite)', 'Date', 'SPST informé le', 'Salarié avisé le'])] },
+    F5: { doc: 'Examen des travailleurs exposés de façon comparable', champs: [T(['Maladie professionnelle reconnue le', 'Poste', 'Personnes à faire examiner', 'Liste transmise au médecin le'])] },
+    G1: { doc: 'Contrôle d\'affectation aux postes reprotoxiques', champs: [{ k: 'postes', type: 'x', l: 'Postes exposant à des reprotoxiques de catégorie 1A ou 1B, au benzène ou à certains dérivés aromatiques' }, { k: 'procedure', type: 'x', l: 'Procédure de changement temporaire de poste dès la déclaration (sans enregistrer l\'état de grossesse)' }] },
+    G2: { doc: 'Dérogations pour les jeunes en formation', champs: [T(['Déclaration de dérogation le', 'Formation', 'Travaux concernés', 'Encadrement', 'Échéance (3 ans)'])] },
+    G3: { doc: 'Contrôle d\'affectation des CDD et intérimaires', champs: [T(['Travaux', 'Liste des 27 travaux interdits vérifiée le', 'Dérogation DREETS (référence)', 'Contrôlé par'])] },
+    H1: { doc: 'Registre des plans de prévention', champs: [T(['Entreprise extérieure', 'Travaux', 'Agents CMR', 'Inspection commune le', 'Plan signé le'])] },
+    H2: { doc: 'Registre des déchets CMR', champs: [{ k: 'procedure', type: 'x', l: 'Procédure de collecte, de stockage et d\'évacuation' }, T(['Enlèvement le', 'Déchet', 'Quantité', 'Collecteur', 'Bordereau n°'])] },
+    H3: { doc: 'Rapport annuel au CSE sur l\'exposition', champs: [{ k: 'presente', type: 'd', l: 'Présenté au CSE le' }, { k: 'contenu', type: 'x', l: 'Contenu : expositions, mesures, programme de prévention' }] }
+  };
+  // Documents déjà produits par les écrans de l'outil
+  var DOCS_OUTIL = { A1: ['registre'], A3: ['revisions'], B1: ['subst'], B2: ['subst'], B3: ['subst'], B4: ['subst'], E1: ['liste'], E2: ['anonyme', 'extrait'], E3: ['bordereau'], E4: ['agence'] };
+  function ficheRemplie(P, id) {
+    var f = P && P.fiches && P.fiches[id]; if (!f) return false;
+    return Object.keys(f).some(function (k) { var v = f[k]; return k !== 'maj' && (Array.isArray(v) ? v.some(function (r) { return r.some(function (c) { return String(c || '').trim(); }); }) : String(v || '').trim()); });
+  }
+  // SIREN : 9 chiffres, clé de Luhn
+  function sirenValide(v) {
+    var d = String(v || '').replace(/\s/g, ''); if (!/^\d{9}$/.test(d)) return false;
+    var sum = 0; for (var i = 0; i < 9; i++) { var n = +d[8 - i]; if (i % 2) { n *= 2; if (n > 9) n -= 9; } sum += n; }
+    return sum % 10 === 0;
+  }
+  function articleUrl(a) { return 'https://code.travail.gouv.fr/code-du-travail/' + a.toLowerCase().replace(/[.\s]/g, ''); }
   // Où en est chaque obligation : « outil » (pièce produite ici), « manuel » (pièce déclarée par l'employeur),
   // « partiel », « manquant » ou « sans objet ». L'outil n'écrit jamais « conforme ».
   function coverage(ctx) {
@@ -256,6 +361,7 @@
 
     var states = cmr.map(function (a) { return substState(P, a.key); });
     function bloc(id, test, okTxt, koTxt) {
+      if (!S.products.length) { set(id, 'manquant', 'Inventoriez d\'abord vos produits et procédés'); return; }
       if (!cmr.length) { set(id, 'sans-objet', 'Aucun agent relevant du régime CMR'); return; }
       var n = states.filter(test).length;
       if (n === cmr.length) set(id, 'outil', okTxt, maxDate(states.map(function (x) { return x.s.date || x.s.mesuresDate; })));
@@ -265,9 +371,10 @@
     bloc('B2', function (x) { return x.b2; }, 'Système clos étudié et justifié', 'système clos à étudier ou justifier');
     bloc('B3', function (x) { return x.b3; }, 'Mesures de réduction et niveau résiduel décrits', 'mesures de réduction à décrire');
     bloc('B4', function (x) { return x.b4; }, 'Grille des treize mesures renseignée', 'grille des treize mesures à compléter');
-    if (!ags.some(function (a) { return a.particuliers.length; })) set('B10', 'sans-objet', 'Aucun plomb ni amiante repéré dans l\'inventaire');
+    if (S.products.length && !ags.some(function (a) { return a.particuliers.length; })) set('B10', 'sans-objet', 'Aucun plomb ni amiante repéré dans l\'inventaire');
 
-    if (!cmr.length) { ['E1', 'E2', 'E3', 'E4'].forEach(function (id) { set(id, 'sans-objet', 'Aucun agent relevant du régime CMR'); }); }
+    if (!S.products.length) { ['E1', 'E2', 'E3', 'E4'].forEach(function (id) { set(id, 'manquant', 'Inventoriez d\'abord vos produits et procédés'); }); }
+    else if (!cmr.length) { ['E1', 'E2', 'E3', 'E4'].forEach(function (id) { set(id, 'sans-objet', 'Aucun agent relevant du régime CMR'); }); }
     else {
       if (lastV && !changedSince(P, rows)) set('E1', 'outil', 'Liste version ' + lastV.n + ' : ' + lastV.rows.length + ' ligne(s)', lastV.date);
       else set('E1', lastV ? 'partiel' : 'manquant', lastV ? 'La liste a changé depuis la version ' + lastV.n + ' : arrêtez une nouvelle version' : 'Aucune version datée de la liste');
@@ -285,6 +392,7 @@
 
     return OBLIGATIONS.map(function (o) {
       var a = auto[o.id], m = P.pieces[o.id] || {};
+      if (!a && ficheRemplie(P, o.id)) a = { statut: 'outil', detail: 'Renseigné dans l\'outil : ' + FICHES[o.id].doc, date: (P.fiches[o.id].maj || '') };
       if (a && (a.statut === 'outil' || a.statut === 'sans-objet')) return { o: o, statut: a.statut, detail: a.detail, date: a.date, source: 'outil' };
       if (m.ok) return { o: o, statut: 'manuel', detail: m.lieu ? 'Pièce rangée : ' + m.lieu : 'Pièce déclarée disponible', date: m.date || '', source: 'employeur' };
       if (a) return { o: o, statut: a.statut, detail: a.detail, date: a.date, source: 'outil' };
@@ -313,6 +421,7 @@
     regimeOf: regimeOf, particuliersOf: particuliersOf, agents: agents, agentsCmr: agentsCmr, substState: substState,
     blank: blank, normalize: normalize, fullName: fullName, inPeriod: inPeriod, listeRows: listeRows, fingerprint: fingerprint, freezeVersion: freezeVersion,
     lastVersion: lastVersion, changedSince: changedSince, extraitIndividuel: extraitIndividuel, anonyme: anonyme, interimaires: interimaires,
+    FICHES: FICHES, DOCS_OUTIL: DOCS_OUTIL, ficheRemplie: ficheRemplie, sirenValide: sirenValide, articleUrl: articleUrl,
     suggestions: suggestions, exposFromEval: exposFromEval, revisionSummary: revisionSummary, coverage: coverage, articleLabel: articleLabel, mention: mention,
     frDate: frDate, today: today, packProject: packProject, unpackProject: unpackProject
   };
