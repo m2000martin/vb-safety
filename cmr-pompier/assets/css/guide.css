@@ -153,3 +153,16 @@
 .g-phases span { display: flex !important; align-items: center; gap: 8px; }
 .g-phases i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; background: var(--red); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; letter-spacing: 0; }
 @media (max-width: 640px) { .g-agents span, .gl-st, .g-phases span { font-size: 12.5px; } }
+
+/* Schéma « l'exposition continue après l'extinction » */
+.g-fig { margin: 22px 0 6px; padding: 16px 16px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.g-svg { display: block; width: 100%; height: auto; }
+.g-fig figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+@media (max-width: 560px) { .g-fig { padding: 10px 8px 10px; } .g-svg text { font-size: 15px; } }
+/* Niveaux de preuve du CIRC */
+.g-ev { display: inline-block; font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.g-ev-s { background: #FDECEA; color: #B81F18; }
+.g-ev-l { background: #FFF2DE; color: #8A5300; }
+.g-note { font-size: 14px; color: var(--muted); }
+.g-agents-2 { grid-template-columns: 1fr; }
+@media (min-width: 640px) { .g-agents-2 { grid-template-columns: 1fr 1fr; } }
