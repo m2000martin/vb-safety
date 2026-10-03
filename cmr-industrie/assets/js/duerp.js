@@ -388,7 +388,7 @@
   var VIEWS = { accueil: viewAccueil, entreprise: viewEntreprise, produits: viewProduits, prio: viewPrio, actions: viewActions, salaries: viewSalaries, dossier: viewDossier };
   function render(focus) {
     var v = $('#du-view');
-    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
+    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><span class="demo-acts"><a class="btn btn-secondary" href="/ressources/exemple-dossier-duerp-risque-chimique.pdf" download>Télécharger l\'exemple (PDF)</a><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></span></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
     document.body.classList.toggle('du-welcome', !UI.wz && UI.view === 'accueil');
     drawSide();
     $$('[data-w]', v).forEach(function (i) { i.style.width = i.getAttribute('data-w') + '%'; });
