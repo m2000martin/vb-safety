@@ -1,6 +1,6 @@
 // VB Safety · Dossier de preuve CMR (version 1) : registre des agents, révisions datées, substitution et treize mesures,
 // liste nominative des travailleurs exposés avec ses vues, sommaire des 45 obligations.
-// Prolonge l'évaluation « Mon DUERP risque chimique » (même navigateur, mêmes données). Rien n'est envoyé à un serveur.
+// Prolonge l'évaluation « Mon DUERP » (même navigateur, mêmes données). Rien n'est envoyé à un serveur.
 (function () {
   'use strict';
   var C = window.PREUVE;
@@ -98,7 +98,7 @@
   function area(bind, val, ph) { return '<textarea class="input" data-b="' + esc(bind) + '" placeholder="' + esc(ph || '') + '">' + esc(val || '') + '</textarea>'; }
   function legalNote() { return '<p class="pv-note"><b>Référentiel juridique du ' + fd(C.REFERENTIEL.date) + '.</b> Chaque écran cite l\'article qui fonde la pièce. L\'outil indique ce qui a été renseigné et quand ; il ne juge pas de la conformité. ' + esc(C.REFERENTIEL.relecture) + '.</p>'; }
   function noEval() {
-    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP risque chimique » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="' + B + 'duerp.html#produits">Inventorier mes produits</a></div>';
+    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="' + B + 'duerp.html#produits">Inventorier mes produits</a></div>';
   }
 
   // ------------------------------------------------------------------ accueil
@@ -106,7 +106,7 @@
     var has = S.products.length > 0;
     return '<section class="welcome"><p class="q-k">Version 1 · rien n\'est hébergé</p><h1 class="q-t" id="q-title">Votre dossier de preuve CMR</h1>' +
       '<p class="q-s">L\'évaluation du risque chimique est faite. Il reste les pièces écrites que le code du travail demande pour les agents cancérogènes, mutagènes et toxiques pour la reproduction (CMR), et que l\'employeur doit pouvoir montrer le jour où un salarié, un inspecteur ou un juge les demande.</p>' +
-      (has ? '' : '<div class="pv-start"><h2>Comment démarrer</h2><ol><li><b>Inventoriez vos produits et procédés</b> dans « Mon DUERP risque chimique », étapes 1 et 2 (environ 5 minutes par produit). C\'est la seule saisie à faire dans l\'autre outil.</li><li><b>Revenez ici</b> par le lien « Dossier de preuve CMR » du menu : vos agents CMR sont repris automatiquement et les 6 étapes ci-dessous s\'ouvrent.</li></ol><p class="muted small">Pour découvrir l\'outil sans rien saisir, ouvrez l\'exemple rempli (données fictives, vos données ne sont pas touchées).</p></div>') +
+      (has ? '' : '<div class="pv-start"><h2>Comment démarrer</h2><ol><li><b>Inventoriez vos produits et procédés</b> dans « Mon DUERP », étapes 1 et 2 (environ 5 minutes par produit). C\'est la seule saisie à faire dans l\'autre outil.</li><li><b>Revenez ici</b> par le lien « Dossier de preuve CMR » du menu : vos agents CMR sont repris automatiquement et les 6 étapes ci-dessous s\'ouvrent.</li></ol><p class="muted small">Pour découvrir l\'outil sans rien saisir, ouvrez l\'exemple rempli (données fictives, vos données ne sont pas touchées).</p></div>') +
       '<div class="wl-grid"><ol class="wl-steps">' + STEPS.map(function (s, i) { return '<li><i>' + (i + 1) + '</i><div><b>' + s.t + '</b><span>' + s.d + '</span></div></li>'; }).join('') + '</ol>' +
       '<div class="wl-prep"><h2>Ce que produit cette version</h2><ul>' +
       '<li>' + icon('file') + '<span><b>Le registre des agents et procédés</b> avec leur régime (art. R. 4412-59 et R. 4412-60).</span></li>' +
@@ -129,7 +129,7 @@
     var body = legalNote() + entCard() +
       '<div class="pv-kpis"><div class="pv-kpi ok"><span>Faites</span><b>' + n.fait + '</b></div><div class="pv-kpi mid"><span>À compléter</span><b>' + n.partiel + '</b></div><div class="pv-kpi bad"><span>À faire</span><b>' + n.manquant + '</b></div><div class="pv-kpi"><span>Sans objet</span><b>' + n.so + '</b></div>' +
       '<div class="pv-kpi"><span>Avancement</span><b>' + (total ? Math.round(n.fait / total * 100) : 0) + ' %</b></div></div>' +
-      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="' + B + 'duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
+      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="' + B + 'duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
       '<div class="pv-filter" role="group" aria-label="Filtrer les obligations">' + [['tout', 'Toutes (' + C.OBLIGATIONS.length + ')'], ['afaire', 'À faire (' + (n.manquant + n.partiel) + ')'], ['fait', 'Faites (' + n.fait + ')']].map(function (t) { return '<button type="button" class="chip-btn' + (f === t[0] ? ' on' : '') + '" data-a="ob-filter" data-f="' + t[0] + '" aria-pressed="' + (f === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
     var bloc = '', shown = 0;
     c.cov.forEach(function (x) {
@@ -292,7 +292,7 @@
       field('Justification', inp('periodiciteJustif', P.periodiciteJustif, ' placeholder="Ex. procédés stables, mesurages annuels"')) + '</div>' + (due ? '<p class="small">Prochaine révision prévue : <b>' + fd(due) + '</b></p>' : '') + '</div>' +
       (P.revisions.length ? '<h2 class="sub-h">Historique (' + P.revisions.length + ')</h2><div class="pv-tw"><table class="pv-t stack"><thead><tr><th>Date</th><th>Motif</th><th>Par</th><th>État de l\'évaluation</th><th></th></tr></thead><tbody>' +
         P.revisions.slice().reverse().map(function (r) { return '<tr><td data-l="Date"><b>' + fd(r.date) + '</b></td><td data-l="Motif">' + esc(r.motif) + (r.note ? '<small>' + esc(r.note) + '</small>' : '') + '</td><td data-l="Par">' + esc(r.auteur || '—') + '</td><td data-l="État">' + r.resume.produits + ' produit(s), ' + r.resume.cmr + ' CMR, ' + r.resume.prioritesFortes + ' à risque élevé</td><td><button type="button" class="pv-link" data-a="print" data-doc="revision" data-id="' + r.id + '">Copie figée (PDF)</button></td></tr>'; }).join('') +
-        '</tbody></table></div><div class="pv-row"><button type="button" class="btn btn-secondary" data-a="print" data-doc="revisions">' + icon('download') + 'Historique des révisions (PDF)</button><a class="btn btn-secondary" href="' + B + 'duerp.html#dossier">Dossier DUERP risque chimique</a></div>' : '<div class="pv-empty">Aucune révision datée pour l\'instant.</div>');
+        '</tbody></table></div><div class="pv-row"><button type="button" class="btn btn-secondary" data-a="print" data-doc="revisions">' + icon('download') + 'Historique des révisions (PDF)</button><a class="btn btn-secondary" href="' + B + 'duerp.html#dossier">Mon DUERP</a></div>' : '<div class="pv-empty">Aucune révision datée pour l\'instant.</div>');
     return screen({ id: 'revisions', kicker: 'Étape 2 sur 6 · art. R. 4412-61 à R. 4412-64', title: 'Datez chaque révision de l\'évaluation', sub: 'Une évaluation non datée ne prouve rien. Chaque révision garde une copie de l\'évaluation telle qu\'elle était ce jour-là.', body: body,
       help: '<h2 class="h-t">' + icon('help') + 'Quand réviser ?</h2><ol class="h-steps"><li>À la périodicité que vous avez fixée.</li><li>À chaque nouveau produit, nouvelle fiche de sécurité ou nouveau procédé.</li><li>Après un mesurage, un accident ou une exposition anormale.</li></ol><p class="muted small">Le chapitre risque chimique se télécharge depuis « Mon DUERP » et se joint au document unique (art. R. 4412-64). Conservez chaque version 40 ans (art. R. 4121-4).</p>' });
   }

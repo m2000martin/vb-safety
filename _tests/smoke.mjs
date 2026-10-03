@@ -108,7 +108,7 @@ for (const p of pages) {
     const t = await p2.evaluate(() => document.getElementById('ev-print-head').innerText + '\n' + document.getElementById('ev-print-tail').innerText); await p2.close(); return t;
   };
   const d1 = await docText('duerp', '11-49');
-  ok(['volet risque chimique', 'Unités de travail', 'Version', 'N° 1', '40 ans', 'R. 4121-4', 'R. 4121-2', 'Liste des actions de prévention', 'Signature'].every(x => d1.includes(x)), 'DUERP imprimé · page de garde, version, actions, mise à jour, conservation, accès, signature');
+  ok(['Document unique', 'risques chimiques', 'Unités de travail', 'Version', 'N° 1', '40 ans', 'R. 4121-4', 'R. 4121-2', 'Liste des actions de prévention', 'Signature'].every(x => d1.includes(x)), 'DUERP imprimé · page de garde, version, actions, mise à jour, conservation, accès, signature');
   ok(!d1.includes('PAPRIPACT)'), 'DUERP imprimé · moins de 50 salariés : liste des actions, pas de PAPRIPACT');
   const d2 = await docText('duerp', '50+');
   ok(d2.includes('PAPRIPACT') && d2.includes('Indicateur de résultat') && d2.includes('Coût estimé'), 'DUERP imprimé · 50 salariés et plus : PAPRIPACT avec indicateurs et coûts');
