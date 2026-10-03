@@ -151,11 +151,19 @@ for (const p of pages) {
   ok(/5 juillet 2024/.test(await pg.locator('#ob-d-E1').textContent()), 'Obligations · le détail s\'affiche au clic');
   await pg.click('[data-a="ob-done"][data-id="D3"]');
   ok(await pg.evaluate(() => JSON.parse(localStorage.getItem('vbs-preuve-v1')).pieces.D3.ok === true), 'Obligations · « C\'est fait » est enregistré');
+  ok(/Compléter maintenant/.test(await pg.locator('[data-a="ob-faire"][data-id="B1"]').textContent()) && /min/.test(await pg.locator('[data-a="ob-faire"][data-id="B1"]').textContent()), 'Obligations · bouton « Compléter maintenant » avec temps estimé');
   await pg.click('[data-a="ob-faire"][data-id="B1"]'); await pg.waitForTimeout(200);
-  ok(/Substitution/.test(await pg.locator('#q-title').textContent()), 'Obligations · « Faire avec VB Safety » ouvre l\'écran de l\'outil');
+  ok(await pg.locator('#pv-intro[open]').count() === 1 && /Obligation B1/.test(await pg.locator('#pv-intro-k').textContent()), 'Obligations · une fenêtre explique ce que l\'on vient d\'ouvrir');
+  await pg.click('#pv-intro button');
+  ok(/Substitution/.test(await pg.locator('#q-title').textContent()), 'Obligations · « Compléter maintenant » ouvre l\'écran de l\'outil');
+  for (const id of ['A2', 'A4', 'A5', 'A6']) {
+    await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(300);
+    await pg.click('[data-a="ob-faire"][data-id="' + id + '"]'); await pg.waitForTimeout(200); await pg.click('#pv-intro button');
+    ok(/\/outil\/#/.test(pg.url()) && await pg.locator('.ob-tool').count() === 1, 'Obligations · ' + id + ' a son écran dédié, sans renvoi vers le DUERP');
+  }
   await pg.goto(BASE + '/cmr-industrie/outil/#obligations'); await pg.waitForTimeout(400);
-  await pg.click('[data-a="ob-faire"][data-id="C2"]'); await pg.waitForTimeout(300);
-  ok(await pg.locator('#ob-d-C2 .ob-tool').count() === 1, 'Obligations · « Faire avec VB Safety » ouvre l\'outil sous l\'obligation (C2)');
+  await pg.click('[data-a="ob-faire"][data-id="C2"]'); await pg.waitForTimeout(300); await pg.click('#pv-intro button');
+  ok(/#C2$/.test(pg.url()) && await pg.locator('.ob-tool').count() === 1, 'Obligations · C2 s\'ouvre sur son écran dédié');
   await pg.goto(BASE + '/devis/?besoin=' + encodeURIComponent('Obligation C2 · test')); await pg.waitForTimeout(300);
   ok(/C2/.test(await pg.inputValue('#dv-msg-t')) && await pg.inputValue('#dv-type') === 'Industrie', 'Devis · pré-rempli quand on vient de l\'outil');
   ok(!errs.length, 'Obligations · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
@@ -169,7 +177,7 @@ for (const p of pages) {
   await pg.addInitScript(() => { window.print = () => { window.__lastDoc = document.getElementById('pv-print').innerText; }; });
   await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(500);
   await pg.fill('#ent-nom', 'Métallerie Test'); await pg.fill('#ent-siren', '999999998');
-  await pg.click('[data-a="ob-open"][data-id="B8"]');
+  await pg.click('[data-a="ob-faire"][data-id="B8"]'); await pg.click('#pv-intro button');
   await pg.fill('[data-fi="B8"][data-r="0"][data-c="1"]', 'Captage poste de soudage');
   await pg.click('[data-a="row-add"][data-id="B8"]');
   ok(await pg.locator('[data-fi="B8"][data-c="1"]').count() === 2, 'Outils · ajout d\'une ligne au registre');
@@ -178,7 +186,7 @@ for (const p of pages) {
   ok(/Registre de vérification/.test(doc) && /Métallerie Test/.test(doc) && /999999998/.test(doc) && /Captage poste de soudage/.test(doc), 'Outils · justificatif téléchargé avec l\'entreprise et les lignes saisies');
   await pg.setInputFiles('[data-upload="B8"]', { name: 'rapport.pdf', mimeType: 'application/pdf', buffer: Buffer.from('x') });
   ok(/n'a pas été enregistré/.test(await pg.locator('.ob-tool').first().textContent()), 'Outils · dépôt de fichier affiché, sans enregistrement (version hébergée)');
-  await pg.click('[data-a="ob-filter"][data-f="fait"]');
+  await pg.click('[data-nav="obligations"]'); await pg.click('[data-a="ob-filter"][data-f="fait"]');
   ok(await pg.locator('.ob-it.st-outil [data-id="B8"]').count() > 0, 'Outils · B8 passe en « fait avec VB Safety »');
   ok(!errs.length, 'Outils · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();

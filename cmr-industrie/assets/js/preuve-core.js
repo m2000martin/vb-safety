@@ -236,11 +236,11 @@
   // vue : écran du dossier de preuve ; lien : autre page de l'outil ; rien : accompagnement VB Safety (demande de devis).
   var AIDE = {
     A1: ['Lister chaque substance, mélange ou procédé présent dans l\'entreprise et dire s\'il relève du régime CMR (catégories 1A ou 1B, ou procédé listé : bois, silice, diesel, HAP, huiles usagées). Les CMR de catégorie 2 restent au régime général des agents chimiques dangereux.', { vue: 'agents' }],
-    A2: ['Pour chaque activité exposant à un CMR, évaluer la nature, le degré et la durée de l\'exposition, par inhalation et par contact cutané. Cette évaluation est faite avant toute activité nouvelle.', { lien: 'duerp.html#produits', t: 'Ouvrir l\'évaluation du risque chimique' }],
+    A2: ['Pour chaque activité exposant à un CMR, évaluer la nature, le degré et la durée de l\'exposition, par inhalation et par contact cutané. Cette évaluation est faite avant toute activité nouvelle.', { ecran: 'A2' }],
     A3: ['Renouveler l\'évaluation régulièrement et à chaque changement : nouveau produit, nouvelle fiche de sécurité, nouveau procédé, résultat de mesurage. Le texte ne fixe pas de délai : l\'employeur choisit sa périodicité et la justifie.', { vue: 'revisions' }],
-    A4: ['Les résultats de l\'évaluation figurent dans le document unique (DUERP), avec les éléments qui ont servi à l\'établir : fiches de sécurité, inventaires, mesures.', { lien: 'duerp.html#dossier', t: 'Télécharger le volet risque chimique du DUERP' }],
-    A5: ['Mettre à jour le DUERP au moins une fois par an à partir de 11 salariés, conserver chaque version 40 ans et le transmettre au service de prévention et de santé au travail. Depuis le 27 juin 2026, l\'absence de DUERP expose à une amende administrative pouvant atteindre 4 000 € par travailleur.', { lien: 'duerp.html#dossier', t: 'Ouvrir mon dossier DUERP' }],
-    A6: ['Définir les actions de prévention issues de l\'évaluation. À partir de 50 salariés, elles forment un programme annuel (PAPRIPACT) avec indicateurs, coût et calendrier.', { lien: 'duerp.html#actions', t: 'Ouvrir le plan d\'action' }],
+    A4: ['Les résultats de l\'évaluation figurent dans le document unique (DUERP), avec les éléments qui ont servi à l\'établir : fiches de sécurité, inventaires, mesures.', { ecran: 'A4' }],
+    A5: ['Mettre à jour le DUERP au moins une fois par an à partir de 11 salariés, conserver chaque version 40 ans et le transmettre au service de prévention et de santé au travail. Depuis le 27 juin 2026, l\'absence de DUERP expose à une amende administrative pouvant atteindre 4 000 € par travailleur.', { ecran: 'A5' }],
+    A6: ['Définir les actions de prévention issues de l\'évaluation. À partir de 50 salariés, elles forment un programme annuel (PAPRIPACT) avec indicateurs, coût et calendrier.', { ecran: 'A6' }],
     A7: ['La loi de 2021 prévoyait un dépôt du DUERP sur un portail national. Ce portail n\'a jamais été mis en service : il n\'y a rien à faire à ce jour.', null],
     B1: ['Remplacer chaque agent CMR par un produit ou un procédé moins dangereux quand c\'est techniquement possible, et consigner le résultat de la recherche dans le DUERP, y compris quand elle échoue.', { vue: 'substitution' }],
     B2: ['Si la substitution est impossible, travailler en système clos. Si le système clos est lui aussi impossible, le justifier par écrit.', { vue: 'substitution' }],
@@ -281,7 +281,10 @@
     H2: ['Collecter, stocker et évacuer les déchets contenant des CMR en sécurité, et émettre les bordereaux de suivi des déchets dangereux.', null],
     H3: ['Présenter chaque année au CSE un rapport qui traite de l\'exposition aux facteurs de risques, dont les agents chimiques dangereux, et du programme de prévention.', null]
   };
-  OBLIGATIONS.forEach(function (o) { o.aide = AIDE[o.id][0]; o.faire = AIDE[o.id][1]; });
+  var MINUTES = { A1: 5, A2: 10, A3: 3, A4: 5, A5: 5, A6: 10, A7: 0, B1: 15, B2: 5, B3: 5, B4: 15, B5: 10, B6: 10, B7: 15, B8: 5, B9: 15, B10: 10,
+    C1: 5, C2: 5, C3: 5, C4: 10, C5: 10, C6: 5, D1: 20, D2: 20, D3: 10, D4: 10, D5: 10, D6: 5, D7: 10, E1: 15, E2: 3, E3: 3, E4: 3,
+    F1: 10, F2: 10, F3: 5, F4: 5, F5: 10, G1: 10, G2: 5, G3: 5, H1: 10, H2: 10, H3: 10 };
+  OBLIGATIONS.forEach(function (o) { o.aide = AIDE[o.id][0]; o.faire = AIDE[o.id][1]; o.minutes = MINUTES[o.id]; });
   function articleLabel(o) { return 'Art. ' + o.articles.replace(/, /g, ' et '); }
 
 
@@ -292,6 +295,8 @@
   var SEIRICH = { nom: 'Seirich (INRS), logiciel gratuit d\'évaluation du risque chimique', url: 'https://www.seirich.fr' };
   function T(cols) { return { k: 'lignes', type: 'tab', cols: cols }; }
   var FICHES = {
+    A2: { doc: 'Évaluation de l\'exposition par activité', ref: SEIRICH, eval: 'expo', champs: [{ k: 'date', type: 'd', l: 'Évaluation réalisée le' }, { k: 'par', type: 't', l: 'Réalisée par' }, { k: 'complement', type: 'x', l: 'Compléments : contact cutané, activités ponctuelles, maintenance, nettoyage' }] },
+    A4: { doc: 'Chapitre risque chimique et CMR du DUERP', eval: 'chapitre', champs: [{ k: 'integre', type: 'd', l: 'Intégré au document unique le' }, { k: 'version', type: 't', l: 'Version du DUERP concernée' }, { k: 'emplacement', type: 't', l: 'Où se trouve le DUERP (classeur, logiciel, intranet)' }] },
     A5: { doc: 'Registre des versions du DUERP', ref: SEIRICH, champs: [T(['Version', 'Date', 'Motif de la mise à jour', 'Transmis au SPST le', 'Moyen de transmission'])] },
     A6: { doc: 'Programme d\'actions de prévention', champs: [{ k: 'cadre', type: 's', l: 'Cadre', o: ['Liste d\'actions consignée dans le DUERP (moins de 50 salariés)', 'Programme annuel de prévention, PAPRIPACT (50 salariés et plus)'] }, T(['Action', 'Responsable', 'Échéance', 'Coût estimé', 'Indicateur de suivi'])] },
     B5: { doc: 'Registre d\'hygiène, vêtements et équipements', champs: [{ k: 'consignes', type: 'x', l: 'Consignes affichées (interdiction de manger, boire et fumer en zone, vestiaires)' }, { k: 'prestataire', type: 't', l: 'Prestataire de nettoyage des vêtements' }, { k: 'infoPresta', type: 'd', l: 'Information écrite du prestataire le' }, T(['Date', 'Équipement ou vêtement', 'Opération (fourniture, nettoyage, vérification)', 'Fait par'])] },
@@ -392,7 +397,7 @@
 
     return OBLIGATIONS.map(function (o) {
       var a = auto[o.id], m = P.pieces[o.id] || {};
-      if (!a && ficheRemplie(P, o.id)) a = { statut: 'outil', detail: 'Renseigné dans l\'outil : ' + FICHES[o.id].doc, date: (P.fiches[o.id].maj || '') };
+      if ((!a || (a.statut !== 'outil' && a.statut !== 'sans-objet')) && ficheRemplie(P, o.id)) a = { statut: 'outil', detail: 'Renseigné dans l\'outil : ' + FICHES[o.id].doc, date: (P.fiches[o.id].maj || '') };
       if (a && (a.statut === 'outil' || a.statut === 'sans-objet')) return { o: o, statut: a.statut, detail: a.detail, date: a.date, source: 'outil' };
       if (m.ok) return { o: o, statut: 'manuel', detail: m.lieu ? 'Pièce rangée : ' + m.lieu : 'Pièce déclarée disponible', date: m.date || '', source: 'employeur' };
       if (a) return { o: o, statut: a.statut, detail: a.detail, date: a.date, source: 'outil' };

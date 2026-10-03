@@ -168,3 +168,19 @@
 .ob-files .btn .icon { width: 15px; height: 15px; margin-right: 6px; }
 .ob-refs { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
 .ob-refs a { color: var(--text); }
+
+/* « Compléter maintenant » et temps estimé */
+.ob-vb { flex-direction: column; align-items: center; justify-content: center; gap: 0; min-height: 44px; line-height: 1.2; padding-top: 4px; padding-bottom: 4px; }
+.ob-vb .ob-vb-l { display: inline-flex; align-items: center; }
+.ob-vb small { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); margin-top: 1px; }
+.ob-detail .btn-primary .icon { width: 15px; height: 15px; margin-left: 6px; }
+/* Écran dédié */
+.ob-head-st { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 14px; }
+.ob-dl-top { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+/* Fenêtre d'explication */
+.pv-dialog { width: min(560px, calc(100vw - 32px)); border: 0; border-radius: 16px; padding: 24px 26px 20px; box-shadow: 0 24px 60px rgba(23, 25, 29, .35); color: var(--text); }
+.pv-dialog::backdrop { background: rgba(23, 25, 29, .5); }
+.pv-dialog h2 { font-size: 21px; font-weight: 800; margin: 0 0 8px; line-height: 1.25; }
+.pv-dialog p { margin: 0 0 12px; font-size: 15px; line-height: 1.5; }
+.pv-dialog ul { margin: 0 0 16px; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; }
+.pv-dialog-f { display: flex; justify-content: flex-end; }
