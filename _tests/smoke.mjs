@@ -92,22 +92,22 @@ for (const p of pages) {
   await pg.goto(BASE + '/cmr-industrie/outil/#agents'); await pg.waitForTimeout(600);
   ok(await pg.locator('.pv-reg.cmr').count() >= 2, 'Dossier · deux agents proposés au régime CMR');
   await pg.click('[data-a="confirm-all"]');
-  await pg.click('a[href="#revisions"]'); await pg.click('[data-a="revision"]');
-  await pg.click('a[href="#substitution"]');
+  await pg.click('.du-steps a[href$="/revisions/"]'); await pg.click('[data-a="revision"]');
+  await pg.click('.du-steps a[href$="/substitution/"]');
   ok(await pg.locator('details.pv-card').count() === 2, 'Dossier · une fiche de substitution par agent CMR');
-  await pg.click('a[href="#salaries"]');
+  await pg.click('.du-steps a[href$="/salaries/"]');
   await pg.fill('#ns-nom', 'Martin'); await pg.fill('#ns-prenom', 'Léa'); await pg.fill('#ns-poste', 'Dégraissage'); await pg.click('[data-a="add-sal"]');
   await pg.click('[data-a="add-sug"]');
   await pg.fill('#ns-nom', 'Durand'); await pg.fill('#ns-prenom', 'Paul'); await pg.fill('#ns-poste', 'Menuiserie'); await pg.selectOption('#ns-contrat', 'interim'); await pg.click('[data-a="add-sal"]');
   await pg.click('[data-a="add-sug"]');
-  await pg.click('a[href="#liste"]');
+  await pg.click('.du-steps a[href$="/liste/"]');
   await pg.fill('#vr-auteur', 'RH'); await pg.click('[data-a="freeze"]');
   await pg.click('[data-a="print"][data-doc="anonyme"]');
   const anon = await pg.evaluate(() => window.__lastDoc || '');
   ok(/Salarié 1/.test(anon) && !/MARTIN|Léa|DURAND|Paul/.test(anon), 'Dossier · version CSE imprimée sans aucun nom');
   await pg.click('[data-a="envoi"]');
   await pg.click('[data-a="envoi-agence"]');
-  await pg.click('a[href="#sommaire"]');
+  await pg.click('.du-steps a[href$="/sommaire/"]');
   const st = await pg.evaluate(() => { const P = JSON.parse(localStorage.getItem('vbs-preuve-v1')); return { v: P.versions.length, rows: P.versions[0].rows.length, envois: P.envois.length, rev: P.revisions.length }; });
   ok(st.v === 1 && st.rows === 2 && st.envois === 2 && st.rev === 1, 'Dossier · version 1 (2 lignes), 2 envois et 1 révision enregistrés ' + JSON.stringify(st));
   const badges = await pg.locator('.pv-st.outil').count();
@@ -159,11 +159,11 @@ for (const p of pages) {
   for (const id of ['A2', 'A4', 'A5', 'A6']) {
     await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(300);
     await pg.click('[data-a="ob-faire"][data-id="' + id + '"]'); await pg.waitForTimeout(200); await pg.click('#pv-intro button');
-    ok(/\/outil\/#/.test(pg.url()) && await pg.locator('.ob-tool').count() === 1, 'Obligations · ' + id + ' a son écran dédié, sans renvoi vers le DUERP');
+    ok(new RegExp('/outil/' + id.toLowerCase() + '/$').test(pg.url()) && await pg.locator('.ob-tool').count() === 1, 'Obligations · ' + id + ' a son écran dédié, sans renvoi vers le DUERP');
   }
   await pg.goto(BASE + '/cmr-industrie/outil/#obligations'); await pg.waitForTimeout(400);
   await pg.click('[data-a="ob-faire"][data-id="C2"]'); await pg.waitForTimeout(300); await pg.click('#pv-intro button');
-  ok(/#C2$/.test(pg.url()) && await pg.locator('.ob-tool').count() === 1, 'Obligations · C2 s\'ouvre sur son écran dédié');
+  ok(/\/outil\/c2\/$/.test(pg.url()) && await pg.locator('.ob-tool').count() === 1, 'Obligations · C2 s\'ouvre sur son écran dédié');
   await pg.goto(BASE + '/devis/?besoin=' + encodeURIComponent('Obligation C2 · test')); await pg.waitForTimeout(300);
   ok(/C2/.test(await pg.inputValue('#dv-msg-t')) && await pg.inputValue('#dv-type') === 'Industrie', 'Devis · pré-rempli quand on vient de l\'outil');
   ok(!errs.length, 'Obligations · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
@@ -202,6 +202,29 @@ for (const p of pages) {
   await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
   ok(!/\.html|#/.test(pg.url()), 'Adresses · après connexion, l\'adresse est propre : ' + pg.url().replace(BASE, ''));
   ok(await pg.evaluate(() => !!(window.REF && REF.substances && REF.substances.length)), 'Adresses · le référentiel des substances se charge depuis /outil/');
+  await ctx.close();
+}
+
+// Une adresse par écran : /outil/b8/, le bouton « précédent » revient à l'écran d'avant, le rechargement garde l'écran
+{
+  const src = fs.readFileSync(path.join(ROOT, 'cmr-industrie/outil/index.html'), 'utf8');
+  const { ROUTES } = await import(path.join(ROOT, '_outils/generer-routes.mjs'));
+  const stale = ROUTES.filter(r => !fs.existsSync(path.join(ROOT, 'cmr-industrie/outil', r, 'index.html')) || fs.readFileSync(path.join(ROOT, 'cmr-industrie/outil', r, 'index.html'), 'utf8') !== src);
+  ok(!stale.length, 'Pages · les ' + ROUTES.length + ' pages d\'écran sont à jour' + (stale.length ? ' (relancer node _outils/generer-routes.mjs : ' + stale.slice(0, 5).join(', ') + ')' : ''));
+  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(500);
+  await pg.click('[data-a="ob-faire"][data-id="B8"]'); await pg.click('#pv-intro button');
+  ok(/\/cmr-industrie\/outil\/b8\/$/.test(pg.url()), 'Pages · l\'obligation B8 a sa propre adresse : ' + pg.url().replace(BASE, ''));
+  await pg.click('.du-steps a[href$="/agents/"]'); await pg.waitForTimeout(200);
+  ok(/\/outil\/agents\/$/.test(pg.url()) && /Agents/.test(await pg.locator('#du-top-title').textContent()), 'Pages · le menu ouvre /outil/agents/');
+  await pg.goBack(); await pg.waitForTimeout(300);
+  ok(/\/outil\/b8\/$/.test(pg.url()) && /protections collectives/.test(await pg.locator('#q-title').textContent()), 'Pages · « précédent » revient à B8, pas à l\'accueil');
+  await pg.goBack(); await pg.waitForTimeout(300);
+  ok(/\/outil\/$/.test(pg.url()) && await pg.locator('.ob-it').count() === 45, 'Pages · encore « précédent » : la liste des obligations');
+  await pg.goto(BASE + '/cmr-industrie/outil/c2/'); await pg.waitForTimeout(500);
+  ok(/organisme accrédité/.test(await pg.locator('#q-title').textContent()) && /Obligation C2/.test(await pg.title()), 'Pages · une adresse ouverte directement affiche le bon écran et le bon titre d\'onglet');
+  ok(!errs.length, 'Pages · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();
 }
 

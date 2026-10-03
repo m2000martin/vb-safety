@@ -6,6 +6,15 @@
   var C = window.PREUVE;
   // Chemin vers la racine de l'outil (la page est servie depuis /cmr-industrie/outil/)
   var B = document.documentElement.getAttribute('data-base') || '';
+  // Chaque écran a sa propre adresse : /cmr-industrie/outil/agents/, /cmr-industrie/outil/b8/…
+  var ROOT = document.documentElement.getAttribute('data-root') || '';
+  function routeOf(id) { return id === 'obligations' || !id ? '' : /^[A-H]\d{1,2}$/.test(id) ? id.toLowerCase() : id; }
+  function href(id) { var r = routeOf(id); return ROOT ? ROOT + (r ? r + '/' : '') : '#' + (id || 'obligations'); }
+  function routeFromPath() {
+    if (!ROOT || location.pathname.indexOf(ROOT) !== 0) return '';
+    var r = location.pathname.slice(ROOT.length).replace(/\/.*$/, '');
+    return /^[a-h]\d{1,2}$/.test(r) ? r.toUpperCase() : r;
+  }
 
   // ------------------------------------------------------------------ données
   // L'évaluation (S) vient de eval-core.js ; le dossier (P) est rangé à part pour ne jamais modifier l'évaluation.
@@ -61,9 +70,9 @@
   }
   function drawSide(c) {
     var done = c.cov.filter(function (x) { return x.statut === 'outil' || x.statut === 'manuel'; }).length, on0 = UI.view === 'obligations' || UI.view === 'ob';
-    $('#du-steps').innerHTML = '<li class="pv-side-ob' + (on0 ? ' on' : '') + '"><a href="#obligations"' + (on0 ? ' aria-current="page"' : '') + '><i>' + icon('list') + '</i><span><b>Mes obligations</b><small>' + done + ' faites sur ' + C.OBLIGATIONS.length + '</small></span></a></li><li class="pv-side-k" aria-hidden="true">Outils VB Safety</li>' + STEPS.map(function (s, i) {
+    $('#du-steps').innerHTML = '<li class="pv-side-ob' + (on0 ? ' on' : '') + '"><a href="' + href('obligations') + '"' + (on0 ? ' aria-current="page"' : '') + '><i>' + icon('list') + '</i><span><b>Mes obligations</b><small>' + done + ' faites sur ' + C.OBLIGATIONS.length + '</small></span></a></li><li class="pv-side-k" aria-hidden="true">Outils VB Safety</li>' + STEPS.map(function (s, i) {
       var d = stepDone(s.id, c), on = s.id === UI.view;
-      return '<li class="' + (on ? 'on ' : '') + (d ? 'done' : '') + '"><a href="#' + s.id + '"' + (on ? ' aria-current="step"' : '') + '><i>' + (d ? icon('check') + '<span class="sr-only">Terminé : </span>' : i + 1) + '</i><span><b>' + s.t + '</b><small>' + s.d + '</small></span></a></li>';
+      return '<li class="' + (on ? 'on ' : '') + (d ? 'done' : '') + '"><a href="' + href(s.id) + '"' + (on ? ' aria-current="step"' : '') + '><i>' + (d ? icon('check') + '<span class="sr-only">Terminé : </span>' : i + 1) + '</i><span><b>' + s.t + '</b><small>' + s.d + '</small></span></a></li>';
     }).join('');
     var k = -1; STEPS.forEach(function (s, i) { if (s.id === UI.view) k = i; });
     $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : UI.view === 'obligations' ? 'Mes obligations CMR' : UI.view === 'ob' ? 'Obligation ' + UI.ob : 'Dossier de preuve CMR';
@@ -592,10 +601,20 @@
     else window.scrollTo(0, y);
   }
   function isOb(id) { return /^[A-H]\d{1,2}$/.test(id || '') && !!obById(id); }
-  function go(id) {
-    if (isOb(id)) { UI.view = 'ob'; UI.ob = id; } else UI.view = VIEWS[id] && id !== 'ob' ? id : 'obligations';
-    try { history.replaceState(null, '', UI.view === 'obligations' ? location.pathname : '#' + (UI.view === 'ob' ? UI.ob : UI.view)); } catch (e) {}
+  function setRoute(id) { if (isOb(id)) { UI.view = 'ob'; UI.ob = id; } else UI.view = VIEWS[id] && id !== 'ob' ? id : 'obligations'; }
+  function curId() { return UI.view === 'ob' ? UI.ob : UI.view; }
+  // Changer d'écran = changer de page : nouvelle adresse dans l'historique, le bouton « précédent » revient à l'écran d'avant
+  function go(id, replace) {
+    setRoute(id);
+    var url = href(curId());
+    try { if (location.pathname + location.hash !== url) history[replace ? 'replaceState' : 'pushState']({ v: curId() }, '', url); } catch (e) {}
+    document.title = pageTitle();
     render(true);
+    var v = $('#du-view'); if (v) { v.classList.remove('pv-enter'); void v.offsetWidth; v.classList.add('pv-enter'); }
+  }
+  function pageTitle() {
+    var k = UI.view === 'ob' ? 'Obligation ' + UI.ob : UI.view === 'obligations' ? 'Mes obligations CMR' : (STEPS.filter(function (x) { return x.id === UI.view; })[0] || {}).t || 'Dossier de preuve CMR';
+    return k + ' · VB Safety Industrie & BTP';
   }
   // Écriture d'une valeur : « a|b|c » désigne P.a.b.c ; « sal|id|champ » et « expo|id|champ » désignent un salarié ou une exposition
   function setPath(path, val) {
@@ -613,11 +632,16 @@
   function getPath(path) { var o = P; path.split('|').forEach(function (k) { o = o == null ? undefined : o[k]; }); return o; }
 
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('button, a[href^="#"]');
+    var t = e.target.closest('button, a[href^="#"], a[href^="/cmr-industrie/outil/"]');
     if (!t) { document.body.classList.remove('du-nav-open'); return; }
     if (t.id === 'du-nav-btn') { var o = document.body.classList.toggle('du-nav-open'); t.setAttribute('aria-expanded', o); return; }
     document.body.classList.remove('du-nav-open');
-    if (t.tagName === 'A') { var id = t.getAttribute('href').slice(1); if (VIEWS[id] || isOb(id)) { e.preventDefault(); go(id); } return; }
+    if (t.tagName === 'A') {
+      if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+      var hr = t.getAttribute('href'), id = hr.charAt(0) === '#' ? hr.slice(1) : (hr.slice(ROOT.length).replace(/\/.*$/, '') || 'obligations');
+      if (/^[a-h]\d{1,2}$/.test(id)) id = id.toUpperCase();
+      if (VIEWS[id] || isOb(id)) { e.preventDefault(); go(id); } return;
+    }
     if (t.disabled) return;
     var d = t.dataset;
     if (d.nav != null) { go(d.nav); return; }
@@ -736,11 +760,14 @@
   // Démarrage
   window.EV_ONREF = function () { render(); };
   loadRef();
-  var h0 = (location.hash || '').slice(1);
+  var h0 = (location.hash || '').slice(1) || routeFromPath();
   try { if (sessionStorage.getItem('vbs-ind-demo-start') === '1') { sessionStorage.removeItem('vbs-ind-demo-start'); h0 = 'demo'; } } catch (e) {}
-  // #exemple ouvre l'exemple sur le sommaire ; #demo (après la page de connexion) l'ouvre sur l'accueil
-  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; try { history.replaceState(null, '', location.pathname); } catch (e) {} }
-  if (isOb(h0)) { UI.view = 'ob'; UI.ob = h0; } else UI.view = VIEWS[h0] && h0 !== 'ob' ? h0 : 'obligations';
+  // #exemple et #demo (après la page de connexion) ouvrent l'exemple fictif sur la liste des obligations
+  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; }
+  setRoute(h0);
+  try { history.replaceState({ v: curId() }, '', href(curId())); } catch (e) {}
+  document.title = pageTitle();
   render();
-  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if ((VIEWS[h] || isOb(h)) && h !== (UI.view === 'ob' ? UI.ob : UI.view)) go(h); });
+  window.addEventListener('popstate', function () { var r = (location.hash || '').slice(1) || routeFromPath(); setRoute(r); document.title = pageTitle(); render(true); });
+  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if ((VIEWS[h] || isOb(h)) && h !== curId()) go(h, true); });
 })();

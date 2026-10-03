@@ -25,7 +25,7 @@
       }
       try { sessionStorage.setItem('vbs-ind-demo', '1'); } catch (x) {}
       try { sessionStorage.setItem('vbs-ind-demo-start', '1'); } catch (x) {}
-      location.href = '../outil/';
+      location.href = '/cmr-industrie/outil/';
     });
   });
 })();
