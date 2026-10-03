@@ -497,3 +497,20 @@
 .cd-cta .btn-primary { box-shadow: none; }
 .ex-back { padding-top: 16px; font-size: 14.5px; }
 .ex-back a { color: var(--red-strong); font-weight: 600; text-decoration: none; }
+
+/* Exemple de dossier DUERP : aperçu des pages et téléchargement */
+.ev-ex { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 8px; }
+.ev-ex-p { display: block; text-decoration: none; color: var(--text); background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; box-shadow: 0 10px 28px -18px rgba(23, 25, 29, .35); transition: transform .15s, box-shadow .15s; }
+.ev-ex-p:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -20px rgba(23, 25, 29, .45); }
+.ev-ex-p img { display: block; width: 100%; height: auto; border: 1px solid #EEE9E2; border-radius: 4px; background: #fff; }
+.ev-ex-p span { display: block; margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+.ev-ex-p b { display: block; color: var(--text); font-size: 14px; }
+.ev-ex-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.ev-ex-cta .icon { width: 18px; height: 18px; }
+.ev-ex-link { margin: 12px 0 0; font-size: 14.5px; }
+.ev-ex-link a { color: inherit; font-weight: 600; }
+@media (max-width: 899px) {
+  .ev-ex { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding-bottom: 8px; margin-right: calc(-1 * var(--gutter, 16px)); padding-right: var(--gutter, 16px); }
+  .ev-ex-p { flex: 0 0 68%; scroll-snap-align: start; }
+  .ev-ex-cta .btn { flex: 1 1 100%; justify-content: center; }
+}
