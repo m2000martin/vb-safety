@@ -502,26 +502,75 @@
   }
   function slug() { return S.site ? '-' + S.site.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : ''; }
   var DOCS = {
+    duerp: ['Document unique d\'évaluation des risques professionnels · volet risque chimique', 'Art. L. 4121-3, L. 4121-3-1 et R. 4121-1 à R. 4121-4 du code du travail ; évaluation des agents chimiques dangereux (art. R. 4412-5 et R. 4412-6) et des agents CMR (art. R. 4412-61 à R. 4412-66)', ['inv', 'hier', 'inh', 'cmr']],
+    cmr: ['Dossier CMR · agents cancérogènes, mutagènes et toxiques pour la reproduction', 'Art. R. 4412-59 à R. 4412-93-4 du code du travail · agents CMR, salariés exposés, liste des travailleurs exposés et obligations associées', ['cmr', 'sal']],
     all: ['Dossier DUERP · évaluation du risque chimique', 'Document unique d\'évaluation des risques professionnels (art. R. 4121-1, R. 4412-5 et R. 4412-61 du code du travail) · rapport d\'évaluation, liste des travailleurs exposés aux agents CMR et plan d\'action', ['inv', 'hier', 'inh', 'cmr', 'sal', 'plan']],
     report: ['DUERP · Rapport d\'évaluation du risque chimique', 'Annexe au document unique d\'évaluation des risques professionnels (art. R. 4121-1 et R. 4412-5 du code du travail)', ['inv', 'hier', 'inh', 'cmr', 'sal', 'plan']],
     liste: ['Liste des travailleurs exposés aux agents CMR', 'Art. R. 4412-93-1 du code du travail · à transmettre au service de prévention et de santé au travail et à conserver 40 ans', []],
     plan: ['Plan d\'action de prévention du risque chimique', 'À reporter dans le programme annuel de prévention (PAPRIPACT) ou dans le document unique', ['plan']]
   };
+  function isoDay(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  var EFF = { '1-10': 'De 1 à 10 salariés', '11-49': 'De 11 à 49 salariés', '50+': '50 salariés et plus' };
+  function unitesTravail() { var u = []; S.products.forEach(function (p) { if (p.poste && u.indexOf(p.poste) === -1) u.push(p.poste); }); return u; }
+  // Page de garde du DUERP : identification, version, unités de travail (art. R. 4121-1 et L. 4121-3-1)
+  function duerpHead(doc, today, v) {
+    S.versions = S.versions || []; var iso = isoDay(new Date()), last = S.versions[S.versions.length - 1];
+    if (!last || last.date !== iso) { S.versions.push({ n: S.versions.length + 1, date: iso }); last = S.versions[S.versions.length - 1]; }
+    var next = S.effectif === '1-10' ? 'À chaque décision d\'aménagement important et à chaque information nouvelle sur un risque' : (function () { var d = new Date(); d.setFullYear(d.getFullYear() + 1); return 'Au plus tard le ' + d.toLocaleDateString('fr-FR') + ', et à chaque changement important'; })();
+    var meta = [['Entreprise ou établissement', S.site || '………………………………'], ['SIRET', S.siret || '………………………………'], ['Effectif', EFF[S.effectif] || '………………'], ['Unités de travail concernées', unitesTravail().join(', ') || '………………………………'],
+      ['Version', 'N° ' + last.n + ' du ' + today], ['Évaluation réalisée par', S.auteur || '………………………………'], ['Consultation du CSE (s\'il existe)', S.cse ? new Date(S.cse + 'T12:00:00').toLocaleDateString('fr-FR') : '………………………………'], ['Prochaine mise à jour', next],
+      ['Référentiel', 'Valeurs limites : art. R. 4412-149' + (v ? ' (version du ' + frDate(v) + ')' : '')]];
+    return '<h1>' + doc[0] + '</h1><p class="ph-sub">' + doc[1] + '</p><dl class="ph-meta">' + meta.map(function (m) { return '<div><dt>' + m[0] + '</dt><dd>' + esc(m[1]) + '</dd></div>'; }).join('') + '</dl>' +
+      '<p class="ph-meth">Ce document constitue le volet « risque chimique » du document unique. Il transcrit, pour chaque unité de travail, l\'inventaire des produits et procédés utilisés, l\'évaluation des risques et les actions de prévention. Les autres risques professionnels de l\'entreprise (chutes, bruit, manutention, machines, risques psychosociaux, etc.) figurent dans les autres parties du document unique. Méthode : évaluation simplifiée du risque chimique inspirée de la démarche de l\'INRS ; résultats indicatifs, à confirmer par des mesurages pour les agents soumis à une valeur limite.</p>';
+  }
+  // Actions de prévention : liste (moins de 50 salariés) ou programme annuel PAPRIPACT (50 et plus, art. L. 4121-3-1)
+  function duerpPlan() {
+    var items = planItems(ROWS), big = S.effectif === '50+';
+    items.sort(function (x, y) { return GORDER[x.group] - GORDER[y.group] || x.prio - y.prio; });
+    var st = function (it) { return S.actions[it.k] || {}; }, d = function (x) { return x ? new Date(x + 'T12:00:00').toLocaleDateString('fr-FR') : ''; };
+    var cols = big ? ['Mesure', 'Référence', 'Conditions d\'exécution', 'Indicateur de résultat', 'Coût estimé', 'Ressources mobilisables', 'Échéance', 'Statut'] : ['Mesure', 'Référence', 'Responsable', 'Échéance', 'Statut'];
+    var rows = items.map(function (it) { var a = st(it), stt = a.statut === 'fait' ? 'Réalisée' : a.statut === 'cours' ? 'En cours' : 'À faire';
+      return big ? [it.text, it.law, a.resp ? 'Responsable : ' + a.resp : '', a.indic || '', a.cout || '', a.moyens || '', d(a.date), stt] : [it.text, it.law, a.resp || '', d(a.date), stt]; });
+    return '<h2 class="ph-h2">' + (big ? 'Programme annuel de prévention des risques professionnels et d\'amélioration des conditions de travail (PAPRIPACT) · volet chimique' : 'Liste des actions de prévention et de protection') + '</h2><p class="ph-sub">Art. L. 4121-3-1 du code du travail · actions classées dans l\'ordre des principes de prévention : substitution, système clos, protection collective, suivi, protection individuelle</p>' +
+      '<table class="ph-list"><thead><tr>' + cols.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' + (rows.length ? rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') : '<tr><td colspan="' + cols.length + '">Aucune action.</td></tr>') + '</tbody></table>';
+  }
+  // Mise à jour, conservation et accès (art. R. 4121-2, R. 4121-4 et L. 4121-3-1), historique des versions, signature
+  function duerpFoot() {
+    var vs = (S.versions || []).slice().reverse();
+    return '<h2 class="ph-h2">Mise à jour, conservation et accès</h2><ul class="ph-rules">' +
+      '<li><b>Mise à jour</b> : au moins chaque année dans les entreprises d\'au moins 11 salariés, et dans toutes les entreprises lors de toute décision d\'aménagement important modifiant les conditions de travail ou lorsqu\'une information supplémentaire sur un risque est portée à la connaissance de l\'employeur (art. R. 4121-2).</li>' +
+      '<li><b>Conservation</b> : le document unique et chacune de ses versions successives sont conservés par l\'employeur pendant 40 ans (art. L. 4121-3-1).</li>' +
+      '<li><b>Accès</b> : tenu à la disposition des travailleurs et des anciens travailleurs pour les versions en vigueur pendant leur activité, des membres du comité social et économique, du service de prévention et de santé au travail, des agents de l\'inspection du travail et des services de prévention des organismes de sécurité sociale ; un avis indiquant les modalités d\'accès est affiché (art. R. 4121-4).</li>' +
+      '<li><b>Transmission</b> : le document unique est transmis par l\'employeur au service de prévention et de santé au travail à chaque mise à jour (art. L. 4121-3-1).</li></ul>' +
+      '<table class="ph-list ph-vers"><thead><tr><th>Version</th><th>Date</th><th>Motif de la mise à jour</th><th>Transmise au SPST le</th></tr></thead><tbody>' + vs.map(function (v) { return '<tr><td>N° ' + v.n + '</td><td>' + new Date(v.date + 'T12:00:00').toLocaleDateString('fr-FR') + '</td><td></td><td></td></tr>'; }).join('') + '</tbody></table>' +
+      '<div class="ph-sign"><div>Date</div><div>Nom et qualité de l\'employeur</div><div>Signature</div></div>';
+  }
+  // Dossier CMR : liste des travailleurs exposés et rappel des obligations propres aux agents CMR
+  function cmrTail(lt) {
+    var ob = [['Rechercher la substitution et consigner le résultat dans le document unique', 'R. 4412-66'], ['À défaut, travailler en système clos', 'R. 4412-68'], ['À défaut, réduire l\'exposition au niveau le plus bas techniquement possible', 'R. 4412-69'], ['Appliquer les treize mesures de prévention', 'R. 4412-70'],
+      ['Faire contrôler au moins une fois par an le respect des valeurs limites par un organisme accrédité', 'R. 4412-76'], ['Tenir la liste des travailleurs exposés et la communiquer au service de prévention et de santé au travail à chaque actualisation', 'R. 4412-93-1 à R. 4412-93-3'],
+      ['Organiser le suivi individuel renforcé des travailleurs exposés', 'R. 4624-23'], ['Respecter les interdictions d\'affectation (jeunes, femmes enceintes ou allaitantes pour les reprotoxiques, CDD et intérimaires)', 'D. 4152-10, D. 4153-17, D. 4154-1']];
+    return '<h2 class="ph-h2">Liste des travailleurs exposés aux agents CMR</h2><p class="ph-sub">Art. R. 4412-93-1 · à compléter avec le nom des salariés, à transmettre au SPST à chaque actualisation</p>' + lt +
+      '<h2 class="ph-h2">Obligations propres aux agents CMR</h2><table class="ph-list"><thead><tr><th>Obligation</th><th>Article du code du travail</th><th>Pièce disponible le</th></tr></thead><tbody>' + ob.map(function (o) { return '<tr><td>' + o[0] + '</td><td>' + o[1] + '</td><td></td></tr>'; }).join('') + '</tbody></table>' +
+      '<p class="ph-meth">Le dossier de preuve CMR complet (registre des agents, étude de substitution, versions datées de la liste, extraits individuels, sommaire des 45 obligations) se tient avec l\'outil VB Safety : vb-safety.com/cmr-industrie/outil/</p>';
+  }
   function printDoc(mode) {
     var doc = DOCS[mode] || DOCS.report, prev = UI.view, today = new Date().toLocaleDateString('fr-FR');
     var v = REF ? ((REF.meta.sources || {}).vlep || {}).en_vigueur_depuis : '';
-    var head = '<h1>' + doc[0] + '</h1><p class="ph-sub">' + doc[1] + '</p><dl class="ph-meta"><div><dt>Établissement ou unité de travail</dt><dd>' + esc(S.site || '………………………………') + '</dd></div><div><dt>Date d\'édition</dt><dd>' + today + '</dd></div><div><dt>Référentiel</dt><dd>Code du travail, art. R. 4412-149' + (v ? ' (version du ' + frDate(v) + ')' : '') + '</dd></div><div><dt>Évaluation réalisée par</dt><dd>………………………………</dd></div></dl>';
+    var head = '<h1>' + doc[0] + '</h1><p class="ph-sub">' + doc[1] + '</p><dl class="ph-meta"><div><dt>Établissement ou unité de travail</dt><dd>' + esc(S.site || '………………………………') + '</dd></div><div><dt>Date d\'édition</dt><dd>' + today + '</dd></div><div><dt>Référentiel</dt><dd>Code du travail, art. R. 4412-149' + (v ? ' (version du ' + frDate(v) + ')' : '') + '</dd></div><div><dt>Évaluation réalisée par</dt><dd>' + esc(S.auteur || '………………………………') + '</dd></div></dl>';
+    if (mode === 'duerp') head = duerpHead(doc, today, v);
     if (mode === 'report' || mode === 'all') head += '<p class="ph-meth">Méthode : évaluation simplifiée du risque chimique inspirée de la démarche de l\'INRS (hiérarchisation des risques potentiels, puis estimation du risque par inhalation). Résultats indicatifs, à confirmer par des mesurages pour les agents soumis à une valeur limite.</p>';
     var tail = '';
-    if (mode === 'liste' || mode === 'all') {
+    if (mode === 'liste' || mode === 'all' || mode === 'cmr') {
       var ps = postesCmr(), keys = Object.keys(ps), lt = '<table class="ph-list"><thead><tr><th>Nom et prénom</th><th>Poste</th><th>Agents CMR</th><th>Durée d\'utilisation</th><th>Niveau d\'exposition estimé</th><th>Exposé du</th><th>au</th></tr></thead><tbody>' +
         (keys.length ? keys.map(function (k) {
           var n = Math.max(ps[k].nb || 0, 2), f = Math.max.apply(null, ps[k].rows.map(function (r) { return r.fc; })), lv = Math.min.apply(null, ps[k].rows.map(function (r) { return r.inh; })), rows = '';
           for (var i = 0; i < n; i++) rows += '<tr><td></td><td>' + esc(k) + '</td><td>' + ps[k].agents.map(esc).join(', ') + '</td><td>' + FREQ_S[f - 1] + '</td><td>' + INH[lv][0] + '</td><td></td><td></td></tr>';
           return rows;
         }).join('') : '<tr><td colspan="7">Aucun agent CMR avéré ou présumé dans l\'inventaire.</td></tr>') + '</tbody></table><p class="ph-meth">Pour chaque salarié : nature, durée et degré de l\'exposition, et résultats des contrôles de l\'exposition au poste lorsqu\'ils existent.</p>';
-      if (mode === 'liste') head += lt; else tail = '<h2 class="ph-h2">Liste des travailleurs exposés aux agents CMR</h2><p class="ph-sub">Art. R. 4412-93-1 · à compléter avec le nom des salariés, à transmettre au SPST et à conserver 40 ans</p>' + lt;
+      if (mode === 'liste') head += lt; else if (mode === 'cmr') tail = cmrTail(lt); else tail = '<h2 class="ph-h2">Liste des travailleurs exposés aux agents CMR</h2><p class="ph-sub">Art. R. 4412-93-1 · à compléter avec le nom des salariés, à transmettre au SPST et à conserver 40 ans</p>' + lt;
     }
+    if (mode === 'duerp') tail = duerpPlan() + duerpFoot();
     $('#ev-print-head').innerHTML = head; $('#ev-print-tail').innerHTML = tail;
     var R = { dash: renderDash, inv: renderInv, hier: renderHier, inh: renderInh, plan: renderPlan, cmr: renderCmr, sal: renderSal };
     $$('.ev-view').forEach(function (el) { var id = el.id.slice(2); el.hidden = doc[2].indexOf(id) < 0; if (!el.hidden && R[id]) { UI.view = id; R[id](); } });
@@ -612,7 +661,7 @@
 
 
   // Démarrage
-  var h0 = (location.hash || '').slice(1), printMode = /^imprimer(-(all|report|liste|plan))?$/.test(h0) ? (h0.split('-')[1] || 'all') : '', printed = false;
+  var h0 = (location.hash || '').slice(1), printMode = /^imprimer(-(all|report|liste|plan|duerp|cmr))?$/.test(h0) ? (h0.split('-')[1] || 'all') : '', printed = false;
   function autoPrint() { if (!printMode || printed) return; printed = true; setTimeout(function () { printDoc(printMode); }, 60); }
   window.EV_ONREF = function () { refStatus(); render(); checkRefChanges(); autoPrint(); };
   loadRef();

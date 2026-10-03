@@ -270,3 +270,21 @@
 }
 .demo-note { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 16px; margin: 0 0 22px; padding: 12px 14px; border: 1px solid #F0D5A8; background: var(--warn-soft); border-radius: 10px; font-size: 14.5px; }
 .demo-note .btn { min-height: 42px; font-size: 14.5px; }
+
+/* Identification complémentaire du document unique */
+.du-more { margin-top: 16px; border: 1px solid var(--line); border-radius: 10px; padding: 0 14px; background: #fff; }
+.du-more summary { cursor: pointer; padding: 12px 0; font-weight: 600; font-size: 14.5px; }
+.du-more[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.du-more .field, .du-more label { display: block; margin-bottom: 12px; }
+/* Champs PAPRIPACT (50 salariés et plus) */
+.ac-f2 { margin-top: 8px; }
+@media (min-width: 700px) { .ac-f2 { grid-template-columns: 1.3fr 1fr 1fr; } }
+.ac-help { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+/* Deux documents distincts : DUERP et dossier CMR */
+.dl-main + .dl-main, .dl-cmr { margin-top: 14px; }
+.dl-cmr { border-color: var(--line-strong, #D8D2CA); background: #fff; }
+@media (max-width: 560px) {
+  .dl-main { padding: 16px; }
+  .dl-main > div { flex-basis: 100%; }
+  .dl-main > .btn { width: 100%; justify-content: center; white-space: normal; text-align: center; }
+}

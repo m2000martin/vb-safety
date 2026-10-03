@@ -21,13 +21,15 @@ const server = http.createServer((req, res) => {
 const BASE = `http://127.0.0.1:${server.address().port}`;
 
 const pages = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').match(/<loc>[^<]+<\/loc>/g).map(l => l.replace(/<\/?loc>/g, '').replace('https://vb-safety.com', ''));
-['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/outil/', '/cmr-industrie/demo/', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
+['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/outil/', '/cmr-industrie/demo/', '/cmr-industrie/acces-duerp/', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
 
 const browser = await chromium.launch();
+// Les parcours d'outils partent d'un accès DUERP déjà validé par code ; la barrière elle-même est testée à part
+const newCtx = async (acces = true) => { const c = await browser.newContext(); if (acces) await c.addInitScript(() => { try { localStorage.setItem('vbs-duerp-acces', '1'); } catch (e) {} }); return c; };
 let fails = 0;
 const ok = (c, m) => { console.log((c ? 'OK   ' : 'ÉCHEC ') + m); if (!c) fails++; };
 for (const p of pages) {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   pg.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|api\.vb-safety|ERR_|Content Security Policy.*api/.test(m.text())) errs.push(m.text()); });
   const r = await pg.goto(BASE + p, { waitUntil: 'load' }).catch(e => null);
@@ -38,7 +40,7 @@ for (const p of pages) {
 
 // Parcours de l'outil DUERP : exemple rempli, puis chaque étape
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.goto(BASE + '/cmr-industrie/duerp.html#exemple'); await pg.waitForTimeout(800);
   for (const s of ['produits', 'prio', 'actions', 'salaries', 'dossier']) {
@@ -70,9 +72,55 @@ for (const p of pages) {
   await ctx.close();
 }
 
+// Accès à l'outil DUERP par code : renvoi vers la connexion, code refusé, puis retour à la page demandée
+{
+  const ctx = await newCtx(false); const pg = await ctx.newPage(); const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto(BASE + '/cmr-industrie/duerp.html#produits'); await pg.waitForURL(/acces-duerp/);
+  ok(/\/cmr-industrie\/acces-duerp\/\?suite=/.test(pg.url()), 'Accès DUERP · sans code, renvoi vers la page de connexion');
+  await pg.fill('#code', 'FAUX12'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
+  ok(await pg.locator('#login-msg.error').count() === 1, 'Accès DUERP · code incorrect refusé');
+  await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/duerp\.html/);
+  ok(/\/cmr-industrie\/duerp\.html#produits$/.test(pg.url()), 'Accès DUERP · VLN533 ouvre la page demandée');
+  await pg.goto(BASE + '/cmr-industrie/expert.html'); await pg.waitForTimeout(300);
+  ok(/expert\.html($|#)/.test(pg.url()), 'Accès DUERP · le mode expert reste ouvert ensuite');
+  await pg.goto(BASE + '/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent('//exemple.com/x')); await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/duerp\.html/);
+  ok(pg.url().startsWith(BASE + '/cmr-industrie/duerp.html'), 'Accès DUERP · aucun renvoi vers un autre site');
+  const pub = await (await newCtx(false)).newPage(); await pub.goto(BASE + '/cmr-industrie/evaluation.html'); await pub.waitForTimeout(200);
+  ok(/evaluation\.html$/.test(pub.url()), 'Accès DUERP · la page de présentation reste publique');
+  ok(!errs.length, 'Accès DUERP · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
+  await ctx.close();
+}
+
+// Documents imprimés : DUERP (forme légale) et dossier CMR distincts
+{
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto(BASE + '/cmr-industrie/duerp.html#exemple'); await pg.waitForTimeout(800);
+  await pg.evaluate(() => { location.hash = 'dossier'; }); await pg.waitForTimeout(300);
+  ok(await pg.locator('[data-print="duerp"]').count() === 1 && await pg.locator('[data-print="cmr"]').count() === 1, 'DUERP · étape 6 : DUERP et dossier CMR téléchargeables séparément');
+  const docText = async (mode, eff) => {
+    const p2 = await ctx.newPage(); p2.on('pageerror', e => errs.push(e.message));
+    await p2.addInitScript(() => { window.print = () => { window.__printed = 1; }; });
+    await p2.goto(BASE + '/cmr-industrie/duerp.html#exemple'); await p2.waitForTimeout(600);
+    await p2.evaluate(e => { S.effectif = e; localStorage.setItem('vbs-eval-demo', JSON.stringify(S)); }, eff);
+    await p2.goto(BASE + '/cmr-industrie/expert.html#imprimer-' + mode); await p2.waitForFunction(() => window.__printed, null, { timeout: 15000 });
+    const t = await p2.evaluate(() => document.getElementById('ev-print-head').innerText + '\n' + document.getElementById('ev-print-tail').innerText); await p2.close(); return t;
+  };
+  const d1 = await docText('duerp', '11-49');
+  ok(['volet risque chimique', 'Unités de travail', 'Version', 'N° 1', '40 ans', 'R. 4121-4', 'R. 4121-2', 'Liste des actions de prévention', 'Signature'].every(x => d1.includes(x)), 'DUERP imprimé · page de garde, version, actions, mise à jour, conservation, accès, signature');
+  ok(!d1.includes('PAPRIPACT)'), 'DUERP imprimé · moins de 50 salariés : liste des actions, pas de PAPRIPACT');
+  const d2 = await docText('duerp', '50+');
+  ok(d2.includes('PAPRIPACT') && d2.includes('Indicateur de résultat') && d2.includes('Coût estimé'), 'DUERP imprimé · 50 salariés et plus : PAPRIPACT avec indicateurs et coûts');
+  const c1 = await docText('cmr', '11-49');
+  ok(c1.includes('Dossier CMR') && c1.includes('Liste des travailleurs exposés') && c1.includes('R. 4412-93-1') && !c1.includes('Mise à jour, conservation et accès'), 'Dossier CMR imprimé · distinct du DUERP');
+  ok(!errs.length, 'Documents imprimés · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
+  await ctx.close();
+}
+
 // Carnet sapeurs-pompiers : page de connexion et module EPI
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.goto(BASE + '/cmr-pompier/connexion.html'); await pg.waitForTimeout(400);
   ok(await pg.locator('form, button').count() > 0 && !errs.length, 'Carnet · page de connexion' + (errs.length ? ' · ' + errs.join(' | ') : ''));
@@ -81,7 +129,7 @@ for (const p of pages) {
 
 // Dossier de preuve CMR (version 1) : parcours complet avec des données réelles, puis l'exemple fictif
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.addInitScript(() => { window.print = () => { window.__printed = (window.__printed || 0) + 1; window.__lastDoc = document.getElementById('pv-print') && document.getElementById('pv-print').innerText; }; });
   await pg.goto(BASE + '/cmr-industrie/duerp.html');
@@ -126,7 +174,7 @@ for (const p of pages) {
 
 // Démo industrie : code faux refusé, VLN533 ouvre le dossier de preuve sur l'exemple
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.goto(BASE + '/cmr-industrie/'); await pg.click('.ih-cta a.btn-primary');
   ok(/demo\/$/.test(pg.url()), 'Démo · « Accéder à la démo » ouvre /cmr-industrie/demo/');
@@ -143,7 +191,7 @@ for (const p of pages) {
 
 // Outil : s'ouvre sur la liste des 45 obligations ; voir le détail, cocher « fait », « Faire avec VB Safety »
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(600);
   ok(await pg.locator('.ob-it').count() === 45, 'Obligations · l\'outil s\'ouvre sur les 45 obligations, même sans inventaire');
@@ -172,7 +220,7 @@ for (const p of pages) {
 
 // Outils sous les obligations : entreprise saisie une fois, registre rempli, justificatif et dépôt
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.addInitScript(() => { window.print = () => { window.__lastDoc = document.getElementById('pv-print').innerText; }; });
   await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(500);
@@ -194,7 +242,7 @@ for (const p of pages) {
 
 // Adresses propres : les anciennes adresses .html redirigent, l'outil s'affiche sans .html ni #
 {
-  const ctx = await browser.newContext(); const pg = await ctx.newPage();
+  const ctx = await newCtx(); const pg = await ctx.newPage();
   await pg.goto(BASE + '/cmr-industrie/dossier.html#exemple'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
   ok(await pg.locator('.demo-note').count() === 1 && await pg.locator('.ob-it').count() === 45, 'Adresses · dossier.html#exemple redirige vers /outil/ avec l\'exemple');
   await pg.goto(BASE + '/cmr-industrie/connexion.html'); await pg.waitForURL(/demo\/$/);
@@ -211,7 +259,7 @@ for (const p of pages) {
   const { ROUTES } = await import(path.join(ROOT, '_outils/generer-routes.mjs'));
   const stale = ROUTES.filter(r => !fs.existsSync(path.join(ROOT, 'cmr-industrie/outil', r, 'index.html')) || fs.readFileSync(path.join(ROOT, 'cmr-industrie/outil', r, 'index.html'), 'utf8') !== src);
   ok(!stale.length, 'Pages · les ' + ROUTES.length + ' pages d\'écran sont à jour' + (stale.length ? ' (relancer node _outils/generer-routes.mjs : ' + stale.slice(0, 5).join(', ') + ')' : ''));
-  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(500);
   await pg.click('[data-a="ob-faire"][data-id="B8"]'); await pg.click('#pv-intro button');

@@ -1,20 +1,23 @@
-// Régénère l'exemple de dossier DUERP (ressources/exemple-dossier-duerp-risque-chimique.pdf) à partir de l'exemple fictif de l'outil.
+// Régénère les exemples fictifs : DUERP volet risque chimique (exemple-duerp.pdf) et dossier CMR (exemple-dossier-cmr.pdf).
 // Serveur local sur le port 8765 requis (npx http-server -p 8765), puis : node _outils/generer-exemple-duerp.mjs <dossier de sortie>
 // Aperçus : pdftoppm -r 110 -png <pdf> page, puis conversion en WebP dans static/duerp-exemple/.
 import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);
 const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 const SP = process.argv[2];
-const b = await chromium.launch(); const pg = await b.newPage({ locale: 'fr-FR', timezoneId: 'Europe/Paris' });
+const b = await chromium.launch();
+for (const [mode, out] of [['duerp', 'exemple-duerp.pdf'], ['cmr', 'exemple-dossier-cmr.pdf']]) {
+const pg = await b.newPage({ locale: 'fr-FR', timezoneId: 'Europe/Paris' });
+await pg.addInitScript(() => { localStorage.setItem('vbs-duerp-acces', '1'); });
 await pg.goto('http://127.0.0.1:8765/cmr-industrie/duerp.html#exemple'); await pg.waitForTimeout(1200);
 // Données de l'exemple : entreprise fictive, actions avec responsables et échéances
 await pg.evaluate(() => {
   const resp = ['Responsable HSE', 'Chef d\'atelier', 'Direction', 'Responsable maintenance'];
-  S.site = 'Atelier de démonstration (exemple fictif)';
+  S.site = 'Atelier de démonstration (exemple fictif)'; S.siret = '000 000 000 00000'; S.auteur = 'Responsable HSE (exemple)'; S.effectif = S.effectif || '11-49'; S.versions = [];
   planItems(compute()).forEach((it, i) => { S.actions[it.k] = { resp: resp[i % resp.length], date: '2027-0' + (1 + (i % 6)) + '-15', statut: i % 4 === 0 ? 'fait' : i % 4 === 1 ? 'cours' : '' }; });
   localStorage.setItem('vbs-eval-demo', JSON.stringify(S));
 });
 await pg.addInitScript(() => { window.print = () => { window.__printed = true; throw new Error('arrêt pour capture'); }; });
-await pg.goto('http://127.0.0.1:8765/cmr-industrie/expert.html#imprimer-all'); await pg.waitForFunction(() => window.__printed, null, { timeout: 15000 });
+await pg.goto('http://127.0.0.1:8765/cmr-industrie/expert.html#imprimer-' + mode); await pg.waitForFunction(() => window.__printed, null, { timeout: 15000 });
 await pg.evaluate(() => {
   document.querySelectorAll('a').forEach(a => { if (/Revenir/.test(a.textContent)) a.remove(); });
   // Champs de saisie remplacés par leur valeur, comme sur un document imprimé
@@ -26,5 +29,7 @@ await pg.evaluate(() => {
   });
 });
 await pg.emulateMedia({ media: 'print' });
-await pg.pdf({ path: SP + '/exemple-duerp.pdf', format: 'A4', printBackground: true, margin: { top: '12mm', bottom: '14mm', left: '12mm', right: '12mm' }, displayHeaderFooter: true, headerTemplate: '<span></span>', footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#666">Exemple fictif · VB Safety · page <span class="pageNumber"></span> / <span class="totalPages"></span></div>' });
+await pg.pdf({ path: SP + '/' + out, format: 'A4', printBackground: true, margin: { top: '12mm', bottom: '14mm', left: '12mm', right: '12mm' }, displayHeaderFooter: true, headerTemplate: '<span></span>', footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#666">Exemple fictif · VB Safety · page <span class="pageNumber"></span> / <span class="totalPages"></span></div>' });
+await pg.close();
+}
 await b.close();

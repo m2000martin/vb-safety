@@ -288,7 +288,12 @@
       sub: 'Ces informations figurent en première page de votre dossier.',
       body: '<label class="big-field"><span class="lbl">Nom de l\'entreprise, du site ou de l\'atelier évalué</span><input class="input input-xl" data-s="site" maxlength="80" value="' + esc(S.site || '') + '" placeholder="Ex. Menuiserie Dupont, atelier de Meaux" autocomplete="organization"></label>' +
         '<p class="lbl lbl-block">Combien de salariés compte l\'entreprise ?</p>' + tiles('effectif', [['1-10', 'De 1 à 10'], ['11-49', 'De 11 à 49'], ['50+', '50 et plus']], S.effectif || '', 'tiles-3') +
-        '<p class="hint-line" id="eff-hint">' + effHint() + '</p>',
+        '<p class="hint-line" id="eff-hint">' + effHint() + '</p>' +
+        '<details class="du-more"' + (S.siret || S.auteur || S.cse ? ' open' : '') + '><summary>Pour un document unique complet (facultatif)</summary><div class="form-2">' +
+        '<label class="big-field"><span class="lbl">SIRET de l\'établissement</span><input class="input" data-s="siret" maxlength="17" inputmode="numeric" value="' + esc(S.siret || '') + '" placeholder="14 chiffres"></label>' +
+        '<label class="big-field"><span class="lbl">Évaluation réalisée par</span><input class="input" data-s="auteur" maxlength="80" value="' + esc(S.auteur || '') + '" placeholder="Nom, fonction"></label>' +
+        '<label class="big-field"><span class="lbl">Consultation du CSE (s\'il existe)</span><input class="input" type="date" data-s="cse" value="' + esc(S.cse || '') + '"></label></div>' +
+        '<p class="muted small">Ces informations figurent sur la page de garde de votre document unique.</p></details>',
       help: help('Pourquoi l\'effectif ?', ['À partir de 11 salariés, le DUERP doit être mis à jour au moins une fois par an.', 'À partir de 50 salariés, les actions sont reprises dans un programme annuel de prévention (PAPRIPACT).']),
       back: 'accueil', next: 'produits', nextDisabled: !(S.site && S.effectif)
     });
@@ -342,13 +347,14 @@
       var a = S.actions[it.k] || {};
       html += '<li class="ac' + (a.statut === 'fait' ? ' done' : '') + '"><div class="ac-t"><b>' + esc(it.text) + '</b><span>' + (it.sub ? 'Postes : ' + esc(it.sub) : 'Concerne : ' + it.prods.map(esc).join(', ')) + '</span><em>' + esc(it.law) + '</em></div>' +
         '<div class="ac-f"><label><span>Qui s\'en occupe ?</span><input class="input" data-k="' + it.k + '" data-af="resp" value="' + esc(a.resp || '') + '" placeholder="Nom"></label><label><span>Pour quand ?</span><input class="input" type="date" data-k="' + it.k + '" data-af="date" value="' + esc(a.date || '') + '"></label>' +
-        '<label class="ac-done"><input type="checkbox" data-k="' + it.k + '" data-af="fait"' + (a.statut === 'fait' ? ' checked' : '') + '><span>C\'est fait</span></label></div></li>';
+        '<label class="ac-done"><input type="checkbox" data-k="' + it.k + '" data-af="fait"' + (a.statut === 'fait' ? ' checked' : '') + '><span>C\'est fait</span></label></div>' +
+        (S.effectif === '50+' ? '<div class="ac-f ac-f2"><label><span>Indicateur de résultat</span><input class="input" data-k="' + it.k + '" data-af="indic" value="' + esc(a.indic || '') + '" placeholder="Ex. captage installé et vérifié"></label><label><span>Coût estimé</span><input class="input" data-k="' + it.k + '" data-af="cout" value="' + esc(a.cout || '') + '" placeholder="Ex. 4 500 €"></label><label><span>Ressources mobilisables</span><input class="input" data-k="' + it.k + '" data-af="moyens" value="' + esc(a.moyens || '') + '" placeholder="Ex. maintenance, budget travaux"></label></div>' : '') + '</li>';
     });
     if (cur) html += '</ul></section>';
     return screen({
       kicker: 'Étape 4 sur 6', title: 'Vos actions', sub: 'Pour chaque action, indiquez qui s\'en occupe et pour quand. Elles sont classées dans l\'ordre imposé par le code du travail.',
       body: '<div class="prog"><b id="ac-prog">' + ok + ' sur ' + items.length + '</b> actions planifiées · vous pouvez compléter plus tard<div class="prog-bar"><i id="ac-bar" data-w="' + (items.length ? Math.round(ok / items.length * 100) : 0) + '"></i></div></div>' + html,
-      help: help('Pourquoi cet ordre ?', ['D\'abord supprimer ou remplacer le produit dangereux.', 'Sinon, l\'enfermer ou l\'aspirer à la source.', 'Les masques et gants viennent en dernier recours.'], S.effectif === '50+' ? '<p class="muted small">Avec 50 salariés et plus, reprenez ces actions dans votre programme annuel de prévention (PAPRIPACT).</p>' : ''),
+      help: help('Pourquoi cet ordre ?', ['D\'abord supprimer ou remplacer le produit dangereux.', 'Sinon, l\'enfermer ou l\'aspirer à la source.', 'Les masques et gants viennent en dernier recours.'], S.effectif === '50+' ? '<p class="muted small">À partir de 50 salariés, le document unique s\'accompagne d\'un programme annuel de prévention (PAPRIPACT) : pour chaque mesure, ses conditions d\'exécution, un indicateur de résultat, son coût estimé, les ressources mobilisables et un calendrier (art. L. 4121-3-1).</p>' : ''),
       back: 'prio', next: 'salaries', nextLabel: 'Continuer'
     });
   }
@@ -366,29 +372,31 @@
   }
 
   function viewDossier() {
-    var none = S.products.length ? '' : ' disabled';
+    var none = S.products.length ? '' : ' disabled', hasCmr = compute().some(function (r) { return r.cmr === 'cmr'; });
     return screen({
-      kicker: 'Étape 6 sur 6', title: 'Votre dossier DUERP est prêt',
-      sub: 'Téléchargez-le et joignez-le à votre document unique. Gardez-le : il peut vous être demandé par l\'inspection du travail, le médecin du travail ou vos salariés.',
-      body: '<div class="dl-main"><div>' + icon('file') + '<span><b>Dossier DUERP complet</b><small>Rapport d\'évaluation du risque chimique, liste des travailleurs exposés aux CMR et plan d\'action, en un seul PDF.</small></span></div><button type="button" class="btn btn-primary btn-lg" data-print="all"' + none + '>' + icon('download') + 'Télécharger mon dossier (PDF)</button></div>' +
-        '<p class="muted small">Dans la fenêtre qui s\'ouvre, choisissez « Enregistrer au format PDF ».</p>' +
+      kicker: 'Étape 6 sur 6', title: 'Vos documents sont prêts',
+      sub: 'Deux documents distincts : le volet chimique de votre document unique, et le dossier propre aux agents CMR. Gardez-les : l\'inspection du travail, le médecin du travail ou vos salariés peuvent vous les demander.',
+      body: '<div class="dl-main"><div>' + icon('file') + '<span><b>Mon DUERP · volet risque chimique</b><small>Page de garde, inventaire par unité de travail, évaluation des risques, ' + (S.effectif === '50+' ? 'programme annuel de prévention (PAPRIPACT)' : 'liste des actions de prévention') + ', règles de mise à jour, de conservation (40 ans) et d\'accès, historique des versions.</small></span></div><button type="button" class="btn btn-primary btn-lg" data-print="duerp"' + none + '>' + icon('download') + 'Télécharger mon DUERP (PDF)</button></div>' +
+        '<div class="dl-main dl-cmr"><div>' + icon('users') + '<span><b>Mon dossier CMR</b><small>' + (hasCmr ? 'Agents CMR repérés, salariés exposés, liste des travailleurs exposés à transmettre au service de santé au travail, obligations propres aux CMR.' : 'Aucun agent CMR repéré pour l\'instant : le dossier rappelle les obligations qui s\'appliqueraient.') + '</small></span></div><button type="button" class="btn btn-secondary btn-lg" data-print="cmr"' + none + '>' + icon('download') + 'Télécharger mon dossier CMR (PDF)</button></div>' +
+        '<p class="muted small">Dans la fenêtre qui s\'ouvre, choisissez « Enregistrer au format PDF ». Chaque téléchargement du DUERP crée une version datée.</p>' +
         '<h3 class="sub-h">Ou un document à la fois</h3><ul class="dl-list">' +
         '<li><span><b>Rapport d\'évaluation</b><small>À annexer au DUERP</small></span><button type="button" class="btn btn-secondary" data-print="report"' + none + '>Télécharger</button></li>' +
         '<li><span><b>Liste des travailleurs exposés aux CMR</b><small>À transmettre au service de santé au travail</small></span><button type="button" class="btn btn-secondary" data-print="liste"' + none + '>Télécharger</button></li>' +
         '<li><span><b>Plan d\'action</b><small>' + (S.effectif === '50+' ? 'À reprendre dans votre PAPRIPACT' : 'À reprendre dans votre DUERP') + '</small></span><button type="button" class="btn btn-secondary" data-print="plan"' + none + '>Télécharger</button></li></ul>' +
-        '<div class="info-box"><b>Et ensuite ?</b> ' + (S.effectif === '1-10' ? 'Mettez à jour votre DUERP à chaque nouveau produit ou changement de procédé.' : 'Mettez à jour votre DUERP au moins une fois par an, et à chaque nouveau produit ou changement de procédé.') + ' Revenez ici : votre évaluation est conservée dans ce navigateur.</div>' +
-        '<div class="dl-main dl-next"><div>' + icon('users') + '<span><b>Étape suivante : le dossier de preuve CMR</b><small>' + (compute().some(function (r) { return r.cmr === 'cmr'; }) ? 'Vous utilisez des agents CMR. ' : '') + 'Registre des agents, étude de substitution et treize mesures, liste nominative datée des salariés exposés, extraits et envoi au service de santé au travail. Repris de cette évaluation, sur ce navigateur.</small></span></div><a class="btn btn-secondary btn-lg" href="outil/">Ouvrir le dossier de preuve' + icon('arrow') + '</a></div>' +
+        '<div class="info-box"><b>Et ensuite ?</b> ' + (S.effectif === '1-10' ? 'Mettez à jour votre DUERP à chaque nouveau produit ou changement de procédé.' : 'Mettez à jour votre DUERP au moins une fois par an, et à chaque nouveau produit ou changement de procédé.') + ' Transmettez chaque mise à jour à votre service de prévention et de santé au travail, et conservez chaque version 40 ans. Revenez ici : votre évaluation est conservée dans ce navigateur.</div>' +
+        '<div class="dl-main dl-next"><div>' + icon('users') + '<span><b>Étape suivante : le dossier de preuve CMR</b><small>' + (hasCmr ? 'Vous utilisez des agents CMR. ' : '') + 'Registre des agents, étude de substitution et treize mesures, liste nominative datée des salariés exposés, extraits et envoi au service de santé au travail. Repris de cette évaluation, sur ce navigateur.</small></span></div><a class="btn btn-secondary btn-lg" href="outil/">Ouvrir le dossier de preuve' + icon('arrow') + '</a></div>' +
         '<h3 class="sub-h">Sauvegarder votre évaluation</h3><ul class="dl-list"><li><span><b>Fichier de sauvegarde</b><small>Pour reprendre l\'évaluation sur un autre ordinateur ou l\'an prochain</small></span><button type="button" class="btn btn-secondary" data-act="json"' + none + '>Télécharger</button></li>' +
         '<li><span><b>Restaurer une sauvegarde</b><small>Remplace l\'évaluation en cours</small></span><label class="btn btn-secondary file-btn">Choisir un fichier<input type="file" accept="application/json,.json" data-import></label></li></ul>',
       back: 'salaries'
     });
   }
 
+
   // ------------------------------------------------------------------ rendu et navigation
   var VIEWS = { accueil: viewAccueil, entreprise: viewEntreprise, produits: viewProduits, prio: viewPrio, actions: viewActions, salaries: viewSalaries, dossier: viewDossier };
   function render(focus) {
     var v = $('#du-view');
-    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><span class="demo-acts"><a class="btn btn-secondary" href="/ressources/exemple-dossier-duerp-risque-chimique.pdf" download>Télécharger l\'exemple (PDF)</a><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></span></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
+    v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><span class="demo-acts"><a class="btn btn-secondary" href="/ressources/exemple-duerp-risque-chimique.pdf" download>Exemple de DUERP (PDF)</a><a class="btn btn-secondary" href="/ressources/exemple-dossier-cmr.pdf" download>Exemple de dossier CMR (PDF)</a><button type="button" class="btn btn-secondary" data-act="quitdemo">Quitter l\'exemple et remplir mon DUERP</button></span></div>' : '') + (UI.wz ? renderWizard() : (VIEWS[UI.view] || viewAccueil)());
     document.body.classList.toggle('du-welcome', !UI.wz && UI.view === 'accueil');
     drawSide();
     $$('[data-w]', v).forEach(function (i) { i.style.width = i.getAttribute('data-w') + '%'; });
