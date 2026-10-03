@@ -4,6 +4,8 @@
 (function () {
   'use strict';
   var C = window.PREUVE;
+  // Chemin vers la racine de l'outil (la page est servie depuis /cmr-industrie/outil/)
+  var B = document.documentElement.getAttribute('data-base') || '';
 
   // ------------------------------------------------------------------ données
   // L'évaluation (S) vient de eval-core.js ; le dossier (P) est rangé à part pour ne jamais modifier l'évaluation.
@@ -58,13 +60,13 @@
     return false;
   }
   function drawSide(c) {
-    var done = c.cov.filter(function (x) { return x.statut === 'outil' || x.statut === 'manuel'; }).length, on0 = UI.view === 'obligations';
+    var done = c.cov.filter(function (x) { return x.statut === 'outil' || x.statut === 'manuel'; }).length, on0 = UI.view === 'obligations' || UI.view === 'ob';
     $('#du-steps').innerHTML = '<li class="pv-side-ob' + (on0 ? ' on' : '') + '"><a href="#obligations"' + (on0 ? ' aria-current="page"' : '') + '><i>' + icon('list') + '</i><span><b>Mes obligations</b><small>' + done + ' faites sur ' + C.OBLIGATIONS.length + '</small></span></a></li><li class="pv-side-k" aria-hidden="true">Outils VB Safety</li>' + STEPS.map(function (s, i) {
       var d = stepDone(s.id, c), on = s.id === UI.view;
       return '<li class="' + (on ? 'on ' : '') + (d ? 'done' : '') + '"><a href="#' + s.id + '"' + (on ? ' aria-current="step"' : '') + '><i>' + (d ? icon('check') + '<span class="sr-only">Terminé : </span>' : i + 1) + '</i><span><b>' + s.t + '</b><small>' + s.d + '</small></span></a></li>';
     }).join('');
     var k = -1; STEPS.forEach(function (s, i) { if (s.id === UI.view) k = i; });
-    $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : UI.view === 'obligations' ? 'Mes obligations CMR' : 'Dossier de preuve CMR';
+    $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : UI.view === 'obligations' ? 'Mes obligations CMR' : UI.view === 'ob' ? 'Obligation ' + UI.ob : 'Dossier de preuve CMR';
     $('#du-top-step').textContent = k >= 0 ? 'Étape ' + (k + 1) + ' sur ' + STEPS.length + (S.site ? ' · ' + S.site : '') : (S.site || 'Version 1');
     var n = STEPS.filter(function (s) { return stepDone(s.id, c); }).length;
     $('#du-bar').style.width = Math.round(n / STEPS.length * 100) + '%';
@@ -87,7 +89,7 @@
   function area(bind, val, ph) { return '<textarea class="input" data-b="' + esc(bind) + '" placeholder="' + esc(ph || '') + '">' + esc(val || '') + '</textarea>'; }
   function legalNote() { return '<p class="pv-note"><b>Référentiel juridique du ' + fd(C.REFERENTIEL.date) + '.</b> Chaque écran cite l\'article qui fonde la pièce. L\'outil indique ce qui a été renseigné et quand ; il ne juge pas de la conformité. ' + esc(C.REFERENTIEL.relecture) + '.</p>'; }
   function noEval() {
-    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP risque chimique » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="duerp.html#produits">Inventorier mes produits</a></div>';
+    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP risque chimique » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="' + B + 'duerp.html#produits">Inventorier mes produits</a></div>';
   }
 
   // ------------------------------------------------------------------ accueil
@@ -104,7 +106,7 @@
       '<li>' + icon('lock') + '<span><b>Vos données restent sur cet appareil.</b> Aucune donnée médicale n\'est demandée. Pour conserver le dossier (40 ans pour le DUERP), archivez vous-même les PDF et le fichier de projet.</span></li></ul>' +
       (has ? '<p class="muted small">Évaluation trouvée sur ce navigateur : <b>' + esc(S.site || 'sans nom') + '</b>, ' + S.products.length + ' produit(s) ou procédé(s), dont ' + c.cmr.length + ' relevant du régime CMR.</p>' : '') +
       '</div></div></section>' +
-      '<footer class="du-foot">' + (has ? '<label class="btn btn-secondary file-btn">' + icon('upload') + 'Ouvrir un fichier de projet<input type="file" accept="application/json,.json" data-import></label>' : '<a class="btn btn-secondary" href="duerp.html#produits">Inventorier mes produits</a>') +
+      '<footer class="du-foot">' + (has ? '<label class="btn btn-secondary file-btn">' + icon('upload') + 'Ouvrir un fichier de projet<input type="file" accept="application/json,.json" data-import></label>' : '<a class="btn btn-secondary" href="' + B + 'duerp.html#produits">Inventorier mes produits</a>') +
       (has ? '<button type="button" class="btn btn-primary" data-nav="' + resumeStep(c) + '">' + (P.revisions.length || P.salaries.length ? 'Reprendre' : 'Commencer') + icon('arrow') + '</button>' : '<button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli' + icon('arrow') + '</button>') + '</footer>';
   }
   function resumeStep(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
@@ -118,7 +120,7 @@
     var body = legalNote() + entCard() +
       '<div class="pv-kpis"><div class="pv-kpi ok"><span>Faites</span><b>' + n.fait + '</b></div><div class="pv-kpi mid"><span>À compléter</span><b>' + n.partiel + '</b></div><div class="pv-kpi bad"><span>À faire</span><b>' + n.manquant + '</b></div><div class="pv-kpi"><span>Sans objet</span><b>' + n.so + '</b></div>' +
       '<div class="pv-kpi"><span>Avancement</span><b>' + (total ? Math.round(n.fait / total * 100) : 0) + ' %</b></div></div>' +
-      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
+      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="' + B + 'duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
       '<div class="pv-filter" role="group" aria-label="Filtrer les obligations">' + [['tout', 'Toutes (' + C.OBLIGATIONS.length + ')'], ['afaire', 'À faire (' + (n.manquant + n.partiel) + ')'], ['fait', 'Faites (' + n.fait + ')']].map(function (t) { return '<button type="button" class="chip-btn' + (f === t[0] ? ' on' : '') + '" data-a="ob-filter" data-f="' + t[0] + '" aria-pressed="' + (f === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
     var bloc = '', shown = 0;
     c.cov.forEach(function (x) {
@@ -129,18 +131,18 @@
       var open = UI.obOpen === o.id, m = P.pieces[o.id] || {};
       var doneBtn = x.statut === 'outil' ? '<span class="ob-done is-tool">' + icon('check') + 'Fait avec VB Safety</span>' : x.statut === 'sans-objet' ? '<span class="ob-done is-so">Sans objet</span>' :
         '<button type="button" class="ob-done' + (m.ok ? ' on' : '') + '" data-a="ob-done" data-id="' + o.id + '" aria-pressed="' + !!m.ok + '">' + icon('check') + (m.ok ? 'Fait' : 'C\'est fait') + '</button>';
-      var vbBtn = x.statut === 'sans-objet' && !o.faire ? '' : '<button type="button" class="btn btn-secondary btn-sm ob-vb" data-a="ob-faire" data-id="' + o.id + '">' + (x.statut === 'outil' ? 'Voir dans l\'outil' : 'Faire avec VB Safety') + icon('arrow') + '</button>';
+      var vbBtn = o.id === 'A7' ? '' : '<button type="button" class="btn btn-secondary btn-sm ob-vb" data-a="ob-faire" data-id="' + o.id + '"><span class="ob-vb-l">' + (isDone ? 'Voir ou modifier' : 'Compléter maintenant') + icon('arrow') + '</span>' + (o.minutes && !isDone ? '<small>' + minTxt(o) + '</small>' : '') + '</button>';
       body += '<li class="ob-it st-' + x.statut + (open ? ' open' : '') + '"><div class="ob-row">' +
         '<button type="button" class="ob-title" data-a="ob-open" data-id="' + o.id + '" aria-expanded="' + open + '" aria-controls="ob-d-' + o.id + '"><span class="ob-id">' + o.id + '</span><span class="ob-txt"><b>' + esc(o.obligation) + '</b><small>' + C.articleLabel(o) + ' · ' + stLabel(x.statut) + '</small></span>' + icon(open ? 'up' : 'down') + '</button>' +
         '<div class="ob-acts">' + doneBtn + vbBtn + '</div></div>' +
         (open ? '<div class="ob-detail" id="ob-d-' + o.id + '"><p>' + esc(o.aide) + '</p><dl class="ob-dl"><div><dt>Pièce à produire</dt><dd>' + esc(o.piece) + '</dd></div>' + (o.frequence ? '<div><dt>Fréquence</dt><dd>' + esc(o.frequence) + '</dd></div>' : '') + '<div><dt>Texte</dt><dd>' + C.articleLabel(o) + ' du code du travail</dd></div><div><dt>Où vous en êtes</dt><dd>' + esc(x.detail) + (x.date ? ' · ' + fd(x.date) : '') + '</dd></div></dl>' +
           (m.ok && x.statut === 'manuel' ? '<div class="pv-grid2">' + field('Fait le', '<input class="input" type="date" data-b="pieces|' + o.id + '|date" value="' + esc(m.date || '') + '">') + field('Où est rangée la pièce ?', inp('pieces|' + o.id + '|lieu', m.lieu, ' placeholder="Ex. classeur HSE, serveur RH, logiciel du SPST"')) + '</div>' : '') +
-          (o.id === 'A7' ? '' : outilPanel(o, x)) + '</div>' : '') + '</li>';
+          (o.id === 'A7' ? '' : '<button type="button" class="btn btn-primary btn-sm" data-a="ob-faire" data-id="' + o.id + '">' + (isDone ? 'Voir ou modifier' : 'Compléter maintenant') + (o.minutes ? ' · ' + minTxt(o) : '') + icon('arrow') + '</button>') + '</div>' : '') + '</li>';
     });
     if (bloc) body += '</ul>';
     if (!shown) body += '<div class="pv-empty">Aucune obligation dans ce filtre.</div>';
     return '<section class="q pv-wide"><p class="q-k">' + (S.site ? esc(S.site) + ' · ' : '') + 'Code du travail, partie CMR</p><h1 class="q-t" id="q-title">Vos 45 obligations CMR</h1>' +
-      '<p class="q-s">Cliquez sur une obligation pour voir ce qu\'elle demande. Cochez-la quand la pièce existe, ou faites-la avec VB Safety.</p><div class="q-grid q-solo"><div class="q-main">' + body + '</div></div></section>' +
+      '<p class="q-s">Cliquez sur une obligation pour voir ce qu\'elle demande. Cochez-la si la pièce existe déjà, ou complétez-la maintenant avec l\'outil.</p><div class="q-grid q-solo"><div class="q-main">' + body + '</div></div></section>' +
       '<footer class="du-foot"><button type="button" class="btn btn-secondary" data-a="print" data-doc="sommaire">' + icon('download') + 'Sommaire (PDF)</button><button type="button" class="btn btn-primary" data-nav="' + firstTodoView(c) + '">Continuer mon dossier' + icon('arrow') + '</button></footer>';
   }
 
@@ -181,6 +183,52 @@
       (UI.up && UI.up[o.id] ? '<p class="small pv-warn">« ' + esc(UI.up[o.id]) + ' » n\'a pas été enregistré : le dépôt de fichiers arrive avec la version hébergée. Indiquez en attendant où la pièce est rangée.</p>' : '') +
       '<p class="ob-refs">Texte : ' + o.articles.split(', ').map(function (a) { return '<a href="' + C.articleUrl(a) + '" target="_blank" rel="noopener">art. ' + esc(a) + '</a>'; }).join(', ') + (F && F.ref ? ' · Référence : <a href="' + F.ref.url + '" target="_blank" rel="noopener">' + esc(F.ref.nom) + '</a>' : '') + '</p></div>';
     return html;
+  }
+
+  // ------------------------------------------------------------------ écran dédié à une obligation
+  function obById(id) { return C.OBLIGATIONS.filter(function (x) { return x.id === id; })[0]; }
+  function minTxt(o) { return o.minutes ? '≈ ' + o.minutes + ' min' : ''; }
+  // Tableaux repris de l'évaluation pour A2 (exposition par activité) et A4 (chapitre du DUERP)
+  function evalTable(kind) {
+    var rows = S.products.length ? compute() : [];
+    if (kind === 'expo') return [['Produit ou procédé', 'Poste', 'Régime', 'Nature (voies)', 'Degré estimé', 'Durée'], rows.map(function (r) {
+      var voies = r.p.type === 'procede' && r.p.procede === 'huiles' ? 'Contact cutané' : 'Inhalation' + (r.peau ? ', contact cutané' : '');
+      return [r.p.name, r.p.poste || '—', r.cmr === 'cmr' ? 'CMR' : r.cmr === 'susp' ? 'CMR suspecté' : 'Agent chimique', voies, INH[r.inh][0], FREQ_S[r.fc - 1]];
+    })];
+    return [['Produit ou procédé', 'Poste', 'Salariés', 'Classe de danger', 'Priorité', 'Risque par inhalation', 'CMR'], rows.map(function (r) {
+      return [r.p.name, r.p.poste || '—', r.p.nb === '' || r.p.nb == null ? '—' : r.p.nb, r.dc + ' sur 5', PRIO[r.prio][0], INH[r.inh][0], r.cmr === 'cmr' ? 'Oui' : r.cmr === 'susp' ? 'Suspecté' : 'Non'];
+    })];
+  }
+  function viewOb(c) {
+    var o = obById(UI.ob); if (!o) { UI.view = 'obligations'; return viewObligations(c); }
+    var x = c.cov.filter(function (y) { return y.o.id === o.id; })[0], F = C.FICHES[o.id], m = P.pieces[o.id] || {};
+    var body = '<div class="ob-head-st">' + stBadge(x.statut === 'manuel' ? 'manuel' : x.statut) + '<span class="muted small">' + esc(x.detail) + (x.date ? ' · ' + fd(x.date) : '') + '</span></div>' +
+      '<dl class="ob-dl ob-dl-top"><div><dt>Pièce à produire</dt><dd>' + esc(o.piece) + '</dd></div>' + (o.frequence ? '<div><dt>Fréquence</dt><dd>' + esc(o.frequence) + '</dd></div>' : '') + '</dl>';
+    if (F && F.eval) {
+      var t = evalTable(F.eval);
+      body += '<h2 class="sub-h">' + (F.eval === 'expo' ? 'Ce que dit votre évaluation, activité par activité' : 'Le chapitre risque chimique, tel qu\'il sera joint au DUERP') + '</h2>' +
+        (t[1].length ? '<div class="pv-tw"><table class="pv-t stack"><thead><tr>' + t[0].map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' + t[1].map(function (r) { return '<tr>' + r.map(function (v, i) { return '<td data-l="' + esc(t[0][i]) + '">' + esc(v) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>' :
+          '<div class="pv-empty">Aucun produit ni procédé inventorié pour l\'instant. L\'inventaire se saisit une fois, produit par produit, puis il alimente toutes les obligations. <a href="' + B + 'duerp.html#produits">Inventorier mes produits</a></div>') +
+        (t[1].length ? '<p class="muted small">Ces lignes viennent de votre inventaire. Pour ajouter ou modifier un produit : <a href="' + B + 'duerp.html#produits">modifier l\'inventaire</a>.</p>' : '');
+    }
+    if (o.id === 'A6' && S.products.length) body += '<div class="pv-row"><button type="button" class="btn btn-secondary btn-sm" data-a="a6-import">' + icon('plus') + 'Reprendre les actions proposées par l\'évaluation</button></div>';
+    body += outilPanel(o, x);
+    if (x.statut !== 'outil' && x.statut !== 'sans-objet') body += '<div class="pv-row"><button type="button" class="ob-done' + (m.ok ? ' on' : '') + '" data-a="ob-done" data-id="' + o.id + '" aria-pressed="' + !!m.ok + '">' + icon('check') + (m.ok ? 'Marquée comme faite' : 'J\'ai déjà cette pièce ailleurs : c\'est fait') + '</button></div>';
+    var next = c.cov.filter(function (y) { return (y.statut === 'manquant' || y.statut === 'partiel') && y.o.id !== o.id; })[0];
+    return '<section class="q pv-wide"><p class="q-k">Obligation ' + o.id + ' · ' + C.articleLabel(o) + (o.minutes ? ' · ' + minTxt(o) : '') + '</p><h1 class="q-t" id="q-title">' + esc(o.obligation) + '</h1><p class="q-s">' + esc(o.aide) + '</p>' +
+      '<div class="q-grid q-solo"><div class="q-main">' + body + '</div></div></section>' +
+      '<footer class="du-foot"><button type="button" class="btn btn-secondary" data-nav="obligations">' + icon('back') + 'Mes obligations</button>' +
+      (next ? '<button type="button" class="btn btn-primary" data-nav="' + next.o.id + '">Suivante : ' + next.o.id + icon('arrow') + '</button>' : '<span></span>') + '</footer>';
+  }
+  // Petite fenêtre : ce que l'on vient d'ouvrir
+  function intro(o) {
+    var dlg = $('#pv-intro'); if (!dlg || !dlg.showModal) return;
+    var F = C.FICHES[o.id], vue = o.faire && o.faire.vue, nom = { agents: 'le registre des agents et de leur régime', revisions: 'les révisions datées de l\'évaluation', substitution: 'l\'étude de substitution et la grille des treize mesures', salaries: 'la liste des salariés exposés', liste: 'les versions de la liste, les extraits et les envois' }[vue];
+    $('#pv-intro-k').textContent = 'Obligation ' + o.id + (o.minutes ? ' · ' + minTxt(o) : '');
+    $('#pv-intro-t').textContent = vue ? 'Vous ouvrez ' + nom : 'Vous ouvrez : ' + (F ? F.doc : o.piece);
+    $('#pv-intro-p').textContent = o.aide;
+    $('#pv-intro-l').innerHTML = '<li><b>Ce que vous produisez :</b> ' + esc(F ? F.doc : o.piece) + '</li><li><b>Comment :</b> ' + (vue ? 'remplissez l\'écran ; l\'obligation se coche toute seule quand la pièce est prête.' : 'remplissez le formulaire ; tout est enregistré dans ce navigateur au fur et à mesure.') + '</li><li><b>Ensuite :</b> téléchargez le justificatif en PDF et rangez-le avec votre DUERP.</li>';
+    try { dlg.showModal(); } catch (e) {}
   }
   function stLabel(st) { return { outil: 'faite avec VB Safety', manuel: 'faite', partiel: 'à compléter', manquant: 'à faire', 'sans-objet': 'sans objet' }[st]; }
   function firstTodoView(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
@@ -235,7 +283,7 @@
       field('Justification', inp('periodiciteJustif', P.periodiciteJustif, ' placeholder="Ex. procédés stables, mesurages annuels"')) + '</div>' + (due ? '<p class="small">Prochaine révision prévue : <b>' + fd(due) + '</b></p>' : '') + '</div>' +
       (P.revisions.length ? '<h2 class="sub-h">Historique (' + P.revisions.length + ')</h2><div class="pv-tw"><table class="pv-t stack"><thead><tr><th>Date</th><th>Motif</th><th>Par</th><th>État de l\'évaluation</th><th></th></tr></thead><tbody>' +
         P.revisions.slice().reverse().map(function (r) { return '<tr><td data-l="Date"><b>' + fd(r.date) + '</b></td><td data-l="Motif">' + esc(r.motif) + (r.note ? '<small>' + esc(r.note) + '</small>' : '') + '</td><td data-l="Par">' + esc(r.auteur || '—') + '</td><td data-l="État">' + r.resume.produits + ' produit(s), ' + r.resume.cmr + ' CMR, ' + r.resume.prioritesFortes + ' à risque élevé</td><td><button type="button" class="pv-link" data-a="print" data-doc="revision" data-id="' + r.id + '">Copie figée (PDF)</button></td></tr>'; }).join('') +
-        '</tbody></table></div><div class="pv-row"><button type="button" class="btn btn-secondary" data-a="print" data-doc="revisions">' + icon('download') + 'Historique des révisions (PDF)</button><a class="btn btn-secondary" href="duerp.html#dossier">Dossier DUERP risque chimique</a></div>' : '<div class="pv-empty">Aucune révision datée pour l\'instant.</div>');
+        '</tbody></table></div><div class="pv-row"><button type="button" class="btn btn-secondary" data-a="print" data-doc="revisions">' + icon('download') + 'Historique des révisions (PDF)</button><a class="btn btn-secondary" href="' + B + 'duerp.html#dossier">Dossier DUERP risque chimique</a></div>' : '<div class="pv-empty">Aucune révision datée pour l\'instant.</div>');
     return screen({ id: 'revisions', kicker: 'Étape 2 sur 6 · art. R. 4412-61 à R. 4412-64', title: 'Datez chaque révision de l\'évaluation', sub: 'Une évaluation non datée ne prouve rien. Chaque révision garde une copie de l\'évaluation telle qu\'elle était ce jour-là.', body: body,
       help: '<h2 class="h-t">' + icon('help') + 'Quand réviser ?</h2><ol class="h-steps"><li>À la périodicité que vous avez fixée.</li><li>À chaque nouveau produit, nouvelle fiche de sécurité ou nouveau procédé.</li><li>Après un mesurage, un accident ou une exposition anormale.</li></ol><p class="muted small">Le chapitre risque chimique se télécharge depuis « Mon DUERP » et se joint au document unique (art. R. 4412-64). Conservez chaque version 40 ans (art. R. 4121-4).</p>' });
   }
@@ -390,6 +438,7 @@
     var o = C.OBLIGATIONS.filter(function (x) { return x.id === id; })[0], F = C.FICHES[id], fv = vierge ? {} : ((P.fiches || {})[id] || {});
     if (!o || !F) return '';
     var html = head(F.doc, 'Obligation ' + o.id + ' · ' + o.obligation + ' · ' + C.articleLabel(o) + ' du code du travail', ent().responsable ? [['Établi par', ent().responsable]] : []);
+    if (F.eval && !vierge) { var et = evalTable(F.eval); html += table(et[0], et[1]); }
     F.champs.forEach(function (f) {
       if (f.type === 'tab') {
         var rows = (fv[f.k] || []).filter(function (r) { return r.some(function (c) { return String(c || '').trim(); }); });
@@ -533,7 +582,7 @@
   }
 
   // ------------------------------------------------------------------ rendu et navigation
-  var VIEWS = { obligations: viewObligations, accueil: viewAccueil, agents: viewAgents, revisions: viewRevisions, substitution: viewSubstitution, salaries: viewSalaries, liste: viewListe, sommaire: viewSommaire };
+  var VIEWS = { ob: viewOb, obligations: viewObligations, accueil: viewAccueil, agents: viewAgents, revisions: viewRevisions, substitution: viewSubstitution, salaries: viewSalaries, liste: viewListe, sommaire: viewSommaire };
   function render(focus) {
     var c = ctx(), v = $('#du-view'), y = window.scrollY;
     v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><button type="button" class="btn btn-secondary" data-a="quitdemo">Quitter l\'exemple</button></div>' : '') + (VIEWS[UI.view] || viewAccueil)(c);
@@ -542,9 +591,10 @@
     if (focus) { window.scrollTo(0, 0); var t = $('#q-title', v); if (t) { t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true }); } }
     else window.scrollTo(0, y);
   }
+  function isOb(id) { return /^[A-H]\d{1,2}$/.test(id || '') && !!obById(id); }
   function go(id) {
-    UI.view = VIEWS[id] ? id : 'obligations';
-    try { history.replaceState(null, '', '#' + UI.view); } catch (e) {}
+    if (isOb(id)) { UI.view = 'ob'; UI.ob = id; } else UI.view = VIEWS[id] && id !== 'ob' ? id : 'obligations';
+    try { history.replaceState(null, '', UI.view === 'obligations' ? location.pathname : '#' + (UI.view === 'ob' ? UI.ob : UI.view)); } catch (e) {}
     render(true);
   }
   // Écriture d'une valeur : « a|b|c » désigne P.a.b.c ; « sal|id|champ » et « expo|id|champ » désignent un salarié ou une exposition
@@ -567,7 +617,7 @@
     if (!t) { document.body.classList.remove('du-nav-open'); return; }
     if (t.id === 'du-nav-btn') { var o = document.body.classList.toggle('du-nav-open'); t.setAttribute('aria-expanded', o); return; }
     document.body.classList.remove('du-nav-open');
-    if (t.tagName === 'A') { var id = t.getAttribute('href').slice(1); if (VIEWS[id]) { e.preventDefault(); go(id); } return; }
+    if (t.tagName === 'A') { var id = t.getAttribute('href').slice(1); if (VIEWS[id] || isOb(id)) { e.preventDefault(); go(id); } return; }
     if (t.disabled) return;
     var d = t.dataset;
     if (d.nav != null) { go(d.nav); return; }
@@ -628,14 +678,18 @@
       if (a === 'row-add') rows.push(col.cols.map(function () { return ''; })); else rows.splice(+d.r, 1);
       P.fiches[fid].maj = today(); persist(); render(); return;
     }
+    if (a === 'a6-import') {
+      var items = planItems(compute()); P.fiches.A6 = P.fiches.A6 || {};
+      var cur = (P.fiches.A6.lignes || []).filter(function (r) { return r.some(function (v) { return String(v || '').trim(); }); });
+      items.forEach(function (it) { if (!cur.some(function (r) { return r[0] === it.text; })) { var st = S.actions[it.k] || {}; cur.push([it.text + ' (' + it.law + ')', st.resp || '', st.date || '', '', '']); } });
+      P.fiches.A6.lignes = cur; P.fiches.A6.maj = today(); persist(); render(); announce(items.length + ' action(s) reprise(s).'); return;
+    }
     if (a === 'ob-filter') { UI.obFilter = d.f; render(); return; }
     if (a === 'ob-open') { UI.obOpen = UI.obOpen === d.id ? null : d.id; render(); var it = $('[aria-controls="ob-d-' + d.id + '"]'); if (it) it.focus({ preventScroll: true }); return; }
     if (a === 'ob-done') { var pc = P.pieces[d.id] = P.pieces[d.id] || {}; pc.ok = !pc.ok; if (pc.ok && !pc.date) pc.date = today(); persist(); if (pc.ok) UI.obOpen = d.id; render(); announce(pc.ok ? 'Obligation ' + d.id + ' marquée comme faite.' : 'Obligation ' + d.id + ' remise à faire.'); return; }
     if (a === 'ob-faire') {
       var ob = C.OBLIGATIONS.filter(function (x) { return x.id === d.id; })[0]; if (!ob) return;
-      if (ob.faire && ob.faire.vue) { go(ob.faire.vue); return; }
-      if (C.FICHES[ob.id] && !(ob.faire && ob.faire.lien)) { UI.obOpen = ob.id; render(); var tl = $('#ob-d-' + ob.id + ' .ob-tool'); if (tl) tl.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
-      if (ob.faire && ob.faire.lien) { location.href = ob.faire.lien; return; }
+      go(ob.faire && ob.faire.vue ? ob.faire.vue : ob.id); intro(ob); return;
       location.href = '/devis/?besoin=' + encodeURIComponent('Obligation ' + ob.id + ' · ' + ob.obligation + ' (' + C.articleLabel(ob) + ')'); return;
     }
   });
@@ -683,9 +737,10 @@
   window.EV_ONREF = function () { render(); };
   loadRef();
   var h0 = (location.hash || '').slice(1);
+  try { if (sessionStorage.getItem('vbs-ind-demo-start') === '1') { sessionStorage.removeItem('vbs-ind-demo-start'); h0 = 'demo'; } } catch (e) {}
   // #exemple ouvre l'exemple sur le sommaire ; #demo (après la page de connexion) l'ouvre sur l'accueil
-  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; }
-  UI.view = VIEWS[h0] ? h0 : 'obligations';
+  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; try { history.replaceState(null, '', location.pathname); } catch (e) {} }
+  if (isOb(h0)) { UI.view = 'ob'; UI.ob = h0; } else UI.view = VIEWS[h0] && h0 !== 'ob' ? h0 : 'obligations';
   render();
-  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });
+  window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if ((VIEWS[h] || isOb(h)) && h !== (UI.view === 'ob' ? UI.ob : UI.view)) go(h); });
 })();

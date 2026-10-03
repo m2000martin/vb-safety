@@ -193,7 +193,8 @@ test('Liste des obligations · « Faire avec VB Safety » mène à un écran exi
   const vues = ['agents', 'revisions', 'substitution', 'salaries', 'liste'];
   for (const o of C.OBLIGATIONS.filter(x => x.faire)) {
     if (o.faire.vue) assert.ok(vues.includes(o.faire.vue), o.id);
-    else assert.match(o.faire.lien, /^duerp\.html#(produits|dossier|actions)$/, o.id);
+    else { assert.equal(o.faire.ecran, o.id, o.id); assert.ok(C.FICHES[o.id], o.id + ' a son écran dédié'); }
+    assert.ok(!o.faire.lien, o.id + ' ne renvoie plus vers l\'outil DUERP');
   }
   for (const id of ['A1', 'B1', 'B4', 'E1', 'E3']) assert.ok(C.OBLIGATIONS.find(o => o.id === id).faire, id);
   assert.equal(C.OBLIGATIONS.find(o => o.id === 'A7').faire, null, 'A7 : rien à faire, le portail n\'existe pas');
@@ -233,4 +234,8 @@ test('Entreprise · contrôle du SIREN (9 chiffres, clé de Luhn)', () => {
 test('Textes · lien vers le Code du travail numérique pour chaque article', () => {
   assert.equal(C.articleUrl('R. 4412-93-1'), 'https://code.travail.gouv.fr/code-du-travail/r4412-93-1');
   assert.equal(C.articleUrl('L. 4121-3-1'), 'https://code.travail.gouv.fr/code-du-travail/l4121-3-1');
+});
+
+test('Compléter maintenant · chaque obligation affiche un temps estimé (sauf A7, sans objet)', () => {
+  for (const o of C.OBLIGATIONS) { if (o.id === 'A7') assert.equal(o.minutes, 0); else assert.ok(o.minutes >= 2 && o.minutes <= 30, o.id); }
 });

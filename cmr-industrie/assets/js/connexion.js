@@ -24,7 +24,8 @@
         show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error'); return;
       }
       try { sessionStorage.setItem('vbs-ind-demo', '1'); } catch (x) {}
-      location.href = 'dossier.html#demo';
+      try { sessionStorage.setItem('vbs-ind-demo-start', '1'); } catch (x) {}
+      location.href = '../outil/';
     });
   });
 })();
