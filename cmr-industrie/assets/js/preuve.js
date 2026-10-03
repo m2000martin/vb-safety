@@ -58,12 +58,13 @@
     return false;
   }
   function drawSide(c) {
-    $('#du-steps').innerHTML = STEPS.map(function (s, i) {
+    var done = c.cov.filter(function (x) { return x.statut === 'outil' || x.statut === 'manuel'; }).length, on0 = UI.view === 'obligations';
+    $('#du-steps').innerHTML = '<li class="pv-side-ob' + (on0 ? ' on' : '') + '"><a href="#obligations"' + (on0 ? ' aria-current="page"' : '') + '><i>' + icon('list') + '</i><span><b>Mes obligations</b><small>' + done + ' faites sur ' + C.OBLIGATIONS.length + '</small></span></a></li><li class="pv-side-k" aria-hidden="true">Outils VB Safety</li>' + STEPS.map(function (s, i) {
       var d = stepDone(s.id, c), on = s.id === UI.view;
       return '<li class="' + (on ? 'on ' : '') + (d ? 'done' : '') + '"><a href="#' + s.id + '"' + (on ? ' aria-current="step"' : '') + '><i>' + (d ? icon('check') + '<span class="sr-only">Terminé : </span>' : i + 1) + '</i><span><b>' + s.t + '</b><small>' + s.d + '</small></span></a></li>';
     }).join('');
     var k = -1; STEPS.forEach(function (s, i) { if (s.id === UI.view) k = i; });
-    $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : 'Dossier de preuve CMR';
+    $('#du-top-title').textContent = k >= 0 ? STEPS[k].t : UI.view === 'obligations' ? 'Mes obligations CMR' : 'Dossier de preuve CMR';
     $('#du-top-step').textContent = k >= 0 ? 'Étape ' + (k + 1) + ' sur ' + STEPS.length + (S.site ? ' · ' + S.site : '') : (S.site || 'Version 1');
     var n = STEPS.filter(function (s) { return stepDone(s.id, c); }).length;
     $('#du-bar').style.width = Math.round(n / STEPS.length * 100) + '%';
@@ -72,7 +73,7 @@
   // ------------------------------------------------------------------ gabarits
   function screen(o) {
     var k = -1; STEPS.forEach(function (s, i) { if (s.id === o.id) k = i; });
-    var prev = k > 0 ? STEPS[k - 1].id : 'accueil', next = k >= 0 && k < STEPS.length - 1 ? STEPS[k + 1].id : '';
+    var prev = k > 0 ? STEPS[k - 1].id : 'obligations', next = k >= 0 && k < STEPS.length - 1 ? STEPS[k + 1].id : '';
     return '<section class="q pv-wide">' + (o.kicker ? '<p class="q-k">' + o.kicker + '</p>' : '') +
       '<h1 class="q-t" id="q-title">' + o.title + '</h1>' + (o.sub ? '<p class="q-s">' + o.sub + '</p>' : '') +
       '<div class="q-grid' + (o.help ? '' : ' q-solo') + '"><div class="q-main">' + o.body + '</div>' + (o.help ? '<aside class="q-help" aria-label="Aide">' + o.help + '</aside>' : '') + '</div></section>' +
@@ -107,6 +108,43 @@
       (has ? '<button type="button" class="btn btn-primary" data-nav="' + resumeStep(c) + '">' + (P.revisions.length || P.salaries.length ? 'Reprendre' : 'Commencer') + icon('arrow') + '</button>' : '<button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli' + icon('arrow') + '</button>') + '</footer>';
   }
   function resumeStep(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
+
+
+  // ------------------------------------------------------------------ accueil de l'outil : les 45 obligations
+  function viewObligations(c) {
+    var n = { fait: 0, partiel: 0, manquant: 0, so: 0 };
+    c.cov.forEach(function (x) { if (x.statut === 'outil' || x.statut === 'manuel') n.fait++; else if (x.statut === 'partiel') n.partiel++; else if (x.statut === 'manquant') n.manquant++; else n.so++; });
+    var f = UI.obFilter || 'tout', total = C.OBLIGATIONS.length - n.so;
+    var body = legalNote() +
+      '<div class="pv-kpis"><div class="pv-kpi ok"><span>Faites</span><b>' + n.fait + '</b></div><div class="pv-kpi mid"><span>À compléter</span><b>' + n.partiel + '</b></div><div class="pv-kpi bad"><span>À faire</span><b>' + n.manquant + '</b></div><div class="pv-kpi"><span>Sans objet</span><b>' + n.so + '</b></div>' +
+      '<div class="pv-kpi"><span>Avancement</span><b>' + (total ? Math.round(n.fait / total * 100) : 0) + ' %</b></div></div>' +
+      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
+      '<div class="pv-filter" role="group" aria-label="Filtrer les obligations">' + [['tout', 'Toutes (' + C.OBLIGATIONS.length + ')'], ['afaire', 'À faire (' + (n.manquant + n.partiel) + ')'], ['fait', 'Faites (' + n.fait + ')']].map(function (t) { return '<button type="button" class="chip-btn' + (f === t[0] ? ' on' : '') + '" data-a="ob-filter" data-f="' + t[0] + '" aria-pressed="' + (f === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
+    var bloc = '', shown = 0;
+    c.cov.forEach(function (x) {
+      var o = x.o, isDone = x.statut === 'outil' || x.statut === 'manuel', todo = x.statut === 'manquant' || x.statut === 'partiel';
+      if ((f === 'fait' && !isDone) || (f === 'afaire' && !todo)) return;
+      shown++;
+      if (o.bloc !== bloc) { if (bloc) body += '</ul>'; bloc = o.bloc; body += '<p class="pv-bloc">' + o.bloc + '. ' + C.BLOCS[o.bloc] + '</p><ul class="ob-list">'; }
+      var open = UI.obOpen === o.id, m = P.pieces[o.id] || {};
+      var doneBtn = x.statut === 'outil' ? '<span class="ob-done is-tool">' + icon('check') + 'Fait avec VB Safety</span>' : x.statut === 'sans-objet' ? '<span class="ob-done is-so">Sans objet</span>' :
+        '<button type="button" class="ob-done' + (m.ok ? ' on' : '') + '" data-a="ob-done" data-id="' + o.id + '" aria-pressed="' + !!m.ok + '">' + icon('check') + (m.ok ? 'Fait' : 'C\'est fait') + '</button>';
+      var vbBtn = x.statut === 'sans-objet' && !o.faire ? '' : '<button type="button" class="btn btn-secondary btn-sm ob-vb" data-a="ob-faire" data-id="' + o.id + '">' + (x.statut === 'outil' ? 'Voir dans l\'outil' : 'Faire avec VB Safety') + icon('arrow') + '</button>';
+      body += '<li class="ob-it st-' + x.statut + (open ? ' open' : '') + '"><div class="ob-row">' +
+        '<button type="button" class="ob-title" data-a="ob-open" data-id="' + o.id + '" aria-expanded="' + open + '" aria-controls="ob-d-' + o.id + '"><span class="ob-id">' + o.id + '</span><span class="ob-txt"><b>' + esc(o.obligation) + '</b><small>' + C.articleLabel(o) + ' · ' + stLabel(x.statut) + '</small></span>' + icon(open ? 'up' : 'down') + '</button>' +
+        '<div class="ob-acts">' + doneBtn + vbBtn + '</div></div>' +
+        (open ? '<div class="ob-detail" id="ob-d-' + o.id + '"><p>' + esc(o.aide) + '</p><dl class="ob-dl"><div><dt>Pièce à produire</dt><dd>' + esc(o.piece) + '</dd></div>' + (o.frequence ? '<div><dt>Fréquence</dt><dd>' + esc(o.frequence) + '</dd></div>' : '') + '<div><dt>Texte</dt><dd>' + C.articleLabel(o) + ' du code du travail</dd></div><div><dt>Où vous en êtes</dt><dd>' + esc(x.detail) + (x.date ? ' · ' + fd(x.date) : '') + '</dd></div></dl>' +
+          (m.ok && x.statut === 'manuel' ? '<div class="pv-grid2">' + field('Fait le', '<input class="input" type="date" data-b="pieces|' + o.id + '|date" value="' + esc(m.date || '') + '">') + field('Où est rangée la pièce ?', inp('pieces|' + o.id + '|lieu', m.lieu, ' placeholder="Ex. classeur HSE, serveur RH, logiciel du SPST"')) + '</div>' : '') +
+          (o.faire ? '' : x.statut === 'sans-objet' ? '' : '<p class="muted small">Cette pièce n\'est pas encore produite dans l\'outil. « Faire avec VB Safety » vous met en relation avec nous pour la préparer.</p>') + '</div>' : '') + '</li>';
+    });
+    if (bloc) body += '</ul>';
+    if (!shown) body += '<div class="pv-empty">Aucune obligation dans ce filtre.</div>';
+    return '<section class="q pv-wide"><p class="q-k">' + (S.site ? esc(S.site) + ' · ' : '') + 'Code du travail, partie CMR</p><h1 class="q-t" id="q-title">Vos 45 obligations CMR</h1>' +
+      '<p class="q-s">Cliquez sur une obligation pour voir ce qu\'elle demande. Cochez-la quand la pièce existe, ou faites-la avec VB Safety.</p><div class="q-grid q-solo"><div class="q-main">' + body + '</div></div></section>' +
+      '<footer class="du-foot"><button type="button" class="btn btn-secondary" data-a="print" data-doc="sommaire">' + icon('download') + 'Sommaire (PDF)</button><button type="button" class="btn btn-primary" data-nav="' + firstTodoView(c) + '">Continuer mon dossier' + icon('arrow') + '</button></footer>';
+  }
+  function stLabel(st) { return { outil: 'faite avec VB Safety', manuel: 'faite', partiel: 'à compléter', manquant: 'à faire', 'sans-objet': 'sans objet' }[st]; }
+  function firstTodoView(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
 
   // ------------------------------------------------------------------ M1 · agents et régimes
   function viewAgents(c) {
@@ -435,7 +473,7 @@
   }
 
   // ------------------------------------------------------------------ rendu et navigation
-  var VIEWS = { accueil: viewAccueil, agents: viewAgents, revisions: viewRevisions, substitution: viewSubstitution, salaries: viewSalaries, liste: viewListe, sommaire: viewSommaire };
+  var VIEWS = { obligations: viewObligations, accueil: viewAccueil, agents: viewAgents, revisions: viewRevisions, substitution: viewSubstitution, salaries: viewSalaries, liste: viewListe, sommaire: viewSommaire };
   function render(focus) {
     var c = ctx(), v = $('#du-view'), y = window.scrollY;
     v.innerHTML = (demoMode() ? '<div class="demo-note"><span><b>Exemple fictif.</b> Vos propres données ne sont pas modifiées.</span><button type="button" class="btn btn-secondary" data-a="quitdemo">Quitter l\'exemple</button></div>' : '') + (VIEWS[UI.view] || viewAccueil)(c);
@@ -445,7 +483,7 @@
     else window.scrollTo(0, y);
   }
   function go(id) {
-    UI.view = VIEWS[id] ? id : 'accueil';
+    UI.view = VIEWS[id] ? id : 'obligations';
     try { history.replaceState(null, '', '#' + UI.view); } catch (e) {}
     render(true);
   }
@@ -475,8 +513,8 @@
     if (d.nav != null) { go(d.nav); return; }
     if (d.set) { setPath(d.set, getPath(d.set) === d.v ? '' : d.v); persist(); render(); return; }
     var a = d.a, n = +d.id;
-    if (a === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); go('sommaire'); return; }
-    if (a === 'quitdemo') { setDemoMode(false); S = load(); S.seen = S.seen || {}; P = loadP(); go('accueil'); return; }
+    if (a === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); go('obligations'); return; }
+    if (a === 'quitdemo') { setDemoMode(false); S = load(); S.seen = S.seen || {}; P = loadP(); go('obligations'); return; }
     if (a === 'confirm-all') { ctx().agents.forEach(function (g) { P.agents[g.key] = P.agents[g.key] || {}; P.agents[g.key].regime = g.regime; if (!P.agents[g.key].date) P.agents[g.key].date = today(); }); persist(); render(); announce('Régimes confirmés.'); return; }
     if (a === 'revision') {
       var date = $('#rv-date').value || today();
@@ -523,6 +561,15 @@
     }
     if (a === 'project') { download('dossier-cmr' + slug() + '-' + today() + '.json', JSON.stringify(C.packProject(S, P), null, 1), 'application/json'); return; }
     if (a === 'print') { printDocs(d.doc, d.id); return; }
+    if (a === 'ob-filter') { UI.obFilter = d.f; render(); return; }
+    if (a === 'ob-open') { UI.obOpen = UI.obOpen === d.id ? null : d.id; render(); var it = $('[aria-controls="ob-d-' + d.id + '"]'); if (it) it.focus({ preventScroll: true }); return; }
+    if (a === 'ob-done') { var pc = P.pieces[d.id] = P.pieces[d.id] || {}; pc.ok = !pc.ok; if (pc.ok && !pc.date) pc.date = today(); persist(); if (pc.ok) UI.obOpen = d.id; render(); announce(pc.ok ? 'Obligation ' + d.id + ' marquée comme faite.' : 'Obligation ' + d.id + ' remise à faire.'); return; }
+    if (a === 'ob-faire') {
+      var ob = C.OBLIGATIONS.filter(function (x) { return x.id === d.id; })[0]; if (!ob) return;
+      if (ob.faire && ob.faire.vue) { go(ob.faire.vue); return; }
+      if (ob.faire && ob.faire.lien) { location.href = ob.faire.lien; return; }
+      location.href = '/devis/?besoin=' + encodeURIComponent('Obligation ' + ob.id + ' · ' + ob.obligation + ' (' + C.articleLabel(ob) + ')'); return;
+    }
   });
   document.addEventListener('toggle', function (e) { var c = e.target.closest && e.target.closest('[data-card]'); if (c && e.target === c) UI.open[c.dataset.card] = c.open; }, true);
 
@@ -558,8 +605,8 @@
   loadRef();
   var h0 = (location.hash || '').slice(1);
   // #exemple ouvre l'exemple sur le sommaire ; #demo (après la page de connexion) l'ouvre sur l'accueil
-  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = h0 === 'demo' ? 'accueil' : 'sommaire'; }
-  UI.view = VIEWS[h0] ? h0 : 'accueil';
+  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; }
+  UI.view = VIEWS[h0] ? h0 : 'obligations';
   render();
   window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });
 })();

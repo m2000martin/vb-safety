@@ -185,3 +185,27 @@ test('Fichier de projet : l\'évaluation et le dossier sont sauvegardés et rest
   assert.ok(old && old.P === null, 'les sauvegardes de l\'outil DUERP restent lisibles');
   assert.equal(C.unpackProject({ foo: 1 }), null);
 });
+
+test('Liste des obligations · chacune a une explication, sans jamais écrire « conforme »', () => {
+  for (const o of C.OBLIGATIONS) { assert.ok(o.aide && o.aide.length > 40, o.id); assert.ok(!/conforme/i.test(o.aide), o.id); }
+});
+test('Liste des obligations · « Faire avec VB Safety » mène à un écran existant de l\'outil', () => {
+  const vues = ['agents', 'revisions', 'substitution', 'salaries', 'liste'];
+  for (const o of C.OBLIGATIONS.filter(x => x.faire)) {
+    if (o.faire.vue) assert.ok(vues.includes(o.faire.vue), o.id);
+    else assert.match(o.faire.lien, /^duerp\.html#(produits|dossier|actions)$/, o.id);
+  }
+  for (const id of ['A1', 'B1', 'B4', 'E1', 'E3']) assert.ok(C.OBLIGATIONS.find(o => o.id === id).faire, id);
+  assert.equal(C.OBLIGATIONS.find(o => o.id === 'A7').faire, null, 'A7 : rien à faire, le portail n\'existe pas');
+});
+test('Liste des obligations · sans inventaire, substitution et liste nominative restent à faire (pas « sans objet »)', () => {
+  const S = { products: [] }, P = C.blank();
+  const cov = C.coverage({ S, P, agents: [], listeRows: [] });
+  for (const id of ['B1', 'B4', 'E1', 'E3']) assert.equal(cov.find(c => c.o.id === id).statut, 'manquant', id);
+});
+test('Liste des obligations · « C\'est fait » enregistre la date et passe l\'obligation en « faite »', () => {
+  const S = { products: [] }, P = C.blank();
+  P.pieces.D3 = { ok: true, date: '2026-10-03' };
+  const d3 = C.coverage({ S, P, agents: [], listeRows: [] }).find(c => c.o.id === 'D3');
+  assert.equal(d3.statut, 'manuel'); assert.equal(d3.date, '2026-10-03');
+});

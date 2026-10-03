@@ -133,11 +133,30 @@ for (const p of pages) {
   await pg.fill('#code', 'ABC123'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
   ok(/incorrect/.test(await pg.locator('#login-msg').textContent()) && /connexion\.html$/.test(pg.url()), 'Démo · un code faux est refusé');
   await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/dossier\.html#/); await pg.waitForTimeout(600);
-  ok(await pg.locator('.demo-note').count() === 1 && /dossier de preuve/i.test(await pg.locator('#q-title').textContent()), 'Démo · VLN533 ouvre le dossier de preuve avec l\'exemple fictif');
+  ok(await pg.locator('.demo-note').count() === 1 && /45 obligations/.test(await pg.locator('#q-title').textContent()), 'Démo · VLN533 ouvre l\'outil sur la liste des obligations, avec l\'exemple fictif');
   ok(await pg.evaluate(() => !localStorage.getItem('vbs-eval-v1')), 'Démo · aucune donnée réelle créée');
   await pg.goto(BASE + '/cmr-industrie/'); 
   ok(await pg.locator('.header-cta[href="/devis/"]').count() === 1 && await pg.locator('.ih-note').count() === 0, 'Portail · bouton « Demander un devis » en haut, petit texte retiré');
   ok(!errs.length, 'Démo · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
+  await ctx.close();
+}
+
+// Outil : s'ouvre sur la liste des 45 obligations ; voir le détail, cocher « fait », « Faire avec VB Safety »
+{
+  const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto(BASE + '/cmr-industrie/dossier.html'); await pg.waitForTimeout(600);
+  ok(await pg.locator('.ob-it').count() === 45, 'Obligations · l\'outil s\'ouvre sur les 45 obligations, même sans inventaire');
+  await pg.click('[data-a="ob-open"][data-id="E1"]');
+  ok(/5 juillet 2024/.test(await pg.locator('#ob-d-E1').textContent()), 'Obligations · le détail s\'affiche au clic');
+  await pg.click('[data-a="ob-done"][data-id="D3"]');
+  ok(await pg.evaluate(() => JSON.parse(localStorage.getItem('vbs-preuve-v1')).pieces.D3.ok === true), 'Obligations · « C\'est fait » est enregistré');
+  await pg.click('[data-a="ob-faire"][data-id="B1"]'); await pg.waitForTimeout(200);
+  ok(/Substitution/.test(await pg.locator('#q-title').textContent()), 'Obligations · « Faire avec VB Safety » ouvre l\'écran de l\'outil');
+  await pg.goto(BASE + '/cmr-industrie/dossier.html#obligations'); await pg.waitForTimeout(400);
+  await pg.click('[data-a="ob-faire"][data-id="C2"]'); await pg.waitForURL(/devis/); await pg.waitForTimeout(300);
+  ok(/C2/.test(await pg.inputValue('#dv-msg-t')) && await pg.inputValue('#dv-type') === 'Industrie', 'Obligations · sans écran dédié, la demande de devis est pré-remplie');
+  ok(!errs.length, 'Obligations · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();
 }
 
