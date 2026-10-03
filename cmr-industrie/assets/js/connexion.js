@@ -25,8 +25,8 @@
       }
       try { localStorage.setItem('vbs-duerp-acces', '1'); } catch (x) {}
       var suite = new URLSearchParams(location.search).get('suite') || '';
-      // Retour vers la page demandée, uniquement à l'intérieur de l'espace Industrie & BTP
-      if (/^\/cmr-industrie\/[^\/]/.test(suite) && suite.indexOf('//') === -1 && suite.indexOf('/cmr-industrie/outil') !== 0) { location.href = suite; return; }
+      // Retour vers la page demandée, uniquement vers l'espace Industrie & BTP ou la page DUERP
+      if (/^\/(cmr-industrie\/[^\/]|duerp\/)/.test(suite) && suite.indexOf('//') === -1 && suite.indexOf('/cmr-industrie/outil') !== 0) { location.href = suite; return; }
       if (form.getAttribute('data-suite')) { location.href = form.getAttribute('data-suite'); return; }
       try { sessionStorage.setItem('vbs-ind-demo', '1'); } catch (x) {}
       try { sessionStorage.setItem('vbs-ind-demo-start', '1'); } catch (x) {}

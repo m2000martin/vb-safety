@@ -24,6 +24,13 @@ const pages = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').match(/<lo
 ['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/outil/', '/cmr-industrie/demo/', '/cmr-industrie/acces-duerp/', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
 
 const browser = await chromium.launch();
+// Pages DUERP cachées : aucun lien depuis les pages publiques, absentes du plan du site
+{
+  const hidden = /href="[^"]*(\/duerp\/|evaluation\.html|duerp\.html|expert\.html|acces-duerp)/;
+  const leaks = pages.filter(p => !/^\/(duerp\/|cmr-industrie\/(evaluation|duerp|expert)\.html|cmr-industrie\/acces-duerp\/|cmr-industrie\/outil\/)/.test(p)).filter(p => { let f = path.join(ROOT, p); if (f.endsWith('/')) f += 'index.html'; return fs.existsSync(f) && hidden.test(fs.readFileSync(f, 'utf8')); });
+  console.log((leaks.length ? 'ÉCHEC ' : 'OK   ') + 'DUERP caché · aucun lien public' + (leaks.length ? ' · ' + leaks.join(', ') : ''));
+  if (leaks.length) process.exitCode = 1;
+}
 // Les parcours d'outils partent d'un accès DUERP déjà validé par code ; la barrière elle-même est testée à part
 const newCtx = async (acces = true) => { const c = await browser.newContext(); if (acces) await c.addInitScript(() => { try { localStorage.setItem('vbs-duerp-acces', '1'); } catch (e) {} }); return c; };
 let fails = 0;
@@ -84,10 +91,15 @@ for (const p of pages) {
   ok(/\/cmr-industrie\/duerp\.html#produits$/.test(pg.url()), 'Accès DUERP · VLN533 ouvre la page demandée');
   await pg.goto(BASE + '/cmr-industrie/expert.html'); await pg.waitForTimeout(300);
   ok(/expert\.html($|#)/.test(pg.url()), 'Accès DUERP · le mode expert reste ouvert ensuite');
-  await pg.goto(BASE + '/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent('//exemple.com/x')); await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/duerp\.html/);
-  ok(pg.url().startsWith(BASE + '/cmr-industrie/duerp.html'), 'Accès DUERP · aucun renvoi vers un autre site');
-  const pub = await (await newCtx(false)).newPage(); await pub.goto(BASE + '/cmr-industrie/evaluation.html'); await pub.waitForTimeout(200);
-  ok(/evaluation\.html$/.test(pub.url()), 'Accès DUERP · la page de présentation reste publique');
+  await pg.goto(BASE + '/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent('//exemple.com/x')); await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/\/duerp\/$/);
+  ok(pg.url() === BASE + '/duerp/', 'Accès DUERP · aucun renvoi vers un autre site');
+  const pub = await (await newCtx(false)).newPage();
+  for (const p of ['/duerp/', '/cmr-industrie/evaluation.html']) {
+    await pub.goto(BASE + p); await pub.waitForURL(/acces-duerp/);
+    ok(pub.url().includes('/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent(p)), 'Accès DUERP · ' + p + ' demande le code');
+  }
+  await pub.fill('#code', 'VLN533'); await pub.click('#login-btn'); await pub.waitForURL(/evaluation\.html$/);
+  ok(true, 'Accès DUERP · VLN533 ouvre la page de présentation');
   ok(!errs.length, 'Accès DUERP · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();
 }

@@ -2,7 +2,7 @@
 (function () {
   // Anciennes adresses de la page d'accueil (#mentions-legales, démo…) : redirection vers les vraies pages
   var OLD = { 'mentions-legales': '/mentions-legales/', confidentialite: '/confidentialite/', pompiers: '/cmr-pompier/', acces: '/cmr-pompier/connexion.html', espace: '/cmr-pompier/',
-    'acces-btp': '/cmr-industrie/', 'btp-expositions': '/cmr-industrie/', 'btp-duerp': '/cmr-industrie/evaluation.html', 'btp-fiches': '/cmr-industrie/' };
+    'acces-btp': '/cmr-industrie/', 'btp-expositions': '/cmr-industrie/', 'btp-fiches': '/cmr-industrie/' };
   var h = decodeURIComponent(location.hash.slice(1));
   if (OLD[h]) { location.replace(OLD[h]); return; }
 
