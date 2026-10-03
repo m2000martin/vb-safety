@@ -4,6 +4,8 @@
 (function () {
   'use strict';
   var C = window.PREUVE;
+  // Chemin vers la racine de l'outil (la page est servie depuis /cmr-industrie/outil/)
+  var B = document.documentElement.getAttribute('data-base') || '';
 
   // ------------------------------------------------------------------ données
   // L'évaluation (S) vient de eval-core.js ; le dossier (P) est rangé à part pour ne jamais modifier l'évaluation.
@@ -87,7 +89,7 @@
   function area(bind, val, ph) { return '<textarea class="input" data-b="' + esc(bind) + '" placeholder="' + esc(ph || '') + '">' + esc(val || '') + '</textarea>'; }
   function legalNote() { return '<p class="pv-note"><b>Référentiel juridique du ' + fd(C.REFERENTIEL.date) + '.</b> Chaque écran cite l\'article qui fonde la pièce. L\'outil indique ce qui a été renseigné et quand ; il ne juge pas de la conformité. ' + esc(C.REFERENTIEL.relecture) + '.</p>'; }
   function noEval() {
-    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP risque chimique » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="duerp.html#produits">Inventorier mes produits</a></div>';
+    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP risque chimique » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="' + B + 'duerp.html#produits">Inventorier mes produits</a></div>';
   }
 
   // ------------------------------------------------------------------ accueil
@@ -104,7 +106,7 @@
       '<li>' + icon('lock') + '<span><b>Vos données restent sur cet appareil.</b> Aucune donnée médicale n\'est demandée. Pour conserver le dossier (40 ans pour le DUERP), archivez vous-même les PDF et le fichier de projet.</span></li></ul>' +
       (has ? '<p class="muted small">Évaluation trouvée sur ce navigateur : <b>' + esc(S.site || 'sans nom') + '</b>, ' + S.products.length + ' produit(s) ou procédé(s), dont ' + c.cmr.length + ' relevant du régime CMR.</p>' : '') +
       '</div></div></section>' +
-      '<footer class="du-foot">' + (has ? '<label class="btn btn-secondary file-btn">' + icon('upload') + 'Ouvrir un fichier de projet<input type="file" accept="application/json,.json" data-import></label>' : '<a class="btn btn-secondary" href="duerp.html#produits">Inventorier mes produits</a>') +
+      '<footer class="du-foot">' + (has ? '<label class="btn btn-secondary file-btn">' + icon('upload') + 'Ouvrir un fichier de projet<input type="file" accept="application/json,.json" data-import></label>' : '<a class="btn btn-secondary" href="' + B + 'duerp.html#produits">Inventorier mes produits</a>') +
       (has ? '<button type="button" class="btn btn-primary" data-nav="' + resumeStep(c) + '">' + (P.revisions.length || P.salaries.length ? 'Reprendre' : 'Commencer') + icon('arrow') + '</button>' : '<button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli' + icon('arrow') + '</button>') + '</footer>';
   }
   function resumeStep(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
@@ -118,7 +120,7 @@
     var body = legalNote() + entCard() +
       '<div class="pv-kpis"><div class="pv-kpi ok"><span>Faites</span><b>' + n.fait + '</b></div><div class="pv-kpi mid"><span>À compléter</span><b>' + n.partiel + '</b></div><div class="pv-kpi bad"><span>À faire</span><b>' + n.manquant + '</b></div><div class="pv-kpi"><span>Sans objet</span><b>' + n.so + '</b></div>' +
       '<div class="pv-kpi"><span>Avancement</span><b>' + (total ? Math.round(n.fait / total * 100) : 0) + ' %</b></div></div>' +
-      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
+      (S.products.length ? '' : '<div class="pv-alert"><b>Inventoriez vos produits pour aller plus vite</b>Une fois vos produits et procédés saisis dans « Mon DUERP risque chimique » (étapes 1 et 2), l\'outil coche lui-même les obligations qu\'il vous aide à remplir. <a href="' + B + 'duerp.html#entreprise">Inventorier mes produits</a> · ou <button type="button" class="pv-link" data-a="demo">voir un exemple rempli</button></div>') +
       '<div class="pv-filter" role="group" aria-label="Filtrer les obligations">' + [['tout', 'Toutes (' + C.OBLIGATIONS.length + ')'], ['afaire', 'À faire (' + (n.manquant + n.partiel) + ')'], ['fait', 'Faites (' + n.fait + ')']].map(function (t) { return '<button type="button" class="chip-btn' + (f === t[0] ? ' on' : '') + '" data-a="ob-filter" data-f="' + t[0] + '" aria-pressed="' + (f === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
     var bloc = '', shown = 0;
     c.cov.forEach(function (x) {
@@ -235,7 +237,7 @@
       field('Justification', inp('periodiciteJustif', P.periodiciteJustif, ' placeholder="Ex. procédés stables, mesurages annuels"')) + '</div>' + (due ? '<p class="small">Prochaine révision prévue : <b>' + fd(due) + '</b></p>' : '') + '</div>' +
       (P.revisions.length ? '<h2 class="sub-h">Historique (' + P.revisions.length + ')</h2><div class="pv-tw"><table class="pv-t stack"><thead><tr><th>Date</th><th>Motif</th><th>Par</th><th>État de l\'évaluation</th><th></th></tr></thead><tbody>' +
         P.revisions.slice().reverse().map(function (r) { return '<tr><td data-l="Date"><b>' + fd(r.date) + '</b></td><td data-l="Motif">' + esc(r.motif) + (r.note ? '<small>' + esc(r.note) + '</small>' : '') + '</td><td data-l="Par">' + esc(r.auteur || '—') + '</td><td data-l="État">' + r.resume.produits + ' produit(s), ' + r.resume.cmr + ' CMR, ' + r.resume.prioritesFortes + ' à risque élevé</td><td><button type="button" class="pv-link" data-a="print" data-doc="revision" data-id="' + r.id + '">Copie figée (PDF)</button></td></tr>'; }).join('') +
-        '</tbody></table></div><div class="pv-row"><button type="button" class="btn btn-secondary" data-a="print" data-doc="revisions">' + icon('download') + 'Historique des révisions (PDF)</button><a class="btn btn-secondary" href="duerp.html#dossier">Dossier DUERP risque chimique</a></div>' : '<div class="pv-empty">Aucune révision datée pour l\'instant.</div>');
+        '</tbody></table></div><div class="pv-row"><button type="button" class="btn btn-secondary" data-a="print" data-doc="revisions">' + icon('download') + 'Historique des révisions (PDF)</button><a class="btn btn-secondary" href="' + B + 'duerp.html#dossier">Dossier DUERP risque chimique</a></div>' : '<div class="pv-empty">Aucune révision datée pour l\'instant.</div>');
     return screen({ id: 'revisions', kicker: 'Étape 2 sur 6 · art. R. 4412-61 à R. 4412-64', title: 'Datez chaque révision de l\'évaluation', sub: 'Une évaluation non datée ne prouve rien. Chaque révision garde une copie de l\'évaluation telle qu\'elle était ce jour-là.', body: body,
       help: '<h2 class="h-t">' + icon('help') + 'Quand réviser ?</h2><ol class="h-steps"><li>À la périodicité que vous avez fixée.</li><li>À chaque nouveau produit, nouvelle fiche de sécurité ou nouveau procédé.</li><li>Après un mesurage, un accident ou une exposition anormale.</li></ol><p class="muted small">Le chapitre risque chimique se télécharge depuis « Mon DUERP » et se joint au document unique (art. R. 4412-64). Conservez chaque version 40 ans (art. R. 4121-4).</p>' });
   }
@@ -544,7 +546,7 @@
   }
   function go(id) {
     UI.view = VIEWS[id] ? id : 'obligations';
-    try { history.replaceState(null, '', '#' + UI.view); } catch (e) {}
+    try { history.replaceState(null, '', UI.view === 'obligations' ? location.pathname : '#' + UI.view); } catch (e) {}
     render(true);
   }
   // Écriture d'une valeur : « a|b|c » désigne P.a.b.c ; « sal|id|champ » et « expo|id|champ » désignent un salarié ou une exposition
@@ -635,7 +637,7 @@
       var ob = C.OBLIGATIONS.filter(function (x) { return x.id === d.id; })[0]; if (!ob) return;
       if (ob.faire && ob.faire.vue) { go(ob.faire.vue); return; }
       if (C.FICHES[ob.id] && !(ob.faire && ob.faire.lien)) { UI.obOpen = ob.id; render(); var tl = $('#ob-d-' + ob.id + ' .ob-tool'); if (tl) tl.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
-      if (ob.faire && ob.faire.lien) { location.href = ob.faire.lien; return; }
+      if (ob.faire && ob.faire.lien) { location.href = B + ob.faire.lien; return; }
       location.href = '/devis/?besoin=' + encodeURIComponent('Obligation ' + ob.id + ' · ' + ob.obligation + ' (' + C.articleLabel(ob) + ')'); return;
     }
   });
@@ -683,8 +685,9 @@
   window.EV_ONREF = function () { render(); };
   loadRef();
   var h0 = (location.hash || '').slice(1);
+  try { if (sessionStorage.getItem('vbs-ind-demo-start') === '1') { sessionStorage.removeItem('vbs-ind-demo-start'); h0 = 'demo'; } } catch (e) {}
   // #exemple ouvre l'exemple sur le sommaire ; #demo (après la page de connexion) l'ouvre sur l'accueil
-  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; }
+  if (h0 === 'exemple' || h0 === 'demo') { setDemoMode(true); S = demo(); S.effectif = '11-49'; S.seen = {}; S.exported = 1; save(); P = demoP(); persist(); h0 = 'obligations'; try { history.replaceState(null, '', location.pathname); } catch (e) {} }
   UI.view = VIEWS[h0] ? h0 : 'obligations';
   render();
   window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (h === 'exemple' || h === 'demo') { location.reload(); return; } if (VIEWS[h] && h !== UI.view) go(h); });

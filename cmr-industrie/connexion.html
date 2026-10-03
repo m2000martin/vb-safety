@@ -2,92 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'">
-<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#17191D">
-<title>Connexion à la démo · VB Safety Industrie &amp; BTP</title>
-<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-<link rel="stylesheet" href="assets/css/vbs.css?v=2">
-<link rel="stylesheet" href="assets/css/connexion.css?v=1">
+<title>Démo · VB Safety</title>
+<link rel="canonical" href="https://vb-safety.com/cmr-industrie/demo/">
+<meta http-equiv="refresh" content="0; url=demo/">
+<script>location.replace('demo/' + location.search + location.hash);</script>
 </head>
-<body class="login-body">
-
-<svg class="sprite" width="0" height="0" aria-hidden="true">
-  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
-  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
-  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
-  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
-  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
-  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
-  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
-</svg>
-
-<main class="login">
-  <!-- Panneau gauche : message -->
-  <section class="login-side" aria-labelledby="side-title">
-    <div class="login-side-media" aria-hidden="true"></div>
-    <a class="brand brand-dark" href="./" aria-label="Retour à l'accueil VB Safety Industrie et BTP">
-      <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
-        <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
-        <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
-        <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
-        <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
-      </svg>
-      <span class="brand-name">VB Safety<span class="brand-sub">Industrie &amp; BTP</span></span>
-    </a>
-
-    <div class="side-main">
-      <span class="side-rule" aria-hidden="true"></span>
-      <h1 id="side-title">Votre dossier CMR prêt le jour où on vous le <em>demande.</em></h1>
-      <p>Agents, substitution, liste nominative des salariés exposés, envois au service de santé au travail : chaque pièce exigée par le code du travail, datée et retrouvable.</p>
-      <ul class="side-facts">
-        <li><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg><span>Liste nominative datée</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>45 obligations suivies</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><span>Chaque pièce cite son article</span></li>
-      </ul>
-    </div>
-
-    <div class="side-secure">
-      <span class="side-secure-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
-      <div><strong>Démonstration avec une entreprise fictive</strong><span>Atelier de démonstration, salariés et produits inventés. Rien de ce que vous saisissez ne quitte votre navigateur.</span></div>
-    </div>
-  </section>
-
-  <!-- Panneau droit : connexion -->
-  <section class="login-panel" aria-labelledby="login-title">
-    <div class="demo-banner" role="note">Version de démonstration · données fictives</div>
-    <div class="login-inner">
-      <a class="back-link" href="./"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>Accueil</a>
-      <h2 id="login-title">Accéder à la démo</h2>
-      <p class="login-lead">Saisissez le code d'accès qui vous a été transmis.</p>
-
-      <form id="login-form" novalidate>
-        <div class="field code-field">
-          <div class="code-head"><label class="label" for="code">Code d'accès à la démo</label><a class="code-ask" href="/devis/">Demander un accès</a></div>
-          <div class="input-icon"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg><input class="input" id="code" name="code" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Code reçu par e-mail ou en rendez-vous" required></div>
-        </div>
-
-        <button class="btn btn-primary btn-lg btn-block" id="login-btn" type="submit"><span>Se connecter</span><svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-        <p class="login-msg" id="login-msg" role="status" hidden></p>
-      </form>
-
-      <ul class="demo-modules" aria-label="Contenu de la démo">
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Registre des agents et de leur régime</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Étude de substitution et grille des treize mesures</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Liste nominative, extrait individuel, version anonyme pour le CSE, envoi au SPST</span></li>
-        <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Sommaire des 45 obligations et pièces manquantes</span></li>
-      </ul>
-
-      <p class="login-foot">Pas encore de code ? <a href="/devis/">Demander un devis</a> · Une question ? <a href="/#contact">Nous contacter</a></p>
-    </div>
-  </section>
-</main>
-
-<script src="assets/js/connexion.js?v=1"></script>
-<script src="/static/vu.js?v=1" defer></script>
-</body>
+<body><p>Cette page a déménagé : <a href="demo/">vb-safety.com/cmr-industrie/demo/</a></p></body>
 </html>

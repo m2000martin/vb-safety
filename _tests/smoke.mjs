@@ -21,7 +21,7 @@ const server = http.createServer((req, res) => {
 const BASE = `http://127.0.0.1:${server.address().port}`;
 
 const pages = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').match(/<loc>[^<]+<\/loc>/g).map(l => l.replace(/<\/?loc>/g, '').replace('https://vb-safety.com', ''));
-['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/dossier.html', '/cmr-industrie/connexion.html', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
+['/cmr-industrie/duerp.html', '/cmr-industrie/expert.html', '/cmr-industrie/outil/', '/cmr-industrie/demo/', '/cmr-pompier/connexion.html', '/cmr-pompier/espace.html', '/404.html'].concat(process.argv.slice(2)).forEach(p => { if (!pages.includes(p)) pages.push(p); });
 
 const browser = await chromium.launch();
 let fails = 0;
@@ -89,7 +89,7 @@ for (const p of pages) {
     { id: 1, type: 'produit', name: 'Dégraissant H350', h: ['H350', 'H336'], etat: 'liquide', vol: 2, qte: 100, unite: 'L', freq: 3, proc: 3, prot: 4, poste: 'Dégraissage', nb: 2 },
     { id: 2, type: 'procede', procede: 'bois', name: 'Poussières de bois', intensite: 3, freq: 2, proc: 3, prot: 2, poste: 'Menuiserie', nb: 1, etat: 'solide', pulv: 3 } ] })); });
   const evalBefore = await pg.evaluate(() => localStorage.getItem('vbs-eval-v1'));
-  await pg.goto(BASE + '/cmr-industrie/dossier.html#agents'); await pg.waitForTimeout(600);
+  await pg.goto(BASE + '/cmr-industrie/outil/#agents'); await pg.waitForTimeout(600);
   ok(await pg.locator('.pv-reg.cmr').count() >= 2, 'Dossier · deux agents proposés au régime CMR');
   await pg.click('[data-a="confirm-all"]');
   await pg.click('a[href="#revisions"]'); await pg.click('[data-a="revision"]');
@@ -118,7 +118,7 @@ for (const p of pages) {
   ok(await pg.evaluate(() => localStorage.getItem('vbs-eval-v1')) === evalBefore, 'Dossier · l\'évaluation DUERP n\'est jamais modifiée par le dossier');
   await pg.goto(BASE + '/cmr-industrie/duerp.html#produits'); await pg.waitForTimeout(400);
   ok(await pg.locator('text=Dégraissant H350').count() > 0, 'DUERP · relit toujours la même évaluation après usage du dossier');
-  await pg.goto(BASE + '/cmr-industrie/dossier.html#exemple'); await pg.waitForTimeout(800);
+  await pg.goto(BASE + '/cmr-industrie/outil/#exemple'); await pg.waitForTimeout(800);
   ok(await pg.locator('.demo-note').count() === 1 && await pg.evaluate(() => JSON.parse(localStorage.getItem('vbs-preuve-v1')).salaries.length === 2), 'Dossier · l\'exemple fictif ne touche pas aux données réelles');
   ok(!errs.length, 'Dossier · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();
@@ -129,10 +129,10 @@ for (const p of pages) {
   const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.goto(BASE + '/cmr-industrie/'); await pg.click('.ih-cta a.btn-primary');
-  ok(/connexion\.html$/.test(pg.url()), 'Démo · « Accéder à la démo » ouvre la page de connexion');
+  ok(/demo\/$/.test(pg.url()), 'Démo · « Accéder à la démo » ouvre /cmr-industrie/demo/');
   await pg.fill('#code', 'ABC123'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
-  ok(/incorrect/.test(await pg.locator('#login-msg').textContent()) && /connexion\.html$/.test(pg.url()), 'Démo · un code faux est refusé');
-  await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/dossier\.html#/); await pg.waitForTimeout(600);
+  ok(/incorrect/.test(await pg.locator('#login-msg').textContent()) && /demo\/$/.test(pg.url()), 'Démo · un code faux est refusé');
+  await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
   ok(await pg.locator('.demo-note').count() === 1 && /45 obligations/.test(await pg.locator('#q-title').textContent()), 'Démo · VLN533 ouvre l\'outil sur la liste des obligations, avec l\'exemple fictif');
   ok(await pg.evaluate(() => !localStorage.getItem('vbs-eval-v1')), 'Démo · aucune donnée réelle créée');
   await pg.goto(BASE + '/cmr-industrie/'); 
@@ -145,7 +145,7 @@ for (const p of pages) {
 {
   const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
-  await pg.goto(BASE + '/cmr-industrie/dossier.html'); await pg.waitForTimeout(600);
+  await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(600);
   ok(await pg.locator('.ob-it').count() === 45, 'Obligations · l\'outil s\'ouvre sur les 45 obligations, même sans inventaire');
   await pg.click('[data-a="ob-open"][data-id="E1"]');
   ok(/5 juillet 2024/.test(await pg.locator('#ob-d-E1').textContent()), 'Obligations · le détail s\'affiche au clic');
@@ -153,7 +153,7 @@ for (const p of pages) {
   ok(await pg.evaluate(() => JSON.parse(localStorage.getItem('vbs-preuve-v1')).pieces.D3.ok === true), 'Obligations · « C\'est fait » est enregistré');
   await pg.click('[data-a="ob-faire"][data-id="B1"]'); await pg.waitForTimeout(200);
   ok(/Substitution/.test(await pg.locator('#q-title').textContent()), 'Obligations · « Faire avec VB Safety » ouvre l\'écran de l\'outil');
-  await pg.goto(BASE + '/cmr-industrie/dossier.html#obligations'); await pg.waitForTimeout(400);
+  await pg.goto(BASE + '/cmr-industrie/outil/#obligations'); await pg.waitForTimeout(400);
   await pg.click('[data-a="ob-faire"][data-id="C2"]'); await pg.waitForTimeout(300);
   ok(await pg.locator('#ob-d-C2 .ob-tool').count() === 1, 'Obligations · « Faire avec VB Safety » ouvre l\'outil sous l\'obligation (C2)');
   await pg.goto(BASE + '/devis/?besoin=' + encodeURIComponent('Obligation C2 · test')); await pg.waitForTimeout(300);
@@ -167,7 +167,7 @@ for (const p of pages) {
   const ctx = await browser.newContext(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
   await pg.addInitScript(() => { window.print = () => { window.__lastDoc = document.getElementById('pv-print').innerText; }; });
-  await pg.goto(BASE + '/cmr-industrie/dossier.html'); await pg.waitForTimeout(500);
+  await pg.goto(BASE + '/cmr-industrie/outil/'); await pg.waitForTimeout(500);
   await pg.fill('#ent-nom', 'Métallerie Test'); await pg.fill('#ent-siren', '999999998');
   await pg.click('[data-a="ob-open"][data-id="B8"]');
   await pg.fill('[data-fi="B8"][data-r="0"][data-c="1"]', 'Captage poste de soudage');
@@ -181,6 +181,19 @@ for (const p of pages) {
   await pg.click('[data-a="ob-filter"][data-f="fait"]');
   ok(await pg.locator('.ob-it.st-outil [data-id="B8"]').count() > 0, 'Outils · B8 passe en « fait avec VB Safety »');
   ok(!errs.length, 'Outils · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
+  await ctx.close();
+}
+
+// Adresses propres : les anciennes adresses .html redirigent, l'outil s'affiche sans .html ni #
+{
+  const ctx = await browser.newContext(); const pg = await ctx.newPage();
+  await pg.goto(BASE + '/cmr-industrie/dossier.html#exemple'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
+  ok(await pg.locator('.demo-note').count() === 1 && await pg.locator('.ob-it').count() === 45, 'Adresses · dossier.html#exemple redirige vers /outil/ avec l\'exemple');
+  await pg.goto(BASE + '/cmr-industrie/connexion.html'); await pg.waitForURL(/demo\/$/);
+  ok(await pg.locator('#code').count() === 1, 'Adresses · connexion.html redirige vers /demo/');
+  await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
+  ok(!/\.html|#/.test(pg.url()), 'Adresses · après connexion, l\'adresse est propre : ' + pg.url().replace(BASE, ''));
+  ok(await pg.evaluate(() => !!(window.REF && REF.substances && REF.substances.length)), 'Adresses · le référentiel des substances se charge depuis /outil/');
   await ctx.close();
 }
 

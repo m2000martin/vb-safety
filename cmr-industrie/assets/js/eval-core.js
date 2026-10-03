@@ -87,7 +87,7 @@ function validCas(c) {
 function parseCas(txt) { var out = [], m, re = /\b\d{2,7}-\d{2}-\d\b/g; while ((m = re.exec(txt || ''))) if (validCas(m[0]) && out.indexOf(m[0]) === -1) out.push(m[0]); return out; }
 function loadRef() {
   if (!window.fetch) return;
-  fetch('data/substances.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+  fetch((document.documentElement.getAttribute('data-base') || '') + 'data/substances.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
     if (!d || !d.substances) return;
     REF = d; RBY = {}; RPROC = {}; RMP = {};
     RIDX = d.substances.map(function (x) { RBY[x.id] = x; return { s: x, k: nrm([x.nom].concat(x.syn || [], x.cas || [], [x.ce || '']).join(' ')), n: nrm(x.nom) }; });

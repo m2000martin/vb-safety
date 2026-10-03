@@ -1,5 +1,5 @@
 // VB Safety · Dossier de preuve CMR : règles et calculs, sans interface.
-// Utilisé par dossier.html (navigateur) et par les tests automatiques (_tests/, Node).
+// Utilisé par outil/ (navigateur) et par les tests automatiques (_tests/, Node).
 // Aucune donnée médicale : pas de résultat biologique, pas d'état de grossesse, pas de contenu d'avis médical.
 // Référentiel juridique : articles lus sur le Code du travail numérique le 3 octobre 2026, à relire sur Légifrance.
 (function (root, factory) {
