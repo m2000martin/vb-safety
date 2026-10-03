@@ -209,3 +209,28 @@ test('Liste des obligations · « C\'est fait » enregistre la date et passe l\'
   const d3 = C.coverage({ S, P, agents: [], listeRows: [] }).find(c => c.o.id === 'D3');
   assert.equal(d3.statut, 'manuel'); assert.equal(d3.date, '2026-10-03');
 });
+
+test('Outils · chaque obligation (sauf A7, sans objet) a un outil : écran dédié ou formulaire avec justificatif', () => {
+  for (const o of C.OBLIGATIONS) if (o.id !== 'A7') assert.ok(C.FICHES[o.id] || o.faire, o.id);
+  for (const [id, F] of Object.entries(C.FICHES)) { assert.ok(F.doc && F.champs.length, id); assert.ok(!/conforme/i.test(JSON.stringify(F)), id); }
+});
+test('Outils · aucun formulaire ne demande de donnée médicale', () => {
+  const txt = JSON.stringify(C.FICHES).toLowerCase();
+  for (const mot of ['aptitude', 'inaptitude', 'plombémie', 'résultat biologique', 'enceinte depuis', 'diagnostic']) assert.ok(!txt.includes(mot), mot);
+});
+test('Outils · un formulaire rempli compte comme pièce produite avec l\'outil, un formulaire vide non', () => {
+  const S = { products: [] }, P = C.blank();
+  const st = () => C.coverage({ S, P, agents: [], listeRows: [] }).find(c => c.o.id === 'B8');
+  assert.equal(st().statut, 'manquant');
+  P.fiches.B8 = { lignes: [['', '', '', '', '']], maj: '2026-10-03' };
+  assert.equal(st().statut, 'manquant', 'une ligne vide ne compte pas');
+  P.fiches.B8.lignes[0][1] = 'Captage';
+  assert.equal(st().statut, 'outil'); assert.equal(st().date, '2026-10-03');
+});
+test('Entreprise · contrôle du SIREN (9 chiffres, clé de Luhn)', () => {
+  assert.ok(C.sirenValide('999 999 998')); assert.ok(!C.sirenValide('999999999')); assert.ok(!C.sirenValide('12345678'));
+});
+test('Textes · lien vers le Code du travail numérique pour chaque article', () => {
+  assert.equal(C.articleUrl('R. 4412-93-1'), 'https://code.travail.gouv.fr/code-du-travail/r4412-93-1');
+  assert.equal(C.articleUrl('L. 4121-3-1'), 'https://code.travail.gouv.fr/code-du-travail/l4121-3-1');
+});

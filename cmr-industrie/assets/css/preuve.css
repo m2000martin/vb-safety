@@ -154,3 +154,17 @@
   .ob-acts > * { flex: 1 1 auto; justify-content: center; }
   .ob-vb { white-space: normal; }
 }
+
+/* Outil sous chaque obligation */
+.pv-ent > summary b { font-size: 16px; }
+.pv-warn { color: var(--warn); background: #FFF8EC; border: 1px solid #F0D5A8; border-radius: 8px; padding: 8px 10px; }
+.ob-tool { margin-top: 14px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.ob-tool h4 { display: flex; align-items: center; gap: 8px; font-size: 15px; margin: 0 0 12px; }
+.ob-tool h4 .icon { width: 18px; height: 18px; color: var(--red); }
+.ob-tool .pv-tw { margin-bottom: 6px; }
+.pv-reg-t td { padding: 6px 8px; }
+.pv-reg-t .input { min-width: 120px; }
+.ob-files { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.ob-files .btn .icon { width: 15px; height: 15px; margin-right: 6px; }
+.ob-refs { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+.ob-refs a { color: var(--text); }
