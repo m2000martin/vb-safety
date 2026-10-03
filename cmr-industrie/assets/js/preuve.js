@@ -86,7 +86,7 @@
   function area(bind, val, ph) { return '<textarea class="input" data-b="' + esc(bind) + '" placeholder="' + esc(ph || '') + '">' + esc(val || '') + '</textarea>'; }
   function legalNote() { return '<p class="pv-note"><b>Référentiel juridique du ' + fd(C.REFERENTIEL.date) + '.</b> Chaque écran cite l\'article qui fonde la pièce. L\'outil indique ce qui a été renseigné et quand ; il ne juge pas de la conformité. ' + esc(C.REFERENTIEL.relecture) + '.</p>'; }
   function noEval() {
-    return '<div class="pv-empty"><p><b>Commencez par l\'évaluation du risque chimique.</b><br>Le dossier de preuve reprend les produits et procédés inventoriés dans « Mon DUERP risque chimique », sur ce même navigateur.</p><a class="btn btn-primary" href="duerp.html">Faire mon évaluation</a> <button type="button" class="btn btn-secondary" data-a="demo">Voir un exemple rempli</button></div>';
+    return '<div class="pv-empty"><p><b>Aucun produit inventorié sur ce navigateur.</b><br>Le dossier de preuve part de la liste de vos produits et procédés. Elle se saisit une seule fois dans « Mon DUERP risque chimique » (étapes 1 et 2), puis le dossier la reprend automatiquement.</p><button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli</button> <a class="btn btn-secondary" href="duerp.html#produits">Inventorier mes produits</a></div>';
   }
 
   // ------------------------------------------------------------------ accueil
@@ -94,16 +94,17 @@
     var has = S.products.length > 0;
     return '<section class="welcome"><p class="q-k">Version 1 · rien n\'est hébergé</p><h1 class="q-t" id="q-title">Votre dossier de preuve CMR</h1>' +
       '<p class="q-s">L\'évaluation du risque chimique est faite. Il reste les pièces écrites que le code du travail demande pour les agents cancérogènes, mutagènes et toxiques pour la reproduction (CMR), et que l\'employeur doit pouvoir montrer le jour où un salarié, un inspecteur ou un juge les demande.</p>' +
+      (has ? '' : '<div class="pv-start"><h2>Comment démarrer</h2><ol><li><b>Inventoriez vos produits et procédés</b> dans « Mon DUERP risque chimique », étapes 1 et 2 (environ 5 minutes par produit). C\'est la seule saisie à faire dans l\'autre outil.</li><li><b>Revenez ici</b> par le lien « Dossier de preuve CMR » du menu : vos agents CMR sont repris automatiquement et les 6 étapes ci-dessous s\'ouvrent.</li></ol><p class="muted small">Pour découvrir l\'outil sans rien saisir, ouvrez l\'exemple rempli (données fictives, vos données ne sont pas touchées).</p></div>') +
       '<div class="wl-grid"><ol class="wl-steps">' + STEPS.map(function (s, i) { return '<li><i>' + (i + 1) + '</i><div><b>' + s.t + '</b><span>' + s.d + '</span></div></li>'; }).join('') + '</ol>' +
       '<div class="wl-prep"><h2>Ce que produit cette version</h2><ul>' +
       '<li>' + icon('file') + '<span><b>Le registre des agents et procédés</b> avec leur régime (art. R. 4412-59 et R. 4412-60).</span></li>' +
       '<li>' + icon('file') + '<span><b>L\'étude de substitution et la grille des treize mesures</b> à consigner dans le DUERP (art. R. 4412-66 à R. 4412-70).</span></li>' +
       '<li>' + icon('users') + '<span><b>La liste nominative des travailleurs exposés</b>, datée et versionnée, avec l\'extrait individuel, la version anonyme pour le CSE, l\'extrait pour l\'agence d\'intérim et le bordereau d\'envoi au service de santé au travail (art. R. 4412-93-1 à R. 4412-93-4).</span></li>' +
       '<li>' + icon('lock') + '<span><b>Vos données restent sur cet appareil.</b> Aucune donnée médicale n\'est demandée. Pour conserver le dossier (40 ans pour le DUERP), archivez vous-même les PDF et le fichier de projet.</span></li></ul>' +
-      (has ? '<p class="muted small">Évaluation trouvée sur ce navigateur : <b>' + esc(S.site || 'sans nom') + '</b>, ' + S.products.length + ' produit(s) ou procédé(s), dont ' + c.cmr.length + ' relevant du régime CMR.</p>' : '<p class="muted small">Aucune évaluation trouvée sur ce navigateur. Faites-la d\'abord, ou ouvrez un fichier de projet.</p>') +
+      (has ? '<p class="muted small">Évaluation trouvée sur ce navigateur : <b>' + esc(S.site || 'sans nom') + '</b>, ' + S.products.length + ' produit(s) ou procédé(s), dont ' + c.cmr.length + ' relevant du régime CMR.</p>' : '') +
       '</div></div></section>' +
-      '<footer class="du-foot">' + (has ? '<label class="btn btn-secondary file-btn">' + icon('upload') + 'Ouvrir un fichier de projet<input type="file" accept="application/json,.json" data-import></label>' : (demoMode() ? '<span></span>' : '<button type="button" class="btn btn-secondary" data-a="demo">Voir un exemple rempli</button>')) +
-      (has ? '<button type="button" class="btn btn-primary" data-nav="' + resumeStep(c) + '">' + (P.revisions.length || P.salaries.length ? 'Reprendre' : 'Commencer') + icon('arrow') + '</button>' : '<a class="btn btn-primary" href="duerp.html">Faire mon évaluation' + icon('arrow') + '</a>') + '</footer>';
+      '<footer class="du-foot">' + (has ? '<label class="btn btn-secondary file-btn">' + icon('upload') + 'Ouvrir un fichier de projet<input type="file" accept="application/json,.json" data-import></label>' : '<a class="btn btn-secondary" href="duerp.html#produits">Inventorier mes produits</a>') +
+      (has ? '<button type="button" class="btn btn-primary" data-nav="' + resumeStep(c) + '">' + (P.revisions.length || P.salaries.length ? 'Reprendre' : 'Commencer') + icon('arrow') + '</button>' : '<button type="button" class="btn btn-primary" data-a="demo">Voir un exemple rempli' + icon('arrow') + '</button>') + '</footer>';
   }
   function resumeStep(c) { for (var i = 0; i < STEPS.length; i++) if (!stepDone(STEPS[i].id, c)) return STEPS[i].id; return 'sommaire'; }
 
