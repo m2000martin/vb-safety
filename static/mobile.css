@@ -34,18 +34,25 @@
   .haut.has-menu.open > .haut-nav a { display: block; padding: 15px 2px; font-size: 16.5px; color: #FAFAFA; border-bottom: 1px solid rgba(255, 255, 255, .08); white-space: normal; }
   .haut.has-menu.open > .haut-nav a.nav-ecrire { display: flex; justify-content: center; margin-top: 16px; padding: 14px; border: 0; border-radius: 8px; background: #C2501C; font-weight: 700; }
 }
-/* Accueil sur téléphone : un seul écran, la devise en grand, « invisible » qui apparaît */
+/* Accueil, téléphone et ordinateur : la devise monte, puis « visible » apparaît et se souligne */
+.scene .enonce > span:not(.h1-kw) { animation: hero-up .8s cubic-bezier(.2, .7, .2, 1) both; }
+.scene .enonce > span:nth-child(2) { animation-delay: .1s; }
+.scene .enonce .seconde { animation-delay: .45s; }
+.scene .invis { display: inline-block; position: relative; color: #fff; white-space: nowrap; will-change: opacity, filter; animation: hero-reveal 1.5s ease-out 1.3s both; }
+.scene .invis::after { content: ""; position: absolute; left: 0; right: .35em; bottom: .02em; height: 3px; border-radius: 2px; background: var(--signal, #E06C34); transform: scaleX(0); transform-origin: left; animation: hero-line .6s ease-out 2.5s both; }
+@media (prefers-reduced-motion: reduce) {
+  .scene .enonce > span, .scene .invis, .scene .invis::after { animation: none; }
+  .scene .invis::after { transform: none; }
+}
+
+/* Accueil sur téléphone : un seul écran, la devise en grand */
 @media (max-width: 700px) {
   .scene { min-height: 100vh; min-height: 100svh; }
   .scene .centre { padding: 0; align-items: center; }
   .scene .centre > div { width: 100%; }
   .scene .enonce { font-size: clamp(42px, 12.8vw, 60px); line-height: 1.02; letter-spacing: -.012em; }
   .scene .enonce .h1-kw { font-size: 11.5px; letter-spacing: .16em; line-height: 1.6; margin-bottom: 26px; max-width: 30ch; }
-  .scene .enonce > span:not(.h1-kw) { animation: hero-up .8s cubic-bezier(.2, .7, .2, 1) both; }
-  .scene .enonce > span:nth-child(2) { animation-delay: .1s; }
-  .scene .enonce .seconde { margin-top: 12px; animation-delay: .45s; }
-  .scene .invis { display: inline-block; position: relative; color: #fff; white-space: nowrap; will-change: opacity, filter; animation: hero-reveal 1.5s ease-out 1.3s both; }
-  .scene .invis::after { content: ""; position: absolute; left: 0; right: .35em; bottom: .02em; height: 3px; border-radius: 2px; background: var(--signal, #E06C34); transform: scaleX(0); transform-origin: left; animation: hero-line .6s ease-out 2.5s both; }
+  .scene .enonce .seconde { margin-top: 12px; }
   .scene .trait { display: none; }
   .scene .note { margin-top: 26px; font-size: 15.5px; line-height: 1.55; max-width: 34ch; animation: hero-up .7s ease-out 2.6s both; }
   .scene .hero-cta { margin-top: 26px; animation: hero-up .7s ease-out 2.8s both; }
