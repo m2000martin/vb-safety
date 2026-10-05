@@ -1558,6 +1558,16 @@
   $('tour-open').onclick = function () { app.classList.remove('nav-open'); openTour(); };
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('tour').hidden) closeTour(); });
 
+  // =================================================================== assistant (assistant.js)
+  // Accès en lecture seule à ce que l'utilisateur voit déjà : mêmes données, mêmes droits.
+  window.VBSApp = {
+    session: S, menu: MENU, roleLabel: ROLE_LABEL[S.role], types: TYPE,
+    getDb: function () { return db; },
+    page: function () { return (location.hash.slice(1) || 'tableau-de-bord').split('/')[0]; },
+    go: function (hash) { location.hash = hash; },
+    fmtD: fmtD, esc: esc, icon: icon
+  };
+
   // =================================================================== démarrage
   route();
   VBSData.load(S).then(function (data) {
