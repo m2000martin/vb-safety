@@ -2,10 +2,10 @@
 .lab { padding: clamp(24px, 4vw, 56px) 0 clamp(56px, 8vw, 110px); }
 .lab-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ligne); }
 .lab-item { display: grid; grid-template-columns: 110px minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(20px, 4vw, 64px); align-items: center; padding: clamp(36px, 5vw, 72px) 0; border-bottom: 1px solid var(--ligne); }
-.lab-n { font: 400 clamp(56px, 6vw, 88px)/.9 var(--serif); color: transparent; -webkit-text-stroke: 1px rgba(224, 108, 52, .75); letter-spacing: -.02em; }
+.lab-n { font: 500 clamp(56px, 6vw, 88px)/.9 var(--serif); color: transparent; -webkit-text-stroke: 1px rgba(224, 108, 52, .75); letter-spacing: -.02em; }
 .lab-st { display: inline-flex; align-items: center; gap: 10px; font: 600 11px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--doux); margin-bottom: 18px; }
 .lab-st i { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 0 rgba(224, 108, 52, .55); animation: lab-ping 2.4s ease-out infinite; }
-.lab-txt h2 { margin: 0; font: 500 clamp(32px, 3.6vw, 52px)/1.05 var(--serif); letter-spacing: -.01em; }
+.lab-txt h2 { margin: 0; font: 600 clamp(32px, 3.6vw, 52px)/1.04 var(--serif); letter-spacing: -.04em; }
 .lab-txt p { margin: 16px 0 0; max-width: 40ch; color: var(--doux); font-size: clamp(16px, 1.3vw, 18px); line-height: 1.55; }
 .lab-vis { position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--ligne); border-radius: 14px; overflow: hidden; background: radial-gradient(120% 90% at 70% 20%, rgba(224, 108, 52, .07), transparent 60%), linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, 0)); }
 .lab-vis::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px); background-size: 32px 32px; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 85%); mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 85%); }
@@ -49,3 +49,7 @@
   .v1 .ring { opacity: .5; } .v1 .trace, .v3 .curve { stroke-dashoffset: 0; } .v3 .fill { transform: none; } .v3 .end { opacity: 1; } .v2 .hot { opacity: .6; }
 }
 .lab > .wrap > .maj { display: block; margin-top: 18px; }
+/* En-tête « Innovation » : grand titre, une phrase */
+.lab-hero { padding-top: clamp(40px, 8vw, 120px); padding-bottom: clamp(24px, 4vw, 48px); }
+.lab-hero .lab-h1 { font: 600 clamp(64px, 12vw, 168px)/.92 var(--serif); letter-spacing: -.055em; margin-top: clamp(20px, 3vw, 40px); background: linear-gradient(180deg, #fff 30%, rgba(255, 255, 255, .62)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lab-hero .lab-chapeau { margin-top: clamp(18px, 2.4vw, 32px); max-width: 30ch; font-size: clamp(19px, 2vw, 26px); line-height: 1.35; letter-spacing: -.01em; color: var(--doux); }
