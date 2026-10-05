@@ -48,7 +48,7 @@
   .scene { min-height: 100vh; min-height: 100svh; }
   .scene .centre { padding: 0; align-items: center; }
   .scene .centre > div { width: 100%; text-align: center; }
-  .scene .enonce { font-size: clamp(36px, 11.4vw, 52px); line-height: 1.04; letter-spacing: -.02em; }
+  .scene .enonce { font-size: clamp(36px, 11.4vw, 52px); line-height: 1.02; letter-spacing: -.045em; }
   .scene .enonce > span:nth-child(2) { text-wrap: balance; }
   .scene .enonce .h1-kw { font-size: 11px; letter-spacing: .14em; line-height: 1.6; margin: 0 auto 22px; text-wrap: balance; }
   .scene .enonce .seconde { margin-top: 10px; }
