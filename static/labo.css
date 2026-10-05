@@ -49,7 +49,3 @@
   .v1 .ring { opacity: .5; } .v1 .trace, .v3 .curve { stroke-dashoffset: 0; } .v3 .fill { transform: none; } .v3 .end { opacity: 1; } .v2 .hot { opacity: .6; }
 }
 .lab > .wrap > .maj { display: block; margin-top: 18px; }
-/* En-tête « Innovation » : grand titre, une phrase */
-.lab-hero { padding-top: clamp(40px, 8vw, 120px); padding-bottom: clamp(24px, 4vw, 48px); }
-.lab-hero .lab-h1 { font: 600 clamp(64px, 12vw, 168px)/.92 var(--serif); letter-spacing: -.055em; margin-top: clamp(20px, 3vw, 40px); background: linear-gradient(180deg, #fff 30%, rgba(255, 255, 255, .62)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.lab-hero .lab-chapeau { margin-top: clamp(18px, 2.4vw, 32px); max-width: 30ch; font-size: clamp(19px, 2vw, 26px); line-height: 1.35; letter-spacing: -.01em; color: var(--doux); }
