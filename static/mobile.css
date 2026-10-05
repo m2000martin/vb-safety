@@ -34,15 +34,13 @@
   .haut.has-menu.open > .haut-nav a { display: block; padding: 15px 2px; font-size: 16.5px; color: #FAFAFA; border-bottom: 1px solid rgba(255, 255, 255, .08); white-space: normal; }
   .haut.has-menu.open > .haut-nav a.nav-ecrire { display: flex; justify-content: center; margin-top: 16px; padding: 14px; border: 0; border-radius: 8px; background: #C2501C; font-weight: 700; }
 }
-/* Accueil, téléphone et ordinateur : la devise monte, puis « visible » apparaît et se souligne */
+/* Accueil, téléphone et ordinateur : la devise monte, puis « visible » apparaît */
 .scene .enonce > span:not(.h1-kw) { animation: hero-up .8s cubic-bezier(.2, .7, .2, 1) both; }
 .scene .enonce > span:nth-child(2) { animation-delay: .1s; }
 .scene .enonce .seconde { animation-delay: .45s; }
 .scene .invis { display: inline-block; position: relative; color: #fff; white-space: nowrap; will-change: opacity, filter; animation: hero-reveal 1.5s ease-out 1.3s both; }
-.scene .invis::after { content: ""; position: absolute; left: 0; right: .35em; bottom: .02em; height: 3px; border-radius: 2px; background: var(--signal, #E06C34); transform: scaleX(0); transform-origin: left; animation: hero-line .6s ease-out 2.5s both; }
 @media (prefers-reduced-motion: reduce) {
-  .scene .enonce > span, .scene .invis, .scene .invis::after { animation: none; }
-  .scene .invis::after { transform: none; }
+  .scene .enonce > span, .scene .invis { animation: none; }
 }
 
 /* Accueil sur téléphone : un seul écran, devise centrée et resserrée */
@@ -50,7 +48,7 @@
   .scene { min-height: 100vh; min-height: 100svh; }
   .scene .centre { padding: 0; align-items: center; }
   .scene .centre > div { width: 100%; text-align: center; }
-  .scene .enonce { font-size: clamp(36px, 11.4vw, 52px); line-height: 1.04; letter-spacing: -.012em; }
+  .scene .enonce { font-size: clamp(36px, 11.4vw, 52px); line-height: 1.04; letter-spacing: -.02em; }
   .scene .enonce > span:nth-child(2) { text-wrap: balance; }
   .scene .enonce .h1-kw { font-size: 11px; letter-spacing: .14em; line-height: 1.6; margin: 0 auto 22px; text-wrap: balance; }
   .scene .enonce .seconde { margin-top: 10px; }
