@@ -663,7 +663,7 @@
     var dlg = document.createElement('dialog');
     dlg.className = 'modal' + (opts && opts.wide ? ' wide' : '');
     dlg.innerHTML = '<form method="dialog" class="modal-card" novalidate><div class="modal-head"><h3>' + esc(title) + '</h3><button class="icon-btn" value="cancel" aria-label="Fermer">✕</button></div><div class="modal-body">' + body + '</div><p class="field-error modal-err" hidden></p><div class="modal-foot">' +
-      '<button class="btn btn-secondary" value="cancel">Annuler</button>' + actions.map(function (a, i) { return '<button class="btn ' + (a.primary ? 'btn-primary' : 'btn-secondary') + '" type="button" data-act="' + i + '">' + a.label + '</button>'; }).join('') + '</div></form>';
+      '<button class="btn btn-secondary" value="cancel">' + (opts && opts.close ? opts.close : 'Annuler') + '</button>' + actions.map(function (a, i) { return '<button class="btn ' + (a.primary ? 'btn-primary' : 'btn-secondary') + '" type="button" data-act="' + i + '">' + a.label + '</button>'; }).join('') + '</div></form>';
     document.body.appendChild(dlg);
     dlg.addEventListener('close', function () { dlg.remove(); });
     dlg.querySelectorAll('[data-act]').forEach(function (b) {
@@ -1620,12 +1620,64 @@
   }
   function lastSave() { var c = db.config || {}; return c.maj ? 'Dernière modification le ' + fmtDT(new Date(c.maj)) + (c.par ? ' par ' + esc(c.par) : '') : 'Réglages d\'origine, aucune modification.'; }
 
+  // =================================================================== aperçu d'un profil (administrateur)
+  // L'administrateur n'a pas accès aux données d'exposition : l'aperçu se calcule sur un jeu
+  // d'exemple fictif, généré ici, jamais sur les données réelles du service.
+  var SAMPLE = null;
+  function sampleDb() {
+    if (SAMPLE) return SAMPLE;
+    var seed = 77; function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+    function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+    var now = Date.now(), its = [], parts = [], types = ['habitation', 'habitation', 'habitation', 'vehicule', 'vehicule', 'vegetation', 'vegetation', 'conteneur', 'industriel', 'cheminee', 'clos', 'chimique'];
+    for (var i = 0; i < 72; i++) {
+      var ago = Math.floor(i / 72 * 360) + Math.floor(rnd() * 4), d = new Date(now - ago * VBSData.DAY - Math.floor(rnd() * 12) * 3600000);
+      var st = ago <= 1 ? 'brouillon' : ago <= 9 ? (rnd() < 0.5 ? 'transmis' : 'controle_sssm') : 'controle_sssm';
+      if (i === 8 || i === 11) st = 'brouillon';
+      var t = pick(types), it = { id: 'ex' + i, dateObj: d, statut: st, type_feu: t, ambiance: t === 'chimique' ? 'aucun_feu' : 'feu_fumee', cos: i % 2 ? 'me' : 'autre', crew: [] };
+      its.push(it);
+      for (var k = 0; k < 4; k++) {
+        var att = k < 2, r = rnd();
+        var p = { id: it.id + '-' + k, it: it, agent: k === 0 && i % 3 === 0 ? 'me' : 'a' + k, position: st === 'brouillon' ? '' : (att ? 'POS_ATT' : 'POS_SOUT'), contamination: att ? (r < 0.55 ? 'forte' : 'moyenne') : (r < 0.8 ? 'nulle' : 'moyenne'),
+          ari_porte: att ? rnd() > 0.06 : rnd() < 0.3, decon_type: rnd() < 0.14 ? 'DEC_AUCUNE' : 'DEC_LING_DOUCHE' };
+        p.decon_validee = p.decon_type !== 'DEC_AUCUNE'; it.crew.push(p); parts.push(p);
+      }
+    }
+    var rdv = [3, 12, 26, 41].map(function (j) { return { statut: 'prevu', dateObj: new Date(now + j * VBSData.DAY), agent: 'me' }; });
+    var tenues = [];
+    for (var n = 0; n < 66; n++) { var r2 = rnd(); tenues.push({ statut: r2 < 0.62 ? 'en_service' : r2 < 0.74 ? 'contaminee' : r2 < 0.84 ? 'au_lavage' : 'en_stock', nb_feux: Math.floor(rnd() * 34), seuil_feux: VBSData.SEUIL }); }
+    SAMPLE = { meId: 'me', interventions: its, participations: parts, mine: parts.filter(function (p) { return p.agent === 'me'; }), rdv: rdv, tenues: tenues };
+    return SAMPLE;
+  }
+  // Rendu calculé « comme si » l'on était le profil indiqué, sur le jeu d'exemple
+  function asRole(role, fn) {
+    var d0 = db, r0 = S.role;
+    try { db = sampleDb(); S.role = role; return fn(); } finally { db = d0; S.role = r0; }
+  }
+  function previewFrame(role, cfg) {
+    var pages = MENUS[role].filter(function (m) { return VBSParam.pageVisible(cfg, role, m.id); });
+    var hidden = MENUS[role].filter(function (m) { return !VBSParam.pageVisible(cfg, role, m.id); });
+    var denied = VBSParam.ACTIONS.filter(function (a) { return a.roles.indexOf(role) !== -1 && !VBSParam.can(cfg, role, a.id); });
+    var ids = cfg.widgets[role] || [];
+    var body = ids.length ? asRole(role, function () { return widgetsSection(ids); }) : '<p class="empty">Aucun indicateur ajouté : seul le tableau de bord d\'origine s\'affiche.</p>';
+    return '<div class="pv" data-pv-role="' + role + '">' +
+      '<div class="pv-bar"><span>Aperçu · espace ' + esc(ROLE_LABEL[role]) + '</span><span class="pv-tag">Données d\'exemple fictives</span></div>' +
+      '<div class="pv-body"><aside class="pv-side"><span class="pv-brand">VB Safety</span><ul>' + pages.map(function (m, i) { return '<li class="' + (i ? '' : 'on') + '">' + icon(m.icon) + '<span>' + esc(m.label) + '</span></li>'; }).join('') + '</ul>' +
+        (hidden.length ? '<p class="pv-hid">Masqué : ' + hidden.map(function (m) { return esc(m.label); }).join(', ') + '</p>' : '') + '</aside>' +
+      '<div class="pv-main"><div class="pv-orig"><b>Tableau de bord d\'origine</b><span>Les compteurs et listes habituels du profil, sur ses propres données.</span></div>' + body +
+        (denied.length ? '<div class="pv-denied">' + icon('lock') + '<span><b>Actions retirées :</b> ' + denied.map(function (a) { return esc(a.label.charAt(0).toLowerCase() + a.label.slice(1)); }).join(' ; ') + '.</span></div>' : '') +
+      '</div></div></div>';
+  }
+  function openPreview(role, cfg) {
+    var dlg = modal('Aperçu · ' + ROLE_LABEL[role], previewFrame(role, cfg), [], { wide: true, close: 'Fermer' });
+    bindCharts(dlg);
+  }
+
   function viewDroits(root) {
     var cfg = admCfg();
     root.innerHTML = head("Droits d'accès", "Pour chaque profil, les pages visibles et les actions autorisées. Vous pouvez restreindre, jamais élargir : les données d'exposition restent réservées à l'agent concerné et au SSSM.", '<span class="note">' + lastSave() + '</span>') +
       '<div class="adm-grid">' + ADM_ROLES.map(function (r) {
         var pages = MENUS[r], acts = VBSParam.ACTIONS.filter(function (a) { return a.roles.indexOf(r) !== -1; }), locked = VBSParam.LOCKED[r] || [];
-        return '<section class="panel adm-role"><div class="panel-head"><h3>' + esc(ROLE_LABEL[r]) + '</h3>' + previewBtn(r) + '</div>' +
+        return '<section class="panel adm-role"><div class="panel-head"><h3>' + esc(ROLE_LABEL[r]) + '</h3><div class="adm-btns"><button class="btn btn-secondary btn-sm" type="button" data-pv="' + r + '">Aperçu</button>' + previewBtn(r) + '</div></div>' +
           '<h4 class="adm-h">Pages visibles</h4><ul class="adm-list">' + pages.map(function (m) {
             var fixed = m.id === 'tableau-de-bord', on = VBSParam.pageVisible(cfg, r, m.id);
             return '<li><label class="adm-sw"><input type="checkbox" data-page="' + r + '|' + m.id + '"' + (on ? ' checked' : '') + (fixed ? ' disabled' : '') + '><span class="sw" aria-hidden="true"></span><span>' + esc(m.label) + (fixed ? ' <span class="note">· toujours visible</span>' : '') + '</span></label></li>';
@@ -1637,6 +1689,7 @@
           '</section>';
       }).join('') + '</div>' +
       (S.offline ? '' : '<p class="note">Aperçu des espaces disponible dans la démonstration sans serveur.</p>');
+    root.querySelectorAll('[data-pv]').forEach(function (b) { b.onclick = function () { openPreview(b.dataset.pv, cfg); }; });
     root.querySelectorAll('[data-page]').forEach(function (c) { c.onchange = function () { var q = c.dataset.page.split('|'); if (c.checked) delete cfg.pages[q[0]][q[1]]; else cfg.pages[q[0]][q[1]] = false; saveConfig(cfg).catch(function (e) { toast(e.message); }); }; });
     root.querySelectorAll('[data-perm]').forEach(function (c) { c.onchange = function () { var q = c.dataset.perm.split('|'); if (c.checked) delete cfg.actions[q[0]][q[1]]; else cfg.actions[q[0]][q[1]] = false; saveConfig(cfg).catch(function (e) { toast(e.message); }); }; });
     bindPreview(root);
@@ -1657,7 +1710,9 @@
           var added = list.indexOf(w.id) !== -1;
           return '<li><span class="what"><b>' + esc(w.label) + '</b> ' + typeTag(w) + '<small>' + esc(w.desc) + '</small></span><span class="right">' + (added ? '<span class="note">' + icon('check') + 'Ajouté</span>' : '<button class="btn btn-secondary btn-sm" type="button" data-add="' + w.id + '"' + (list.length >= max ? ' disabled title="' + max + ' indicateurs au maximum"' : '') + '>Ajouter</button>') + '</span></li>';
         }).join('') + '</ul></section>' +
-      '</div>';
+      '</div>' +
+      '<section class="adm-pv"><div class="panel-head"><h3>Aperçu en direct</h3><span class="note">Ce que verra le profil ' + esc(ROLE_LABEL[admRole]) + ', mis à jour à chaque modification.</span></div>' + previewFrame(admRole, cfg) + '</section>';
+    bindCharts(root.querySelector('.adm-pv'));
     root.querySelectorAll('[data-role]').forEach(function (b) { b.onclick = function () { admRole = b.dataset.role; viewIndicateurs(root); }; });
     var save = function () { cfg.widgets[admRole] = list; saveConfig(cfg).catch(function (e) { toast(e.message); }); };
     root.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () { if (list.length < max) { list.push(b.dataset.add); save(); } }; });

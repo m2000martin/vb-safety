@@ -32,8 +32,19 @@ for (const id of ['k_retard', 'g_statuts']) { await pg.click(`[data-add="${id}"]
 await pg.click('[data-role="cos"]'); await wait(200);
 await pg.click('[data-down="0"]'); await wait(350);
 ok(await pg.evaluate(() => JSON.stringify(VBSApp.getDb().config.widgets.cos) === JSON.stringify(['k_decon','k_retard','g_types','g_zones'])), 'Admin · ajout et ordre des indicateurs CA/COS');
+ok(await pg.locator('.adm-pv .pv .w-added .kpi').count() === 2 && await pg.locator('.adm-pv .pv .wbars').count() === 2, 'Admin · aperçu en direct du tableau de bord CA/COS');
+ok((await pg.locator('.adm-pv .pv-side ul').innerText()).indexOf('Export') === -1 && (await pg.locator('.adm-pv .pv-hid').innerText()).includes('Export'), 'Admin · aperçu : page masquée signalée');
+ok((await pg.locator('.adm-pv .pv-denied').innerText()).includes('rédiger'), 'Admin · aperçu : action retirée signalée');
+ok(await pg.evaluate(() => VBSApp.getDb().interventions.length === 0), "Admin · l'aperçu n'a chargé aucune donnée réelle");
 await pg.screenshot({ path: SC + '/adm-indic.png' });
 // Aperçu CA/COS
+await pg.screenshot({ path: SC + '/adm-indic-pv.png', fullPage: true });
+await pg.goto(B + '/cmr-pompier/espace.html#droits'); await wait(600);
+await pg.click('[data-pv="commandement"]'); await wait(300);
+ok(await pg.locator('dialog .pv[data-pv-role="commandement"]').count() === 1, 'Admin · aperçu du commandement en fenêtre');
+await pg.screenshot({ path: SC + '/adm-droits-pv.png' });
+await pg.keyboard.press('Escape'); await wait(200);
+await pg.goto(B + '/cmr-pompier/espace.html#indicateurs'); await wait(600);
 await pg.click('[data-preview="cos"]'); await wait(1000);
 ok((await pg.locator('#demo-banner').innerText()).includes('Aperçu administrateur'), 'CA/COS · bandeau d\'aperçu');
 const navTxt = await pg.locator('#nav').innerText();
