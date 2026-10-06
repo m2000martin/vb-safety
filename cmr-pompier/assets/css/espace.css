@@ -761,3 +761,5 @@ dialog.modal .pv { margin: 0; }
 .chg-force { font-size: 13.5px; color: var(--danger); font-weight: 600; }
 @media (max-width: 600px) { .epi-grid { grid-template-columns: 1fr; } .epi-tab .epi-feux { display: none; } }
 .chg-in[hidden], .chg-force[hidden] { display: none !important; }
+/* Bouton de langue */
+.lang-btn { font: 700 13px/1 var(--font); letter-spacing: .04em; width: auto; padding: 0 12px; }

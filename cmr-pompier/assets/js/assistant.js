@@ -14,6 +14,7 @@
   var S = A.session, ROLE = S.role, esc = A.esc, icon = A.icon, fmtD = A.fmtD;
   var ENDPOINT = VBS.API_BASE + '/api/assistant';
   var MAX = 400;
+  var LANG = window.VBSi18n && VBSi18n.lang === 'en' ? 'en' : 'fr';
   var serverOk = !S.offline; // passe à false après un 404 : on n'insiste pas
 
   var PAGES = A.menu.map(function (m) { return { id: m.id, label: m.label }; });
@@ -64,7 +65,7 @@
 
   function open() {
     panel.hidden = false; fab.setAttribute('aria-expanded', 'true'); root.classList.add('on');
-    if (!log.children.length) say("Bonjour. Dites-moi ce que vous cherchez, par exemple « " + SUGG[ROLE][0].toLowerCase() + " ».", 'bot');
+    if (!log.children.length) say("Bonjour. Dites-moi ce que vous cherchez, par exemple « " + SUGG[ROLE][0] + " ».", 'bot');
     setTimeout(function () { input.focus(); }, 30);
   }
   function close() { panel.hidden = true; fab.setAttribute('aria-expanded', 'false'); root.classList.remove('on'); fab.focus(); }
@@ -114,7 +115,7 @@
   async function callServer(q) {
     var r = await VBS.request('/api/assistant', {
       method: 'POST',
-      body: { message: q, today: iso(0), page: A.page(), pages: PAGES.map(function (p) { return p.id; }) }
+      body: { message: q, lang: LANG, today: iso(0), page: A.page(), pages: PAGES.map(function (p) { return p.id; }) }
     });
     if (r && (r.action || r.text)) return r;
     return null;
@@ -220,47 +221,47 @@
   function local(q) {
     var t = norm(q);
     var has = function (re) { return re.test(t); };
-    var jours = has(/24 ?h|aujourd hui|ce jour/) ? 1 : has(/semaine|7 jours/) ? 7 : has(/mois|30 jours/) ? 30 : null;
-    var date = has(/hier/) ? iso(-1) : has(/aujourd hui/) && has(/rapport/) && has(/ouvr|affich|montr|voir/) ? iso(0) : null;
+    var jours = has(/24 ?h|aujourd hui|ce jour|today/) ? 1 : has(/semaine|7 jours|week|7 days/) ? 7 : has(/mois|30 jours|month|30 days/) ? 30 : null;
+    var date = has(/hier|yesterday/) ? iso(-1) : has(/aujourd hui|today/) && has(/rapport|report/) && has(/ouvr|affich|montr|voir|open|show|see/) ? iso(0) : null;
 
-    if (has(/decontamin|douche|lingette|deshabill/)) return act('aide', { sujet: 'decontamination' });
-    if (has(/zone|exclusion|controlee|soutien/) && has(/quoi|c est|signifie|explique|comment|difference/)) return act('aide', { sujet: 'zones_contamination' });
-    if (has(/\bari\b|appareil respiratoire/) && has(/quoi|comment|explique|remplir/)) return act('aide', { sujet: 'ari' });
-    if (has(/qui (valide|voit|controle)|circuit|validation/)) return act('aide', { sujet: 'circuit_validation' });
-    if (has(/confidential|qui voit mes|donnees personnelles|rgpd/)) return act('aide', { sujet: 'donnees' });
-    if (has(/comment/) && has(/rapport|remplir|rediger/)) return act('aide', { sujet: 'remplir_rapport' });
-    if (has(/pourquoi.*retard|c est quoi.*retard|72/)) return act('aide', { sujet: 'retard' });
+    if (has(/decontamin|douche|lingette|deshabill|shower|wipe|undress/)) return act('aide', { sujet: 'decontamination' });
+    if (has(/zone|exclusion|controlee|soutien|controlled/) && has(/quoi|c est|signifie|explique|comment|difference|what|mean|explain|\bhow\b/)) return act('aide', { sujet: 'zones_contamination' });
+    if (has(/\bari\b|appareil respiratoire|\bba\b|breathing apparatus/) && has(/quoi|comment|explique|remplir|what|\bhow\b|explain|fill/)) return act('aide', { sujet: 'ari' });
+    if (has(/qui (valide|voit|controle)|circuit|validation|who (approves|validates|sees|reviews|checks)|workflow|approval process/)) return act('aide', { sujet: 'circuit_validation' });
+    if (has(/confidential|qui voit mes|donnees personnelles|rgpd|who sees my|who can see my|personal data|gdpr|privacy/)) return act('aide', { sujet: 'donnees' });
+    if (has(/comment|\bhow\b/) && has(/rapport|remplir|rediger|report|fill|write/)) return act('aide', { sujet: 'remplir_rapport' });
+    if (has(/pourquoi.*retard|c est quoi.*retard|why.*(overdue|\blate\b)|what.*overdue|72/)) return act('aide', { sujet: 'retard' });
 
-    if (has(/nouveau rapport|creer.*rapport|rediger un rapport|nouvelle intervention/)) return act('ouvrir_rapport', { quel: 'nouveau' });
-    var wantsOpen = has(/ouvr|affich|montr|voir|va |aller|lance|reprend/);
-    if (has(/rapport/) && wantsOpen && date) return act('ouvrir_rapport', { quel: 'date', date: date });
-    if (has(/rapport/) && wantsOpen && has(/dernier|derniere|recent/)) return act('ouvrir_rapport', { quel: has(/complet|faire|attente|brouillon|controler|valider|en cours/) ? 'a_completer' : 'dernier' });
-    if (has(/rapport/) && wantsOpen && has(/complet|faire|controler/)) return act('ouvrir_rapport', { quel: 'a_completer' });
+    if (has(/nouveau rapport|creer.*rapport|rediger un rapport|nouvelle intervention|new report|create.*report|write a report|new call-out/)) return act('ouvrir_rapport', { quel: 'nouveau' });
+    var wantsOpen = has(/ouvr|affich|montr|voir|va |aller|lance|reprend|open|show|display|see|view|go to|resume/);
+    if (has(/rapport|report/) && wantsOpen && date) return act('ouvrir_rapport', { quel: 'date', date: date });
+    if (has(/rapport|report/) && wantsOpen && has(/dernier|derniere|recent|latest|last/)) return act('ouvrir_rapport', { quel: has(/complet|faire|attente|brouillon|controler|valider|en cours|to do|pending|draft|review|approve|check|in progress/) ? 'a_completer' : 'dernier' });
+    if (has(/rapport|report/) && wantsOpen && has(/complet|faire|controler|to do|review|check/)) return act('ouvrir_rapport', { quel: 'a_completer' });
 
-    if (has(/retard/)) return act('lister_rapports', { statut: 'en_retard', jours: jours });
-    if (has(/a completer|a faire|en attente|brouillon|pas fait|manque/)) return act('lister_rapports', { statut: 'a_completer', jours: jours });
-    if (has(/transmis|a controler|a valider/)) return act('lister_rapports', { statut: 'transmis', jours: jours });
-    if (has(/valide|verrouill/)) return act('lister_rapports', { statut: 'valides', jours: jours });
-    if (has(/(liste|tous|combien).*(rapport|intervention)/)) return act('lister_rapports', { statut: 'tous', jours: jours });
+    if (has(/retard|overdue|\blate\b/)) return act('lister_rapports', { statut: 'en_retard', jours: jours });
+    if (has(/a completer|a faire|en attente|brouillon|pas fait|manque|to complete|to do|pending|draft|not done|missing/)) return act('lister_rapports', { statut: 'a_completer', jours: jours });
+    if (has(/transmis|a controler|a valider|\bsent\b|submitted|to review|to approve|to check/)) return act('lister_rapports', { statut: 'transmis', jours: jours });
+    if (has(/valide|verrouill|approved|validated|locked/)) return act('lister_rapports', { statut: 'valides', jours: jours });
+    if (has(/(liste|tous|combien|list|\ball\b|how many).*(rapport|intervention|report|call-out)/)) return act('lister_rapports', { statut: 'tous', jours: jours });
 
     var pages = [
-      [/droit|acces|permission|autoris/, 'droits'],
-      [/indicateur|kpi|graphique|tableaux de bord des/, 'indicateurs'],
-      [/historique|dossier|mes expositions|ma fiche|rendez-vous|rdv/, 'dossier'],
-      [/export|csv|pdf|telecharg/, 'export'],
-      [/gestion/, 'gestion'],
-      [/suivi individuel|suivi des agents|dossier d un agent/, 'suivi'],
-      [/referentiel|base de donnees|coefficient/, 'referentiel'],
-      [/reglementation|loi|decret/, 'reglementation'],
-      [/changement/, 'changements'],
-      [/tenue/, 'tenues'],
-      [/rapport/, 'rapports'],
-      [/tableau de bord|accueil|dashboard/, 'tableau-de-bord']
+      [/droit|acces|permission|autoris|right/, 'droits'],
+      [/indicateur|kpi|graphique|tableaux de bord des|indicator|chart|graph|profile dashboard/, 'indicateurs'],
+      [/historique|dossier|mes expositions|ma fiche|rendez-vous|rdv|history|record|my exposure|appointment/, 'dossier'],
+      [/export|csv|pdf|telecharg|download/, 'export'],
+      [/gestion|management|overview/, 'gestion'],
+      [/suivi individuel|suivi des agents|dossier d un agent|individual follow|follow-up|follow up/, 'suivi'],
+      [/referentiel|base de donnees|coefficient|reference framework|database/, 'referentiel'],
+      [/reglementation|loi|decret|regulation|\blaw|decree/, 'reglementation'],
+      [/changement|change/, 'changements'],
+      [/tenue|\bkit\b|turnout|\bgear\b/, 'tenues'],
+      [/rapport|report/, 'rapports'],
+      [/tableau de bord|accueil|dashboard|\bhome\b/, 'tableau-de-bord']
     ];
     for (var i = 0; i < pages.length; i++) {
       if (has(pages[i][0]) && PAGES.some(function (p) { return p.id === pages[i][1]; })) return act('ouvrir_page', { page: pages[i][1] });
     }
-    return { text: "Je n'ai pas compris. Essayez par exemple : " + SUGG[ROLE].slice(0, 2).map(function (s) { return '« ' + s.toLowerCase() + ' »'; }).join(' ou ') + '.' };
+    return { text: "Je n'ai pas compris. Essayez par exemple : " + SUGG[ROLE].slice(0, 2).map(function (s) { return '« ' + s + ' »'; }).join(' ou ') + '.' };
   }
   function act(name, input) { return { action: { name: name, input: input } }; }
   function iso(offset) { var d = new Date(Date.now() + offset * 864e5); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }

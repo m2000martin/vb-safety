@@ -34,6 +34,7 @@ routerAdd("POST", "/api/assistant", (e) => {
   if (!message) throw new ApiError(400, "Message vide.");
   const clean = (s) => String(s || "").replace(/[^a-z-]/g, "").slice(0, 30);
   const page = clean(body.page);
+  const en = body.lang === "en";
   const pages = (Array.isArray(body.pages) ? body.pages : []).map(clean).filter(Boolean).slice(0, 12);
 
   // ---------------------------------------------------------------- limite par utilisateur
@@ -53,14 +54,15 @@ routerAdd("POST", "/api/assistant", (e) => {
     "Tu ne remplis, ne transmets, ne valides et ne supprimes jamais rien.",
     "",
     "Règles :",
+    "- L'utilisateur peut écrire en français ou en anglais (open, show, latest, to complete, overdue, sent, approved…) : les règles valent dans les deux langues.",
     "- Ouvrir, voir, afficher, reprendre un rapport → ouvrir_rapport. « à compléter », « à faire », « en cours » ou « à contrôler » → quel = a_completer. Une date précise ou « hier » → quel = date avec la date au format AAAA-MM-JJ, calculée à partir de la date du jour fournie.",
     "- Créer ou rédiger un rapport → ouvrir_rapport avec quel = nouveau.",
     "- Combien, lesquels, liste, en retard, en attente, transmis, validés → lister_rapports. « cette semaine » = 7 jours, « aujourd'hui » ou « 24 h » = 1, « ce mois » = 30.",
     "- Aller sur une page de l'espace → ouvrir_page, uniquement parmi les pages listées dans la demande.",
     "- Question sur le fonctionnement → aide avec le sujet le plus proche.",
-    "- Question d'usage du logiciel sans sujet adapté : réponds sans outil, en français, en deux phrases au plus.",
+    "- Question d'usage du logiciel sans sujet adapté : réponds sans outil, en deux phrases au plus.",
     "- Question médicale, juridique ou hors sujet : réponds sans outil, en une phrase, que tu ne réponds qu'aux questions sur l'utilisation du Carnet et renvoie vers le SSSM ou le guide santé.",
-    "Réponds toujours en français, en vouvoyant."
+    en ? "Answer in English (the interface is shown in English), concisely and politely. Keep French acronyms such as SSSM, SDIS, CA, COS with their English meaning when useful." : "Réponds toujours en français, en vouvoyant."
   ].join("\n");
 
   const tools = [

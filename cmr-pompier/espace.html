@@ -10,7 +10,7 @@
 <title>Mon espace · VB Safety Sapeur-pompier</title>
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="stylesheet" href="assets/css/vbs.css?v=11">
-<link rel="stylesheet" href="assets/css/espace.css?v=26">
+<link rel="stylesheet" href="assets/css/espace.css?v=27">
 </head>
 <body class="app-body">
 
@@ -71,6 +71,7 @@
       <button class="icon-btn menu-toggle" type="button" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
       <h1 id="page-title">Tableau de bord</h1>
       <div class="topbar-right">
+        <button class="icon-btn lang-btn" type="button" data-lang-toggle>EN</button>
         <div class="bell-wrap"><button class="icon-btn" type="button" id="bell" aria-label="Notifications"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></button><div class="bell-pop" id="bell-pop" role="region" aria-label="Notifications" hidden></div></div>
         <div class="user-chip"><span class="avatar" id="user-initials">--</span><div><b id="user-name">—</b><small id="user-role">—</small></div></div>
       </div>
@@ -103,13 +104,15 @@
   </div>
 </section>
 
+<script src="assets/js/i18n-en.js?v=1"></script>
+<script src="assets/js/i18n.js?v=1"></script>
 <script src="assets/js/api.js?v=14"></script>
 <script src="assets/js/referentiel.js?v=3"></script>
 <script src="assets/js/parametres.js?v=1"></script>
 <script src="assets/js/data.js?v=14"></script>
 <script src="assets/js/cisu.js?v=3"></script>
 <script src="assets/vendor/read-excel-file.min.js" defer></script>
-<script src="assets/js/espace.js?v=23"></script>
-<script src="assets/js/assistant.js?v=2"></script>
+<script src="assets/js/espace.js?v=24"></script>
+<script src="assets/js/assistant.js?v=3"></script>
 </body>
 </html>

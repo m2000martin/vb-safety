@@ -112,6 +112,7 @@
     document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3200);
   }
   function csvDownload(name, rows) {
+    if (window.VBSi18n && VBSi18n.lang === 'en') rows = rows.map(function (r) { return r.map(function (c) { return typeof c === 'string' ? VBSi18n.t(c) : c; }); });
     var csv = rows.map(function (r) { return r.map(function (c) { var s = String(c == null ? '' : c); return /[";\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(';'); }).join('\n');
     var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
@@ -411,6 +412,7 @@
     var area = $('print-area'); area.innerHTML = html;
     document.body.classList.add('printing');
     var t = document.title; document.title = 'Fiche exposition ' + (u.matricule || '') + ' ' + periodLabel();
+    if (window.VBSi18n) VBSi18n.apply(document.getElementById('print-area'));
     window.print();
     document.title = t;
     setTimeout(function () { document.body.classList.remove('printing'); area.innerHTML = ''; }, 300);
@@ -1652,8 +1654,17 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { pop.hidden = true; bell.setAttribute('aria-expanded', 'false'); bell.focus(); } });
   })();
 
+  // Version anglaise : noms propres (agents, grades, communes) conservés tels quels, grades traduits
+  function i18nNames() {
+    if (!window.VBSi18n || VBSi18n.lang !== 'en' || !db) return;
+    var m = {};
+    (db.users || []).forEach(function (u) { if (u.name) { m[u.name] = u.name; var last = u.name.split(' ').slice(-1)[0]; if (last.length > 2) m[last] = last; if (u.grade) m[u.grade + ' ' + u.name] = VBSi18n.grade(u.grade) + ' ' + u.name; } });
+    (db.interventions || []).forEach(function (x) { if (x.commune) m[x.commune] = x.commune; });
+    (db.operations || []).forEach(function (x) { if (x.commune) m[x.commune] = x.commune; });
+    VBSi18n.names(m);
+  }
   async function reload() {
-    try { db = await VBSData.load(S); applyConfig(); counts(); route(); }
+    try { db = await VBSData.load(S); i18nNames(); applyConfig(); counts(); route(); }
     catch (e) { toast('Rechargement impossible : ' + e.message); }
   }
 
@@ -1965,7 +1976,7 @@
   // =================================================================== démarrage
   route();
   VBSData.load(S).then(function (data) {
-    db = data; applyConfig(); counts(); route();
+    db = data; i18nNames(); applyConfig(); counts(); route();
     if (S.fromAdmin) adminBanner();
     if (!tourSeen() && !S.fromAdmin) openTour();
   }).catch(function (err) {
