@@ -4,7 +4,7 @@
 // filtré avec les mêmes règles que le serveur.
 (function (w) {
   var DAY = 86400000;
-  var COLS = ['users', 'operations', 'interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'referentiel', 'reglementation', 'rappels', 'tenues', 'mouvements_epi', 'ref_motifs'];
+  var COLS = ['users', 'operations', 'interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'referentiel', 'reglementation', 'rappels', 'tenues', 'mouvements_epi', 'ref_motifs', 'parametres'];
 
   // Indicateur conventionnel en équivalents-feu (référentiel VB Safety v1.0, voir referentiel.js)
   function indice(it, p) { return VBSRef.calcul(it || {}, p || {}).ef; }
@@ -26,6 +26,13 @@
   async function loadOnline(s) {
     var role = s.role, jobs = {};
     jobs.users = list('users', { sort: 'name', fields: 'id,name,matricule,role,grade,centre' });
+    // Paramètres réglés par l'administrateur (lus par tous, modifiables par l'administrateur seul)
+    jobs.parametres = list('parametres').catch(function () { return []; });
+    if (role === 'admin') {
+      var k0 = Object.keys(jobs), v0 = await Promise.all(k0.map(function (k) { return jobs[k]; }));
+      var raw0 = {}; COLS.forEach(function (c) { raw0[c] = []; }); k0.forEach(function (k, i) { raw0[k] = v0[i]; });
+      return normalise(raw0, s.id);
+    }
     if (role !== 'habillement') jobs.interventions = list('interventions', { sort: '-date' });
     if (role !== 'agent' && role !== 'habillement') jobs.operations = list('operations', { sort: '-date' });
     if (role === 'sssm') jobs.documents = list('documents', { sort: '-created' });
@@ -44,7 +51,7 @@
   }
 
   // ---------------------------------------------------------------- hors ligne
-  var OFF_KEY = 'vbs-offline-db-v8', offline = null;
+  var OFF_KEY = 'vbs-offline-db-v9', offline = null;
   function saveOffline() { try { sessionStorage.setItem(OFF_KEY, JSON.stringify(offline)); } catch (e) {} }
   function loadOffline() { try { return JSON.parse(sessionStorage.getItem(OFF_KEY) || 'null'); } catch (e) { return null; } }
   var idn = 0;
@@ -61,6 +68,7 @@
     var agentDemo = user('SP-0142', 'J. Leroy', 'agent', 'Sapeur'), cosDemo = user('CA-0107', 'T. Bernard', 'cos', 'Adjudant');
     var ci = user('CI-0021', 'M. Garnier', 'commandement', 'Capitaine'), med = user('MED-0003', 'C. Roche', 'sssm', 'Médecin');
     var hab = user('HAB-0005', 'L. Perrin', 'habillement', 'Adjudant-chef');
+    var adm = user('ADM-0001', 'S. Durand', 'admin', 'Commandant');
     var otherCos = [user('CA-0112', 'S. Moreau', 'cos', 'Sergent-chef'), user('CA-0119', 'D. Fabre', 'cos', 'Adjudant-chef')];
     var names = [['A. Martin', 'Sergent'], ['L. Dubois', 'Caporal-chef'], ['N. Petit', 'Caporal'], ['C. Faure', 'Sapeur'], ['E. Lambert', 'Sapeur'], ['H. Girard', 'Caporal'], ['I. Bonnet', 'Sapeur'], ['K. Mercier', 'Caporal-chef'], ['O. Blanc', 'Sapeur'], ['R. Guerin', 'Sergent'], ['V. Muller', 'Sapeur'], ['Y. Henry', 'Caporal'], ['P. Rousseau', 'Sapeur'], ['F. Vincent', 'Caporal'], ['G. Morel', 'Sapeur'], ['B. Andre', 'Caporal-chef'], ['M. Laurent', 'Sapeur'], ['S. Simon', 'Sapeur'], ['T. Michel', 'Caporal']];
     var agents = [agentDemo].concat(names.map(function (x, k) { return user('SP-0' + (150 + k), x[0], 'agent', x[1]); }));
@@ -179,8 +187,8 @@
       { id: id(), motif: 'habitation', coef: 1, substances: ['HAP', 'BENZ', 'FORM', 'BUTA', 'DIOX', 'SUIE', 'CO'], circonstances: ['PB', 'AMIANTE'], statut: 'valide', valide_par: med.id, valide_le: new Date(now - 10 * DAY).toISOString(), commentaire: '' },
       { id: id(), motif: 'vehicule', coef: 0.6, substances: ['HAP', 'BENZ', 'FORM', 'BUTA', 'DIOX', 'SUIE', 'CO'], circonstances: ['PB', 'CD'], statut: 'valide', valide_par: med.id, valide_le: new Date(now - 10 * DAY).toISOString(), commentaire: '' }
     ];
-    return { ref_motifs: ref_motifs, users: users, operations: operations, documents: documents, interventions: interventions, participations: participations, rendez_vous: rdv, signalements: signalements, prelevements: prelevements.concat(opPrel), referentiel: [], reglementation: reglementation, rappels: rappels, tenues: tenues, mouvements_epi: mouv,
-      demo: { agent: agentDemo.id, cos: cosDemo.id, commandement: ci.id, sssm: med.id, habillement: hab.id } };
+    return { ref_motifs: ref_motifs, users: users, operations: operations, documents: documents, interventions: interventions, participations: participations, rendez_vous: rdv, signalements: signalements, prelevements: prelevements.concat(opPrel), referentiel: [], reglementation: reglementation, rappels: rappels, tenues: tenues, mouvements_epi: mouv, parametres: [],
+      demo: { agent: agentDemo.id, cos: cosDemo.id, commandement: ci.id, sssm: med.id, habillement: hab.id, admin: adm.id } };
   }
 
   // Mêmes règles de lecture que le serveur
@@ -189,7 +197,11 @@
     // Copies : la normalisation ajoute des liens (it, user, crew) qui ne doivent pas polluer l'état stocké
     var all0 = all; all = {}; COLS.forEach(function (c) { all[c] = all0[c].map(function (r) { return Object.assign({}, r); }); });
     var v = {}; COLS.forEach(function (c) { v[c] = all[c].slice(); });
-    if (role === 'agent') {
+    if (role === 'admin') {
+      // Administrateur : réglages et annuaire du centre, aucune donnée opérationnelle ni d'exposition
+      COLS.forEach(function (c) { if (c !== 'users' && c !== 'parametres') v[c] = []; });
+      v.users = all.users.filter(function (u) { return u.centre === me.centre; });
+    } else if (role === 'agent') {
       v.participations = all.participations.filter(function (p) { return p.agent === meId; });
       var ids = v.participations.map(function (p) { return p.intervention; });
       v.interventions = all.interventions.filter(function (x) { return ids.indexOf(x.id) !== -1; });
@@ -224,6 +236,7 @@
   }
   function offlineView(s) {
     if (!offline) offline = loadOffline() || generateRaw();
+    COLS.forEach(function (c) { if (!offline[c]) offline[c] = []; });
     var meId = offline.demo[s.role];
     return normalise(filterFor(offline, s.role, meId), meId);
   }
@@ -246,6 +259,9 @@
     (db.tenues || []).forEach(function (t) { t.user = byId[t.agent] || null; });
     (db.mouvements_epi || []).forEach(function (m) { m.user = byId[m.agent] || null; m.createdObj = parseD(m.created); });
     db.ref_motifs = db.ref_motifs || [];
+    db.parametres = db.parametres || [];
+    db.configRec = db.parametres.filter(function (r) { return r.cle === 'config'; })[0] || null;
+    db.config = w.VBSParam ? VBSParam.merge(db.configRec && db.configRec.valeur) : null;
     if (VBSRef.setMotifs) VBSRef.setMotifs(db.ref_motifs, byId);
     db.ops = ops; db.byId = byId; db.inter = inter; db.meId = meId; db.me = byId[meId] || null;
     db.mine = db.participations.filter(function (p) { return p.agent === meId && p.it; }).sort(function (a, b) { return b.it.dateObj - a.it.dateObj; });

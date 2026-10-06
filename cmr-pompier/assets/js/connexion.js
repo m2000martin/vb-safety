@@ -6,7 +6,8 @@
     cos:          { role: 'cos',          matricule: 'CA-0107',  password: 'Demo-CaCos-2026',  name: 'Adj. T. Bernard' },
     commandement: { role: 'commandement', matricule: 'CI-0021',  password: 'Demo-ChefCi-2026', name: 'Cne. M. Garnier' },
     sssm:         { role: 'sssm',         matricule: 'MED-0003', password: 'Demo-Sssm-2026',   name: 'Dr C. Roche' },
-    habillement:  { role: 'habillement',  matricule: 'HAB-0005', password: 'Demo-Habil-2026',  name: 'Adc. L. Perrin' }
+    habillement:  { role: 'habillement',  matricule: 'HAB-0005', password: 'Demo-Habil-2026',  name: 'Adc. L. Perrin' },
+    admin:        { role: 'admin',        matricule: 'ADM-0001', password: 'Demo-Admin-2026',  name: 'Cdt S. Durand' }
   };
 
   var form = document.getElementById('login-form');

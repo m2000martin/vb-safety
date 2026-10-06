@@ -660,3 +660,42 @@ ul.plain { margin: 0 0 8px; padding-left: 18px; font-size: 14px; }
 @media (max-width: 600px) { .cisu-tab th { width: 40%; } }
 /* L'assistant ne recouvre pas la barre d'actions du rapport */
 body:has(.action-bar) .asst-fab { bottom: 92px; }
+
+/* ---------- Administrateur ---------- */
+.adm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; align-items: start; }
+.adm-role .panel-head { gap: 10px; }
+.adm-h { margin: 14px 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.adm-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.adm-sw { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 4px 6px; border-radius: 8px; cursor: pointer; font-size: 14.5px; }
+.adm-sw:hover { background: var(--bg); }
+.adm-sw input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.adm-sw .sw { flex: none; width: 38px; height: 22px; border-radius: 999px; background: var(--line-strong); position: relative; transition: background .15s; }
+.adm-sw .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.adm-sw input:checked + .sw { background: var(--ok); }
+.adm-sw input:checked + .sw::after { transform: translateX(16px); }
+.adm-sw input:focus-visible + .sw { outline: 2px solid var(--info); outline-offset: 2px; }
+.adm-sw input:disabled + .sw { opacity: .55; }
+.adm-sw input:disabled ~ span:last-child { color: var(--muted); }
+.adm-locked li { display: flex; align-items: flex-start; gap: 8px; padding: 6px; font-size: 13.5px; color: var(--muted); }
+.adm-locked .icon { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+.adm-seg { margin-bottom: 16px; flex-wrap: wrap; }
+.adm-ind { align-items: start; }
+.adm-order, .adm-cat { list-style: none; margin: 0; padding: 0; }
+.adm-order li, .adm-cat li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.adm-order li:last-child, .adm-cat li:last-child { border-bottom: 0; }
+.adm-order .what, .adm-cat .what { flex: 1; min-width: 0; }
+.adm-order .what small, .adm-cat .what small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.adm-order .right, .adm-cat .right { display: flex; align-items: center; gap: 6px; flex: none; }
+.adm-cat .note .icon { width: 15px; height: 15px; vertical-align: -3px; margin-right: 3px; color: var(--ok); }
+/* Indicateurs ajoutés sur les tableaux de bord */
+.w-added { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+.w-head { display: flex; align-items: baseline; gap: 10px; border-top: 1px solid var(--line); padding-top: 18px; }
+.w-head h3 { font-size: 17px; font-weight: 800; }
+.wbars { display: flex; flex-direction: column; gap: 8px; }
+.wbar { display: grid; grid-template-columns: minmax(110px, 38%) 1fr auto; align-items: center; gap: 10px; font-size: 13.5px; }
+.wb-l { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-t { height: 14px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.wb-t i { display: block; height: 100%; background: var(--red); border-radius: 0 4px 4px 0; }
+.wbar b { font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right; }
+@media (max-width: 600px) { .adm-grid { grid-template-columns: 1fr; } .adm-order li, .adm-cat li { flex-wrap: wrap; } }
+.adm-cat .right .note { display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; }

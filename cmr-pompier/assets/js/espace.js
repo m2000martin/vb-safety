@@ -1,12 +1,12 @@
 // Espace connecté : menu par rôle, visite guidée, tableaux de bord et vues.
 (function () {
-  var S = VBS.requireRole(['agent', 'cos', 'commandement', 'sssm', 'habillement']);
+  var S = VBS.requireRole(['agent', 'cos', 'commandement', 'sssm', 'habillement', 'admin']);
   if (!S) return;
   // L'indicateur d'exposition (équivalents-feu) n'est affiché qu'au médecin du SSSM
   var DOC = S.role === 'sssm';
 
   // =================================================================== libellés
-  var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM', habillement: 'Référent EPI' };
+  var ROLE_LABEL = { agent: 'Agent', cos: 'CA / COS', commandement: 'Chef CI / commandement', sssm: 'SSSM', habillement: 'Référent EPI', admin: 'Administrateur' };
   var R = VBSRef;
   var TYPE = { habitation: "Feu d'habitation, de structure", industriel: 'Feu industriel ou entrepôt', clos: 'Feu en volume clos (cave, sous-sol, parking)', vehicule: 'Feu de véhicule', cheminee: 'Feu de cheminée', vegetation: 'Feu de végétation', conteneur: 'Feu de conteneur, de poubelle', chimique: 'Matières dangereuses, chimique', autre: 'Autre intervention avec fumées' };
   var ROLE_TENU = { chef_agres: "Chef d'agrès", binome_attaque: "Binôme d'attaque", binome_alimentation: "Binôme d'alimentation", conducteur: 'Conducteur', soutien: 'Soutien', autre: 'Autre' };
@@ -34,7 +34,9 @@
     regl: { id: 'reglementation', label: 'Suivi réglementation', icon: 'scale' },
     tdbHab: { id: 'tableau-de-bord', label: 'Tableau de bord', icon: 'home' },
     tenues: { id: 'tenues', label: 'Tenues de feu', icon: 'list' },
-    changements: { id: 'changements', label: 'Changements de tenue', icon: 'send' }
+    changements: { id: 'changements', label: 'Changements de tenue', icon: 'send' },
+    droits: { id: 'droits', label: "Droits d'accès", icon: 'shield' },
+    indicateurs: { id: 'indicateurs', label: 'Tableaux de bord', icon: 'chart' }
   };
   function item(base, tour) { return Object.assign({}, base, { tour: tour }); }
   var MENUS = {
@@ -68,9 +70,15 @@
       item(M.changements, "Vous enregistrez chaque changement de tenue : l'ancienne part au lavage, la nouvelle est attribuée à l'agent. Les remplacements au seuil d'alerte arrivent ici aussi."),
       item(M.tenues, 'Toutes les tenues du centre : numéro, agent, état, nombre de feux et de lavages. Vous pouvez modifier les numéros et attribuer une tenue.'),
       item(M.exp, 'Export de l\'état des tenues du centre.')
+    ],
+    admin: [
+      item(M.droits, "Pour chaque profil, choisissez les pages visibles et les actions autorisées. Vous pouvez restreindre, jamais ouvrir les données d'exposition au-delà de l'agent et du SSSM."),
+      item(M.indicateurs, "Ajoutez à chaque tableau de bord des indicateurs et des graphiques, choisis dans un catalogue validé.")
     ]
   };
-  var MENU = MENUS[S.role];
+  var MENU_ALL = MENUS[S.role], MENU = MENU_ALL;
+  // Droit d'action selon les paramètres de l'administrateur (sans paramètre : comportement d'origine)
+  function can(action) { return !db || !db.config || S.role === 'admin' ? true : VBSParam.can(db.config, S.role, action); }
 
   // =================================================================== utilitaires
   var $ = function (id) { return document.getElementById(id); };
@@ -1017,7 +1025,7 @@
     if (!st0.crew.length && x.cos === db.meId) st0.crew.push(blankMember(db.meId, 'chef_agres', engOf(x) !== '—' ? engOf(x) : 'FPT'));
     return st0;
   }
-  function edReadOnly() { return S.role === 'cos' ? ed.it.statut !== 'brouillon' : S.role !== 'sssm'; }
+  function edReadOnly() { return S.role === 'cos' ? ed.it.statut !== 'brouillon' || !can('rapport_rediger') : S.role !== 'sssm' || !can('rapport_corriger'); }
   function pairBtns(i, field, a, b) {
     var cur = ed.crew[i][field];
     return '<div class="pair" role="group"><button type="button" class="opt' + (cur === true ? ' on' : '') + '" data-set="' + i + '|' + field + '|1" aria-pressed="' + (cur === true) + '">' + a + '</button><button type="button" class="opt' + (cur === false ? ' on warn' : '') + '" data-set="' + i + '|' + field + '|0" aria-pressed="' + (cur === false) + '">' + b + '</button></div>';
@@ -1197,7 +1205,7 @@
       '<div class="ed-nav">' + (n > 1 ? '<button type="button" class="btn btn-secondary" data-step="' + (n - 1) + '">' + icon('back') + 'Précédent</button>' : '<span></span>') + (n < 5 ? '<button type="button" class="btn btn-primary" data-step="' + (n + 1) + '">Suivant : ' + STEPS[n].t + icon('arrow', 'icon-arrow') + '</button>' : '') + '</div>' +
       (ro ? '' : '<div class="action-bar"><span class="note" id="ed-status"></span>' +
         (S.role === 'cos' ? '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer le brouillon</button><button type="button" class="btn btn-primary" id="ed-send">' + icon('send') + 'Transmettre au SSSM</button>'
-          : '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer les corrections</button>' + (x.statut !== 'controle_sssm' ? '<button type="button" class="btn btn-primary" id="ed-validate">' + icon('lock') + 'Enregistrer et valider</button>' : '')) + '</div>') + '</div>';
+          : '<button type="button" class="btn btn-secondary" id="ed-save">Enregistrer les corrections</button>' + (x.statut !== 'controle_sssm' && can('rapport_valider') ? '<button type="button" class="btn btn-primary" id="ed-validate">' + icon('lock') + 'Enregistrer et valider</button>' : '')) + '</div>') + '</div>';
     var obs = root.querySelector('#ed-obs'); if (obs) obs.value = x.observations || '';
     bindEditor(root.firstElementChild, root);
   }
@@ -1531,24 +1539,169 @@
   })();
 
   async function reload() {
-    try { db = await VBSData.load(S); counts(); route(); }
+    try { db = await VBSData.load(S); applyConfig(); counts(); route(); }
     catch (e) { toast('Rechargement impossible : ' + e.message); }
+  }
+
+  // =================================================================== indicateurs du catalogue (tableaux de bord)
+  // Chaque indicateur se calcule sur les données que le rôle voit déjà.
+  function wIts() {
+    if (S.role === 'agent') { var seen = {}; return db.mine.map(function (p) { return p.it; }).filter(function (x) { if (seen[x.id]) return false; seen[x.id] = 1; return true; }); }
+    if (S.role === 'cos') return db.interventions.filter(function (x) { return x.cos === db.meId; });
+    return db.interventions || [];
+  }
+  function wParts() { return S.role === 'agent' ? db.mine : (db.participations || []).filter(function (p) { return p.it; }); }
+  function onFire(p) { return filled(p) && p.it.ambiance !== 'aucun_feu'; }
+  function deconOk(p) { return p.decon_type ? p.decon_type !== 'DEC_AUCUNE' : !!p.decon_validee; }
+  function pct(a, b) { return b ? Math.round(a / b * 100) + ' %' : '—'; }
+  function bars(rows, unit) {
+    var max = Math.max.apply(null, rows.map(function (r) { return r.value; }).concat([1]));
+    return '<div class="wbars" role="list">' + rows.map(function (r) {
+      return '<div class="wbar" role="listitem" title="' + esc(r.label + ' : ' + r.value + (unit || '')) + '"><span class="wb-l">' + esc(r.label) + '</span><span class="wb-t"><i style="width:' + Math.max(r.value ? 2 : 0, Math.round(r.value / max * 100)) + '%"></i></span><b>' + r.value + '</b></div>';
+    }).join('') + '</div>';
+  }
+  var WIDGET_IMPL = {
+    k_attente: function () { var n = wIts().filter(function (x) { return x.statut === 'brouillon'; }).length; return kpi('clip', n ? 'warn' : '', 'Rapports non transmis', n, 'Brouillons en cours'); },
+    k_retard: function () { var n = wIts().filter(function (x) { return VBSData.reportState(x) === 'retard'; }).length; return kpi('clock', n ? 'warn' : '', 'Rapports en retard', n, 'Brouillons de plus de 72 h'); },
+    k_a_valider: function () { var n = wIts().filter(function (x) { return x.statut === 'transmis'; }).length; return kpi('lock', 'info', 'Rapports à valider', n, 'Transmis au SSSM'); },
+    k_feux30: function () { var n = wIts().filter(function (x) { return x.ambiance !== 'aucun_feu' && within(x.dateObj, 30); }).length; return kpi('flame', '', 'Interventions avec fumées', n, 'Sur les 30 derniers jours'); },
+    k_decon: function () { var f = wParts().filter(function (p) { return onFire(p) && within(p.it.dateObj, 365); }); return kpi('shield', 'ok', 'Décontamination effectuée', pct(f.filter(deconOk).length, f.length), f.length + ' engagements sur feu, 12 mois'); },
+    k_exclusion: function () { var f = wParts().filter(function (p) { return onFire(p) && within(p.it.dateObj, 365); }); var n = f.filter(function (p) { return p.contamination === 'forte'; }).length; return kpi('alert', n ? 'warn' : '', "Engagements en zone d'exclusion", n, 'Sur 12 mois · ' + pct(n, f.length)); },
+    k_sans_ari: function () { var n = wParts().filter(function (p) { return onFire(p) && within(p.it.dateObj, 365) && p.position === 'POS_ATT' && !p.ari_porte; }).length; return kpi('alert', n ? 'warn' : '', 'Attaques sans ARI', n, 'Sur 12 mois'); },
+    k_rdv: function () { var n = (db.rdv || []).filter(function (r) { return r.statut === 'prevu' && r.dateObj >= new Date() && r.dateObj - Date.now() < 30 * VBSData.DAY; }).length; return kpi('cal', 'info', 'Rendez-vous SSSM à venir', n, 'Dans les 30 prochains jours'); },
+    k_tenues_cont: function () { var n = (db.tenues || []).filter(function (t) { return t.statut === 'contaminee'; }).length; return kpi('alert', n ? 'warn' : '', 'Tenues contaminées', n, 'À changer ou à laver'); },
+    k_tenues_seuil: function () { var n = (db.tenues || []).filter(function (t) { return t.statut !== 'reformee' && (+t.nb_feux || 0) >= (+t.seuil_feux || VBSData.SEUIL); }).length; return kpi('flame', n ? 'warn' : '', "Tenues au seuil d'alerte", n, 'Feux depuis la mise en service'); },
+    g_mois: function () { return lineChart(monthly(wIts().filter(function (x) { return x.ambiance !== 'aucun_feu'; }), function (x) { return x.dateObj; }, function () { return 1; }), ' intervention(s)'); },
+    g_types: function () { var its = wIts().filter(function (x) { return within(x.dateObj, 365); }); return bars(Object.keys(TYPE).map(function (k) { return { label: TYPE[k], value: its.filter(function (x) { return x.type_feu === k; }).length }; }).filter(function (r) { return r.value; }).sort(function (a, b) { return b.value - a.value; })); },
+    g_statuts: function () { var its = wIts(); return bars(['attente', 'retard', 'transmis', 'controle'].map(function (k) { return { label: STATE[k][0], value: its.filter(function (x) { return VBSData.reportState(x) === k; }).length }; })); },
+    g_decon_mois: function () { return lineChart(monthly(wParts().filter(onFire), function (p) { return p.it.dateObj; }, function (p) { return deconOk(p) ? 100 : 0; }, true), ' %'); },
+    g_zones: function () { var f = wParts().filter(function (p) { return onFire(p) && within(p.it.dateObj, 365); }); return bars([['Zone de soutien', ['nulle', 'faible']], ['Zone contrôlée', ['moyenne']], ["Zone d'exclusion", ['forte']]].map(function (z) { return { label: z[0], value: f.filter(function (p) { return z[1].indexOf(p.contamination) !== -1; }).length }; })); },
+    g_tenues: function () { var T = db.tenues || []; return bars(['en_service', 'contaminee', 'au_lavage', 'en_stock'].map(function (k) { return { label: TST[k][0], value: T.filter(function (t) { return t.statut === k; }).length }; })); }
+  };
+  function widgetsSection(ids) {
+    var k = ids.filter(function (id) { var d = VBSParam.widget(id); return d && d.type === 'kpi' && WIDGET_IMPL[id]; });
+    var g = ids.filter(function (id) { var d = VBSParam.widget(id); return d && d.type === 'graph' && WIDGET_IMPL[id]; });
+    return '<section class="w-added" aria-label="Indicateurs du service">' +
+      '<div class="w-head"><h3>Indicateurs du service</h3><span class="note">Choisis par l\'administrateur</span></div>' +
+      (k.length ? '<div class="grid grid-' + Math.min(4, Math.max(2, k.length)) + '">' + k.map(function (id) { return WIDGET_IMPL[id](); }).join('') + '</div>' : '') +
+      (g.length ? '<div class="grid grid-2">' + g.map(function (id) { return '<section class="panel"><div class="panel-head"><h3>' + esc(VBSParam.widget(id).label) + '</h3></div>' + WIDGET_IMPL[id]() + '</section>'; }).join('') + '</div>' : '') +
+      '</section>';
+  }
+
+  // =================================================================== administrateur
+  var ADM_ROLES = VBSParam.ROLES;
+  var PREVIEW = { agent: { role: 'agent', matricule: 'SP-0142', name: 'Sap. J. Leroy' }, cos: { role: 'cos', matricule: 'CA-0107', name: 'Adj. T. Bernard' }, commandement: { role: 'commandement', matricule: 'CI-0021', name: 'Cne. M. Garnier' }, sssm: { role: 'sssm', matricule: 'MED-0003', name: 'Dr C. Roche' }, habillement: { role: 'habillement', matricule: 'HAB-0005', name: 'Adc. L. Perrin' }, admin: { role: 'admin', matricule: 'ADM-0001', name: 'Cdt S. Durand' } };
+  var admRole = 'cos';
+  function admCfg() { return JSON.parse(JSON.stringify(db.config || VBSParam.blank())); }
+  async function saveConfig(cfg) {
+    cfg.maj = new Date().toISOString(); cfg.par = S.name || S.matricule;
+    if (db.configRec) await VBSData.update(S, 'parametres', db.configRec.id, { valeur: cfg });
+    else await VBSData.create(S, 'parametres', { cle: 'config', valeur: cfg });
+    await reload();
+    toast('Paramètre enregistré');
+  }
+  function previewAs(role) {
+    VBS.offlinePreview(PREVIEW[role]);
+    try { var s = JSON.parse(sessionStorage.getItem('vbs-session')); s.fromAdmin = role !== 'admin'; sessionStorage.setItem('vbs-session', JSON.stringify(s)); } catch (e) {}
+    // Rechargement complet (un simple changement d'ancre ne relirait pas la session)
+    history.replaceState(null, '', 'espace.html' + (role === 'admin' ? '#' + (sessionStorage.getItem('vbs-adm-page') || 'droits') : ''));
+    location.reload();
+  }
+  function adminBanner() {
+    var b = $('demo-banner');
+    b.innerHTML = 'Aperçu administrateur : espace ' + esc(ROLE_LABEL[S.role]) + ' tel que vous l\'avez réglé · <button class="link-btn" type="button" id="back-admin">Revenir à l\'administration</button>';
+    $('back-admin').onclick = function () { previewAs('admin'); };
+  }
+  function previewBtn(role) {
+    return S.offline ? '<button class="btn btn-secondary btn-sm" type="button" data-preview="' + role + '">' + icon('user') + 'Voir cet espace</button>' : '';
+  }
+  function bindPreview(root) {
+    root.querySelectorAll('[data-preview]').forEach(function (b) { b.onclick = function () { try { sessionStorage.setItem('vbs-adm-page', (location.hash.slice(1) || 'droits')); } catch (e) {} previewAs(b.dataset.preview); }; });
+  }
+  function lastSave() { var c = db.config || {}; return c.maj ? 'Dernière modification le ' + fmtDT(new Date(c.maj)) + (c.par ? ' par ' + esc(c.par) : '') : 'Réglages d\'origine, aucune modification.'; }
+
+  function viewDroits(root) {
+    var cfg = admCfg();
+    root.innerHTML = head("Droits d'accès", "Pour chaque profil, les pages visibles et les actions autorisées. Vous pouvez restreindre, jamais élargir : les données d'exposition restent réservées à l'agent concerné et au SSSM.", '<span class="note">' + lastSave() + '</span>') +
+      '<div class="adm-grid">' + ADM_ROLES.map(function (r) {
+        var pages = MENUS[r], acts = VBSParam.ACTIONS.filter(function (a) { return a.roles.indexOf(r) !== -1; }), locked = VBSParam.LOCKED[r] || [];
+        return '<section class="panel adm-role"><div class="panel-head"><h3>' + esc(ROLE_LABEL[r]) + '</h3>' + previewBtn(r) + '</div>' +
+          '<h4 class="adm-h">Pages visibles</h4><ul class="adm-list">' + pages.map(function (m) {
+            var fixed = m.id === 'tableau-de-bord', on = VBSParam.pageVisible(cfg, r, m.id);
+            return '<li><label class="adm-sw"><input type="checkbox" data-page="' + r + '|' + m.id + '"' + (on ? ' checked' : '') + (fixed ? ' disabled' : '') + '><span class="sw" aria-hidden="true"></span><span>' + esc(m.label) + (fixed ? ' <span class="note">· toujours visible</span>' : '') + '</span></label></li>';
+          }).join('') + '</ul>' +
+          (acts.length ? '<h4 class="adm-h">Actions autorisées</h4><ul class="adm-list">' + acts.map(function (a) {
+            return '<li><label class="adm-sw"><input type="checkbox" data-perm="' + r + '|' + a.id + '"' + (VBSParam.can(cfg, r, a.id) ? ' checked' : '') + '><span class="sw" aria-hidden="true"></span><span>' + esc(a.label) + '</span></label></li>';
+          }).join('') + '</ul>' : '') +
+          (locked.length ? '<h4 class="adm-h">Jamais accessible</h4><ul class="adm-list adm-locked">' + locked.map(function (t) { return '<li>' + icon('lock') + '<span>' + esc(t) + '</span></li>'; }).join('') + '</ul>' : '') +
+          '</section>';
+      }).join('') + '</div>' +
+      (S.offline ? '' : '<p class="note">Aperçu des espaces disponible dans la démonstration sans serveur.</p>');
+    root.querySelectorAll('[data-page]').forEach(function (c) { c.onchange = function () { var q = c.dataset.page.split('|'); if (c.checked) delete cfg.pages[q[0]][q[1]]; else cfg.pages[q[0]][q[1]] = false; saveConfig(cfg).catch(function (e) { toast(e.message); }); }; });
+    root.querySelectorAll('[data-perm]').forEach(function (c) { c.onchange = function () { var q = c.dataset.perm.split('|'); if (c.checked) delete cfg.actions[q[0]][q[1]]; else cfg.actions[q[0]][q[1]] = false; saveConfig(cfg).catch(function (e) { toast(e.message); }); }; });
+    bindPreview(root);
+  }
+
+  function viewIndicateurs(root) {
+    var cfg = admCfg(), list = cfg.widgets[admRole] || [], max = VBSParam.MAX_WIDGETS;
+    var cat = VBSParam.WIDGETS.filter(function (w) { return w.roles.indexOf(admRole) !== -1; });
+    var typeTag = function (w) { return '<span class="badge ' + (w.type === 'kpi' ? 'badge-info' : 'badge-neutral') + '">' + (w.type === 'kpi' ? 'Indicateur' : 'Graphique') + '</span>'; };
+    root.innerHTML = head('Tableaux de bord', 'Ajoutez des indicateurs et des graphiques au tableau de bord de chaque profil, choisis dans un catalogue validé. Chacun se calcule uniquement sur les données que ce profil voit déjà.', '<span class="note">' + lastSave() + '</span>') +
+      '<div class="seg adm-seg" role="group" aria-label="Profil">' + ADM_ROLES.map(function (r) { var n = (cfg.widgets[r] || []).length; return '<button type="button" data-role="' + r + '" aria-pressed="' + (r === admRole) + '">' + esc(ROLE_LABEL[r]) + (n ? ' (' + n + ')' : '') + '</button>'; }).join('') + '</div>' +
+      '<div class="grid grid-2 adm-ind">' +
+        '<section class="panel"><div class="panel-head"><h3>Sur le tableau de bord · ' + list.length + ' / ' + max + '</h3>' + previewBtn(admRole) + '</div>' +
+          (list.length ? '<ol class="adm-order">' + list.map(function (id, i) { var w = VBSParam.widget(id); return '<li><span class="what"><b>' + esc(w.label) + '</b> ' + typeTag(w) + '<small>' + esc(w.desc) + '</small></span><span class="right"><button class="icon-btn sm" type="button" data-up="' + i + '" aria-label="Monter"' + (i ? '' : ' disabled') + '>↑</button><button class="icon-btn sm" type="button" data-down="' + i + '" aria-label="Descendre"' + (i < list.length - 1 ? '' : ' disabled') + '>↓</button><button class="link-btn" type="button" data-rm="' + i + '">Retirer</button></span></li>'; }).join('') + '</ol>'
+            : '<p class="empty">Aucun indicateur ajouté : le tableau de bord d\'origine s\'affiche seul.</p>') +
+          '<p class="note">Les indicateurs ajoutés s\'affichent sous le tableau de bord d\'origine, dans cet ordre. ' + max + ' au maximum.</p></section>' +
+        '<section class="panel"><div class="panel-head"><h3>Catalogue · ' + esc(ROLE_LABEL[admRole]) + '</h3></div><ul class="adm-cat">' + cat.map(function (w) {
+          var added = list.indexOf(w.id) !== -1;
+          return '<li><span class="what"><b>' + esc(w.label) + '</b> ' + typeTag(w) + '<small>' + esc(w.desc) + '</small></span><span class="right">' + (added ? '<span class="note">' + icon('check') + 'Ajouté</span>' : '<button class="btn btn-secondary btn-sm" type="button" data-add="' + w.id + '"' + (list.length >= max ? ' disabled title="' + max + ' indicateurs au maximum"' : '') + '>Ajouter</button>') + '</span></li>';
+        }).join('') + '</ul></section>' +
+      '</div>';
+    root.querySelectorAll('[data-role]').forEach(function (b) { b.onclick = function () { admRole = b.dataset.role; viewIndicateurs(root); }; });
+    var save = function () { cfg.widgets[admRole] = list; saveConfig(cfg).catch(function (e) { toast(e.message); }); };
+    root.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () { if (list.length < max) { list.push(b.dataset.add); save(); } }; });
+    root.querySelectorAll('[data-rm]').forEach(function (b) { b.onclick = function () { list.splice(+b.dataset.rm, 1); save(); }; });
+    root.querySelectorAll('[data-up]').forEach(function (b) { b.onclick = function () { var i = +b.dataset.up; list.splice(i - 1, 0, list.splice(i, 1)[0]); save(); }; });
+    root.querySelectorAll('[data-down]').forEach(function (b) { b.onclick = function () { var i = +b.dataset.down; list.splice(i + 1, 0, list.splice(i, 1)[0]); save(); }; });
+    bindPreview(root);
   }
 
   var VIEWS = {
     'tableau-de-bord': { agent: viewDashPerso, cos: viewDashCos, commandement: viewDashCmd, sssm: viewDashSssm, habillement: viewDashHab },
     dossier: viewDossier, rapports: { cos: viewRapportsCos, sssm: viewRapportsSssm }, gestion: viewGestion,
-    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, tenues: viewTenues, changements: viewChangements
+    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, tenues: viewTenues, changements: viewChangements,
+    droits: viewDroits, indicateurs: viewIndicateurs
   };
   function renderInto(id, root) {
     var v = VIEWS[id]; if (v && typeof v === 'object') v = v[S.role];
     if (!v) { root.innerHTML = '<p class="empty">Page introuvable.</p>'; return; }
     v(root);
+    // Indicateurs ajoutés par l'administrateur sur le tableau de bord
+    if (id === 'tableau-de-bord' && S.role !== 'admin' && db && db.config) {
+      var ids = db.config.widgets[S.role] || [];
+      if (ids.length) { root.insertAdjacentHTML('beforeend', widgetsSection(ids)); bindCharts(root.lastElementChild); }
+    }
   }
 
   // =================================================================== coque
   var nav = $('nav');
-  nav.innerHTML = MENU.map(function (m) { return '<li><a class="nav-item" href="#' + m.id + '" data-id="' + m.id + '">' + icon(m.icon) + '<span>' + m.label + '</span><span class="nav-count" data-count="' + m.id + '" hidden></span></a></li>'; }).join('');
+  function drawNav() { nav.innerHTML = MENU.map(function (m) { return '<li><a class="nav-item" href="#' + m.id + '" data-id="' + m.id + '">' + icon(m.icon) + '<span>' + m.label + '</span><span class="nav-count" data-count="' + m.id + '" hidden></span></a></li>'; }).join(''); }
+  drawNav();
+  // Paramètres de l'administrateur : pages masquées et actions retirées
+  var stripObs = null;
+  function applyConfig() {
+    if (S.role === 'admin' || !db || !db.config) return;
+    MENU = MENU_ALL.filter(function (m) { return VBSParam.pageVisible(db.config, S.role, m.id); });
+    drawNav();
+    var sel = VBSParam.deniedSelector(db.config, S.role);
+    if (stripObs) { stripObs.disconnect(); stripObs = null; }
+    if (!sel) return;
+    var strip = function () { document.querySelectorAll(sel).forEach(function (el) { el.remove(); }); };
+    strip();
+    stripObs = new MutationObserver(strip);
+    stripObs.observe(document.body, { childList: true, subtree: true });
+  }
   $('side-role').textContent = 'Espace ' + ROLE_LABEL[S.role];
   $('user-name').textContent = S.name || S.matricule;
   $('user-role').textContent = ROLE_LABEL[S.role] + ' · ' + S.matricule;
@@ -1569,7 +1722,11 @@
     document.title = (isEditor ? 'Rapport de contamination' : m.label) + ' · Carnet Expo CMR';
     if (!db) return;
     var view = $('view');
-    if (isEditor) { if (parts[1] === 'nouveau' && S.role !== 'cos') { location.hash = 'rapports'; return; } viewEditor(view, parts[1]); return; }
+    if (isEditor) {
+      if (!MENU.some(function (x) { return x.id === 'rapports'; })) { location.hash = 'tableau-de-bord'; return; }
+      if (parts[1] === 'nouveau' && (S.role !== 'cos' || !can('rapport_rediger'))) { location.hash = 'rapports'; return; }
+      viewEditor(view, parts[1]); return;
+    }
     ed = null;
     renderInto(m.id, view);
   }
@@ -1627,7 +1784,7 @@
   // =================================================================== assistant (assistant.js)
   // Accès en lecture seule à ce que l'utilisateur voit déjà : mêmes données, mêmes droits.
   window.VBSApp = {
-    session: S, menu: MENU, roleLabel: ROLE_LABEL[S.role], types: TYPE,
+    session: S, get menu() { return MENU; }, roleLabel: ROLE_LABEL[S.role], types: TYPE,
     getDb: function () { return db; },
     page: function () { return (location.hash.slice(1) || 'tableau-de-bord').split('/')[0]; },
     go: function (hash) { location.hash = hash; },
@@ -1637,8 +1794,9 @@
   // =================================================================== démarrage
   route();
   VBSData.load(S).then(function (data) {
-    db = data; counts(); route();
-    if (!tourSeen()) openTour();
+    db = data; applyConfig(); counts(); route();
+    if (S.fromAdmin) adminBanner();
+    if (!tourSeen() && !S.fromAdmin) openTour();
   }).catch(function (err) {
     var expired = err && (err.status === 401 || err.status === 403);
     $('view').innerHTML = '<section class="panel"><h2>' + (expired ? 'Session expirée' : 'Données indisponibles') + '</h2><p class="note">' + (expired ? 'Reconnectez-vous pour continuer.' : 'Le serveur de démonstration ne répond pas. Vous pouvez vous reconnecter en mode aperçu.') + '</p><p style="margin-top:14px"><a class="btn btn-primary" href="connexion.html">Retour à la connexion</a></p></section>';

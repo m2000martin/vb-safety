@@ -11,7 +11,8 @@
     cos: 'espace.html',
     commandement: 'espace.html',
     sssm: 'espace.html',
-    habillement: 'espace.html'
+    habillement: 'espace.html',
+    admin: 'espace.html'
   };
 
   function saveSession(s) { try { sessionStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }

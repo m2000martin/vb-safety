@@ -17,6 +17,7 @@
   var serverOk = !S.offline; // passe à false après un 404 : on n'insiste pas
 
   var PAGES = A.menu.map(function (m) { return { id: m.id, label: m.label }; });
+  function refreshPages() { PAGES = A.menu.map(function (m) { return { id: m.id, label: m.label }; }); }
   var CAN_EDIT = ROLE === 'cos' || ROLE === 'sssm';
 
   // ------------------------------------------------------------------ suggestions par rôle
@@ -25,7 +26,8 @@
     cos: ['Ouvre mon dernier rapport à compléter', 'Mes rapports en retard', 'Nouveau rapport', "C'est quoi la zone d'exclusion ?"],
     commandement: ['Rapports en retard', 'Rapports en attente cette semaine', 'Qui valide les rapports ?'],
     sssm: ['Ouvre le dernier rapport à contrôler', 'Rapports transmis cette semaine', 'Suivi individuel'],
-    habillement: ['Tenues de feu', 'Changements de tenue', 'Tableau de bord']
+    habillement: ['Tenues de feu', 'Changements de tenue', 'Tableau de bord'],
+    admin: ["Droits d'accès", 'Tableaux de bord des profils']
   };
 
   // ------------------------------------------------------------------ aide intégrée (textes fixes, relus)
@@ -90,6 +92,7 @@
   async function ask(q) {
     if (busy) return;
     q = q.slice(0, MAX);
+    refreshPages();
     busy = true; input.value = ''; say(q, 'me');
     var wait = say('…', 'bot wait');
     var res = null;
@@ -150,6 +153,7 @@
 
   function openReport(quel, date) {
     if (!db()) { say('Les données sont encore en cours de chargement. Réessayez dans un instant.', 'bot'); return; }
+    if (ROLE === 'admin') { say("Le profil administrateur n'a pas accès aux rapports ni aux données d'exposition.", 'bot'); return; }
     if (ROLE === 'agent') { A.go('dossier'); say("Les rapports sont rédigés par votre chef d'agrès ou votre COS. J'ouvre votre dossier, où se trouvent toutes vos expositions.", 'bot'); return; }
     if (ROLE === 'habillement') { A.go('tenues'); say("Votre espace ne contient pas de rapports. J'ouvre les tenues de feu.", 'bot'); return; }
     if (quel === 'nouveau') {
@@ -240,6 +244,8 @@
     if (has(/(liste|tous|combien).*(rapport|intervention)/)) return act('lister_rapports', { statut: 'tous', jours: jours });
 
     var pages = [
+      [/droit|acces|permission|autoris/, 'droits'],
+      [/indicateur|kpi|graphique|tableaux de bord des/, 'indicateurs'],
       [/historique|dossier|mes expositions|ma fiche|rendez-vous|rdv/, 'dossier'],
       [/export|csv|pdf|telecharg/, 'export'],
       [/gestion/, 'gestion'],
