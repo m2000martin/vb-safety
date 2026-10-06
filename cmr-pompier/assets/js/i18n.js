@@ -11,7 +11,7 @@
   var KEY = 'vbs-lang';
   function readLang() {
     try {
-      var q = new URLSearchParams(location.search).get('lang');
+      var q = new URLSearchParams(location.search).get('lang') || d.documentElement.getAttribute('data-lang');
       if (q === 'en' || q === 'fr') { localStorage.setItem(KEY, q); return q; }
       return localStorage.getItem(KEY) === 'en' ? 'en' : 'fr';
     } catch (e) { return 'fr'; }
@@ -37,6 +37,9 @@
     });
   }
   I.bindToggles = bindToggles;
+  // Liens propres à la version anglaise (ex. retour vers la page d'accueil anglaise)
+  function enLinks() { if (lang === 'en') d.querySelectorAll('[data-href-en]').forEach(function (a) { a.setAttribute('href', a.getAttribute('data-href-en')); }); }
+  if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', enLinks); else enLinks();
   if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', function () { bindToggles(); }); else bindToggles();
   if (lang !== 'en') return;
 
@@ -176,7 +179,9 @@
     var n; while ((n = tw.nextNode())) { if (n.nodeType === 3) trText(n); else trAttrs(n); }
   }
   I.apply = apply;
-  function title() { var t = d.title, o = tr(t); if (o !== t) d.title = o; }
+  // Page publique déjà rédigée en anglais (html[data-lang]) : seul le contenu ajouté par script est traduit
+  var STATIC = d.documentElement.hasAttribute('data-lang');
+  function title() { if (STATIC) return; var t = d.title, o = tr(t); if (o !== t) d.title = o; }
   var mo = new MutationObserver(function (list) {
     for (var i = 0; i < list.length; i++) {
       var m = list[i];

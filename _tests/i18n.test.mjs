@@ -34,6 +34,19 @@ async function open(role, lang) {
   await ctx.close();
 }
 
+// 1 bis. Pages publiques anglaises : liens, fenêtre de contact traduite, bascule vers le français
+for (const [p, fr] of [['/cmr-pompier/en/', '/cmr-pompier/'], ['/cmr-pompier/en/ppe-module.html', '/cmr-pompier/module-epi.html'], ['/cmr-pompier/en/firefighter-health.html', '/cmr-pompier/sante-sapeurs-pompiers.html']]) {
+  const ctx = await br.newContext(); const pg = await ctx.newPage(); const bad = [];
+  pg.on('response', r => { if (r.status() >= 400 && !/\.webp$/.test(r.url())) bad.push(r.url()); }); pg.on('pageerror', e => errs.push(p + ' : ' + e.message));
+  await pg.goto(B + p); await wait(300);
+  await pg.locator('[data-demande]').first().click(); await wait(250);
+  const modal = await pg.locator('.req-card').innerText();
+  const miss = await pg.evaluate(() => VBSi18n.misses);
+  ok(!Object.keys(miss).length && /Full name/.test(modal) && !bad.length, `${p} · page et fenêtre de contact en anglais` + (bad.length ? ' — 404 : ' + bad.join(' ') : ''));
+  ok(new URL(await pg.locator('a.lang-link').getAttribute('href'), B + p).pathname === fr, `${p} · bouton FR vers ${fr}`);
+  await ctx.close();
+}
+
 // 2. Tous les écrans de chaque profil, sans texte français restant
 for (const role of Object.keys(PROFILES)) {
   const { ctx, pg } = await open(role, 'en');

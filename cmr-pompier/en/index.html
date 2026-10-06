@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.vb-safety.com; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#17191D">
+<title>Carnet Expo CMR: contamination reporting for fire services · VB Safety</title>
+<meta name="description" content="Carnet Expo CMR, contamination reporting software for French fire and rescue services (SDIS): the crew or incident commander records the crew&#x27;s exposure, the SSSM medical service reviews and approves.">
+<link rel="canonical" href="https://vb-safety.com/cmr-pompier/en/">
+<link rel="alternate" hreflang="fr" href="https://vb-safety.com/cmr-pompier/">
+<link rel="alternate" hreflang="en" href="https://vb-safety.com/cmr-pompier/en/">
+<link rel="alternate" hreflang="x-default" href="https://vb-safety.com/cmr-pompier/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VB Safety">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Carnet Expo CMR · contamination reporting software for fire services">
+<meta property="og:description" content="Carnet Expo CMR, contamination reporting software for French fire and rescue services (SDIS): the crew or incident commander records the crew&#x27;s exposure, the SSSM medical service reviews and approves.">
+<meta property="og:url" content="https://vb-safety.com/cmr-pompier/en/">
+<meta property="og:image" content="https://vb-safety.com/static/og/carnet-expo-cmr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Carnet Expo CMR · contamination reporting software for fire services">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+<link rel="stylesheet" href="../assets/css/vbs.css?v=12">
+<link rel="stylesheet" href="../assets/css/accueil.css?v=11">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://vb-safety.com/#organisation", "name": "VB Safety", "legalName": "VB Safety SAS", "identifier": [{"@type": "PropertyValue", "propertyID": "SIREN", "value": "109381640"}, {"@type": "PropertyValue", "propertyID": "SIRET", "value": "10938164000019"}], "vatID": "FR43109381640", "alternateName": "VB Safety · CMR traceability", "address": {"@type": "PostalAddress", "addressCountry": "FR"}, "url": "https://vb-safety.com/", "logo": "https://vb-safety.com/favicon-512.png", "email": "contact@vb-safety.com", "areaServed": "FR"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://vb-safety.com/#site", "name": "VB Safety", "url": "https://vb-safety.com/", "inLanguage": "en", "publisher": {"@id": "https://vb-safety.com/#organisation"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Carnet Expo CMR", "url": "https://vb-safety.com/cmr-pompier/en/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "inLanguage": "en", "description": "Contamination reporting software for French fire and rescue services (SDIS): traceability of firefighters' CMR exposures after each call-out, review by the occupational health and medical service (SSSM) and an individual history.", "audience": {"@type": "Audience", "audienceType": "French fire and rescue services (SDIS)"}, "publisher": {"@id": "https://vb-safety.com/#organisation"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://vb-safety.com/en/"}, {"@type": "ListItem", "position": 2, "name": "Firefighters", "item": "https://vb-safety.com/en/firefighters/"}, {"@type": "ListItem", "position": 3, "name": "Carnet Expo CMR", "item": "https://vb-safety.com/cmr-pompier/en/"}]}</script>
+<link rel="stylesheet" href="/static/barre.css?v=3">
+<link rel="stylesheet" href="/static/mobile.css?v=7">
+</head>
+<body>
+<div class="vbs-barre" data-no-i18n><div class="container"><a class="vbs-maison" href="/en/">VB Safety</a><nav aria-label="VB Safety sites"><a href="/en/innovation/">Innovation</a><a href="/en/industry/">Industry</a><a href="/en/construction/">Construction</a><a href="/en/firefighters/">Firefighters</a><a href="/ressources/" hreflang="fr">Resources</a><a href="/en/#contact">Contact</a></nav></div></div>
+
+<!-- Icons (paths inspired by Lucide, ISC licence) -->
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/><path d="M3.2 12h6.3l.5-1 2 4.5 2-7 1.5 3.5h5.3"/></symbol>
+  <symbol id="i-steth" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 12 0V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 12 0v-4"/><circle cx="20" cy="10" r="2"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M9.9 9.9a3 3 0 1 0 4.2 4.2M10.7 5.1A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7M6.6 6.6A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.4-1.6M2 2l20 20"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-drops" viewBox="0 0 24 24"><path d="M7 16.3c2.2 0 4-1.8 4-4 0-1.2-.6-2.3-1.7-3.2S7.3 6.8 7 5.3c-.3 1.5-1.1 2.8-2.3 3.8S3 11.1 3 12.3c0 2.2 1.8 4 4 4z"/><path d="M12.6 6.6A11 11 0 0 0 14 3c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a7 7 0 0 1-11.9 5"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-shirt" viewBox="0 0 24 24"><path d="M20.4 3.5 16 2a4 4 0 0 1-8 0L3.6 3.5a2 2 0 0 0-1.3 2.2l.6 3.5a1 1 0 0 0 1 .8H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.2a1 1 0 0 0 1-.8l.6-3.5a2 2 0 0 0-1.4-2.2z"/></symbol>
+</svg>
+
+<div class="demo-banner" role="note" data-no-i18n>Demo version · all people and call-outs are fictitious</div>
+
+<header class="site-header" id="top" data-no-i18n>
+  <div class="container">
+    <a class="brand" href="./" aria-label="VB Safety Firefighter, home">
+      <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
+        <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
+        <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
+        <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
+        <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">VB Safety<span class="brand-sub">Firefighter</span></span>
+    </a>
+
+    <nav class="nav" id="main-nav" aria-label="Main navigation">
+      <a href="./" aria-current="page">Home</a>
+      <a href="#fonctionnement">How it works</a>
+      <a href="#roles">Roles</a>
+      <a href="ppe-module.html">PPE module</a>
+      <a href="firefighter-health.html">Health and law</a>
+      <a href="#demo">Demo</a>
+      <a href="#demande" data-demande="contact">Contact us</a>
+    </nav>
+    <a class="lang-link" href="../" hreflang="fr" lang="fr" data-set-lang="fr" aria-label="Version française">FR</a>
+    <a class="btn btn-primary header-cta" href="../connexion.html?lang=en">Log in <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <button class="menu-btn" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">
+      <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+  </div>
+</header>
+
+<main data-no-i18n>
+<nav class="sb-crumbs" aria-label="Breadcrumb"><div class="container"><a href="/en/">Home</a><span aria-hidden="true">/</span><a href="/en/firefighters/">Firefighters</a><span aria-hidden="true">/</span><span aria-current="page">Carnet Expo CMR</span></div></nav>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true"></div>
+    <div class="container">
+      <div>
+        <h1 id="hero-title"><span class="h1-kw">Carnet Expo CMR · contamination reporting software for French fire and rescue services (SDIS)</span>Your CMR exposures on call-outs, <em>tracked and recorded.</em></h1>
+        <p class="hero-lead">At the end of every call-out, the crew commander (CA) or incident commander (COS) writes the contamination report for their crew. Command checks that everything is up to date, the occupational health and medical service (SSSM) reviews and completes it, and every firefighter can access their own history.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="../connexion.html?lang=en">Access the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-ghost-dark btn-lg" href="#fonctionnement">How it works</a>
+        </div>
+        <ul class="hero-facts">
+          <li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><div><strong>Hosted in France</strong><span>Server and database in France</span></div></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg><div><strong>Role-based access</strong><span>Everyone sees only what concerns them</span></div></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><div><strong>Individual evidence</strong><span>Every exposure dated and linked to the firefighter</span></div></li>
+        </ul>
+      </div>
+
+      <!-- Product preview (fictitious data) -->
+      <figure class="preview" aria-label="Preview of a fictitious contamination report">
+        <div class="preview-head">
+          <div>
+            <div class="preview-kicker">Contamination report</div>
+            <div class="preview-title">Car fire · underground car park</div>
+            <div class="preview-meta">Written by the CA · yesterday, 22:14</div>
+          </div>
+          <span class="badge badge-info">Sent to SSSM</span>
+        </div>
+        <div class="preview-subs" aria-label="Probable CMR agents">
+          <span class="chip">PAHs</span><span class="chip">Benzene</span><span class="chip">Heavy metals</span><span class="chip">Fine particles</span>
+        </div>
+        <div class="preview-cols" aria-hidden="true"><span>Crew</span><span>Contamination · Decon.</span></div>
+        <ul class="preview-list">
+          <li><span class="agent"><span class="avatar">TB</span><span>T. Bernard<small>Crew commander</small></span></span><span class="row-right"><span class="badge badge-low">Low</span><span class="decon ok" title="Decontamination approved"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Decontamination approved</span></span></span></li>
+          <li><span class="agent"><span class="avatar">AM</span><span>A. Martin<small>Attack pair</small></span></span><span class="row-right"><span class="badge badge-high">High</span><span class="decon ok" title="Decontamination approved"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Decontamination approved</span></span></span></li>
+          <li><span class="agent"><span class="avatar">JL</span><span>J. Leroy<small>Attack pair</small></span></span><span class="row-right"><span class="badge badge-mod">Medium</span><span class="decon ok" title="Decontamination approved"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Decontamination approved</span></span></span></li>
+          <li><span class="agent"><span class="avatar">LD</span><span>L. Dubois<small>Driver</small></span></span><span class="row-right"><span class="badge badge-low">Low</span><span class="decon todo" title="Decontamination awaiting approval"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span class="sr-only">Decontamination awaiting approval</span></span></span></li>
+        </ul>
+        <div class="preview-foot"><span>Decontamination approved: 3 of 4</span><span class="meter" aria-hidden="true"><i></i></span></div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- WHY / HOW / TRUST -->
+  <section class="section section-flush" id="fonctionnement" aria-label="Why, how and confidentiality">
+    <div class="container">
+      <h2 class="sr-only">Carnet Expo CMR (CMR exposure record) at a glance</h2>
+      <div class="pillars">
+        <article class="card">
+          <span class="kicker">Why?</span>
+          <h3>A real and recognised exposure</h3>
+          <p class="card-text">Firefighting as an occupation has been classified as carcinogenic to humans (Group 1) by IARC (International Agency for Research on Cancer) since 2022. Whatever is not recorded on the day of the call-out is lost, both for medical follow-up and for any future recognition as an occupational disease.</p>
+          <div class="why-points">
+            <div><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg><strong>IARC Group 1</strong><span>2022 classification</span></div>
+            <div><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg><strong>Evidence of exposure</strong><span>Dated, per firefighter</span></div>
+            <div><svg class="icon" aria-hidden="true"><use href="#i-steth"/></svg><strong>SSSM follow-up</strong><span>Reports ready for review</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="kicker">How?</span>
+          <h3>3 steps after every call-out</h3>
+          <ol class="steps">
+            <li><span class="step-num">1</span><div><strong>The CA or COS writes the report <span class="role-tag">CA / COS</span></strong><span>For themselves and their crew: roles, breathing apparatus (BA) use, each person's level of contamination and decontamination.</span></div></li>
+            <li><span class="step-num">2</span><div><strong>Command checks <span class="role-tag">Station officer</span></strong><span>Does every call-out have its report? Up to date, pending or overdue, with reminders.</span></div></li>
+            <li><span class="step-num">3</span><div><strong>The SSSM reviews and completes <span class="role-tag">SSSM</span></strong><span>Views, corrects where needed, and follows each firefighter's history.</span></div></li>
+          </ol>
+        </article>
+
+        <article class="card" id="confidentialite">
+          <span class="kicker">Your data</span>
+          <h3>4 confidentiality commitments</h3>
+          <ul class="promises">
+            <li><span class="icon-tile teal"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span><div><strong>Hosted in France</strong><span>Server and backups in France, no trackers or third-party services in the tool.</span></div></li>
+            <li><span class="icon-tile ok"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><div><strong>Access partitioned by role</strong><span>Permissions are enforced by the server, not merely hidden on screen.</span></div></li>
+            <li><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span><div><strong>Firefighters stay in control</strong><span>They can view and export their exposure history at any time.</span></div></li>
+            <li><span class="icon-tile warn"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></span><div><strong>Changes are logged</strong><span>Every time a report is viewed or corrected, it is recorded in the audit log.</span></div></li>
+          </ul>
+        </article>
+      </div>
+
+      <a class="epi-line" href="ppe-module.html">
+        <span class="epi-line-ico"><svg class="icon" aria-hidden="true"><use href="#i-shirt"/></svg></span>
+        <span class="epi-line-text"><span class="epi-line-tag">PPE module · in demo</span><strong>Track the contamination, cleaning and return to service of every fire kit.</strong></span>
+        <span class="epi-line-cta">Learn more <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ROLES -->
+  <section class="section" id="roles">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Roles</span>
+        <h2>Five roles, each limited to what concerns them</h2>
+        <p>The CA or COS writes the report, command checks that everything is up to date, the SSSM reviews and completes it, and firefighters view their own history. The personal protective equipment (PPE, EPI in French) module is separate and reserved for the station's PPE officer.</p>
+      </div>
+      <div class="roles">
+        <article class="card role">
+          <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span><div><h3>Firefighter</h3><div class="role-who">Firefighter deployed on the call-out</div></div></div>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Views their exposures, call-out by call-out</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Follows their history and individual exposure record</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Reports a change of fire kit or requests one</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exports their data as PDF or CSV</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Has nothing to enter: their CA or COS takes care of it</li>
+          </ul>
+          <a class="role-link" href="../connexion.html?profil=agent&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Cannot see other firefighters' exposure</p></div>
+        </article>
+
+        <article class="card role">
+          <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg></span><div><h3>CA / COS</h3><div class="role-who">Crew commander or incident commander</div></div></div>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Writes the contamination and decontamination report at the end of the call-out</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Does so for themselves and every member of their crew</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Checks the positions, suggested from each person's post</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Declares the crew's decontamination with a single tap, without entering the time</li>
+          </ul>
+          <a class="role-link" href="../connexion.html?profil=cos&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Sees only the call-outs they commanded</p></div>
+        </article>
+
+        <article class="card role">
+          <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span><div><h3>Station officer / command</h3><div class="role-who">Station commander, group commander, command</div></div></div>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Sees whether every call-out has its report</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Spots reports that are up to date, pending or overdue</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Sends a reminder to the CA or COS concerned</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exports the tracking status as CSV</li>
+          </ul>
+          <a class="role-link" href="../connexion.html?profil=commandement&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Sees no individual exposure data</p></div>
+        </article>
+
+        <article class="card role">
+          <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-steth"/></svg></span><div><h3>SSSM</h3><div class="role-who">Doctors and nurses of the medical service</div></div></div>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Views all contamination reports</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Corrects or completes each report</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Follows each firefighter's full history</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Produces the exposure record by year, over 12 months or over the whole career</li>
+          </ul>
+          <a class="role-link" href="../connexion.html?profil=sssm&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Every view and correction is logged</p></div>
+        </article>
+
+        <article class="card role">
+          <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3>PPE officer</h3><div class="role-who">The station's fire kits</div></div></div>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Sees which firefighters need re-equipping after each report</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Records fire kit changes and items sent for laundering</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Tracks the fires and washes of each fire kit, with an alert threshold</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Edits firefighters' fire kit numbers</li>
+          </ul>
+          <a class="role-link" href="../connexion.html?profil=habillement&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Sees no individual exposure data</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO / ADAPTATION -->
+  <section class="section section-flush" id="demo">
+    <div class="container">
+      <div class="demo-band">
+        <div>
+          <span class="kicker">A solution that adapts to you</span>
+          <h2>A configurable version for your fire service</h2>
+          <p>Every SDIS has its own procedures. We adapt the tool to your organisation: call-out types, decontamination protocol, roles and approval workflow, export formats for your SSSM.</p>
+          <ul class="adapt-list">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Your call-out types and your terminology</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Your decontamination protocol</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Your role structure</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>The exports your SSSM needs</li>
+          </ul>
+        </div>
+        <div class="demo-actions">
+          <a class="btn btn-primary btn-lg btn-block" href="#demande" data-demande="version"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Request a version for my fire service</a>
+          <a class="btn btn-ghost-dark btn-lg btn-block" href="../connexion.html?lang=en"><svg class="icon" aria-hidden="true"><use href="#i-login"/></svg>Log in to the demo</a>
+          <div class="demo-links"><a href="#demande" data-demande="acces">Request an access code</a><span aria-hidden="true">·</span><a href="#demande" data-demande="contact">Contact us</a></div>
+          <small>Demo: one fictitious station, one account per role. Access with the code provided by VB Safety.</small>
+        </div>
+      </div>
+      <p class="disclaimer">The exposure index is indicative only: it is neither a metrological measurement nor medical advice. This demo version is not intended to hold real data.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" data-no-i18n>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a class="brand" href="./" aria-label="Home">
+          <svg class="brand-mark" viewBox="0 0 48 52" aria-hidden="true">
+            <path d="M24 2 44 9v15c0 13-9 21-20 26C13 45 4 37 4 24V9Z" fill="#D7261E"/>
+            <path d="M24 2 44 9v15c0 13-9 21-20 26Z" fill="#B81F18"/>
+            <rect x="15" y="14" width="18" height="23" rx="2.5" fill="#fff"/>
+            <path d="M19 21h10M19 25.5h10M19 30h6" stroke="#D7261E" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+          <span class="brand-name footer-brand">VB Safety<span class="brand-sub">Firefighter</span></span>
+        </a>
+        <p class="footer-tag">Occupational exposure traceability, designed with firefighters.</p>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-h">Tool</h2>
+        <ul>
+          <li><a href="../connexion.html?lang=en">Log in</a></li>
+          <li><a href="#roles">Roles and access</a></li>
+          <li><a href="#confidentialite">Confidentiality</a></li>
+          <li><a href="ppe-module.html">PPE module</a></li>
+          <li><a href="firefighter-health.html">Health and law</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-h">Sectors</h2>
+        <ul>
+          <li><a href="/en/industry/">Industry</a></li>
+          <li><a href="/en/construction/">Construction</a></li>
+          <li><a href="/en/firefighters/">Firefighters</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-h">Resources</h2>
+        <ul>
+          <li><a href="/ressources/" hreflang="fr">All resources (in French)</a></li>
+          <li><a href="/cmr-pompier/en/firefighter-health.html">Firefighter health guide</a></li>
+
+          <li><a href="/ressources/liste-travailleurs-exposes-cmr/" hreflang="fr">Template list of exposed workers (in French)</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-h">VB Safety</h2>
+        <ul>
+          <li><a href="/en/">vb-safety.com home</a></li>
+          <li><a href="/en/#contact">Contact</a></li>
+          <li><a href="/mentions-legales/" hreflang="fr">Legal notice (in French)</a></li>
+          <li><a href="/confidentialite/" hreflang="fr">Privacy policy (in French)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> VB Safety SAS</span>
+      <span>Updated 1 October 2026</span>
+      <span>Demo version · fictitious data</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/i18n-en.js?v=2"></script>
+<script src="../assets/js/i18n.js?v=2"></script>
+<script src="../assets/js/site.js?v=10"></script>
+  <script src="../assets/js/demande.js?v=10"></script>
+<script src="/static/vu.js?v=1" defer></script>
+<script src="/static/menu.js?v=1" defer></script>
+</body>
+</html>

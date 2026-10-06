@@ -26,7 +26,8 @@
 - [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020.
 
 ## English
-- [VB Safety in English](https://vb-safety.com/en/) · [Firefighters](https://vb-safety.com/en/firefighters/) · [Industry](https://vb-safety.com/en/industry/) · [Construction](https://vb-safety.com/en/construction/) · [Innovation](https://vb-safety.com/en/innovation/). The tools themselves are in French.
+- [VB Safety in English](https://vb-safety.com/en/) · [Firefighters](https://vb-safety.com/en/firefighters/) · [Industry](https://vb-safety.com/en/industry/) · [Construction](https://vb-safety.com/en/construction/) · [Innovation](https://vb-safety.com/en/innovation/).
+- [Carnet Expo CMR in English](https://vb-safety.com/cmr-pompier/en/) · [PPE module](https://vb-safety.com/cmr-pompier/en/ppe-module.html) · [Firefighter cancers and fire smoke guide](https://vb-safety.com/cmr-pompier/en/firefighter-health.html). The firefighter app (login and all six profiles) has an EN/FR switch; the industry and construction tools are in French.
 
 ## Contact
 - [Demander une démonstration ou un devis](https://vb-safety.com/devis/)
