@@ -1,0 +1,5 @@
+Exemple officiel d'échange « Incendie » publié par l'Agence du numérique en santé (ANS),
+dépôt SAMU-Hub-Modeles, dossier src/main/resources/sample/examples.
+Source : https://github.com/ansforge/SAMU-Hub-Modeles
+Licence : Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0). Fichiers non modifiés.
+Données fictives. Utilisé par la démonstration du Carnet Expo CMR (assets/js/cisu.js).

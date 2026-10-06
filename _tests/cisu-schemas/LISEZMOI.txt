@@ -1,0 +1,3 @@
+Schémas officiels des messages CISU, copiés sans modification depuis le dépôt de l'Agence du numérique en santé :
+https://github.com/ansforge/SAMU-Hub-Modeles (src/main/resources/json-schema), commit 11ecbd8 du 2 octobre 2026.
+Licence : Apache License 2.0. Utilisés uniquement par les tests (_tests/cisu.test.mjs).

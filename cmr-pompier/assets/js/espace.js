@@ -456,11 +456,12 @@
         '<span class="right">' + repState(x) + (t ? '<a class="btn btn-primary btn-sm" href="#rapport/' + x.id + '">Faire mon rapport</a>' : '<a class="btn btn-secondary btn-sm" href="#rapport/' + x.id + '">Voir</a>') + '</span></li>';
     };
     var shown = repAll ? done : done.slice(0, 8);
-    root.innerHTML = head("Rapports d'interventions", 'Le rapport de contamination de votre équipage, après chaque intervention.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="new-op">Opération à plusieurs agrès</button><a class="btn btn-primary" href="#rapport/nouveau">Nouveau rapport</a></div>') +
+    root.innerHTML = head("Rapports d'interventions", 'Le rapport de contamination de votre équipage, après chaque intervention.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="cisu-in">Réception CISU (démo)</button><button class="btn btn-secondary" type="button" id="new-op">Opération à plusieurs agrès</button><a class="btn btn-primary" href="#rapport/nouveau">Nouveau rapport</a></div>') +
       '<section class="panel"><div class="panel-head"><h3>À faire</h3></div>' + (todo.length ? '<ul class="rows rep-list">' + todo.map(row).join('') + '</ul>' : '<p class="empty">Tous vos rapports sont faits.</p>') + '</section>' +
       viewOpsCos(myOps) +
       '<section class="panel"><div class="panel-head"><h3>Déjà transmis</h3><span class="note">' + done.length + '</span></div>' + (done.length ? '<ul class="rows rep-list">' + shown.map(row).join('') + '</ul>' + (done.length > shown.length ? '<div class="actions-row"><button class="link-btn" type="button" id="rep-more">Afficher les ' + (done.length - shown.length) + ' plus anciens</button></div>' : '') : '<p class="empty">Aucun rapport transmis.</p>') + '</section>';
     root.querySelector('#new-op').onclick = openNewOperation;
+    root.querySelector('#cisu-in').onclick = openCisu;
     var more = root.querySelector('#rep-more'); if (more) more.onclick = function () { repAll = true; route(); };
     bindRemind(root);
   }
@@ -744,6 +745,71 @@
           }).join('') + '</tbody></table></div>';
       }).join('') + '</section>';
   }
+  // =================================================================== réception CISU (démonstration)
+  // Un message au format national (création d'affaire RC-EDA + moyens engagés RC-RI) crée le rapport
+  // à compléter : nature, commune, début, durée et engin sont repris ; le CA ajoute l'équipage et l'exposition.
+  var CISU_ANS = ['RC-EDA_Incendie_RaymondeLECCIA.01.json'].concat(['02', '03', '04', '05', '06', '07', '08'].map(function (n) { return 'RC-RI_Incendie_RaymondeLECCIA.' + n + '.json'; }));
+  function hm(d) { return d ? d2(d.getHours()) + 'h' + d2(d.getMinutes()) : '—'; }
+  function openCisu() {
+    var C = window.VBSCisu, msgs = null, res = null;
+    var dlg = modal('Intervention reçue du système d\'alerte',
+      '<p class="note">Démonstration de l\'interface au <b>format national CISU</b>, celui des échanges 15-18 (modèles publics de l\'Agence du numérique en santé) : création d\'affaire <code>RC-EDA</code> et moyens engagés <code>RC-RI</code>. Avec un accès au système d\'alerte, ces messages arrivent seuls ; ici, vous les générez ou les importez.</p>' +
+      '<div class="cisu-src"><div class="field"><label class="label" for="cisu-sc">Générer une intervention fictive</label><div class="cisu-row"><select class="select" id="cisu-sc">' + Object.keys(C.SCENARIOS).map(function (k) { return '<option value="' + k + '">' + esc(C.SCENARIOS[k]) + '</option>'; }).join('') + '</select><button class="btn btn-secondary" type="button" id="cisu-gen">Générer</button></div></div>' +
+      '<div class="cisu-row cisu-alt"><button class="link-btn" type="button" id="cisu-ans">Charger l\'exemple officiel de l\'ANS (incendie)</button><label class="link-btn" for="cisu-file">Importer des fichiers .json</label><input type="file" id="cisu-file" accept=".json,application/json" multiple hidden></div></div>' +
+      '<div id="cisu-res" class="cisu-res"><p class="empty">Aucun message reçu.</p></div>',
+      [{ label: 'Créer le rapport à compléter', primary: true, run: async function () {
+        if (!res) throw new Error('Générez ou importez d\'abord un message.');
+        if (!res.type) throw new Error('Intervention sans exposition aux fumées : aucun rapport de contamination à créer.');
+        var dup = db.interventions.filter(function (x) { return String(x.observations || '').indexOf(res.caseId) !== -1; })[0];
+        if (dup) { location.hash = 'rapport/' + dup.id; toast('Cette affaire a déjà été reçue : rapport existant ouvert.'); return true; }
+        var tail = String(res.caseId).replace(/[^A-Za-z0-9]/g, '').slice(-5).toUpperCase();
+        var rec = await VBSData.create(S, 'interventions', {
+          numero: 'INT-' + res.debut.getFullYear() + '-' + tail + '-' + res.enginPrincipal, date: VBSData.toApiDate(res.debut), type_feu: res.type,
+          precision: (res.nature.label + (res.lieu ? ' · ' + res.lieu.label : '')).slice(0, 160), commune: res.commune, motorisation: '', ambiance: res.ambiance,
+          duree_min: res.duree_min, circonstances: [], zone_deshabillage: false, epi_ensaches: false, suspicion_amiante: false, exposition_globale: '',
+          observations: 'Reçu au format CISU · affaire ' + res.caseId + ' · nature ' + res.nature.code + ' ' + res.nature.label + ' · engins : ' + res.engins.map(function (e) { return e.nom; }).join(', '),
+          statut: 'brouillon', centre: (db.me || {}).centre, cos: db.meId });
+        await reload();
+        location.hash = 'rapport/' + rec.id;
+        toast('Rapport créé : complétez l\'équipage et l\'exposition.');
+      } }], { wide: true });
+    var box = dlg.querySelector('#cisu-res');
+    function show(list, origine) {
+      msgs = list;
+      try { res = C.parse(list); }
+      catch (e) { res = null; box.innerHTML = '<div class="callout red"><div><strong>Message refusé</strong><span class="sub">' + esc(e.message) + '</span></div></div>'; return; }
+      var row = function (k, v) { return '<tr><th scope="row">' + k + '</th><td>' + v + '</td></tr>'; };
+      var nEda = 1, nRi = list.length - 1;
+      box.innerHTML = '<p class="cisu-ok">' + icon('check') + ' ' + list.length + ' message' + (list.length > 1 ? 's' : '') + ' lu' + (list.length > 1 ? 's' : '') + ' · ' + esc(origine) + '</p>' +
+        '<table class="cisu-tab"><tbody>' +
+        row('Affaire', '<code>' + esc(res.caseId) + '</code>') +
+        row('Nature (code national)', '<code>' + esc(res.nature.code) + '</code> ' + esc(res.nature.label)) +
+        (res.lieu ? row('Type de lieu', '<code>' + esc(res.lieu.code) + '</code> ' + esc(res.lieu.label)) : '') +
+        (res.risques.length ? row('Risques', res.risques.map(function (r) { return '<code>' + esc(r.code) + '</code> ' + esc(r.label); }).join(' · ')) : '') +
+        row('Type retenu pour le Carnet', res.type ? '<b>' + esc(TYPE[res.type]) + '</b><br><span class="note">' + esc(res.regle) + ' · ' + esc(AMB[res.ambiance]) + '</span>' : '<b>Aucun rapport</b><br><span class="note">' + esc(res.regle) + '</span>') +
+        row('Commune', esc(res.commune || '—')) +
+        row('Départ', fmtDT(res.debut)) +
+        row('Fin sur les lieux', res.fin ? fmtDT(res.fin) : '—') +
+        row('Durée', res.duree_min ? durTxt(res.duree_min) + ' <span class="note">(premier départ d\'engin → dernière fin sur les lieux)</span>' : '—') +
+        row('Engins', res.engins.length ? '<ul class="cisu-eng">' + res.engins.map(function (e) { return '<li><b>' + esc(e.nom) + '</b> <span class="note">départ ' + hm(e.depart) + ' · arrivée ' + hm(e.arrivee) + ' · fin sur les lieux ' + hm(e.finLieux) + '</span></li>'; }).join('') + '</ul>' : '—') +
+        '</tbody></table>' +
+        (res.warnings.length ? '<p class="note">' + res.warnings.map(esc).join('<br>') + '</p>' : '') +
+        (res.type ? '<div class="callout"><div><strong>Reste à saisir par le chef d\'agrès</strong><span class="sub">L\'équipage et les rôles (absents des messages CISU, ou repris du CRSS), le port de l\'ARI, la contamination et la décontamination.</span></div></div>' : '') +
+        '<details class="cisu-raw"><summary>Voir les messages reçus (JSON)</summary><pre>' + esc(JSON.stringify(list, null, 2).slice(0, 20000)) + '</pre></details>';
+    }
+    dlg.querySelector('#cisu-gen').onclick = function () { var k = dlg.querySelector('#cisu-sc').value; show(C.generate(k), 'intervention fictive générée : ' + C.SCENARIOS[k]); };
+    dlg.querySelector('#cisu-ans').onclick = async function () {
+      try { var list = await Promise.all(CISU_ANS.map(function (f) { return fetch('assets/demo/cisu-ans/' + f).then(function (r) { if (!r.ok) throw new Error(f); return r.json(); }); })); show(list, "exemple officiel publié par l'ANS (dépôt SAMU-Hub-Modeles)"); }
+      catch (e) { box.innerHTML = '<p class="empty">Exemple indisponible.</p>'; }
+    };
+    dlg.querySelector('#cisu-file').onchange = async function (e) {
+      var files = Array.prototype.slice.call(e.target.files || []);
+      if (!files.length) return;
+      try { var list = await Promise.all(files.map(function (f) { return f.text().then(function (t) { try { return JSON.parse(t); } catch (er) { throw new Error(f.name + " n'est pas un JSON valide."); } }); })); show(list, files.length + ' fichier' + (files.length > 1 ? 's' : '') + ' importé' + (files.length > 1 ? 's' : '')); }
+      catch (er) { res = null; box.innerHTML = '<div class="callout red"><div><strong>Fichier refusé</strong><span class="sub">' + esc(er.message) + '</span></div></div>'; }
+    };
+  }
+
   function openNewOperation() {
     var cas = db.users.filter(function (u) { return u.role === 'cos'; }).sort(function (a, b) { return (a.id === db.meId ? -1 : 0) - (b.id === db.meId ? -1 : 0) || a.name.localeCompare(b.name); });
     var num = 'OP-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
