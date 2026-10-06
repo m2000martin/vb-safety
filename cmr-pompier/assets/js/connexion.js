@@ -61,9 +61,11 @@
         codeInput.setAttribute('aria-invalid', 'true'); codeInput.select();
         show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error');
       } else if ((err.status === 400 || err.status === 403) && p.role === 'admin') {
-        // Profil administrateur pas encore installé sur le serveur : aperçu sans serveur proposé
-        show("Le profil administrateur n'est pas encore installé sur le serveur de démonstration. Ouvrez-le en aperçu sans serveur : vos réglages resteront propres à cette fenêtre.", 'warn');
-        offline.hidden = false;
+        // Profil administrateur pas encore installé sur le serveur : ouverture directe en aperçu sans serveur
+        var okA = false; try { okA = (await sha256(codeValue())) === CODE_HASH; } catch (e2) {}
+        if (okA) { var sa = VBS.offlinePreview(p); location.href = VBS.HOME[sa.role]; return; }
+        codeInput.setAttribute('aria-invalid', 'true'); codeInput.select();
+        show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error');
       } else if (err.status === 400 || err.status === 403) {
         show('Identifiants refusés par le serveur de démonstration.', 'error');
       } else {
