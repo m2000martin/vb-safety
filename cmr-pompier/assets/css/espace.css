@@ -734,3 +734,30 @@ dialog.modal .pv { margin: 0; }
 .adm-col .wbar { grid-template-columns: minmax(80px, 42%) 1fr auto; }
 @media (max-width: 760px) { .adm-col .pv-body { grid-template-columns: 1fr; } }
 .adm-col .w-head { flex-wrap: wrap; row-gap: 2px; } .adm-col .w-head h3 { font-size: 15px; white-space: nowrap; }
+/* ---------- EPI : par agent et changement ---------- */
+.epi-q { max-width: 420px; }
+.epi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 14px; }
+.epi-card .panel-head { align-items: baseline; }
+.epi-tab { width: 100%; border-collapse: collapse; font-size: 14px; }
+.epi-tab th, .epi-tab td { padding: 7px 6px; border-top: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.epi-tab th { color: var(--muted); font-weight: 600; width: 34%; }
+.epi-tab tr.hit th, .epi-tab tr.hit td { background: var(--warn-soft); }
+.epi-tab .epi-feux { font-size: 13px; color: var(--muted); min-width: 70px; }
+.epi-tab .t-act { text-align: right; }
+.epi-hit { margin-bottom: 14px; }
+.chg-rows { display: flex; flex-direction: column; gap: 10px; }
+.chg-row { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--surface); }
+.chg-in { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.chg-in .form-2 { margin: 0; }
+.chg-msgs { display: flex; flex-direction: column; gap: 6px; }
+.epi-msg { display: flex; gap: 8px; align-items: flex-start; margin: 0; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; line-height: 1.4; }
+.epi-msg .icon { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+.epi-msg.ok { background: var(--ok-soft); color: #1F5A22; }
+.epi-msg.warn { background: var(--warn-soft); color: #7A4A00; }
+.epi-msg.err { background: var(--bg); color: var(--text); border: 1px solid var(--line-strong); }
+.epi-msg.alarm { background: var(--danger-soft); color: var(--danger); font-weight: 600; border: 1px solid #F3B9B5; animation: epi-pulse 1.2s ease-out 1; }
+@keyframes epi-pulse { 0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, .45); } 100% { box-shadow: 0 0 0 10px rgba(198, 40, 40, 0); } }
+@media (prefers-reduced-motion: reduce) { .epi-msg.alarm { animation: none; } }
+.chg-force { font-size: 13.5px; color: var(--danger); font-weight: 600; }
+@media (max-width: 600px) { .epi-grid { grid-template-columns: 1fr; } .epi-tab .epi-feux { display: none; } }
+.chg-in[hidden], .chg-force[hidden] { display: none !important; }

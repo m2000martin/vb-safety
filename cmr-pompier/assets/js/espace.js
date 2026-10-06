@@ -34,6 +34,7 @@
     regl: { id: 'reglementation', label: 'Suivi réglementation', icon: 'scale' },
     tdbHab: { id: 'tableau-de-bord', label: 'Tableau de bord', icon: 'home' },
     tenues: { id: 'tenues', label: 'Tenues de feu', icon: 'list' },
+    epiAgents: { id: 'epi-agents', label: 'Par agent', icon: 'users' },
     changements: { id: 'changements', label: 'Changements de tenue', icon: 'send' },
     droits: { id: 'droits', label: "Droits d'accès", icon: 'shield' },
     indicateurs: { id: 'indicateurs', label: 'Tableaux de bord', icon: 'chart' }
@@ -67,6 +68,7 @@
     ],
     habillement: [
       item(M.tdbHab, 'Les agents dont la tenue est à changer après une intervention sur feu, les tenues à laver et les alertes de seuil.'),
+      item(M.epiAgents, "Les tenues de chaque agent. Recherchez par nom, matricule ou numéro d'EPI, et changez une tenue en confirmant le numéro rendu."),
       item(M.changements, "Vous enregistrez chaque changement de tenue : l'ancienne part au lavage, la nouvelle est attribuée à l'agent. Les remplacements au seuil d'alerte arrivent ici aussi."),
       item(M.tenues, 'Toutes les tenues du centre : numéro, agent, état, nombre de feux et de lavages. Vous pouvez modifier les numéros et attribuer une tenue.'),
       item(M.exp, 'Export de l\'état des tenues du centre.')
@@ -1355,23 +1357,131 @@
         '<input class="input" data-num="' + ty + '" maxlength="20" placeholder="N° de la nouvelle tenue"' + (st.length ? ' hidden' : '') + '></div>';
     }).join('');
   }
-  function openChangement(agentId) {
-    agentId = agentId || (aChanger()[0] || {}).agent || '';
-    var dlg = modal('Enregistrer un changement de tenue', '<div class="field"><label class="label" for="ch-agent">Agent</label><select class="select" id="ch-agent">' + agentOptions(agentId) + '</select></div>' +
-      '<fieldset class="fs"><legend class="label">Éléments changés et nouvelle tenue</legend><div id="ch-rows">' + chgRows(agentId || (db.users.filter(function (u) { return u.role === 'agent' || u.role === 'cos'; })[0] || {}).id) + '</div></fieldset>' +
-      '<p class="note">L\'ancienne tenue passe « à laver », la nouvelle est attribuée à l\'agent.</p>',
-      [{ label: 'Enregistrer', primary: true, run: async function (d) {
-        var agent = d.querySelector('#ch-agent').value;
-        var types = Array.prototype.map.call(d.querySelectorAll('[name=ty]:checked'), function (c) { return c.value; });
-        if (!types.length) throw new Error('Cochez au moins un élément.');
-        var numeros = {};
-        types.forEach(function (ty) { var v = d.querySelector('[data-new="' + ty + '"]').value || d.querySelector('[data-num="' + ty + '"]').value.trim().toUpperCase(); if (!v) throw new Error('Indiquez le numéro de la nouvelle ' + TENUE[ty].toLowerCase() + '.'); numeros[ty] = v; });
-        await VBSData.create(S, 'mouvements_epi', { type: 'changement', agent: agent, centre: (db.me || {}).centre, types: types, numeros: numeros, statut: 'traitee', auto: false, motif: 'Changement après intervention', traite_par: db.meId });
-        toast('Changement enregistré : l\'ancienne tenue est à laver.'); await reload();
+  // =================================================================== EPI : contrôle d'un changement
+  // Vérifie, pour un agent et un type de tenue, le numéro actuel confirmé et le nouveau numéro.
+  function normNum(v) { return String(v || '').trim().toUpperCase().replace(/\s+/g, ''); }
+  function tenueByNum(n) { n = normNum(n); return n ? (db.tenues || []).filter(function (t) { return normNum(t.numero) === n; })[0] || null : null; }
+  function holder(t) { var u = t && t.agent ? db.byId[t.agent] : null; return u ? (u.grade ? u.grade + ' ' : '') + u.name + ' (' + u.matricule + ')' : ''; }
+  var UN = { veste: 'une veste de feu', surpantalon: 'un pantalon de feu', cagoule: 'une cagoule' };
+  function article(ty) { return ty === 'surpantalon' ? 'le pantalon de feu' : ty === 'cagoule' ? 'la cagoule' : 'la veste de feu'; }
+  function epiCheck(agentId, ty, curTyped, newTyped, force) {
+    var out = { errors: [], warns: [], infos: [], conflict: null };
+    var cur = tenuesOf(agentId).filter(function (t) { return t.type === ty; })[0] || null;
+    // 1. Numéro actuel, lu sur la tenue rendue par l'agent
+    if (cur) {
+      if (!normNum(curTyped)) out.errors.push('Confirmez le numéro de ' + article(ty) + ' rendue par l\'agent.');
+      else if (normNum(curTyped) !== normNum(cur.numero)) {
+        var other = tenueByNum(curTyped);
+        if (other && other.agent && other.agent !== agentId) out.errors.push('Conflit : ' + normNum(curTyped) + ' est attribuée à ' + holder(other) + ', pas à cet agent.');
+        else out.errors.push('Le numéro saisi ne correspond pas : ' + article(ty) + ' enregistrée pour cet agent porte le n° ' + cur.numero + '.');
+      }
+    } else out.infos.push('Aucune tenue de ce type enregistrée pour cet agent : rien à confirmer.');
+    // 2. Nouveau numéro
+    var n = normNum(newTyped);
+    if (!n) { out.errors.push('Saisissez le numéro de la nouvelle tenue.'); return out; }
+    if (cur && n === normNum(cur.numero)) { out.errors.push('Le nouveau numéro est celui de la tenue actuelle.'); return out; }
+    var f = tenueByNum(n);
+    if (!f) { out.infos.push('Numéro inconnu au centre : la tenue ' + n + ' sera créée (0 feu).'); return out; }
+    if (f.type !== ty) { out.errors.push('Conflit : ' + n + ' est ' + UN[f.type] + ', pas ' + UN[ty] + '.'); return out; }
+    if (f.statut === 'reformee') { out.errors.push('Conflit : la tenue ' + n + ' est réformée.'); return out; }
+    if (f.agent && f.agent !== agentId) {
+      out.conflict = f;
+      if (!force) out.errors.push('Conflit : la tenue ' + n + ' est déjà attribuée à ' + holder(f) + '.');
+      else out.warns.push('La tenue ' + n + ' sera retirée à ' + holder(f) + '.');
+    } else if (f.statut === 'contaminee') { out.errors.push('Conflit : la tenue ' + n + ' est contaminée. Elle doit passer au lavage avant d\'être attribuée.'); return out; }
+    else if (f.statut === 'au_lavage') { out.errors.push('Conflit : la tenue ' + n + ' est au lavage.'); return out; }
+    else out.infos.push('En stock · ' + (f.nb_feux || 0) + ' feux depuis la mise en service.');
+    if ((+f.nb_feux || 0) >= (+f.seuil_feux || VBSData.SEUIL)) out.warns.push('Cette tenue a atteint le seuil d\'alerte (' + (f.nb_feux || 0) + ' feux).');
+    return out;
+  }
+  function epiMsg(r) {
+    return r.errors.map(function (m) { return '<p class="epi-msg ' + (/^Conflit/.test(m) ? 'alarm' : 'err') + '">' + icon('alert') + '<span>' + esc(m) + '</span></p>'; }).join('') +
+      r.warns.map(function (m) { return '<p class="epi-msg warn">' + icon('alert') + '<span>' + esc(m) + '</span></p>'; }).join('') +
+      (r.errors.length ? '' : r.infos.map(function (m) { return '<p class="epi-msg ok">' + icon('check') + '<span>' + esc(m) + '</span></p>'; }).join(''));
+  }
+  function stockList(ty) { return '<datalist id="dl-' + ty + '">' + stockOf(ty).map(function (x) { return '<option value="' + esc(x.numero) + '">' + (x.nb_feux || 0) + ' feux · en stock</option>'; }).join('') + '</datalist>'; }
+
+  // Changement de tenue : pour chaque élément, numéro actuel confirmé puis nouveau numéro
+  function openChangement(agentId, onlyType) {
+    agentId = agentId || (aChanger()[0] || {}).agent || ((db.users.filter(function (u) { return u.role === 'agent' || u.role === 'cos'; })[0]) || {}).id || '';
+    function rows(aid) {
+      var cur = tenuesOf(aid);
+      return Object.keys(TENUE).map(function (ty) {
+        var t = cur.filter(function (x) { return x.type === ty; })[0], on = onlyType ? onlyType === ty : !!(t && t.statut === 'contaminee');
+        return '<div class="chg-row" data-ty="' + ty + '"><label class="check"><input type="checkbox" data-on' + (on ? ' checked' : '') + '> <b>' + TENUE[ty] + '</b> <span class="note">' + (t ? TST[t.statut][0].toLowerCase() + ' · ' + (t.nb_feux || 0) + ' feux' : 'aucune enregistrée') + '</span></label>' +
+          '<div class="chg-in"' + (on ? '' : ' hidden') + '><div class="form-2">' +
+            '<div class="field"><label class="label">N° actuel, lu sur la tenue rendue</label><input class="input" data-cur maxlength="20" autocomplete="off"' + (t ? ' placeholder="Recopiez le n° de l\'étiquette"' : ' disabled placeholder="Aucune tenue à rendre"') + '></div>' +
+            '<div class="field"><label class="label">Nouveau n°</label><input class="input" data-newn maxlength="20" autocomplete="off" list="dl-' + ty + '" placeholder="Saisissez ou choisissez en stock"></div></div>' +
+            '<div class="chg-msgs" data-msgs></div>' +
+            '<label class="check chg-force" hidden><input type="checkbox" data-force> <span data-force-txt></span></label>' +
+          '</div></div>';
+      }).join('') + Object.keys(TENUE).map(stockList).join('');
+    }
+    var dlg = modal('Changer une tenue', '<div class="field"><label class="label" for="ch-agent">Agent</label><select class="select" id="ch-agent">' + agentOptions(agentId) + '</select></div>' +
+      '<div id="ch-rows" class="chg-rows">' + rows(agentId) + '</div>' +
+      '<p class="note">La tenue rendue passe « contaminée, à laver », la nouvelle est attribuée à l\'agent.</p>',
+      [{ label: 'Enregistrer le changement', primary: true, run: async function (d) {
+        var agent = d.querySelector('#ch-agent').value, types = [], numeros = {}, details = [], forced = [];
+        var rs = d.querySelectorAll('.chg-row');
+        for (var i = 0; i < rs.length; i++) {
+          var row = rs[i], ty = row.dataset.ty;
+          if (!row.querySelector('[data-on]').checked) continue;
+          var r = check(row);
+          if (r.errors.length) throw new Error(TENUE[ty] + ' : ' + r.errors[0]);
+          var cur = tenuesOf(agent).filter(function (x) { return x.type === ty; })[0];
+          types.push(ty); numeros[ty] = normNum(row.querySelector('[data-newn]').value);
+          details.push(TENUE[ty] + ' ' + (cur ? cur.numero : '—') + ' → ' + numeros[ty]);
+          if (r.conflict) forced.push(numeros[ty] + ' retirée à ' + holder(r.conflict));
+        }
+        if (!types.length) throw new Error('Cochez au moins un élément à changer.');
+        await VBSData.create(S, 'mouvements_epi', { type: 'changement', agent: agent, centre: (db.me || {}).centre, types: types, numeros: numeros, statut: 'traitee', auto: false, motif: 'Changement · ' + details.join(' · ') + (forced.length ? ' · conflit confirmé : ' + forced.join(', ') : ''), traite_par: db.meId });
+        toast('Changement enregistré : la tenue rendue est à laver.'); await reload();
       } }]);
-    function bindRows() { dlg.querySelectorAll('[data-new]').forEach(function (sel) { sel.onchange = function () { dlg.querySelector('[data-num="' + sel.dataset.new + '"]').hidden = !!sel.value; }; }); }
-    dlg.querySelector('#ch-agent').onchange = function (e) { dlg.querySelector('#ch-rows').innerHTML = chgRows(e.target.value); bindRows(); };
+    function check(row) {
+      var r = epiCheck(dlg.querySelector('#ch-agent').value, row.dataset.ty, row.querySelector('[data-cur]').value, row.querySelector('[data-newn]').value, row.querySelector('[data-force]').checked);
+      var fl = row.querySelector('.chg-force');
+      if (r.conflict) { fl.hidden = false; row.querySelector('[data-force-txt]').textContent = 'Je confirme : retirer la tenue ' + r.conflict.numero + ' à ' + holder(r.conflict) + ' et l\'attribuer à cet agent.'; }
+      else { fl.hidden = true; row.querySelector('[data-force]').checked = false; }
+      return r;
+    }
+    function refresh(row, show) { var r = check(row); row.querySelector('[data-msgs]').innerHTML = show ? epiMsg(r) : ''; }
+    function bindRows() {
+      dlg.querySelectorAll('.chg-row').forEach(function (row) {
+        row.querySelector('[data-on]').onchange = function (e) { row.querySelector('.chg-in').hidden = !e.target.checked; if (e.target.checked) (row.querySelector('[data-cur]:not([disabled])') || row.querySelector('[data-newn]')).focus(); };
+        row.querySelectorAll('[data-cur],[data-newn]').forEach(function (inp) { inp.oninput = function () { refresh(row, true); }; });
+        row.querySelector('[data-force]').onchange = function () { refresh(row, true); };
+      });
+    }
+    dlg.querySelector('#ch-agent').onchange = function (e) { dlg.querySelector('#ch-rows').innerHTML = rows(e.target.value); bindRows(); };
     bindRows();
+    var first = dlg.querySelector('.chg-in:not([hidden]) [data-cur]:not([disabled])'); if (first) first.focus();
+  }
+
+  // =================================================================== EPI : vue par agent, recherche par agent ou par n°
+  var eQ = '';
+  function viewEpiAgents(root) {
+    var q = normNum(eQ), ql = eQ.trim().toLowerCase();
+    var people = db.users.filter(function (u) { return u.role === 'agent' || u.role === 'cos'; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+    var hitT = q ? (db.tenues || []).filter(function (t) { return t.statut !== 'reformee' && normNum(t.numero).indexOf(q) !== -1; }) : [];
+    var hitIds = {}; hitT.forEach(function (t) { if (t.agent) hitIds[t.agent] = 1; });
+    var list = !ql ? people : people.filter(function (u) { return hitIds[u.id] || (u.name + ' ' + u.matricule + ' ' + (u.grade || '')).toLowerCase().indexOf(ql) !== -1; });
+    var loose = hitT.filter(function (t) { return !t.agent; });
+    var exact = q ? (db.tenues || []).filter(function (t) { return normNum(t.numero) === q; })[0] : null;
+    var MAX = 24, shown = list.slice(0, MAX);
+    root.innerHTML = head('Équipement par agent', 'Les tenues de feu attribuées à chaque agent. Recherchez par nom, matricule ou numéro d\'EPI.', '<button class="btn btn-primary" type="button" data-chg="">Changer une tenue</button>') +
+      '<div class="filters"><input class="input epi-q" id="e-q" placeholder="Nom, matricule ou n° d\'EPI (ex. V-1012)" value="' + esc(eQ) + '" autocomplete="off"><span class="note">' + list.length + ' agent' + (list.length > 1 ? 's' : '') + (loose.length ? ' · ' + loose.length + ' EPI non attribué' + (loose.length > 1 ? 's' : '') : '') + '</span></div>' +
+      (exact ? '<div class="callout epi-hit"><span class="icon-tile">' + icon('shield') + '</span><div><strong>' + esc(exact.numero) + ' · ' + TENUE[exact.type] + '</strong><span class="sub">' + esc(TST[exact.statut][0]) + ' · ' + (exact.agent ? 'attribuée à ' + esc(holder(exact)) : 'non attribuée') + ' · ' + (exact.nb_feux || 0) + ' feux, ' + (exact.nb_lavages || 0) + ' lavages</span></div></div>' : '') +
+      (shown.length ? '<div class="epi-grid">' + shown.map(function (u) {
+        var mine = tenuesOf(u.id);
+        return '<section class="panel epi-card"><div class="panel-head"><h3>' + esc((u.grade ? u.grade + ' ' : '') + u.name) + '</h3><span class="note">' + esc(u.matricule) + '</span></div><table class="epi-tab"><tbody>' + Object.keys(TENUE).map(function (ty) {
+          var t = mine.filter(function (x) { return x.type === ty; })[0], hit = t && q && normNum(t.numero).indexOf(q) !== -1;
+          return '<tr' + (hit ? ' class="hit"' : '') + '><th scope="row">' + TENUE[ty] + '</th><td>' + (t ? '<b>' + esc(t.numero) + '</b>' : '<span class="note">aucune</span>') + '</td><td>' + (t ? badge(TST[t.statut]) : '') + '</td><td class="epi-feux">' + (t ? (t.nb_feux || 0) + ' / ' + (t.seuil_feux || VBSData.SEUIL) + seuilBar(t) : '') + '</td><td class="t-act"><button class="btn btn-secondary btn-sm" type="button" data-chg="' + u.id + '|' + ty + '">' + (t ? 'Changer' : 'Attribuer') + '</button></td></tr>';
+        }).join('') + '</tbody></table></section>';
+      }).join('') + '</div>' + (list.length > MAX ? '<p class="note">' + (list.length - MAX) + ' autres agents : affinez la recherche.</p>' : '')
+        : '<section class="panel"><p class="empty">Aucun agent ne correspond.</p></section>') +
+      (loose.length ? '<section class="panel"><div class="panel-head"><h3>EPI correspondants non attribués</h3></div><ul class="rows">' + loose.slice(0, 20).map(function (t) { return '<li><span class="what"><b>' + esc(t.numero) + '</b><small>' + TENUE[t.type] + ' · ' + (t.nb_feux || 0) + ' feux</small></span><span class="right">' + badge(TST[t.statut]) + ' ' + tenueActions(t) + '</span></li>'; }).join('') + '</ul></section>' : '');
+    var inp = root.querySelector('#e-q'); inp.oninput = function () { eQ = inp.value; var pos = inp.selectionStart; route(); var n2 = document.getElementById('e-q'); n2.focus(); n2.setSelectionRange(pos, pos); };
+    bindHab(root);
   }
 
   function habStats() {
@@ -1385,7 +1495,7 @@
   }
   function tenueActions(t) {
     var a = [];
-    if (t.statut === 'contaminee' && t.agent) a.push('<button class="btn btn-primary btn-sm" type="button" data-chg="' + t.agent + '">Changer</button>');
+    if (t.statut === 'contaminee' && t.agent) a.push('<button class="btn btn-primary btn-sm" type="button" data-chg="' + t.agent + '|' + t.type + '">Changer</button>');
     if (t.statut === 'contaminee' && !t.agent) a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="lavage|' + t.id + '">Envoyer au lavage</button>');
     if (t.statut === 'au_lavage') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="retour|' + t.id + '">Retour de lavage</button>');
     if (t.statut === 'en_stock') a.push('<button class="btn btn-secondary btn-sm" type="button" data-tact="attribuer|' + t.id + '">Attribuer</button>');
@@ -1431,7 +1541,7 @@
   }
   function bindHab(root) {
     root.querySelectorAll('[data-traiter]').forEach(function (b) { b.onclick = function () { openTraiter((db.mouvements_epi || []).find(function (m) { return m.id === b.dataset.traiter; })); }; });
-    root.querySelectorAll('[data-chg]').forEach(function (b) { b.onclick = function () { openChangement(b.dataset.chg); }; });
+    root.querySelectorAll('[data-chg]').forEach(function (b) { b.onclick = function () { var q = b.dataset.chg.split('|'); openChangement(q[0], q[1]); }; });
     root.querySelectorAll('[data-tact]').forEach(function (b) { b.onclick = function () { var q = b.dataset.tact.split('|'); tenueAct(q[0], (db.tenues || []).find(function (t) { return t.id === q[1]; }), b); }; });
   }
   async function tenueAct(act, t, btn) {
@@ -1464,6 +1574,10 @@
       [{ label: 'Enregistrer', primary: true, run: async function (d) {
         var data = { numero: need(d.querySelector('#tn-num').value, 'Indiquez le numéro.').trim().toUpperCase(), type: d.querySelector('#tn-type').value, agent: d.querySelector('#tn-agent').value, statut: d.querySelector('#tn-st').value, nb_feux: +d.querySelector('#tn-feux').value || 0, seuil_feux: +d.querySelector('#tn-seuil').value || VBSData.SEUIL };
         if (data.agent && data.statut === 'en_stock') data.statut = 'en_service';
+        var dup = (db.tenues || []).filter(function (x) { return normNum(x.numero) === normNum(data.numero) && x.id !== t.id; })[0];
+        if (dup) throw new Error('Conflit : le n° ' + data.numero + ' existe déjà (' + TENUE[dup.type].toLowerCase() + (dup.agent ? ', attribuée à ' + holder(dup) : ', ' + TST[dup.statut][0].toLowerCase()) + ').');
+        var twin = data.agent ? (db.tenues || []).filter(function (x) { return x.agent === data.agent && x.type === data.type && x.id !== t.id && x.statut !== 'reformee'; })[0] : null;
+        if (twin) throw new Error('Conflit : cet agent a déjà ' + article(data.type) + ' n° ' + twin.numero + '. Utilisez « Changer » pour la remplacer.');
         if (isNew) await VBSData.create(S, 'tenues', Object.assign({ centre: (db.me || {}).centre, feux_depuis_lavage: 0, nb_lavages: 0, ef_cumul: 0 }, data)); else await VBSData.update(S, 'tenues', t.id, data);
         toast('Tenue enregistrée.'); await reload();
       } }]);
@@ -1727,7 +1841,7 @@
   var VIEWS = {
     'tableau-de-bord': { agent: viewDashPerso, cos: viewDashCos, commandement: viewDashCmd, sssm: viewDashSssm, habillement: viewDashHab },
     dossier: viewDossier, rapports: { cos: viewRapportsCos, sssm: viewRapportsSssm }, gestion: viewGestion,
-    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, tenues: viewTenues, changements: viewChangements,
+    suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, tenues: viewTenues, changements: viewChangements, 'epi-agents': viewEpiAgents,
     droits: viewDroits, indicateurs: viewIndicateurs
   };
   function renderInto(id, root) {
