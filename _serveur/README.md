@@ -44,6 +44,10 @@ Il peut restreindre, jamais élargir : les données d'exposition restent réserv
 
 ### Mise en service
 
+Le plus simple : copier `pb_migrations/1791300000_admin_parametres.js` dans le dossier `pb_migrations/`
+du serveur et redémarrer PocketBase. La migration fait les trois étapes ci-dessous.
+À défaut, à la main :
+
 1. Collection `users` : ajouter la valeur `admin` au champ `role`, puis créer le compte de démonstration
    `ADM-0001` (mot de passe `Demo-Admin-2026`, centre de démonstration).
 2. Créer la collection `parametres` (type « base ») :
