@@ -1701,18 +1701,20 @@
     var typeTag = function (w) { return '<span class="badge ' + (w.type === 'kpi' ? 'badge-info' : 'badge-neutral') + '">' + (w.type === 'kpi' ? 'Indicateur' : 'Graphique') + '</span>'; };
     root.innerHTML = head('Tableaux de bord', 'Ajoutez des indicateurs et des graphiques au tableau de bord de chaque profil, choisis dans un catalogue validé. Chacun se calcule uniquement sur les données que ce profil voit déjà.', '<span class="note">' + lastSave() + '</span>') +
       '<div class="seg adm-seg" role="group" aria-label="Profil">' + ADM_ROLES.map(function (r) { var n = (cfg.widgets[r] || []).length; return '<button type="button" data-role="' + r + '" aria-pressed="' + (r === admRole) + '">' + esc(ROLE_LABEL[r]) + (n ? ' (' + n + ')' : '') + '</button>'; }).join('') + '</div>' +
-      '<div class="grid grid-2 adm-ind">' +
-        '<section class="panel"><div class="panel-head"><h3>Sur le tableau de bord · ' + list.length + ' / ' + max + '</h3>' + previewBtn(admRole) + '</div>' +
+      '<div class="grid grid-2 adm-ind"><div class="adm-col">' +
+        '<section class="panel"><div class="panel-head"><h3>Sur le tableau de bord · ' + list.length + ' / ' + max + '</h3><div class="adm-btns"><button class="btn btn-secondary btn-sm" type="button" data-pv="' + admRole + '">Aperçu</button>' + previewBtn(admRole) + '</div></div>' +
           (list.length ? '<ol class="adm-order">' + list.map(function (id, i) { var w = VBSParam.widget(id); return '<li><span class="what"><b>' + esc(w.label) + '</b> ' + typeTag(w) + '<small>' + esc(w.desc) + '</small></span><span class="right"><button class="icon-btn sm" type="button" data-up="' + i + '" aria-label="Monter"' + (i ? '' : ' disabled') + '>↑</button><button class="icon-btn sm" type="button" data-down="' + i + '" aria-label="Descendre"' + (i < list.length - 1 ? '' : ' disabled') + '>↓</button><button class="link-btn" type="button" data-rm="' + i + '">Retirer</button></span></li>'; }).join('') + '</ol>'
             : '<p class="empty">Aucun indicateur ajouté : le tableau de bord d\'origine s\'affiche seul.</p>') +
           '<p class="note">Les indicateurs ajoutés s\'affichent sous le tableau de bord d\'origine, dans cet ordre. ' + max + ' au maximum.</p></section>' +
+        '<section class="adm-pv"><div class="adm-pv-head"><h3>Aperçu en direct</h3><span class="note">Mis à jour à chaque modification</span></div>' + previewFrame(admRole, cfg) + '</section>' +
+      '</div>' +
         '<section class="panel"><div class="panel-head"><h3>Catalogue · ' + esc(ROLE_LABEL[admRole]) + '</h3></div><ul class="adm-cat">' + cat.map(function (w) {
           var added = list.indexOf(w.id) !== -1;
           return '<li><span class="what"><b>' + esc(w.label) + '</b> ' + typeTag(w) + '<small>' + esc(w.desc) + '</small></span><span class="right">' + (added ? '<span class="note">' + icon('check') + 'Ajouté</span>' : '<button class="btn btn-secondary btn-sm" type="button" data-add="' + w.id + '"' + (list.length >= max ? ' disabled title="' + max + ' indicateurs au maximum"' : '') + '>Ajouter</button>') + '</span></li>';
         }).join('') + '</ul></section>' +
-      '</div>' +
-      '<section class="adm-pv"><div class="panel-head"><h3>Aperçu en direct</h3><span class="note">Ce que verra le profil ' + esc(ROLE_LABEL[admRole]) + ', mis à jour à chaque modification.</span></div>' + previewFrame(admRole, cfg) + '</section>';
+      '</div>';
     bindCharts(root.querySelector('.adm-pv'));
+    root.querySelectorAll('[data-pv]').forEach(function (b) { b.onclick = function () { openPreview(b.dataset.pv, cfg); }; });
     root.querySelectorAll('[data-role]').forEach(function (b) { b.onclick = function () { admRole = b.dataset.role; viewIndicateurs(root); }; });
     var save = function () { cfg.widgets[admRole] = list; saveConfig(cfg).catch(function (e) { toast(e.message); }); };
     root.querySelectorAll('[data-add]').forEach(function (b) { b.onclick = function () { if (list.length < max) { list.push(b.dataset.add); save(); } }; });

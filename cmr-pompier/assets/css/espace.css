@@ -723,3 +723,14 @@ body:has(.action-bar) .asst-fab { bottom: 92px; }
 .pv-denied .icon { width: 16px; height: 16px; flex: none; margin-top: 2px; color: var(--danger); }
 dialog.modal .pv { margin: 0; }
 @media (max-width: 760px) { .pv-body { grid-template-columns: 1fr; } .pv-side ul { flex-direction: row; flex-wrap: wrap; } .pv-hid { margin-top: 0; } }
+/* Aperçu en direct dans la colonne de gauche de « Tableaux de bord » */
+.adm-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.adm-col .adm-pv { margin-top: 0; }
+.adm-pv-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.adm-pv-head h3 { font-size: 16px; font-weight: 800; }
+.adm-col .pv-body { grid-template-columns: 150px 1fr; }
+.adm-col .pv .grid { grid-template-columns: 1fr; }
+.adm-col .pv-main { padding: 12px; }
+.adm-col .wbar { grid-template-columns: minmax(80px, 42%) 1fr auto; }
+@media (max-width: 760px) { .adm-col .pv-body { grid-template-columns: 1fr; } }
+.adm-col .w-head { flex-wrap: wrap; row-gap: 2px; } .adm-col .w-head h3 { font-size: 15px; white-space: nowrap; }

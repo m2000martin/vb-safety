@@ -36,6 +36,10 @@ ok(await pg.locator('.adm-pv .pv .w-added .kpi').count() === 2 && await pg.locat
 ok((await pg.locator('.adm-pv .pv-side ul').innerText()).indexOf('Export') === -1 && (await pg.locator('.adm-pv .pv-hid').innerText()).includes('Export'), 'Admin · aperçu : page masquée signalée');
 ok((await pg.locator('.adm-pv .pv-denied').innerText()).includes('rédiger'), 'Admin · aperçu : action retirée signalée');
 ok(await pg.evaluate(() => VBSApp.getDb().interventions.length === 0), "Admin · l'aperçu n'a chargé aucune donnée réelle");
+ok(await pg.locator('.adm-col .adm-pv').count() === 1, 'Admin · aperçu en direct sous la liste du tableau de bord');
+await pg.click('.adm-col [data-pv="cos"]'); await wait(300);
+ok(await pg.locator('dialog .pv[data-pv-role="cos"] .w-added .kpi').count() === 2, 'Admin · bouton Aperçu depuis « Sur le tableau de bord »');
+await pg.keyboard.press('Escape'); await wait(200);
 await pg.screenshot({ path: SC + '/adm-indic.png' });
 // Aperçu CA/COS
 await pg.screenshot({ path: SC + '/adm-indic-pv.png', fullPage: true });
