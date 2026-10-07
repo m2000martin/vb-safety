@@ -1,4 +1,4 @@
-// Grandes opérations, relevés réglementaires, formations et lavage par lot, vérifiés dans Chromium (version française).
+// Interventions de grande ampleur, relevés réglementaires, formations et lavage par lot, vérifiés dans Chromium (version française).
 // Lancement : node _tests/operations.test.mjs  (depuis la racine du dépôt)
 import { createRequire } from 'node:module'; import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
 const require = createRequire(import.meta.url);
@@ -19,9 +19,9 @@ async function as(role, hash) {
   await pg.goto(B + '/cmr-pompier/connexion.html'); await pg.evaluate(([r, m, n]) => sessionStorage.setItem('vbs-session', JSON.stringify({ token: null, role: r, name: n, matricule: m, offline: true })), [role, ...P[role]]);
   await pg.goto(B + '/cmr-pompier/espace.html#' + (hash || 'tableau-de-bord')); await wait(800);
 }
-// 1. Commandement : grande opération, relève ajoutée, aucune donnée d'exposition
+// 1. Commandement : intervention de grande ampleur, relève ajoutée, aucune donnée d'exposition
 await as('commandement');
-ok(await pg.locator('.op-call').count() === 1, 'Commandement · grande opération récente sur le tableau de bord');
+ok(await pg.locator('.op-call').count() === 1, 'Commandement · intervention de grande ampleur récente sur le tableau de bord');
 await pg.click('.op-call a'); await wait(500);
 const bars0 = await pg.locator('.g-bar').count();
 ok(bars0 === 10 && await pg.locator('.g-rel').count() === 3, 'Commandement · chronologie : 10 engagements sur 3 relèves');
@@ -55,15 +55,22 @@ ok(/Visa du médecin/.test(printed) && /Suivi post-exposition proposé/.test(pri
 // Téléchargement en haut de page : périmètre et période
 const sumTxt = async () => (await pg.locator('.dl-sum span').first().innerText());
 const nAll = parseInt(await sumTxt(), 10);
-await pg.click('[data-dl="scope|groupement"]'); await wait(300); await pg.selectOption('#dl-grp', 'Sud'); await wait(300);
+await pg.selectOption('#dl-grp', 'Sud'); await wait(300);
 const nSud = parseInt(await sumTxt(), 10);
-await pg.click('[data-dl="scope|caserne"]'); await wait(300);
+await pg.selectOption('#dl-cis', { index: 1 }); await wait(300);
 const nCis = parseInt(await sumTxt(), 10);
-ok(nAll > nSud && nSud > 0 && nCis > 0 && nCis < nAll, 'SSSM · périmètre tout le monde / groupement / caserne (' + nAll + ' / ' + nSud + ' / ' + nCis + ')');
+await pg.selectOption('#dl-cis', ''); await pg.selectOption('#dl-grp', ''); await wait(300);
+await pg.fill('#dl-q', 'mart'); await wait(200);
+const hits = await pg.locator('#dl-res [data-pick]').count();
+await pg.press('#dl-q', 'Enter'); await wait(300);
+ok(hits >= 1 && parseInt(await sumTxt(), 10) === 1 && await pg.locator('.dl-chip').count() === 1, 'SSSM · recherche d\'un agent par son nom (' + hits + ' résultat)');
+await pg.click('#dl-clear'); await wait(300);
+await pg.selectOption('#dl-grp', 'Sud'); await wait(300); await pg.selectOption('#dl-cis', { index: 1 }); await wait(300);
+ok(nAll > nSud && nSud > 0 && nCis > 0 && nCis <= nSud, 'SSSM · sélection tous / groupement / caserne (' + nAll + ' / ' + nSud + ' / ' + nCis + ')');
 await pg.click('[data-dl="per|perso"]'); await wait(300); await pg.fill('#dl-from', new Date().getFullYear() + '-07-01'); await pg.locator('#dl-from').dispatchEvent('change'); await wait(300);
 await pg.click('#dl-pdf'); await wait(300);
 ok(/Relevé des activités potentiellement exposantes/.test(await pg.evaluate(() => window.__printed)), 'SSSM · relevés d\'une caserne sur une période personnalisée (PDF)');
-await pg.click('[data-dl="scope|tous"]'); await pg.click('[data-dl="per|annee"]'); await wait(300);
+await pg.selectOption('#dl-cis', ''); await pg.selectOption('#dl-grp', ''); await pg.click('[data-dl="per|annee"]'); await wait(300);
 await pg.click('#at-go'); await wait(300);
 ok(/Attestation d'exposition/.test(await pg.evaluate(() => window.__printed)), "SSSM · attestation d'exposition générée");
 // 4. Agent : formations dans son dossier, relevé annuel téléchargeable

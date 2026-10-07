@@ -18,7 +18,7 @@
     { id: 'rapport_valider', roles: ['sssm'], label: 'Valider et verrouiller les rapports', sel: '[data-validate-it], #ed-validate' },
     { id: 'mesures', roles: ['sssm'], label: 'Importer des mesures et saisir des prélèvements', sel: '[data-import], [data-prel]' },
     { id: 'referentiel', roles: ['sssm'], label: 'Modifier et valider le référentiel CMR', sel: '[data-mval], [data-medit], #ref-all' },
-    { id: 'operation_releve', roles: ['commandement', 'cos'], label: 'Ajouter une relève sur une grande opération', sel: '#add-releve' },
+    { id: 'operation_releve', roles: ['commandement', 'cos'], label: 'Ajouter une relève sur une intervention de grande ampleur', sel: '#add-releve' },
     { id: 'releves_viser', roles: ['sssm'], label: 'Contrôler et viser les relevés annuels', sel: '[data-rctl]' },
     { id: 'activites', roles: ['cos'], label: 'Déclarer une formation ou un entretien du matériel', sel: '#act-new' },
     { id: 'tenues', roles: ['habillement'], label: 'Enregistrer les changements et mouvements de tenues', sel: '[data-tact], [data-chg], #lv-out, #lv-in' }

@@ -39,7 +39,7 @@
     changements: { id: 'changements', label: 'Changements de tenue', icon: 'send' },
     droits: { id: 'droits', label: "Droits d'accès", icon: 'shield' },
     indicateurs: { id: 'indicateurs', label: 'Tableaux de bord', icon: 'chart' },
-    operations: { id: 'operations', label: 'Grandes opérations', icon: 'flame' },
+    operations: { id: 'operations', label: 'Interventions de grande ampleur', icon: 'flame' },
     releves: { id: 'releves', label: 'Relevés réglementaires', icon: 'file' }
   };
   function item(base, tour) { return Object.assign({}, base, { tour: tour }); }
@@ -66,7 +66,7 @@
     sssm: [
       item(M.tdb, 'Dossiers à jour ou non, alertes sur les cas particuliers, feux des dernières 24 h et tendance de contamination.'),
       item(M.rapportsSssm, "Toutes les interventions, engin par engin ou agent par agent. Corrigez un rapport, et importez les mesures (ex. CO sanguin) de toute une opération depuis un fichier."),
-      item(M.operations, "Les grandes opérations : la liste des personnels exposés, relève par relève, avec les durées cumulées, et les renforts à signaler à leur SDIS d'origine."),
+      item(M.operations, "Les interventions de grande ampleur : la liste des personnels exposés, relève par relève, avec les durées cumulées, et les renforts à signaler à leur SDIS d'origine."),
       item(M.suivi, "Le dossier de chaque agent et sa fiche individuelle d'exposition, par année, sur 12 mois glissants ou sur toute la carrière."),
       item(M.releves, "Le relevé annuel des activités exposantes et l'attestation d'exposition, au format de la circulaire du 14 janvier 2025. Vous contrôlez, visez et téléchargez."),
       item(M.exp, 'Tous les exports : interventions, expositions, référentiel.'),
@@ -320,7 +320,7 @@
     });
   }
   function centreName() { return 'CIS Démo-sur-Marne'; }
-  // Grande opération des 15 derniers jours : accès direct depuis le tableau de bord
+  // Intervention de grande ampleur des 15 derniers jours : accès direct depuis le tableau de bord
   function bigOpCallout() {
     var o = bigOps().filter(function (x) { return within(x.dateObj, 15); })[0]; if (!o) return '';
     var miss = o.reports.filter(function (x) { return x.statut === 'brouillon'; }).length, pers = {};
@@ -849,7 +849,7 @@
     var cas = db.users.filter(function (u) { return u.role === 'cos'; }).sort(function (a, b) { return (a.id === db.meId ? -1 : 0) - (b.id === db.meId ? -1 : 0) || a.name.localeCompare(b.name); });
     var num = 'OP-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
     var dlg = modal('Nouvelle opération à plusieurs agrès', '<p class="note">Vous êtes COS. Un rapport est ouvert pour chaque CA engagé : chacun remplit celui de son équipage.</p>' +
-      '<label class="check op-big"><input type="checkbox" id="op-big"' + (big ? ' checked' : '') + '> <span><b>Grande opération</b> : plusieurs jours, relèves successives, renforts. Les relèves suivantes s\'ajoutent depuis « Grandes opérations ».</span></label>' +
+      '<label class="check op-big"><input type="checkbox" id="op-big"' + (big ? ' checked' : '') + '> <span><b>Intervention de grande ampleur</b> : plusieurs jours, relèves successives, renforts. Les relèves suivantes s\'ajoutent depuis « Interventions de grande ampleur ».</span></label>' +
       '<div class="field" id="op-sec-f"' + (big ? '' : ' hidden') + '><label class="label" for="op-sec">Secteurs</label><input class="input" id="op-sec" maxlength="200" value="Secteur Nord, Secteur Est, Secteur Sud"><span class="hint">Séparés par des virgules.</span></div>' +
       '<div class="form-2"><div class="field"><label class="label" for="op-num">N° d\'opération</label><input class="input" id="op-num" value="' + num + '" maxlength="32"></div>' +
       '<div class="field"><label class="label" for="op-date">Date et heure</label><input class="input" id="op-date" type="datetime-local" value="' + localInput(new Date()) + '"></div></div>' +
@@ -1834,14 +1834,14 @@
     var o = OP_ID && db.ops[OP_ID];
     if (o) return viewOperation(root, o);
     var list = bigOps();
-    root.innerHTML = head('Grandes opérations', 'Feux de forêt, feux d\'entrepôt, opérations de plusieurs jours : chaque relève, chaque équipage et chaque rapport, au même endroit.', S.role === 'cos' && can('rapport_rediger') ? '<button class="btn btn-primary" type="button" id="new-op">Nouvelle opération</button>' : '') +
+    root.innerHTML = head('Interventions de grande ampleur', 'Feux de forêt, feux d\'entrepôt, opérations de plusieurs jours : chaque relève, chaque équipage et chaque rapport, au même endroit.', S.role === 'cos' && can('rapport_rediger') ? '<button class="btn btn-primary" type="button" id="new-op">Nouvelle opération</button>' : '') +
       (list.length ? '<div class="op-cards">' + list.map(function (op) {
         var n = op.reports.length, done = opDone(op);
         return '<a class="panel op-card" href="#operations/' + op.id + '"><div class="op-card-top"><span class="icon-tile warn">' + icon('flame') + '</span><div><b>' + esc(op.numero) + ' · ' + esc(TYPE[op.type_feu]) + '</b><small>' + esc(op.precision || '') + ' · ' + esc(op.commune || '') + '</small></div></div>' +
           '<div class="op-facts"><span><b>' + durTxt(opMinutes(op)) + '</b>du ' + fmtDT(op.dateObj) + '<br>au ' + fmtDT(opEnd(op)) + '</span><span><b>' + releves(op).length + '</b>relèves</span><span><b>' + n + '</b>engagements d\'agrès</span></div>' +
           badge(done === n ? ['Tous les rapports transmis', 'badge-ok'] : [done + ' sur ' + n + ' rapports transmis', n - done && op.reports.some(function (x) { return VBSData.reportState(x) === 'retard'; }) ? 'badge-late' : 'badge-pending']) + '</a>';
-      }).join('') + '</div>' : '<section class="panel"><p class="empty">Aucune grande opération pour le moment.</p></section>') +
-      '<p class="note">Une grande opération regroupe les engagements successifs : chaque agrès, à chaque relève, a son rapport rempli par son chef d\'agrès. Un agent qui revient sur une relève suivante cumule ses durées.</p>';
+      }).join('') + '</div>' : '<section class="panel"><p class="empty">Aucune intervention de grande ampleur pour le moment.</p></section>') +
+      '<p class="note">Une intervention de grande ampleur regroupe les engagements successifs : chaque agrès, à chaque relève, a son rapport rempli par son chef d\'agrès. Un agent qui revient sur une relève suivante cumule ses durées.</p>';
     var b = root.querySelector('#new-op'); if (b) b.onclick = function () { openNewOperation(true); };
   }
   function viewOperation(root, o) {
@@ -1935,7 +1935,7 @@
   var GROUPEMENTS = ['Nord', 'Sud', 'Est', 'Ouest', 'Centre'];
   var RV = { f: 'tous', st: '' };
   // Téléchargement : périmètre (tout le monde, groupement, caserne, agent) et période
-  var DL = { scope: 'tous', grp: 'Nord', cis: '', agent: '', per: 'annee', year: new Date().getFullYear(), from: '', to: '', vises: false };
+  var DL = { grp: '', cis: '', agent: '', per: 'annee', year: new Date().getFullYear(), from: '', to: '', vises: false };
   function cisOf(u) { return u.cis || centreName(); }
   function grpOf(u) { return u.groupement || 'Nord'; }
   function rvPeople() { return db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && !u.renfort; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }
@@ -1949,18 +1949,20 @@
     var f = DL.from ? new Date(DL.from + 'T00:00:00') : new Date(now.getFullYear(), 0, 1), t = DL.to ? new Date(DL.to + 'T23:59:59') : now;
     return { kind: 'perso', from: f, to: t, label: 'Du ' + fmtD(f) + ' au ' + fmtD(t) };
   }
-  function scopePeople() {
-    var p = rvPeople();
-    if (DL.scope === 'groupement') return p.filter(function (u) { return grpOf(u) === DL.grp; });
-    if (DL.scope === 'caserne') { var c = DL.cis || (casernes()[0] || [''])[0]; return p.filter(function (u) { return cisOf(u) === c; }); }
-    if (DL.scope === 'agent') { var a = DL.agent || (p[0] || {}).id; return p.filter(function (u) { return u.id === a; }); }
-    return p;
-  }
+  // Sélection en cascade : groupement → caserne → agent (tous par défaut à chaque niveau)
+  function scopeBase() { return rvPeople().filter(function (u) { return (!DL.grp || grpOf(u) === DL.grp) && (!DL.cis || cisOf(u) === DL.cis); }); }
+  function scopePeople() { var p = scopeBase(); return DL.agent ? p.filter(function (u) { return u.id === DL.agent; }) : p; }
   function scopeLabel() {
-    if (DL.scope === 'groupement') return 'Groupement ' + DL.grp;
-    if (DL.scope === 'caserne') return DL.cis || (casernes()[0] || [''])[0];
-    if (DL.scope === 'agent') { var u = db.byId[DL.agent] || scopePeople()[0] || {}; return (u.name || '') + (u.matricule ? ' · ' + u.matricule : ''); }
+    var u = DL.agent && db.byId[DL.agent];
+    if (u) return u.name + ' · ' + u.matricule;
+    if (DL.cis) return DL.cis;
+    if (DL.grp) return 'Groupement ' + DL.grp;
     return 'Tout le service';
+  }
+  function normQ(v) { return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); }
+  function searchPeople(q) {
+    q = normQ(q); if (!q) return [];
+    return scopeBase().filter(function (u) { return normQ(u.name + ' ' + u.matricule + ' ' + (u.grade || '')).indexOf(q) !== -1; }).slice(0, 8);
   }
   function rvData(u, rng, career) {
     if (career) rng = { all: true };
@@ -2027,20 +2029,22 @@
   }
   function dlPanel() {
     var people = rvPeople(), cis = casernes(), now = new Date(), rng = dlRange(), sel = scopePeople();
-    if (DL.scope === 'caserne' && !DL.cis && cis[0]) DL.cis = cis[0][0];
-    if (DL.scope === 'agent' && !DL.agent && people[0]) DL.agent = people[0].id;
     var withAct = sel.filter(function (u) { return rvData(u, rng).lines.length; });
     var vis = rng.kind === 'annee' ? withAct.filter(function (u) { return rvDoc(u, rng.year); }) : [];
     var n = DL.vises && rng.kind === 'annee' ? vis.length : withAct.length;
     var years = []; for (var k = 0; k < 4; k++) years.push(now.getFullYear() - k);
     var segB = function (key, opts) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-dl="' + key + '|' + o[0] + '" aria-pressed="' + (DL[key] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
-    var scopeSel = DL.scope === 'groupement' ? '<select class="select" id="dl-grp" aria-label="Groupement">' + GROUPEMENTS.map(function (g) { return '<option value="' + g + '"' + (g === DL.grp ? ' selected' : '') + '>' + g + '</option>'; }).join('') + '</select>'
-      : DL.scope === 'caserne' ? '<select class="select" id="dl-cis" aria-label="Caserne">' + GROUPEMENTS.map(function (g) { var l = cis.filter(function (c) { return c[1] === g; }); return l.length ? '<optgroup label="Groupement ' + g + '">' + l.map(function (c) { return '<option value="' + esc(c[0]) + '"' + (c[0] === DL.cis ? ' selected' : '') + '>' + esc(c[0]) + '</option>'; }).join('') + '</optgroup>' : ''; }).join('') + '</select>'
-      : DL.scope === 'agent' ? '<select class="select" id="dl-agent" aria-label="Agent">' + people.map(function (u) { return '<option value="' + u.id + '"' + (u.id === DL.agent ? ' selected' : '') + '>' + esc(u.name + ' · ' + u.matricule + ' · ' + cisOf(u)) + '</option>'; }).join('') + '</select>' : '';
+    var cisList = cis.filter(function (c) { return !DL.grp || c[1] === DL.grp; });
+    var who = DL.agent && db.byId[DL.agent];
+    var scopeSel = '<div class="dl-casc">' +
+      '<label class="dl-f"><span>Groupement</span><select class="select" id="dl-grp"><option value="">Tous les groupements</option>' + GROUPEMENTS.map(function (g) { return '<option value="' + g + '"' + (g === DL.grp ? ' selected' : '') + '>' + g + '</option>'; }).join('') + '</select></label>' +
+      '<label class="dl-f"><span>Caserne</span><select class="select" id="dl-cis"><option value="">Toutes les casernes</option>' + cisList.map(function (c) { return '<option value="' + esc(c[0]) + '"' + (c[0] === DL.cis ? ' selected' : '') + '>' + esc(c[0]) + (DL.grp ? '' : ' · ' + c[1]) + '</option>'; }).join('') + '</select></label>' +
+      '<div class="dl-f dl-who"><span>Agent</span>' + (who ? '<div class="dl-chip"><b>' + esc(who.name) + '</b><small>' + esc(who.matricule + ' · ' + cisOf(who)) + '</small><button type="button" class="icon-btn sm" id="dl-clear" aria-label="Tous les agents">✕</button></div>'
+        : '<div class="dl-search"><input class="input" id="dl-q" autocomplete="off" placeholder="Tous les agents · rechercher un nom ou un matricule" aria-label="Rechercher un agent"><ul class="dl-res" id="dl-res" hidden></ul></div>') + '</div></div>';
     var perSel = DL.per === 'annee' ? '<select class="select" id="dl-year" aria-label="Année">' + years.map(function (y) { return '<option' + (y === +DL.year ? ' selected' : '') + '>' + y + '</option>'; }).join('') + '</select>'
       : DL.per === 'perso' ? '<div class="dl-dates"><input class="input" type="date" id="dl-from" aria-label="Du" value="' + esc(DL.from || localInput(new Date(now.getFullYear(), 0, 1)).slice(0, 10)) + '"><span>au</span><input class="input" type="date" id="dl-to" aria-label="Au" value="' + esc(DL.to || localInput(now).slice(0, 10)) + '"></div>' : '';
     return '<section class="panel dl-panel"><div class="panel-head"><h3>' + icon('download') + 'Télécharger les relevés</h3><span class="note">Choisissez qui et quelle période, puis téléchargez</span></div>' +
-      '<div class="dl-grid"><div class="dl-row"><span class="dl-lab">Périmètre</span>' + segB('scope', [['tous', 'Tout le monde'], ['groupement', 'Groupement'], ['caserne', 'Caserne'], ['agent', 'Agent']]) + scopeSel + '</div>' +
+      '<div class="dl-grid"><div class="dl-row"><span class="dl-lab">Qui</span>' + scopeSel + '</div>' +
       '<div class="dl-row"><span class="dl-lab">Période</span>' + segB('per', [['annee', 'Contrôle annuel'], ['12m', '12 mois glissants'], ['carriere', 'Carrière'], ['perso', 'Personnalisée']]) + perSel + '</div></div>' +
       '<div class="dl-foot"><div class="dl-sum"><b>' + esc(scopeLabel()) + ' · ' + esc(rng.label) + '</b><span>' + sel.length + ' agent' + (sel.length > 1 ? 's' : '') + ' dans le périmètre · ' + withAct.length + ' avec au moins une activité exposante' + (rng.kind === 'annee' ? ' · ' + vis.length + ' relevé' + (vis.length > 1 ? 's' : '') + ' visé' + (vis.length > 1 ? 's' : '') : '') + '</span>' +
         (rng.kind === 'annee' ? '<label class="check"><input type="checkbox" id="dl-vises"' + (DL.vises ? ' checked' : '') + '> Seulement les relevés visés par le médecin</label>' : '') + '</div>' +
@@ -2049,7 +2053,21 @@
   function bindDl(root) {
     root.querySelectorAll('[data-dl]').forEach(function (b) { b.onclick = function () { var q = b.dataset.dl.split('|'); DL[q[0]] = q[1]; route(); }; });
     var on = function (id, f) { var el = root.querySelector(id); if (el) el.onchange = function (e) { f(e.target); route(); }; };
-    on('#dl-grp', function (t) { DL.grp = t.value; }); on('#dl-cis', function (t) { DL.cis = t.value; }); on('#dl-agent', function (t) { DL.agent = t.value; });
+    on('#dl-grp', function (t) { DL.grp = t.value; if (DL.cis && casernes().filter(function (c) { return c[0] === DL.cis; })[0][1] !== DL.grp && DL.grp) DL.cis = ''; var a = db.byId[DL.agent]; if (a && DL.grp && grpOf(a) !== DL.grp) DL.agent = ''; });
+    on('#dl-cis', function (t) { DL.cis = t.value; var a = db.byId[DL.agent]; if (a && DL.cis && cisOf(a) !== DL.cis) DL.agent = ''; });
+    var clr = root.querySelector('#dl-clear'); if (clr) clr.onclick = function () { DL.agent = ''; route(); };
+    var q = root.querySelector('#dl-q'), res = root.querySelector('#dl-res');
+    if (q) {
+      var pick = function (id) { DL.agent = id; route(); };
+      var draw = function () {
+        var hits = searchPeople(q.value);
+        res.hidden = !q.value.trim();
+        res.innerHTML = hits.length ? hits.map(function (u, i) { return '<li><button type="button" data-pick="' + u.id + '"' + (i ? '' : ' class="on"') + '><b>' + esc(u.name) + '</b><small>' + esc(u.matricule + ' · ' + cisOf(u) + ' · ' + grpOf(u)) + '</small></button></li>'; }).join('') : '<li class="dl-none">Aucun agent ne correspond dans cette sélection.</li>';
+        res.querySelectorAll('[data-pick]').forEach(function (b) { b.onclick = function () { pick(b.dataset.pick); }; });
+      };
+      q.oninput = draw;
+      q.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); var f = res.querySelector('[data-pick]'); if (f) pick(f.dataset.pick); } else if (e.key === 'Escape') { q.value = ''; draw(); } };
+    }
     on('#dl-year', function (t) { DL.year = +t.value; }); on('#dl-from', function (t) { DL.from = t.value; }); on('#dl-to', function (t) { DL.to = t.value; }); on('#dl-vises', function (t) { DL.vises = t.checked; });
     var go = function () { var rng = dlRange(); return { rng: rng, list: scopePeople().filter(function (u) { return rvData(u, rng).lines.length && (!(DL.vises && rng.kind === 'annee') || rvDoc(u, rng.year)); }) }; };
     root.querySelector('#dl-pdf').onclick = function () { var g = go(); if (g.list.length) printReleves(g.list, g.rng); };
@@ -2075,7 +2093,7 @@
             '<td class="t-act"><button class="btn btn-' + (o.doc ? 'secondary' : 'primary') + ' btn-sm" type="button" data-rctl="' + o.u.id + '">' + (o.doc ? 'Revoir' : 'Contrôler') + '</button><button class="btn btn-secondary btn-sm" type="button" data-rpdf="' + o.u.id + '">' + icon('download') + 'PDF</button></td></tr>';
         }).join('') + '</tbody></table>' : '<p class="empty">Aucun relevé dans cette sélection.</p>') + '</section>' +
       '<section class="panel"><div class="panel-head"><h3>Attestation d\'exposition</h3><span class="note">Cumul de carrière, remis à l\'agent à son départ · à conserver 50 ans</span></div>' +
-        '<div class="form-3"><div class="field"><label class="label" for="at-u">Agent</label><select class="select" id="at-u">' + rvPeople().map(function (u) { return '<option value="' + u.id + '"' + (DL.scope === 'agent' && u.id === DL.agent ? ' selected' : '') + '>' + esc(u.name + ' · ' + u.matricule) + '</option>'; }).join('') + '</select></div>' +
+        '<div class="form-3"><div class="field"><label class="label" for="at-u">Agent</label><select class="select" id="at-u">' + rvPeople().map(function (u) { return '<option value="' + u.id + '"' + (u.id === DL.agent ? ' selected' : '') + '>' + esc(u.name + ' · ' + u.matricule) + '</option>'; }).join('') + '</select></div>' +
         '<div class="field"><label class="label" for="at-m">Motif</label><select class="select" id="at-m">' + Object.keys(MOTIF_ATT).map(function (k) { return '<option value="' + k + '">' + esc(MOTIF_ATT[k]) + '</option>'; }).join('') + '</select></div>' +
         '<div class="field"><span class="label">&nbsp;</span><button class="btn btn-primary" type="button" id="at-go">' + icon('download') + 'Générer l\'attestation (PDF)</button></div></div></section>';
     bindDl(root);
