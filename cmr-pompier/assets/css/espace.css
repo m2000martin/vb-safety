@@ -816,3 +816,14 @@ a.op-chip:hover { border-color: var(--text); }
   .rv-att { border: 1.5px solid #111; padding: 8px 10px; margin-top: 10px; break-inside: avoid; }
 }
 @media (max-width: 700px) { .g-row { grid-template-columns: 120px minmax(360px, 1fr); } .form-3 { grid-template-columns: 1fr; } .op-facts { grid-template-columns: 1fr 1fr 1fr; } }
+/* Relevés : panneau de téléchargement */
+.dl-panel { border-color: var(--text); }
+.dl-panel .panel-head h3 { display: flex; align-items: center; gap: 8px; }
+.dl-grid { display: flex; flex-direction: column; gap: 12px; }
+.dl-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.dl-row .select { width: auto; min-width: 220px; }
+.dl-lab { width: 90px; font: 700 12px var(--font); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.dl-dates { display: flex; align-items: center; gap: 8px; } .dl-dates .input { width: auto; }
+.dl-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.dl-sum { display: flex; flex-direction: column; gap: 4px; } .dl-sum span { color: var(--muted); font-size: 14px; } .dl-sum .check { margin-top: 6px; }
+@media (max-width: 700px) { .dl-lab { width: 100%; } .dl-row .select { min-width: 0; width: 100%; } }

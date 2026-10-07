@@ -1,7 +1,7 @@
 /// <reference path="../pb_data/types.d.ts" />
 // Grandes opérations, relevés réglementaires et activités exposantes hors intervention (PocketBase v0.23 ou plus récent).
 // À copier dans le dossier pb_migrations/ du serveur : appliqué automatiquement au redémarrage. Ne modifie que ce qui manque.
-//   - users : statut (SPP, SPV, PATS) et renfort (colonne extérieure) ;
+//   - users : statut (SPP, SPV, PATS), renfort (colonne extérieure), caserne et groupement ;
 //   - operations : grande opération, fin, secteurs ;
 //   - interventions : relève, secteur, origine, agrès ;
 //   - documents : visa des relevés annuels (agent, année, observations) ;
@@ -16,6 +16,8 @@ migrate((app) => {
   }
   add("users", new SelectField({ name: "statut_sp", values: ["SPP", "SPV", "PATS"], maxSelect: 1 }));
   add("users", new TextField({ name: "renfort", max: 160 }));
+  add("users", new TextField({ name: "cis", max: 80 }));
+  add("users", new SelectField({ name: "groupement", values: ["Nord", "Sud", "Est", "Ouest", "Centre"], maxSelect: 1 }));
   add("operations", new BoolField({ name: "ampleur" }));
   add("operations", new DateField({ name: "date_fin" }));
   add("operations", new JSONField({ name: "secteurs", maxSize: 4000 }));

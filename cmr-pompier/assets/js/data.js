@@ -25,7 +25,7 @@
   }
   async function loadOnline(s) {
     var role = s.role, jobs = {};
-    jobs.users = list('users', { sort: 'name', fields: 'id,name,matricule,role,grade,centre' });
+    jobs.users = list('users', { sort: 'name', fields: 'id,name,matricule,role,grade,centre,statut_sp,cis,groupement,renfort' });
     // Paramètres réglés par l'administrateur (lus par tous, modifiables par l'administrateur seul)
     jobs.parametres = list('parametres').catch(function () { return []; });
     if (role === 'admin') {
@@ -53,7 +53,7 @@
   }
 
   // ---------------------------------------------------------------- hors ligne
-  var OFF_KEY = 'vbs-offline-db-v10', offline = null;
+  var OFF_KEY = 'vbs-offline-db-v11', offline = null;
   function saveOffline() { try { sessionStorage.setItem(OFF_KEY, JSON.stringify(offline)); } catch (e) {} }
   function loadOffline() { try { return JSON.parse(sessionStorage.getItem(OFF_KEY) || 'null'); } catch (e) { return null; } }
   var idn = 0;
@@ -73,7 +73,10 @@
     var adm = user('ADM-0001', 'S. Durand', 'admin', 'Commandant');
     var otherCos = [user('CA-0112', 'S. Moreau', 'cos', 'Sergent-chef', 'SPV'), user('CA-0119', 'D. Fabre', 'cos', 'Adjudant-chef', 'SPP')];
     var names = [['A. Martin', 'Sergent'], ['L. Dubois', 'Caporal-chef'], ['N. Petit', 'Caporal'], ['C. Faure', 'Sapeur'], ['E. Lambert', 'Sapeur'], ['H. Girard', 'Caporal'], ['I. Bonnet', 'Sapeur'], ['K. Mercier', 'Caporal-chef'], ['O. Blanc', 'Sapeur'], ['R. Guerin', 'Sergent'], ['V. Muller', 'Sapeur'], ['Y. Henry', 'Caporal'], ['P. Rousseau', 'Sapeur'], ['F. Vincent', 'Caporal'], ['G. Morel', 'Sapeur'], ['B. Andre', 'Caporal-chef'], ['M. Laurent', 'Sapeur'], ['S. Simon', 'Sapeur'], ['T. Michel', 'Caporal']];
+    // Casernes fictives, réparties dans les cinq groupements
+    var CIS = [['CIS Démo-sur-Marne', 'Nord'], ['CIS Val-Fictif', 'Nord'], ['CIS Bois-Exemple', 'Sud'], ['CIS Saint-Exemple', 'Sud'], ['CIS Mont-Fictif', 'Est'], ['CIS Rive-Exemple', 'Est'], ['CIS Pont-Exemple', 'Ouest'], ['CIS Ville-Démo', 'Centre'], ['CIS Plaine-Fictive', 'Centre']];
     var agents = [agentDemo].concat(names.map(function (x, k) { return user('SP-0' + (150 + k), x[0], 'agent', x[1], k % 10 < 7 ? 'SPV' : 'SPP'); }));
+    users.forEach(function (u, k) { var c = u === agentDemo || u === cosDemo || u.role !== 'agent' && u.role !== 'cos' ? CIS[0] : CIS[k % CIS.length]; u.cis = c[0]; u.groupement = c[1]; });
     var T = {
       habitation: { c: ['Démo-sur-Marne', 'Val-Fictif', 'Saint-Exemple'], p: ['Pavillon, feu de cuisine', 'Appartement R+2', 'Feu de chambre'], e: ['FPT', 'EPA'], d: [60, 150] },
       vehicule: { c: ['Démo-sur-Marne', "Zone d'activités Fictive"], p: ['VL sur voie publique', 'Utilitaire', 'VL électrique'], e: ['FPT', 'VL'], d: [30, 75] },

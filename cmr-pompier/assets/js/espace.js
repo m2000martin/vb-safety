@@ -578,7 +578,7 @@
     if (S.role === 'agent' || S.role === 'cos' || S.role === 'commandement') {
       opts.push(['perso', 'Mes expositions (CSV)', 'Votre historique complet, avec la nature des agents CMR de chaque intervention.', function () { csvDownload('mes-expositions.csv', [expoHead].concat(db.mine.map(expoRow))); }]);
       opts.push(['pdf', 'Ma fiche individuelle d\'exposition (PDF)', 'Toute votre carrière : nature, durée et degré de chaque exposition.', function () { var m = PER.mode; PER.mode = 'carriere'; printFiche(db.me || {}, db.mine); PER.mode = m; }]);
-      opts.push(['releve', 'Mon relevé annuel ' + new Date().getFullYear() + ' (PDF)', 'Vos activités exposantes de l\'année, interventions et formations, au format de la circulaire du 14 janvier 2025.', function () { var me = db.me || {}; printHtml(releveHtml(me, new Date().getFullYear(), null), 'Releve annuel ' + (me.matricule || '')); }]);
+      opts.push(['releve', 'Mon relevé annuel ' + new Date().getFullYear() + ' (PDF)', 'Vos activités exposantes de l\'année, interventions et formations, au format de la circulaire du 14 janvier 2025.', function () { var me = db.me || {}; printHtml(releveHtml(me, yearRange(new Date().getFullYear()), null), 'Releve annuel ' + (me.matricule || '')); }]);
     }
     if (S.role === 'commandement' || S.role === 'sssm') opts.push(['etat', 'État des rapports du centre (CSV)', 'Statut de chaque rapport : en attente, en retard, transmis, validé.', function () { csvDownload('etat-rapports.csv', [['Date', 'Numéro', 'Type', 'Commune', 'CA/COS', 'Statut']].concat(db.interventions.map(function (x) { return [fmtD(x.dateObj), x.numero, TYPE[x.type_feu], x.commune, x.cosUser ? x.cosUser.name : '', STATE[VBSData.reportState(x)][0]]; }))); }]);
     if (S.role === 'sssm') {
@@ -1690,6 +1690,7 @@
     (db.users || []).forEach(function (u) { if (u.name) { m[u.name] = u.name; var last = u.name.split(' ').slice(-1)[0]; if (last.length > 2) m[last] = last; if (u.grade) m[u.grade + ' ' + u.name] = VBSi18n.grade(u.grade) + ' ' + u.name; } });
     (db.interventions || []).forEach(function (x) { if (x.commune) m[x.commune] = x.commune; });
     (db.operations || []).forEach(function (x) { if (x.commune) m[x.commune] = x.commune; });
+    (db.users || []).forEach(function (u) { if (u.cis) m[u.cis] = u.cis; });
     VBSi18n.names(m);
   }
   async function reload() {
@@ -1912,7 +1913,7 @@
     var d1 = new Date(d0.getTime() + 10 * 3600000);
     modal('Ajouter une relève · ' + o.numero, '<p class="note">Un rapport est ouvert pour le chef d\'agrès de chaque agrès engagé. Il le remplit à son désengagement, pour lui et son équipage.</p>' +
       '<div class="form-2"><div class="field"><label class="label" for="rl-n">Relève n°</label><input class="input" id="rl-n" type="number" min="1" value="' + next + '"></div>' +
-      '<div class="field"><label class="label" for="rl-sec">Secteur</label><select class="select" id="rl-sec">' + (o.secteurs || []).concat(['Autre']).map(function (s) { return '<option>' + esc(s) + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="field"><label class="label" for="rl-sec">Secteur</label><select class="select" id="rl-sec">' + (o.secteurs || []).concat(['Autre']).map(function (s) { return '<option value="' + esc(s) + '">' + esc(s) + '</option>'; }).join('') + '</select></div></div>' +
       '<div class="form-2"><div class="field"><label class="label" for="rl-ca">Chef d\'agrès</label><select class="select" id="rl-ca">' + cas.map(function (u) { return '<option value="' + u.id + '">' + esc((u.grade ? u.grade + ' ' : '') + u.name + (u.renfort ? ' · renfort' : '')) + '</option>'; }).join('') + '</select></div>' +
       '<div class="field"><label class="label" for="rl-eng">Agrès</label><input class="input" id="rl-eng" maxlength="12" value="CCF"></div></div>' +
       '<div class="field"><label class="label" for="rl-ori">Origine</label><input class="input" id="rl-ori" maxlength="120" value="' + esc(centreName()) + '"><span class="hint">Centre de secours, ou colonne de renfort d\'un autre département.</span></div>' +
@@ -1929,16 +1930,46 @@
   }
 
   // =================================================================== relevés réglementaires (SSSM)
-  // Relevé annuel des activités potentiellement exposantes et attestation d'exposition,
+  // Relevé des activités potentiellement exposantes et attestation d'exposition,
   // d'après la circulaire DGSCGC du 14 janvier 2025 (santé et sécurité en service).
-  var RV = { year: new Date().getFullYear(), f: 'tous', st: '' };
+  var GROUPEMENTS = ['Nord', 'Sud', 'Est', 'Ouest', 'Centre'];
+  var RV = { f: 'tous', st: '' };
+  // Téléchargement : périmètre (tout le monde, groupement, caserne, agent) et période
+  var DL = { scope: 'tous', grp: 'Nord', cis: '', agent: '', per: 'annee', year: new Date().getFullYear(), from: '', to: '', vises: false };
+  function cisOf(u) { return u.cis || centreName(); }
+  function grpOf(u) { return u.groupement || 'Nord'; }
   function rvPeople() { return db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && !u.renfort; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }
-  function rvData(u, year, career) {
-    var inY = function (d) { return career || d.getFullYear() === year; };
-    var all = (db.participations || []).filter(function (p) { return p.agent === u.id && p.it && inY(p.it.dateObj); });
+  function casernes() { var o = {}; rvPeople().forEach(function (u) { o[cisOf(u)] = grpOf(u); }); return Object.keys(o).sort(function (a, b) { return GROUPEMENTS.indexOf(o[a]) - GROUPEMENTS.indexOf(o[b]) || a.localeCompare(b); }).map(function (k) { return [k, o[k]]; }); }
+  function yearRange(y) { return { kind: 'annee', year: +y, from: new Date(+y, 0, 1), to: new Date(+y, 11, 31, 23, 59, 59), label: 'Année ' + y }; }
+  function dlRange() {
+    var now = new Date();
+    if (DL.per === 'annee') return yearRange(DL.year);
+    if (DL.per === '12m') return { kind: '12m', from: new Date(now.getTime() - 365 * VBSData.DAY), to: now, label: '12 mois glissants au ' + fmtD(now) };
+    if (DL.per === 'carriere') return { kind: 'carriere', all: true, label: 'Toute la carrière au SDIS' };
+    var f = DL.from ? new Date(DL.from + 'T00:00:00') : new Date(now.getFullYear(), 0, 1), t = DL.to ? new Date(DL.to + 'T23:59:59') : now;
+    return { kind: 'perso', from: f, to: t, label: 'Du ' + fmtD(f) + ' au ' + fmtD(t) };
+  }
+  function scopePeople() {
+    var p = rvPeople();
+    if (DL.scope === 'groupement') return p.filter(function (u) { return grpOf(u) === DL.grp; });
+    if (DL.scope === 'caserne') { var c = DL.cis || (casernes()[0] || [''])[0]; return p.filter(function (u) { return cisOf(u) === c; }); }
+    if (DL.scope === 'agent') { var a = DL.agent || (p[0] || {}).id; return p.filter(function (u) { return u.id === a; }); }
+    return p;
+  }
+  function scopeLabel() {
+    if (DL.scope === 'groupement') return 'Groupement ' + DL.grp;
+    if (DL.scope === 'caserne') return DL.cis || (casernes()[0] || [''])[0];
+    if (DL.scope === 'agent') { var u = db.byId[DL.agent] || scopePeople()[0] || {}; return (u.name || '') + (u.matricule ? ' · ' + u.matricule : ''); }
+    return 'Tout le service';
+  }
+  function rvData(u, rng, career) {
+    if (career) rng = { all: true };
+    else if (typeof rng !== 'object') rng = yearRange(rng);
+    var inR = function (d) { return rng.all || (d >= rng.from && d <= rng.to); };
+    var all = (db.participations || []).filter(function (p) { return p.agent === u.id && p.it && inR(p.it.dateObj); });
     var parts = all.filter(function (p) { return filled(p) && p.it.ambiance !== 'aucun_feu'; });
     var pending = all.filter(function (p) { return p.it.statut !== 'controle_sssm'; });
-    var acts = actsOf(u.id).filter(function (a) { return inY(a.dateObj); });
+    var acts = actsOf(u.id).filter(function (a) { return inR(a.dateObj); });
     var tot = {}; CATS.forEach(function (c) { tot[c[0]] = { n: 0, min: 0 }; });
     parts.forEach(function (p) { var c = catsP(p); Object.keys(c).forEach(function (k) { tot[k].n++; tot[k].min += +p.duree_min || 0; }); });
     acts.forEach(function (a) { var c = catsA(a); Object.keys(c).forEach(function (k) { tot[k].n++; tot[k].min += +a.duree_min || 0; }); });
@@ -1950,19 +1981,20 @@
   function rvDoc(u, year) { return (db.documents || []).filter(function (d) { return d.type_mesure === 'releve_annuel' && d.agent === u.id && +d.annee === +year; }).sort(function (a, b) { return b.createdObj - a.createdObj; })[0] || null; }
   function rvModel(u) { return u.statut_sp === 'SPV' ? 'sapeur-pompier volontaire' : 'sapeur-pompier professionnel ou PATS'; }
   function idBlock(u, extra) {
-    return '<dl class="fi-id"><div><dt>Agent</dt><dd>' + esc((u.grade ? u.grade + ' ' : '') + (u.name || '')) + '</dd></div><div><dt>Matricule</dt><dd>' + esc(u.matricule || '') + '</dd></div><div><dt>Statut</dt><dd>' + esc(u.statut_sp === 'SPV' ? 'SPV · volontaire' : u.statut_sp === 'PATS' ? 'PATS' : 'SPP · professionnel') + '</dd></div><div><dt>Centre</dt><dd>' + esc(centreName()) + '</dd></div>' + extra + '<div><dt>Édition</dt><dd>' + fmtD(new Date()) + '</dd></div></dl>';
+    return '<dl class="fi-id"><div><dt>Agent</dt><dd>' + esc((u.grade ? u.grade + ' ' : '') + (u.name || '')) + '</dd></div><div><dt>Matricule</dt><dd>' + esc(u.matricule || '') + '</dd></div><div><dt>Statut</dt><dd>' + esc(u.statut_sp === 'SPV' ? 'SPV · volontaire' : u.statut_sp === 'PATS' ? 'PATS' : 'SPP · professionnel') + '</dd></div><div><dt>Caserne</dt><dd>' + esc(cisOf(u)) + '</dd></div><div><dt>Groupement</dt><dd>' + esc(grpOf(u)) + '</dd></div>' + extra + '<div><dt>Édition</dt><dd>' + fmtD(new Date()) + '</dd></div></dl>';
   }
   function rvSumTable(tot) {
     return '<table class="fi-tab rv-sum"><thead><tr><th>Nature de l\'exposition</th><th>Activités</th><th>Durée cumulée</th></tr></thead><tbody>' + CATS.map(function (c) { var t = tot[c[0]]; return '<tr><td>' + esc(c[1]) + '</td><td>' + (t.n || '—') + '</td><td>' + (t.n ? durTxt(t.min) : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
   }
-  function releveHtml(u, year, doc) {
-    var r = rvData(u, year), med = doc ? db.byId[doc.auteur] : null;
-    return '<article class="fiche"><header class="fi-head"><div><h1>Relevé annuel des activités potentiellement exposantes · ' + year + '</h1><p>Circulaire DGSCGC du 14 janvier 2025 relative à la santé et à la sécurité en service · modèle ' + esc(rvModel(u)) + ' · à transmettre avant la visite médicale</p></div><span class="fi-brand">VB Safety · Sapeur-pompier</span></header>' +
-      idBlock(u, '<div><dt>Année</dt><dd>' + year + '</dd></div>') +
+  function releveHtml(u, rng, doc) {
+    if (typeof rng !== 'object') rng = yearRange(rng);
+    var annual = rng.kind === 'annee', r = rvData(u, rng), med = doc ? db.byId[doc.auteur] : null;
+    return '<article class="fiche"><header class="fi-head"><div><h1>' + (annual ? 'Relevé annuel des activités potentiellement exposantes · ' + rng.year : 'Relevé des activités potentiellement exposantes') + '</h1><p>Circulaire DGSCGC du 14 janvier 2025 relative à la santé et à la sécurité en service · modèle ' + esc(rvModel(u)) + (annual ? ' · à transmettre avant la visite médicale' : '') + '</p></div><span class="fi-brand">VB Safety · Sapeur-pompier</span></header>' +
+      idBlock(u, '<div><dt>Période</dt><dd>' + esc(rng.label) + '</dd></div>') +
       '<h2>Synthèse par nature d\'exposition</h2>' + rvSumTable(r.tot) +
       '<p class="fi-note">' + r.parts.length + ' intervention' + (r.parts.length > 1 ? 's' : '') + ' avec fumées et ' + r.acts.length + ' formation' + (r.acts.length > 1 ? 's' : '') + ' ou séance' + (r.acts.length > 1 ? 's' : '') + ' d\'entretien du matériel, soit ' + durTxt(r.mins) + ' d\'activités exposantes.' + (r.pending.length ? ' <span>' + r.pending.length + ' rapport' + (r.pending.length > 1 ? 's' : '') + ' pas encore validé' + (r.pending.length > 1 ? 's' : '') + ' par le SSSM.</span>' : '') + '</p>' +
       '<h2>Détail chronologique</h2>' + (r.lines.length ? '<table class="fi-tab rv-tab"><thead><tr><th>Date · référence</th><th>Activité</th><th>Durée</th><th>Expositions</th><th>Protection et décontamination</th></tr></thead><tbody>' +
-        r.lines.map(function (l) { return '<tr><td>' + fmtD(l.d) + '<br><small>' + esc(l.ref) + '</small></td><td>' + esc(l.quoi) + '</td><td>' + durTxt(l.dur) + '</td><td>' + CATS.filter(function (c) { return l.cats[c[0]]; }).map(function (c) { return esc(CAT_COURT[c[0]]); }).join(', ') + '</td><td>' + esc(l.prot) + '<br><small>' + esc(l.dec) + '</small></td></tr>'; }).join('') + '</tbody></table>' : '<p>Aucune activité exposante enregistrée sur l\'année.</p>') +
+        r.lines.map(function (l) { return '<tr><td>' + fmtD(l.d) + '<br><small>' + esc(l.ref) + '</small></td><td>' + esc(l.quoi) + '</td><td>' + durTxt(l.dur) + '</td><td>' + CATS.filter(function (c) { return l.cats[c[0]]; }).map(function (c) { return esc(CAT_COURT[c[0]]); }).join(', ') + '</td><td>' + esc(l.prot) + '<br><small>' + esc(l.dec) + '</small></td></tr>'; }).join('') + '</tbody></table>' : '<p>Aucune activité exposante enregistrée sur la période.</p>') +
       '<h2>Observations du médecin</h2><p class="rv-obs">' + (doc && doc.observations ? esc(doc.observations) : '—') + '</p>' +
       '<p class="fi-note">Établi à partir des rapports de contamination contrôlés par le SSSM et des activités déclarées (formations, entretien du matériel). Les rubriques suivent la circulaire ; elles s\'alignent sur le modèle en vigueur dans votre SDIS. Données fictives de démonstration.</p>' +
       '<div class="fi-sign"><div>Visa du médecin du SSSM' + (doc ? '<br><b>' + esc(med ? (med.grade ? med.grade + ' ' : '') + med.name : 'SSSM') + ' · ' + fmtD(doc.createdObj) + '</b>' : '') + '</div><div>Date et signature de l\'agent</div></div></article>';
@@ -1983,43 +2015,73 @@
       '<p class="fi-note">Document à remettre à l\'agent et à conserver au dossier médical. Il sert au suivi post-exposition et, le cas échéant, à une demande de reconnaissance en maladie professionnelle (tableaux 16 bis et 30, décret n° 2025-1349). Données fictives de démonstration.</p>' +
       '<div class="fi-sign"><div>Le médecin du SSSM, date et signature</div><div>Remis à l\'agent le</div></div></article>';
   }
-  function printReleves(list, year) {
-    printHtml(list.map(function (u) { return releveHtml(u, year, rvDoc(u, year)); }).join('<div class="pg-break"></div>'), 'Relevés annuels ' + year + (list.length === 1 ? ' ' + list[0].matricule : ''));
+  function printReleves(list, rng) {
+    if (typeof rng !== 'object') rng = yearRange(rng);
+    printHtml(list.map(function (u) { return releveHtml(u, rng, rng.kind === 'annee' ? rvDoc(u, rng.year) : null); }).join('<div class="pg-break"></div>'), 'Relevés ' + (rng.kind === 'annee' ? 'annuels ' + rng.year : rng.label) + (list.length === 1 ? ' ' + list[0].matricule : ''));
+  }
+  function rvCsv(list, rng, name) {
+    csvDownload(name, [['Agent', 'Matricule', 'Statut', 'Caserne', 'Groupement', 'Période', 'Interventions', 'Formations et entretien', 'Durée (min)'].concat(CATS.map(function (c) { return CAT_COURT[c[0]] + ' (activités)'; })).concat(['Rapports à valider', 'Visé le'])].concat(list.map(function (u) {
+      var r = rvData(u, rng), doc = rng.kind === 'annee' ? rvDoc(u, rng.year) : null;
+      return [u.name, u.matricule, u.statut_sp || 'SPP', cisOf(u), grpOf(u), rng.label, r.parts.length, r.acts.length, r.mins].concat(CATS.map(function (c) { return r.tot[c[0]].n; })).concat([r.pending.length, doc ? fmtD(doc.createdObj) : '']);
+    })));
+  }
+  function dlPanel() {
+    var people = rvPeople(), cis = casernes(), now = new Date(), rng = dlRange(), sel = scopePeople();
+    if (DL.scope === 'caserne' && !DL.cis && cis[0]) DL.cis = cis[0][0];
+    if (DL.scope === 'agent' && !DL.agent && people[0]) DL.agent = people[0].id;
+    var withAct = sel.filter(function (u) { return rvData(u, rng).lines.length; });
+    var vis = rng.kind === 'annee' ? withAct.filter(function (u) { return rvDoc(u, rng.year); }) : [];
+    var n = DL.vises && rng.kind === 'annee' ? vis.length : withAct.length;
+    var years = []; for (var k = 0; k < 4; k++) years.push(now.getFullYear() - k);
+    var segB = function (key, opts) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-dl="' + key + '|' + o[0] + '" aria-pressed="' + (DL[key] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
+    var scopeSel = DL.scope === 'groupement' ? '<select class="select" id="dl-grp" aria-label="Groupement">' + GROUPEMENTS.map(function (g) { return '<option value="' + g + '"' + (g === DL.grp ? ' selected' : '') + '>' + g + '</option>'; }).join('') + '</select>'
+      : DL.scope === 'caserne' ? '<select class="select" id="dl-cis" aria-label="Caserne">' + GROUPEMENTS.map(function (g) { var l = cis.filter(function (c) { return c[1] === g; }); return l.length ? '<optgroup label="Groupement ' + g + '">' + l.map(function (c) { return '<option value="' + esc(c[0]) + '"' + (c[0] === DL.cis ? ' selected' : '') + '>' + esc(c[0]) + '</option>'; }).join('') + '</optgroup>' : ''; }).join('') + '</select>'
+      : DL.scope === 'agent' ? '<select class="select" id="dl-agent" aria-label="Agent">' + people.map(function (u) { return '<option value="' + u.id + '"' + (u.id === DL.agent ? ' selected' : '') + '>' + esc(u.name + ' · ' + u.matricule + ' · ' + cisOf(u)) + '</option>'; }).join('') + '</select>' : '';
+    var perSel = DL.per === 'annee' ? '<select class="select" id="dl-year" aria-label="Année">' + years.map(function (y) { return '<option' + (y === +DL.year ? ' selected' : '') + '>' + y + '</option>'; }).join('') + '</select>'
+      : DL.per === 'perso' ? '<div class="dl-dates"><input class="input" type="date" id="dl-from" aria-label="Du" value="' + esc(DL.from || localInput(new Date(now.getFullYear(), 0, 1)).slice(0, 10)) + '"><span>au</span><input class="input" type="date" id="dl-to" aria-label="Au" value="' + esc(DL.to || localInput(now).slice(0, 10)) + '"></div>' : '';
+    return '<section class="panel dl-panel"><div class="panel-head"><h3>' + icon('download') + 'Télécharger les relevés</h3><span class="note">Choisissez qui et quelle période, puis téléchargez</span></div>' +
+      '<div class="dl-grid"><div class="dl-row"><span class="dl-lab">Périmètre</span>' + segB('scope', [['tous', 'Tout le monde'], ['groupement', 'Groupement'], ['caserne', 'Caserne'], ['agent', 'Agent']]) + scopeSel + '</div>' +
+      '<div class="dl-row"><span class="dl-lab">Période</span>' + segB('per', [['annee', 'Contrôle annuel'], ['12m', '12 mois glissants'], ['carriere', 'Carrière'], ['perso', 'Personnalisée']]) + perSel + '</div></div>' +
+      '<div class="dl-foot"><div class="dl-sum"><b>' + esc(scopeLabel()) + ' · ' + esc(rng.label) + '</b><span>' + sel.length + ' agent' + (sel.length > 1 ? 's' : '') + ' dans le périmètre · ' + withAct.length + ' avec au moins une activité exposante' + (rng.kind === 'annee' ? ' · ' + vis.length + ' relevé' + (vis.length > 1 ? 's' : '') + ' visé' + (vis.length > 1 ? 's' : '') : '') + '</span>' +
+        (rng.kind === 'annee' ? '<label class="check"><input type="checkbox" id="dl-vises"' + (DL.vises ? ' checked' : '') + '> Seulement les relevés visés par le médecin</label>' : '') + '</div>' +
+      '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="dl-csv">' + icon('download') + 'Synthèse (CSV)</button><button class="btn btn-primary" type="button" id="dl-pdf"' + (n ? '' : ' disabled') + '>' + icon('download') + 'Télécharger ' + n + ' relevé' + (n > 1 ? 's' : '') + ' (PDF)</button></div></div></section>';
+  }
+  function bindDl(root) {
+    root.querySelectorAll('[data-dl]').forEach(function (b) { b.onclick = function () { var q = b.dataset.dl.split('|'); DL[q[0]] = q[1]; route(); }; });
+    var on = function (id, f) { var el = root.querySelector(id); if (el) el.onchange = function (e) { f(e.target); route(); }; };
+    on('#dl-grp', function (t) { DL.grp = t.value; }); on('#dl-cis', function (t) { DL.cis = t.value; }); on('#dl-agent', function (t) { DL.agent = t.value; });
+    on('#dl-year', function (t) { DL.year = +t.value; }); on('#dl-from', function (t) { DL.from = t.value; }); on('#dl-to', function (t) { DL.to = t.value; }); on('#dl-vises', function (t) { DL.vises = t.checked; });
+    var go = function () { var rng = dlRange(); return { rng: rng, list: scopePeople().filter(function (u) { return rvData(u, rng).lines.length && (!(DL.vises && rng.kind === 'annee') || rvDoc(u, rng.year)); }) }; };
+    root.querySelector('#dl-pdf').onclick = function () { var g = go(); if (g.list.length) printReleves(g.list, g.rng); };
+    root.querySelector('#dl-csv').onclick = function () { var g = go(); rvCsv(scopePeople(), g.rng, 'releves-' + scopeLabel().toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + (g.rng.kind === 'annee' ? g.rng.year : g.rng.kind) + '.csv'); };
   }
   function viewReleves(root) {
-    var people = rvPeople(), y = RV.year, now = new Date();
-    var years = []; for (var k = 0; k < 3; k++) years.push(now.getFullYear() - k);
-    var rows = people.map(function (u) {
-      var r = rvData(u, y), doc = rvDoc(u, y), nx = nextRdv(db, u.id), soon = nx && nx.dateObj - now < 30 * VBSData.DAY;
-      return { u: u, r: r, doc: doc, nx: nx, soon: soon };
-    }).filter(function (o) { return (o.r.lines.length || o.doc) && (!RV.st || o.u.statut_sp === RV.st) && (RV.f === 'tous' || (RV.f === 'viser' ? !o.doc : !!o.doc)); });
+    var people = scopePeople(), y = +DL.year, now = new Date();
     var all = people.map(function (u) { return { u: u, doc: rvDoc(u, y), r: rvData(u, y), nx: nextRdv(db, u.id) }; }).filter(function (o) { return o.r.lines.length || o.doc; });
+    var rows = all.filter(function (o) { return (!RV.st || o.u.statut_sp === RV.st) && (RV.f === 'tous' || (RV.f === 'viser' ? !o.doc : !!o.doc)); });
     var ready = all.filter(function (o) { return !o.r.pending.length; }).length, vises = all.filter(function (o) { return o.doc; }).length;
     var urgent = all.filter(function (o) { return !o.doc && o.nx && o.nx.dateObj - now < 30 * VBSData.DAY; }).length;
     var seg = function (key, opts) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-rv="' + key + '|' + o[0] + '" aria-pressed="' + (RV[key] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
-    root.innerHTML = head('Relevés réglementaires', 'Le relevé annuel des activités exposantes de chaque agent, et l\'attestation d\'exposition en fin de carrière. Vous contrôlez, visez, puis téléchargez.',
-      '<div class="field"><label class="label" for="rv-y">Année</label><select class="select" id="rv-y">' + years.map(function (v) { return '<option' + (v === y ? ' selected' : '') + '>' + v + '</option>'; }).join('') + '</select></div>') +
+    root.innerHTML = head('Relevés réglementaires', 'Le relevé des activités exposantes de chaque agent, et l\'attestation d\'exposition en fin de carrière. Vous contrôlez, visez, puis téléchargez.') +
+      dlPanel() +
       '<div class="callout"><span class="icon-tile">' + icon('scale') + '</span><div><strong>Circulaire DGSCGC du 14 janvier 2025</strong><span class="sub">Un relevé annuel des activités potentiellement exposantes, transmis avant la visite médicale, et une attestation cumulée à conserver 50 ans. Modèles distincts pour les professionnels (SPP, PATS) et les volontaires (SPV). Le Carnet les remplit à partir des rapports contrôlés et des formations déclarées.</span></div></div>' +
-      '<div class="grid grid-4">' + kpi('users', '', 'Agents concernés · ' + y, all.length, 'Au moins une activité exposante') + kpi('check', 'ok', 'Données complètes', ready + ' / ' + all.length, 'Tous les rapports de l\'année validés') + kpi('lock', 'info', 'Relevés visés', vises + ' / ' + all.length, 'Par le médecin du SSSM') + kpi('cal', urgent ? 'warn' : '', 'À viser avant une visite', urgent, 'Visite SSSM dans les 30 jours') + '</div>' +
-      '<section class="panel"><div class="panel-head wrap"><h3>Relevés ' + y + '</h3><div class="actions-row" style="margin:0">' + seg('f', [['tous', 'Tous'], ['viser', 'À viser'], ['vises', 'Visés']]) + seg('st', [['', 'SPP et SPV'], ['SPP', 'SPP'], ['SPV', 'SPV']]) + '</div></div>' +
-        (rows.length ? '<table class="dtable"><thead><tr><th>Agent</th><th>Activités exposantes</th><th>Durée</th><th>Données</th><th>Visite SSSM</th><th>Relevé</th><th></th></tr></thead><tbody>' + rows.map(function (o) {
-          return '<tr><td data-l="Agent"><b>' + esc(o.u.name) + '</b><br><span class="note">' + esc(o.u.matricule) + ' · ' + esc(o.u.statut_sp || 'SPP') + '</span></td><td data-l="Activités">' + o.r.parts.length + ' intervention' + (o.r.parts.length > 1 ? 's' : '') + '<br><span class="note">' + o.r.acts.length + ' formation' + (o.r.acts.length > 1 ? 's' : '') + ' ou entretien</span></td><td data-l="Durée">' + durTxt(o.r.mins) + '</td>' +
+      '<div class="grid grid-4">' + kpi('users', '', 'Agents concernés · ' + y, all.length, esc(scopeLabel())) + kpi('check', 'ok', 'Données complètes', ready + ' / ' + all.length, 'Tous les rapports de l\'année validés') + kpi('lock', 'info', 'Relevés visés', vises + ' / ' + all.length, 'Par le médecin du SSSM') + kpi('cal', urgent ? 'warn' : '', 'À viser avant une visite', urgent, 'Visite SSSM dans les 30 jours') + '</div>' +
+      '<section class="panel"><div class="panel-head wrap"><h3>Contrôle annuel ' + y + ' · ' + esc(scopeLabel()) + '</h3><div class="actions-row" style="margin:0">' + seg('f', [['tous', 'Tous'], ['viser', 'À viser'], ['vises', 'Visés']]) + seg('st', [['', 'SPP et SPV'], ['SPP', 'SPP'], ['SPV', 'SPV']]) + '</div></div>' +
+        (rows.length ? '<table class="dtable"><thead><tr><th>Agent</th><th>Caserne</th><th>Activités exposantes</th><th>Durée</th><th>Données</th><th>Visite SSSM</th><th>Relevé</th><th></th></tr></thead><tbody>' + rows.map(function (o) {
+          return '<tr><td data-l="Agent"><b>' + esc(o.u.name) + '</b><br><span class="note">' + esc(o.u.matricule) + ' · ' + esc(o.u.statut_sp || 'SPP') + '</span></td><td data-l="Caserne">' + esc(cisOf(o.u)) + '<br><span class="note">Groupement ' + esc(grpOf(o.u)) + '</span></td><td data-l="Activités">' + o.r.parts.length + ' intervention' + (o.r.parts.length > 1 ? 's' : '') + '<br><span class="note">' + o.r.acts.length + ' formation' + (o.r.acts.length > 1 ? 's' : '') + ' ou entretien</span></td><td data-l="Durée">' + durTxt(o.r.mins) + '</td>' +
             '<td data-l="Données">' + (o.r.pending.length ? badge([o.r.pending.length + ' rapport' + (o.r.pending.length > 1 ? 's' : '') + ' à valider', 'badge-pending']) : badge(['Complètes', 'badge-ok'])) + '</td>' +
-            '<td data-l="Visite">' + (o.nx ? fmtD(o.nx.dateObj) + (o.soon && !o.doc ? '<br>' + badge(['À transmettre', 'badge-late']) : '') : '<span class="note">—</span>') + '</td>' +
+            '<td data-l="Visite">' + (o.nx ? fmtD(o.nx.dateObj) + (!o.doc && o.nx.dateObj - now < 30 * VBSData.DAY ? '<br>' + badge(['À transmettre', 'badge-late']) : '') : '<span class="note">—</span>') + '</td>' +
             '<td data-l="Relevé">' + (o.doc ? badge(['Visé le ' + fmtD(o.doc.createdObj), 'badge-ok']) : badge(['À viser', 'badge-neutral'])) + '</td>' +
             '<td class="t-act"><button class="btn btn-' + (o.doc ? 'secondary' : 'primary') + ' btn-sm" type="button" data-rctl="' + o.u.id + '">' + (o.doc ? 'Revoir' : 'Contrôler') + '</button><button class="btn btn-secondary btn-sm" type="button" data-rpdf="' + o.u.id + '">' + icon('download') + 'PDF</button></td></tr>';
-        }).join('') + '</tbody></table>' : '<p class="empty">Aucun relevé dans cette sélection.</p>') +
-        '<div class="actions-row"><button class="btn btn-secondary" type="button" id="rv-all"' + (vises ? '' : ' disabled') + '>' + icon('download') + 'Tous les relevés visés (PDF)</button><button class="btn btn-secondary" type="button" id="rv-csv">' + icon('download') + 'Synthèse ' + y + ' (CSV)</button></div></section>' +
+        }).join('') + '</tbody></table>' : '<p class="empty">Aucun relevé dans cette sélection.</p>') + '</section>' +
       '<section class="panel"><div class="panel-head"><h3>Attestation d\'exposition</h3><span class="note">Cumul de carrière, remis à l\'agent à son départ · à conserver 50 ans</span></div>' +
-        '<div class="form-3"><div class="field"><label class="label" for="at-u">Agent</label><select class="select" id="at-u">' + people.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + u.matricule) + '</option>'; }).join('') + '</select></div>' +
+        '<div class="form-3"><div class="field"><label class="label" for="at-u">Agent</label><select class="select" id="at-u">' + rvPeople().map(function (u) { return '<option value="' + u.id + '"' + (DL.scope === 'agent' && u.id === DL.agent ? ' selected' : '') + '>' + esc(u.name + ' · ' + u.matricule) + '</option>'; }).join('') + '</select></div>' +
         '<div class="field"><label class="label" for="at-m">Motif</label><select class="select" id="at-m">' + Object.keys(MOTIF_ATT).map(function (k) { return '<option value="' + k + '">' + esc(MOTIF_ATT[k]) + '</option>'; }).join('') + '</select></div>' +
         '<div class="field"><span class="label">&nbsp;</span><button class="btn btn-primary" type="button" id="at-go">' + icon('download') + 'Générer l\'attestation (PDF)</button></div></div></section>';
-    root.querySelector('#rv-y').onchange = function (e) { RV.year = +e.target.value; route(); };
+    bindDl(root);
     root.querySelectorAll('[data-rv]').forEach(function (b) { b.onclick = function () { var q = b.dataset.rv.split('|'); RV[q[0]] = q[1]; route(); }; });
     root.querySelectorAll('[data-rctl]').forEach(function (b) { b.onclick = function () { openControle(db.byId[b.dataset.rctl], y); }; });
     root.querySelectorAll('[data-rpdf]').forEach(function (b) { b.onclick = function () { printReleves([db.byId[b.dataset.rpdf]], y); }; });
-    root.querySelector('#rv-all').onclick = function () { printReleves(all.filter(function (o) { return o.doc; }).map(function (o) { return o.u; }), y); };
-    root.querySelector('#rv-csv').onclick = function () { csvDownload('releves-' + y + '.csv', [['Agent', 'Matricule', 'Statut', 'Interventions', 'Formations et entretien', 'Durée (min)'].concat(CATS.map(function (c) { return CAT_COURT[c[0]] + ' (activités)'; })).concat(['Rapports à valider', 'Visé le'])].concat(all.map(function (o) { return [o.u.name, o.u.matricule, o.u.statut_sp || 'SPP', o.r.parts.length, o.r.acts.length, o.r.mins].concat(CATS.map(function (c) { return o.r.tot[c[0]].n; })).concat([o.r.pending.length, o.doc ? fmtD(o.doc.createdObj) : '']); }))); };
     root.querySelector('#at-go').onclick = function () { var u = db.byId[root.querySelector('#at-u').value]; printHtml(attestationHtml(u, root.querySelector('#at-m').value), 'Attestation exposition ' + u.matricule); };
   }
   function openControle(u, year) {

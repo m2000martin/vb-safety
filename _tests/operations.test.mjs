@@ -52,6 +52,18 @@ ok(await pg.locator('.badge:has-text("Visé le")').count() === before + 1, 'SSSM
 await pg.locator('[data-rpdf]').first().click(); await wait(300);
 const printed = await pg.evaluate(() => window.__printed);
 ok(/Visa du médecin/.test(printed) && /Suivi post-exposition proposé/.test(printed), 'SSSM · PDF du relevé avec le visa et les observations');
+// Téléchargement en haut de page : périmètre et période
+const sumTxt = async () => (await pg.locator('.dl-sum span').first().innerText());
+const nAll = parseInt(await sumTxt(), 10);
+await pg.click('[data-dl="scope|groupement"]'); await wait(300); await pg.selectOption('#dl-grp', 'Sud'); await wait(300);
+const nSud = parseInt(await sumTxt(), 10);
+await pg.click('[data-dl="scope|caserne"]'); await wait(300);
+const nCis = parseInt(await sumTxt(), 10);
+ok(nAll > nSud && nSud > 0 && nCis > 0 && nCis < nAll, 'SSSM · périmètre tout le monde / groupement / caserne (' + nAll + ' / ' + nSud + ' / ' + nCis + ')');
+await pg.click('[data-dl="per|perso"]'); await wait(300); await pg.fill('#dl-from', new Date().getFullYear() + '-07-01'); await pg.locator('#dl-from').dispatchEvent('change'); await wait(300);
+await pg.click('#dl-pdf'); await wait(300);
+ok(/Relevé des activités potentiellement exposantes/.test(await pg.evaluate(() => window.__printed)), 'SSSM · relevés d\'une caserne sur une période personnalisée (PDF)');
+await pg.click('[data-dl="scope|tous"]'); await pg.click('[data-dl="per|annee"]'); await wait(300);
 await pg.click('#at-go'); await wait(300);
 ok(/Attestation d'exposition/.test(await pg.evaluate(() => window.__printed)), "SSSM · attestation d'exposition générée");
 // 4. Agent : formations dans son dossier, relevé annuel téléchargeable
