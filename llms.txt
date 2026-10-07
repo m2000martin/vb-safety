@@ -8,8 +8,9 @@
 - [Industrie](https://vb-safety.com/industrie/) : traçabilité des expositions CMR pour les équipes HSE et mesure de contamination chimique sur site (programme pilote).
 
 ## Produits
-- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : logiciel de rapport de contamination pour SDIS. Le chef d'agrès ou le COS remplit le rapport de son équipage, le commandement suit, le SSSM contrôle et valide, chaque agent consulte son historique. Démonstration avec données fictives, serveur en France.
-- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du lavage et de la remise en service des tenues de feu, réservé au référent EPI de la caserne.
+- [Carnet Expo CMR](https://vb-safety.com/cmr-pompier/) : logiciel de rapport de contamination pour SDIS. Le chef d'agrès ou le COS remplit le rapport de son équipage, le commandement suit, le SSSM contrôle et valide, chaque agent consulte son historique. Relevé annuel des activités exposantes et attestation d'exposition au format de la circulaire DGSCGC du 14 janvier 2025, interventions de grande ampleur (relèves, renforts, liste des personnels exposés), formations exposantes et nettoyage du matériel. Démonstration avec données fictives, serveur en France.
+- [Sécurité et données de santé](https://vb-safety.com/cmr-pompier/securite-donnees.html) : hébergement des données de santé (HDS), secret médical, journalisation, conservation 40 à 50 ans, RGPD, réversibilité.
+- [Module EPI](https://vb-safety.com/cmr-pompier/module-epi.html) : suivi de la contamination, du lavage (envoi par lot au prestataire) et de la remise en service des tenues de feu, réservé au référent EPI de la caserne ; complète le logiciel de gestion de l'habillement.
 - [Espace industrie et BTP](https://vb-safety.com/cmr-industrie/) : obligations de l'employeur face aux agents CMR (inventaire, liste des salariés exposés, contrôles VLEP, suivi individuel renforcé, hiérarchie de prévention). En préparation · accès anticipé.
 
 ## Innovation (en développement)
@@ -27,7 +28,7 @@
 
 ## English
 - [VB Safety in English](https://vb-safety.com/en/) · [Firefighters](https://vb-safety.com/en/firefighters/) · [Industry](https://vb-safety.com/en/industry/) · [Construction](https://vb-safety.com/en/construction/) · [Innovation](https://vb-safety.com/en/innovation/).
-- [Carnet Expo CMR in English](https://vb-safety.com/cmr-pompier/en/) · [PPE module](https://vb-safety.com/cmr-pompier/en/ppe-module.html) · [Firefighter cancers and fire smoke guide](https://vb-safety.com/cmr-pompier/en/firefighter-health.html). The firefighter app (login and all six profiles) has an EN/FR switch; the industry and construction tools are in French.
+- [Carnet Expo CMR in English](https://vb-safety.com/cmr-pompier/en/) · [PPE module](https://vb-safety.com/cmr-pompier/en/ppe-module.html) · [Firefighter cancers and fire smoke guide](https://vb-safety.com/cmr-pompier/en/firefighter-health.html) · [Security and health data](https://vb-safety.com/cmr-pompier/en/data-security.html). The firefighter app (login and all six profiles) has an EN/FR switch; the industry and construction tools are in French.
 
 ## Contact
 - [Demander une démonstration ou un devis](https://vb-safety.com/devis/)
