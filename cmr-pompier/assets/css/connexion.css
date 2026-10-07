@@ -9,7 +9,7 @@
     radial-gradient(55% 60% at 80% 40%, rgba(215, 38, 30, 0.38), rgba(215, 38, 30, 0) 70%),
     radial-gradient(40% 45% at 100% 100%, rgba(255, 140, 60, 0.2), rgba(255, 140, 60, 0) 70%),
     var(--ink); }
-.login-side-media::before { content: ""; position: absolute; inset: 0; background: url("../img/login.webp") center / cover no-repeat; }
+.login-side-media::before { content: ""; position: absolute; inset: 0; background: none; }
 .login-side-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(23, 25, 29, 0.92) 0%, rgba(23, 25, 29, 0.7) 45%, rgba(23, 25, 29, 0.25) 100%); }
 .brand-dark .brand-name { color: #fff; }
 .brand-dark .brand-sub { color: #A9AEB6; }

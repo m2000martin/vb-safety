@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="stylesheet" href="assets/css/vbs.css?v=12">
-<link rel="stylesheet" href="assets/css/accueil.css?v=11">
+<link rel="stylesheet" href="assets/css/accueil.css?v=12">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://vb-safety.com/#organisation", "name": "VB Safety", "legalName": "VB Safety SAS", "identifier": [{"@type": "PropertyValue", "propertyID": "SIREN", "value": "109381640"}, {"@type": "PropertyValue", "propertyID": "SIRET", "value": "10938164000019"}], "vatID": "FR43109381640", "alternateName": "VB Safety · traçabilité CMR", "address": {"@type": "PostalAddress", "addressCountry": "FR"}, "url": "https://vb-safety.com/", "logo": "https://vb-safety.com/favicon-512.png", "email": "contact@vb-safety.com", "areaServed": "FR"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://vb-safety.com/#site", "name": "VB Safety", "url": "https://vb-safety.com/", "inLanguage": "fr-FR", "publisher": {"@id": "https://vb-safety.com/#organisation"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Carnet Expo CMR", "url": "https://vb-safety.com/cmr-pompier/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "inLanguage": "fr-FR", "description": "Logiciel de rapport de contamination pour SDIS : traçabilité des expositions CMR des sapeurs-pompiers après intervention, contrôle par le SSSM et historique individuel.", "audience": {"@type": "Audience", "audienceType": "Services départementaux d'incendie et de secours (SDIS)"}, "publisher": {"@id": "https://vb-safety.com/#organisation"}}</script>
@@ -183,6 +183,48 @@
     </div>
   </section>
 
+  <!-- OBLIGATIONS RÉGLEMENTAIRES -->
+  <section class="section" id="obligations">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Prêt pour vos obligations</span>
+        <h2>Ce que la réglementation demande, le Carnet le produit</h2>
+        <p>Les rapports remplis après chaque intervention alimentent directement les documents attendus par les textes. Le médecin du SSSM contrôle, vise, puis télécharge.</p>
+      </div>
+      <div class="oblig">
+        <article class="card oblig-card">
+          <span class="oblig-ref">Circulaire DGSCGC · 14 janvier 2025</span>
+          <h3>Relevé annuel et attestation d'exposition</h3>
+          <p>Un relevé annuel des activités exposantes par agent, avant la visite médicale, et une attestation cumulée à conserver 50 ans. Modèles distincts pour les professionnels et les volontaires.</p>
+          <span class="oblig-out"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Générés et visés dans l'espace SSSM</span>
+        </article>
+        <article class="card oblig-card">
+          <span class="oblig-ref">Décret n° 2025-1349 · 26 décembre 2025</span>
+          <h3>Formations, déblai et nettoyage comptent aussi</h3>
+          <p>Les tableaux de maladies professionnelles 16 bis et 30 visent la lutte contre l'incendie, y compris les formations exposantes, le déblai et le nettoyage du matériel.</p>
+          <span class="oblig-out"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Caissons, feux réels et entretien déclarés en un formulaire</span>
+        </article>
+        <article class="card oblig-card">
+          <span class="oblig-ref">Code du travail · R. 4412-93-1</span>
+          <h3>Liste des exposés et fiche individuelle</h3>
+          <p>Nature, durée et degré de chaque exposition aux agents CMR, transmis au service de santé et conservés au moins 40 ans.</p>
+          <span class="oblig-out"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Fiche individuelle par année, sur 12 mois ou sur la carrière</span>
+        </article>
+        <article class="card oblig-card">
+          <span class="oblig-ref">Guide de doctrine · fumées d'incendie</span>
+          <h3>Liste des personnels exposés sur les grandes opérations</h3>
+          <p>Feu de forêt sur plusieurs jours, relèves, colonnes de renfort : qui était engagé, quand, combien de temps, et dans quelle zone.</p>
+          <span class="oblig-out"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Chronologie des relèves et liste exportable pour le SSSM</span>
+        </article>
+      </div>
+      <a class="epi-line ops-line" href="securite-donnees.html">
+        <span class="epi-line-ico"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+        <span class="epi-line-text"><span class="epi-line-tag">Données de santé</span><strong>Hébergement, secret médical, réversibilité : comment vos données sont protégées.</strong></span>
+        <span class="epi-line-cta">Sécurité et données <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </section>
+
   <!-- RÔLES -->
   <section class="section" id="roles">
     <div class="container">
@@ -223,6 +265,7 @@
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Voit si chaque intervention a bien son rapport</li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Repère les rapports à jour, en attente ou en retard</li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Relance le CA ou le COS concerné</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Suit les grandes opérations relève par relève</li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exporte l'état du suivi en CSV</li>
           </ul>
           <a class="role-link" href="connexion.html?profil=commandement">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -236,6 +279,7 @@
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Corrige ou complète chaque rapport</li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Suit l'historique complet de chaque agent</li>
             <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Édite la fiche d'exposition par année, sur 12 mois ou sur la carrière</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Vise le relevé annuel et l'attestation d'exposition de chaque agent</li>
           </ul>
           <a class="role-link" href="connexion.html?profil=sssm">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Chaque consultation et correction est journalisée</p></div>
@@ -304,6 +348,8 @@
           <li><a href="connexion.html">Se connecter</a></li>
           <li><a href="#roles">Rôles et accès</a></li>
           <li><a href="#confidentialite">Confidentialité</a></li>
+          <li><a href="securite-donnees.html">Sécurité et données</a></li>
+          <li><a href="#obligations">Obligations réglementaires</a></li>
           <li><a href="module-epi.html">Module EPI</a></li>
           <li><a href="sante-sapeurs-pompiers.html">Santé et loi</a></li>
         </ul>

@@ -51,7 +51,10 @@ for (const [p, fr] of [['/cmr-pompier/en/', '/cmr-pompier/'], ['/cmr-pompier/en/
 for (const role of Object.keys(PROFILES)) {
   const { ctx, pg } = await open(role, 'en');
   const ids = await pg.evaluate(() => VBSApp.menu.map(m => m.id));
-  for (const id of ids) { await pg.evaluate(h => { location.hash = h; }, id); await wait(400); }
+  const ops = await pg.evaluate(() => (VBSApp.getDb().operations || []).filter(o => o.ampleur).map(o => 'operations/' + o.id));
+  for (const id of ids.concat(ops)) { await pg.evaluate(h => { location.hash = h; }, id); await wait(400); }
+  if (role === 'sssm') { await pg.evaluate(() => { location.hash = 'releves'; }); await wait(400); await pg.locator('[data-rctl]').first().click(); await wait(400); await pg.keyboard.press('Escape'); }
+  if (role === 'habillement') { await pg.evaluate(() => { location.hash = 'tableau-de-bord'; }); await wait(400); await pg.click('#lv-out'); await wait(300); await pg.keyboard.press('Escape'); }
   const miss = await pg.evaluate(() => VBSi18n.misses);
   ok(Object.keys(miss).length === 0, `${role} · ${ids.length} écrans en anglais` + (Object.keys(miss).length ? ' — manquants : ' + Object.keys(miss).slice(0, 5).join(' | ') : ''));
   await ctx.close();

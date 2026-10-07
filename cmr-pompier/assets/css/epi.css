@@ -2,7 +2,7 @@
 .epi-hero { position: relative; overflow: hidden; color: #fff; background:
   radial-gradient(60% 80% at 75% 30%, rgba(215, 38, 30, .28), rgba(215, 38, 30, 0) 70%),
   linear-gradient(90deg, rgba(17, 18, 21, .97) 0%, rgba(17, 18, 21, .88) 45%, rgba(17, 18, 21, .55) 100%),
-  url("../img/epi-hero.webp") center / cover no-repeat, #141518; padding: clamp(40px, 6vw, 72px) 0 clamp(56px, 7vw, 88px); }
+  #141518; padding: clamp(40px, 6vw, 72px) 0 clamp(56px, 7vw, 88px); }
 .epi-hero-grid { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
 @media (min-width: 1080px) { .epi-hero-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.2fr); gap: 24px; } }
 .epi-new { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #FF5A50; }

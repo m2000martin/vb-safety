@@ -10,7 +10,7 @@
 }
 .hero-media::before { /* photo terrain, si présente : assets/img/hero.webp */
   content: ""; position: absolute; inset: 0;
-  background: url("../img/hero.webp") center / cover no-repeat;
+  background: none;
 }
 .hero-media::after { /* fondu vers le texte */
   content: ""; position: absolute; inset: 0;
@@ -158,3 +158,26 @@
   .role-tag, .epi-line-tag { font-size: 12px; }
 }
 .demo-band .btn-primary { box-shadow: none; }
+
+/* Obligations réglementaires */
+.oblig { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 760px) { .oblig { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .oblig { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.oblig-card { display: flex; flex-direction: column; gap: 10px; }
+.oblig-card h3 { margin: 0; font-size: 17px; line-height: 1.3; }
+.oblig-card p { margin: 0; color: var(--muted); font-size: 14.5px; flex: 1; }
+.oblig-ref { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+.oblig-out { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; font-weight: 600; color: var(--ok); }
+.oblig-out .icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+.ops-line { margin-top: 24px; }
+
+/* Page « Sécurité et données » */
+.trust-hero { padding-bottom: 0; }
+.trust-hero h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.1; margin: 8px 0 12px; letter-spacing: -.02em; }
+.trust-lead { font-size: 18px; color: var(--muted); max-width: 780px; margin: 0 0 28px; }
+.trust-table-wrap { overflow-x: auto; }
+.trust-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; font-size: 15px; }
+.trust-table th, .trust-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.trust-table thead th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+.trust-table tbody th { font-weight: 700; white-space: nowrap; }
+.trust-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }

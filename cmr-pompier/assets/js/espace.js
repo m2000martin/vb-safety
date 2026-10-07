@@ -13,6 +13,7 @@
   var CONT = { nulle: ['Zone de soutien', 'badge-neutral'], faible: ['Zone de soutien', 'badge-neutral'], moyenne: ['Zone contrôlée', 'badge-mod'], forte: ["Zone d'exclusion", 'badge-high'] };
   var TENUE = { veste: 'Veste de feu', surpantalon: 'Pantalon de feu', cagoule: 'Cagoule' };
   var TST = { en_service: ['En service', 'badge-ok'], contaminee: ['Contaminée', 'badge-late'], au_lavage: ['Au lavage', 'badge-info'], en_stock: ['En stock', 'badge-neutral'], reformee: ['Réformée', 'badge-neutral'] };
+  var MVT = { changement: 'Changement de tenue', demande: 'Remplacement au seuil', lavage: 'Envoi au lavage', retour_lavage: 'Retour de lavage' };
   var DST = { envoyee: ['À traiter', 'badge-pending'], traitee: ['Traitée', 'badge-ok'], annulee: ['Annulée', 'badge-neutral'] };
   var STATE = { attente: ['En attente', 'badge-pending'], retard: ['En retard', 'badge-late'], transmis: ['Transmis SSSM', 'badge-info'], controle: ['Validé SSSM', 'badge-ok'] };
   var PHASE = { attaque: 'Attaque', deblai: 'Déblai', soutien: 'Soutien / alimentation' };
@@ -37,7 +38,9 @@
     epiAgents: { id: 'epi-agents', label: 'Par agent', icon: 'users' },
     changements: { id: 'changements', label: 'Changements de tenue', icon: 'send' },
     droits: { id: 'droits', label: "Droits d'accès", icon: 'shield' },
-    indicateurs: { id: 'indicateurs', label: 'Tableaux de bord', icon: 'chart' }
+    indicateurs: { id: 'indicateurs', label: 'Tableaux de bord', icon: 'chart' },
+    operations: { id: 'operations', label: 'Grandes opérations', icon: 'flame' },
+    releves: { id: 'releves', label: 'Relevés réglementaires', icon: 'file' }
   };
   function item(base, tour) { return Object.assign({}, base, { tour: tour }); }
   var MENUS = {
@@ -50,18 +53,22 @@
       item(M.tdb, "Vos expositions récentes, votre prochain rendez-vous SSSM et les rapports qu'il vous reste à compléter."),
       item(M.dossier, "L'historique complet de vos propres expositions et vos rendez-vous SSSM."),
       item(M.rapportsCos, "Rédigez le rapport de contamination de votre équipage après chaque intervention : trois appuis suffisent, le reste est proposé d'office. Sur une opération à plusieurs agrès, chaque CA remplit le sien."),
+      item(M.operations, "Feux de forêt et opérations de plusieurs jours : chaque relève a son rapport. Vous retrouvez vos engagements, et, si vous êtes COS, l'état de tous les rapports."),
       item(M.exp, 'Exportez vos propres données en PDF ou CSV.')
     ],
     commandement: [
       item(M.tdb, 'Suivez vos éléments personnels ou ceux du centre : rapports par statut et calendrier coloré.'),
       item(M.dossier, 'Votre propre historique d\'exposition et vos rendez-vous SSSM.'),
       item(M.gestion, 'Le détail des rapports par statut, et un rappel en un clic aux CA ou COS concernés.'),
+      item(M.operations, "Les opérations de plusieurs jours : relèves, agrès engagés, renforts, et l'état de chaque rapport. Vous ajoutez une relève en un clic."),
       item(M.exp, "Exportez vos données personnelles et l'état des rapports de votre centre.")
     ],
     sssm: [
       item(M.tdb, 'Dossiers à jour ou non, alertes sur les cas particuliers, feux des dernières 24 h et tendance de contamination.'),
       item(M.rapportsSssm, "Toutes les interventions, engin par engin ou agent par agent. Corrigez un rapport, et importez les mesures (ex. CO sanguin) de toute une opération depuis un fichier."),
+      item(M.operations, "Les grandes opérations : la liste des personnels exposés, relève par relève, avec les durées cumulées, et les renforts à signaler à leur SDIS d'origine."),
       item(M.suivi, "Le dossier de chaque agent et sa fiche individuelle d'exposition, par année, sur 12 mois glissants ou sur toute la carrière."),
+      item(M.releves, "Le relevé annuel des activités exposantes et l'attestation d'exposition, au format de la circulaire du 14 janvier 2025. Vous contrôlez, visez et téléchargez."),
       item(M.exp, 'Tous les exports : interventions, expositions, référentiel.'),
       item(Object.assign({}, M.ref, { label: 'Référentiel CMR' }), "Pour chaque motif de départ, validez ou modifiez le coefficient, les agents CMR retenus et les circonstances proposées au chef d'agrès."),
       item(M.regl, 'Les évolutions réglementaires qui concernent le suivi des expositions, avec leur niveau d\'impact.')
@@ -249,7 +256,7 @@
     var total = its.length, upToDate = total ? Math.round(100 * (st.transmis + st.controle) / total) : 0;
     var late = its.filter(function (x) { return VBSData.reportState(x) === 'retard'; });
     root.innerHTML = head('Suivi des rapports · ' + esc(centreName()), 'Chaque intervention a-t-elle son rapport de contamination, et est-il à jour ?', toggle) +
-      '<div class="status-strip">' +
+      bigOpCallout() + '<div class="status-strip">' +
         '<div class="status-card retard">' + badge(STATE.retard) + '<b>' + st.retard + '</b><span class="note">Brouillon depuis plus de 72 h</span></div>' +
         '<div class="status-card">' + badge(STATE.attente) + '<b>' + st.attente + '</b><span class="note">Brouillon de moins de 72 h</span></div>' +
         '<div class="status-card">' + badge(STATE.transmis) + '<b>' + st.transmis + '</b><span class="note">En attente de contrôle</span></div>' +
@@ -313,6 +320,14 @@
     });
   }
   function centreName() { return 'CIS Démo-sur-Marne'; }
+  // Grande opération des 15 derniers jours : accès direct depuis le tableau de bord
+  function bigOpCallout() {
+    var o = bigOps().filter(function (x) { return within(x.dateObj, 15); })[0]; if (!o) return '';
+    var miss = o.reports.filter(function (x) { return x.statut === 'brouillon'; }).length, pers = {};
+    o.reports.forEach(function (x) { x.crew.forEach(function (p) { pers[p.agent] = 1; }); });
+    var n = Object.keys(pers).length;
+    return '<div class="callout op-call"><span class="icon-tile warn">' + icon('flame') + '</span><div><strong>' + esc(o.numero) + ' · ' + esc(o.precision || TYPE[o.type_feu]) + '</strong><span class="sub">' + releves(o).length + ' relèves · ' + o.reports.length + ' engagements d\'agrès' + (S.role === 'sssm' && n ? ' · ' + n + ' personnels exposés' : '') + (miss ? ' · ' + miss + ' rapport' + (miss > 1 ? 's' : '') + ' à compléter' : ' · tous les rapports transmis') + '</span></div><a class="btn btn-primary btn-sm" href="#operations/' + o.id + '">Ouvrir l\'opération</a></div>';
+  }
 
   function viewDashSssm(root) {
     var its = db.interventions, P = db.participations;
@@ -338,7 +353,7 @@
     }).concat(fortes.slice(0, 4).map(function (p) {
       return '<li><span class="when">' + fmtD(p.it.dateObj) + '</span><span class="what"><b>' + esc(p.user ? p.user.name : 'Agent') + (p.position === 'POS_ATT' && !p.ari_porte ? ' · attaque sans ARI' : ' · zone d\'exclusion sans décontamination') + '</b><small>' + esc(TYPE[p.it.type_feu]) + ' · ' + esc(p.it.numero) + '</small></span><span class="right">' + badge(['À vérifier', 'badge-pending']) + '</span></li>';
     }));
-    root.innerHTML = head('Tableau de bord SSSM', 'État des dossiers, cas particuliers et tendance des expositions.', '<span class="page-date">' + esc(fmtLong(new Date())) + '</span>') +
+    root.innerHTML = head('Tableau de bord SSSM', 'État des dossiers, cas particuliers et tendance des expositions.', '<span class="page-date">' + esc(fmtLong(new Date())) + '</span>') + bigOpCallout() +
       '<div class="grid grid-4">' +
         kpi('check', 'ok', 'Dossiers à jour', upToDate + ' %', toCheck + ' rapport' + (toCheck > 1 ? 's' : '') + ' à contrôler') +
         kpi('alert', '', 'Alertes cas particuliers', openSig.length + fortes.length, openSig.length + ' signalement' + (openSig.length > 1 ? 's' : '') + ' · ' + fortes.length + ' écart' + (fortes.length > 1 ? 's' : '') + ' au protocole') +
@@ -365,6 +380,7 @@
 
   // ---------- Fiche individuelle d'exposition (nature, durée, degré) ----------
   var PER = { mode: '12m', year: new Date().getFullYear() };
+  function inPeriodD(d) { return PER.mode === 'carriere' ? true : PER.mode === 'annee' ? d.getFullYear() === PER.year : within(d, 365); }
   function inPeriod(p) { return PER.mode === 'carriere' ? true : PER.mode === 'annee' ? p.it.dateObj.getFullYear() === PER.year : within(p.it.dateObj, 365); }
   function periodLabel() { return PER.mode === 'carriere' ? 'Toute la carrière au SDIS' : PER.mode === 'annee' ? 'Année ' + PER.year : '12 mois glissants (au ' + fmtD(new Date()) + ')'; }
   function periodBar(parts) {
@@ -429,6 +445,7 @@
         kpi('cal', 'info', 'Rendez-vous SSSM', rdvs.filter(function (r) { return r.statut === 'prevu' && r.dateObj >= new Date(); }).length + ' prévu', rdvs.filter(function (r) { return r.statut === 'realise'; })[0] ? 'Dernier : ' + fmtD(rdvs.filter(function (r) { return r.statut === 'realise'; })[0].dateObj) : 'Aucun rendez-vous passé') +
       '</div>' +
       '<section class="panel"><div class="panel-head wrap"><h3>Historique des expositions · ' + esc(periodLabel()) + '</h3>' + periodBar(mine) + '</div>' + historyTable(parts, 'Aucune intervention enregistrée sur cette période.') + '</section>' +
+      actPanel(actsOf(db.meId).filter(function (a) { return inPeriodD(a.dateObj); }), 'Formations et entretien du matériel · ' + esc(periodLabel())) +
       countersPanel(counters(parts.filter(filled)), 'Compteurs · ' + periodLabel()) +
       '<section class="panel"><div class="panel-head"><h3>Rendez-vous SSSM</h3></div>' + (rdvs.length ? '<ul class="rows">' + rdvs.map(function (r) {
         return '<li><span class="when">' + fmtD(r.dateObj) + '</span><span class="what"><b>' + esc(r.motif) + '</b><small>' + esc(r.lieu || '') + '</small></span><span class="right">' + badge(r.statut === 'prevu' ? ['Prévu', 'badge-info'] : r.statut === 'realise' ? ['Réalisé', 'badge-ok'] : ['Annulé', 'badge-neutral']) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Aucun rendez-vous.</p>') + '</section>';
@@ -461,18 +478,20 @@
   function viewRapportsCos(root) {
     var its = db.interventions.filter(function (x) { return x.cos === db.meId; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
     var todo = its.filter(function (x) { return x.statut === 'brouillon'; }), done = its.filter(function (x) { return x.statut !== 'brouillon'; });
-    var myOps = db.operations.filter(function (o) { return o.cos === db.meId; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
+    var myOps = db.operations.filter(function (o) { return o.cos === db.meId && !o.ampleur; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
     var row = function (x) {
       var t = x.statut === 'brouillon', rap = t ? lastRappel(x.id) : null;
       return '<li><span class="when">' + fmtD(x.dateObj) + '<small>' + d2(x.dateObj.getHours()) + 'h' + d2(x.dateObj.getMinutes()) + '</small></span><span class="what"><b>' + esc(TYPE[x.type_feu]) + (x.precision ? ' · ' + esc(x.precision) : '') + '</b><small>' + esc(x.numero) + (x.commune ? ' · ' + esc(x.commune) : '') + (rap ? ' · relancé le ' + fmtD(rap.createdObj) : '') + '</small></span>' +
         '<span class="right">' + repState(x) + (t ? '<a class="btn btn-primary btn-sm" href="#rapport/' + x.id + '">Faire mon rapport</a>' : '<a class="btn btn-secondary btn-sm" href="#rapport/' + x.id + '">Voir</a>') + '</span></li>';
     };
     var shown = repAll ? done : done.slice(0, 8);
-    root.innerHTML = head("Rapports d'interventions", 'Le rapport de contamination de votre équipage, après chaque intervention.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="cisu-in">Réception CISU (démo)</button><button class="btn btn-secondary" type="button" id="new-op">Opération à plusieurs agrès</button><a class="btn btn-primary" href="#rapport/nouveau">Nouveau rapport</a></div>') +
+    root.innerHTML = head("Rapports d'interventions", 'Le rapport de contamination de votre équipage, après chaque intervention.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="cisu-in">Réception CISU (démo)</button><button class="btn btn-secondary" type="button" id="new-op">Opération à plusieurs agrès</button><button class="btn btn-secondary" type="button" id="act-new">Formation ou entretien</button><a class="btn btn-primary" href="#rapport/nouveau">Nouveau rapport</a></div>') +
       '<section class="panel"><div class="panel-head"><h3>À faire</h3></div>' + (todo.length ? '<ul class="rows rep-list">' + todo.map(row).join('') + '</ul>' : '<p class="empty">Tous vos rapports sont faits.</p>') + '</section>' +
       viewOpsCos(myOps) +
+      (function () { var mineA = (db.activites || []).filter(function (a) { return a.auteur === db.meId; }).slice(0, 4); return mineA.length ? '<section class="panel"><div class="panel-head"><h3>Formations et entretien déclarés</h3><span class="note">Activités exposantes hors intervention</span></div><ul class="rows">' + mineA.map(function (a) { return '<li><span class="when">' + fmtD(a.dateObj) + '</span><span class="what"><b>' + esc(ACT[a.type] || a.type) + '</b><small>' + esc(a.intitule || '') + ' · ' + (a.agents || []).length + ' participants · ' + durTxt(a.duree_min) + '</small></span><span class="right">' + catChips(catsA(a)) + '</span></li>'; }).join('') + '</ul></section>' : ''; })() +
       '<section class="panel"><div class="panel-head"><h3>Déjà transmis</h3><span class="note">' + done.length + '</span></div>' + (done.length ? '<ul class="rows rep-list">' + shown.map(row).join('') + '</ul>' + (done.length > shown.length ? '<div class="actions-row"><button class="link-btn" type="button" id="rep-more">Afficher les ' + (done.length - shown.length) + ' plus anciens</button></div>' : '') : '<p class="empty">Aucun rapport transmis.</p>') + '</section>';
-    root.querySelector('#new-op').onclick = openNewOperation;
+    root.querySelector('#new-op').onclick = function () { openNewOperation(false); };
+    root.querySelector('#act-new').onclick = openActivite;
     root.querySelector('#cisu-in').onclick = openCisu;
     var more = root.querySelector('#rep-more'); if (more) more.onclick = function () { repAll = true; route(); };
     bindRemind(root);
@@ -545,6 +564,7 @@
       '<section class="panel"><div class="panel-head"><h3>Évolution de l\'indicateur (12 mois)</h3></div>' + lineChart(monthly(all.filter(filled), function (p) { return p.it.dateObj; }, function (p) { return +p.indice || 0; }), ' EF') + '</section>' +
       '<section class="panel"><div class="panel-head wrap"><h3>Expositions · ' + esc(periodLabel()) + '</h3>' + periodBar(all) + '</div>' + historyTable(parts, 'Aucune exposition sur cette période.') +
       '<div class="actions-row"><button class="link-btn" type="button" id="plan-rdv">' + icon('cal') + 'Planifier un rendez-vous</button></div></section>' +
+      actPanel(actsOf(suiviId).filter(function (a) { return inPeriodD(a.dateObj); }), 'Formations et entretien du matériel · ' + esc(periodLabel())) +
       countersPanel(cP, 'Compteurs · ' + periodLabel());
     bindCharts(root); bindSoon(root); bindPeriod(root, all, u);
     root.querySelector('#plan-rdv').onclick = function () { openRdv(u); };
@@ -558,6 +578,7 @@
     if (S.role === 'agent' || S.role === 'cos' || S.role === 'commandement') {
       opts.push(['perso', 'Mes expositions (CSV)', 'Votre historique complet, avec la nature des agents CMR de chaque intervention.', function () { csvDownload('mes-expositions.csv', [expoHead].concat(db.mine.map(expoRow))); }]);
       opts.push(['pdf', 'Ma fiche individuelle d\'exposition (PDF)', 'Toute votre carrière : nature, durée et degré de chaque exposition.', function () { var m = PER.mode; PER.mode = 'carriere'; printFiche(db.me || {}, db.mine); PER.mode = m; }]);
+      opts.push(['releve', 'Mon relevé annuel ' + new Date().getFullYear() + ' (PDF)', 'Vos activités exposantes de l\'année, interventions et formations, au format de la circulaire du 14 janvier 2025.', function () { var me = db.me || {}; printHtml(releveHtml(me, new Date().getFullYear(), null), 'Releve annuel ' + (me.matricule || '')); }]);
     }
     if (S.role === 'commandement' || S.role === 'sssm') opts.push(['etat', 'État des rapports du centre (CSV)', 'Statut de chaque rapport : en attente, en retard, transmis, validé.', function () { csvDownload('etat-rapports.csv', [['Date', 'Numéro', 'Type', 'Commune', 'CA/COS', 'Statut']].concat(db.interventions.map(function (x) { return [fmtD(x.dateObj), x.numero, TYPE[x.type_feu], x.commune, x.cosUser ? x.cosUser.name : '', STATE[VBSData.reportState(x)][0]]; }))); }]);
     if (S.role === 'sssm') {
@@ -568,6 +589,7 @@
         csvDownload('referentiel-cmr-v' + R.version + '.csv', rows);
       }]);
     }
+    if (S.role === 'habillement') opts.push(['mvts', 'Mouvements pour le logiciel d\'habillement (CSV)', 'Changements, envois et retours de lavage, avec les numéros : à intégrer dans votre outil de gestion de l\'habillement.', function () { csvDownload('mouvements-epi.csv', [['Date', 'Mouvement', 'Agent', 'Matricule', 'Articles', 'Numéros', 'Détail']].concat((db.mouvements_epi || []).slice().sort(function (a, b) { return a.createdObj - b.createdObj; }).map(function (m) { return [fmtD(m.createdObj), MVT[m.type] || m.type, m.user ? m.user.name : '', m.user ? m.user.matricule : '', (m.types || []).map(function (x) { return TENUE[x]; }).join(', '), m.numeros ? Object.keys(m.numeros).map(function (k) { return m.numeros[k]; }).join(', ') : '', m.motif || '']; }))); }]);
     if (S.role === 'habillement') opts.push(['tenues', 'État des tenues du centre (CSV)', 'Numéro, type, agent, état, feux et lavages.', function () { csvDownload('tenues.csv', [['Numéro', 'Type', 'Agent', 'Matricule', 'État', 'Feux depuis la mise en service', 'Feux depuis le dernier lavage', 'Lavages', 'Seuil d\'alerte']].concat((db.tenues || []).map(function (t) { return [t.numero, TENUE[t.type], t.user ? t.user.name : '', t.user ? t.user.matricule : '', TST[t.statut][0], t.nb_feux, t.feux_depuis_lavage, t.nb_lavages, t.seuil_feux]; }))); }]);
     root.innerHTML = head('Export', S.role === 'sssm' ? 'Tous les exports sont disponibles pour le SSSM.' : S.role === 'commandement' ? 'Vos données personnelles et l\'état des rapports de votre centre.' : S.role === 'habillement' ? 'Les données des tenues de votre centre.' : 'Vos données personnelles uniquement.',
       S.role === 'commandement' ? '<div class="field"><label class="label" for="zone">Périmètre</label><select class="select" id="zone"><option>' + esc(centreName()) + '</option><option disabled>Autres centres du groupement (version SDIS)</option></select></div>' : '') +
@@ -735,11 +757,12 @@
   }
 
   // =================================================================== opérations (plusieurs agrès)
-  function engOf(x) { var m = String(x.numero || '').match(/-([A-Z]{2,5})$/); if (m) return m[1]; var c = x.crew && x.crew[0]; return c && c.engin ? c.engin : '—'; }
+  function engOf(x) { if (x.engin) return x.engin; var m = String(x.numero || '').match(/-([A-Z]{2,5})$/); if (m) return m[1]; var c = x.crew && x.crew[0]; return c && c.engin ? c.engin : '—'; }
   function opLabel(o) { return o.numero + ' · ' + TYPE[o.type_feu] + (o.precision ? ' · ' + o.precision : ''); }
   function opChip(x) {
     if (!x.op) return '';
     var cos = x.op.cosUser ? x.op.cosUser.name : '—';
+    if (x.op.ampleur) return '<a class="chip op-chip" href="#operations/' + x.op.id + '">' + icon('flame') + esc(x.op.numero) + (x.releve ? ' · relève ' + x.releve : '') + (x.secteur ? ' · ' + esc(x.secteur) : '') + ' · COS : ' + esc(cos) + '</a>';
     return '<span class="chip op-chip">' + icon('users') + esc(x.op.numero) + ' · COS : ' + esc(cos) + '</span>';
   }
   function viewOpsCos(ops) {
@@ -822,10 +845,12 @@
     };
   }
 
-  function openNewOperation() {
+  function openNewOperation(big) {
     var cas = db.users.filter(function (u) { return u.role === 'cos'; }).sort(function (a, b) { return (a.id === db.meId ? -1 : 0) - (b.id === db.meId ? -1 : 0) || a.name.localeCompare(b.name); });
     var num = 'OP-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
-    modal('Nouvelle opération à plusieurs agrès', '<p class="note">Vous êtes COS. Un rapport est ouvert pour chaque CA engagé : chacun remplit celui de son équipage.</p>' +
+    var dlg = modal('Nouvelle opération à plusieurs agrès', '<p class="note">Vous êtes COS. Un rapport est ouvert pour chaque CA engagé : chacun remplit celui de son équipage.</p>' +
+      '<label class="check op-big"><input type="checkbox" id="op-big"' + (big ? ' checked' : '') + '> <span><b>Grande opération</b> : plusieurs jours, relèves successives, renforts. Les relèves suivantes s\'ajoutent depuis « Grandes opérations ».</span></label>' +
+      '<div class="field" id="op-sec-f"' + (big ? '' : ' hidden') + '><label class="label" for="op-sec">Secteurs</label><input class="input" id="op-sec" maxlength="200" value="Secteur Nord, Secteur Est, Secteur Sud"><span class="hint">Séparés par des virgules.</span></div>' +
       '<div class="form-2"><div class="field"><label class="label" for="op-num">N° d\'opération</label><input class="input" id="op-num" value="' + num + '" maxlength="32"></div>' +
       '<div class="field"><label class="label" for="op-date">Date et heure</label><input class="input" id="op-date" type="datetime-local" value="' + localInput(new Date()) + '"></div></div>' +
       '<div class="form-2"><div class="field"><label class="label" for="op-type">Nature / motif de départ</label><select class="select" id="op-type">' + Object.keys(TYPE).map(function (k) { return '<option value="' + k + '">' + TYPE[k] + '</option>'; }).join('') + '</select></div>' +
@@ -842,16 +867,18 @@
         var engins = chosen.map(function (id) { return d.querySelector('[data-engin="' + id + '"]').value; });
         if (new Set(engins).size !== engins.length) throw new Error('Chaque CA doit avoir un agrès différent.');
         var base = { date: VBSData.toApiDate(new Date(when)), type_feu: d.querySelector('#op-type').value, precision: d.querySelector('#op-prec').value, commune: d.querySelector('#op-commune').value, centre: (db.me || {}).centre };
-        var op = await VBSData.create(S, 'operations', Object.assign({ numero: numero, cos: db.meId }, base));
+        var isBig = d.querySelector('#op-big').checked, secs = isBig ? d.querySelector('#op-sec').value.split(',').map(function (x) { return x.trim(); }).filter(Boolean) : [];
+        var op = await VBSData.create(S, 'operations', Object.assign({ numero: numero, cos: db.meId }, base, isBig ? { ampleur: true, secteurs: secs } : {}));
         var mineId = null;
         for (var i = 0; i < chosen.length; i++) {
-          var r = await VBSData.create(S, 'interventions', Object.assign({}, base, { numero: numero.replace(/^OP/, 'INT') + '-' + engins[i], cos: chosen[i], operation: op.id, statut: 'brouillon', ambiance: 'feu_fumee' }));
+          var r = await VBSData.create(S, 'interventions', Object.assign({}, base, { numero: numero.replace(/^OP/, 'INT') + (isBig ? '-R1' : '') + '-' + engins[i], cos: chosen[i], operation: op.id, statut: 'brouillon', ambiance: 'feu_fumee' }, isBig ? { releve: 1, engin: engins[i], secteur: secs[i % Math.max(1, secs.length)] || '', origine: centreName() } : {}));
           if (chosen[i] === db.meId) mineId = r.id;
         }
         toast('Opération créée : ' + chosen.length + ' rapport' + (chosen.length > 1 ? 's' : '') + ' ouvert' + (chosen.length > 1 ? 's' : '') + '.');
         await reload();
-        if (mineId) location.hash = 'rapport/' + mineId;
+        if (isBig) location.hash = 'operations/' + op.id; else if (mineId) location.hash = 'rapport/' + mineId;
       } }]);
+    dlg.querySelector('#op-big').onchange = function (e) { dlg.querySelector('#op-sec-f').hidden = !e.target.checked; };
   }
 
   // =================================================================== import de mesures (SSSM)
@@ -1506,14 +1533,15 @@
   }
   function viewDashHab(root) {
     var s = habStats(), ac = aChanger();
-    root.innerHTML = head('Tenues de feu · ' + esc(centreName()), 'Après une intervention sur feu, les tenues des agents engagés sont à changer. Enregistrez chaque changement ici.', '<button class="btn btn-primary" type="button" data-chg="">Enregistrer un changement</button>') +
+    root.innerHTML = head('Tenues de feu · ' + esc(centreName()), 'Après une intervention sur feu, les tenues des agents engagés sont à changer. Ce module suit la contamination et le lavage liés aux feux ; il complète votre logiciel de gestion de l\'habillement.', '<div class="actions-row" style="margin:0"><button class="btn btn-secondary" type="button" id="lv-out">' + icon('send') + 'Envoyer au lavage' + (s.aLaver.length ? ' (' + s.aLaver.length + ')' : '') + '</button><button class="btn btn-secondary" type="button" id="lv-in">Retour du prestataire' + (s.lavage.length ? ' (' + s.lavage.length + ')' : '') + '</button><button class="btn btn-primary" type="button" data-chg="">Enregistrer un changement</button></div>') +
       '<div class="grid grid-4">' + kpi('users', '', 'Agents à rééquiper', ac.length, ac.length ? 'Tenue contaminée après un feu' : 'Tout le monde est rééquipé') + kpi('alert', '', 'À envoyer au lavage', s.aLaver.length, 'Tenues déposées au centre') + kpi('clock', 'info', 'Au lavage', s.lavage.length, 'En attente de retour') + kpi('list', '', 'En stock', s.stock.length, 'Disponibles au centre') + '</div>' +
       '<section class="panel"><div class="panel-head"><h3>Agents à rééquiper</h3></div>' + (ac.length ? '<ul class="rows nw">' + ac.map(function (a) {
         return '<li><span class="what"><b>' + esc((a.user.grade ? a.user.grade + ' ' : '') + (a.user.name || '—')) + '</b><small>' + esc(a.user.matricule || '') + ' · ' + esc(a.tenues.map(tenueLine).join(', ')) + '</small></span><span class="right"><button class="btn btn-primary btn-sm" type="button" data-chg="' + a.agent + '">Enregistrer le changement</button></span></li>';
       }).join('') + '</ul>' : '<p class="empty">Aucune tenue à changer.</p>') + '</section>' +
-      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>À envoyer au lavage</h3><a href="#tenues">Toutes les tenues ' + icon('arrow') + '</a></div>' + (s.aLaver.length ? '<ul class="rows nw">' + s.aLaver.slice(0, 8).map(function (t) { return '<li><span class="what"><b>' + esc(tenueLine(t)) + '</b><small>' + (t.feux_depuis_lavage || 0) + ' feu(x) depuis le dernier lavage</small></span><span class="right">' + tenueActions(t) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Rien à envoyer.</p>') + '</section>' +
+      '<div class="grid grid-2"><section class="panel"><div class="panel-head"><h3>À envoyer au lavage</h3><a href="#tenues">Toutes les tenues ' + icon('arrow') + '</a></div>' + (s.aLaver.length ? '<ul class="rows nw">' + s.aLaver.slice(0, 8).map(function (t) { return '<li><span class="what"><b>' + esc(tenueLine(t)) + '</b><small>' + (t.feux_depuis_lavage || 0) + ' feu(x) depuis le dernier lavage' + (t.derniere_it ? ' · après ' + esc(t.derniere_it) : '') + '</small></span><span class="right">' + tenueActions(t) + '</span></li>'; }).join('') + '</ul>' : '<p class="empty">Rien à envoyer.</p>') + '</section>' +
       '<section class="panel"><div class="panel-head"><h3>Remplacements (seuil d\'alerte)</h3><a href="#changements">Historique ' + icon('arrow') + '</a></div>' + (s.demandes.length ? '<ul class="rows">' + s.demandes.map(demandeRow).join('') + '</ul>' : '<p class="empty">Aucune tenue au seuil.</p>') + '<p class="note">Créés automatiquement quand une tenue atteint ' + ((db.tenues || [])[0] || {}).seuil_feux + ' feux. Seuil réglable dans « Tenues de feu ».</p></section></div>';
     bindHab(root);
+    root.querySelector('#lv-out').onclick = openEnvoiLavage; root.querySelector('#lv-in').onclick = openRetourLavage;
   }
   var tFilter = 'tous', tType = '', tQ = '';
   function viewTenues(root) {
@@ -1524,7 +1552,7 @@
       '<div class="filters"><div class="seg" role="group" aria-label="État">' + F.map(function (f) { var n = f[0] === 'tous' ? T.filter(function (t) { return t.statut !== 'reformee'; }).length : T.filter(function (t) { return t.statut === f[0]; }).length; return '<button type="button" data-tf="' + f[0] + '" aria-pressed="' + (tFilter === f[0]) + '">' + f[1] + ' (' + n + ')</button>'; }).join('') + '</div>' +
       '<select class="select sel-sm" id="t-type" aria-label="Type"><option value="">Tous les types</option>' + Object.keys(TENUE).map(function (k) { return '<option value="' + k + '"' + (tType === k ? ' selected' : '') + '>' + TENUE[k] + '</option>'; }).join('') + '</select><input class="input sel-sm" id="t-q" placeholder="N°, agent, matricule" value="' + esc(tQ) + '"></div>' +
       '<section class="panel"><table class="dtable"><thead><tr><th>N°</th><th>Type</th><th>Agent</th><th>État</th><th class="num">Depuis lavage</th><th>Feux / seuil</th><th class="num">Lavages</th><th></th></tr></thead><tbody>' +
-      (list.length ? list.map(function (t) { return '<tr><td data-l="N°"><b>' + esc(t.numero) + '</b></td><td data-l="Type">' + TENUE[t.type] + '</td><td data-l="Agent">' + esc(t.user ? t.user.name : '—') + '</td><td data-l="État">' + badge(TST[t.statut]) + '</td><td class="num" data-l="Depuis lavage">' + (t.feux_depuis_lavage || 0) + '</td><td data-l="Feux">' + (t.nb_feux || 0) + ' / ' + (t.seuil_feux || VBSData.SEUIL) + seuilBar(t) + '</td><td class="num" data-l="Lavages">' + (t.nb_lavages || 0) + '</td><td class="t-act">' + tenueActions(t) + '</td></tr>'; }).join('') : '<tr><td colspan="8" class="empty">Aucune tenue.</td></tr>') + '</tbody></table></section>';
+      (list.length ? list.map(function (t) { return '<tr><td data-l="N°"><b>' + esc(t.numero) + '</b></td><td data-l="Type">' + TENUE[t.type] + '</td><td data-l="Agent">' + esc(t.user ? t.user.name : '—') + '</td><td data-l="État">' + badge(TST[t.statut]) + (t.statut === 'contaminee' && t.derniere_it ? '<br><span class="note">après ' + esc(t.derniere_it) + '</span>' : '') + '</td><td class="num" data-l="Depuis lavage">' + (t.feux_depuis_lavage || 0) + '</td><td data-l="Feux">' + (t.nb_feux || 0) + ' / ' + (t.seuil_feux || VBSData.SEUIL) + seuilBar(t) + '</td><td class="num" data-l="Lavages">' + (t.nb_lavages || 0) + '</td><td class="t-act">' + tenueActions(t) + '</td></tr>'; }).join('') : '<tr><td colspan="8" class="empty">Aucune tenue.</td></tr>') + '</tbody></table></section>';
     root.querySelectorAll('[data-tf]').forEach(function (b) { b.onclick = function () { tFilter = b.dataset.tf; route(); }; });
     root.querySelector('#t-type').onchange = function (e) { tType = e.target.value; route(); };
     var q = root.querySelector('#t-q'); q.oninput = function () { tQ = q.value; var pos = q.selectionStart; route(); var n2 = document.getElementById('t-q'); n2.focus(); n2.setSelectionRange(pos, pos); };
@@ -1534,10 +1562,11 @@
   function viewChangements(root) {
     var M = (db.mouvements_epi || []).slice().sort(function (a, b) { return b.createdObj - a.createdObj; });
     var open = M.filter(function (m) { return m.type === 'demande' && m.statut === 'envoyee'; }), hist = M.filter(function (m) { return !(m.type === 'demande' && m.statut === 'envoyee'); });
-    root.innerHTML = head('Changements de tenue', 'Chaque changement enregistré au centre, et les remplacements au seuil d\'alerte.', '<button class="btn btn-primary" type="button" data-chg="">Enregistrer un changement</button>') +
+    root.innerHTML = head('Changements de tenue', 'Chaque changement enregistré au centre, les remplacements au seuil d\'alerte et les lots envoyés au lavage.', '<button class="btn btn-primary" type="button" data-chg="">Enregistrer un changement</button>') +
       (open.length ? '<section class="panel"><div class="panel-head"><h3>Remplacements à faire</h3></div><ul class="rows">' + open.map(demandeRow).join('') + '</ul></section>' : '') +
       '<section class="panel"><div class="panel-head"><h3>Historique</h3></div>' + (hist.length ? '<ul class="rows">' + hist.map(function (m) {
-        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + '</b><small>' + esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' + esc(m.motif) : '') + '</small></span><span class="right">' + badge(m.statut === 'annulee' ? ['Annulé', 'badge-neutral'] : m.type === 'changement' ? ['Changé', 'badge-ok'] : ['Remplacé', 'badge-ok']) + '</span></li>';
+        var lot = m.type === 'lavage' || m.type === 'retour_lavage';
+        return '<li><span class="when">' + fmtD(m.createdObj) + '</span><span class="what"><b>' + esc(lot ? MVT[m.type] : m.user ? m.user.name + ' · ' + m.user.matricule : 'Agent') + '</b><small>' + (lot ? '' : esc((m.types || []).map(function (x) { return TENUE[x] + (m.numeros && m.numeros[x] ? ' → ' + m.numeros[x] : ''); }).join(', ')) + (m.motif ? ' · ' : '')) + esc(m.motif || '') + '</small></span><span class="right">' + badge(m.statut === 'annulee' ? ['Annulé', 'badge-neutral'] : m.type === 'lavage' ? ['Au lavage', 'badge-info'] : m.type === 'retour_lavage' ? ['En stock', 'badge-ok'] : m.type === 'changement' ? ['Changé', 'badge-ok'] : ['Remplacé', 'badge-ok']) + '</span></li>';
       }).join('') + '</ul>' : '<p class="empty">Aucun changement enregistré.</p>') + '</section>';
     bindHab(root);
   }
@@ -1713,6 +1742,337 @@
       '</section>';
   }
 
+  // =================================================================== impression d'un document (fiche, relevé, attestation, bon)
+  function printHtml(html, title) {
+    var area = $('print-area'); area.innerHTML = html;
+    document.body.classList.add('printing');
+    var t = document.title; document.title = title;
+    if (window.VBSi18n) VBSi18n.apply(area);
+    window.print();
+    document.title = t;
+    setTimeout(function () { document.body.classList.remove('printing'); area.innerHTML = ''; }, 300);
+  }
+
+  // =================================================================== natures d'exposition (circulaire DGSCGC du 14 janvier 2025)
+  var CATS = [
+    ['fumees', "Fumées d'incendie (HAP, benzène, suies…)"],
+    ['co', 'Monoxyde et dioxyde de carbone (CO, CO₂)'],
+    ['pfas', 'PFAS (mousses extinctrices, textiles)'],
+    ['amiante', 'Amiante'],
+    ['chaleur', 'Chaleur'],
+    ['effort', 'Effort physique intense']
+  ];
+  var CAT_COURT = { fumees: 'Fumées', co: 'CO / CO₂', pfas: 'PFAS', amiante: 'Amiante', chaleur: 'Chaleur', effort: 'Effort physique' };
+  var ACT = { caisson: "Caisson d'observation (phénomènes thermiques)", feu_reel: 'Formation feu réel', brulage: 'Brûlage dirigé, feu tactique', mousse: 'Manœuvre mousse (émulseur)', nettoyage: 'Nettoyage et reconditionnement du matériel', autre: 'Autre activité exposante' };
+  function catsP(p) {
+    var it = p.it, out = {};
+    if (!it || !filled(p) || it.ambiance === 'aucun_feu') return out;
+    var c = it.circonstances || [], hot = ['POS_ATT', 'POS_VENT', 'VEG_LISIERE', 'VEG_NOYAGE'].indexOf(p.position) !== -1;
+    out.fumees = 1; out.co = 1;
+    if (c.indexOf('PFAS') !== -1) out.pfas = 1;
+    if (c.indexOf('AMIANTE') !== -1 || it.suspicion_amiante) out.amiante = 1;
+    if (hot || (it.type_feu === 'vegetation' && +p.duree_min >= 240)) out.chaleur = 1;
+    if (p.ari_porte || +p.duree_min >= 180) out.effort = 1;
+    return out;
+  }
+  function catsA(a) {
+    var out = {}, fire = ['caisson', 'feu_reel', 'brulage'].indexOf(a.type) !== -1;
+    if (fire) { out.fumees = 1; out.co = 1; out.chaleur = 1; out.effort = 1; }
+    if (a.type === 'nettoyage') out.fumees = 1;
+    if (a.type === 'mousse' || a.pfas) out.pfas = 1;
+    if (a.amiante) out.amiante = 1;
+    return out;
+  }
+  function catChips(o) { var k = CATS.filter(function (c) { return o[c[0]]; }); return k.length ? k.map(function (c) { return '<span class="cat-chip">' + esc(CAT_COURT[c[0]]) + '</span>'; }).join(' ') : '<span class="note">—</span>'; }
+  function actsOf(uid) { return (db.activites || []).filter(function (a) { return (a.agents || []).indexOf(uid) !== -1; }); }
+  function decCourt(t) { return t ? (R.DEC[t] || { court: '—' }).court : '—'; }
+  function actTable(list, empty) {
+    if (!list.length) return '<p class="empty">' + (empty || 'Aucune activité déclarée sur cette période.') + '</p>';
+    return '<table class="dtable"><thead><tr><th>Date</th><th>Activité</th><th>Lieu</th><th>Durée</th><th>Protection</th><th>Décontamination</th><th>Expositions</th></tr></thead><tbody>' +
+      list.map(function (a) { return '<tr><td data-l="Date">' + fmtD(a.dateObj) + '</td><td data-l="Activité"><b>' + esc(ACT[a.type] || a.type) + '</b><br><span class="note">' + esc(a.intitule || '') + '</span></td><td data-l="Lieu">' + esc(a.lieu || '—') + '</td><td data-l="Durée">' + durTxt(a.duree_min) + '</td><td data-l="Protection">' + (a.ari ? 'ARI porté' : 'Sans ARI') + '</td><td data-l="Décontamination">' + esc(decCourt(a.decon_type)) + '</td><td data-l="Expositions">' + catChips(catsA(a)) + '</td></tr>'; }).join('') + '</tbody></table>';
+  }
+  function actPanel(list, title) {
+    return '<section class="panel"><div class="panel-head"><h3>' + title + '</h3><span class="note">Formations, manœuvres et entretien du matériel · décret n° 2025-1349</span></div>' + actTable(list) + '</section>';
+  }
+
+  // Séance de formation ou d'entretien déclarée par le CA ou le formateur
+  function openActivite() {
+    var people = db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && !u.renfort; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+    var d0 = new Date(); d0.setMinutes(0, 0, 0);
+    var dlg = modal('Formation ou entretien du matériel', '<p class="note">Les activités exposantes hors intervention comptent aussi : formations feu réel, caissons, manœuvres mousse, nettoyage du matériel souillé. Elles apparaissent dans le dossier de chaque participant et dans son relevé annuel.</p>' +
+      '<div class="form-2"><div class="field"><label class="label" for="ac-type">Activité</label><select class="select" id="ac-type">' + Object.keys(ACT).map(function (k) { return '<option value="' + k + '">' + esc(ACT[k]) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label class="label" for="ac-date">Date et heure de début</label><input class="input" id="ac-date" type="datetime-local" value="' + localInput(d0) + '"></div></div>' +
+      '<div class="field"><label class="label" for="ac-titre">Intitulé</label><input class="input" id="ac-titre" maxlength="160" placeholder="Ex. FMPA caisson, reconditionnement des tuyaux après feu"></div>' +
+      '<div class="form-2"><div class="field"><label class="label" for="ac-lieu">Lieu</label><input class="input" id="ac-lieu" maxlength="120" value="' + esc(centreName()) + '"></div>' +
+      '<div class="field"><label class="label" for="ac-dur">Durée (minutes)</label><input class="input" id="ac-dur" type="number" min="5" step="5" value="120"></div></div>' +
+      '<div class="form-2"><div class="field"><label class="label" for="ac-dec">Décontamination</label><select class="select" id="ac-dec">' + Object.keys(R.DEC).map(function (k) { return '<option value="' + k + '"' + (k === 'DEC_LING_DOUCHE' ? ' selected' : '') + '>' + esc(R.DEC[k].label) + '</option>'; }).join('') + '</select></div>' +
+      '<fieldset class="fs"><legend class="label">Conditions</legend><label class="check"><input type="checkbox" id="ac-ari"> ARI porté</label><label class="check"><input type="checkbox" id="ac-pfas"> Émulseur ou textiles avec PFAS</label></fieldset></div>' +
+      '<fieldset class="fs"><legend class="label">Participants</legend><div class="ac-people">' + people.map(function (u) { return '<label class="check"><input type="checkbox" name="ac-ag" value="' + u.id + '"' + (u.id === db.meId ? ' checked' : '') + '> ' + esc((u.grade ? u.grade + ' ' : '') + u.name) + '</label>'; }).join('') + '</div></fieldset>',
+      [{ label: 'Enregistrer', primary: true, run: async function (d) {
+        var agents = Array.prototype.map.call(d.querySelectorAll('[name=ac-ag]:checked'), function (c) { return c.value; });
+        if (!agents.length) throw new Error('Cochez au moins un participant.');
+        var type = d.querySelector('#ac-type').value;
+        await VBSData.create(S, 'activites', { type: type, date: VBSData.toApiDate(new Date(need(d.querySelector('#ac-date').value, 'Indiquez la date.'))), duree_min: +need(d.querySelector('#ac-dur').value, 'Indiquez la durée.'),
+          intitule: d.querySelector('#ac-titre').value.trim() || ACT[type], lieu: d.querySelector('#ac-lieu').value.trim(), agents: agents, auteur: db.meId, centre: (db.me || {}).centre,
+          ari: d.querySelector('#ac-ari').checked, pfas: d.querySelector('#ac-pfas').checked || type === 'mousse', decon_type: d.querySelector('#ac-dec').value });
+        toast('Activité enregistrée pour ' + agents.length + ' participant' + (agents.length > 1 ? 's' : '') + '.'); await reload();
+      } }], { wide: true });
+    dlg.querySelector('#ac-type').onchange = function (e) { var t = e.target.value; dlg.querySelector('#ac-ari').checked = t === 'caisson' || t === 'feu_reel'; if (t === 'mousse') dlg.querySelector('#ac-pfas').checked = true; };
+  }
+
+  // =================================================================== opérations d'ampleur : plusieurs jours, relèves, renforts
+  var OP_ID = null;
+  function bigOps() { return (db.operations || []).filter(function (o) { return o.ampleur; }).sort(function (a, b) { return b.dateObj - a.dateObj; }); }
+  function opEnd(o) { var e = o.finObj; o.reports.forEach(function (x) { if (!e || x.finObj > e) e = x.finObj; }); return e || o.dateObj; }
+  function opMinutes(o) { return Math.round((opEnd(o) - o.dateObj) / 60000); }
+  function releves(o) { var r = []; o.reports.forEach(function (x) { var n = +x.releve || 1; if (r.indexOf(n) === -1) r.push(n); }); return r.sort(); }
+  function opDone(o) { return o.reports.filter(function (x) { return x.statut !== 'brouillon'; }).length; }
+  function canAddReleve(o) { return (S.role === 'commandement' || (S.role === 'cos' && o.cos === db.meId)) && can('operation_releve'); }
+  function stBar(x) { var s = VBSData.reportState(x); return s === 'retard' ? 'late' : s === 'attente' ? 'pending' : 'ok'; }
+  function viewOperations(root) {
+    var o = OP_ID && db.ops[OP_ID];
+    if (o) return viewOperation(root, o);
+    var list = bigOps();
+    root.innerHTML = head('Grandes opérations', 'Feux de forêt, feux d\'entrepôt, opérations de plusieurs jours : chaque relève, chaque équipage et chaque rapport, au même endroit.', S.role === 'cos' && can('rapport_rediger') ? '<button class="btn btn-primary" type="button" id="new-op">Nouvelle opération</button>' : '') +
+      (list.length ? '<div class="op-cards">' + list.map(function (op) {
+        var n = op.reports.length, done = opDone(op);
+        return '<a class="panel op-card" href="#operations/' + op.id + '"><div class="op-card-top"><span class="icon-tile warn">' + icon('flame') + '</span><div><b>' + esc(op.numero) + ' · ' + esc(TYPE[op.type_feu]) + '</b><small>' + esc(op.precision || '') + ' · ' + esc(op.commune || '') + '</small></div></div>' +
+          '<div class="op-facts"><span><b>' + durTxt(opMinutes(op)) + '</b>du ' + fmtDT(op.dateObj) + '<br>au ' + fmtDT(opEnd(op)) + '</span><span><b>' + releves(op).length + '</b>relèves</span><span><b>' + n + '</b>engagements d\'agrès</span></div>' +
+          badge(done === n ? ['Tous les rapports transmis', 'badge-ok'] : [done + ' sur ' + n + ' rapports transmis', n - done && op.reports.some(function (x) { return VBSData.reportState(x) === 'retard'; }) ? 'badge-late' : 'badge-pending']) + '</a>';
+      }).join('') + '</div>' : '<section class="panel"><p class="empty">Aucune grande opération pour le moment.</p></section>') +
+      '<p class="note">Une grande opération regroupe les engagements successifs : chaque agrès, à chaque relève, a son rapport rempli par son chef d\'agrès. Un agent qui revient sur une relève suivante cumule ses durées.</p>';
+    var b = root.querySelector('#new-op'); if (b) b.onclick = function () { openNewOperation(true); };
+  }
+  function viewOperation(root, o) {
+    var reps = o.reports.slice().sort(function (a, b) { return (+a.releve || 1) - (+b.releve || 1) || a.dateObj - b.dateObj; });
+    var t0 = o.dateObj.getTime(), t1 = opEnd(o).getTime(), span = Math.max(1, t1 - t0);
+    var pos = function (d) { return Math.max(0, Math.min(100, (d.getTime() - t0) / span * 100)); };
+    var people = {}, seeExpo = S.role === 'sssm';
+    reps.forEach(function (x) { x.crew.forEach(function (p) { (people[p.agent] = people[p.agent] || []).push(p); }); });
+    var ids = Object.keys(people), ext = ids.filter(function (id) { return (db.byId[id] || {}).renfort; });
+    // Graduations : un repère à chaque minuit
+    var ticks = '', m = new Date(t0); m.setHours(24, 0, 0, 0);
+    for (; m.getTime() < t1; m = new Date(m.getTime() + VBSData.DAY)) ticks += '<span class="g-tick" style="left:' + pos(m) + '%"><i>' + fmtD(m).slice(0, 5) + '</i></span>';
+    var rows = releves(o).map(function (n) {
+      return '<div class="g-rel">Relève ' + n + '</div>' + reps.filter(function (x) { return (+x.releve || 1) === n; }).map(function (x) {
+        var l = pos(x.dateObj), w = Math.max(1.5, pos(x.finObj) - l), ca = x.cosUser ? x.cosUser.name : '—';
+        return '<div class="g-row"><div class="g-lab"><b>' + esc(engOf(x)) + '</b><small>' + esc(ca) + ' · ' + esc(x.secteur || '') + '</small></div><div class="g-track">' + ticks.replace(/<i>[^<]*<\/i>/g, '') +
+          '<span class="g-bar ' + stBar(x) + '" style="left:' + l + '%;width:' + w + '%" title="' + esc(engOf(x) + ' · ' + ca + ' · ' + hm(x.dateObj) + ' → ' + hm(x.finObj) + ' · ' + STATE[VBSData.reportState(x)][0]) + '">' + hm(x.dateObj) + ' → ' + hm(x.finObj) + '</span></div></div>';
+      }).join('');
+    }).join('');
+    var act = function (x) {
+      if (x.cos === db.meId) return '<a class="btn btn-' + (x.statut === 'brouillon' ? 'primary' : 'secondary') + ' btn-sm" href="#rapport/' + x.id + '">' + (x.statut === 'brouillon' ? 'Compléter mon rapport' : 'Voir mon rapport') + '</a>';
+      if (S.role === 'sssm') return '<a class="btn btn-secondary btn-sm" href="#rapport/' + x.id + '">Ouvrir</a>';
+      if (x.statut === 'brouillon' && (S.role === 'commandement' || o.cos === db.meId)) return '<button class="btn btn-secondary btn-sm" type="button" data-remind="' + x.id + '">' + icon('send') + 'Relancer</button>';
+      return '';
+    };
+    var right = '<div class="actions-row" style="margin:0"><a class="btn btn-secondary" href="#operations">' + icon('back') + 'Toutes les opérations</a>' +
+      (canAddReleve(o) ? '<button class="btn btn-primary" type="button" id="add-releve">Ajouter une relève</button>' : '') +
+      (seeExpo ? '<button class="btn btn-secondary" type="button" id="op-import" data-import="' + reps[0].id + '">' + icon('download') + 'Importer des mesures</button><button class="btn btn-primary" type="button" id="op-csv">' + icon('download') + 'Personnels exposés (CSV)</button>' : '') + '</div>';
+    var expo = '';
+    if (seeExpo) {
+      var lines = ids.map(function (id) {
+        var ps = people[id], u = db.byId[id] || {}, f = ps.filter(filled), mins = sum(f, function (p) { return +p.duree_min || 0; });
+        var worst = f.map(function (p) { return p.contamination; }).sort(function (a, b) { return ['nulle', 'faible', 'moyenne', 'forte'].indexOf(b) - ['nulle', 'faible', 'moyenne', 'forte'].indexOf(a); })[0];
+        var rel = ps.map(function (p) { return +p.it.releve || 1; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort();
+        return { u: u, id: id, n: ps.length, rel: rel, mins: mins, worst: worst, dec: f.filter(deconOk).length, nf: f.length, miss: ps.length - f.length, ef: sum(f, function (p) { return +p.indice || 0; }) };
+      }).sort(function (a, b) { return b.mins - a.mins; });
+      expo = '<section class="panel"><div class="panel-head"><h3>Personnels exposés · ' + ids.length + '</h3><span class="note">Liste demandée par le guide de doctrine sur les fumées pour les opérations d\'ampleur</span></div>' +
+        (ext.length ? '<div class="callout"><span class="icon-tile">' + icon('send') + '</span><div><strong>' + ext.length + ' personnels de renfort extérieur</strong><span class="sub">Leurs expositions sont à transmettre au SSSM de leur SDIS d\'origine.</span></div><button class="btn btn-secondary btn-sm" type="button" id="op-ext">Liste des renforts (CSV)</button></div>' : '') +
+        '<table class="dtable"><thead><tr><th>Agent</th><th>Relèves</th><th>Durée cumulée</th><th>Zone la plus exposée</th><th>Décontamination</th><th>Rapports</th>' + (DOC ? '<th class="num">Indicateur</th>' : '') + '</tr></thead><tbody>' +
+        lines.map(function (L) { return '<tr><td data-l="Agent"><b>' + esc(L.u.name || '—') + '</b><br><span class="note">' + esc(L.u.matricule || '') + (L.u.statut_sp ? ' · ' + esc(L.u.statut_sp) : '') + '</span>' + (L.u.renfort ? ' ' + badge(['Renfort', 'badge-info']) : '') + '</td><td data-l="Relèves">' + L.rel.join(', ') + (L.n > 1 ? '<br><span class="note">' + L.n + ' engagements</span>' : '') + '</td><td data-l="Durée"><b>' + durTxt(L.mins) + '</b></td><td data-l="Zone">' + (L.worst ? badge(CONT[L.worst]) : '—') + '</td><td data-l="Décontamination">' + (L.nf ? L.dec + ' / ' + L.nf : '—') + '</td><td data-l="Rapports">' + (L.miss ? badge([L.miss + ' rapport' + (L.miss > 1 ? 's' : '') + ' en attente', 'badge-pending']) : badge(['Complet', 'badge-ok'])) + '</td>' + (DOC ? '<td class="num" data-l="Indicateur">' + R.fmt(L.ef) + '</td>' : '') + '</tr>'; }).join('') + '</tbody></table></section>';
+      root.__expo = lines;
+    }
+    var n = reps.length, done = opDone(o);
+    root.innerHTML = head(esc(o.numero) + ' · ' + esc(TYPE[o.type_feu]), esc(o.precision || '') + ' · ' + esc(o.commune || '') + ' · COS : ' + esc(o.cosUser ? (o.cosUser.grade ? o.cosUser.grade + ' ' : '') + o.cosUser.name : '—'), right) +
+      '<div class="grid grid-4">' +
+        kpi('clock', 'warn', 'Durée de l\'opération', durTxt(opMinutes(o)), 'Du ' + fmtDT(o.dateObj) + ' au ' + fmtDT(opEnd(o))) +
+        kpi('users', '', 'Relèves', releves(o).length, n + ' engagements d\'agrès') +
+        (seeExpo ? kpi('user', 'info', 'Personnels engagés', ids.length, ext.length ? 'dont ' + ext.length + ' en renfort extérieur' : 'Tous du département') : kpi('list', 'info', 'Secteurs', (o.secteurs || []).length || '—', esc((o.secteurs || []).join(' · ')))) +
+        kpi('clip', done === n ? 'ok' : '', 'Rapports transmis', done + ' / ' + n, done === n ? 'Opération complète' : (n - done) + ' rapport' + (n - done > 1 ? 's' : '') + ' à compléter') +
+      '</div>' +
+      '<section class="panel"><div class="panel-head"><h3>Chronologie des engagements</h3><span class="note">Qui était engagé, quand, et si chaque rapport est fait</span></div>' +
+        '<div class="gantt"><div class="g-row g-axis"><div class="g-lab"></div><div class="g-track">' + ticks + '</div></div>' + rows + '</div>' +
+        '<div class="legend"><span><i style="background:var(--ok)"></i>Rapport transmis</span><span><i style="background:var(--warn)"></i>À compléter</span><span><i style="background:var(--danger)"></i>En retard</span></div></section>' +
+      expo +
+      '<section class="panel"><div class="panel-head"><h3>Engagements par relève</h3></div><table class="dtable"><thead><tr><th>Relève</th><th>Agrès</th><th>Chef d\'agrès</th><th>Origine</th><th>Secteur</th><th>Arrivée</th><th>Départ</th><th>Rapport</th><th></th></tr></thead><tbody>' +
+        reps.map(function (x) { return '<tr><td data-l="Relève">' + (+x.releve || 1) + '</td><td data-l="Agrès"><b>' + esc(engOf(x)) + '</b></td><td data-l="CA">' + esc(x.cosUser ? x.cosUser.name : '—') + (x.cos === db.meId ? ' <span class="note">(vous)</span>' : '') + '</td><td data-l="Origine">' + esc(x.origine || '—') + '</td><td data-l="Secteur">' + esc(x.secteur || '—') + '</td><td data-l="Arrivée">' + fmtDT(x.dateObj) + '</td><td data-l="Départ">' + fmtDT(x.finObj) + '<br><span class="note">' + durTxt(x.duree_min) + '</span></td><td>' + badge(STATE[VBSData.reportState(x)]) + '</td><td>' + act(x) + '</td></tr>'; }).join('') +
+      '</tbody></table>' + (seeExpo ? '' : '<p class="note">Vous voyez qui est engagé et si chaque rapport est fait, pas l\'exposition des agents : elle reste réservée à l\'agent et au SSSM.</p>') + '</section>';
+    bindRemind(root);
+    var ab = root.querySelector('#add-releve'); if (ab) ab.onclick = function () { openReleve(o); };
+    var ib = root.querySelector('#op-import'); if (ib) ib.onclick = function () { openImport(reps[0]); };
+    var csvRow = function (L) { return [L.u.name || '', L.u.matricule || '', L.u.statut_sp || '', L.u.renfort || centreName(), L.rel.join(' '), L.n, L.mins, L.worst ? CONT[L.worst][0] : '', L.nf ? L.dec + '/' + L.nf : '', L.miss ? 'incomplet' : 'complet']; };
+    var csvHead = ['Agent', 'Matricule', 'Statut', 'Origine', 'Relèves', 'Engagements', 'Durée cumulée (min)', 'Zone la plus exposée', 'Décontamination', 'Rapports'];
+    var cb = root.querySelector('#op-csv'); if (cb) cb.onclick = function () { csvDownload('personnels-exposes-' + o.numero + '.csv', [csvHead].concat(root.__expo.map(csvRow))); };
+    var eb = root.querySelector('#op-ext'); if (eb) eb.onclick = function () { csvDownload('renforts-' + o.numero + '.csv', [csvHead].concat(root.__expo.filter(function (L) { return L.u.renfort; }).map(csvRow))); };
+  }
+  function openReleve(o) {
+    var cas = db.users.filter(function (u) { return u.role === 'cos'; }).sort(function (a, b) { return (a.renfort ? 1 : 0) - (b.renfort ? 1 : 0) || a.name.localeCompare(b.name); });
+    var next = Math.max.apply(null, releves(o).concat([0])) + 1, d0 = new Date(); d0.setMinutes(0, 0, 0);
+    var d1 = new Date(d0.getTime() + 10 * 3600000);
+    modal('Ajouter une relève · ' + o.numero, '<p class="note">Un rapport est ouvert pour le chef d\'agrès de chaque agrès engagé. Il le remplit à son désengagement, pour lui et son équipage.</p>' +
+      '<div class="form-2"><div class="field"><label class="label" for="rl-n">Relève n°</label><input class="input" id="rl-n" type="number" min="1" value="' + next + '"></div>' +
+      '<div class="field"><label class="label" for="rl-sec">Secteur</label><select class="select" id="rl-sec">' + (o.secteurs || []).concat(['Autre']).map(function (s) { return '<option>' + esc(s) + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="form-2"><div class="field"><label class="label" for="rl-ca">Chef d\'agrès</label><select class="select" id="rl-ca">' + cas.map(function (u) { return '<option value="' + u.id + '">' + esc((u.grade ? u.grade + ' ' : '') + u.name + (u.renfort ? ' · renfort' : '')) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><label class="label" for="rl-eng">Agrès</label><input class="input" id="rl-eng" maxlength="12" value="CCF"></div></div>' +
+      '<div class="field"><label class="label" for="rl-ori">Origine</label><input class="input" id="rl-ori" maxlength="120" value="' + esc(centreName()) + '"><span class="hint">Centre de secours, ou colonne de renfort d\'un autre département.</span></div>' +
+      '<div class="form-2"><div class="field"><label class="label" for="rl-d0">Arrivée sur les lieux</label><input class="input" id="rl-d0" type="datetime-local" value="' + localInput(d0) + '"></div>' +
+      '<div class="field"><label class="label" for="rl-d1">Départ</label><input class="input" id="rl-d1" type="datetime-local" value="' + localInput(d1) + '"></div></div>',
+      [{ label: 'Ajouter la relève', primary: true, run: async function (d) {
+        var a = new Date(need(d.querySelector('#rl-d0').value, 'Indiquez l\'heure d\'arrivée.')), b = new Date(need(d.querySelector('#rl-d1').value, 'Indiquez l\'heure de départ.'));
+        if (b <= a) throw new Error('Le départ doit être après l\'arrivée.');
+        var ca = db.byId[d.querySelector('#rl-ca').value] || {}, n = +d.querySelector('#rl-n').value || next, eng = need(d.querySelector('#rl-eng').value, 'Indiquez l\'agrès.').trim().toUpperCase(), sec = d.querySelector('#rl-sec').value;
+        await VBSData.create(S, 'interventions', { numero: o.numero.replace(/^OP/, 'INT') + '-R' + n + '-' + eng.replace(/\s+/g, ''), date: VBSData.toApiDate(a), duree_min: Math.round((b - a) / 60000), type_feu: o.type_feu, precision: (o.precision || '') + ' · ' + sec, commune: o.commune || '',
+          centre: ca.centre || (db.me || {}).centre, cos: ca.id, operation: o.id, statut: 'brouillon', ambiance: 'feu_fumee', circonstances: [], releve: n, secteur: sec, origine: d.querySelector('#rl-ori').value.trim(), engin: eng });
+        toast('Relève ajoutée : ' + (ca.name || 'le chef d\'agrès') + ' voit son rapport à compléter.'); await reload();
+      } }]);
+  }
+
+  // =================================================================== relevés réglementaires (SSSM)
+  // Relevé annuel des activités potentiellement exposantes et attestation d'exposition,
+  // d'après la circulaire DGSCGC du 14 janvier 2025 (santé et sécurité en service).
+  var RV = { year: new Date().getFullYear(), f: 'tous', st: '' };
+  function rvPeople() { return db.users.filter(function (u) { return (u.role === 'agent' || u.role === 'cos') && !u.renfort; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }
+  function rvData(u, year, career) {
+    var inY = function (d) { return career || d.getFullYear() === year; };
+    var all = (db.participations || []).filter(function (p) { return p.agent === u.id && p.it && inY(p.it.dateObj); });
+    var parts = all.filter(function (p) { return filled(p) && p.it.ambiance !== 'aucun_feu'; });
+    var pending = all.filter(function (p) { return p.it.statut !== 'controle_sssm'; });
+    var acts = actsOf(u.id).filter(function (a) { return inY(a.dateObj); });
+    var tot = {}; CATS.forEach(function (c) { tot[c[0]] = { n: 0, min: 0 }; });
+    parts.forEach(function (p) { var c = catsP(p); Object.keys(c).forEach(function (k) { tot[k].n++; tot[k].min += +p.duree_min || 0; }); });
+    acts.forEach(function (a) { var c = catsA(a); Object.keys(c).forEach(function (k) { tot[k].n++; tot[k].min += +a.duree_min || 0; }); });
+    var lines = parts.map(function (p) { return { d: p.it.dateObj, ref: p.it.numero, quoi: TYPE[p.it.type_feu] + (p.it.releve ? ' · relève ' + p.it.releve : '') + (p.it.precision ? ' · ' + p.it.precision : ''), dur: +p.duree_min || 0, cats: catsP(p), prot: posTxt(p) + ' · ' + ariTxt(p) + ' · ' + (CONT[p.contamination] || [''])[0], dec: (R.DEC[p.decon_type] || { label: 'Non renseignée' }).label }; })
+      .concat(acts.map(function (a) { return { d: a.dateObj, ref: 'Formation / entretien', quoi: ACT[a.type] + (a.intitule ? ' · ' + a.intitule : ''), dur: +a.duree_min || 0, cats: catsA(a), prot: a.ari ? 'ARI porté' : 'Sans ARI', dec: decCourt(a.decon_type) }; }))
+      .sort(function (a, b) { return a.d - b.d; });
+    return { parts: parts, pending: pending, acts: acts, tot: tot, lines: lines, mins: sum(lines, function (l) { return l.dur; }) };
+  }
+  function rvDoc(u, year) { return (db.documents || []).filter(function (d) { return d.type_mesure === 'releve_annuel' && d.agent === u.id && +d.annee === +year; }).sort(function (a, b) { return b.createdObj - a.createdObj; })[0] || null; }
+  function rvModel(u) { return u.statut_sp === 'SPV' ? 'sapeur-pompier volontaire' : 'sapeur-pompier professionnel ou PATS'; }
+  function idBlock(u, extra) {
+    return '<dl class="fi-id"><div><dt>Agent</dt><dd>' + esc((u.grade ? u.grade + ' ' : '') + (u.name || '')) + '</dd></div><div><dt>Matricule</dt><dd>' + esc(u.matricule || '') + '</dd></div><div><dt>Statut</dt><dd>' + esc(u.statut_sp === 'SPV' ? 'SPV · volontaire' : u.statut_sp === 'PATS' ? 'PATS' : 'SPP · professionnel') + '</dd></div><div><dt>Centre</dt><dd>' + esc(centreName()) + '</dd></div>' + extra + '<div><dt>Édition</dt><dd>' + fmtD(new Date()) + '</dd></div></dl>';
+  }
+  function rvSumTable(tot) {
+    return '<table class="fi-tab rv-sum"><thead><tr><th>Nature de l\'exposition</th><th>Activités</th><th>Durée cumulée</th></tr></thead><tbody>' + CATS.map(function (c) { var t = tot[c[0]]; return '<tr><td>' + esc(c[1]) + '</td><td>' + (t.n || '—') + '</td><td>' + (t.n ? durTxt(t.min) : '—') + '</td></tr>'; }).join('') + '</tbody></table>';
+  }
+  function releveHtml(u, year, doc) {
+    var r = rvData(u, year), med = doc ? db.byId[doc.auteur] : null;
+    return '<article class="fiche"><header class="fi-head"><div><h1>Relevé annuel des activités potentiellement exposantes · ' + year + '</h1><p>Circulaire DGSCGC du 14 janvier 2025 relative à la santé et à la sécurité en service · modèle ' + esc(rvModel(u)) + ' · à transmettre avant la visite médicale</p></div><span class="fi-brand">VB Safety · Sapeur-pompier</span></header>' +
+      idBlock(u, '<div><dt>Année</dt><dd>' + year + '</dd></div>') +
+      '<h2>Synthèse par nature d\'exposition</h2>' + rvSumTable(r.tot) +
+      '<p class="fi-note">' + r.parts.length + ' intervention' + (r.parts.length > 1 ? 's' : '') + ' avec fumées et ' + r.acts.length + ' formation' + (r.acts.length > 1 ? 's' : '') + ' ou séance' + (r.acts.length > 1 ? 's' : '') + ' d\'entretien du matériel, soit ' + durTxt(r.mins) + ' d\'activités exposantes.' + (r.pending.length ? ' <span>' + r.pending.length + ' rapport' + (r.pending.length > 1 ? 's' : '') + ' pas encore validé' + (r.pending.length > 1 ? 's' : '') + ' par le SSSM.</span>' : '') + '</p>' +
+      '<h2>Détail chronologique</h2>' + (r.lines.length ? '<table class="fi-tab rv-tab"><thead><tr><th>Date · référence</th><th>Activité</th><th>Durée</th><th>Expositions</th><th>Protection et décontamination</th></tr></thead><tbody>' +
+        r.lines.map(function (l) { return '<tr><td>' + fmtD(l.d) + '<br><small>' + esc(l.ref) + '</small></td><td>' + esc(l.quoi) + '</td><td>' + durTxt(l.dur) + '</td><td>' + CATS.filter(function (c) { return l.cats[c[0]]; }).map(function (c) { return esc(CAT_COURT[c[0]]); }).join(', ') + '</td><td>' + esc(l.prot) + '<br><small>' + esc(l.dec) + '</small></td></tr>'; }).join('') + '</tbody></table>' : '<p>Aucune activité exposante enregistrée sur l\'année.</p>') +
+      '<h2>Observations du médecin</h2><p class="rv-obs">' + (doc && doc.observations ? esc(doc.observations) : '—') + '</p>' +
+      '<p class="fi-note">Établi à partir des rapports de contamination contrôlés par le SSSM et des activités déclarées (formations, entretien du matériel). Les rubriques suivent la circulaire ; elles s\'alignent sur le modèle en vigueur dans votre SDIS. Données fictives de démonstration.</p>' +
+      '<div class="fi-sign"><div>Visa du médecin du SSSM' + (doc ? '<br><b>' + esc(med ? (med.grade ? med.grade + ' ' : '') + med.name : 'SSSM') + ' · ' + fmtD(doc.createdObj) + '</b>' : '') + '</div><div>Date et signature de l\'agent</div></div></article>';
+  }
+  var MOTIF_ATT = { carriere: 'Fin de carrière', depart: 'Départ du SDIS (mutation, fin d\'engagement)', demande: 'Demande de l\'agent' };
+  function attestationHtml(u, motif) {
+    var r = rvData(u, 0, true), years = {};
+    r.lines.forEach(function (l) { var y = l.d.getFullYear(); years[y] = years[y] || { n: 0, min: 0, f: 0, cats: {} }; years[y].n++; years[y].min += l.dur; if (l.ref !== 'Formation / entretien') years[y].f++; Object.keys(l.cats).forEach(function (k) { years[y].cats[k] = 1; }); });
+    var first = r.lines[0] ? r.lines[0].d : new Date();
+    var amiante = r.parts.filter(function (p) { return catsP(p).amiante; });
+    return '<article class="fiche"><header class="fi-head"><div><h1>Attestation d\'exposition aux agents CMR et aux fumées d\'incendie</h1><p>Circulaire DGSCGC du 14 janvier 2025 · attestation cumulée de carrière · à conserver 50 ans · motif : ' + esc(MOTIF_ATT[motif] || '') + '</p></div><span class="fi-brand">VB Safety · Sapeur-pompier</span></header>' +
+      idBlock(u, '<div><dt>Période</dt><dd>' + fmtD(first) + ' → ' + fmtD(new Date()) + '</dd></div>') +
+      '<h2>Expositions cumulées sur la période</h2>' + rvSumTable(r.tot) +
+      '<h2>Par année</h2><table class="fi-tab rv-years"><thead><tr><th>Année</th><th>Interventions avec fumées</th><th>Formations, entretien</th><th>Durée cumulée</th><th>Natures d\'exposition</th></tr></thead><tbody>' +
+        Object.keys(years).sort().map(function (y) { var Y = years[y]; return '<tr><td>' + y + '</td><td>' + Y.f + '</td><td>' + (Y.n - Y.f) + '</td><td>' + durTxt(Y.min) + '</td><td>' + CATS.filter(function (c) { return Y.cats[c[0]]; }).map(function (c) { return esc(CAT_COURT[c[0]]); }).join(', ') + '</td></tr>'; }).join('') + '</tbody></table>' +
+      (amiante.length ? '<h2>Circonstances particulières</h2><p>Suspicion d\'amiante : ' + amiante.map(function (p) { return fmtD(p.it.dateObj) + ' (' + esc(p.it.numero) + ')'; }).join(', ') + '.</p>' : '') +
+      '<p class="rv-att">Le médecin du service de santé et de secours médical atteste que l\'agent désigné ci-dessus a été exposé, au cours de son activité de sapeur-pompier, aux natures d\'exposition récapitulées dans ce document. Le détail de chaque exposition figure dans ses relevés annuels et sa fiche individuelle d\'exposition.</p>' +
+      '<p class="fi-note">Document à remettre à l\'agent et à conserver au dossier médical. Il sert au suivi post-exposition et, le cas échéant, à une demande de reconnaissance en maladie professionnelle (tableaux 16 bis et 30, décret n° 2025-1349). Données fictives de démonstration.</p>' +
+      '<div class="fi-sign"><div>Le médecin du SSSM, date et signature</div><div>Remis à l\'agent le</div></div></article>';
+  }
+  function printReleves(list, year) {
+    printHtml(list.map(function (u) { return releveHtml(u, year, rvDoc(u, year)); }).join('<div class="pg-break"></div>'), 'Relevés annuels ' + year + (list.length === 1 ? ' ' + list[0].matricule : ''));
+  }
+  function viewReleves(root) {
+    var people = rvPeople(), y = RV.year, now = new Date();
+    var years = []; for (var k = 0; k < 3; k++) years.push(now.getFullYear() - k);
+    var rows = people.map(function (u) {
+      var r = rvData(u, y), doc = rvDoc(u, y), nx = nextRdv(db, u.id), soon = nx && nx.dateObj - now < 30 * VBSData.DAY;
+      return { u: u, r: r, doc: doc, nx: nx, soon: soon };
+    }).filter(function (o) { return (o.r.lines.length || o.doc) && (!RV.st || o.u.statut_sp === RV.st) && (RV.f === 'tous' || (RV.f === 'viser' ? !o.doc : !!o.doc)); });
+    var all = people.map(function (u) { return { u: u, doc: rvDoc(u, y), r: rvData(u, y), nx: nextRdv(db, u.id) }; }).filter(function (o) { return o.r.lines.length || o.doc; });
+    var ready = all.filter(function (o) { return !o.r.pending.length; }).length, vises = all.filter(function (o) { return o.doc; }).length;
+    var urgent = all.filter(function (o) { return !o.doc && o.nx && o.nx.dateObj - now < 30 * VBSData.DAY; }).length;
+    var seg = function (key, opts) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-rv="' + key + '|' + o[0] + '" aria-pressed="' + (RV[key] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
+    root.innerHTML = head('Relevés réglementaires', 'Le relevé annuel des activités exposantes de chaque agent, et l\'attestation d\'exposition en fin de carrière. Vous contrôlez, visez, puis téléchargez.',
+      '<div class="field"><label class="label" for="rv-y">Année</label><select class="select" id="rv-y">' + years.map(function (v) { return '<option' + (v === y ? ' selected' : '') + '>' + v + '</option>'; }).join('') + '</select></div>') +
+      '<div class="callout"><span class="icon-tile">' + icon('scale') + '</span><div><strong>Circulaire DGSCGC du 14 janvier 2025</strong><span class="sub">Un relevé annuel des activités potentiellement exposantes, transmis avant la visite médicale, et une attestation cumulée à conserver 50 ans. Modèles distincts pour les professionnels (SPP, PATS) et les volontaires (SPV). Le Carnet les remplit à partir des rapports contrôlés et des formations déclarées.</span></div></div>' +
+      '<div class="grid grid-4">' + kpi('users', '', 'Agents concernés · ' + y, all.length, 'Au moins une activité exposante') + kpi('check', 'ok', 'Données complètes', ready + ' / ' + all.length, 'Tous les rapports de l\'année validés') + kpi('lock', 'info', 'Relevés visés', vises + ' / ' + all.length, 'Par le médecin du SSSM') + kpi('cal', urgent ? 'warn' : '', 'À viser avant une visite', urgent, 'Visite SSSM dans les 30 jours') + '</div>' +
+      '<section class="panel"><div class="panel-head wrap"><h3>Relevés ' + y + '</h3><div class="actions-row" style="margin:0">' + seg('f', [['tous', 'Tous'], ['viser', 'À viser'], ['vises', 'Visés']]) + seg('st', [['', 'SPP et SPV'], ['SPP', 'SPP'], ['SPV', 'SPV']]) + '</div></div>' +
+        (rows.length ? '<table class="dtable"><thead><tr><th>Agent</th><th>Activités exposantes</th><th>Durée</th><th>Données</th><th>Visite SSSM</th><th>Relevé</th><th></th></tr></thead><tbody>' + rows.map(function (o) {
+          return '<tr><td data-l="Agent"><b>' + esc(o.u.name) + '</b><br><span class="note">' + esc(o.u.matricule) + ' · ' + esc(o.u.statut_sp || 'SPP') + '</span></td><td data-l="Activités">' + o.r.parts.length + ' intervention' + (o.r.parts.length > 1 ? 's' : '') + '<br><span class="note">' + o.r.acts.length + ' formation' + (o.r.acts.length > 1 ? 's' : '') + ' ou entretien</span></td><td data-l="Durée">' + durTxt(o.r.mins) + '</td>' +
+            '<td data-l="Données">' + (o.r.pending.length ? badge([o.r.pending.length + ' rapport' + (o.r.pending.length > 1 ? 's' : '') + ' à valider', 'badge-pending']) : badge(['Complètes', 'badge-ok'])) + '</td>' +
+            '<td data-l="Visite">' + (o.nx ? fmtD(o.nx.dateObj) + (o.soon && !o.doc ? '<br>' + badge(['À transmettre', 'badge-late']) : '') : '<span class="note">—</span>') + '</td>' +
+            '<td data-l="Relevé">' + (o.doc ? badge(['Visé le ' + fmtD(o.doc.createdObj), 'badge-ok']) : badge(['À viser', 'badge-neutral'])) + '</td>' +
+            '<td class="t-act"><button class="btn btn-' + (o.doc ? 'secondary' : 'primary') + ' btn-sm" type="button" data-rctl="' + o.u.id + '">' + (o.doc ? 'Revoir' : 'Contrôler') + '</button><button class="btn btn-secondary btn-sm" type="button" data-rpdf="' + o.u.id + '">' + icon('download') + 'PDF</button></td></tr>';
+        }).join('') + '</tbody></table>' : '<p class="empty">Aucun relevé dans cette sélection.</p>') +
+        '<div class="actions-row"><button class="btn btn-secondary" type="button" id="rv-all"' + (vises ? '' : ' disabled') + '>' + icon('download') + 'Tous les relevés visés (PDF)</button><button class="btn btn-secondary" type="button" id="rv-csv">' + icon('download') + 'Synthèse ' + y + ' (CSV)</button></div></section>' +
+      '<section class="panel"><div class="panel-head"><h3>Attestation d\'exposition</h3><span class="note">Cumul de carrière, remis à l\'agent à son départ · à conserver 50 ans</span></div>' +
+        '<div class="form-3"><div class="field"><label class="label" for="at-u">Agent</label><select class="select" id="at-u">' + people.map(function (u) { return '<option value="' + u.id + '">' + esc(u.name + ' · ' + u.matricule) + '</option>'; }).join('') + '</select></div>' +
+        '<div class="field"><label class="label" for="at-m">Motif</label><select class="select" id="at-m">' + Object.keys(MOTIF_ATT).map(function (k) { return '<option value="' + k + '">' + esc(MOTIF_ATT[k]) + '</option>'; }).join('') + '</select></div>' +
+        '<div class="field"><span class="label">&nbsp;</span><button class="btn btn-primary" type="button" id="at-go">' + icon('download') + 'Générer l\'attestation (PDF)</button></div></div></section>';
+    root.querySelector('#rv-y').onchange = function (e) { RV.year = +e.target.value; route(); };
+    root.querySelectorAll('[data-rv]').forEach(function (b) { b.onclick = function () { var q = b.dataset.rv.split('|'); RV[q[0]] = q[1]; route(); }; });
+    root.querySelectorAll('[data-rctl]').forEach(function (b) { b.onclick = function () { openControle(db.byId[b.dataset.rctl], y); }; });
+    root.querySelectorAll('[data-rpdf]').forEach(function (b) { b.onclick = function () { printReleves([db.byId[b.dataset.rpdf]], y); }; });
+    root.querySelector('#rv-all').onclick = function () { printReleves(all.filter(function (o) { return o.doc; }).map(function (o) { return o.u; }), y); };
+    root.querySelector('#rv-csv').onclick = function () { csvDownload('releves-' + y + '.csv', [['Agent', 'Matricule', 'Statut', 'Interventions', 'Formations et entretien', 'Durée (min)'].concat(CATS.map(function (c) { return CAT_COURT[c[0]] + ' (activités)'; })).concat(['Rapports à valider', 'Visé le'])].concat(all.map(function (o) { return [o.u.name, o.u.matricule, o.u.statut_sp || 'SPP', o.r.parts.length, o.r.acts.length, o.r.mins].concat(CATS.map(function (c) { return o.r.tot[c[0]].n; })).concat([o.r.pending.length, o.doc ? fmtD(o.doc.createdObj) : '']); }))); };
+    root.querySelector('#at-go').onclick = function () { var u = db.byId[root.querySelector('#at-u').value]; printHtml(attestationHtml(u, root.querySelector('#at-m').value), 'Attestation exposition ' + u.matricule); };
+  }
+  function openControle(u, year) {
+    var r = rvData(u, year), doc = rvDoc(u, year);
+    var dlg = modal('Relevé ' + year + ' · ' + u.name, (r.pending.length ? '<div class="callout red"><span class="icon-tile">' + icon('alert') + '</span><div><strong>' + r.pending.length + ' rapport' + (r.pending.length > 1 ? 's' : '') + ' de l\'année pas encore validé' + (r.pending.length > 1 ? 's' : '') + '</strong><span class="sub">' + r.pending.slice(0, 4).map(function (p) { return '<a href="#rapport/' + p.it.id + '">' + esc(p.it.numero) + '</a>'; }).join(' · ') + '</span></div></div>' : '') +
+      '<div class="rv-preview">' + releveHtml(u, year, doc) + '</div>' +
+      '<div class="field"><label class="label" for="rv-obs">Observations du médecin</label><textarea class="textarea" id="rv-obs" rows="3" maxlength="1200" placeholder="Ex. exposition prolongée aux fumées de végétation en juillet : suivi post-exposition proposé.">' + esc(doc ? doc.observations || '' : '') + '</textarea></div>' +
+      (doc ? '<p class="note">' + icon('lock') + ' Visé le ' + fmtD(doc.createdObj) + '. Un nouveau visa remplace le précédent dans le relevé.</p>' : ''),
+      [{ label: icon('download') + 'Télécharger (PDF)', run: function () { printReleves([u], year); return false; } },
+       { label: icon('lock') + (doc ? 'Mettre à jour le visa' : 'Viser le relevé'), primary: true, run: async function (d) {
+        await VBSData.create(S, 'documents', { titre: 'Relevé annuel ' + year + ' · ' + u.name, type_mesure: 'releve_annuel', agent: u.id, annee: year, observations: d.querySelector('#rv-obs').value.trim(), nb_mesures: 0, auteur: db.meId, fichier: '' });
+        toast('Relevé ' + year + ' de ' + u.name + ' visé.'); await reload();
+      } }], { wide: true });
+    dlg.querySelectorAll('a[href^="#"]').forEach(function (a) { a.addEventListener('click', function () { dlg.close(); }); });
+    dlg.querySelector('#rv-obs').oninput = function (e) { var o = dlg.querySelector('.rv-obs'); if (o) o.textContent = e.target.value || '—'; };
+  }
+
+  // =================================================================== EPI : lavage par lot (prestataire)
+  function openEnvoiLavage() {
+    var list = habStats().aLaver;
+    if (!list.length) { toast('Aucune tenue à envoyer au lavage.'); return; }
+    var dlg = modal('Envoyer au lavage', '<p class="note">Tenues contaminées déposées au centre. Le bon d\'envoi accompagne le lot chez le prestataire de lavage.</p>' +
+      '<div class="form-2"><div class="field"><label class="label" for="lv-pre">Prestataire</label><input class="input" id="lv-pre" maxlength="80" value="Prestataire de lavage (marché EPI)"></div><div class="field"><label class="label" for="lv-d">Enlèvement</label><input class="input" id="lv-d" type="date" value="' + localInput(new Date()).slice(0, 10) + '"></div></div>' +
+      '<fieldset class="fs"><legend class="label">Tenues du lot</legend>' + list.map(function (t) { return '<label class="check"><input type="checkbox" name="lv-t" value="' + t.id + '" checked> <b>' + esc(t.numero) + '</b> · ' + esc(TENUE[t.type]) + ' <span class="note">' + (t.feux_depuis_lavage || 0) + ' feu(x) depuis le dernier lavage' + (t.derniere_it ? ' · après ' + esc(t.derniere_it) : '') + '</span></label>'; }).join('') + '</fieldset>' +
+      '<label class="check"><input type="checkbox" id="lv-print" checked> Imprimer le bon d\'envoi</label>',
+      [{ label: icon('send') + 'Envoyer le lot', primary: true, run: async function (d) {
+        var ids = Array.prototype.map.call(d.querySelectorAll('[name=lv-t]:checked'), function (c) { return c.value; });
+        if (!ids.length) throw new Error('Cochez au moins une tenue.');
+        var tl = ids.map(function (id) { return (db.tenues || []).find(function (t) { return t.id === id; }); }), pre = d.querySelector('#lv-pre').value.trim(), date = d.querySelector('#lv-d').value;
+        for (var i = 0; i < tl.length; i++) await VBSData.update(S, 'tenues', tl[i].id, { statut: 'au_lavage', agent: '' });
+        await VBSData.create(S, 'mouvements_epi', { type: 'lavage', agent: '', centre: (db.me || {}).centre, types: tl.map(function (t) { return t.type; }), statut: 'traitee', auto: false, motif: 'Envoi au lavage · ' + tl.length + ' tenue' + (tl.length > 1 ? 's' : '') + ' · ' + pre + ' · ' + tl.map(function (t) { return t.numero; }).join(', '), traite_par: db.meId });
+        if (d.querySelector('#lv-print').checked) printHtml('<article class="fiche"><header class="fi-head"><div><h1>Bon d\'envoi au lavage</h1><p>' + esc(centreName()) + ' · ' + esc(pre) + ' · enlèvement le ' + esc(date.split('-').reverse().join('/')) + '</p></div><span class="fi-brand">VB Safety · Module EPI</span></header>' +
+          '<table class="fi-tab"><thead><tr><th>N°</th><th>Type</th><th>Feux depuis le dernier lavage</th><th>Dernière intervention</th><th>Contrôle au retour</th></tr></thead><tbody>' + tl.map(function (t) { return '<tr><td><b>' + esc(t.numero) + '</b></td><td>' + esc(TENUE[t.type]) + '</td><td>' + (t.feux_depuis_lavage || 0) + '</td><td>' + esc(t.derniere_it || '—') + '</td><td></td></tr>'; }).join('') + '</tbody></table>' +
+          '<p class="fi-note">' + tl.length + ' tenue' + (tl.length > 1 ? 's' : '') + ' contaminée' + (tl.length > 1 ? 's' : '') + ' aux fumées d\'incendie, ensachée' + (tl.length > 1 ? 's' : '') + '. Manipuler avec des gants.</p><div class="fi-sign"><div>Remis par (référent EPI)</div><div>Reçu par (prestataire)</div></div></article>', 'Bon envoi lavage');
+        toast(tl.length + ' tenue' + (tl.length > 1 ? 's' : '') + ' envoyée' + (tl.length > 1 ? 's' : '') + ' au lavage.'); await reload();
+      } }], { wide: true });
+    return dlg;
+  }
+  function openRetourLavage() {
+    var list = habStats().lavage;
+    if (!list.length) { toast('Aucune tenue au lavage.'); return; }
+    modal('Retour du prestataire', '<p class="note">Cochez les tenues revenues propres et contrôlées : elles repassent en stock, prêtes à être attribuées.</p><fieldset class="fs"><legend class="label">Tenues au lavage</legend>' + list.map(function (t) { return '<label class="check"><input type="checkbox" name="rt-t" value="' + t.id + '" checked> <b>' + esc(t.numero) + '</b> · ' + esc(TENUE[t.type]) + ' <span class="note">' + (t.nb_lavages || 0) + ' lavage(s)</span></label>'; }).join('') + '</fieldset>' +
+      '<label class="check"><input type="checkbox" id="rt-ref"> Une tenue est hors d\'usage : je la réformerai depuis « Tenues de feu »</label>',
+      [{ label: icon('check') + 'Remettre en stock', primary: true, run: async function (d) {
+        var ids = Array.prototype.map.call(d.querySelectorAll('[name=rt-t]:checked'), function (c) { return c.value; });
+        if (!ids.length) throw new Error('Cochez au moins une tenue.');
+        var tl = ids.map(function (id) { return (db.tenues || []).find(function (t) { return t.id === id; }); });
+        for (var i = 0; i < tl.length; i++) await VBSData.update(S, 'tenues', tl[i].id, { statut: 'en_stock', agent: '', nb_lavages: (+tl[i].nb_lavages || 0) + 1, feux_depuis_lavage: 0 });
+        await VBSData.create(S, 'mouvements_epi', { type: 'retour_lavage', agent: '', centre: (db.me || {}).centre, types: tl.map(function (t) { return t.type; }), statut: 'traitee', auto: false, motif: 'Retour de lavage · ' + tl.length + ' tenue' + (tl.length > 1 ? 's' : '') + ' · ' + tl.map(function (t) { return t.numero; }).join(', '), traite_par: db.meId });
+        toast(tl.length + ' tenue' + (tl.length > 1 ? 's' : '') + ' de retour en stock.'); await reload();
+      } }]);
+  }
+
   // =================================================================== administrateur
   var ADM_ROLES = VBSParam.ROLES;
   var PREVIEW = { agent: { role: 'agent', matricule: 'SP-0142', name: 'Sap. J. Leroy' }, cos: { role: 'cos', matricule: 'CA-0107', name: 'Adj. T. Bernard' }, commandement: { role: 'commandement', matricule: 'CI-0021', name: 'Cne. M. Garnier' }, sssm: { role: 'sssm', matricule: 'MED-0003', name: 'Dr C. Roche' }, habillement: { role: 'habillement', matricule: 'HAB-0005', name: 'Adc. L. Perrin' }, admin: { role: 'admin', matricule: 'ADM-0001', name: 'Cdt S. Durand' } };
@@ -1853,7 +2213,7 @@
     'tableau-de-bord': { agent: viewDashPerso, cos: viewDashCos, commandement: viewDashCmd, sssm: viewDashSssm, habillement: viewDashHab },
     dossier: viewDossier, rapports: { cos: viewRapportsCos, sssm: viewRapportsSssm }, gestion: viewGestion,
     suivi: viewSuivi, 'export': viewExport, referentiel: viewReferentiel, reglementation: viewReglementation, tenues: viewTenues, changements: viewChangements, 'epi-agents': viewEpiAgents,
-    droits: viewDroits, indicateurs: viewIndicateurs
+    droits: viewDroits, indicateurs: viewIndicateurs, operations: viewOperations, releves: viewReleves
   };
   function renderInto(id, root) {
     var v = VIEWS[id]; if (v && typeof v === 'object') v = v[S.role];
@@ -1910,6 +2270,7 @@
       viewEditor(view, parts[1]); return;
     }
     ed = null;
+    OP_ID = m.id === 'operations' && id === 'operations' ? parts[1] || null : null;
     renderInto(m.id, view);
   }
   window.addEventListener('hashchange', function () { route(); $('view').focus({ preventScroll: true }); window.scrollTo(0, 0); });
@@ -1918,7 +2279,7 @@
     var c = {};
     if (S.role === 'cos') c.rapports = db.interventions.filter(function (x) { return x.cos === db.meId && x.statut === 'brouillon'; }).length;
     if (S.role === 'commandement') c.gestion = db.interventions.filter(function (x) { return VBSData.reportState(x) === 'retard'; }).length;
-    if (S.role === 'sssm') { c.rapports = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; c.reglementation = db.reglementation.filter(function (r) { return r.impact === 'action_requise'; }).length; }
+    if (S.role === 'sssm') { var yN = new Date().getFullYear(); c.releves = rvPeople().filter(function (u) { var nx = nextRdv(db, u.id); return nx && nx.dateObj - Date.now() < 30 * VBSData.DAY && !rvDoc(u, yN) && rvData(u, yN).lines.length; }).length; c.rapports = db.interventions.filter(function (x) { return x.statut === 'transmis'; }).length; c.reglementation = db.reglementation.filter(function (r) { return r.impact === 'action_requise'; }).length; }
     if (S.role === 'habillement') { c['tableau-de-bord'] = aChanger().length; c.changements = habStats().demandes.length; }
     nav.querySelectorAll('[data-count]').forEach(function (el) { el.hidden = true; });
     Object.keys(c).forEach(function (k) { var el = nav.querySelector('[data-count="' + k + '"]'); if (el && c[k]) { el.textContent = c[k]; el.hidden = false; } });

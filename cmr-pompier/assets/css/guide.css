@@ -2,7 +2,7 @@
 .g-hero { background:
   radial-gradient(55% 90% at 85% 20%, rgba(215, 38, 30, .30), rgba(215, 38, 30, 0) 70%),
   linear-gradient(90deg, rgba(17, 18, 21, .97), rgba(17, 18, 21, .85)),
-  url("../img/sante-hero.webp") center / cover no-repeat, #141518;
+  #141518;
   color: #fff; padding: clamp(36px, 5vw, 72px) 0 clamp(36px, 5vw, 64px); }
 .g-hero-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: end; }
 @media (min-width: 1000px) { .g-hero-grid { grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); gap: 56px; } }

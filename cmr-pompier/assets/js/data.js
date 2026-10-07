@@ -4,7 +4,7 @@
 // filtré avec les mêmes règles que le serveur.
 (function (w) {
   var DAY = 86400000;
-  var COLS = ['users', 'operations', 'interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'referentiel', 'reglementation', 'rappels', 'tenues', 'mouvements_epi', 'ref_motifs', 'parametres'];
+  var COLS = ['users', 'activites', 'operations', 'interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'referentiel', 'reglementation', 'rappels', 'tenues', 'mouvements_epi', 'ref_motifs', 'parametres'];
 
   // Indicateur conventionnel en équivalents-feu (référentiel VB Safety v1.0, voir referentiel.js)
   function indice(it, p) { return VBSRef.calcul(it || {}, p || {}).ef; }
@@ -34,6 +34,8 @@
       return normalise(raw0, s.id);
     }
     if (role !== 'habillement') jobs.interventions = list('interventions', { sort: '-date' });
+    // Activités exposantes hors intervention (formations, nettoyage du matériel)
+    if (role !== 'habillement' && role !== 'commandement') jobs.activites = list('activites', { sort: '-date' }).catch(function () { return []; });
     if (role !== 'agent' && role !== 'habillement') jobs.operations = list('operations', { sort: '-date' });
     if (role === 'sssm') jobs.documents = list('documents', { sort: '-created' });
     if (role !== 'commandement' && role !== 'habillement') { jobs.participations = list('participations', { sort: '-created' }); jobs.rendez_vous = list('rendez_vous', { sort: 'date' }); }
@@ -51,7 +53,7 @@
   }
 
   // ---------------------------------------------------------------- hors ligne
-  var OFF_KEY = 'vbs-offline-db-v9', offline = null;
+  var OFF_KEY = 'vbs-offline-db-v10', offline = null;
   function saveOffline() { try { sessionStorage.setItem(OFF_KEY, JSON.stringify(offline)); } catch (e) {} }
   function loadOffline() { try { return JSON.parse(sessionStorage.getItem(OFF_KEY) || 'null'); } catch (e) { return null; } }
   var idn = 0;
@@ -64,14 +66,14 @@
     function ri(a, b) { return a + Math.floor(rnd() * (b - a + 1)); }
     var n = 0; function id() { n++; return 'x' + String(n).padStart(14, '0'); }
     var now = Date.now(), centre = 'centre000000001', users = [];
-    function user(m, name, r, grade) { var u = { id: id(), matricule: m, name: name, role: r, grade: grade, centre: centre }; users.push(u); return u; }
-    var agentDemo = user('SP-0142', 'J. Leroy', 'agent', 'Sapeur'), cosDemo = user('CA-0107', 'T. Bernard', 'cos', 'Adjudant');
+    function user(m, name, r, grade, st) { var u = { id: id(), matricule: m, name: name, role: r, grade: grade, centre: centre, statut_sp: st || 'SPP' }; users.push(u); return u; }
+    var agentDemo = user('SP-0142', 'J. Leroy', 'agent', 'Sapeur', 'SPV'), cosDemo = user('CA-0107', 'T. Bernard', 'cos', 'Adjudant');
     var ci = user('CI-0021', 'M. Garnier', 'commandement', 'Capitaine'), med = user('MED-0003', 'C. Roche', 'sssm', 'Médecin');
     var hab = user('HAB-0005', 'L. Perrin', 'habillement', 'Adjudant-chef');
     var adm = user('ADM-0001', 'S. Durand', 'admin', 'Commandant');
-    var otherCos = [user('CA-0112', 'S. Moreau', 'cos', 'Sergent-chef'), user('CA-0119', 'D. Fabre', 'cos', 'Adjudant-chef')];
+    var otherCos = [user('CA-0112', 'S. Moreau', 'cos', 'Sergent-chef', 'SPV'), user('CA-0119', 'D. Fabre', 'cos', 'Adjudant-chef', 'SPP')];
     var names = [['A. Martin', 'Sergent'], ['L. Dubois', 'Caporal-chef'], ['N. Petit', 'Caporal'], ['C. Faure', 'Sapeur'], ['E. Lambert', 'Sapeur'], ['H. Girard', 'Caporal'], ['I. Bonnet', 'Sapeur'], ['K. Mercier', 'Caporal-chef'], ['O. Blanc', 'Sapeur'], ['R. Guerin', 'Sergent'], ['V. Muller', 'Sapeur'], ['Y. Henry', 'Caporal'], ['P. Rousseau', 'Sapeur'], ['F. Vincent', 'Caporal'], ['G. Morel', 'Sapeur'], ['B. Andre', 'Caporal-chef'], ['M. Laurent', 'Sapeur'], ['S. Simon', 'Sapeur'], ['T. Michel', 'Caporal']];
-    var agents = [agentDemo].concat(names.map(function (x, k) { return user('SP-0' + (150 + k), x[0], 'agent', x[1]); }));
+    var agents = [agentDemo].concat(names.map(function (x, k) { return user('SP-0' + (150 + k), x[0], 'agent', x[1], k % 10 < 7 ? 'SPV' : 'SPP'); }));
     var T = {
       habitation: { c: ['Démo-sur-Marne', 'Val-Fictif', 'Saint-Exemple'], p: ['Pavillon, feu de cuisine', 'Appartement R+2', 'Feu de chambre'], e: ['FPT', 'EPA'], d: [60, 150] },
       vehicule: { c: ['Démo-sur-Marne', "Zone d'activités Fictive"], p: ['VL sur voie publique', 'Utilitaire', 'VL électrique'], e: ['FPT', 'VL'], d: [30, 75] },
@@ -179,6 +181,8 @@
       });
     });
     Object.keys(TT).forEach(function (ty) { for (var q = 0; q < 4; q++) tenue(ty, null, 'en_stock', ri(0, 12), 0); tenue(ty, null, 'au_lavage', ri(4, 20), 1); });
+    // Tenues rendues après le feu de massif, déposées au centre en attente d'enlèvement
+    [['veste', 'INT-' + new Date(now).getFullYear() + '-0802-R2-CCF1'], ['surpantalon', 'INT-' + new Date(now).getFullYear() + '-0802-R2-CCF1'], ['veste', 'INT-' + new Date(now).getFullYear() + '-0802-R2-CCF2'], ['cagoule', 'INT-' + new Date(now).getFullYear() + '-0802-R1-CCF3']].forEach(function (x) { var t = tenue(x[0], null, 'contaminee', ri(8, 22), ri(1, 3)); t.derniere_it = x[1]; });
     var kM = agents.filter(function (a) { return a.matricule === 'SP-0157'; })[0], lD = agents.filter(function (a) { return a.matricule === 'SP-0151'; })[0];
     mouv.push({ id: id(), type: 'demande', agent: kM.id, centre: centre, types: ['veste'], statut: 'envoyee', auto: true, motif: 'Seuil d\'alerte atteint : 31 feux depuis la mise en service (seuil 30).', created: new Date(now - DAY).toISOString() });
     mouv.push({ id: id(), type: 'changement', agent: lD.id, centre: centre, types: ['veste', 'surpantalon'], statut: 'traitee', auto: false, numeros: { veste: 'V-0987', surpantalon: 'P-0988' }, traite_par: hab.id, motif: 'Changement après intervention', created: new Date(now - 3 * DAY).toISOString() });
@@ -187,7 +191,69 @@
       { id: id(), motif: 'habitation', coef: 1, substances: ['HAP', 'BENZ', 'FORM', 'BUTA', 'DIOX', 'SUIE', 'CO'], circonstances: ['PB', 'AMIANTE'], statut: 'valide', valide_par: med.id, valide_le: new Date(now - 10 * DAY).toISOString(), commentaire: '' },
       { id: id(), motif: 'vehicule', coef: 0.6, substances: ['HAP', 'BENZ', 'FORM', 'BUTA', 'DIOX', 'SUIE', 'CO'], circonstances: ['PB', 'CD'], statut: 'valide', valide_par: med.id, valide_le: new Date(now - 10 * DAY).toISOString(), commentaire: '' }
     ];
-    return { ref_motifs: ref_motifs, users: users, operations: operations, documents: documents, interventions: interventions, participations: participations, rendez_vous: rdv, signalements: signalements, prelevements: prelevements.concat(opPrel), referentiel: [], reglementation: reglementation, rappels: rappels, tenues: tenues, mouvements_epi: mouv, parametres: [],
+    // ---------- Opération d'ampleur : feu de massif sur trois jours, avec relèves et colonne de renfort ----------
+    var EXT = 'centre000000099';
+    function extUser(m, name, r, grade) { var u = user(m, name, r, grade, 'SPV'); u.centre = EXT; u.renfort = 'Colonne de renfort · SDIS voisin (fictif)'; return u; }
+    var extCa = [extUser('EXT-201', 'P. Arnaud', 'cos', 'Lieutenant'), extUser('EXT-202', 'G. Roux', 'cos', 'Adjudant')];
+    var extAg = [['A. Colin', 'Caporal'], ['J. Masson', 'Sapeur'], ['L. Renard', 'Sapeur'], ['M. Picard', 'Caporal-chef'], ['N. Gauthier', 'Sapeur'], ['Q. Lemaire', 'Sapeur']].map(function (x, k) { return extUser('EXT-2' + (10 + k), x[0], 'agent', x[1]); });
+    var t0 = new Date(now - 6 * DAY); t0.setHours(13, 40, 0, 0);
+    var H = 3600000;
+    var opF = { id: id(), numero: 'OP-' + t0.getFullYear() + '-0802', date: t0.toISOString(), date_fin: new Date(t0.getTime() + 53 * H + 20 * 60000).toISOString(), type_feu: 'vegetation', precision: 'Feu de massif forestier, environ 600 ha', commune: 'Bois-Exemple', centre: centre, cos: ci.id, ampleur: true, secteurs: ['Secteur Nord', 'Secteur Est', 'Secteur Sud'] };
+    operations.push(opF);
+    var cA = [agentDemo, agents[1], agents[2]], cB = [agents[3], agents[4], agents[5]], cC = [agents[6], agents[7], agents[8]], cD = [agents[9], agents[10], agents[11]];
+    var e1 = extAg.slice(0, 3), e2 = extAg.slice(3);
+    var CIS = 'CIS Démo-sur-Marne', CIS2 = 'CIS Val-Fictif', COL = 'Colonne de renfort · SDIS voisin (fictif)';
+    // [relève, début (h après l'alerte), durée (h), engin, CA, équipage, origine, secteur, statut]
+    var ENG = [
+      [1, 0.33, 9.6, 'CCF 1', cosDemo, cA, CIS, 'Secteur Nord', 'controle_sssm'],
+      [1, 0.58, 9, 'CCF 2', moreau, cB, CIS, 'Secteur Est', 'controle_sssm'],
+      [1, 1.17, 8.5, 'CCF 3', fabre, cC, CIS2, 'Secteur Sud', 'controle_sssm'],
+      [1, 4, 10, 'CCF R1', extCa[0], e1, COL, 'Secteur Est', 'transmis'],
+      [2, 17.33, 11, 'CCF 1', cosDemo, cA, CIS, 'Secteur Nord', 'transmis'],
+      [2, 17.5, 10.5, 'CCF 2', moreau, cD, CIS, 'Secteur Est', 'transmis'],
+      [2, 18, 12, 'CCF R2', extCa[1], e2, COL, 'Secteur Sud', 'transmis'],
+      [3, 42.33, 9, 'CCF 3', fabre, cC, CIS2, 'Secteur Sud', 'transmis'],
+      [3, 42.5, 10, 'CCF 1', cosDemo, cB, CIS, 'Secteur Nord', 'brouillon'],
+      [3, 43, 8, 'CCF R1', extCa[0], e1, COL, 'Secteur Est', 'transmis']
+    ];
+    var VEG_ROLES = ['conducteur', 'binome_attaque', 'binome_attaque'];
+    ENG.forEach(function (g, k) {
+      var start = new Date(t0.getTime() + g[1] * H), dur = Math.round(g[2] * 60);
+      var it = { id: id(), numero: 'INT-' + t0.getFullYear() + '-0802-R' + g[0] + '-' + g[3].replace(/\s+/g, ''), date: start.toISOString(), type_feu: 'vegetation', precision: opF.precision + ' · ' + g[7], commune: opF.commune, centre: g[4].centre, cos: g[4].id, operation: opF.id,
+        ambiance: 'feu_fumee', zone_deshabillage: g[0] > 1, epi_ensaches: g[0] > 1, suspicion_amiante: false, statut: g[8], motorisation: '', exposition_globale: '', circonstances: k === 2 ? ['bascule'] : [], duree_min: dur,
+        releve: g[0], secteur: g[7], origine: g[6], engin: g[3] };
+      if (g[8] === 'controle_sssm') { it.valide_le = new Date(start.getTime() + 2 * DAY).toISOString(); it.valide_par = med.id; }
+      interventions.push(it);
+      [{ u: g[4], r: 'chef_agres' }].concat(g[5].map(function (u, j) { return { u: u, r: VEG_ROLES[j % 3] }; })).forEach(function (m, j) {
+        var base = { id: id(), intervention: it.id, agent: m.u.id, role_tenu: m.r, engin: g[3], created: it.date };
+        if (g[8] === 'brouillon') { participations.push(Object.assign(base, { contamination: 'nulle', indice: 0, fonctions: [], position: '', decon_type: '', duree_min: 0 })); return; }
+        var p = fill(it, base, m.r, j);
+        // Feu de végétation : pas d'ARI, décontamination souvent différée au retour
+        p.ari_porte = false; p.ari_min = 0; p.ari_retire_deb = false; p.ffp3 = rnd() < 0.35;
+        p.decon_type = g[0] === 1 ? pick(['DEC_LING_TARD', 'DEC_DOUCHE_TARD', 'DEC_LING_TARD', 'DEC_AUCUNE']) : pick(['DEC_LING_1H', 'DEC_LING_DOUCHE', 'DEC_LING_TARD']);
+        p.decon_validee = p.decon_type !== 'DEC_AUCUNE'; p.lingettes = /LING/.test(p.decon_type); p.douche = /DOUCHE/.test(p.decon_type); p.decon_ref = ''; p.decon_heure = '';
+        p.indice = indice(it, p);
+        participations.push(p);
+      });
+    });
+
+    // ---------- Activités exposantes hors intervention : formations, entretien du matériel ----------
+    var activites = [];
+    function session(type, ago, hour, dur, intitule, lieu, people, opt) {
+      var d = new Date(now - ago * DAY); d.setHours(hour, 0, 0, 0);
+      var a = Object.assign({ id: id(), type: type, date: d.toISOString(), duree_min: dur, intitule: intitule, lieu: lieu, agents: people.map(function (u) { return u.id; }), auteur: cosDemo.id, centre: centre, ari: false, decon_type: 'DEC_LING_DOUCHE', pfas: false }, opt || {});
+      activites.push(a); return a;
+    }
+    session('caisson', 300, 9, 240, "FMPA · caisson d'observation des phénomènes thermiques", 'Plateau technique fictif', [agentDemo, agents[1], agents[2], agents[3], agents[4], cosDemo], { ari: true });
+    session('brulage', 205, 10, 360, 'Brûlage dirigé de prévention (débroussaillement)', 'Bois-Exemple', [agentDemo, agents[5], agents[6], agents[9], moreau], { decon_type: 'DEC_LING_TARD' });
+    session('nettoyage', 178, 14, 120, 'Reconditionnement des tuyaux et des ARI après le feu d\'entrepôt', CIS, [agentDemo, agents[7], agents[8]], { decon_type: 'DEC_LING_1H' });
+    session('feu_reel', 122, 8, 300, 'Formation feu réel en conteneur (FDF 1)', 'Plateau technique fictif', [agentDemo, agents[1], agents[10], agents[11], agents[12], cosDemo, fabre], { ari: true });
+    session('mousse', 88, 9, 150, 'Manœuvre mousse · émulseur fluoré (ancien stock, avant remplacement)', CIS2, [agents[2], agents[3], agents[13], agents[14], moreau], { pfas: true, decon_type: 'DEC_DOUCHE_2H' });
+    session('caisson', 34, 9, 240, "FMPA · caisson d'observation des phénomènes thermiques", 'Plateau technique fictif', [cosDemo, agents[4], agents[5], agents[15], agents[16]], { ari: true });
+    session('nettoyage', 2, 9, 150, 'Nettoyage des CCF et du matériel après le feu de massif', CIS, [agentDemo, agents[1], agents[2]], { decon_type: 'DEC_LING_DOUCHE' });
+    session('feu_reel', 420, 8, 300, 'Formation feu réel en conteneur (FDF 1)', 'Plateau technique fictif', [agentDemo, agents[3], agents[6]], { ari: true });
+
+    return { ref_motifs: ref_motifs, users: users, activites: activites, operations: operations, documents: documents, interventions: interventions, participations: participations, rendez_vous: rdv, signalements: signalements, prelevements: prelevements.concat(opPrel), referentiel: [], reglementation: reglementation, rappels: rappels, tenues: tenues, mouvements_epi: mouv, parametres: [],
       demo: { agent: agentDemo.id, cos: cosDemo.id, commandement: ci.id, sssm: med.id, habillement: hab.id, admin: adm.id } };
   }
 
@@ -208,6 +274,7 @@
       v.rendez_vous = all.rendez_vous.filter(function (r) { return r.agent === meId; }); v.users = [me];
       v.signalements = []; v.prelevements = []; v.reglementation = []; v.rappels = []; v.operations = []; v.documents = [];
       v.tenues = []; v.mouvements_epi = [];
+      v.activites = all.activites.filter(function (a) { return (a.agents || []).indexOf(meId) !== -1; });
     } else if (role === 'cos') {
       var myOps = all.operations.filter(function (o) { return o.cos === meId; }).map(function (o) { return o.id; });
       v.interventions = all.interventions.filter(function (x) { return x.cos === meId || myOps.indexOf(x.operation) !== -1; });
@@ -216,17 +283,18 @@
       v.participations = all.participations.filter(function (p) { return its.indexOf(p.intervention) !== -1; });
       v.rendez_vous = all.rendez_vous.filter(function (r) { return r.agent === meId; });
       v.signalements = all.signalements.filter(function (s) { return s.auteur === meId; });
-      v.users = all.users.filter(function (u) { return u.centre === me.centre; });
+      v.users = all.users.filter(function (u) { return u.centre === me.centre || u.renfort; });
+      v.activites = all.activites.filter(function (a) { return a.auteur === meId || (a.agents || []).indexOf(meId) !== -1; });
       v.prelevements = []; v.reglementation = []; v.rappels = all.rappels.filter(function (r) { return r.a === meId || r.de === meId; });
       v.tenues = []; v.mouvements_epi = [];
     } else if (role === 'habillement') {
-      ['interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'reglementation', 'rappels', 'operations', 'referentiel', 'ref_motifs'].forEach(function (c) { v[c] = []; });
+      ['interventions', 'participations', 'rendez_vous', 'signalements', 'prelevements', 'documents', 'reglementation', 'rappels', 'operations', 'referentiel', 'ref_motifs', 'activites'].forEach(function (c) { v[c] = []; });
       v.users = all.users.filter(function (u) { return u.centre === me.centre; });
       v.tenues = all.tenues.filter(function (t) { return t.centre === me.centre; }); v.mouvements_epi = all.mouvements_epi.filter(function (m) { return m.centre === me.centre; });
     } else if (role === 'commandement') {
       v.tenues = []; v.mouvements_epi = [];
-      v.participations = []; v.rendez_vous = []; v.signalements = []; v.prelevements = []; v.documents = [];
-      v.users = all.users.filter(function (u) { return u.centre === me.centre; });
+      v.participations = []; v.rendez_vous = []; v.signalements = []; v.prelevements = []; v.documents = []; v.activites = [];
+      v.users = all.users.filter(function (u) { return u.centre === me.centre || u.renfort; });
       v.rappels = all.rappels.filter(function (r) { return r.a === meId || r.de === meId; });
     } else {
       v.rappels = []; v.mouvements_epi = []; v.tenues = [];
@@ -247,9 +315,9 @@
     var byId = {};
     db.users.forEach(function (u) { byId[u.id] = u; });
     var ops = {};
-    db.operations.forEach(function (o) { o.dateObj = parseD(o.date); o.cosUser = byId[o.cos]; o.reports = []; ops[o.id] = o; });
+    db.operations.forEach(function (o) { o.dateObj = parseD(o.date); o.finObj = o.date_fin ? parseD(o.date_fin) : null; o.cosUser = byId[o.cos]; o.reports = []; ops[o.id] = o; });
     var inter = {};
-    db.interventions.forEach(function (x) { x.dateObj = parseD(x.date); inter[x.id] = x; x.cosUser = byId[x.cos]; x.crew = []; x.op = x.operation ? ops[x.operation] || null : null; if (x.op) x.op.reports.push(x); });
+    db.interventions.forEach(function (x) { x.dateObj = parseD(x.date); x.finObj = new Date(x.dateObj.getTime() + (+x.duree_min || 0) * 60000); inter[x.id] = x; x.cosUser = byId[x.cos]; x.crew = []; x.op = x.operation ? ops[x.operation] || null : null; if (x.op) x.op.reports.push(x); });
     db.participations.forEach(function (p) { p.it = inter[p.intervention]; p.user = byId[p.agent]; if (p.it) p.it.crew.push(p); });
     db.rendez_vous.forEach(function (r) { r.dateObj = parseD(r.date); r.user = byId[r.agent]; });
     db.signalements.forEach(function (s) { s.it = inter[s.intervention]; s.createdObj = parseD(s.created); });
@@ -258,6 +326,7 @@
     db.documents.forEach(function (d) { d.createdObj = parseD(d.created); d.op = ops[d.operation] || null; });
     (db.tenues || []).forEach(function (t) { t.user = byId[t.agent] || null; });
     (db.mouvements_epi || []).forEach(function (m) { m.user = byId[m.agent] || null; m.createdObj = parseD(m.created); });
+    db.activites = (db.activites || []).map(function (a) { a.dateObj = parseD(a.date); return a; }).sort(function (a, b) { return b.dateObj - a.dateObj; });
     db.ref_motifs = db.ref_motifs || [];
     db.parametres = db.parametres || [];
     db.configRec = db.parametres.filter(function (r) { return r.cle === 'config'; })[0] || null;
@@ -280,7 +349,7 @@
     if (!it || it.ambiance === 'aucun_feu') return;
     all.participations.filter(function (p) { return p.intervention === it.id && p.position; }).forEach(function (p) {
       all.tenues.filter(function (t) { return t.agent === p.agent && (t.statut === 'en_service' || t.statut === 'contaminee'); }).forEach(function (t) {
-        t.statut = 'contaminee'; t.nb_feux = (+t.nb_feux || 0) + 1; t.feux_depuis_lavage = (+t.feux_depuis_lavage || 0) + 1; t.ef_cumul = Math.round(((+t.ef_cumul || 0) + (+p.indice || 0)) * 100) / 100;
+        t.statut = 'contaminee'; t.derniere_it = it.numero; t.nb_feux = (+t.nb_feux || 0) + 1; t.feux_depuis_lavage = (+t.feux_depuis_lavage || 0) + 1; t.ef_cumul = Math.round(((+t.ef_cumul || 0) + (+p.indice || 0)) * 100) / 100;
         var seuil = +t.seuil_feux || SEUIL;
         var open = all.mouvements_epi.some(function (m) { return m.agent === p.agent && m.type === 'demande' && m.statut === 'envoyee' && (m.types || []).indexOf(t.type) !== -1; });
         if (t.nb_feux >= seuil && !open) all.mouvements_epi.push({ id: newId(), created: new Date().toISOString(), type: 'demande', agent: p.agent, centre: t.centre, types: [t.type], statut: 'envoyee', auto: true, motif: "Seuil d'alerte atteint : " + t.nb_feux + ' feux depuis la mise en service (seuil ' + seuil + ').' });
@@ -303,7 +372,7 @@
 
   // ---------------------------------------------------------------- écritures
   function clean(data) {
-    var o = {}; Object.keys(data).forEach(function (k) { var v = data[k]; if (v !== undefined && typeof v !== 'function' && ['it', 'user', 'crew', 'dateObj', 'cosUser', 'op', 'reports', 'createdObj'].indexOf(k) === -1) o[k] = v; }); return o;
+    var o = {}; Object.keys(data).forEach(function (k) { var v = data[k]; if (v !== undefined && typeof v !== 'function' && ['it', 'user', 'crew', 'dateObj', 'cosUser', 'op', 'reports', 'createdObj', 'finObj'].indexOf(k) === -1) o[k] = v; }); return o;
   }
   async function create(s, col, data) {
     if (typeof FormData !== 'undefined' && data instanceof FormData) {

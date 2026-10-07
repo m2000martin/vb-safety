@@ -245,6 +245,8 @@
     if (has(/(liste|tous|combien|list|\ball\b|how many).*(rapport|intervention|report|call-out)/)) return act('lister_rapports', { statut: 'tous', jours: jours });
 
     var pages = [
+      [/grandes? operations?|operation d ampleur|feu de (foret|massif)|large operations?|wildfire|forest fire|releves? \d|relief/, 'operations'],
+      [/releves? (annuel|reglementaire)|attestation|annual record|official record|circulaire/, 'releves'],
       [/droit|acces|permission|autoris|right/, 'droits'],
       [/indicateur|kpi|graphique|tableaux de bord des|indicator|chart|graph|profile dashboard/, 'indicateurs'],
       [/historique|dossier|mes expositions|ma fiche|rendez-vous|rdv|history|record|my exposure|appointment/, 'dossier'],

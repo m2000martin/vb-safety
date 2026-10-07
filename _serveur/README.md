@@ -65,3 +65,14 @@ Dans l'application, les pages masquées et les actions retirées disparaissent d
 adresses directes sont refusées. Pour un SDIS, reproduire ces restrictions dans les règles d'API
 PocketBase (création de rapports, relances, validation, référentiel, tenues), afin qu'elles soient
 aussi appliquées par le serveur.
+
+## Grandes opérations, relevés réglementaires, formations · `pb_migrations/1791400000_operations_releves.js`
+
+1. Copier le fichier dans `pb_migrations/` du serveur et redémarrer PocketBase : les champs manquants et la
+   collection `activites` sont créés (rien n'est supprimé).
+2. Vérifier les règles de la collection `documents` : le SSSM doit pouvoir y créer les visas de relevés
+   (`type_mesure = "releve_annuel"`, champs `agent`, `annee`, `observations`).
+3. Dans le hook EPI (`pb_hooks/epi.js`), lors de la contamination d'une tenue, renseigner `derniere_it`
+   avec le numéro de l'intervention, comme le fait la démonstration (`data.js`, `epiContaminer`).
+4. Les renforts extérieurs sont des comptes avec le champ `renfort` rempli ; les relèves d'une grande
+   opération sont des rapports (`interventions`) rattachés à l'opération, avec `releve`, `secteur`, `origine`, `engin`.
