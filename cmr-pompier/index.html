@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="stylesheet" href="assets/css/vbs.css?v=12">
-<link rel="stylesheet" href="assets/css/accueil.css?v=12">
+<link rel="stylesheet" href="assets/css/accueil.css?v=14">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://vb-safety.com/#organisation", "name": "VB Safety", "legalName": "VB Safety SAS", "identifier": [{"@type": "PropertyValue", "propertyID": "SIREN", "value": "109381640"}, {"@type": "PropertyValue", "propertyID": "SIRET", "value": "10938164000019"}], "vatID": "FR43109381640", "alternateName": "VB Safety · traçabilité CMR", "address": {"@type": "PostalAddress", "addressCountry": "FR"}, "url": "https://vb-safety.com/", "logo": "https://vb-safety.com/favicon-512.png", "email": "contact@vb-safety.com", "areaServed": "FR"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://vb-safety.com/#site", "name": "VB Safety", "url": "https://vb-safety.com/", "inLanguage": "fr-FR", "publisher": {"@id": "https://vb-safety.com/#organisation"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Carnet Expo CMR", "url": "https://vb-safety.com/cmr-pompier/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "inLanguage": "fr-FR", "description": "Logiciel de rapport de contamination pour SDIS : traçabilité des expositions CMR des sapeurs-pompiers après intervention, contrôle par le SSSM, relevés annuels et attestations d'exposition.", "audience": {"@type": "Audience", "audienceType": "Services départementaux d'incendie et de secours (SDIS)"}, "publisher": {"@id": "https://vb-safety.com/#organisation"}, "featureList": ["Rapport de contamination de l'équipage rempli par le chef d'agrès ou le COS", "Contrôle, correction et validation par le SSSM", "Relevé annuel des activités potentiellement exposantes et attestation d'exposition (circulaire DGSCGC du 14 janvier 2025)", "Interventions de grande ampleur : relèves, renforts, liste des personnels exposés", "Formations exposantes et nettoyage du matériel (décret n° 2025-1349)", "Fiche individuelle d'exposition aux agents CMR (art. R. 4412-93-1 du code du travail)", "Module EPI : contamination et lavage des tenues de feu", "Réception des interventions au format national CISU"], "dateModified": "2026-10-07"}</script>
@@ -233,70 +233,37 @@
         <h2>Cinq rôles, chacun limité à ce qui le concerne</h2>
         <p>Le CA ou le COS rédige, le commandement vérifie que tout est à jour, le SSSM contrôle et complète, l'agent consulte son historique. Le module EPI, à part, est réservé au référent EPI de la caserne.</p>
       </div>
-      <div class="roles">
+      <div class="locked"><div class="roles" aria-hidden="true" inert>
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span><div><h3>Agent</h3><div class="role-who">Sapeur-pompier engagé</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Consulte ses expositions, intervention par intervention</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Suit son historique et sa fiche individuelle d'exposition</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Signale le changement de sa tenue de feu ou en demande une</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exporte ses données en PDF ou CSV</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>N'a rien à saisir : son CA ou son COS s'en charge</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li><li><i style="width:72%"></i></li></ul>
           <a class="role-link" href="connexion.html?profil=agent">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Ne voit pas l'exposition des autres agents</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg></span><div><h3>CA / COS</h3><div class="role-who">Chef d'agrès ou commandant des opérations de secours</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Rédige, en fin d'intervention, le compte rendu de contamination et de décontamination</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Le fait pour lui-même et chaque homme de son équipage</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Vérifie les positions, proposées d'après le poste de chacun</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Déclare la décontamination de l'équipage en un appui, sans noter l'heure</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li></ul>
           <a class="role-link" href="connexion.html?profil=cos">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Ne voit que les interventions qu'il a commandées</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span><div><h3>Chef CI / commandement</h3><div class="role-who">Chef de centre, chef de groupement, commandement</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Voit si chaque intervention a bien son rapport</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Repère les rapports à jour, en attente ou en retard</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Relance le CA ou le COS concerné</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Suit les interventions de grande ampleur relève par relève</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exporte l'état du suivi en CSV</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li><li><i style="width:72%"></i></li></ul>
           <a class="role-link" href="connexion.html?profil=commandement">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Ne voit aucune donnée d'exposition individuelle</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-steth"/></svg></span><div><h3>SSSM</h3><div class="role-who">Médecins et infirmiers du service de santé</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Consulte tous les rapports de contamination</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Corrige ou complète chaque rapport</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Suit l'historique complet de chaque agent</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Édite la fiche d'exposition par année, sur 12 mois ou sur la carrière</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Vise le relevé annuel et l'attestation d'exposition de chaque agent</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li><li><i style="width:72%"></i></li></ul>
           <a class="role-link" href="connexion.html?profil=sssm">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Chaque consultation et correction est journalisée</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3>Référent EPI</h3><div class="role-who">Tenues de feu de la caserne</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Voit les agents à rééquiper après chaque rapport</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Enregistre les changements de tenue et les envois au lavage</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Suit feux et lavages de chaque tenue, avec un seuil d'alerte</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Modifie les numéros de tenue des agents</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li></ul>
           <a class="role-link" href="connexion.html?profil=habillement">Voir cette vue en démo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Ne voit aucune donnée d'exposition individuelle</p></div>
         </article>
-      </div>
+      </div><div class="locked-cta"><span class="locked-ico"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span><strong>Détail réservé aux services partenaires</strong><span>Le fonctionnement précis de chaque rôle est présenté sur demande, en démonstration.</span><a class="btn btn-primary" href="#demande" data-demande="acces">Demander l'accès</a></div></div>
     </div>
   </section>
 

@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
 <link rel="stylesheet" href="../assets/css/vbs.css?v=12">
-<link rel="stylesheet" href="../assets/css/accueil.css?v=12">
+<link rel="stylesheet" href="../assets/css/accueil.css?v=14">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://vb-safety.com/#organisation", "name": "VB Safety", "legalName": "VB Safety SAS", "identifier": [{"@type": "PropertyValue", "propertyID": "SIREN", "value": "109381640"}, {"@type": "PropertyValue", "propertyID": "SIRET", "value": "10938164000019"}], "vatID": "FR43109381640", "alternateName": "VB Safety · CMR traceability", "address": {"@type": "PostalAddress", "addressCountry": "FR"}, "url": "https://vb-safety.com/", "logo": "https://vb-safety.com/favicon-512.png", "email": "contact@vb-safety.com", "areaServed": "FR"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://vb-safety.com/#site", "name": "VB Safety", "url": "https://vb-safety.com/", "inLanguage": "en", "publisher": {"@id": "https://vb-safety.com/#organisation"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Carnet Expo CMR", "url": "https://vb-safety.com/cmr-pompier/en/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "inLanguage": "en", "description": "Contamination reporting software for French fire and rescue services: firefighters' CMR exposure traced after each call-out, medical review, annual records and exposure certificates.", "audience": {"@type": "Audience", "audienceType": "French fire and rescue services (SDIS)"}, "publisher": {"@id": "https://vb-safety.com/#organisation"}, "featureList": ["Crew contamination report filled in by the crew or incident commander", "Review, correction and approval by the medical service (SSSM)", "Annual record of exposing activities and exposure certificate (DGSCGC circular of 14 January 2025)", "Large-scale call-outs: relief shifts, reinforcements, list of exposed personnel", "Exposing training and equipment cleaning", "Individual CMR exposure record", "PPE module: contamination and washing of fire kit", "Call-out intake in the French national CISU format"], "dateModified": "2026-10-07"}</script>
@@ -233,70 +233,37 @@
         <h2>Five roles, each limited to what concerns them</h2>
         <p>The CA or COS writes the report, command checks that everything is up to date, the SSSM reviews and completes it, and firefighters view their own history. The personal protective equipment (PPE, EPI in French) module is separate and reserved for the station's PPE officer.</p>
       </div>
-      <div class="roles">
+      <div class="locked"><div class="roles" aria-hidden="true" inert>
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span><div><h3>Firefighter</h3><div class="role-who">Firefighter deployed on the call-out</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Views their exposures, call-out by call-out</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Follows their history and individual exposure record</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Reports a change of fire kit or requests one</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exports their data as PDF or CSV</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Has nothing to enter: their CA or COS takes care of it</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li><li><i style="width:72%"></i></li></ul>
           <a class="role-link" href="../connexion.html?profil=agent&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Cannot see other firefighters' exposure</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg></span><div><h3>CA / COS</h3><div class="role-who">Crew commander or incident commander</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Writes the contamination and decontamination report at the end of the call-out</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Does so for themselves and every member of their crew</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Checks the positions, suggested from each person's post</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Declares the crew's decontamination with a single tap, without entering the time</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li></ul>
           <a class="role-link" href="../connexion.html?profil=cos&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Sees only the call-outs they commanded</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span><div><h3>Station officer / command</h3><div class="role-who">Station commander, group commander, command</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Sees whether every call-out has its report</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Spots reports that are up to date, pending or overdue</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Sends a reminder to the CA or COS concerned</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Follows large-scale call-outs relief shift by relief shift</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Exports the tracking status as CSV</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li><li><i style="width:72%"></i></li></ul>
           <a class="role-link" href="../connexion.html?profil=commandement&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Sees no individual exposure data</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-steth"/></svg></span><div><h3>SSSM</h3><div class="role-who">Doctors and nurses of the medical service</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Views all contamination reports</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Corrects or completes each report</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Follows each firefighter's full history</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Produces the exposure record by year, over 12 months or over the whole career</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Signs off the annual record and the exposure certificate of each firefighter</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li><li><i style="width:72%"></i></li></ul>
           <a class="role-link" href="../connexion.html?profil=sssm&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Every view and correction is logged</p></div>
         </article>
 
         <article class="card role">
           <div class="role-head"><span class="icon-tile"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3>PPE officer</h3><div class="role-who">The station's fire kits</div></div></div>
-          <ul>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Sees which firefighters need re-equipping after each report</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Records fire kit changes and items sent for laundering</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Tracks the fires and washes of each fire kit, with an alert threshold</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Edits firefighters' fire kit numbers</li>
-          </ul>
+          <ul class="ghost" aria-hidden="true"><li><i style="width:92%"></i></li><li><i style="width:78%"></i></li><li><i style="width:86%"></i></li><li><i style="width:64%"></i></li></ul>
           <a class="role-link" href="../connexion.html?profil=habillement&amp;lang=en">See this view in the demo <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <div class="role-not"><p><svg class="icon" aria-hidden="true"><use href="#i-eyeoff"/></svg>Sees no individual exposure data</p></div>
         </article>
-      </div>
+      </div><div class="locked-cta"><span class="locked-ico"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span><strong>Details reserved for partner services</strong><span>How each role works in detail is shown on request, in a demo.</span><a class="btn btn-primary" href="#demande" data-demande="acces">Request access</a></div></div>
     </div>
   </section>
 

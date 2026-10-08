@@ -181,3 +181,16 @@
 .trust-table thead th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
 .trust-table tbody th { font-weight: 700; white-space: nowrap; }
 .trust-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+/* Contenu réservé : aperçu flouté et demande d'accès */
+.locked { position: relative; min-height: 300px; }
+.locked > [inert] { filter: blur(5px); opacity: .65; pointer-events: none; user-select: none; }
+.ghost { list-style: none; padding: 0; margin: 14px 0; display: flex; flex-direction: column; gap: 12px; }
+.ghost li, .ghost i { display: block; height: 11px; border-radius: 6px; background: var(--line-strong, #d9d3c9); }
+p.ghost i { margin-bottom: 9px; }
+.locked-cta { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(460px, calc(100% - 32px)); display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px 24px; box-shadow: 0 30px 60px -30px rgba(23, 25, 29, .45); }
+.locked-cta strong { font-size: 18px; }
+.locked-cta span { color: var(--muted); font-size: 14.5px; }
+.locked-cta .btn { margin-top: 8px; }
+.locked-ico { width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--red-soft); color: var(--red); }
+.locked-ico .icon { width: 20px; height: 20px; }
