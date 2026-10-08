@@ -11,7 +11,10 @@
   var KEY = 'vbs-lang';
   function readLang() {
     try {
-      var q = new URLSearchParams(location.search).get('lang') || d.documentElement.getAttribute('data-lang');
+      // Page anglaise statique (html[data-lang]) : anglais pour cette page, sans changer le choix mémorisé
+      var dl = d.documentElement.getAttribute('data-lang');
+      if (dl === 'en' || dl === 'fr') return dl;
+      var q = new URLSearchParams(location.search).get('lang');
       if (q === 'en' || q === 'fr') { localStorage.setItem(KEY, q); return q; }
       return localStorage.getItem(KEY) === 'en' ? 'en' : 'fr';
     } catch (e) { return 'fr'; }

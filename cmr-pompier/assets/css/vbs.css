@@ -207,3 +207,32 @@ p { margin: 0; }
   .btn { white-space: normal; text-align: center; line-height: 1.25; }
   .brand { min-height: 44px; }
 }
+
+/* Contenu réservé aux membres : aperçu flouté, déverrouillage par code (verrou.js) */
+.locked { position: relative; }
+.locked:not(.locked-silent):not(.locked-login) { min-height: 330px; }
+.locked { min-width: 0; max-width: 100%; overflow: hidden; }
+.locked-login.open { overflow: visible; }
+.locked-ghost, .locked-login .locked-live { filter: blur(4px); opacity: .7; pointer-events: none; user-select: none; }
+.locked-ghost .gh { width: 8ch; display: inline-block; height: .78em; max-width: 100%; border-radius: 5px; background: currentColor; opacity: .2; vertical-align: middle; }
+.locked-ghost .gw1 { width: min(6ch, 100%); }
+.locked-ghost .gw2 { width: min(13ch, 100%); }
+.locked-ghost .gw3 { width: min(19ch, 100%); }
+.locked-ghost .gw4 { width: min(26ch, 100%); }
+.locked-ghost .gw5 { width: min(32ch, 100%); }
+.locked-ghost .gw6 { width: min(38ch, 100%); }
+.locked-ghost .gw7 { width: min(45ch, 100%); }
+.locked-ghost .gw8 { width: min(51ch, 100%); }
+.locked-cta { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 5; width: min(440px, calc(100% - 24px)); display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px 22px; box-shadow: 0 30px 60px -30px rgba(23, 25, 29, .45); }
+.locked-cta strong { font-size: 18px; }
+.locked-cta > span { color: var(--muted); font-size: 14.5px; }
+.locked-ico { width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--red-soft); color: var(--red); }
+.locked-ico .icon { width: 20px; height: 20px; }
+.locked-row { display: flex; gap: 8px; width: 100%; margin-top: 6px; }
+.locked-row .input { flex: 1; min-width: 0; text-transform: uppercase; letter-spacing: .08em; }
+.locked-row .input::placeholder { text-transform: none; letter-spacing: 0; }
+.locked-err { margin: 0; color: var(--danger); font-size: 13.5px; font-weight: 600; }
+.locked-links { margin: 4px 0 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; font-size: 13.5px; }
+.locked-links a { color: var(--red); font-weight: 600; }
+.locked-login.open .locked-live { filter: none; opacity: 1; pointer-events: auto; user-select: auto; }
+.locked-login.open .locked-cta { display: none; }

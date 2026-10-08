@@ -1,6 +1,9 @@
 // Menu mobile + année du pied de page. Aucun traceur, aucun appel externe.
 (function () {
   var EN = document.documentElement.lang === 'en';
+  // Langue de la page publique visitée = langue de l'application (connexion, contact, espace) :
+  // un visiteur des pages françaises reste en français ; depuis les pages anglaises, les liens data-set-lang choisissent l'anglais
+  if (!EN) try { localStorage.setItem('vbs-lang', 'fr'); } catch (e) {}
   // Choix de langue mémorisé pour l'application (connexion, espace)
   document.querySelectorAll('[data-set-lang]').forEach(function (a) {
     a.addEventListener('click', function () { try { localStorage.setItem('vbs-lang', a.getAttribute('data-set-lang')); } catch (e) {} });

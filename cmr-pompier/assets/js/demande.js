@@ -6,6 +6,7 @@
   var TXT = {
     acces: { titre: "Demander un code d'accès", intro: 'Recevez le code pour tester la démonstration avec les quatre profils.', bouton: 'Recevoir un code' },
     version: { titre: 'Une version pour votre SDIS', intro: 'Parlez-nous de votre organisation : nous revenons vers vous pour une présentation et une version adaptée à vos procédures.', bouton: 'Envoyer la demande' },
+    partenaire: { titre: 'Devenir partenaire', intro: 'SDIS, fabricant, laboratoire, organisme de formation : présentez-nous votre projet, nous revenons vers vous pour en parler.', bouton: 'Envoyer la demande' },
     contact: { titre: 'Nous contacter', intro: 'Une question sur le Carnet Expo CMR ? Écrivez-nous, nous répondons rapidement.', bouton: 'Envoyer' }
   };
   var CFG = window.VBS_DEMANDE || {};
@@ -49,8 +50,9 @@
       var bad = Array.prototype.find.call(form.querySelectorAll('[required]'), function (i) { return !i.value.trim() || (i.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value.trim())); });
       form.querySelectorAll('[required]').forEach(function (i) { i.removeAttribute('aria-invalid'); });
       if (bad) { bad.setAttribute('aria-invalid', 'true'); bad.focus(); err.textContent = bad.type === 'email' && bad.value ? "Vérifiez l'adresse e-mail." : 'Merci de remplir les champs obligatoires.'; err.hidden = false; return; }
-      var data = { type: type, page: location.pathname.slice(0, 80) };
+      var data = { type: type === 'partenaire' ? 'contact' : type, page: location.pathname.slice(0, 80) };
       ['nom', 'email', 'organisme', 'fonction', 'message', 'site_web'].forEach(function (k) { data[k] = form.elements[k].value.trim(); });
+      if (type === 'partenaire') data.message = ('[Partenariat] ' + data.message).trim();
       btn.disabled = true; btn.textContent = 'Envoi…';
       try {
         var r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), credentials: 'omit' });
@@ -71,7 +73,7 @@
   }
 
   // Lien direct vers le formulaire (…/#demande, #acces, #contact) : il s'ouvre au chargement de la page
-  var H = { '#demande': 'contact', '#acces': 'acces', '#contact': 'contact', '#version': 'version' };
+  var H = { '#demande': 'contact', '#acces': 'acces', '#contact': 'contact', '#version': 'version', '#partenaire': 'partenaire' };
   if (H[location.hash] && !document.getElementById(location.hash.slice(1))) {
     var go = function () { build(H[location.hash]); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
