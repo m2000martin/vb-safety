@@ -49,3 +49,5 @@
   .v1 .ring { opacity: .5; } .v1 .trace, .v3 .curve { stroke-dashoffset: 0; } .v3 .fill { transform: none; } .v3 .end { opacity: 1; } .v2 .hot { opacity: .6; }
 }
 .lab > .wrap > .maj { display: block; margin-top: 18px; }
+.v4 .ring { fill: none; stroke: var(--signal); stroke-width: 1.2; vector-effect: non-scaling-stroke; transform-origin: 160px 100px; transform-box: view-box; animation: lab-ring 3.6s ease-out infinite; opacity: 0; }
+.v4 .r2 { animation-delay: 1.8s; }
