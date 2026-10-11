@@ -525,7 +525,9 @@ ul.plain { margin: 0 0 8px; padding-left: 18px; font-size: 14px; }
   .fi-tab th { font-size: 7pt; text-transform: uppercase; letter-spacing: .02em; }
   .fi-tab thead { display: table-header-group; }
   .fi-tab th:nth-child(1) { width: 15%; } .fi-tab th:nth-child(2) { width: 20%; } .fi-tab th:nth-child(3) { width: 29%; } .fi-tab th:nth-child(4) { width: 8%; } .fi-tab th:nth-child(5) { width: 28%; }
-  .fi-tab td:nth-child(4) { white-space: nowrap; }
+  .fi-expo td:nth-child(4) { white-space: nowrap; }
+  /* Relevés : la 4e colonne contient du texte (natures d'exposition), elle doit passer à la ligne */
+  .rv-tab td:nth-child(3), .rv-sum td:nth-child(3), .rv-years td:nth-child(4) { white-space: nowrap; }
   .fi-tab small { font-size: 6.5pt; }
   .fi-note, .fi-ind { font-size: 7pt; }
   .fi-sign div { font-size: 7.5pt; height: 16mm; }
@@ -812,6 +814,8 @@ a.op-chip:hover { border-color: var(--text); }
   .pg-break { break-after: page; page-break-after: always; height: 0; }
   .rv-tab th:nth-child(1) { width: 14%; } .rv-tab th:nth-child(2) { width: 34%; } .rv-tab th:nth-child(3) { width: 9%; } .rv-tab th:nth-child(4) { width: 17%; } .rv-tab th:nth-child(5) { width: 26%; }
   .rv-sum th:nth-child(1) { width: 60%; }
+  .rv-sum th:nth-child(2) { width: 20%; } .rv-sum th:nth-child(3) { width: 20%; }
+  .rv-years th:nth-child(1) { width: 10%; } .rv-years th:nth-child(2) { width: 20%; } .rv-years th:nth-child(3) { width: 20%; } .rv-years th:nth-child(4) { width: 14%; } .rv-years th:nth-child(5) { width: 36%; }
   .rv-obs { border: 1px solid #bbb; padding: 6px 8px; min-height: 40px; margin: 0; }
   .rv-att { border: 1.5px solid #111; padding: 8px 10px; margin-top: 10px; break-inside: avoid; }
 }

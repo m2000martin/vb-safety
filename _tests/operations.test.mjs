@@ -13,7 +13,11 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const P = { agent: ['SP-0142', 'Sap. J. Leroy'], cos: ['CA-0107', 'Adj. T. Bernard'], commandement: ['CI-0021', 'Cne. M. Garnier'], sssm: ['MED-0003', 'Dr C. Roche'], habillement: ['HAB-0005', 'Adc. L. Perrin'] };
 // Une seule session navigateur pour partager le jeu de démonstration entre les profils
 const ctx = await br.newContext({ viewport: { width: 1360, height: 920 } });
-await ctx.addInitScript(() => { window.print = () => { window.__printed = (document.getElementById('print-area') || {}).innerText || ''; }; ['agent', 'cos', 'commandement', 'sssm', 'habillement'].forEach(r => localStorage.setItem('vbs-tour-' + r, '1')); });
+await ctx.addInitScript(() => { window.print = () => {
+  const a = document.getElementById('print-area') || {}; window.__printed = a.innerText || '';
+  // Mise en page impression : aucun texte ne doit déborder de sa cellule de tableau
+  window.__overflow = a.querySelectorAll ? Array.from(a.querySelectorAll('td')).filter(td => td.scrollWidth > td.clientWidth + 1).map(td => td.innerText.slice(0, 60)) : [];
+}; ['agent', 'cos', 'commandement', 'sssm', 'habillement'].forEach(r => localStorage.setItem('vbs-tour-' + r, '1')); });
 const pg = await ctx.newPage(); pg.on('pageerror', e => errs.push(e.message)); pg.on('dialog', d => d.accept());
 async function as(role, hash) {
   await pg.goto(B + '/cmr-pompier/connexion.html'); await pg.evaluate(([r, m, n]) => sessionStorage.setItem('vbs-session', JSON.stringify({ token: null, role: r, name: n, matricule: m, offline: true })), [role, ...P[role]]);
@@ -70,6 +74,9 @@ ok(nAll > nSud && nSud > 0 && nCis > 0 && nCis <= nSud, 'SSSM · sélection tous
 await pg.click('[data-dl="per|perso"]'); await wait(300); await pg.fill('#dl-from', new Date().getFullYear() + '-07-01'); await pg.locator('#dl-from').dispatchEvent('change'); await wait(300);
 await pg.click('#dl-pdf'); await wait(300);
 ok(/Relevé des activités potentiellement exposantes/.test(await pg.evaluate(() => window.__printed)), 'SSSM · relevés d\'une caserne sur une période personnalisée (PDF)');
+await pg.emulateMedia({ media: 'print' }); await pg.click('#dl-pdf'); await wait(300);
+const ovf = await pg.evaluate(() => window.__overflow); await pg.emulateMedia({ media: 'screen' });
+ok(!ovf.length, 'SSSM · PDF des relevés : aucun texte ne déborde des colonnes' + (ovf.length ? ' — ' + ovf.slice(0, 3).join(' | ') : ''));
 await pg.selectOption('#dl-cis', ''); await pg.selectOption('#dl-grp', ''); await pg.click('[data-dl="per|annee"]'); await wait(300);
 await pg.click('#at-go'); await wait(300);
 ok(/Attestation d'exposition/.test(await pg.evaluate(() => window.__printed)), "SSSM · attestation d'exposition générée");
