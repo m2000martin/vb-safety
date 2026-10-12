@@ -1,4 +1,4 @@
-// Frise « avec / sans traçabilité » (pages Sapeurs-pompiers et Carnet Expo CMR).
+// Frise « avec / sans traçabilité » (pages Sapeurs-pompiers et VB CMR).
 // Ordinateur : la section s'épingle sous l'en-tête ; le défilement trace d'abord la ligne « avec », puis la ligne « sans » ;
 // une fois la frise complète, la page reprend son défilement normal. En remontant, la frise se défait dans l'ordre inverse.
 // Téléphone, mouvement réduit, ou écran trop bas pour contenir la frise : frise complète et statique.

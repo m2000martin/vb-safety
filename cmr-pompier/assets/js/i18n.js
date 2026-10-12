@@ -1,4 +1,4 @@
-// Version anglaise du Carnet Expo CMR.
+// Version anglaise de VB CMR.
 // L'application est écrite en français ; en anglais, cette couche traduit ce qui s'affiche
 // (textes, infobulles, champs, fenêtres de confirmation, exports) à partir du dictionnaire
 // i18n-en.js. La logique de l'application et les données ne changent pas.

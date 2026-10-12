@@ -1,4 +1,4 @@
-// Version anglaise du Carnet Expo CMR : couverture des traductions et assistant en anglais, vérifiés dans Chromium.
+// Version anglaise de VB CMR : couverture des traductions et assistant en anglais, vérifiés dans Chromium.
 // Lancement : node _tests/i18n.test.mjs  (depuis la racine du dépôt)
 import { createRequire } from 'node:module'; import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
 const require = createRequire(import.meta.url);

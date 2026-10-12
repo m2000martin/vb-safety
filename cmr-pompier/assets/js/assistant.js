@@ -211,7 +211,7 @@
   }
 
   function help(sujet, text) {
-    var t = HELP[sujet] || text || "Je réponds aux questions sur l'utilisation du Carnet Expo CMR. Pour la réglementation et la santé, voyez le guide.";
+    var t = HELP[sujet] || text || "Je réponds aux questions sur l'utilisation de VB CMR. Pour la réglementation et la santé, voyez le guide.";
     var link = HELP_LINKS[sujet] || (!HELP[sujet] ? HELP_LINKS.autre : null);
     say('<p>' + esc(t) + '</p>' + (link ? '<p><a href="' + link[0] + '" target="_blank" rel="noopener">' + esc(link[1]) + '</a></p>' : ''), 'bot', true);
   }

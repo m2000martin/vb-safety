@@ -1,4 +1,4 @@
-// Profil administrateur du Carnet Expo CMR : droits par profil et indicateurs ajoutés, vérifiés dans Chromium.
+// Profil administrateur de VB CMR : droits par profil et indicateurs ajoutés, vérifiés dans Chromium.
 // Lancement : node _tests/admin.test.mjs  (depuis la racine du dépôt)
 import { createRequire } from 'node:module'; import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path'; import os from 'node:os';
 const require = createRequire(import.meta.url);

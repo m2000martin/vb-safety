@@ -1,5 +1,5 @@
 /// <reference path="../pb_data/types.d.ts" />
-// Profil administrateur du Carnet Expo CMR (PocketBase v0.23 ou plus récent).
+// Profil administrateur de VB CMR (PocketBase v0.23 ou plus récent).
 // À copier dans le dossier pb_migrations/ du serveur : appliqué automatiquement au redémarrage.
 //   1. ajoute la valeur « admin » au champ role des utilisateurs ;
 //   2. crée la collection « parametres » (lecture : tout utilisateur connecté ; écriture : administrateur) ;

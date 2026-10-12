@@ -7,7 +7,7 @@
     acces: { titre: "Demander un code d'accès", intro: 'Recevez le code pour tester la démonstration avec les quatre profils.', bouton: 'Recevoir un code' },
     version: { titre: 'Une version pour votre SDIS', intro: 'Parlez-nous de votre organisation : nous revenons vers vous pour une présentation et une version adaptée à vos procédures.', bouton: 'Envoyer la demande' },
     partenaire: { titre: 'Devenir partenaire', intro: 'SDIS, fabricant, laboratoire, organisme de formation : présentez-nous votre projet, nous revenons vers vous pour en parler.', bouton: 'Envoyer la demande' },
-    contact: { titre: 'Nous contacter', intro: 'Une question sur le Carnet Expo CMR ? Écrivez-nous, nous répondons rapidement.', bouton: 'Envoyer' }
+    contact: { titre: 'Nous contacter', intro: 'Une question sur VB CMR ? Écrivez-nous, nous répondons rapidement.', bouton: 'Envoyer' }
   };
   var CFG = window.VBS_DEMANDE || {};
   if (CFG.txt) for (var k in CFG.txt) TXT[k] = CFG.txt[k];

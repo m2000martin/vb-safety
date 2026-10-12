@@ -1,4 +1,4 @@
-// Dictionnaire anglais du Carnet Expo CMR (anglais britannique).
+// Dictionnaire anglais de VB CMR (anglais britannique).
 // Clés : texte français « gabarisé » ({0}, {1}… = noms, dates, nombres, identifiants).
 // Sigles français conservés entre parenthèses (SDIS, SSSM, CA, COS, ARI…).
 window.VBS_EN_GRADES = {
@@ -10,7 +10,7 @@ window.VBS_EN_NAMES = {
   'Sap. J. Leroy': 'Ff. J. Leroy', 'Adj. T. Bernard': 'WO T. Bernard', 'Cne. M. Garnier': 'Capt. M. Garnier', 'Dr C. Roche': 'Dr C. Roche',
   'Adc. L. Perrin': 'CWO L. Perrin', 'Cdt S. Durand': 'Maj. S. Durand', 'CIS Démo-sur-Marne': 'CIS Démo-sur-Marne',
   'Démo-sur-Marne': 'Démo-sur-Marne', 'Val-Fictif': 'Val-Fictif', 'Saint-Exemple': 'Saint-Exemple', 'Bois-Exemple': 'Bois-Exemple', 'Guichen': 'Guichen',
-  "Zone d'activités Fictive": "Zone d'activités Fictive", 'Groupement fictif Nord': 'Groupement fictif Nord', 'VB Safety': 'VB Safety', 'Carnet Expo CMR': 'Carnet Expo CMR'
+  "Zone d'activités Fictive": "Zone d'activités Fictive", 'Groupement fictif Nord': 'Groupement fictif Nord', 'VB Safety': 'VB Safety', 'VB CMR': 'VB CMR'
 };
 // Gabarits à trou libre ({*}) : le contenu de chaque trou est traduit à son tour.
 window.VBS_EN_PAT = [
@@ -766,7 +766,7 @@ window.VBS_EN = {
 "Je confirme": "I confirm",
 "Je n'ai pas compris. Essayez par exemple": "I didn't understand. Try for example",
 "Je n'ai pas compris. Essayez une des suggestions ci-dessous.": "I didn't understand. Try one of the suggestions below.",
-"Je réponds aux questions sur l'utilisation du Carnet Expo CMR. Pour la réglementation et la santé, voyez le guide.": "I answer questions about using the Carnet Expo CMR. For regulations and health, see the guide.",
+"Je réponds aux questions sur l'utilisation de VB CMR. Pour la réglementation et la santé, voyez le guide.": "I answer questions about using VB CMR. For regulations and health, see the guide.",
 "L'agent n'aura plus de cagoule attribuée. Continuer ?": "The firefighter will no longer have an assigned fire hood. Continue?",
 "L'agent n'aura plus de pantalon de feu attribuée. Continuer ?": "The firefighter will no longer have an assigned fire trousers. Continue?",
 "L'agent n'aura plus de veste de feu attribuée. Continuer ?": "The firefighter will no longer have an assigned fire jacket. Continue?",
@@ -1308,7 +1308,7 @@ window.VBS_EN = {
 "Type": "Type",
 "Type de lieu": "Type of location",
 "Type de sinistre": "Type of incident",
-"Type retenu pour le Carnet": "Type used in the Carnet",
+"Type retenu dans VB CMR": "Type used in VB CMR",
 "Téléchargement impossible": "Download failed",
 "Télécharger": "Download",
 "Télécharger (PDF)": "Download (PDF)",
@@ -1319,12 +1319,12 @@ window.VBS_EN = {
 "Un prélèvement": "One sample",
 "Un rapport est ouvert pour le chef d'agrès de chaque agrès engagé. Il le remplit à son désengagement, pour lui et son équipage.": "A report is opened for the crew commander of each appliance deployed. They fill it in when they disengage, for themselves and their crew.",
 "Un rapport non transmis 72 heures après l'intervention passe « en retard ». Le commandement peut alors relancer le CA ou le COS concerné.": "A report not sent 72 hours after the call-out becomes “overdue”. Command can then remind the CA or COS concerned.",
-"Un relevé annuel des activités potentiellement exposantes, transmis avant la visite médicale, et une attestation cumulée à conserver {0} ans. Modèles distincts pour les professionnels (SPP, PATS) et les volontaires (SPV). Le Carnet les remplit à partir des rapports contrôlés et des formations déclarées.": "An annual record of potentially exposing activities, sent before the medical visit, and a cumulative certificate to keep for {0} years. Separate templates for career staff (SPP, PATS) and volunteers (SPV). The Carnet fills them in from the reviewed reports and the declared training sessions.",
+"Un relevé annuel des activités potentiellement exposantes, transmis avant la visite médicale, et une attestation cumulée à conserver {0} ans. Modèles distincts pour les professionnels (SPP, PATS) et les volontaires (SPV). {1} les remplit à partir des rapports contrôlés et des formations déclarées.": "An annual record of potentially exposing activities, sent before the medical visit, and a cumulative certificate to keep for {0} years. Separate templates for career staff (SPP, PATS) and volunteers (SPV). {1} fills them in from the reviewed reports and the declared training sessions.",
 "Une fois transmis, le rapport n'est plus modifiable par vous. Le SSSM pourra le corriger et le valider. Le référent EPI du centre est prévenu pour le changement des tenues.": "Once sent, you can no longer edit the report. The SSSM can correct and approve it. The station PPE officer is notified to change the kit.",
 "Une intervention de grande ampleur regroupe les engagements successifs : chaque agrès, à chaque relève, a son rapport rempli par son chef d'agrès. Un agent qui revient sur une relève suivante cumule ses durées.": "A large-scale call-out groups successive deployments: each appliance, at each relief shift, has its report filled in by its crew commander. A firefighter who returns on a later relief shift has their durations added up.",
 "Une ligne par agent et par intervention, avec la nature des agents CMR.": "One row per firefighter and call-out, with the nature of the CMR agents.",
 "Une question ?": "A question?",
-"Une question sur le Carnet Expo CMR ? Écrivez-nous, nous répondons rapidement.": "A question about the Carnet Expo CMR? Write to us, we reply quickly.",
+"Une question sur VB CMR ? Écrivez-nous, nous répondons rapidement.": "A question about VB CMR? Write to us, we reply quickly.",
 "Une question sur le {0} ? Écrivez-nous, nous répondons rapidement.": "A question about the {0}? Write to us, we reply quickly.",
 "Une tenue est hors d'usage : je la réformerai depuis « Tenues de feu »": "An item is unusable: I will retire it from “Fire kit”",
 "Une traçabilité simple et sécurisée des expositions CMR des sapeurs-pompiers, intervention après intervention.": "Simple, secure tracking of firefighters' CMR exposures, call-out after call-out.",

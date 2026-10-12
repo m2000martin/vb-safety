@@ -3,7 +3,7 @@
 Ce dossier n'est pas publié par GitHub Pages (dossier commençant par « _ »).
 Il contient les fichiers à copier sur le serveur PocketBase de démonstration.
 
-## Assistant du Carnet Expo CMR · `pb_hooks/assistant.pb.js`
+## Assistant de VB CMR · `pb_hooks/assistant.pb.js`
 
 Route `POST /api/assistant`, réservée aux utilisateurs connectés. Elle transforme une phrase
 (« ouvre mon dernier rapport à compléter ») en une action que le navigateur exécute

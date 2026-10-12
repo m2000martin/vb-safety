@@ -1,4 +1,4 @@
-/* Frise « avec / sans traçabilité » (pages Sapeurs-pompiers et Carnet Expo CMR).
+/* Frise « avec / sans traçabilité » (pages Sapeurs-pompiers et VB CMR).
    La section s'épingle à l'écran, les lignes se tracent avec le défilement, puis la page repart.
    Sans JavaScript, au téléphone ou avec le mouvement réduit : frise complète, affichée d'emblée. */
 .frise { display: grid; gap: clamp(40px, 6vw, 72px); margin-top: 8px; }
@@ -58,7 +58,7 @@
   .fr-steps b { display: inline; margin-top: 0; }
 }
 
-/* Variante claire (page du Carnet Expo CMR) : reprend les couleurs de cette page */
+/* Variante claire (page de VB CMR) : reprend les couleurs de cette page */
 .frise.fr-clair {
   --texte: var(--text); --doux: var(--muted); --faible: var(--faint);
   --ligne: var(--line-strong); --ligne-2: var(--line-strong);
@@ -69,3 +69,7 @@
 .fr-clair .fr-lab { font-weight: 800; font-size: clamp(24px, 2.1vw, 29px); }
 .fr-clair .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(46, 125, 50, .12), 0 0 18px 4px rgba(46, 125, 50, .35); }
 .fr-clair.frise .fr-sans .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(215, 38, 30, .12), 0 0 18px 4px rgba(215, 38, 30, .35); }
+
+/* Étapes apportées par VB Safety (vérification, fiche d'exposition) : même vert que le point d'arrivée */
+.fr-steps li.fr-ok i { background: var(--ok); }
+.fr-steps li.fr-ok b { color: var(--ok); }

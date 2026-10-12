@@ -1,4 +1,4 @@
-// Textes du formulaire de demande pour le portail CMR Industrie
+// Textes du formulaire de demande pour le portail VB CMR Industrie
 window.VBS_DEMANDE = {
   orgLabel: 'Entreprise',
   orgPlaceholder: 'Ex. Société Industrielle SAS',

@@ -1,4 +1,4 @@
-/* Page de connexion à la démo (reprise du Carnet sapeurs-pompiers) */
+/* Page de connexion à la démo (reprise de VB CMR sapeurs-pompiers) */
 .login-body { background: var(--ink); }
 .login { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); min-height: 100vh; min-height: 100svh; }
 

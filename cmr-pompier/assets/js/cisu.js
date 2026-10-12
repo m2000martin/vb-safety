@@ -6,7 +6,7 @@
 //
 // Ce module sait :
 //   - générer des messages fictifs conformes (démonstration) ;
-//   - lire un message reçu et en déduire l'intervention du Carnet :
+//   - lire un message reçu et en déduire l'intervention de VB CMR :
 //     nature → type de feu (référentiel CMR), commune, début, durée sur les lieux, engins.
 // L'équipage nominatif n'existe pas dans ces messages : il reste à saisir par le CA
 // (ou à importer depuis le CRSS).
@@ -31,7 +31,7 @@
     'C02.07.04': 'Personne exposée à produits chimiques ou toxiques / NRBC'
   };
 
-  // ------------------------------------------------------------------ nature CISU → type du Carnet
+  // ------------------------------------------------------------------ nature CISU → type de VB CMR
   // Renvoie { type, ambiance, regle } ; type null = intervention sans exposition aux fumées.
   function typeFor(code, lieu) {
     code = String(code || ''); lieu = String(lieu || '');
@@ -208,7 +208,7 @@
     if (!engins.length) warn.push('Aucun moyen engagé (RC-RI) : la durée et les engins seront à saisir.');
     var sis = engins.filter(function (e) { return e.type !== 'VECTEUR_SANTE'; });
     var main = sis.filter(function (e) { return e.code; })[0] || sis[0] || null;
-    // Intervention du Carnet : du premier départ d'engin à la dernière fin sur les lieux
+    // Intervention de VB CMR : du premier départ d'engin à la dernière fin sur les lieux
     var deps = sis.map(function (e) { return e.depart || e.arrivee; }).filter(Boolean);
     var fins = sis.map(function (e) { return e.finLieux; }).filter(Boolean);
     var debut = deps.length ? new Date(Math.min.apply(null, deps)) : new Date(Date.parse(c.creation));

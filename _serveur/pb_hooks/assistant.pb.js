@@ -1,5 +1,5 @@
 /// <reference path="../pb_data/types.d.ts" />
-// Assistant du Carnet Expo CMR · route POST /api/assistant (PocketBase v0.23 ou plus récent)
+// Assistant de VB CMR · route POST /api/assistant (PocketBase v0.23 ou plus récent)
 //
 // Reçoit : { message, page, pages } d'un utilisateur connecté.
 // Renvoie : { action: { name, input } } ou { text }.
@@ -48,7 +48,7 @@ routerAdd("POST", "/api/assistant", (e) => {
 
   // ---------------------------------------------------------------- consignes et outils
   const system = [
-    "Tu es l'assistant du Carnet Expo CMR de VB Safety, un logiciel où les SDIS tracent l'exposition des sapeurs-pompiers aux fumées d'incendie.",
+    "Tu es l'assistant de VB CMR, le logiciel de VB Safety où les SDIS tracent l'exposition des sapeurs-pompiers aux fumées d'incendie.",
     "Ton rôle : transformer la demande de l'utilisateur en UNE action de l'application, au moyen d'un des outils fournis.",
     "Tu ne vois aucune donnée et tu n'en inventes aucune : l'application exécute l'action et affiche elle-même les résultats.",
     "Tu ne remplis, ne transmets, ne valides et ne supprimes jamais rien.",
@@ -61,7 +61,7 @@ routerAdd("POST", "/api/assistant", (e) => {
     "- Aller sur une page de l'espace → ouvrir_page, uniquement parmi les pages listées dans la demande.",
     "- Question sur le fonctionnement → aide avec le sujet le plus proche.",
     "- Question d'usage du logiciel sans sujet adapté : réponds sans outil, en deux phrases au plus.",
-    "- Question médicale, juridique ou hors sujet : réponds sans outil, en une phrase, que tu ne réponds qu'aux questions sur l'utilisation du Carnet et renvoie vers le SSSM ou le guide santé.",
+    "- Question médicale, juridique ou hors sujet : réponds sans outil, en une phrase, que tu ne réponds qu'aux questions sur l'utilisation de VB CMR et renvoie vers le SSSM ou le guide santé.",
     en ? "Answer in English (the interface is shown in English), concisely and politely. Keep French acronyms such as SSSM, SDIS, CA, COS with their English meaning when useful." : "Réponds toujours en français, en vouvoyant."
   ].join("\n");
 
@@ -76,7 +76,7 @@ routerAdd("POST", "/api/assistant", (e) => {
       input_schema: { type: "object", properties: {
         statut: { type: "string", enum: ["a_completer", "en_retard", "transmis", "valides", "tous"] },
         jours: { type: "integer", minimum: 1, maximum: 365, description: "Limiter aux N derniers jours." } }, required: ["statut"] } },
-    { name: "aide", description: "Affiche une aide sur le fonctionnement du Carnet.",
+    { name: "aide", description: "Affiche une aide sur le fonctionnement de VB CMR.",
       input_schema: { type: "object", properties: {
         sujet: { type: "string", enum: ["remplir_rapport", "circuit_validation", "zones_contamination", "ari", "decontamination", "donnees", "retard"] } }, required: ["sujet"] } }
   ];

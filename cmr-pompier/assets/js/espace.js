@@ -821,7 +821,7 @@
         row('Nature (code national)', '<code>' + esc(res.nature.code) + '</code> ' + esc(res.nature.label)) +
         (res.lieu ? row('Type de lieu', '<code>' + esc(res.lieu.code) + '</code> ' + esc(res.lieu.label)) : '') +
         (res.risques.length ? row('Risques', res.risques.map(function (r) { return '<code>' + esc(r.code) + '</code> ' + esc(r.label); }).join(' · ')) : '') +
-        row('Type retenu pour le Carnet', res.type ? '<b>' + esc(TYPE[res.type]) + '</b><br><span class="note">' + esc(res.regle) + ' · ' + esc(AMB[res.ambiance]) + '</span>' : '<b>Aucun rapport</b><br><span class="note">' + esc(res.regle) + '</span>') +
+        row('Type retenu dans VB CMR', res.type ? '<b>' + esc(TYPE[res.type]) + '</b><br><span class="note">' + esc(res.regle) + ' · ' + esc(AMB[res.ambiance]) + '</span>' : '<b>Aucun rapport</b><br><span class="note">' + esc(res.regle) + '</span>') +
         row('Commune', esc(res.commune || '—')) +
         row('Départ', fmtDT(res.debut)) +
         row('Fin sur les lieux', res.fin ? fmtDT(res.fin) : '—') +
@@ -2082,7 +2082,7 @@
     var seg = function (key, opts) { return '<div class="seg" role="group">' + opts.map(function (o) { return '<button type="button" data-rv="' + key + '|' + o[0] + '" aria-pressed="' + (RV[key] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div>'; };
     root.innerHTML = head('Relevés réglementaires', 'Le relevé des activités exposantes de chaque agent, et l\'attestation d\'exposition en fin de carrière. Vous contrôlez, visez, puis téléchargez.') +
       dlPanel() +
-      '<div class="callout"><span class="icon-tile">' + icon('scale') + '</span><div><strong>Circulaire DGSCGC du 14 janvier 2025</strong><span class="sub">Un relevé annuel des activités potentiellement exposantes, transmis avant la visite médicale, et une attestation cumulée à conserver 50 ans. Modèles distincts pour les professionnels (SPP, PATS) et les volontaires (SPV). Le Carnet les remplit à partir des rapports contrôlés et des formations déclarées.</span></div></div>' +
+      '<div class="callout"><span class="icon-tile">' + icon('scale') + '</span><div><strong>Circulaire DGSCGC du 14 janvier 2025</strong><span class="sub">Un relevé annuel des activités potentiellement exposantes, transmis avant la visite médicale, et une attestation cumulée à conserver 50 ans. Modèles distincts pour les professionnels (SPP, PATS) et les volontaires (SPV). VB CMR les remplit à partir des rapports contrôlés et des formations déclarées.</span></div></div>' +
       '<div class="grid grid-4">' + kpi('users', '', 'Agents concernés · ' + y, all.length, esc(scopeLabel())) + kpi('check', 'ok', 'Données complètes', ready + ' / ' + all.length, 'Tous les rapports de l\'année validés') + kpi('lock', 'info', 'Relevés visés', vises + ' / ' + all.length, 'Par le médecin du SSSM') + kpi('cal', urgent ? 'warn' : '', 'À viser avant une visite', urgent, 'Visite SSSM dans les 30 jours') + '</div>' +
       '<section class="panel"><div class="panel-head wrap"><h3>Contrôle annuel ' + y + ' · ' + esc(scopeLabel()) + '</h3><div class="actions-row" style="margin:0">' + seg('f', [['tous', 'Tous'], ['viser', 'À viser'], ['vises', 'Visés']]) + seg('st', [['', 'SPP et SPV'], ['SPP', 'SPP'], ['SPV', 'SPV']]) + '</div></div>' +
         (rows.length ? '<table class="dtable"><thead><tr><th>Agent</th><th>Caserne</th><th>Activités exposantes</th><th>Durée</th><th>Données</th><th>Visite SSSM</th><th>Relevé</th><th></th></tr></thead><tbody>' + rows.map(function (o) {
@@ -2341,7 +2341,7 @@
     var m = MENU.find(function (x) { return x.id === (isEditor ? 'rapports' : id); }) || MENU[0];
     nav.querySelectorAll('.nav-item').forEach(function (a) { a.setAttribute('aria-current', a.dataset.id === m.id ? 'page' : 'false'); });
     $('page-title').textContent = isEditor ? 'Rapport de contamination' : m.label;
-    document.title = (isEditor ? 'Rapport de contamination' : m.label) + ' · Carnet Expo CMR';
+    document.title = (isEditor ? 'Rapport de contamination' : m.label) + ' · VB CMR';
     if (!db) return;
     var view = $('view');
     if (isEditor) {
