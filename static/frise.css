@@ -52,3 +52,15 @@
   .fr-steps .n { display: inline; margin-right: 8px; }
   .fr-steps b { display: inline; margin-top: 0; }
 }
+
+/* Variante claire (page du Carnet Expo CMR) : reprend les couleurs de cette page */
+.frise.fr-clair {
+  --texte: var(--text); --doux: var(--muted); --faible: var(--faint);
+  --ligne: var(--line-strong); --ligne-2: var(--line-strong);
+  --signal: var(--red); --signal-2: var(--red-strong);
+  --serif: var(--font); --sans: var(--font);
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+.fr-clair .fr-lab { font-weight: 800; font-size: clamp(24px, 2.1vw, 29px); }
+.fr-clair .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(23, 25, 29, .08), 0 0 18px 4px rgba(23, 25, 29, .22); }
+.fr-clair.frise .fr-sans .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(215, 38, 30, .12), 0 0 18px 4px rgba(215, 38, 30, .35); }

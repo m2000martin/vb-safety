@@ -31,6 +31,7 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Carnet Expo CMR", "url": "https://vb-safety.com/cmr-pompier/", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "inLanguage": "fr-FR", "description": "Logiciel de rapport de contamination pour SDIS : traçabilité des expositions CMR des sapeurs-pompiers après intervention, contrôle par le SSSM, relevés annuels et attestations d'exposition.", "audience": {"@type": "Audience", "audienceType": "Services départementaux d'incendie et de secours (SDIS)"}, "publisher": {"@id": "https://vb-safety.com/#organisation"}, "featureList": ["Rapport de contamination de l'équipage rempli par le chef d'agrès ou le COS", "Contrôle, correction et validation par le SSSM", "Relevé annuel des activités potentiellement exposantes et attestation d'exposition (circulaire DGSCGC du 14 janvier 2025)", "Interventions de grande ampleur : relèves, renforts, liste des personnels exposés", "Formations exposantes et nettoyage du matériel (décret n° 2025-1349)", "Fiche individuelle d'exposition aux agents CMR (art. R. 4412-93-1 du code du travail)", "Module EPI : contamination et lavage des tenues de feu", "Réception des interventions au format national CISU"], "dateModified": "2026-10-07"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://vb-safety.com/"}, {"@type": "ListItem", "position": 2, "name": "Sapeurs-pompiers", "item": "https://vb-safety.com/sapeurs-pompiers/"}, {"@type": "ListItem", "position": 3, "name": "Carnet Expo CMR", "item": "https://vb-safety.com/cmr-pompier/"}]}</script>
 <link rel="stylesheet" href="/static/barre.css?v=3">
+<link rel="stylesheet" href="/static/frise.css?v=6">
 <link rel="stylesheet" href="/static/mobile.css?v=7">
 </head>
 <body>
@@ -184,6 +185,19 @@
   </section>
 
   <!-- OBLIGATIONS RÉGLEMENTAIRES -->
+  <section class="section" id="frise" aria-label="Avec ou sans traçabilité">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Avec ou sans traçabilité</span>
+        <h2>L'intervention dure deux heures.<br>La preuve doit durer quarante ans.</h2>
+      </div>
+    <div class="frise fr-clair" data-frise role="group" aria-label="Comparaison du parcours d’un agent avec et sans traçabilité">
+      <div class="fr-row fr-avec"><div class="fr-lab">Avec VB Safety<span class="fr-sub">Suivi CMR</span></div><div class="fr-line"><span class="fr-track" aria-hidden="true"></span><span class="fr-fill" aria-hidden="true"></span><ol class="fr-steps"><li><i></i><span class="n">01</span><b>Intervention</b><small>Équipage et durée repris automatiquement</small></li><li><i></i><span class="n">02</span><b>Décontamination</b><small>Renseignée au retour, validée par le commandement</small></li><li><i></i><span class="n">03</span><b>Vérification</b><small>Contrôle de la décontamination, seconde décontamination si nécessaire</small></li><li><i></i><span class="n">04</span><b>Fiche d'exposition</b><small>Transmise au SSSM</small></li><li><i></i><span class="n">05</span><b>Suivi médical</b><small>Versé au dossier, conservé quarante ans</small></li><li class="fr-end"><i></i><span class="n">&nbsp;</span><b>Preuve disponible</b><small>Le jour où l'agent en a besoin</small></li></ol></div></div>
+      <div class="fr-row fr-sans"><div class="fr-lab">Sans traçabilité</div><div class="fr-line"><span class="fr-track" aria-hidden="true"></span><span class="fr-fill" aria-hidden="true"></span><ol class="fr-steps"><li><i></i><span class="n">01</span><b>Intervention</b><small>L'engagement est noté, l'exposition ne l'est pas</small></li><li><i></i><span class="n">02</span><b>Rien n'est noté</b><small>Ni la zone, ni la protection, ni la décontamination</small></li><li><i></i><span class="n">03</span><b>Rien n'est vérifié</b><small>Personne ne sait si la décontamination a suffi</small></li><li><i></i><span class="n">04</span><b>Rien n'est transmis</b><small>Le service de santé n'en sait rien</small></li><li class="fr-end"><i></i><span class="n">&nbsp;</span><b>Des années plus tard</b><small>Une maladie, aucune preuve d'exposition</small></li></ol></div></div>
+    </div>
+    </div>
+  </section>
+
   <section class="section" id="obligations">
     <div class="container">
       <div class="section-head">
@@ -394,5 +408,6 @@
   <script src="assets/js/demande.js?v=11"></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/menu.js?v=1" defer></script>
+<script src="/static/frise.js?v=2" defer></script>
 </body>
 </html>
