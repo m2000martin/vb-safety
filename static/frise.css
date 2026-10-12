@@ -1,5 +1,5 @@
-/* Frise « avec / sans traçabilité » (page Sapeurs-pompiers).
-   À l'arrivée de la section à l'écran, la ligne se trace seule (une fois), puis les étapes apparaissent.
+/* Frise « avec / sans traçabilité » (pages Sapeurs-pompiers et Carnet Expo CMR).
+   La ligne avance et recule avec le défilement ; les étapes apparaissent quand elle les atteint.
    Sans JavaScript, au téléphone ou avec le mouvement réduit : frise complète, affichée d'emblée. */
 .frise { display: grid; gap: clamp(40px, 6vw, 72px); margin-top: 8px; }
 .fr-row { display: grid; grid-template-columns: 1fr; gap: 18px; }
@@ -34,11 +34,11 @@
 .fr-sans .fr-steps li.fr-end b { color: var(--signal-2); }
 .fr-sans .fr-steps li.fr-end small { color: var(--doux); }
 
-/* Animation (activée par frise.js) : la ligne se découvre de gauche à droite, chaque étape suit la ligne */
-.frise.anim .fr-fill { clip-path: inset(0 100% 0 0); }
-.frise.anim .fr-steps li { opacity: 0; transform: translateY(6px); }
-.frise.anim.go .fr-fill { clip-path: inset(0 0 0 0); transition: clip-path var(--dur, 1.8s) cubic-bezier(.45, 0, .25, 1) var(--start, 0s); }
-.frise.anim.go .fr-steps li { opacity: 1; transform: none; transition: opacity .5s ease var(--d, 0s), transform .5s ease var(--d, 0s); }
+/* Animation (activée par frise.js) : la ligne avance avec le défilement (--q de 0 à 1, lissé),
+   chaque étape apparaît quand la ligne l'atteint. Seul un découpage (clip-path) change : rien n'est recalculé dans la mise en page. */
+.frise.anim .fr-fill { clip-path: inset(0 calc((1 - var(--q, 0)) * 100%) 0 0); will-change: clip-path; }
+.frise.anim .fr-steps li { opacity: 0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
+.frise.anim .fr-steps li.on { opacity: 1; transform: none; }
 
 /* Téléphone et petite tablette : frise verticale, complète d'emblée */
 @media (max-width: 899px) {

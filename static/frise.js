@@ -1,32 +1,47 @@
-// Frise « avec / sans traçabilité » : quand la section arrive à l'écran, la ligne se trace seule, une fois,
-// et chaque étape apparaît au moment où la ligne l'atteint. Le défilement n'est jamais piloté ni ralenti.
+// Frise « avec / sans traçabilité » : chaque ligne avance (et recule) avec le défilement.
+// La position suit le scroll avec un léger lissage, pour un tracé fluide sans à-coups ; le défilement lui-même n'est jamais bloqué.
 // Rien ne bouge au téléphone ni si l'utilisateur a demandé moins d'animations : la frise reste complète.
 (function () {
   var frises = document.querySelectorAll('[data-frise]');
-  if (!frises.length || !window.matchMedia || !('IntersectionObserver' in window)) return;
+  if (!frises.length || !window.matchMedia || !window.requestAnimationFrame) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(min-width: 900px)').matches) return;
 
-  var FULL = 1.8; // durée (s) pour tracer toute la largeur
+  var COLS = 6, rows = [];
   frises.forEach(function (f) {
-    var start = 0;
     f.querySelectorAll('.fr-line').forEach(function (line) {
       var end = parseFloat(getComputedStyle(line).getPropertyValue('--end')) || 1;
-      var dur = FULL * end, cols = 6;
-      line.style.setProperty('--start', start.toFixed(2) + 's');
-      line.style.setProperty('--dur', dur.toFixed(2) + 's');
-      line.querySelectorAll('.fr-steps li').forEach(function (li, i) {
-        var pos = li.classList.contains('fr-end') ? end : i / cols;
-        li.style.setProperty('--d', (start + dur * (pos / end) - 0.1).toFixed(2) + 's');
+      var items = Array.prototype.map.call(line.querySelectorAll('.fr-steps li'), function (li, i) {
+        return { el: li, at: li.classList.contains('fr-end') ? 1 : (i / COLS) / end };
       });
-      start += 0.5; // la ligne « sans » part juste après la ligne « avec »
+      rows.push({ line: line, items: items, q: 0, target: 0 });
     });
     f.classList.add('anim');
   });
 
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('go'); io.unobserve(e.target); }
+  // 0 quand le haut de la ligne passe à 85 % de la hauteur d'écran, 1 quand il atteint 40 %
+  function measure() {
+    var vh = window.innerHeight;
+    rows.forEach(function (r) {
+      var top = r.line.getBoundingClientRect().top;
+      r.target = Math.max(0, Math.min(1, (vh * 0.85 - top) / (vh * 0.45)));
     });
-  }, { threshold: 0.35 });
-  frises.forEach(function (f) { io.observe(f); });
+  }
+
+  var running = false;
+  function frame() {
+    var moving = false;
+    rows.forEach(function (r) {
+      var d = r.target - r.q;
+      r.q = Math.abs(d) < 0.001 ? r.target : r.q + d * 0.14;
+      if (r.q !== r.target) moving = true;
+      r.line.style.setProperty('--q', r.q.toFixed(4));
+      r.items.forEach(function (it) { it.el.classList.toggle('on', r.q >= it.at - 0.01); });
+    });
+    if (moving) requestAnimationFrame(frame); else running = false;
+  }
+  function kick() { measure(); if (!running) { running = true; requestAnimationFrame(frame); } }
+
+  window.addEventListener('scroll', kick, { passive: true });
+  window.addEventListener('resize', kick);
+  kick();
 })();
