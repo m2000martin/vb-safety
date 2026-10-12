@@ -28,7 +28,8 @@
 .fr-sans .fr-steps .n, .fr-sans .fr-steps b, .fr-sans .fr-steps small { color: var(--faible); }
 
 /* Point d'arrivée : carré lumineux */
-.fr-steps li.fr-end i { width: 15px; height: 15px; left: -1px; top: -1px; box-shadow: 0 0 0 4px rgba(244, 246, 248, .08), 0 0 22px 6px rgba(244, 246, 248, .45); }
+.fr-steps li.fr-end i { width: 15px; height: 15px; left: -1px; top: -1px; background: var(--ok); box-shadow: 0 0 0 4px rgba(52, 195, 143, .12), 0 0 22px 6px rgba(52, 195, 143, .45); }
+.fr-avec .fr-steps li.fr-end b { color: var(--ok); }
 .fr-steps li.fr-end i::after { left: 7px; top: 15px; }
 .fr-sans .fr-steps li.fr-end i { background: var(--signal); box-shadow: 0 0 0 4px rgba(224, 108, 52, .10), 0 0 22px 6px rgba(224, 108, 52, .45); }
 .fr-sans .fr-steps li.fr-end b { color: var(--signal-2); }
@@ -66,5 +67,5 @@
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 .fr-clair .fr-lab { font-weight: 800; font-size: clamp(24px, 2.1vw, 29px); }
-.fr-clair .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(23, 25, 29, .08), 0 0 18px 4px rgba(23, 25, 29, .22); }
+.fr-clair .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(46, 125, 50, .12), 0 0 18px 4px rgba(46, 125, 50, .35); }
 .fr-clair.frise .fr-sans .fr-steps li.fr-end i { box-shadow: 0 0 0 4px rgba(215, 38, 30, .12), 0 0 18px 4px rgba(215, 38, 30, .35); }
