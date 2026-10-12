@@ -1,41 +1,32 @@
-// Frise « avec / sans traçabilité » : la ligne avance avec le défilement, chaque étape apparaît quand la ligne l'atteint.
+// Frise « avec / sans traçabilité » : quand la section arrive à l'écran, la ligne se trace seule, une fois,
+// et chaque étape apparaît au moment où la ligne l'atteint. Le défilement n'est jamais piloté ni ralenti.
 // Rien ne bouge au téléphone ni si l'utilisateur a demandé moins d'animations : la frise reste complète.
 (function () {
   var frises = document.querySelectorAll('[data-frise]');
-  if (!frises.length || !window.matchMedia) return;
+  if (!frises.length || !window.matchMedia || !('IntersectionObserver' in window)) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(min-width: 900px)').matches) return;
 
-  var rows = [];
+  var FULL = 1.8; // durée (s) pour tracer toute la largeur
   frises.forEach(function (f) {
-    f.classList.add('anim');
+    var start = 0;
     f.querySelectorAll('.fr-line').forEach(function (line) {
       var end = parseFloat(getComputedStyle(line).getPropertyValue('--end')) || 1;
-      var items = Array.prototype.slice.call(line.querySelectorAll('.fr-steps li'));
-      rows.push({ frise: f, line: line, end: end, items: items });
+      var dur = FULL * end, cols = 6;
+      line.style.setProperty('--start', start.toFixed(2) + 's');
+      line.style.setProperty('--dur', dur.toFixed(2) + 's');
+      line.querySelectorAll('.fr-steps li').forEach(function (li, i) {
+        var pos = li.classList.contains('fr-end') ? end : i / cols;
+        li.style.setProperty('--d', (start + dur * (pos / end) - 0.1).toFixed(2) + 's');
+      });
+      start += 0.5; // la ligne « sans » part juste après la ligne « avec »
     });
+    f.classList.add('anim');
   });
 
-  var ticking = false;
-  function update() {
-    ticking = false;
-    var vh = window.innerHeight;
-    frises.forEach(function (f) {
-      var r = f.getBoundingClientRect();
-      // 0 quand le haut de la frise atteint 85 % de l'écran, 1 quand il atteint 35 %
-      var p = (vh * 0.85 - r.top) / (vh * 0.5);
-      p = Math.max(0, Math.min(1, p));
-      f.style.setProperty('--p', p.toFixed(3));
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('go'); io.unobserve(e.target); }
     });
-    rows.forEach(function (row) {
-      var p = parseFloat(row.frise.style.getPropertyValue('--p')) || 0, reach = p * row.end, n = row.items.length;
-      row.items.forEach(function (li, i) {
-        var pos = li.classList.contains('fr-end') ? row.end : i / 5;
-        li.classList.toggle('on', reach >= pos - 0.005);
-      });
-    });
-  }
-  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  update();
+  }, { threshold: 0.35 });
+  frises.forEach(function (f) { io.observe(f); });
 })();
