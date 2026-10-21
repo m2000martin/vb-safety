@@ -30,11 +30,10 @@
   .note-mob .nm-l1, .note-mob .nm-l2 { display: block; }
   .note-mob .nm-l2 { white-space: nowrap; }
   .nm-pile { display: inline-grid; vertical-align: bottom; overflow: hidden; padding-bottom: 3px; margin-bottom: -3px; }
-  .note-metier { grid-area: 1 / 1; justify-self: start; color: #FAFAFA; opacity: 0; transform: translateY(105%);
-    background: linear-gradient(var(--signal), var(--signal)) 0 100% / 0 1px no-repeat;
-    transition: transform .55s cubic-bezier(.7, 0, .2, 1), opacity .3s ease, background-size .5s ease .35s; }
-  .note-metier.actif { opacity: 1; transform: none; background-size: 100% 1px; }
-  .note-metier.sort { opacity: 0; transform: translateY(-105%); background-size: 100% 1px; transition: transform .5s cubic-bezier(.7, 0, .2, 1), opacity .4s ease; }
+  .note-metier { grid-area: 1 / 1; justify-self: start; color: #FAFAFA; font-weight: 600; opacity: 0; transform: translateY(105%);
+    transition: transform .55s cubic-bezier(.7, 0, .2, 1), opacity .3s ease; }
+  .note-metier.actif { opacity: 1; transform: none; }
+  .note-metier.sort { opacity: 0; transform: translateY(-105%); transition: transform .5s cubic-bezier(.7, 0, .2, 1), opacity .4s ease; }
 
   /* Titre : apparaît d'un seul bloc */
   .scene .enonce > span:not(.h1-kw), .scene .enonce .invis { animation: none; }
