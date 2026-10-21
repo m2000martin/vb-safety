@@ -90,3 +90,12 @@
 .vp-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; margin-top: 14px; padding: 0 16px; border-radius: 10px; border: 1px solid currentColor; background: transparent; color: inherit; font: 600 15px/1.2 Inter, -apple-system, "Segoe UI", sans-serif; cursor: pointer; opacity: .9; }
 .vp-btn::after { content: ""; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); }
 .vp-btn[aria-expanded="true"]::after { transform: rotate(-135deg) translateY(-2px); }
+
+/* ---------- Téléphone : bouton « Demander une démo » fixé en bas (toutes les pages) ---------- */
+.barre-demo { display: none; }
+@media (max-width: 700px) {
+  .barre-demo { display: flex; position: fixed; z-index: 60; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 8px; border-radius: 16px; background: rgba(16, 30, 48, .88); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .55); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); transform: translateY(calc(100% + 24px)); opacity: 0; transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s; pointer-events: none; }
+  .barre-demo.visible { transform: none; opacity: 1; pointer-events: auto; }
+  .barre-demo a { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 11px; background: #C4521C; color: #fff; font: 600 15px/1 Inter, -apple-system, "Segoe UI", sans-serif; text-decoration: none; white-space: nowrap; }
+}
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) { .barre-demo { transition: none; } }

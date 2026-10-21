@@ -50,4 +50,27 @@
     });
   }
   plier(); if (mq.addEventListener) mq.addEventListener('change', plier);
+
+  // 4. Téléphone : bouton « Demander une démo » fixé en bas, comme sur l'accueil
+  (function () {
+    var chemin = location.pathname;
+    if (/^\/(en\/)?(stats|devis)\//.test(chemin) || document.querySelector('.barre-action')) return;
+    var bar = document.createElement('div'); bar.className = 'barre-action barre-demo'; bar.setAttribute('aria-hidden', 'true');
+    var a = document.createElement('a'); a.className = 'principal'; a.href = EN ? '/en/#contact' : '/#contact'; a.tabIndex = -1;
+    a.textContent = EN ? 'Request a demo' : 'Demander une démo';
+    bar.appendChild(a); document.body.appendChild(bar); document.body.classList.add('a-barre');
+    var bas = false, formulaires = 0;
+    function etat() {
+      var v = mq.matches && bas && formulaires === 0;
+      bar.classList.toggle('visible', v); bar.setAttribute('aria-hidden', v ? 'false' : 'true'); a.tabIndex = v ? 0 : -1;
+    }
+    function defile() { var b = window.scrollY > (window.innerHeight || 700) * 0.6; if (b !== bas) { bas = b; etat(); } }
+    window.addEventListener('scroll', defile, { passive: true }); defile();
+    // Masqué quand un formulaire est à l'écran, pour ne pas le recouvrir
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { formulaires += e.isIntersecting ? 1 : (e.target._vu ? -1 : 0); e.target._vu = e.isIntersecting; }); formulaires = Math.max(0, formulaires); etat(); }, { threshold: 0.05 });
+      Array.prototype.forEach.call(document.querySelectorAll('form, .site-footer, footer'), function (f) { io.observe(f); });
+    }
+    if (mq.addEventListener) mq.addEventListener('change', etat);
+  })();
 })();
