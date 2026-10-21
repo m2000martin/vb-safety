@@ -1,0 +1,71 @@
+/* VB Safety · accueil sur téléphone (≤ 700 px), V13.
+   Premier écran aligné à gauche, choix du métier, cartes qui défilent, barre d'action fixe.
+   Rien ne change au-delà de 700 px : les éléments ajoutés par accueil.js y restent masqués. */
+
+.seg, .rail-dots, .barre-action, .hero-metiers { display: none; }
+
+@media (max-width: 700px) {
+  :root { --gouttiere: 20px; --gris-lisible: #B8BCC6; }
+
+  /* ---------- Premier écran ---------- */
+  .scene { min-height: 92vh; min-height: 92svh; padding-left: var(--gouttiere); padding-right: var(--gouttiere); }
+  .scene .centre { align-items: flex-end; padding: 32px 0 28px; }
+  .scene .centre > div { text-align: left; }
+  .scene .enonce { font-size: clamp(38px, 11.6vw, 54px); line-height: 1.04; letter-spacing: -.032em; }
+  .scene .enonce .h1-kw { margin: 0 0 18px; font: 500 11.5px/1.5 var(--mono); letter-spacing: .1em; max-width: 30ch; text-wrap: pretty; }
+  .scene .enonce .seconde { margin-top: 6px; color: #8E95A3; }
+  .scene .note { margin: 20px 0 0; max-width: 36ch; color: var(--gris-lisible); text-wrap: pretty; }
+  .scene .hero-cta { margin-top: 26px; }
+  .scene .btn-hero.primary { border-radius: 12px; min-height: 54px; font-size: 15.5px; }
+
+  /* Choix du métier sous le bouton principal */
+  .hero-metiers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; animation: hero-up .7s ease-out 3s both; }
+  .hero-metiers a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .04); color: #F2F4F7; font: 500 14px var(--sans); text-decoration: none; }
+  .hero-metiers a:active { background: rgba(224, 108, 52, .16); border-color: rgba(224, 108, 52, .6); }
+
+  /* Plus d'indication « Découvrir » : la section suivante dépasse en bas de l'écran */
+  .scene .bas { display: none; }
+
+  /* ---------- Sections ---------- */
+  .section { padding: 56px var(--gouttiere); }
+  .section-title { font-size: clamp(28px, 8.4vw, 36px); letter-spacing: -.028em; text-wrap: balance; }
+  .section-lead, .pillar p, .dive-head p, .spaces-note { color: var(--gris-lisible); }
+
+  /* Rails horizontaux (approche, outils) : une carte par écran, la suivante visible au bord */
+  .rail { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 12px; margin-left: calc(-1 * var(--gouttiere)); margin-right: calc(-1 * var(--gouttiere)); padding: 2px var(--gouttiere) 4px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding: 0 var(--gouttiere); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail > * { flex: 0 0 86%; scroll-snap-align: start; scroll-snap-stop: always; }
+
+  .pillars.rail { margin-top: 24px; background: none; border: 0; border-radius: 0; overflow-x: auto; align-items: stretch; }
+  .pillars.rail .pillar { border: 1px solid rgba(255, 255, 255, .1); border-radius: 18px; padding: 22px 20px 24px; background: linear-gradient(160deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)); min-height: 172px; }
+  .pillars.rail .pillar h3 { font-size: 19px; }
+
+  .dives.rail { margin-top: 16px; gap: 12px; align-items: flex-start; }
+  .dives.rail .dive { border-radius: 20px; padding: 22px 20px; background: rgba(13, 27, 43, .92); }
+  .dives.rail .dive-head h3 { font-size: 30px; }
+
+  /* Points de position sous un rail */
+  .rail-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+  .rail-dots button { width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+  .rail-dots button::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .28); transition: width .25s, background-color .25s; }
+  .rail-dots button[aria-current="true"]::before { width: 18px; background: #FAFAFA; }
+
+  /* Sélecteur de métier au-dessus des outils, collé en haut pendant la lecture */
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; position: sticky; top: calc(10px + env(safe-area-inset-top, 0px)); z-index: 30; margin-top: 24px; padding: 3px; border-radius: 12px; background: rgba(20, 36, 56, .82); border: 1px solid rgba(255, 255, 255, .1); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); }
+  .seg button { min-height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: none; color: #B8BCC6; font: 600 13.5px var(--sans); cursor: pointer; transition: background-color .2s, color .2s; }
+  .seg button[aria-selected="true"] { background: #FAFAFA; color: #0E1E30; }
+
+  /* ---------- Barre d'action fixe ---------- */
+  .barre-action { display: flex; gap: 8px; position: fixed; z-index: 50; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 8px; border-radius: 16px; background: rgba(16, 30, 48, .86); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .7); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); transform: translateY(calc(100% + 24px)); opacity: 0; transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s; pointer-events: none; }
+  .barre-action.visible { transform: none; opacity: 1; pointer-events: auto; }
+  .barre-action a { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 11px; font: 600 14.5px var(--sans); text-decoration: none; color: #FAFAFA; }
+  .barre-action a.principal { background: #C4521C; }
+  .barre-action a.second { flex: 0 0 auto; padding: 0 16px; background: rgba(255, 255, 255, .07); }
+  body.a-barre .site-foot { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .hero-metiers { animation: none; }
+  .barre-action, .rail-dots button::before, .seg button { transition: none; }
+  .rail { scroll-behavior: auto; }
+}

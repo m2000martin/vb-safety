@@ -52,6 +52,78 @@
   }
   replierDefs(); if (mqTel.addEventListener) mqTel.addEventListener('change', replierDefs);
 
+  // Téléphone (V13) : choix du métier, rails de cartes, barre d'action fixe
+  (function () {
+    var T = EN ? { metiers: ['Firefighters', 'Industry', 'Construction'], seg: 'Choose your sector', acces: 'Request access', outils: 'Tools', carte: 'Card ' }
+               : { metiers: ['Pompiers', 'Industrie', 'BTP'], seg: 'Choisir votre métier', acces: 'Demander un accès', outils: 'Outils', carte: 'Carte ' };
+    var smooth = reduce ? 'auto' : 'smooth';
+    function rail(track) {
+      track.classList.add('rail');
+      var items = Array.prototype.slice.call(track.children), dots = document.createElement('div'), listeners = [];
+      dots.className = 'rail-dots';
+      items.forEach(function (it, i) {
+        var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', T.carte + (i + 1) + '/' + items.length);
+        b.addEventListener('click', function () { go(i); }); dots.appendChild(b);
+      });
+      track.insertAdjacentElement('afterend', dots);
+      function go(i) { track.scrollTo({ left: items[i].offsetLeft - items[0].offsetLeft, behavior: smooth }); }
+      function current() {
+        var x = track.scrollLeft, best = 0, d = Infinity;
+        items.forEach(function (it, i) { var dd = Math.abs(it.offsetLeft - items[0].offsetLeft - x); if (dd < d) { d = dd; best = i; } });
+        return best;
+      }
+      var last = -1, raf = 0;
+      function maj() { raf = 0; var c = current(); if (c === last) return; last = c;
+        Array.prototype.forEach.call(dots.children, function (b, i) { b.setAttribute('aria-current', i === c ? 'true' : 'false'); });
+        listeners.forEach(function (f) { f(c); }); }
+      track.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(maj); }, { passive: true });
+      maj();
+      return { go: go, items: items, onChange: function (f) { listeners.push(f); f(last); } };
+    }
+    var pillars = document.querySelector('.pillars'); if (pillars) rail(pillars);
+    var dives = document.querySelector('.dives'), r = dives && rail(dives);
+    if (r) {
+      var seg = document.createElement('div'); seg.className = 'seg'; seg.setAttribute('role', 'tablist'); seg.setAttribute('aria-label', T.seg);
+      r.items.forEach(function (d, i) {
+        d.id = d.id || ['outil-pompiers', 'outil-industrie', 'outil-btp'][i];
+        var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', d.id);
+        b.textContent = T.metiers[i] || ('' + (i + 1));
+        b.addEventListener('click', function () { r.go(i); }); seg.appendChild(b);
+      });
+      dives.insertAdjacentElement('beforebegin', seg);
+      r.onChange(function (c) { Array.prototype.forEach.call(seg.children, function (b, i) { b.setAttribute('aria-selected', i === c ? 'true' : 'false'); }); });
+      // Raccourcis métier sous le bouton principal du premier écran
+      var cta = document.querySelector('.scene .hero-cta');
+      if (cta) {
+        var hm = document.createElement('nav'); hm.className = 'hero-metiers'; hm.setAttribute('aria-label', T.seg);
+        r.items.forEach(function (d, i) {
+          var a = document.createElement('a'); a.href = '#' + d.id; a.textContent = T.metiers[i];
+          a.addEventListener('click', function (e) {
+            if (!mqTel.matches) return; e.preventDefault();
+            document.getElementById('plateforme').scrollIntoView({ behavior: smooth, block: 'start' });
+            setTimeout(function () { r.go(i); }, reduce ? 0 : 450);
+          });
+          hm.appendChild(a);
+        });
+        cta.insertAdjacentElement('afterend', hm);
+      }
+    }
+    // Barre fixe : visible après le premier écran, masquée sur le formulaire de contact
+    var scene = document.querySelector('.scene'), contact = document.getElementById('contact');
+    if (scene && contact && 'IntersectionObserver' in window) {
+      var bar = document.createElement('div'); bar.className = 'barre-action';
+      bar.innerHTML = '<a class="second" href="#plateforme" data-goto="plateforme"></a><a class="principal" href="#contact" data-goto="contact"></a>';
+      bar.firstChild.textContent = T.outils; bar.lastChild.textContent = T.acces;
+      document.body.appendChild(bar); document.body.classList.add('a-barre');
+      var horsScene = false, surContact = false;
+      function etat() { var v = horsScene && !surContact; bar.classList.toggle('visible', v); bar.setAttribute('aria-hidden', v ? 'false' : 'true');
+        Array.prototype.forEach.call(bar.children, function (a) { a.tabIndex = v ? 0 : -1; }); }
+      new IntersectionObserver(function (e) { horsScene = !e[0].isIntersecting; etat(); }, { rootMargin: '-35% 0px 0px 0px' }).observe(scene);
+      new IntersectionObserver(function (e) { surContact = e[0].isIntersecting; etat(); }, { threshold: 0.05 }).observe(contact);
+      etat();
+    }
+  })();
+
   // Formulaire de contact (Web3Forms ; si l'envoi échoue, ouverture de la messagerie)
   var ENDPOINT = 'https://api.web3forms.com/submit', KEY = '0752cc8d-b82f-4ae5-ab72-50183aee5216', MAIL = 'contact@vb-safety.com';
   var form = document.getElementById('contact-form');
@@ -93,13 +165,16 @@
     width = w; height = hh;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = w * dpr; canvas.height = hh * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var n = Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
-    particles = Array.from({ length: n }, function () { return { x: Math.random() * w, y: Math.random() * hh, r: Math.random() * 1.8 + 0.8, vy: -(Math.random() * 0.4 + 0.15) }; });
+    var tel = w <= 700, n = tel ? 22 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
+    // Téléphone : moins de points, plus fins, une partie couleur braise
+    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.45;
+      return { x: Math.random() * w, y: Math.random() * hh, r: tel ? Math.random() * 1.2 + 0.5 : Math.random() * 1.8 + 0.8, vy: -(Math.random() * 0.4 + 0.15),
+        c: ember ? 'rgba(234, 122, 68, ' + (0.45 + Math.random() * 0.4).toFixed(2) + ')' : (tel ? 'rgba(255, 255, 255, 0.55)' : 'rgba(255, 255, 255, 0.9)') }; });
     if (reduce) draw();
   }
   function draw() {
-    ctx.clearRect(0, 0, width, height); ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    particles.forEach(function (p) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); });
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(function (p) { ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); });
   }
   function animate() { if (!document.hidden) { particles.forEach(function (p) { p.y += p.vy; if (p.y < 0) p.y = height; }); draw(); } requestAnimationFrame(animate); }
   window.addEventListener('resize', function () { resize(false); });
