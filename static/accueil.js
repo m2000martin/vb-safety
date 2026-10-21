@@ -109,6 +109,30 @@
     }
   })();
 
+  // Téléphone : le titre apparaît mot par mot, chaque mot monte depuis sa ligne
+  (function () {
+    var h1 = document.querySelector('.scene .enonce'); if (!h1 || !mqTel.matches || reduce) return;
+    var n = 0;
+    function envelopper(noeud, fin) {
+      Array.prototype.slice.call(noeud.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var parts = c.textContent.split(/(\s+)/), frag = document.createDocumentFragment();
+          parts.forEach(function (t) {
+            if (!t) return;
+            if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(' ')); return; }
+            var o = document.createElement('span'), i = document.createElement('span');
+            o.className = 'mot'; i.className = 'mot-i'; i.textContent = t; i.style.setProperty('--i', n++);
+            o.appendChild(i); frag.appendChild(o);
+          });
+          noeud.replaceChild(frag, c);
+        } else if (c.nodeType === 1 && c.classList.contains('invis')) { c.classList.add('mot-fin'); envelopper(c); }
+        else if (c.nodeType === 1) envelopper(c);
+      });
+    }
+    Array.prototype.forEach.call(h1.children, function (l) { if (!l.classList.contains('h1-kw')) envelopper(l); });
+    h1.classList.add('par-mots');
+  })();
+
   // Premier écran (téléphone) : le métier défile dans la phrase d'introduction, le fond suit
   (function () {
     var note = document.querySelector('.scene .note'); if (!note) return;
@@ -127,15 +151,18 @@
     function sync() { note.classList.toggle('vb-sr', mqTel.matches); }
     sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
     var i = 0;
-    function montrer(k) { mots.forEach(function (w, j) { w.classList.toggle('actif', j === k); }); window.vbMode = M[k][0]; }
+    function montrer(k, prec) {
+      if (prec != null) { var o = mots[prec]; o.classList.remove('actif'); o.classList.add('sort'); setTimeout(function () { o.classList.remove('sort'); }, 650); }
+      mots[k].classList.add('actif'); window.vbMode = M[k][0];
+    }
     montrer(0);
     if (reduce) { window.vbMode = null; return; }
     var scene = document.querySelector('.scene'), visible = true;
     if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(scene);
     setInterval(function () {
       if (!visible || document.hidden || !mqTel.matches) return;
-      i = (i + 1) % M.length; montrer(i);
-    }, 3200);
+      var p = i; i = (i + 1) % M.length; montrer(i, p);
+    }, 2400);
   })();
 
   // Formulaire de contact (Web3Forms ; si l'envoi échoue, ouverture de la messagerie)
