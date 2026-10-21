@@ -55,7 +55,7 @@
   (function () {
     var chemin = location.pathname;
     if (/^\/(en\/)?(stats|devis)\//.test(chemin) || document.querySelector('.barre-action')) return;
-    var bar = document.createElement('div'); bar.className = 'barre-action barre-demo'; bar.setAttribute('aria-hidden', 'true');
+    var bar = document.createElement('div'); bar.className = 'barre-action barre-demo'; bar.setAttribute('aria-hidden', 'true'); bar.setAttribute('data-no-i18n', '');
     var a = document.createElement('a'); a.className = 'principal'; a.href = EN ? '/en/#contact' : '/#contact'; a.tabIndex = -1;
     a.textContent = EN ? 'Request a demo' : 'Demander une démo';
     bar.appendChild(a); document.body.appendChild(bar); document.body.classList.add('a-barre');
