@@ -114,24 +114,27 @@
     var note = document.querySelector('.scene .note'); if (!note) return;
     var M = EN ? [['pompiers', 'firefighters'], ['btp', 'construction'], ['industrie', 'industry']]
                : [['pompiers', 'les sapeurs-pompiers'], ['btp', 'le BTP'], ['industrie', "l'industrie"]];
-    var debut = EN ? 'VB Safety measures and tracks exposure to carcinogens. For ' : "VB Safety mesure et trace l'exposition aux agents cancérogènes. Pour ";
+    var L1 = EN ? 'Measures and tracks CMR exposure' : "Mesure et trace l'exposition CMR", L2 = EN ? 'for ' : 'pour ';
+    // Tous les mots sont posés au même endroit : la ligne garde la largeur du plus long, rien ne bouge autour
     var mob = document.createElement('p'); mob.className = 'note note-mob'; mob.setAttribute('aria-hidden', 'true');
-    var mot = document.createElement('span'); mot.className = 'note-metier';
-    mob.appendChild(document.createTextNode(debut)); mob.appendChild(mot); mob.appendChild(document.createTextNode('.'));
+    var l1 = document.createElement('span'); l1.className = 'nm-l1'; l1.textContent = L1;
+    var l2 = document.createElement('span'); l2.className = 'nm-l2'; l2.appendChild(document.createTextNode(L2));
+    var pile = document.createElement('span'); pile.className = 'nm-pile';
+    var mots = M.map(function (m) { var w = document.createElement('span'); w.className = 'note-metier'; w.textContent = m[1]; pile.appendChild(w); return w; });
+    l2.appendChild(pile);
+    mob.appendChild(l1); mob.appendChild(l2);
     note.insertAdjacentElement('afterend', mob);
     function sync() { note.classList.toggle('vb-sr', mqTel.matches); }
     sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
     var i = 0;
-    function montrer(k) { mot.textContent = M[k][1]; window.vbMode = M[k][0]; }
+    function montrer(k) { mots.forEach(function (w, j) { w.classList.toggle('actif', j === k); }); window.vbMode = M[k][0]; }
     montrer(0);
     if (reduce) { window.vbMode = null; return; }
     var scene = document.querySelector('.scene'), visible = true;
     if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(scene);
     setInterval(function () {
       if (!visible || document.hidden || !mqTel.matches) return;
-      mot.classList.add('sort');
-      setTimeout(function () { i = (i + 1) % M.length; montrer(i); mot.classList.remove('sort'); mot.classList.add('entre');
-        requestAnimationFrame(function () { requestAnimationFrame(function () { mot.classList.remove('entre'); }); }); }, 380);
+      i = (i + 1) % M.length; montrer(i);
     }, 3200);
   })();
 

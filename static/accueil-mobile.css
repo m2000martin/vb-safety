@@ -27,9 +27,11 @@
   .haut .lang-link, .haut.has-menu .menu-btn:not([hidden]) { border-color: rgba(255, 255, 255, .14); }
 
   /* Le métier défile dans la phrase d'introduction */
-  .note-metier { display: inline-block; color: #FAFAFA; border-bottom: 1px solid rgba(224, 108, 52, .7); transition: opacity .35s ease, transform .35s ease, filter .35s ease; }
-  .note-metier.sort { opacity: 0; transform: translateY(-6px); filter: blur(3px); }
-  .note-metier.entre { opacity: 0; transform: translateY(6px); filter: blur(3px); transition: none; }
+  .note-mob .nm-l1, .note-mob .nm-l2 { display: block; }
+  .note-mob .nm-l2 { white-space: nowrap; }
+  .nm-pile { display: inline-grid; vertical-align: bottom; }
+  .note-metier { grid-area: 1 / 1; justify-self: start; color: #FAFAFA; border-bottom: 1px solid rgba(224, 108, 52, .7); opacity: 0; transform: translateY(6px); filter: blur(3px); transition: opacity .4s ease, transform .4s ease, filter .4s ease; }
+  .note-metier.actif { opacity: 1; transform: none; filter: none; }
   .vb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* ---------- Sections ---------- */
@@ -71,6 +73,7 @@
 }
 
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .note-metier { transition: none; }
   .barre-action, .rail-dots button::before, .seg button { transition: none; }
   .rail { scroll-behavior: auto; }
 }
