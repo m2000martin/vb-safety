@@ -23,7 +23,7 @@
   var haut = document.querySelector('.haut'), mb = document.getElementById('menu-btn');
   if (haut && mb) {
     mb.hidden = false; haut.classList.add('has-menu');
-    var setMenu = function (o) { haut.classList.toggle('open', o); mb.setAttribute('aria-expanded', o ? 'true' : 'false'); document.body.classList.toggle('menu-ouvert', o); };
+    var setMenu = function (o) { haut.classList.toggle('open', o); mb.setAttribute('aria-expanded', o ? 'true' : 'false'); };
     // Téléphone : un toucher hors du panneau le referme
     document.addEventListener('click', function (e) { if (haut.classList.contains('open') && !e.target.closest('.haut-nav') && !e.target.closest('#menu-btn')) setMenu(false); });
     mb.addEventListener('click', function () { setMenu(!haut.classList.contains('open')); });
