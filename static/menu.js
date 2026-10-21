@@ -22,7 +22,7 @@
   }
 
   // 3. « Voir plus » : sur téléphone, une liste plus haute qu'un écran ne montre que ses premiers éléments
-  var SEL = '.grille-3, .offres, .etapes, .textes, .res-grille, .autres, .feat-grid, .ob-grid, .cd-grid, .pillars4, .pillars, .roles, .hier, .reg-list, .ev-sources, .ev-method';
+  var SEL = '.grille-3, .offres, .etapes, .res-grille, .autres, .feat-grid, .ob-grid, .cd-grid, .pillars4, .pillars, .roles, .hier, .reg-list, .ev-sources, .ev-method';
   var mq = window.matchMedia('(max-width: 700px)');
   function plier() {
     if (!mq.matches) return;
@@ -73,4 +73,20 @@
     }
     if (mq.addEventListener) mq.addEventListener('change', etat);
   })();
+
+  // 5. Téléphone : « Ce que disent les textes » en cartes qui défilent de côté, avec points de position
+  Array.prototype.forEach.call(document.querySelectorAll('ol.textes'), function (ol) {
+    var items = Array.prototype.slice.call(ol.children); if (items.length < 2) return;
+    ol.classList.add('rail-textes');
+    var dots = document.createElement('div'); dots.className = 'rail-points'; dots.setAttribute('aria-hidden', 'true');
+    items.forEach(function () { dots.appendChild(document.createElement('span')); });
+    ol.insertAdjacentElement('afterend', dots);
+    var raf = 0;
+    function maj() {
+      raf = 0; var x = ol.scrollLeft, best = 0, d = Infinity;
+      items.forEach(function (it, i) { var dd = Math.abs(it.offsetLeft - items[0].offsetLeft - x); if (dd < d) { d = dd; best = i; } });
+      Array.prototype.forEach.call(dots.children, function (s, i) { s.classList.toggle('actif', i === best); });
+    }
+    ol.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(maj); }, { passive: true }); maj();
+  });
 })();
