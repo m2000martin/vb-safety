@@ -56,8 +56,8 @@
 
   // Téléphone (V13) : choix du métier, rails de cartes, barre d'action fixe
   (function () {
-    var T = EN ? { metiers: ['Firefighters', 'Industry', 'Construction'], seg: 'Choose your sector', acces: 'Your tailored CMR tool', outils: 'Tools', carte: 'Card ' }
-               : { metiers: ['Pompiers', 'Industrie', 'BTP'], seg: 'Choisir votre métier', acces: 'Votre outil CMR personnalisé', outils: 'Outils', carte: 'Carte ' };
+    var T = EN ? { metiers: ['Firefighters', 'Industry', 'Construction'], seg: 'Choose your sector', acces: 'Request a demo', outils: 'Tools', carte: 'Card ' }
+               : { metiers: ['Pompiers', 'Industrie', 'BTP'], seg: 'Choisir votre métier', acces: 'Demander une démo', outils: 'Outils', carte: 'Carte ' };
     var smooth = reduce ? 'auto' : 'smooth';
     function rail(track) {
       track.classList.add('rail');
@@ -99,8 +99,8 @@
     var scene = document.querySelector('.scene'), contact = document.getElementById('contact');
     if (scene && contact && 'IntersectionObserver' in window) {
       var bar = document.createElement('div'); bar.className = 'barre-action';
-      bar.innerHTML = '<a class="second" href="#plateforme" data-goto="plateforme"></a><a class="principal" href="#contact" data-goto="contact"></a>';
-      bar.firstChild.textContent = T.outils; bar.lastChild.textContent = T.acces;
+      bar.innerHTML = '<a class="principal" href="#contact" data-goto="contact"></a>';
+      bar.firstChild.textContent = T.acces;
       document.body.appendChild(bar); document.body.classList.add('a-barre');
       var horsScene = false, surContact = false;
       function etat() { var v = horsScene && !surContact; bar.classList.toggle('visible', v); bar.setAttribute('aria-hidden', v ? 'false' : 'true');
