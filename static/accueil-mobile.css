@@ -95,3 +95,26 @@
   .scene .enonce, .scene .trait, .scene .note-mob, .scene .hero-cta, .scene .bas { animation: none; }
   .note-metier, .note-metier.sort { transition: none; }
 }
+
+/* ---------- Menu sur téléphone : panneau qui monte du bas de l'écran ---------- */
+@media (max-width: 700px) {
+  body.menu-ouvert { overflow: hidden; }
+  body.menu-ouvert .scene { z-index: 60; }
+  .haut.has-menu.open > .haut-nav { position: fixed; z-index: 70; top: auto; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 0; margin: 0; padding: 10px 24px calc(22px + env(safe-area-inset-bottom, 0px)); border: 0; border-top: 1px solid rgba(255, 255, 255, .1); border-radius: 22px 22px 0 0; background: #0F1C2E; box-shadow: 0 0 0 100vmax rgba(4, 10, 18, .62), 0 -20px 50px -20px rgba(0, 0, 0, .8); animation: panneau-monte .38s cubic-bezier(.2, .8, .2, 1) both; max-height: 86svh; overflow-y: auto; }
+  .haut.has-menu.open > .haut-nav::before { content: ""; align-self: center; width: 38px; height: 4px; margin: 0 0 14px; border-radius: 2px; background: rgba(255, 255, 255, .22); }
+  .haut.has-menu.open > .haut-nav a { display: flex; justify-content: space-between; align-items: center; min-height: 58px; padding: 0 2px; font: 600 21px/1.2 var(--serif); letter-spacing: -.02em; color: #FAFAFA; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+  .haut.has-menu.open > .haut-nav a:not(.nav-ecrire)::after { content: "→"; font: 400 17px var(--sans); color: #6F7787; }
+  .haut.has-menu.open > .haut-nav a:active { color: var(--signal); }
+  .haut.has-menu.open > .haut-nav a.nav-ecrire { justify-content: center; min-height: 52px; margin-top: 18px; border: 0; border-radius: 10px; background: #C4521C; font: 600 15.5px var(--sans); letter-spacing: 0; }
+  /* Bouton Menu : les trois traits deviennent une croix */
+  .menu-ico, .menu-ico::before, .menu-ico::after { transition: transform .25s ease, background-color .2s; }
+  .haut.open .menu-ico { background: transparent; }
+  .haut.open .menu-ico::before { transform: translateY(5px) rotate(45deg); }
+  .haut.open .menu-ico::after { transform: translateY(-5px) rotate(-45deg); }
+  .haut.has-menu .menu-btn { position: relative; z-index: 80; }
+}
+@keyframes panneau-monte { from { transform: translateY(100%); } to { transform: none; } }
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .haut.has-menu.open > .haut-nav { animation: none; }
+  .menu-ico, .menu-ico::before, .menu-ico::after { transition: none; }
+}
