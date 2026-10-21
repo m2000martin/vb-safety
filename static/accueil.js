@@ -109,30 +109,6 @@
     }
   })();
 
-  // Téléphone : le titre apparaît mot par mot, chaque mot monte depuis sa ligne
-  (function () {
-    var h1 = document.querySelector('.scene .enonce'); if (!h1 || !mqTel.matches || reduce) return;
-    var n = 0;
-    function envelopper(noeud, fin) {
-      Array.prototype.slice.call(noeud.childNodes).forEach(function (c) {
-        if (c.nodeType === 3) {
-          var parts = c.textContent.split(/(\s+)/), frag = document.createDocumentFragment();
-          parts.forEach(function (t) {
-            if (!t) return;
-            if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(' ')); return; }
-            var o = document.createElement('span'), i = document.createElement('span');
-            o.className = 'mot'; i.className = 'mot-i'; i.textContent = t; i.style.setProperty('--i', n++);
-            o.appendChild(i); frag.appendChild(o);
-          });
-          noeud.replaceChild(frag, c);
-        } else if (c.nodeType === 1 && c.classList.contains('invis')) { c.classList.add('mot-fin'); envelopper(c); }
-        else if (c.nodeType === 1) envelopper(c);
-      });
-    }
-    Array.prototype.forEach.call(h1.children, function (l) { if (!l.classList.contains('h1-kw')) envelopper(l); });
-    h1.classList.add('par-mots');
-  })();
-
   // Premier écran (téléphone) : le métier défile dans la phrase d'introduction, le fond suit
   (function () {
     var note = document.querySelector('.scene .note'); if (!note) return;
