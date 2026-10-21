@@ -56,8 +56,8 @@
 
   // Téléphone (V13) : choix du métier, rails de cartes, barre d'action fixe
   (function () {
-    var T = EN ? { metiers: ['Firefighters', 'Industry', 'Construction'], seg: 'Choose your sector', acces: 'Request access', outils: 'Tools', carte: 'Card ' }
-               : { metiers: ['Pompiers', 'Industrie', 'BTP'], seg: 'Choisir votre métier', acces: 'Demander un accès', outils: 'Outils', carte: 'Carte ' };
+    var T = EN ? { metiers: ['Firefighters', 'Industry', 'Construction'], seg: 'Choose your sector', acces: 'Your tailored CMR tool', outils: 'Tools', carte: 'Card ' }
+               : { metiers: ['Pompiers', 'Industrie', 'BTP'], seg: 'Choisir votre métier', acces: 'Votre outil CMR personnalisé', outils: 'Outils', carte: 'Carte ' };
     var smooth = reduce ? 'auto' : 'smooth';
     function rail(track) {
       track.classList.add('rail');

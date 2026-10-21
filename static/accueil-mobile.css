@@ -109,3 +109,13 @@
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) {
   .menu-ico, .menu-ico::before, .menu-ico::after { transition: none; }
 }
+
+/* Barre du bas : libellé sur une ligne, centré, y compris sur petits écrans */
+@media (max-width: 700px) {
+  .barre-action a { text-align: center; white-space: nowrap; }
+}
+@media (max-width: 360px) {
+  .barre-action { left: 8px; right: 8px; gap: 6px; padding: 6px; }
+  .barre-action a { font-size: 13.5px; letter-spacing: -.01em; }
+  .barre-action a.second { padding: 0 12px; }
+}
