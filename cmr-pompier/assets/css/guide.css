@@ -59,6 +59,8 @@
 .g-table tbody th { font-weight: 600; width: 34%; }
 .g-table tbody tr:last-child > * { border-bottom: 0; }
 .g-table td { color: #3A3F46; }
+.g-table.g-compact { min-width: 0; }
+@media (max-width: 640px) { .g-table.g-compact { font-size: 14px; } .g-table.g-compact th, .g-table.g-compact td { padding: 10px 12px; } }
 
 .g-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
 .g-stats div { background: var(--ink); color: #fff; border-radius: var(--radius); padding: 16px 18px; }
