@@ -21,15 +21,6 @@
     document.addEventListener('click', function (e) { if (top.classList.contains('mm-open') && !top.contains(e.target)) set(false); });
   }
 
-  // 2. Pages outils : les liens de la barre VB Safety passent dans le menu de l'en-tête
-  var barre = document.querySelector('.vbs-barre nav'), nav = document.querySelector('.site-header .nav');
-  if (barre && nav && !nav.querySelector('.nav-autres')) {
-    var g = document.createElement('div'); g.className = 'nav-autres';
-    g.innerHTML = '<span>' + T.other + '</span>';
-    Array.prototype.forEach.call(barre.querySelectorAll('a'), function (a) { g.appendChild(a.cloneNode(true)); });
-    nav.appendChild(g);
-  }
-
   // 3. « Voir plus » : sur téléphone, une liste plus haute qu'un écran ne montre que ses premiers éléments
   var SEL = '.grille-3, .offres, .etapes, .textes, .res-grille, .autres, .feat-grid, .ob-grid, .cd-grid, .pillars4, .pillars, .roles, .hier, .reg-list, .ev-sources, .ev-method';
   var mq = window.matchMedia('(max-width: 700px)');
