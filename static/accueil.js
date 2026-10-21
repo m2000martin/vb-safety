@@ -109,14 +109,18 @@
     }
   })();
 
-  // Premier écran (téléphone) : le métier défile au-dessus du titre, le fond suit (même couleurs)
+  // Premier écran (téléphone) : le métier défile dans la phrase d'introduction, le fond suit
   (function () {
-    var h1 = document.querySelector('.scene .enonce'); if (!h1) return;
-    var M = EN ? [['pompiers', 'Firefighters'], ['btp', 'Construction'], ['industrie', 'Industry']]
-               : [['pompiers', 'Sapeurs-pompiers'], ['btp', 'BTP'], ['industrie', 'Industrie']];
-    var box = document.createElement('div'); box.className = 'hero-rot'; box.setAttribute('aria-hidden', 'true');
-    var mot = document.createElement('span'); box.appendChild(mot);
-    h1.insertAdjacentElement('beforebegin', box);
+    var note = document.querySelector('.scene .note'); if (!note) return;
+    var M = EN ? [['pompiers', 'firefighters'], ['btp', 'construction'], ['industrie', 'industry']]
+               : [['pompiers', 'les sapeurs-pompiers'], ['btp', 'le BTP'], ['industrie', "l'industrie"]];
+    var debut = EN ? 'VB Safety measures and tracks exposure to carcinogens. For ' : "VB Safety mesure et trace l'exposition aux agents cancérogènes. Pour ";
+    var mob = document.createElement('p'); mob.className = 'note note-mob'; mob.setAttribute('aria-hidden', 'true');
+    var mot = document.createElement('span'); mot.className = 'note-metier';
+    mob.appendChild(document.createTextNode(debut)); mob.appendChild(mot); mob.appendChild(document.createTextNode('.'));
+    note.insertAdjacentElement('afterend', mob);
+    function sync() { note.classList.toggle('vb-sr', mqTel.matches); }
+    sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
     var i = 0;
     function montrer(k) { mot.textContent = M[k][1]; window.vbMode = M[k][0]; }
     montrer(0);
@@ -125,9 +129,9 @@
     if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(scene);
     setInterval(function () {
       if (!visible || document.hidden || !mqTel.matches) return;
-      box.classList.add('sort');
-      setTimeout(function () { i = (i + 1) % M.length; montrer(i); box.classList.remove('sort'); box.classList.add('entre');
-        requestAnimationFrame(function () { requestAnimationFrame(function () { box.classList.remove('entre'); }); }); }, 380);
+      mot.classList.add('sort');
+      setTimeout(function () { i = (i + 1) % M.length; montrer(i); mot.classList.remove('sort'); mot.classList.add('entre');
+        requestAnimationFrame(function () { requestAnimationFrame(function () { mot.classList.remove('entre'); }); }); }, 380);
     }, 3200);
   })();
 
@@ -172,11 +176,11 @@
     width = w; height = hh;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = w * dpr; canvas.height = hh * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var tel = w <= 700, n = tel ? 16 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
+    var tel = w <= 700, n = tel ? 26 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
     // Téléphone : moins de points, plus fins ; une partie couleur braise selon le métier affiché
-    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.4;
+    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.35;
       return { tel: tel, e: ember, a: 0.35 + Math.random() * 0.3, ph: Math.random() * 6.28, k: Math.random() * 0.4 + 0.15,
-        x: Math.random() * w, y: Math.random() * hh, r: tel ? Math.random() * 1.2 + 0.5 : Math.random() * 1.8 + 0.8, vx: 0, vy: -(Math.random() * 0.4 + 0.15) }; });
+        x: Math.random() * w, y: Math.random() * hh, r: tel ? Math.random() * 1.5 + 0.6 : Math.random() * 1.8 + 0.8, vx: 0, vy: -(Math.random() * 0.4 + 0.15) }; });
     if (reduce) draw();
   }
   // Pompiers : braises qui montent ; BTP : poussière qui dérive de côté ; industrie : vapeur lente qui ondule
@@ -185,7 +189,7 @@
     ctx.clearRect(0, 0, width, height);
     var cr = Math.round(255 + (234 - 255) * braise), cg = Math.round(255 + (122 - 255) * braise), cb = Math.round(255 + (68 - 255) * braise);
     particles.forEach(function (p) {
-      ctx.fillStyle = !p.tel ? 'rgba(255, 255, 255, 0.9)' : p.e ? 'rgba(' + cr + ', ' + cg + ', ' + cb + ', ' + p.a.toFixed(2) + ')' : 'rgba(255, 255, 255, 0.35)';
+      ctx.fillStyle = !p.tel ? 'rgba(255, 255, 255, 0.9)' : p.e ? 'rgba(' + cr + ', ' + cg + ', ' + cb + ', ' + p.a.toFixed(2) + ')' : 'rgba(255, 255, 255, 0.8)';
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
     });
   }

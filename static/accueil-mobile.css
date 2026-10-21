@@ -7,20 +7,30 @@
 @media (max-width: 700px) {
   :root { --gouttiere: 20px; --gris-lisible: #B8BCC6; }
 
-  /* ---------- Premier écran : peu d'éléments, beaucoup d'air ---------- */
+  /* ---------- Premier écran : même composition que sur ordinateur, à l'échelle du téléphone ---------- */
   .scene { min-height: 100vh; min-height: 100svh; padding-left: var(--gouttiere); padding-right: var(--gouttiere); }
-  .scene .centre { align-items: flex-end; padding: 0 0 calc(40px + env(safe-area-inset-bottom, 0px)); }
-  .scene .centre > div { text-align: left; }
-  .scene .enonce { font-size: clamp(36px, 10.6vw, 48px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; }
-  .scene .enonce .h1-kw { margin: 0 0 20px; font: 500 13px/1.45 var(--sans); letter-spacing: 0; text-transform: none; color: #8E95A3; max-width: 32ch; }
-  .scene .enonce .h1-kw::before { content: ""; display: block; width: 24px; height: 2px; margin-bottom: 14px; background: var(--signal); }
-  .scene .enonce .seconde { margin-top: 4px; color: #6F7787; }
-  .scene .enonce .invis { color: #FAFAFA; }
-  .scene .note { display: none; }
-  .scene .hero-cta { margin-top: 32px; }
-  .scene .btn-hero.primary { justify-content: space-between; min-height: 52px; padding: 0 20px; border-radius: 12px; font-size: 15px; box-shadow: none; }
-  .scene .bas { display: none; }
-  .haut .lang-link, .haut.has-menu .menu-btn:not([hidden]) { border-color: rgba(255, 255, 255, .12); }
+  .scene .centre { align-items: center; padding: 20px 0 8px; }
+  .scene .centre > div { width: 100%; text-align: left; }
+  .scene .enonce { font-size: clamp(34px, 10.2vw, 44px); line-height: 1.02; letter-spacing: -.045em; }
+  .scene .enonce > span:not(.h1-kw) { text-wrap: wrap; }
+  .scene .enonce .h1-kw { margin: 0 0 16px; max-width: 30ch; font: 600 11.5px/1.55 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); text-wrap: balance; }
+  .scene .enonce .seconde { margin-top: 2px; color: #A1A1AA; }
+  .scene .trait { display: block; width: 36px; margin: 22px 0 20px; }
+  .scene .note { margin: 0; max-width: 34ch; font-size: 15px; line-height: 1.6; color: #A1A1AA; text-align: left; }
+  .scene .hero-cta { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 26px; }
+  .scene .btn-hero { min-height: 46px; padding: 0 16px; border-radius: 6px; font-size: 13.5px; }
+  .scene .btn-hero.ghost { display: none; } /* le contact reste en bas à gauche, comme sur ordinateur */
+  .scene .bas { display: flex; justify-content: space-between; align-items: center; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+  .scene .bas .courriel { display: inline; font-size: 15px; }
+  .scene .scroll-cue { flex-direction: row; gap: 10px; font: 500 12.5px var(--sans); letter-spacing: 0; text-transform: none; color: #A1A1AA; }
+  .scene .scroll-cue .line { width: 1px; height: 22px; background: linear-gradient(var(--signal), rgba(224, 108, 52, 0)); animation: none; }
+  .haut .lang-link, .haut.has-menu .menu-btn:not([hidden]) { border-color: rgba(255, 255, 255, .14); }
+
+  /* Le métier défile dans la phrase d'introduction */
+  .note-metier { display: inline-block; color: #FAFAFA; border-bottom: 1px solid rgba(224, 108, 52, .7); transition: opacity .35s ease, transform .35s ease, filter .35s ease; }
+  .note-metier.sort { opacity: 0; transform: translateY(-6px); filter: blur(3px); }
+  .note-metier.entre { opacity: 0; transform: translateY(6px); filter: blur(3px); transition: none; }
+  .vb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* ---------- Sections ---------- */
   .section { padding: 56px var(--gouttiere); }
@@ -64,14 +74,5 @@
   .barre-action, .rail-dots button::before, .seg button { transition: none; }
   .rail { scroll-behavior: auto; }
 }
-
-/* ---------- Premier écran : le métier défile au-dessus du titre (couleurs de la marque) ---------- */
-.hero-rot { display: none; }
-@media (max-width: 700px) {
-  .scene .enonce .h1-kw::before { display: none; }
-  .hero-rot { display: flex; align-items: center; gap: 12px; height: 24px; margin-bottom: 12px; color: #FAFAFA; font: 500 14px var(--sans); letter-spacing: .01em; }
-  .hero-rot span { display: inline-block; transition: opacity .35s ease, transform .35s ease, filter .35s ease; }
-  .hero-rot::before { content: ""; width: 24px; height: 2px; flex: none; background: var(--signal); }
-  .hero-rot.sort span { opacity: 0; transform: translateY(-8px); filter: blur(3px); }
-  .hero-rot.entre span { opacity: 0; transform: translateY(8px); filter: blur(3px); transition: none; }
-}
+.note-mob { display: none; }
+@media (max-width: 700px) { .note-mob { display: block; } }
