@@ -69,8 +69,9 @@
 .hero-rot { display: none; }
 @media (max-width: 700px) {
   .scene .enonce .h1-kw::before { display: none; }
-  .hero-rot { display: flex; align-items: center; gap: 10px; height: 28px; margin-bottom: 14px; color: var(--signal); font: 600 15px var(--sans); letter-spacing: -.005em; transition: opacity .35s ease, transform .35s ease, filter .35s ease; }
-  .hero-rot svg { width: 24px; height: 24px; flex: none; }
-  .hero-rot.sort { opacity: 0; transform: translateY(-8px); filter: blur(3px); }
-  .hero-rot.entre { opacity: 0; transform: translateY(8px); filter: blur(3px); transition: none; }
+  .hero-rot { display: flex; align-items: center; gap: 12px; height: 24px; margin-bottom: 12px; color: #FAFAFA; font: 500 14px var(--sans); letter-spacing: .01em; }
+  .hero-rot span { display: inline-block; transition: opacity .35s ease, transform .35s ease, filter .35s ease; }
+  .hero-rot::before { content: ""; width: 24px; height: 2px; flex: none; background: var(--signal); }
+  .hero-rot.sort span { opacity: 0; transform: translateY(-8px); filter: blur(3px); }
+  .hero-rot.entre span { opacity: 0; transform: translateY(8px); filter: blur(3px); transition: none; }
 }

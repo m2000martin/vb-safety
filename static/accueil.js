@@ -114,19 +114,11 @@
     var h1 = document.querySelector('.scene .enonce'); if (!h1) return;
     var M = EN ? [['pompiers', 'Firefighters'], ['btp', 'Construction'], ['industrie', 'Industry']]
                : [['pompiers', 'Sapeurs-pompiers'], ['btp', 'BTP'], ['industrie', 'Industrie']];
-    var ICO = {
-      pompiers: '<path d="M12 3c.5 3.2 4.5 5.2 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-2 1-3.2 2-4.1.2 1.6 1 2.6 2 2.9C11 9 11.2 5.6 12 3Z"/><path d="M5 21h14"/>',
-      btp: '<path d="M5 16a7 7 0 0 1 5-6.7M14 9.3A7 7 0 0 1 19 16"/><path d="M10 13V7.5h4V13"/><path d="M2.5 16h19v2.5h-19Z"/>',
-      industrie: '<path d="M3 21V10l5 3V10l5 3V10l5 3V4h3v17Z"/><path d="M7 17h2M12 17h2"/>'
-    };
     var box = document.createElement('div'); box.className = 'hero-rot'; box.setAttribute('aria-hidden', 'true');
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '1.7'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
-    var mot = document.createElement('span'); box.appendChild(svg); box.appendChild(mot);
+    var mot = document.createElement('span'); box.appendChild(mot);
     h1.insertAdjacentElement('beforebegin', box);
     var i = 0;
-    function montrer(k) { svg.innerHTML = ICO[M[k][0]]; mot.textContent = M[k][1]; window.vbMode = M[k][0]; }
+    function montrer(k) { mot.textContent = M[k][1]; window.vbMode = M[k][0]; }
     montrer(0);
     if (reduce) { window.vbMode = null; return; }
     var scene = document.querySelector('.scene'), visible = true;
