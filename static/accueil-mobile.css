@@ -58,8 +58,11 @@
   .pillars.rail .pillar { border: 1px solid rgba(255, 255, 255, .1); border-radius: 18px; padding: 22px 20px 24px; background: linear-gradient(160deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)); min-height: 172px; }
   .pillars.rail .pillar h3 { font-size: 19px; }
 
-  .dives.rail { margin-top: 16px; gap: 12px; align-items: flex-start; }
-  .dives.rail .dive { border-radius: 20px; padding: 22px 20px; background: rgba(13, 27, 43, .92); }
+  /* Cartes de même hauteur, boutons alignés en bas */
+  .dives.rail { margin-top: 16px; gap: 12px; align-items: stretch; }
+  .dives.rail .dive { display: flex; flex-direction: column; border-radius: 20px; padding: 22px 20px; background: rgba(13, 27, 43, .92); }
+  .dives.rail .dive-head { flex: 1; }
+  .dives.rail .dive-cta { margin-top: auto; }
   .dives.rail .dive-head h3 { font-size: 30px; }
 
   /* Points de position sous un rail */
