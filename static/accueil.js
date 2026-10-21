@@ -91,34 +91,7 @@
         b.addEventListener('click', function () { r.go(i); }); seg.appendChild(b);
       });
       dives.insertAdjacentElement('beforebegin', seg);
-      // Thème par métier : couleur et pictogramme propres à chaque carte
-      var METIERS = ['pompiers', 'industrie', 'btp'];
-      var ICO = [
-        '<path d="M12 3c.5 3.2 4.5 5.2 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-2 1-3.2 2-4.1.2 1.6 1 2.6 2 2.9C11 9 11.2 5.6 12 3Z"/><path d="M5 21h14"/>',
-        '<path d="M3 21V10l5 3V10l5 3V10l5 3V4h3v17Z"/><path d="M7 17h2M12 17h2"/>',
-        '<path d="M5 16a7 7 0 0 1 5-6.7M14 9.3A7 7 0 0 1 19 16"/><path d="M10 13V7.5h4V13"/><path d="M2.5 16h19v2.5h-19Z"/>'
-      ];
-      r.items.forEach(function (d, i) {
-        if (!METIERS[i]) return; d.classList.add('t-' + METIERS[i]);
-        var k = d.querySelector('.portal-kicker'); if (!k) return;
-        var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        s.setAttribute('class', 'metier-ico'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true');
-        s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.6'); s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round');
-        s.innerHTML = ICO[i]; k.insertAdjacentElement('beforebegin', s);
-      });
-      var sec = document.getElementById('plateforme'), dotsDives = dives.nextElementSibling, dansOutils = false, metier = METIERS[0];
-      function appliquer() {
-        ['t-pompiers', 't-industrie', 't-btp'].forEach(function (c) { seg.classList.remove(c); if (sec) sec.classList.remove(c); dotsDives.classList.remove(c); document.body.classList.remove(c); });
-        seg.classList.add('t-' + metier); dotsDives.classList.add('t-' + metier); dotsDives.setAttribute('data-metier', metier);
-        if (sec) { sec.classList.add('t-' + metier); sec.setAttribute('data-metier', metier); }
-        if (dansOutils) { document.body.classList.add('t-' + metier); document.body.setAttribute('data-metier', metier); } else document.body.removeAttribute('data-metier');
-        window.vbTeinte = dansOutils ? metier : null;
-      }
-      r.onChange(function (c) {
-        Array.prototype.forEach.call(seg.children, function (b, i) { b.setAttribute('aria-selected', i === c ? 'true' : 'false'); });
-        if (c >= 0 && METIERS[c]) { metier = METIERS[c]; appliquer(); }
-      });
-      if (sec && 'IntersectionObserver' in window) new IntersectionObserver(function (e) { dansOutils = e[0].isIntersecting; appliquer(); }, { rootMargin: '-30% 0px -30% 0px' }).observe(sec);
+      r.onChange(function (c) { Array.prototype.forEach.call(seg.children, function (b, i) { b.setAttribute('aria-selected', i === c ? 'true' : 'false'); }); });
     }
     // Barre fixe : visible après le premier écran, masquée sur le formulaire de contact
     var scene = document.querySelector('.scene'), contact = document.getElementById('contact');
@@ -134,6 +107,36 @@
       new IntersectionObserver(function (e) { surContact = e[0].isIntersecting; etat(); }, { threshold: 0.05 }).observe(contact);
       etat();
     }
+  })();
+
+  // Premier écran (téléphone) : le métier défile au-dessus du titre, le fond suit (même couleurs)
+  (function () {
+    var h1 = document.querySelector('.scene .enonce'); if (!h1) return;
+    var M = EN ? [['pompiers', 'Firefighters'], ['btp', 'Construction'], ['industrie', 'Industry']]
+               : [['pompiers', 'Sapeurs-pompiers'], ['btp', 'BTP'], ['industrie', 'Industrie']];
+    var ICO = {
+      pompiers: '<path d="M12 3c.5 3.2 4.5 5.2 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-2 1-3.2 2-4.1.2 1.6 1 2.6 2 2.9C11 9 11.2 5.6 12 3Z"/><path d="M5 21h14"/>',
+      btp: '<path d="M5 16a7 7 0 0 1 5-6.7M14 9.3A7 7 0 0 1 19 16"/><path d="M10 13V7.5h4V13"/><path d="M2.5 16h19v2.5h-19Z"/>',
+      industrie: '<path d="M3 21V10l5 3V10l5 3V10l5 3V4h3v17Z"/><path d="M7 17h2M12 17h2"/>'
+    };
+    var box = document.createElement('div'); box.className = 'hero-rot'; box.setAttribute('aria-hidden', 'true');
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '1.7'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+    var mot = document.createElement('span'); box.appendChild(svg); box.appendChild(mot);
+    h1.insertAdjacentElement('beforebegin', box);
+    var i = 0;
+    function montrer(k) { svg.innerHTML = ICO[M[k][0]]; mot.textContent = M[k][1]; window.vbMode = M[k][0]; }
+    montrer(0);
+    if (reduce) { window.vbMode = null; return; }
+    var scene = document.querySelector('.scene'), visible = true;
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(scene);
+    setInterval(function () {
+      if (!visible || document.hidden || !mqTel.matches) return;
+      box.classList.add('sort');
+      setTimeout(function () { i = (i + 1) % M.length; montrer(i); box.classList.remove('sort'); box.classList.add('entre');
+        requestAnimationFrame(function () { requestAnimationFrame(function () { box.classList.remove('entre'); }); }); }, 380);
+    }, 3200);
   })();
 
   // Formulaire de contact (Web3Forms ; si l'envoi échoue, ouverture de la messagerie)
@@ -177,20 +180,41 @@
     width = w; height = hh;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = w * dpr; canvas.height = hh * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var tel = w <= 700, n = tel ? 14 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
-    // Téléphone : moins de points, plus fins, une partie couleur braise
-    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.3;
-      var a = (0.35 + Math.random() * 0.3).toFixed(2);
-      return { e: ember, a: a, x: Math.random() * w, y: Math.random() * hh, r: tel ? Math.random() * 1.2 + 0.5 : Math.random() * 1.8 + 0.8, vy: -(Math.random() * 0.4 + 0.15),
-        c: ember ? 'rgba(234, 122, 68, ' + a + ')' : (tel ? 'rgba(255, 255, 255, 0.35)' : 'rgba(255, 255, 255, 0.9)') }; });
+    var tel = w <= 700, n = tel ? 16 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
+    // Téléphone : moins de points, plus fins ; une partie couleur braise selon le métier affiché
+    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.4;
+      return { tel: tel, e: ember, a: 0.35 + Math.random() * 0.3, ph: Math.random() * 6.28, k: Math.random() * 0.4 + 0.15,
+        x: Math.random() * w, y: Math.random() * hh, r: tel ? Math.random() * 1.2 + 0.5 : Math.random() * 1.8 + 0.8, vx: 0, vy: -(Math.random() * 0.4 + 0.15) }; });
     if (reduce) draw();
   }
+  // Pompiers : braises qui montent ; BTP : poussière qui dérive de côté ; industrie : vapeur lente qui ondule
+  var braise = 1, t = 0;
   function draw() {
     ctx.clearRect(0, 0, width, height);
-    var T2 = { pompiers: '229, 72, 47', industrie: '91, 192, 224', btp: '245, 190, 79' }, tc = window.vbTeinte && T2[window.vbTeinte];
-    particles.forEach(function (p) { ctx.fillStyle = (tc && p.e) ? 'rgba(' + tc + ', ' + p.a + ')' : p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); });
+    var cr = Math.round(255 + (234 - 255) * braise), cg = Math.round(255 + (122 - 255) * braise), cb = Math.round(255 + (68 - 255) * braise);
+    particles.forEach(function (p) {
+      ctx.fillStyle = !p.tel ? 'rgba(255, 255, 255, 0.9)' : p.e ? 'rgba(' + cr + ', ' + cg + ', ' + cb + ', ' + p.a.toFixed(2) + ')' : 'rgba(255, 255, 255, 0.35)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    });
   }
-  function animate() { if (!document.hidden) { particles.forEach(function (p) { p.y += p.vy; if (p.y < 0) p.y = height; }); draw(); } requestAnimationFrame(animate); }
+  function animate() {
+    if (!document.hidden) {
+      t += 0.016; var m = window.vbMode;
+      braise += ((m === 'pompiers' || !m ? 1 : 0) - braise) * 0.03;
+      particles.forEach(function (p) {
+        var tvx = 0, tvy = -p.k;
+        if (p.tel && m === 'btp') { tvx = 0.25 + p.k * 0.8; tvy = 0.05 + Math.sin(t + p.ph) * 0.08; }
+        else if (p.tel && m === 'industrie') { tvx = Math.sin(t * 0.6 + p.ph) * 0.3; tvy = -p.k * 0.45; }
+        else if (p.tel) { tvx = Math.sin(t * 1.3 + p.ph) * 0.12; }
+        p.vx += (tvx - p.vx) * 0.025; p.vy += (tvy - p.vy) * 0.025;
+        p.x += p.vx; p.y += p.vy;
+        if (p.y < -4) p.y = height + 4; else if (p.y > height + 4) p.y = -4;
+        if (p.x < -4) p.x = width + 4; else if (p.x > width + 4) p.x = -4;
+      });
+      draw();
+    }
+    requestAnimationFrame(animate);
+  }
   window.addEventListener('resize', function () { resize(false); });
   resize(true);
   if (!reduce) requestAnimationFrame(animate);

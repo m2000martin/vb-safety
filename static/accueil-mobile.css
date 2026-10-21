@@ -65,42 +65,12 @@
   .rail { scroll-behavior: auto; }
 }
 
-/* ---------- Thème par métier (outils) : la couleur suit la carte affichée ---------- */
-@property --teinte { syntax: '<color>'; inherits: true; initial-value: rgba(224, 108, 52, 0); }
-.metier-ico { display: none; }
+/* ---------- Premier écran : le métier défile au-dessus du titre (couleurs de la marque) ---------- */
+.hero-rot { display: none; }
 @media (max-width: 700px) {
-  .t-pompiers  { --c: #F0614A; --c-bouton: #C8361F; --c-texte-bouton: #fff; --c-fond: rgba(229, 72, 47, .16); }
-  .t-industrie { --c: #5BC0E0; --c-bouton: #1F7FA3; --c-texte-bouton: #fff; --c-fond: rgba(63, 167, 201, .15); }
-  .t-btp       { --c: #F5BE4F; --c-bouton: #F2B33D; --c-texte-bouton: #17130A; --c-fond: rgba(242, 179, 61, .14); }
-
-  /* Halo de section qui change de couleur en douceur */
-  #plateforme { --teinte: rgba(224, 108, 52, 0); transition: --teinte .6s ease; background: radial-gradient(120% 60% at 50% 0%, var(--teinte), transparent 70%); }
-  #plateforme[data-metier="pompiers"]  { --teinte: rgba(229, 72, 47, .14); }
-  #plateforme[data-metier="industrie"] { --teinte: rgba(63, 167, 201, .14); }
-  #plateforme[data-metier="btp"]       { --teinte: rgba(242, 179, 61, .12); }
-  #plateforme .kicker { transition: color .4s; }
-  #plateforme[data-metier] .kicker { color: var(--c); }
-
-  /* Sélecteur : la pastille active prend la couleur du métier */
-  .seg button { transition: background-color .3s, color .3s; }
-  .seg button[aria-selected="true"] { background: var(--c-bouton); color: var(--c-texte-bouton); }
-
-  /* Cartes : chaque métier garde sa couleur */
-  .dives.rail .dive { position: relative; overflow: hidden; border-color: color-mix(in srgb, var(--c) 28%, transparent); background: linear-gradient(180deg, var(--c-fond), rgba(13, 27, 43, .94) 55%); }
-  .dives.rail .dive::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--c); }
-  .dives.rail .portal-kicker, .dives.rail .focus-num { color: var(--c); }
-  .dives.rail .dive-list li::before { background: var(--c); }
-  .dives.rail .dive-cta.btn-hero.primary { background: var(--c-bouton); color: var(--c-texte-bouton); box-shadow: none; border-radius: 12px; }
-  .dives.rail .plie-btn { text-decoration-color: var(--c); }
-  .dives.rail .plie-btn::after { color: var(--c); }
-  .metier-ico { display: block; width: 34px; height: 34px; color: var(--c); }
-
-  .rail-dots[data-metier] button[aria-current="true"]::before { background: var(--c); }
-
-  /* Barre du bas : le bouton suit le métier pendant la lecture des outils */
-  .barre-action a.principal { transition: background-color .3s, color .3s; }
-  body[data-metier] .barre-action a.principal { background: var(--c-bouton); color: var(--c-texte-bouton); }
-}
-@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
-  #plateforme, #plateforme .kicker, .seg button, .barre-action a.principal { transition: none; }
+  .scene .enonce .h1-kw::before { display: none; }
+  .hero-rot { display: flex; align-items: center; gap: 10px; height: 28px; margin-bottom: 14px; color: var(--signal); font: 600 15px var(--sans); letter-spacing: -.005em; transition: opacity .35s ease, transform .35s ease, filter .35s ease; }
+  .hero-rot svg { width: 24px; height: 24px; flex: none; }
+  .hero-rot.sort { opacity: 0; transform: translateY(-8px); filter: blur(3px); }
+  .hero-rot.entre { opacity: 0; transform: translateY(8px); filter: blur(3px); transition: none; }
 }
