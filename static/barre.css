@@ -18,3 +18,12 @@
 .g-maj { white-space: nowrap; }
 .demo-band .kicker { color: #FF6A5F; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Proposition · un seul en-tête : la barre VB Safety disparaît (ses liens restent dans le menu téléphone et en pied de page),
+   le fil d'Ariane et la mention démo passent en haut du bandeau d'accueil */
+.vbs-barre { display: none; }
+.hero-haut { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 22px; }
+.hero-haut .sb-crumbs { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; background: none; border: 0; font-size: 13px; color: inherit; opacity: .72; }
+.hero-haut .sb-crumbs a { color: inherit; }
+.demo-pastille { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1.4; background: rgba(255, 106, 95, .12); color: #FF8A80; border: 1px solid rgba(255, 106, 95, .28); }
+.demo-pastille::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
