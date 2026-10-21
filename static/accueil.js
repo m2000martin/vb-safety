@@ -92,21 +92,6 @@
       });
       dives.insertAdjacentElement('beforebegin', seg);
       r.onChange(function (c) { Array.prototype.forEach.call(seg.children, function (b, i) { b.setAttribute('aria-selected', i === c ? 'true' : 'false'); }); });
-      // Raccourcis métier sous le bouton principal du premier écran
-      var cta = document.querySelector('.scene .hero-cta');
-      if (cta) {
-        var hm = document.createElement('nav'); hm.className = 'hero-metiers'; hm.setAttribute('aria-label', T.seg);
-        r.items.forEach(function (d, i) {
-          var a = document.createElement('a'); a.href = '#' + d.id; a.textContent = T.metiers[i];
-          a.addEventListener('click', function (e) {
-            if (!mqTel.matches) return; e.preventDefault();
-            document.getElementById('plateforme').scrollIntoView({ behavior: smooth, block: 'start' });
-            setTimeout(function () { r.go(i); }, reduce ? 0 : 450);
-          });
-          hm.appendChild(a);
-        });
-        cta.insertAdjacentElement('afterend', hm);
-      }
     }
     // Barre fixe : visible après le premier écran, masquée sur le formulaire de contact
     var scene = document.querySelector('.scene'), contact = document.getElementById('contact');
@@ -165,11 +150,11 @@
     width = w; height = hh;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = w * dpr; canvas.height = hh * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var tel = w <= 700, n = tel ? 22 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
+    var tel = w <= 700, n = tel ? 14 : Math.round(Math.min(60, Math.max(24, (w * hh) / 20000)));
     // Téléphone : moins de points, plus fins, une partie couleur braise
-    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.45;
+    particles = Array.from({ length: n }, function () { var ember = tel && Math.random() < 0.3;
       return { x: Math.random() * w, y: Math.random() * hh, r: tel ? Math.random() * 1.2 + 0.5 : Math.random() * 1.8 + 0.8, vy: -(Math.random() * 0.4 + 0.15),
-        c: ember ? 'rgba(234, 122, 68, ' + (0.45 + Math.random() * 0.4).toFixed(2) + ')' : (tel ? 'rgba(255, 255, 255, 0.55)' : 'rgba(255, 255, 255, 0.9)') }; });
+        c: ember ? 'rgba(234, 122, 68, ' + (0.35 + Math.random() * 0.3).toFixed(2) + ')' : (tel ? 'rgba(255, 255, 255, 0.35)' : 'rgba(255, 255, 255, 0.9)') }; });
     if (reduce) draw();
   }
   function draw() {

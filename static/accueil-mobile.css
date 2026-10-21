@@ -2,29 +2,25 @@
    Premier écran aligné à gauche, choix du métier, cartes qui défilent, barre d'action fixe.
    Rien ne change au-delà de 700 px : les éléments ajoutés par accueil.js y restent masqués. */
 
-.seg, .rail-dots, .barre-action, .hero-metiers { display: none; }
+.seg, .rail-dots, .barre-action { display: none; }
 
 @media (max-width: 700px) {
   :root { --gouttiere: 20px; --gris-lisible: #B8BCC6; }
 
-  /* ---------- Premier écran ---------- */
-  .scene { min-height: 92vh; min-height: 92svh; padding-left: var(--gouttiere); padding-right: var(--gouttiere); }
-  .scene .centre { align-items: flex-end; padding: 32px 0 28px; }
+  /* ---------- Premier écran : peu d'éléments, beaucoup d'air ---------- */
+  .scene { min-height: 100vh; min-height: 100svh; padding-left: var(--gouttiere); padding-right: var(--gouttiere); }
+  .scene .centre { align-items: flex-end; padding: 0 0 calc(40px + env(safe-area-inset-bottom, 0px)); }
   .scene .centre > div { text-align: left; }
-  .scene .enonce { font-size: clamp(38px, 11.6vw, 54px); line-height: 1.04; letter-spacing: -.032em; }
-  .scene .enonce .h1-kw { margin: 0 0 18px; font: 500 11.5px/1.5 var(--mono); letter-spacing: .1em; max-width: 30ch; text-wrap: pretty; }
-  .scene .enonce .seconde { margin-top: 6px; color: #8E95A3; }
-  .scene .note { margin: 20px 0 0; max-width: 36ch; color: var(--gris-lisible); text-wrap: pretty; }
-  .scene .hero-cta { margin-top: 26px; }
-  .scene .btn-hero.primary { border-radius: 12px; min-height: 54px; font-size: 15.5px; }
-
-  /* Choix du métier sous le bouton principal */
-  .hero-metiers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; animation: hero-up .7s ease-out 3s both; }
-  .hero-metiers a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .04); color: #F2F4F7; font: 500 14px var(--sans); text-decoration: none; }
-  .hero-metiers a:active { background: rgba(224, 108, 52, .16); border-color: rgba(224, 108, 52, .6); }
-
-  /* Plus d'indication « Découvrir » : la section suivante dépasse en bas de l'écran */
+  .scene .enonce { font-size: clamp(36px, 10.6vw, 48px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; }
+  .scene .enonce .h1-kw { margin: 0 0 20px; font: 500 13px/1.45 var(--sans); letter-spacing: 0; text-transform: none; color: #8E95A3; max-width: 32ch; }
+  .scene .enonce .h1-kw::before { content: ""; display: block; width: 24px; height: 2px; margin-bottom: 14px; background: var(--signal); }
+  .scene .enonce .seconde { margin-top: 4px; color: #6F7787; }
+  .scene .enonce .invis { color: #FAFAFA; }
+  .scene .note { display: none; }
+  .scene .hero-cta { margin-top: 32px; }
+  .scene .btn-hero.primary { justify-content: space-between; min-height: 52px; padding: 0 20px; border-radius: 12px; font-size: 15px; box-shadow: none; }
   .scene .bas { display: none; }
+  .haut .lang-link, .haut.has-menu .menu-btn:not([hidden]) { border-color: rgba(255, 255, 255, .12); }
 
   /* ---------- Sections ---------- */
   .section { padding: 56px var(--gouttiere); }
@@ -65,7 +61,6 @@
 }
 
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) {
-  .hero-metiers { animation: none; }
   .barre-action, .rail-dots button::before, .seg button { transition: none; }
   .rail { scroll-behavior: auto; }
 }
