@@ -124,3 +124,16 @@
 @media (max-width: 700px) {
   .note-mob .nm-version { white-space: normal; color: #D4D4D8; }
 }
+
+/* Bouton principal : « Outils CMR pour [métier] » sur téléphone, texte d'origine sur ordinateur */
+.cta-tel { display: none; }
+@media (max-width: 700px) {
+  .note-mob { display: none !important; }
+  .scene .btn-hero.primary .cta-ordi { display: none; }
+  .scene .btn-hero.primary .cta-tel { display: inline-flex; align-items: baseline; gap: .3em; white-space: nowrap; }
+  .scene .btn-hero.primary .note-metier { color: #fff; font-weight: 700; }
+}
+@media (max-width: 360px) {
+  .scene .btn-hero.primary { max-width: 100%; padding: 10px 14px; font-size: 14px; gap: 10px; }
+  .scene .btn-hero.primary .cta-tel { flex-wrap: wrap; white-space: normal; row-gap: 2px; }
+}

@@ -92,7 +92,7 @@
         b.textContent = T.metiers[i] || ('' + (i + 1));
         b.addEventListener('click', function () { r.go(i); }); seg.appendChild(b);
       });
-      dives.insertAdjacentElement('beforebegin', seg);
+      dives.insertAdjacentElement('beforebegin', seg); window.vbOutil = r.go;
       r.onChange(function (c) { Array.prototype.forEach.call(seg.children, function (b, i) { b.setAttribute('aria-selected', i === c ? 'true' : 'false'); }); });
     }
     // Barre fixe : visible après le premier écran, masquée sur le formulaire de contact
@@ -111,30 +111,28 @@
     }
   })();
 
-  // Premier écran (téléphone) : le métier défile dans la phrase d'introduction, le fond suit
+  // Premier écran (téléphone) : le métier défile dans le bouton principal, qui mène à la carte de ce métier ; le fond suit
   (function () {
-    var note = document.querySelector('.scene .note'); if (!note) return;
-    // Une version par métier : seul le métier change dans la phrase
-    var M = EN ? [['pompiers', 'firefighters'], ['btp', 'construction'], ['industrie', 'industry']]
-               : [['pompiers', 'les sapeurs-pompiers'], ['btp', 'le BTP'], ['industrie', "l'industrie"]];
-    var L2 = EN ? 'Measurement and traceability for ' : 'Mesure et traçabilité pour ';
-    // Tous les mots sont posés au même endroit : la zone garde la largeur du plus long, rien ne bouge autour
-    var mob = document.createElement('p'); mob.className = 'note note-mob'; mob.setAttribute('aria-hidden', 'true');
-    var l1 = document.createElement('span'); l1.className = 'nm-l1';
-    var l2 = document.createElement('span'); l2.className = 'nm-l2 nm-version'; l2.appendChild(document.createTextNode(L2));
+    var btn = document.querySelector('.scene .btn-hero.primary'), note = document.querySelector('.scene .note'); if (!btn) return;
+    // [mode des particules, texte, index de la carte dans « Outils »]
+    var M = EN ? [['pompiers', 'firefighters', 0], ['btp', 'construction', 2], ['industrie', 'industry', 1]]
+               : [['pompiers', 'les sapeurs-pompiers', 0], ['btp', 'le BTP', 2], ['industrie', "l'industrie", 1]];
+    var lib = btn.firstElementChild, ancien = lib.textContent;
+    var tel = document.createElement('span'); tel.className = 'cta-tel'; tel.setAttribute('aria-hidden', 'true');
+    tel.appendChild(document.createTextNode(EN ? 'CMR tools for ' : 'Outils CMR pour '));
     var pile = document.createElement('span'); pile.className = 'nm-pile';
     var mots = M.map(function (m) { var w = document.createElement('span'); w.className = 'note-metier'; w.textContent = m[1]; pile.appendChild(w); return w; });
-    l2.appendChild(pile);
-    mob.appendChild(l2);
-    note.insertAdjacentElement('afterend', mob);
-    function sync() { note.classList.toggle('vb-sr', mqTel.matches); }
-    sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
+    tel.appendChild(pile); lib.insertAdjacentElement('afterend', tel); lib.classList.add('cta-ordi');
+    function sync() { if (note) note.classList.toggle('vb-sr', mqTel.matches); btn.setAttribute('aria-label', mqTel.matches ? tel.textContent.replace(/\s+/g, ' ') : ancien); }
     var i = 0;
     function montrer(k, prec) {
       if (prec != null) { var o = mots[prec]; o.classList.remove('actif'); o.classList.add('sort'); setTimeout(function () { o.classList.remove('sort'); }, 650); }
       mots[k].classList.add('actif'); window.vbMode = M[k][0];
+      btn.setAttribute('aria-label', (EN ? 'CMR tools for ' : 'Outils CMR pour ') + M[k][1]);
     }
-    montrer(0);
+    montrer(0); sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
+    // Le clic ouvre directement la carte du métier affiché
+    btn.addEventListener('click', function () { if (!mqTel.matches || !window.vbOutil) return; var c = M[i][2]; setTimeout(function () { window.vbOutil(c); }, reduce ? 0 : 450); });
     if (reduce) { window.vbMode = null; return; }
     var scene = document.querySelector('.scene'), visible = true;
     if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(scene);
