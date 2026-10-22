@@ -143,3 +143,15 @@
   .scene .btn-hero.primary .cta-tel { font-weight: 400; }
   .scene .btn-hero.primary .note-metier { font-weight: 700; color: #fff; }
 }
+
+/* Ordinateur : même bouton « Outils CMR pour [métier] », le métier en gras */
+@media (min-width: 701px) {
+  .scene .btn-hero.primary .cta-ordi { display: none; }
+  .scene .btn-hero.primary .cta-tel { display: inline-flex; align-items: baseline; gap: .3em; white-space: nowrap; font-weight: 400; }
+  .scene .btn-hero.primary .note-metier { font-weight: 700; color: #fff; }
+  .scene .btn-hero.primary .nm-pile { display: inline-grid; overflow: hidden; padding-bottom: 3px; margin-bottom: -3px; }
+  .scene .btn-hero.primary .note-metier { grid-area: 1 / 1; justify-self: start; opacity: 0; transform: translateY(105%); transition: transform .55s cubic-bezier(.7, 0, .2, 1), opacity .3s ease; }
+  .scene .btn-hero.primary .note-metier.actif { opacity: 1; transform: none; }
+  .scene .btn-hero.primary .note-metier.sort { opacity: 0; transform: translateY(-105%); transition: transform .5s cubic-bezier(.7, 0, .2, 1), opacity .4s ease; }
+}
+@media (min-width: 701px) and (prefers-reduced-motion: reduce) { .scene .btn-hero.primary .note-metier, .scene .btn-hero.primary .note-metier.sort { transition: none; } }

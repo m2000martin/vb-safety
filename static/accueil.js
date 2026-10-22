@@ -123,7 +123,7 @@
     var pile = document.createElement('span'); pile.className = 'nm-pile';
     var mots = M.map(function (m) { var w = document.createElement('span'); w.className = 'note-metier'; w.textContent = m[1]; pile.appendChild(w); return w; });
     tel.appendChild(pile); lib.insertAdjacentElement('afterend', tel); lib.classList.add('cta-ordi');
-    function sync() { if (note) note.classList.toggle('vb-sr', mqTel.matches); btn.setAttribute('aria-label', mqTel.matches ? tel.textContent.replace(/\s+/g, ' ') : ancien); }
+    function sync() { if (note) note.classList.toggle('vb-sr', mqTel.matches); }
     var i = 0;
     function montrer(k, prec) {
       if (prec != null) { var o = mots[prec]; o.classList.remove('actif'); o.classList.add('sort'); setTimeout(function () { o.classList.remove('sort'); }, 650); }
@@ -132,12 +132,18 @@
     }
     montrer(0); sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
     // Le clic ouvre directement la carte du métier affiché
-    btn.addEventListener('click', function () { if (!mqTel.matches || !window.vbOutil) return; var c = M[i][2]; setTimeout(function () { window.vbOutil(c); }, reduce ? 0 : 450); });
+    btn.addEventListener('click', function (e) {
+      var c = M[i][2];
+      if (mqTel.matches) { if (window.vbOutil) setTimeout(function () { window.vbOutil(c); }, reduce ? 0 : 450); return; }
+      // Ordinateur : les cartes sont empilées, on descend directement à celle du métier
+      var d = document.querySelectorAll('.dives > .dive')[c]; if (!d) return;
+      e.preventDefault(); e.stopPropagation(); d.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }, true);
     if (reduce) { window.vbMode = null; return; }
     var scene = document.querySelector('.scene'), visible = true;
     if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(scene);
     setInterval(function () {
-      if (!visible || document.hidden || !mqTel.matches) return;
+      if (!visible || document.hidden) return;
       var p = i; i = (i + 1) % M.length; montrer(i, p);
     }, 2400);
   })();
