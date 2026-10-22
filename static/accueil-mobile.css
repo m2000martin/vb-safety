@@ -137,3 +137,9 @@
   .scene .btn-hero.primary { max-width: 100%; padding: 10px 14px; font-size: 14px; gap: 10px; }
   .scene .btn-hero.primary .cta-tel { flex-wrap: wrap; white-space: normal; row-gap: 2px; }
 }
+
+/* Bouton principal : « Outils CMR pour » en texte normal, le métier en gras */
+@media (max-width: 700px) {
+  .scene .btn-hero.primary .cta-tel { font-weight: 400; }
+  .scene .btn-hero.primary .note-metier { font-weight: 700; color: #fff; }
+}
