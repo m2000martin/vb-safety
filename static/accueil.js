@@ -116,8 +116,8 @@
     var note = document.querySelector('.scene .note'); if (!note) return;
     // Une version par métier : seul le métier change dans la phrase
     var M = EN ? [['pompiers', 'firefighters'], ['btp', 'construction'], ['industrie', 'industry']]
-               : [['pompiers', 'aux sapeurs-pompiers'], ['btp', 'au BTP'], ['industrie', "à l'industrie"]];
-    var L2 = EN ? 'A dedicated version for ' : 'Une version dédiée ';
+               : [['pompiers', 'les sapeurs-pompiers'], ['btp', 'le BTP'], ['industrie', "l'industrie"]];
+    var L2 = EN ? 'Measurement and traceability for ' : 'Mesure et traçabilité pour ';
     // Tous les mots sont posés au même endroit : la zone garde la largeur du plus long, rien ne bouge autour
     var mob = document.createElement('p'); mob.className = 'note note-mob'; mob.setAttribute('aria-hidden', 'true');
     var l1 = document.createElement('span'); l1.className = 'nm-l1';
