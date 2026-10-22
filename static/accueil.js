@@ -116,7 +116,7 @@
     var note = document.querySelector('.scene .note'); if (!note) return;
     var M = EN ? [['pompiers', 'firefighters'], ['btp', 'construction'], ['industrie', 'industry']]
                : [['pompiers', 'les sapeurs-pompiers'], ['btp', 'le BTP'], ['industrie', "l'industrie"]];
-    var L1 = EN ? 'Measures and tracks CMR exposure' : "Mesure et trace l'exposition CMR", L2 = EN ? 'for ' : 'pour ';
+    var L1 = EN ? 'Measurement and traceability of CMR exposure' : "Mesure et traçabilité de l'exposition CMR", L2 = EN ? 'for ' : 'pour ';
     // Tous les mots sont posés au même endroit : la ligne garde la largeur du plus long, rien ne bouge autour
     var mob = document.createElement('p'); mob.className = 'note note-mob'; mob.setAttribute('aria-hidden', 'true');
     var l1 = document.createElement('span'); l1.className = 'nm-l1'; l1.textContent = L1;
