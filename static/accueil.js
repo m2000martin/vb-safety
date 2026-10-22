@@ -114,15 +114,17 @@
   // Premier écran (téléphone) : le métier défile dans la phrase d'introduction, le fond suit
   (function () {
     var note = document.querySelector('.scene .note'); if (!note) return;
-    var M = EN ? [['pompiers', 'firefighters'], ['btp', 'construction'], ['industrie', 'industry']]
-               : [['pompiers', 'les sapeurs-pompiers'], ['btp', 'le BTP'], ['industrie', "l'industrie"]];
-    var L1 = EN ? 'Measurement and traceability of CMR exposure' : "Mesure et traçabilité de l'exposition CMR", L2 = EN ? 'for ' : 'pour ';
-    // Tous les mots sont posés au même endroit : la ligne garde la largeur du plus long, rien ne bouge autour
+    // Une version par métier : le métier et ce que fait sa version défilent sous une ligne fixe
+    var M = EN ? [['pompiers', 'Firefighters', 'contamination report after each call-out'], ['btp', 'Construction', 'exposure logging from the site'], ['industrie', 'Industry', 'exposed-worker list and OEL checks']]
+               : [['pompiers', 'Sapeurs-pompiers', 'rapport de contamination après intervention'], ['btp', 'BTP', 'saisie des expositions depuis le chantier'], ['industrie', 'Industrie', 'liste des exposés et contrôles VLEP']];
+    var L1 = EN ? 'A dedicated version for each sector' : 'Une version dédiée à chaque métier';
+    // Tous les éléments sont posés au même endroit : la zone garde la taille du plus long, rien ne bouge autour
     var mob = document.createElement('p'); mob.className = 'note note-mob'; mob.setAttribute('aria-hidden', 'true');
     var l1 = document.createElement('span'); l1.className = 'nm-l1'; l1.textContent = L1;
-    var l2 = document.createElement('span'); l2.className = 'nm-l2'; l2.appendChild(document.createTextNode(L2));
+    var l2 = document.createElement('span'); l2.className = 'nm-l2 nm-versions';
     var pile = document.createElement('span'); pile.className = 'nm-pile';
-    var mots = M.map(function (m) { var w = document.createElement('span'); w.className = 'note-metier'; w.textContent = m[1]; pile.appendChild(w); return w; });
+    var mots = M.map(function (m) { var w = document.createElement('span'); w.className = 'note-metier';
+      var b = document.createElement('b'); b.textContent = m[1]; w.appendChild(b); w.appendChild(document.createTextNode(' · ' + m[2])); pile.appendChild(w); return w; });
     l2.appendChild(pile);
     mob.appendChild(l1); mob.appendChild(l2);
     note.insertAdjacentElement('afterend', mob);
@@ -140,7 +142,7 @@
     setInterval(function () {
       if (!visible || document.hidden || !mqTel.matches) return;
       var p = i; i = (i + 1) % M.length; montrer(i, p);
-    }, 2400);
+    }, 3000);
   })();
 
   // Formulaire de contact (Web3Forms ; si l'envoi échoue, ouverture de la messagerie)

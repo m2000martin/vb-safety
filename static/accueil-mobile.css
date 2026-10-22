@@ -119,3 +119,12 @@
   .barre-action a { font-size: 13.5px; letter-spacing: -.01em; }
   .barre-action a.second { padding: 0 12px; }
 }
+
+/* Phrase d'accueil : une version par métier (ligne fixe + métier et fonction qui défilent) */
+@media (max-width: 700px) {
+  .note-mob .nm-l1 { color: #D4D4D8; }
+  .note-mob .nm-versions { white-space: normal; margin-top: 4px; }
+  .nm-versions .nm-pile { display: grid; width: 100%; }
+  .nm-versions .note-metier { font-weight: 400; color: #A1A1AA; }
+  .nm-versions .note-metier b { font-weight: 600; color: #FAFAFA; }
+}
