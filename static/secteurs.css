@@ -368,3 +368,19 @@ table.cols th { font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-tran
   .rail-points span.actif { width: 18px; background: #FAFAFA; }
 }
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) { .rail-points span { transition: none; } }
+
+/* Pages métier (ordinateur) : « Les enjeux » en trois cartes, en-tête centré, apparition au fil du défilement (même principe que l'accueil) */
+@media (min-width: 1100px) {
+  .sec-enjeux .sec-tete { text-align: center; margin-bottom: 48px; }
+  .sec-enjeux .sec-tete .titre { margin-left: auto; margin-right: auto; max-width: 24ch; }
+  .sec-enjeux .grille-3 { gap: 20px; background: none; border: 0; border-radius: 0; overflow: visible; }
+  .sec-enjeux .enjeu { position: relative; padding: 32px 30px 34px; background: linear-gradient(170deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012)); border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; overflow: hidden; }
+  .sec-enjeux .enjeu::before { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--signal); transform-origin: left; transform: scaleX(.18); transition: transform .9s cubic-bezier(.2, .7, .2, 1) .15s; }
+  .sec-enjeux .enjeu .n { font: 700 13px/1 Inter, -apple-system, "Segoe UI", sans-serif; letter-spacing: .02em; }
+  .sec-enjeux .enjeu h3 { font-size: 21px; }
+  .sec-enjeux.epingle { height: calc(100vh + 900px); padding: 0; }
+  .sec-enjeux.epingle > .wrap { position: sticky; top: 72px; min-height: calc(100vh - 72px); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; padding-top: 40px; padding-bottom: 40px; }
+  .sec-enjeux.epingle .enjeu { opacity: 0; transform: translateY(36px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .sec-enjeux.epingle .enjeu.vu { opacity: 1; transform: none; }
+  .sec-enjeux.epingle .enjeu.vu::before { transform: scaleX(1); }
+}
