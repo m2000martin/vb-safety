@@ -155,3 +155,7 @@
   .scene .btn-hero.primary .note-metier.sort { opacity: 0; transform: translateY(-105%); transition: transform .5s cubic-bezier(.7, 0, .2, 1), opacity .4s ease; }
 }
 @media (min-width: 701px) and (prefers-reduced-motion: reduce) { .scene .btn-hero.primary .note-metier, .scene .btn-hero.primary .note-metier.sort { transition: none; } }
+
+/* Bouton principal : « Suivi CMR » en texte normal, la suite en gras (téléphone et ordinateur) */
+.scene .btn-hero.primary .note-metier { font-weight: 400; white-space: nowrap; }
+.scene .btn-hero.primary .note-metier b { font-weight: 700; color: #fff; }

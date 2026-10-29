@@ -14,7 +14,7 @@
 - [VB CMR Industrie et BTP](https://vb-safety.com/cmr-industrie/) : obligations de l'employeur face aux agents CMR (inventaire, liste des salariés exposés, contrôles VLEP, suivi individuel renforcé, hiérarchie de prévention). En préparation · accès anticipé.
 
 ## Innovation (en développement)
-- [Innovation](https://vb-safety.com/innovation/) : VB Safety développe ses propres technologies de mesure et de détection. Sujets en cours, avec des partenaires en France et à l'international : capteur de décontamination (contrôle sur les lieux de la contamination cutanée après incendie), détection autonome de feu de forêt et de reprise de feu, autres projets non publiés. Aucun détail technique publié à ce stade.
+- [Innovation](https://vb-safety.com/innovation/) : VB Safety développe ses propres technologies de mesure et de détection. Sujets en cours, avec des partenaires en France et à l'international : capteur de décontamination (contrôle sur les lieux de la contamination des agents et des EPI après incendie), détection autonome de feu de forêt et de reprise de feu, autres projets non publiés. Aucun détail technique publié à ce stade.
 
 ## Outils et ressources gratuits
 - [Dossier de preuve CMR](https://vb-safety.com/cmr-industrie/outil/) : suite gratuite de l'évaluation, sans compte, données dans le navigateur. Registre des agents et de leur régime (art. R. 4412-59), révisions datées de l'évaluation, étude de substitution et grille des treize mesures (art. R. 4412-66 à R. 4412-70), liste nominative datée et versionnée des travailleurs exposés avec extrait individuel, version anonyme pour le CSE, extrait pour l'agence d'intérim et bordereau d'envoi au SPST (art. R. 4412-93-1 à R. 4412-93-4), sommaire des 45 obligations CMR.

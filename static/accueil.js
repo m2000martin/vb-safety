@@ -111,29 +111,34 @@
     }
   })();
 
-  // Premier écran (téléphone) : le métier défile dans le bouton principal, qui mène à la carte de ce métier ; le fond suit
+  // Premier écran : le bouton principal fait défiler « Capteurs et innovation » puis « Suivi CMR [métier] » ; il mène à la page Innovation ou à la carte du métier ; le fond suit
   (function () {
     var btn = document.querySelector('.scene .btn-hero.primary'), note = document.querySelector('.scene .note'); if (!btn) return;
-    // [mode des particules, texte, index de la carte dans « Outils »]
-    var M = EN ? [['pompiers', 'firefighters', 0], ['btp', 'construction', 2], ['industrie', 'industry', 1]]
-               : [['pompiers', 'les sapeurs-pompiers', 0], ['btp', 'le BTP', 2], ['industrie', "l'industrie", 1]];
-    var lib = btn.firstElementChild, ancien = lib.textContent;
+    // [mode des particules, début, mot en gras, index de la carte dans « Outils » ou adresse]
+    var M = EN ? [[null, '', 'Sensors & innovation', '/en/innovation/'], ['pompiers', 'CMR tracking: ', 'firefighters', 0], ['industrie', 'CMR tracking: ', 'industry', 1], ['btp', 'CMR tracking: ', 'construction', 2]]
+               : [[null, '', 'Capteurs et innovation', '/innovation/'], ['pompiers', 'Suivi CMR ', 'sapeurs-pompiers', 0], ['industrie', 'Suivi CMR ', 'industrie', 1], ['btp', 'Suivi CMR ', 'BTP', 2]];
+    var lib = btn.firstElementChild;
     var tel = document.createElement('span'); tel.className = 'cta-tel'; tel.setAttribute('aria-hidden', 'true');
-    tel.appendChild(document.createTextNode(EN ? 'CMR tools for ' : 'Outils CMR pour '));
     var pile = document.createElement('span'); pile.className = 'nm-pile';
-    var mots = M.map(function (m) { var w = document.createElement('span'); w.className = 'note-metier'; w.textContent = m[1]; pile.appendChild(w); return w; });
+    var mots = M.map(function (m) {
+      var w = document.createElement('span'); w.className = 'note-metier';
+      if (m[1]) { var d = document.createElement('span'); d.className = 'nm-debut'; d.textContent = m[1]; w.appendChild(d); }
+      var b = document.createElement('b'); b.textContent = m[2]; w.appendChild(b);
+      pile.appendChild(w); return w;
+    });
     tel.appendChild(pile); lib.insertAdjacentElement('afterend', tel); lib.classList.add('cta-ordi');
     function sync() { if (note) note.classList.toggle('vb-sr', mqTel.matches); }
     var i = 0;
     function montrer(k, prec) {
       if (prec != null) { var o = mots[prec]; o.classList.remove('actif'); o.classList.add('sort'); setTimeout(function () { o.classList.remove('sort'); }, 650); }
       mots[k].classList.add('actif'); window.vbMode = M[k][0];
-      btn.setAttribute('aria-label', (EN ? 'CMR tools for ' : 'Outils CMR pour ') + M[k][1]);
+      btn.setAttribute('aria-label', M[k][1] + M[k][2]);
     }
     montrer(0); sync(); if (mqTel.addEventListener) mqTel.addEventListener('change', sync);
-    // Le clic ouvre directement la carte du métier affiché
+    // Le clic ouvre la page Innovation, ou directement la carte du métier affiché
     btn.addEventListener('click', function (e) {
-      var c = M[i][2];
+      var c = M[i][3];
+      if (typeof c === 'string') { e.preventDefault(); e.stopPropagation(); location.href = c; return; }
       if (mqTel.matches) { if (window.vbOutil) setTimeout(function () { window.vbOutil(c); }, reduce ? 0 : 450); return; }
       // Ordinateur : les cartes sont empilées, on descend directement à celle du métier
       var d = document.querySelectorAll('.dives > .dive')[c]; if (!d) return;
