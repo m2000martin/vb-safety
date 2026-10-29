@@ -419,11 +419,52 @@
     #definitions .def dt::before { content: counter(q, decimal-leading-zero); display: block; margin-bottom: 12px; font: 700 13px var(--sans); letter-spacing: .02em; color: var(--signal); }
     #definitions .def dd { font-size: 14.5px; color: #9EA5B0; }
   }
+  /* « Pensé pour votre façon de travailler » : trois situations de saisie */
+  .usage-cols { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 1080px; margin: 40px auto 0; text-align: left; }
+  .usage-col { display: flex; flex-direction: column; gap: 8px; }
+  .usage-col b { font: 700 15px var(--sans); color: var(--signal); }
+  .usage-col span { color: #C9CDD3; font-size: 15px; line-height: 1.6; }
+  @media (min-width: 701px) {
+    .usage-cols { grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 48px; border-top: 1px solid rgba(255, 255, 255, .1); border-bottom: 1px solid rgba(255, 255, 255, .1); }
+    .usage-col { padding: 28px 30px; text-align: center; }
+    .usage-col + .usage-col { border-left: 1px solid rgba(255, 255, 255, .1); }
+    .usage-col b { font-size: 16px; }
+    #usage .usage-cta { margin-top: 40px; }
+  }
+  /* Adresse e-mail du premier écran : plus discrète */
+  .courriel { font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  /* L'essentiel (ordinateur) : questions alignées à la même hauteur d'une carte à l'autre */
+  @media (min-width: 701px) {
+    #definitions .defs { grid-auto-rows: auto; }
+    #definitions .def { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 0; }
+    #definitions .def dt { align-self: stretch; }
+  }
+  /* Outils de suivi CMR (ordinateur) : carte du métier épurée, deux colonnes sans cadres, points clés en bande */
+  @media (min-width: 960px) {
+    .dive { grid-template-columns: 4fr 7fr; grid-template-rows: 1fr auto; column-gap: 56px; row-gap: 0; padding: 44px 48px 0; }
+    .dive-head { grid-column: 1; grid-row: 1; padding-bottom: 36px; }
+    .dive-head .dive-cta { margin-top: auto; }
+    .dive-head p, .dive .focus p, .dive .steps p, .dive-list li { text-align: left; -webkit-hyphens: manual; hyphens: manual; }
+    .dive .portal-kicker { font: 700 13px var(--sans); letter-spacing: .02em; text-transform: none; color: var(--signal); }
+    .dive-body { display: contents; }
+    .focus-grid, .dive .steps { grid-column: 2; grid-row: 1; padding-bottom: 36px; }
+    .focus-grid { gap: 0; }
+    .focus { border: 0; border-radius: 0; background: none; padding: 0 0 0 0; gap: 10px; }
+    .focus + .focus { border-left: 1px solid rgba(255, 255, 255, .1); padding-left: 36px; margin-left: 36px; }
+    .dive .focus-num { font: 700 13px var(--sans); letter-spacing: .02em; }
+    .dive h4 { font-size: 18px; }
+    .focus p { font-size: 15px; color: #B4B4BC; }
+    .dive-list { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 0 -48px; padding: 0; border-top: 1px solid rgba(255, 255, 255, .1); }
+    .dive-list li { position: relative; display: block; padding: 22px 28px 24px 70px; font-size: 14.5px; color: #D4D4D8; }
+    .dive-list li + li { border-left: 1px solid rgba(255, 255, 255, .1); }
+    .dive-list li::before { content: ""; position: absolute; left: 44px; top: 25px; width: 6px; height: 11px; margin: 0; border-radius: 0; background: none; border-right: 2px solid var(--signal); border-bottom: 2px solid var(--signal); transform: rotate(45deg); }
+    .dive:not(:has(.dive-list)) { padding-bottom: 8px; }
+  }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=9">
 <link rel="stylesheet" href="/static/nav.css?v=1">
 <link rel="stylesheet" href="/static/texte.css?v=1">
-<link rel="stylesheet" href="/static/accueil-mobile.css?v=37">
+<link rel="stylesheet" href="/static/accueil-mobile.css?v=38">
 </head>
 <body>
 
@@ -597,6 +638,7 @@
   <div class="section-inner">
     <h2 class="section-title">Pensé pour votre façon de travailler.</h2>
     <p class="section-lead">Saisie en fin d'intervention, sur chantier ou en atelier : nos outils s'adaptent à vos procédures, à vos équipes et à vos obligations. Chaque version ajoute des agents, des métiers et des modules sans changer les habitudes de saisie, et vos retours décident des prochaines.</p>
+    <div class="usage-cols"><div class="usage-col"><b>Sur intervention</b><span>Le chef d'agrès saisit l'exposition de l'équipage en fin d'intervention, en quelques minutes.</span></div><div class="usage-col"><b>Sur chantier</b><span>Le chef d'équipe décrit la tâche en une phrase ; l'outil reconnaît les salariés, la durée et la protection.</span></div><div class="usage-col"><b>En atelier</b><span>L'équipe HSE tient la liste des exposés et les fiches individuelles à jour, prêtes pour la santé au travail.</span></div></div>
     <div class="usage-cta"><a class="btn-hero primary" href="#contact" data-goto="contact"><span>Demander une démo</span></a></div>
     <p class="spaces-note">Pas encore de code d'accès ? <a class="text-btn" href="#contact" data-goto="contact">Demandez un accès</a></p>
   </div>

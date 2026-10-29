@@ -168,7 +168,8 @@
   .metiers button .n { display: none; }
   .metiers button:hover { color: #fff; }
   .metiers button[aria-selected="true"] { background: #FAFAFA; color: #0E1E30; }
-  .metiers button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+  .metiers button:focus { outline: none; }
+  .metiers button:focus-visible { outline: 1px solid rgba(224, 108, 52, .55); outline-offset: 2px; }
   .dives.choix { margin-top: 28px; }
   .dives.choix > .dive:not(.choisie) { display: none; }
   .dives.choix > .dive.choisie { animation: metier-in .35s ease-out; }

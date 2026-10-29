@@ -415,11 +415,52 @@
     #definitions .def dt::before { content: counter(q, decimal-leading-zero); display: block; margin-bottom: 12px; font: 700 13px var(--sans); letter-spacing: .02em; color: var(--signal); }
     #definitions .def dd { font-size: 14.5px; color: #9EA5B0; }
   }
+  /* « Pensé pour votre façon de travailler » : trois situations de saisie */
+  .usage-cols { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 1080px; margin: 40px auto 0; text-align: left; }
+  .usage-col { display: flex; flex-direction: column; gap: 8px; }
+  .usage-col b { font: 700 15px var(--sans); color: var(--signal); }
+  .usage-col span { color: #C9CDD3; font-size: 15px; line-height: 1.6; }
+  @media (min-width: 701px) {
+    .usage-cols { grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 48px; border-top: 1px solid rgba(255, 255, 255, .1); border-bottom: 1px solid rgba(255, 255, 255, .1); }
+    .usage-col { padding: 28px 30px; text-align: center; }
+    .usage-col + .usage-col { border-left: 1px solid rgba(255, 255, 255, .1); }
+    .usage-col b { font-size: 16px; }
+    #usage .usage-cta { margin-top: 40px; }
+  }
+  /* Adresse e-mail du premier écran : plus discrète */
+  .courriel { font-family: var(--sans); font-weight: 500; font-size: 14px; }
+  /* L'essentiel (ordinateur) : questions alignées à la même hauteur d'une carte à l'autre */
+  @media (min-width: 701px) {
+    #definitions .defs { grid-auto-rows: auto; }
+    #definitions .def { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 0; }
+    #definitions .def dt { align-self: stretch; }
+  }
+  /* Outils de suivi CMR (ordinateur) : carte du métier épurée, deux colonnes sans cadres, points clés en bande */
+  @media (min-width: 960px) {
+    .dive { grid-template-columns: 4fr 7fr; grid-template-rows: 1fr auto; column-gap: 56px; row-gap: 0; padding: 44px 48px 0; }
+    .dive-head { grid-column: 1; grid-row: 1; padding-bottom: 36px; }
+    .dive-head .dive-cta { margin-top: auto; }
+    .dive-head p, .dive .focus p, .dive .steps p, .dive-list li { text-align: left; -webkit-hyphens: manual; hyphens: manual; }
+    .dive .portal-kicker { font: 700 13px var(--sans); letter-spacing: .02em; text-transform: none; color: var(--signal); }
+    .dive-body { display: contents; }
+    .focus-grid, .dive .steps { grid-column: 2; grid-row: 1; padding-bottom: 36px; }
+    .focus-grid { gap: 0; }
+    .focus { border: 0; border-radius: 0; background: none; padding: 0 0 0 0; gap: 10px; }
+    .focus + .focus { border-left: 1px solid rgba(255, 255, 255, .1); padding-left: 36px; margin-left: 36px; }
+    .dive .focus-num { font: 700 13px var(--sans); letter-spacing: .02em; }
+    .dive h4 { font-size: 18px; }
+    .focus p { font-size: 15px; color: #B4B4BC; }
+    .dive-list { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 0 -48px; padding: 0; border-top: 1px solid rgba(255, 255, 255, .1); }
+    .dive-list li { position: relative; display: block; padding: 22px 28px 24px 70px; font-size: 14.5px; color: #D4D4D8; }
+    .dive-list li + li { border-left: 1px solid rgba(255, 255, 255, .1); }
+    .dive-list li::before { content: ""; position: absolute; left: 44px; top: 25px; width: 6px; height: 11px; margin: 0; border-radius: 0; background: none; border-right: 2px solid var(--signal); border-bottom: 2px solid var(--signal); transform: rotate(45deg); }
+    .dive:not(:has(.dive-list)) { padding-bottom: 8px; }
+  }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=9">
 <link rel="stylesheet" href="/static/nav.css?v=1">
 <link rel="stylesheet" href="/static/texte.css?v=1">
-<link rel="stylesheet" href="/static/accueil-mobile.css?v=37">
+<link rel="stylesheet" href="/static/accueil-mobile.css?v=38">
 </head>
 <body>
 
@@ -593,6 +634,7 @@
   <div class="section-inner">
     <h2 class="section-title">Built for how you work.</h2>
     <p class="section-lead">Recorded after the call-out, on site or in the workshop: our tools fit your procedures, your teams and your obligations. Each version adds agents, trades and modules without changing how data is entered, and your feedback decides what comes next.</p>
+    <div class="usage-cols"><div class="usage-col"><b>After a call-out</b><span>The crew commander records the crew's exposure at the end of the call-out, in a few minutes.</span></div><div class="usage-col"><b>On site</b><span>The team leader describes the task in one sentence; the tool picks up workers, duration and protection.</span></div><div class="usage-col"><b>In the workshop</b><span>The HSE team keeps the exposed workers list and individual records up to date, ready for occupational health.</span></div></div>
     <div class="usage-cta"><a class="btn-hero primary" href="#contact" data-goto="contact"><span>Request a demo</span></a></div>
     <p class="spaces-note">No access code yet? <a class="text-btn" href="#contact" data-goto="contact">Ask for access</a></p>
   </div>
