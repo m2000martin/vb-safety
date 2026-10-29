@@ -111,6 +111,29 @@
     }
   })();
 
+  // Ordinateur : « Notre approche » reste à l'écran pendant le défilement ; les trois blocs apparaissent l'un après l'autre
+  (function () {
+    var sec = document.getElementById('approche'), blocs = sec && sec.querySelectorAll('.pillars > .pillar'); if (!blocs || !blocs.length) return;
+    var mq = window.matchMedia('(min-width: 1100px) and (min-height: 700px)'), actif = false, raf = 0;
+    function maj() {
+      raf = 0; if (!actif) return;
+      var r = sec.getBoundingClientRect(), course = sec.offsetHeight - window.innerHeight;
+      var p = course > 0 ? Math.min(1, Math.max(0, -r.top / course)) : 1;
+      Array.prototype.forEach.call(blocs, function (b, i) { b.classList.toggle('vu', p >= 0.06 + i * 0.26); });
+      sec.style.setProperty('--avance', p.toFixed(3));
+    }
+    function regler() {
+      actif = mq.matches && !reduce;
+      sec.classList.toggle('epingle', actif);
+      if (!actif) { Array.prototype.forEach.call(blocs, function (b) { b.classList.remove('vu'); }); sec.style.removeProperty('--avance'); }
+      maj();
+    }
+    window.addEventListener('scroll', function () { if (actif && !raf) raf = requestAnimationFrame(maj); }, { passive: true });
+    window.addEventListener('resize', function () { if (!raf) raf = requestAnimationFrame(maj); });
+    if (mq.addEventListener) mq.addEventListener('change', regler);
+    regler();
+  })();
+
   // Ordinateur : un onglet par métier au-dessus des cartes « Outils » ; une seule carte affichée à la fois
   (function () {
     var dives = document.querySelector('.dives'); if (!dives) return;
