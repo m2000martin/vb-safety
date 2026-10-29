@@ -2,3 +2,5 @@
 main p, .section p, main dd, .section dd { text-align: justify; -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 7 3 3; }
 /* Textes très courts, boutons, mentions : alignement d'origine */
 .spaces-note, .hero-cta p, .cf-msg, .maj, .ariane, .contact-direct p { text-align: inherit; -webkit-hyphens: manual; hyphens: manual; }
+/* Téléphone : chapeaux en grands caractères alignés à gauche (le justifié y crée de grands blancs) */
+@media (max-width: 700px) { main p.chapeau { text-align: left; -webkit-hyphens: manual; hyphens: manual; } }

@@ -20,6 +20,8 @@
 - [Dossier de preuve CMR](https://vb-safety.com/cmr-industrie/outil/) : suite gratuite de l'évaluation, sans compte, données dans le navigateur. Registre des agents et de leur régime (art. R. 4412-59), révisions datées de l'évaluation, étude de substitution et grille des treize mesures (art. R. 4412-66 à R. 4412-70), liste nominative datée et versionnée des travailleurs exposés avec extrait individuel, version anonyme pour le CSE, extrait pour l'agence d'intérim et bordereau d'envoi au SPST (art. R. 4412-93-1 à R. 4412-93-4), sommaire des 45 obligations CMR.
 - [Modèle de liste des travailleurs exposés aux agents CMR](https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/) : Excel et PDF, licence CC BY 4.0, d'après le décret n° 2024-307 du 4 avril 2024 (art. R. 4412-93-1 et suivants du code du travail).
 - [Affiche : décontamination des sapeurs-pompiers après un feu](https://vb-safety.com/ressources/decontamination-sapeurs-pompiers/) : affiche A3 gratuite (CC BY 4.0), gestes pendant, à la sortie et après l'intervention, d'après la doctrine de la DGSCGC.
+- [HAP et sapeurs-pompiers : peau, tenue, risques](https://vb-safety.com/ressources/hap-sapeurs-pompiers/) : voies d'exposition aux HAP des fumées d'incendie, résultats d'études (peau, lingettes, décontamination et lavage des tenues) et gestes de prévention, avec sources.
+- [Relevé d'exposition du sapeur-pompier : que noter après chaque feu](https://vb-safety.com/ressources/releve-exposition-sapeur-pompier/) : rubriques à noter le soir même, professionnels et volontaires.
 - [Toutes les ressources](https://vb-safety.com/ressources/)
 
 ## Guides
