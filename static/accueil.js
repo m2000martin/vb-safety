@@ -111,6 +111,15 @@
     }
   })();
 
+  // Ordinateur : la présentation « Qui est VB Safety » est placée dans la section Contact ; sur téléphone elle reste repliée sous « Notre approche »
+  (function () {
+    var cadre = document.querySelector('.qui-cadre'), dest = document.querySelector('#contact .section-lead'); if (!cadre || !dest) return;
+    var origine = document.createComment('qui'); cadre.parentNode.insertBefore(origine, cadre);
+    var mq = window.matchMedia('(min-width: 1100px)');
+    function placer() { if (mq.matches) dest.insertAdjacentElement('afterend', cadre); else origine.parentNode.insertBefore(cadre, origine.nextSibling); }
+    placer(); if (mq.addEventListener) mq.addEventListener('change', placer);
+  })();
+
   // Ordinateur : « Notre approche » reste à l'écran pendant le défilement ; les trois blocs apparaissent l'un après l'autre
   (function () {
     var sec = document.getElementById('approche'), blocs = sec && sec.querySelectorAll('.pillars > .pillar'); if (!blocs || !blocs.length) return;

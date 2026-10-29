@@ -51,3 +51,20 @@
 .lab > .wrap > .maj { display: block; margin-top: 18px; }
 .v4 .ring { fill: none; stroke: var(--signal); stroke-width: 1.2; vector-effect: non-scaling-stroke; transform-origin: 160px 100px; transform-box: view-box; animation: lab-ring 3.6s ease-out infinite; opacity: 0; }
 .v4 .r2 { animation-delay: 1.8s; }
+/* Téléphone : les sujets défilent de côté, une carte à la fois, avec des points de position */
+.lab-points { display: none; }
+@media (max-width: 700px) {
+  .lab-list { display: flex; gap: 12px; margin: 0 calc(-1 * var(--gut)); padding: 4px var(--gut) 6px; border-top: 0; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 var(--gut); overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .lab-list::-webkit-scrollbar { display: none; }
+  .lab-item { flex: 0 0 86%; display: flex; flex-direction: column; padding: 22px 20px 20px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 18px; background: linear-gradient(160deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)); scroll-snap-align: start; scroll-snap-stop: always; }
+  .lab-n { align-self: flex-start; font-size: 34px; margin-bottom: 10px; }
+  .lab-st { margin-bottom: 12px; }
+  .lab-txt h2 { font-size: 27px; }
+  .lab-txt p { font-size: 15.5px; margin-top: 10px; }
+  .lab-vis { flex: 0 0 auto; width: 100%; margin-top: auto; aspect-ratio: 16 / 10; }
+  .lab-txt { margin-bottom: 20px; }
+  .lab-points { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+  .lab-points button { width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+  .lab-points button::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .28); transition: width .25s, background-color .25s; }
+  .lab-points button[aria-current="true"]::before { width: 18px; background: #FAFAFA; }
+}

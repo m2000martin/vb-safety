@@ -367,23 +367,16 @@
     .haut > .haut-nav::-webkit-scrollbar { display: none; }
     .haut-nav a { white-space: nowrap; }
   }
-  /* Notre approche · ordinateur : titre à gauche, présentation de VB Safety à droite (aperçu, texte complet au survol) */
+  /* Notre approche · ordinateur : titre à gauche, introduction à droite ; la présentation de VB Safety passe dans Contact */
   @media (min-width: 1100px) {
-    #approche .appr-haut { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); column-gap: clamp(48px, 6vw, 96px); row-gap: 0; }
+    #approche .appr-haut { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); column-gap: clamp(48px, 6vw, 96px); align-items: end; }
     #approche .appr-tete { display: contents; }
     #approche .appr-tete .kicker { grid-column: 1; grid-row: 1; }
     #approche .appr-tete .section-title { grid-column: 1; grid-row: 2; max-width: 18ch; }
-    #approche .appr-tete .section-lead { grid-column: 1; grid-row: 3; }
-    /* l'encadré occupe la hauteur du titre et de l'introduction ; au survol il s'agrandit vers le bas, par-dessus les blocs */
-    #approche .qui-cadre { grid-column: 2; grid-row: 2 / 4; position: relative; margin-top: 14px; }
-    #approche .qui { position: absolute; top: 0; left: 0; right: 0; min-height: 100%; z-index: 6; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; margin: 0; max-width: none; padding: 26px 30px; font-size: 16px; line-height: 1.7; color: #C9CDD3; background: rgba(20, 34, 52, .72); border: 1px solid rgba(255, 255, 255, .09); border-left: 2px solid var(--signal); border-radius: 0 12px 12px 0; cursor: default; outline: none; transition: background-color .25s, box-shadow .25s, border-color .25s; }
-    #approche .qui-txt { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
-    #approche .qui::after { content: "Read more \2193"; display: block; margin-top: 14px; font: 500 12px var(--mono); letter-spacing: .06em; color: var(--signal); transition: opacity .2s; }
-    #approche .qui:hover, #approche .qui:focus-visible { background: #14243A; border-color: rgba(255, 255, 255, .16); border-left-color: var(--signal); box-shadow: 0 28px 60px -24px rgba(0, 0, 0, .75); }
-    #approche .qui:hover .qui-txt, #approche .qui:focus-visible .qui-txt { -webkit-line-clamp: unset; line-clamp: none; animation: qui-in .3s ease-out; }
-    #approche .qui:hover::after, #approche .qui:focus-visible::after { opacity: 0; height: 0; margin: 0; }
+    #approche .appr-tete .section-lead { grid-column: 2; grid-row: 2; margin: 0 0 6px; max-width: 46ch; font-size: 18px; }
+    #contact .qui-cadre { margin-top: 24px; }
+    #contact .qui { margin: 0; max-width: 62ch; font-size: 15px; color: #B9BEC7; }
   }
-  @keyframes qui-in { from { opacity: .55; } to { opacity: 1; } }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=8">
 <link rel="stylesheet" href="/static/nav.css?v=1">
@@ -420,8 +413,8 @@
       <div class="trait" aria-hidden="true"></div>
       <p class="note">VB Safety develops tools to detect and track exposure to carcinogens.</p>
       <div class="hero-cta">
-        <a class="btn-hero primary" href="#plateforme" data-goto="plateforme"><span>Discover our CMR tools</span><span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn-hero ghost" href="#contact" data-goto="contact"><span>Contact us</span><span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn-hero primary" href="#plateforme" data-goto="plateforme"><span>Discover our CMR tools</span></a>
+        <a class="btn-hero ghost" href="#contact" data-goto="contact"><span>Contact us</span></a>
       </div>
     </div>
   </main>
@@ -442,7 +435,7 @@
     <p class="section-lead">The effects of carcinogens appear years after exposure. What is not recorded on the day is lost, for medical follow-up and for recognition.</p>
       </div>
       <div class="qui-cadre">
-      <p class="qui" tabindex="0"><span class="qui-txt">VB Safety is a French company that develops tools to detect and track occupational exposure to carcinogenic, mutagenic and reprotoxic (CMR) agents. For French fire services (SDIS) and their medical service, VB CMR records each firefighter's exposure after every call. For industry and construction, our tools keep the list of exposed workers, individual exposure records and the chemical risk assessment required by French law.</span></p>
+      <p class="qui"><span class="qui-txt">VB Safety is a French company that develops tools to detect and track occupational exposure to carcinogenic, mutagenic and reprotoxic (CMR) agents. For French fire services (SDIS) and their medical service, VB CMR records each firefighter's exposure after every call. For industry and construction, our tools keep the list of exposed workers, individual exposure records and the chemical risk assessment required by French law.</span></p>
       </div>
     </div>
     <div class="pillars">
@@ -684,7 +677,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=35" defer></script>
+<script src="/static/accueil.js?v=36" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=1" defer></script>
 </body>
