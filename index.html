@@ -407,11 +407,23 @@
     #approche .appr-tete .section-title { margin-left: auto; margin-right: auto; max-width: 22ch; }
     #approche .appr-tete .section-lead { margin: 18px auto 0; max-width: 60ch; font-size: 17px; text-align-last: center; }
   }
+  /* Épuré (ordinateur) : présentation « Qui est VB Safety » affichée seulement sur téléphone */
+  @media (min-width: 701px) { .qui-cadre { display: none; } }
+  /* L'essentiel (ordinateur) : questions mises en avant */
+  @media (min-width: 701px) {
+    #definitions .section-inner > .kicker { display: block; text-align: center; }
+    #definitions .section-title { text-align: center; margin-left: auto; margin-right: auto; }
+    #definitions .defs { counter-reset: q; gap: 20px; margin-top: 44px; }
+    #definitions .def { counter-increment: q; display: flex; flex-direction: column; padding: 28px 26px 26px; border-radius: 14px; background: linear-gradient(170deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012)); }
+    #definitions .def dt { font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.22; letter-spacing: -.02em; color: #fff; margin: 0 0 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
+    #definitions .def dt::before { content: counter(q, decimal-leading-zero); display: block; margin-bottom: 12px; font: 700 13px var(--sans); letter-spacing: .02em; color: var(--signal); }
+    #definitions .def dd { font-size: 14.5px; color: #9EA5B0; }
+  }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=9">
 <link rel="stylesheet" href="/static/nav.css?v=1">
 <link rel="stylesheet" href="/static/texte.css?v=1">
-<link rel="stylesheet" href="/static/accueil-mobile.css?v=36">
+<link rel="stylesheet" href="/static/accueil-mobile.css?v=37">
 </head>
 <body>
 
@@ -445,7 +457,6 @@
       <p class="note">VB Safety développe des outils de détection et de traçabilité de l'exposition aux agents cancérogènes.</p>
       <div class="hero-cta">
         <a class="btn-hero primary" href="#plateforme" data-goto="plateforme"><span>Découvrez nos outils CMR</span></a>
-        <a class="btn-hero ghost" href="#contact" data-goto="contact"><span>Nous contacter</span></a>
       </div>
     </div>
   </main>
@@ -597,19 +608,19 @@
     <h2 class="section-title">Quatre notions à connaître.</h2>
     <dl class="defs">
       <div class="def">
-        <dt>Qu'est-ce qu'un agent CMR ?</dt>
+        <dt>Qu'est-ce qu'un agent CMR&nbsp;?</dt>
         <dd>Une substance, un mélange ou un procédé cancérogène, mutagène ou toxique pour la reproduction. Le code du travail vise les agents classés en catégorie 1A ou 1B par le règlement CLP et les procédés cancérogènes listés par l'<a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042483502">arrêté du 26 octobre 2020</a>, comme les travaux exposant aux fumées et suies (HAP) ou à la silice cristalline.</dd>
       </div>
       <div class="def">
-        <dt>Qu'est-ce que la liste des travailleurs exposés ?</dt>
+        <dt>Qu'est-ce que la liste des travailleurs exposés&nbsp;?</dt>
         <dd>Depuis le <a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748">décret n° 2024-307 du 4 avril 2024</a>, en vigueur le 5 juillet 2024, l'employeur tient à jour la liste des travailleurs susceptibles d'être exposés aux agents CMR (art. R. 4412-93-1 et suivants du code du travail). Elle est transmise au service de prévention et de santé au travail, qui la conserve 40 ans. <a href="/ressources/liste-travailleurs-exposes-cmr/">Modèle gratuit</a>.</dd>
       </div>
       <div class="def">
-        <dt>Qu'est-ce qu'un relevé d'exposition de sapeur-pompier ?</dt>
+        <dt>Qu'est-ce qu'un relevé d'exposition de sapeur-pompier&nbsp;?</dt>
         <dd>Un enregistrement, intervention par intervention, de ce à quoi chaque sapeur-pompier a été exposé : nature du feu, position tenue, durée, protection et décontamination. Il sert au suivi médical par le SSSM et, plus tard, à la reconnaissance d'une maladie professionnelle. <a href="/cmr-pompier/sante-sapeurs-pompiers.html">Maladies professionnelles des sapeurs-pompiers : le guide</a>.</dd>
       </div>
       <div class="def">
-        <dt>Que doit contenir le DUERP sur le risque chimique ?</dt>
+        <dt>Que doit contenir le DUERP sur le risque chimique&nbsp;?</dt>
         <dd>Le document unique d'évaluation des risques professionnels (art. R. 4121-1 du code du travail) doit comporter l'évaluation du risque chimique : produits utilisés, dangers, conditions d'emploi, salariés concernés et mesures de prévention.</dd>
       </div>
     </dl>
@@ -710,7 +721,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=37" defer></script>
+<script src="/static/accueil.js?v=38" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=1" defer></script>
 </body>
