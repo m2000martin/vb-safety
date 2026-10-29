@@ -111,6 +111,33 @@
     }
   })();
 
+  // Ordinateur : un onglet par métier au-dessus des cartes « Outils » ; une seule carte affichée à la fois
+  (function () {
+    var dives = document.querySelector('.dives'); if (!dives) return;
+    var cartes = Array.prototype.filter.call(dives.children, function (d) { return d.classList.contains('dive'); }); if (cartes.length < 2) return;
+    var noms = EN ? ['Firefighters', 'Industry', 'Construction'] : ['Sapeurs-pompiers', 'Industrie', 'BTP'];
+    var tabs = document.createElement('div'); tabs.className = 'metiers'; tabs.setAttribute('role', 'tablist'); tabs.setAttribute('aria-label', EN ? 'Choose your sector' : 'Choisir votre métier');
+    var boutons = cartes.map(function (d, i) {
+      d.id = d.id || ['outil-pompiers', 'outil-industrie', 'outil-btp'][i];
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', d.id); b.id = 'onglet-' + d.id;
+      var n = document.createElement('span'); n.className = 'n'; n.textContent = '0' + (i + 1); b.appendChild(n);
+      b.appendChild(document.createTextNode(noms[i] || ('' + (i + 1))));
+      b.addEventListener('click', function () { choisir(i); });
+      b.addEventListener('keydown', function (e) {
+        var k = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!k) return;
+        e.preventDefault(); var j = (i + k + cartes.length) % cartes.length; choisir(j); boutons[j].focus();
+      });
+      tabs.appendChild(b); return b;
+    });
+    dives.insertAdjacentElement('beforebegin', tabs); dives.classList.add('choix');
+    function choisir(i) {
+      cartes.forEach(function (d, k) { d.classList.toggle('choisie', k === i); });
+      boutons.forEach(function (b, k) { b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.tabIndex = k === i ? 0 : -1; });
+    }
+    choisir(0);
+    window.vbChoisirOrdi = function (i) { choisir(i); tabs.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); };
+  })();
+
   // Premier écran : le bouton principal fait défiler « Capteurs et innovation » puis « Suivi CMR [métier] » ; il mène à la page Innovation ou à la carte du métier ; le fond suit
   (function () {
     var btn = document.querySelector('.scene .btn-hero.primary'), note = document.querySelector('.scene .note'); if (!btn) return;
@@ -140,7 +167,8 @@
       var c = M[i][3];
       if (typeof c === 'string') { e.preventDefault(); e.stopPropagation(); location.href = c; return; }
       if (mqTel.matches) { if (window.vbOutil) setTimeout(function () { window.vbOutil(c); }, reduce ? 0 : 450); return; }
-      // Ordinateur : les cartes sont empilées, on descend directement à celle du métier
+      // Ordinateur : on ouvre l'onglet du métier et on descend jusqu'aux onglets
+      if (window.vbChoisirOrdi) { e.preventDefault(); e.stopPropagation(); window.vbChoisirOrdi(c); return; }
       var d = document.querySelectorAll('.dives > .dive')[c]; if (!d) return;
       e.preventDefault(); e.stopPropagation(); d.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     }, true);
