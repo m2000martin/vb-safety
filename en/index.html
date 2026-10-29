@@ -456,11 +456,27 @@
     .dive-list li::before { content: ""; position: absolute; left: 44px; top: 25px; width: 6px; height: 11px; margin: 0; border-radius: 0; background: none; border-right: 2px solid var(--signal); border-bottom: 2px solid var(--signal); transform: rotate(45deg); }
     .dive:not(:has(.dive-list)) { padding-bottom: 8px; }
   }
+  /* Téléphone : accueil centré comme sur ordinateur */
+  @media (max-width: 700px) {
+    .centre > div { width: 100%; text-align: center; }
+    .enonce > span { margin-left: auto; margin-right: auto; }
+    .trait { margin-left: auto; margin-right: auto; }
+    .hero-cta { align-items: center; }
+    .scene .hero-cta .btn-hero.primary { width: 100%; max-width: 340px; }
+    #approche .appr-tete, #plateforme .section-inner > .kicker, #plateforme .section-inner > .section-title, #plateforme .section-inner > .section-lead,
+    #definitions .section-inner > .kicker, #definitions .section-title { text-align: center; }
+    #approche .appr-tete .kicker, #plateforme .section-inner > .kicker, #definitions .section-inner > .kicker { display: block; }
+    #approche .section-title, #plateforme .section-title, #definitions .section-title { margin-left: auto; margin-right: auto; }
+    #approche .section-lead, #plateforme .section-lead { text-align-last: center; }
+    #approche .plie-btn { margin-left: auto; margin-right: auto; }
+    #approche .qui-cadre { text-align: center; }
+    #approche .qui { text-align: left; }
+  }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=9">
 <link rel="stylesheet" href="/static/nav.css?v=1">
 <link rel="stylesheet" href="/static/texte.css?v=1">
-<link rel="stylesheet" href="/static/accueil-mobile.css?v=38">
+<link rel="stylesheet" href="/static/accueil-mobile.css?v=40">
 </head>
 <body>
 
@@ -759,7 +775,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=38" defer></script>
+<script src="/static/accueil.js?v=39" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=1" defer></script>
 </body>

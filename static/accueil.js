@@ -82,7 +82,13 @@
       maj();
       return { go: go, items: items, onChange: function (f) { listeners.push(f); f(last); } };
     }
-    var pillars = document.querySelector('.pillars'); if (pillars) rail(pillars);
+    // « Notre approche » : sur téléphone, les trois blocs sont empilés et apparaissent l'un après l'autre au défilement
+    var pillars = document.querySelector('.pillars');
+    if (pillars && 'IntersectionObserver' in window && !reduce) {
+      pillars.classList.add('apparition');
+      var ioP = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu-tel'); ioP.unobserve(e.target); } }); }, { rootMargin: '0px 0px -18% 0px', threshold: 0.2 });
+      Array.prototype.forEach.call(pillars.children, function (p) { ioP.observe(p); });
+    }
     var dives = document.querySelector('.dives'), r = dives && rail(dives);
     if (r) {
       var seg = document.createElement('div'); seg.className = 'seg'; seg.setAttribute('role', 'tablist'); seg.setAttribute('aria-label', T.seg);
