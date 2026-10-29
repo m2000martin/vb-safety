@@ -68,3 +68,15 @@
   .lab-points button::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .28); transition: width .25s, background-color .25s; }
   .lab-points button[aria-current="true"]::before { width: 18px; background: #FAFAFA; }
 }
+/* Ordinateur : les trois sujets côte à côte, illustration en haut, texte dessous */
+@media (min-width: 901px) {
+  .lab-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 44px); border-top: 0; }
+  .lab-item { display: flex; flex-direction: column; gap: 0; padding: 0; border-bottom: 0; align-items: stretch; }
+  .lab-vis { order: -1; aspect-ratio: 16 / 10; margin-bottom: 26px; border-radius: 16px; transition: border-color .25s, transform .35s cubic-bezier(.2, .7, .2, 1); }
+  .lab-item:hover .lab-vis { border-color: rgba(224, 108, 52, .45); transform: translateY(-3px); }
+  .lab-n { order: 0; font: 600 13px var(--mono); color: var(--signal); -webkit-text-stroke: 0; letter-spacing: .08em; margin-bottom: 10px; }
+  .lab-st { margin-bottom: 14px; }
+  .lab-txt h2 { font-size: clamp(26px, 2.3vw, 34px); line-height: 1.08; }
+  .lab-txt p { max-width: none; font-size: 16px; margin-top: 12px; }
+}
+@media (min-width: 901px) and (prefers-reduced-motion: reduce) { .lab-vis { transition: none; } .lab-item:hover .lab-vis { transform: none; } }

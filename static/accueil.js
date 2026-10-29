@@ -106,7 +106,10 @@
       function etat() { var v = horsScene && !surContact; bar.classList.toggle('visible', v); bar.setAttribute('aria-hidden', v ? 'false' : 'true');
         Array.prototype.forEach.call(bar.children, function (a) { a.tabIndex = v ? 0 : -1; }); }
       new IntersectionObserver(function (e) { horsScene = !e[0].isIntersecting; etat(); }, { rootMargin: '-35% 0px 0px 0px' }).observe(scene);
-      new IntersectionObserver(function (e) { surContact = e[0].isIntersecting; etat(); }, { threshold: 0.05 }).observe(contact);
+      // masquée aussi quand le bouton « Demander une démo » de la section « Pensé pour votre façon de travailler » est à l'écran
+      var vus = 0, usage = document.querySelector('#usage .usage-cta');
+      var obs = new IntersectionObserver(function (es) { es.forEach(function (e) { vus += e.isIntersecting ? (e.target._v ? 0 : 1) : (e.target._v ? -1 : 0); e.target._v = e.isIntersecting; }); surContact = vus > 0; etat(); }, { threshold: 0.05 });
+      obs.observe(contact); if (usage) obs.observe(usage);
       etat();
     }
   })();

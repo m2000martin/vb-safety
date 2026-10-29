@@ -99,3 +99,12 @@
   .barre-demo a { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 11px; background: #C4521C; color: #fff; font: 600 15px/1 Inter, -apple-system, "Segoe UI", sans-serif; text-decoration: none; white-space: nowrap; }
 }
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) { .barre-demo { transition: none; } }
+
+/* Ordinateur : même bouton « Demander une démo », compact et centré en bas */
+@media (min-width: 701px) {
+  .barre-demo { display: flex; position: fixed; z-index: 60; left: 50%; bottom: 22px; padding: 6px; border-radius: 14px; background: rgba(16, 30, 48, .82); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .55); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); transform: translate(-50%, calc(100% + 30px)); opacity: 0; transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s; pointer-events: none; }
+  .barre-demo.visible { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+  .barre-demo a { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 34px; border-radius: 10px; background: #C4521C; color: #fff; font: 600 15px/1 Inter, -apple-system, "Segoe UI", sans-serif; text-decoration: none; white-space: nowrap; }
+  .barre-demo a:hover { background: #EA7A44; }
+}
+@media (min-width: 701px) and (prefers-reduced-motion: reduce) { .barre-demo { transition: none; } }

@@ -377,10 +377,37 @@
     #contact .qui-cadre { margin-top: 24px; }
     #contact .qui { margin: 0; max-width: 62ch; font-size: 15px; color: #B9BEC7; }
   }
+  /* Accueil centré (ordinateur) : premier écran, en-têtes de section, section « Pensé pour votre façon de travailler » */
+  .usage-cta { display: flex; justify-content: center; margin-top: 32px; }
+  #usage { text-align: center; overflow: hidden; }
+  #usage .section-inner { position: relative; }
+  #usage .section-title { margin-left: auto; margin-right: auto; max-width: 20ch; }
+  #usage .section-lead { margin-left: auto; margin-right: auto; text-align-last: center; }
+  #usage .spaces-note { text-align: center; text-align-last: center; }
+  #usage::before { content: ""; position: absolute; left: 50%; top: 50%; width: min(1100px, 120vw); height: 520px; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(224, 108, 52, .09), rgba(224, 108, 52, 0)); pointer-events: none; }
+  @media (min-width: 701px) {
+    .centre > div { width: 100%; text-align: center; }
+    .enonce > span { margin-left: auto; margin-right: auto; }
+    .trait { margin-left: auto; margin-right: auto; }
+    .note { margin-left: auto; margin-right: auto; text-align-last: center; }
+    .hero-cta { justify-content: center; }
+    #approche .section-inner > .appr-haut, #plateforme .section-inner > .kicker, #plateforme .section-inner > .section-title, #plateforme .section-inner > .section-lead { text-align: center; }
+    #plateforme .section-inner > .kicker { display: block; }
+    #plateforme .section-title, #plateforme .section-lead { margin-left: auto; margin-right: auto; }
+    #plateforme .section-lead { text-align-last: center; }
+    .metiers { justify-content: center; }
+  }
+  @media (min-width: 1100px) {
+    #approche .appr-haut { display: block; }
+    #approche .appr-tete .kicker { display: block; }
+    #approche .appr-tete .section-title { margin-left: auto; margin-right: auto; max-width: 22ch; }
+    #approche .appr-tete .section-lead { margin: 18px auto 0; max-width: 60ch; font-size: 17px; text-align-last: center; }
+  }
 </style>
-<link rel="stylesheet" href="/static/mobile.css?v=8">
+<link rel="stylesheet" href="/static/mobile.css?v=9">
 <link rel="stylesheet" href="/static/nav.css?v=1">
-<link rel="stylesheet" href="/static/accueil-mobile.css?v=35">
+<link rel="stylesheet" href="/static/texte.css?v=1">
+<link rel="stylesheet" href="/static/accueil-mobile.css?v=36">
 </head>
 <body>
 
@@ -548,12 +575,14 @@
         </div>
       </article>
     </div>
+  </div>
+</section>
 
-    <div class="evolve">
-      <div><span class="kicker">Evolving tool</span>
-      <h3 class="evolve-title">Built with the teams who use it.</h3></div>
-      <p>Each version adds agents, trades and modules without changing how data is entered. Your feedback decides what comes next.</p>
-    </div>
+<section class="section section-centre" id="usage">
+  <div class="section-inner">
+    <h2 class="section-title">Built for how you work.</h2>
+    <p class="section-lead">Recorded after the call-out, on site or in the workshop: our tools fit your procedures, your teams and your obligations. Each version adds agents, trades and modules without changing how data is entered, and your feedback decides what comes next.</p>
+    <div class="usage-cta"><a class="btn-hero primary" href="#contact" data-goto="contact"><span>Request a demo</span></a></div>
     <p class="spaces-note">No access code yet? <a class="text-btn" href="#contact" data-goto="contact">Ask for access</a></p>
   </div>
 </section>
@@ -677,7 +706,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=36" defer></script>
+<script src="/static/accueil.js?v=37" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=1" defer></script>
 </body>

@@ -51,7 +51,7 @@
   }
   plier(); if (mq.addEventListener) mq.addEventListener('change', plier);
 
-  // 4. Téléphone : bouton « Demander une démo » fixé en bas, comme sur l'accueil
+  // 4. Téléphone et ordinateur : bouton « Demander une démo » fixé en bas, comme sur l'accueil
   (function () {
     var chemin = location.pathname;
     if (/^\/(en\/)?(stats|devis)\//.test(chemin) || document.querySelector('.barre-action')) return;
@@ -61,7 +61,7 @@
     bar.appendChild(a); document.body.appendChild(bar); document.body.classList.add('a-barre');
     var bas = false, formulaires = 0;
     function etat() {
-      var v = mq.matches && bas && formulaires === 0;
+      var v = bas && formulaires === 0;
       bar.classList.toggle('visible', v); bar.setAttribute('aria-hidden', v ? 'false' : 'true'); a.tabIndex = v ? 0 : -1;
     }
     function defile() { var b = window.scrollY > (window.innerHeight || 700) * 0.6; if (b !== bas) { bas = b; etat(); } }
