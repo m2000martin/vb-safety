@@ -371,6 +371,12 @@
     .haut > .haut-nav::-webkit-scrollbar { display: none; }
     .haut-nav a { white-space: nowrap; }
   }
+  /* Notre approche · ordinateur : titre à gauche, présentation de VB Safety à droite */
+  @media (min-width: 1100px) {
+    #approche .appr-haut { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(48px, 6vw, 96px); align-items: end; }
+    #approche .appr-tete .section-title { max-width: 18ch; }
+    #approche .qui { margin: 0; max-width: none; padding: 26px 28px; font-size: 15.5px; color: #C9CDD3; background: rgba(255, 255, 255, .03); border: 1px solid rgba(255, 255, 255, .09); border-left: 2px solid var(--signal); border-radius: 0 12px 12px 0; }
+  }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=8">
 <link rel="stylesheet" href="/static/nav.css?v=1">
@@ -422,10 +428,14 @@
 <main>
 <section class="section" id="approche">
   <div class="section-inner">
-    <span class="kicker">Notre approche</span>
+    <div class="appr-haut">
+      <div class="appr-tete">
+      <span class="kicker">Notre approche</span>
     <h2 class="section-title">Rendre l'exposition mesurable, traçable, transmissible.</h2>
     <p class="section-lead">Les effets des agents cancérogènes apparaissent des années après l'exposition. Ce qui n'est pas enregistré le jour même est perdu pour le suivi médical comme pour la reconnaissance.</p>
-    <p class="qui">VB Safety est une entreprise française qui développe des outils de détection et de traçabilité de l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les SDIS et leur service de santé (SSSM), VB CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, nos outils tiennent la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP.</p>
+      </div>
+      <p class="qui">VB Safety est une entreprise française qui développe des outils de détection et de traçabilité de l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les SDIS et leur service de santé (SSSM), VB CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, nos outils tiennent la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP.</p>
+    </div>
     <div class="pillars">
       <div class="pillar">
         <span class="num">01 · Sécurité &amp; Industrie</span>
