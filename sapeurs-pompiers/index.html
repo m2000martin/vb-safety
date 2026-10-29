@@ -36,6 +36,7 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Qui saisit les informations après une intervention ?", "acceptedAnswer": {"@type": "Answer", "text": "Le chef d'agrès ou le COS, pour lui et son équipage. Il connaît les rôles tenus, le port de l'ARI et les conditions de décontamination. L'agent n'a rien à saisir."}}, {"@type": "Question", "name": "Où sont hébergées les données ?", "acceptedAnswer": {"@type": "Answer", "text": "La démonstration fonctionne sur un serveur situé en France, avec des données fictives. Pour un déploiement réel, les données d'exposition sont des données de santé : elles sont hébergées chez un hébergeur certifié HDS ou sur l'infrastructure du SDIS."}}, {"@type": "Question", "name": "Les sapeurs-pompiers volontaires sont-ils concernés ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui. Ils sont exposés aux mêmes fumées que les professionnels, et la proposition de loi adoptée par le Sénat en 2025 les inclut expressément."}}, {"@type": "Question", "name": "L'outil peut-il s'adapter à notre SDIS ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui : types d'intervention, protocole de décontamination, circuit de validation, rôles et formats d'export pour le SSSM sont configurables."}}, {"@type": "Question", "name": "Comment tester la démonstration ?", "acceptedAnswer": {"@type": "Answer", "text": "Demandez un code d'accès depuis la page de la démo ou par le formulaire de contact. Chaque profil (agent, CA/COS, chef de centre, SSSM, référent EPI) est accessible avec des données fictives."}}]}</script>
 <link rel="stylesheet" href="/static/frise.css?v=10">
 <link rel="stylesheet" href="/static/mobile.css?v=8">
+<link rel="stylesheet" href="/static/nav.css?v=1">
 </head>
 <body>
 <a class="evitement" href="#contenu">Aller au contenu</a>
@@ -43,7 +44,7 @@
   <div class="wrap">
     <a class="marque" href="/">VB Safety</a>
     <nav class="onglets" aria-label="Navigation principale">
-      <a href="/innovation/">Innovation</a><a href="/industrie/">Industrie</a><a href="/btp/">BTP</a><a href="/sapeurs-pompiers/" aria-current="page">Sapeurs-pompiers</a><a href="/ressources/">Ressources</a>
+      <a href="/innovation/">Capteurs et innovation</a><div class="nav-groupe actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Solutions de suivi CMR<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste"><a href="/sapeurs-pompiers/" aria-current="page">Sapeurs-pompiers</a><a href="/industrie/">Industrie</a><a href="/btp/">BTP</a></div></div><a href="/ressources/">Ressources</a>
     </nav>
     <a class="langue" href="/en/firefighters/" hreflang="en" lang="en">EN</a>
     <a class="ecrire" href="/#contact">Contact</a>
@@ -121,14 +122,14 @@
 <section class="sec">
   <div class="wrap">
     <h2 class="kicker">Autres secteurs</h2>
-    <div class="autres"><a href="/industrie/"><div><b>Industrie</b><span>Mesure et traçabilité CMR pour les équipes HSE</span></div><i aria-hidden="true">→</i></a><a href="/btp/"><div><b>BTP</b><span>Traçabilité CMR sur chantier, liste des exposés</span></div><i aria-hidden="true">→</i></a></div>
+    <div class="autres"><a href="/industrie/"><div><b>Industrie</b><span>Détection et traçabilité CMR pour les équipes HSE</span></div><i aria-hidden="true">→</i></a><a href="/btp/"><div><b>BTP</b><span>Traçabilité CMR sur chantier, liste des exposés</span></div><i aria-hidden="true">→</i></a></div>
   </div>
 </section>
 </main>
 <footer class="pied">
   <div class="wrap">
     <div class="pied-grille">
-      <div><a class="marque" href="/">VB Safety</a><p>Mesure et traçabilité de l'exposition professionnelle aux agents CMR, pour les services de secours, l'industrie et le BTP.</p></div>
+      <div><a class="marque" href="/">VB Safety</a><p>Détection et traçabilité de l'exposition professionnelle aux agents CMR, pour les services de secours, l'industrie et le BTP.</p></div>
       <div><h2 class="pied-h">Secteurs</h2><ul><li><a href="/industrie/">Industrie</a></li><li><a href="/btp/">BTP</a></li><li><a href="/sapeurs-pompiers/">Sapeurs-pompiers</a></li></ul></div>
       <div><h2 class="pied-h">Ressources</h2><ul><li><a href="/ressources/">Toutes les ressources</a></li><li><a href="/cmr-pompier/sante-sapeurs-pompiers.html">Maladies professionnelles des sapeurs-pompiers</a></li><li><a href="/ressources/liste-travailleurs-exposes-cmr/">Modèle de liste des exposés</a></li></ul></div>
       <div><h2 class="pied-h">Plateforme</h2><ul><li><a href="/cmr-pompier/">VB CMR</a></li><li><a href="/cmr-pompier/module-epi.html">Module EPI</a></li><li><a href="/cmr-industrie/">VB CMR Industrie et BTP</a></li><li><a href="/innovation/">Innovation</a></li></ul></div>
@@ -140,5 +141,6 @@
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/menu.js?v=5" defer></script>
 <script src="/static/frise.js?v=4" defer></script>
+<script src="/static/nav.js?v=1" defer></script>
 </body>
 </html>

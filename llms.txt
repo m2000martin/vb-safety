@@ -1,11 +1,11 @@
 # VB Safety
 
-> VB Safety est une société française (SAS) qui mesure et trace l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les services d'incendie et de secours (SDIS) et leur service de santé (SSSM), VB CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, VB Safety aide à tenir la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP. Contenu en français.
+> VB Safety est une société française (SAS) qui développe des outils de détection et de traçabilité de l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les services d'incendie et de secours (SDIS) et leur service de santé (SSSM), VB CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, VB Safety aide à tenir la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP. Contenu en français.
 
 ## Secteurs
 - [Sapeurs-pompiers](https://vb-safety.com/sapeurs-pompiers/) : relevé d'exposition des sapeurs-pompiers aux fumées d'incendie, contrôle de la décontamination, transmission au SSSM, suivi des tenues de feu.
 - [BTP](https://vb-safety.com/btp/) : traçabilité CMR sur chantier (silice cristalline, poussières de bois, émissions diesel, HAP), liste des travailleurs exposés et fiches individuelles. Espace en préparation · accès anticipé.
-- [Industrie](https://vb-safety.com/industrie/) : traçabilité des expositions CMR pour les équipes HSE et mesure de contamination chimique sur site (programme pilote).
+- [Industrie](https://vb-safety.com/industrie/) : traçabilité des expositions CMR pour les équipes HSE et détection de contamination chimique sur site (programme pilote).
 
 ## Produits
 - [VB CMR](https://vb-safety.com/cmr-pompier/) : logiciel de rapport de contamination pour SDIS. Le chef d'agrès ou le COS remplit le rapport de son équipage, le commandement suit, le SSSM contrôle et valide, chaque agent consulte son historique. Relevé annuel des activités exposantes et attestation d'exposition au format de la circulaire DGSCGC du 14 janvier 2025, interventions de grande ampleur (relèves, renforts, liste des personnels exposés), formations exposantes et nettoyage du matériel. Démonstration avec données fictives, serveur en France.

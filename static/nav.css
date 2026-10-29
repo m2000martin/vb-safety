@@ -1,0 +1,36 @@
+/* VB Safety · menu principal : sous-menu « Solutions de suivi CMR » (Sapeurs-pompiers, Industrie, BTP).
+   Ordinateur : liste déroulante au survol ou au clic. Téléphone et tablette : la liste est affichée dans le menu, sous son titre. */
+
+.nav-groupe { position: relative; display: flex; align-items: center; }
+.nav-sous { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; margin: 0; font: inherit; cursor: pointer; white-space: nowrap; position: relative; }
+.nav-fl { display: inline-block; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform .15s; }
+.nav-groupe.ouvert .nav-fl { transform: translateY(1px) rotate(-135deg); }
+.nav-liste { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; z-index: 30; min-width: 210px; margin-top: 6px; padding: 6px; background: #0E1E30; border: 1px solid rgba(255, 255, 255, .12); border-radius: 10px; box-shadow: 0 20px 40px -14px rgba(0, 0, 0, .65); }
+.nav-liste::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; } /* garde la liste ouverte entre le titre et la liste */
+.nav-groupe:hover .nav-liste, .nav-groupe:focus-within .nav-liste, .nav-groupe.ouvert .nav-liste { display: flex; }
+.nav-liste a { display: block; white-space: nowrap; }
+
+/* Pages intérieures (en-tête .top .onglets) */
+.onglets .nav-sous { color: var(--doux, #A9B4C2); font-size: 14.5px; font-weight: 500; padding: 10px 14px; border-radius: 6px; }
+.onglets .nav-sous:hover, .onglets .nav-groupe.actif > .nav-sous { color: #fff; }
+.onglets .nav-groupe.actif > .nav-sous::after { content: ""; position: absolute; left: 14px; right: 27px; bottom: 2px; height: 2px; background: var(--signal, #E06C34); }
+.onglets .nav-liste a { padding: 10px 12px; border-radius: 6px; }
+.onglets .nav-liste a:hover { background: rgba(255, 255, 255, .06); }
+.onglets .nav-liste a[aria-current="page"] { font-weight: 600; }
+.onglets .nav-liste a[aria-current="page"]::after { display: none; }
+
+/* Accueil (en-tête .haut .haut-nav) */
+.haut-nav .nav-sous { color: #A1A1AA; font-size: 14px; font-weight: 500; padding: 6px 0; border-bottom: 1px solid transparent; }
+.haut-nav .nav-sous:hover { color: #fff; border-bottom-color: var(--signal, #E06C34); }
+.haut-nav .nav-liste { background: #0F1C2E; }
+.haut-nav .nav-liste a { padding: 10px 12px; border-radius: 6px; border-bottom: 0; color: #D4D4D8; }
+.haut-nav .nav-liste a:hover { background: rgba(255, 255, 255, .06); color: #fff; }
+
+/* Téléphone et tablette : menu déroulant plein écran, la liste s'affiche sous son titre */
+@media (max-width: 1040px) {
+  .top.mm-open .onglets .nav-groupe, .haut.has-menu.open > .haut-nav .nav-groupe { display: block; }
+  .top.mm-open .onglets .nav-sous, .haut.has-menu.open > .haut-nav .nav-sous { display: block; width: 100%; padding: 18px 2px 4px; text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #8B97A8; border: 0; pointer-events: none; }
+  .top.mm-open .onglets .nav-sous::after, .nav-fl { display: none; }
+  .top.mm-open .onglets .nav-liste, .haut.has-menu.open > .haut-nav .nav-liste { display: flex; position: static; min-width: 0; margin: 0; padding: 0 0 0 14px; background: none; border: 0; border-radius: 0; box-shadow: none; }
+  .top.mm-open .onglets .nav-liste a[aria-current="page"]::after { display: block; }
+}
