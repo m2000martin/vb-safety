@@ -93,3 +93,23 @@
   .cmp-t { text-align: center; }
   .conf .btn { width: 100%; justify-content: center; }
 }
+
+/* Page capteurs : un seul écran, texte à gauche, animation de mesure à droite */
+.capt { position: relative; overflow: hidden; padding: clamp(28px, 4vw, 56px) 0 clamp(40px, 6vw, 80px); }
+.capt::before { content: ""; position: absolute; right: -10%; top: -20%; width: 60%; height: 140%; background: radial-gradient(closest-side, rgba(224, 108, 52, .12), rgba(224, 108, 52, 0)); pointer-events: none; }
+.capt-grille { position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 80px); align-items: center; min-height: min(560px, calc(100vh - 260px)); }
+.capt .ariane { margin-bottom: clamp(20px, 3vw, 36px); }
+.capt h1 { margin: 0; font: 600 clamp(44px, 5vw, 72px)/1 var(--serif); letter-spacing: -.05em; color: #fff; }
+.capt h1 em { font-style: normal; color: #9AA3AF; }
+.capt .chapeau { margin: 24px 0 0; max-width: 40ch; font-size: clamp(16.5px, 1.5vw, 19px); text-align: left; text-align-last: auto; }
+.capt-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 34px; }
+.capt-conf { font: 500 12.5px/1.4 var(--sans); color: #8B97A8; }
+.capt-vis { aspect-ratio: 16 / 11; border-radius: 18px; }
+.capt + .x, .capt .maj { display: block; margin-top: 28px; }
+@media (max-width: 900px) {
+  .capt-grille { grid-template-columns: 1fr; min-height: 0; gap: 32px; }
+  .capt h1 { font-size: clamp(40px, 11.5vw, 56px); }
+  .capt-cta .btn { width: 100%; justify-content: center; }
+  .capt-conf { width: 100%; text-align: center; }
+  .capt-vis { aspect-ratio: 16 / 10; }
+}
