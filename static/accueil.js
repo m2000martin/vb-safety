@@ -89,18 +89,11 @@
       var ioP = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu-tel'); ioP.unobserve(e.target); } }); }, { rootMargin: '0px 0px -18% 0px', threshold: 0.2 });
       Array.prototype.forEach.call(pillars.children, function (p) { ioP.observe(p); });
     }
-    // « Outils » sur téléphone : trois grands blocs empilés, qui apparaissent l'un après l'autre au défilement
+    // « Outils » sur téléphone : les trois métiers en cartes qui défilent de côté, avec points de position
     var dives = document.querySelector('.dives');
     if (dives) {
-      var dItems = Array.prototype.slice.call(dives.children);
-      dives.classList.add('pile');
-      dItems.forEach(function (d, i) { d.id = d.id || ['outil-pompiers', 'outil-industrie', 'outil-btp'][i]; });
-      window.vbOutil = function (i) { var d = dItems[i]; if (d) d.scrollIntoView({ behavior: smooth, block: 'start' }); };
-      if ('IntersectionObserver' in window && !reduce) {
-        dives.classList.add('apparition');
-        var ioD = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu-tel'); ioD.unobserve(e.target); } }); }, { rootMargin: '0px 0px -15% 0px', threshold: 0.15 });
-        dItems.forEach(function (d) { ioD.observe(d); });
-      }
+      Array.prototype.forEach.call(dives.children, function (d, i) { d.id = d.id || ['outil-pompiers', 'outil-industrie', 'outil-btp'][i]; });
+      var r = rail(dives); window.vbOutil = r.go;
     }
     // Barre fixe : visible après le premier écran, masquée sur le formulaire de contact
     var scene = document.querySelector('.scene'), contact = document.getElementById('contact');
