@@ -307,3 +307,7 @@ body.a-outil [id] { scroll-margin-top: 88px; }
 .pc-logo i { width: 12px; height: 14px; background: #E06C34; clip-path: polygon(50% 0, 100% 15%, 100% 50%, 50% 100%, 0 50%, 0 15%); }
 .pc .preview { max-width: none !important; margin: 0; border-radius: 0 !important; box-shadow: none !important; border: 0 !important; font-size: 92%; }
 @media (max-width: 700px) { .pc-side { display: none; } .pc-ecran { grid-template-columns: 1fr; border-width: 7px; border-bottom-width: 10px; } }
+
+/* Connexion : panneau droit sans particules, dégradé uni */
+.login-side { position: relative; z-index: 1; }
+.login-panel { position: relative; z-index: 2; background: linear-gradient(165deg, #16304D 0%, #0F2236 55%, #0B1828 100%) !important; border-left: 1px solid rgba(255, 255, 255, .08); }
