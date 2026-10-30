@@ -44,3 +44,7 @@
   .top.mm-open .onglets .nav-metiers a[aria-current="page"]::after { display: none !important; }
   .top.mm-open .onglets .nav-metier .nav-sous, .haut.has-menu.open > .haut-nav .nav-metier .nav-sous { padding-top: 16px; color: #fff; font-size: 13px; }
 }
+/* Page en cours dans un menu métier : point orange */
+.nav-metiers a[aria-current="page"] { position: relative; color: #fff; font-weight: 600; }
+.nav-metiers a[aria-current="page"]::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%; background: #E06C34; box-shadow: 0 0 0 3px rgba(224, 108, 52, .2); vertical-align: middle; }
+.nav-metiers a[aria-current="page"]::after { display: none !important; }
