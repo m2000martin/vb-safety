@@ -42,3 +42,22 @@
 .preview-wrap { justify-self: end; width: 100%; max-width: 400px; }
 .preview-wrap .preview { max-width: none; }
 .preview-note { margin: 14px 0 0; text-align: center; }
+
+/* Téléphone : le haut de page occupe tout le premier écran, contenu centré verticalement ;
+   le bloc suivant (En bref, aperçu…) n'arrive qu'au défilement */
+@media (max-width: 700px) {
+  main .hero .wrap > div:first-child, main .hero .container > div:first-child, .ih-grid > div:first-child,
+  .epi-hero-grid > div:first-child, .g-hero-grid > div:first-child, .capt-txt {
+    min-height: calc(100svh - 61px); box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; padding-top: 24px; padding-bottom: 56px;
+  }
+  main .hero, .ih, .epi-hero, .g-hero, .capt { padding-top: 0 !important; }
+  main .hero .container, .capt-grille { padding-top: 0 !important; }
+  main .hero .wrap > div:first-child > *, main .hero .container > div:first-child > * { flex: none; }
+}
+@media (max-width: 700px) {
+  .capt-txt, main .hero .wrap > div:first-child { text-align: center; align-items: center; }
+  .capt-txt .chapeau, main .hero .chapeau { text-align: center !important; }
+  .capt .ariane, main .hero .ariane { justify-content: center; }
+  .capt-cta { justify-content: center; }
+  main .hero .trait { margin-left: auto; margin-right: auto; }
+}
