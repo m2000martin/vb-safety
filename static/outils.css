@@ -1,0 +1,150 @@
+/* VB Safety · pages de présentation des outils VB CMR (sapeurs-pompiers, industrie & BTP).
+   Chargée en dernier : remet ces pages dans le style du site (nuit, orange, Inter Tight, mono).
+   Les maquettes d'écran (aperçu de rapport, ordinateur, téléphone) gardent le style clair de l'outil lui-même. */
+
+:root {
+  --nuit: #0E1E30; --nuit-2: #0A1725; --carte: #12243A; --carte-2: #0F2034;
+  --signal: #E06C34; --signal-2: #EA7A44;
+  --serif: "Inter Tight", "Inter", -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --red: #E06C34; --red-strong: #C4521C;
+  --red-soft: rgba(224, 108, 52, .12); --red-line: rgba(224, 108, 52, .38);
+  --ink: #0A1725; --ink-2: #12243A;
+  --text: #F4F6F8; --muted: #A9B6C6; --faint: #7D8B9C;
+  --bg: #0E1E30; --surface: #12243A;
+  --line: rgba(255, 255, 255, .10); --line-strong: rgba(255, 255, 255, .18);
+  --ok: #5FD3A5; --ok-soft: rgba(52, 195, 143, .14);
+  --warn: #F2B84B; --warn-soft: rgba(242, 184, 75, .14);
+  --danger: #FF8A7A; --danger-soft: rgba(255, 122, 110, .14);
+  --info: #7DB4E6; --info-soft: rgba(125, 180, 230, .14);
+  --teal: #5CC8BA; --teal-soft: rgba(92, 200, 186, .14);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 18px 40px -22px rgba(0, 0, 0, .7);
+  --shadow-red: 0 12px 28px -12px rgba(224, 108, 52, .7);
+  --radius: 10px; --radius-lg: 18px;
+}
+html { background: var(--nuit); }
+body { background: var(--nuit); color: var(--text); }
+h1, h2, h3, .brand-name { font-family: var(--serif); }
+h1, h2 { letter-spacing: -.035em; }
+
+/* Particules : derrière le contenu */
+#fond-particules { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+main, .site-footer { position: relative; z-index: 1; }
+
+/* ---------- En-tête : même allure que le site ---------- */
+.site-header { background: rgba(14, 30, 48, .9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); color: #fff; }
+.site-header .container { min-height: 72px; }
+.brand-mark { display: none; }
+.brand-name { font: 700 14px/1 var(--sans, Inter, sans-serif); letter-spacing: .28em; text-transform: uppercase; color: #fff; }
+.brand-sub { margin-top: 6px; font: 700 10.5px/1 var(--mono); letter-spacing: .14em; color: var(--signal); }
+.vbs-retour { color: var(--muted); border-right-color: var(--line); }
+.vbs-retour:hover { color: #fff; }
+.nav a { color: var(--muted); }
+.nav a:hover, .nav a[aria-current="page"] { color: #fff; }
+.nav a[aria-current="page"]::after { background: var(--signal); }
+.lang-link { color: var(--muted); border: 1px solid var(--line); border-radius: 6px; font: 600 13px/1 var(--mono); letter-spacing: .08em; }
+.lang-link:hover { color: #fff; border-color: var(--line-strong); }
+.menu-btn { color: #fff; border-color: rgba(255, 255, 255, .22); background: none; }
+.site-header.open .nav { background: #0F1C2E; border-color: var(--line); }
+.site-header.open .nav a { border-bottom-color: var(--line); }
+@media (max-width: 640px) { .vbs-retour { border-color: rgba(255, 255, 255, .22); } }
+
+/* ---------- Boutons ---------- */
+.btn { border-radius: 6px; font-weight: 600; }
+.btn-primary { background: #C4521C; color: #fff; box-shadow: var(--shadow-red); }
+.btn-primary:hover { background: #D25E26; }
+.btn-secondary, .btn-ghost, .btn-outline { background: rgba(255, 255, 255, .03); color: #fff; border-color: var(--line-strong); }
+.btn-secondary:hover, .btn-ghost:hover, .btn-outline:hover { border-color: #fff; }
+
+/* ---------- Petites lignes orange (sur-titres) : mono, gras, comme le site ---------- */
+.kicker, .eyebrow, .section-kicker, .g-eyebrow, .epi-new, .hero-kicker, .h1-kw, .h1-kw.sombre, .demo-band .kicker, .epi-line-tag, .gr-n {
+  font-family: var(--mono); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--signal);
+}
+.hero-kicker { background: rgba(224, 108, 52, .1); border-color: rgba(224, 108, 52, .3); }
+.demo-pastille { background: rgba(224, 108, 52, .12); color: #F2A57E; border-color: rgba(224, 108, 52, .3); }
+
+/* ---------- Bandeaux sombres, cartes, accents ---------- */
+.hero { background: transparent; }
+.hero h1 em, .g-hero h1 em, .gf:first-child b, .gc-num { color: #fff; }
+.hero h1 em, .g-hero h1 em { color: #fff; }
+.hero-facts .icon, .adapt-list .icon, .callout .icon { color: var(--signal); }
+.card, .panel, .feature, .step, .role, .engagement, .reg-card, .soon, .trust-card { background: linear-gradient(170deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012)); border-color: var(--line); }
+.demo-band, .epi-line, .g-callout, .g-stats div, .g-routes > div { background: linear-gradient(160deg, #15304D, #0F2034); border: 1px solid rgba(224, 108, 52, .3); }
+.epi-line-ico, .soon .icon-tile, .badge-neutral, .chip { background: rgba(255, 255, 255, .06); color: var(--text); }
+.table th, .g-table thead th { background: rgba(255, 255, 255, .03); }
+.epi-health { background: linear-gradient(170deg, rgba(224, 108, 52, .1), rgba(224, 108, 52, .03)); }
+.g-ev-s { background: rgba(255, 122, 110, .14); color: #FF9F94; }
+.sb-crumbs { background: transparent; border-bottom-color: var(--line); color: var(--muted); }
+.sb-crumbs a { color: #fff; }
+.req-close:hover { background: rgba(255, 255, 255, .06); }
+a { text-decoration-color: var(--signal); }
+
+/* ---------- Pied de page : celui du site ---------- */
+.site-footer { background: var(--nuit-2); border-top: 1px solid var(--line); color: var(--muted); }
+.footer-col h4, .footer-h { font: 500 11px var(--mono); letter-spacing: .12em; color: var(--muted); }
+.site-footer a { color: #fff; }
+.site-footer a:hover { text-decoration-color: var(--signal); }
+.footer-brand .brand-sub { color: var(--signal); }
+.footer-bottom { border-top-color: var(--line); color: var(--muted); }
+
+/* ---------- Maquettes d'écran : style clair de l'outil ---------- */
+.preview, .laptop, .laptop-screen, .phone, .mock, .app-mock {
+  --text: #1F2328; --muted: #5B616B; --faint: #8A9099; --surface: #FFFFFF; --bg: #FAF7F2;
+  --line: #ECE6DE; --line-strong: #DDD5CA; --red-soft: #FDECEA; --red-line: #F6C9C5;
+  --ok: #2E7D32; --ok-soft: #E7F3E8; --warn: #B26A00; --warn-soft: #FFF2DE; --danger: #C62828; --danger-soft: #FDECEA; --info: #1F6FB2; --info-soft: #E6F0FA;
+  color: #1F2328;
+}
+.preview h1, .preview h2, .preview h3, .laptop h3, .phone h3 { font-family: Inter, sans-serif; }
+
+/* ---------- Formulaire de demande (fenêtre) ---------- */
+.req-modal { background: #12243A; color: var(--text); border: 1px solid var(--line); }
+.req-modal input, .req-modal select, .req-modal textarea { background: rgba(255, 255, 255, .04); color: #fff; border-color: var(--line-strong); }
+
+/* ---------- Hauts de page : fond nuit avec la lueur orange du site ---------- */
+.epi-hero, .g-hero { background: radial-gradient(55% 80% at 80% 25%, rgba(224, 108, 52, .14), rgba(224, 108, 52, 0) 70%), transparent; }
+.hero-media { background: radial-gradient(60% 70% at 70% 45%, rgba(224, 108, 52, .16), rgba(224, 108, 52, 0) 70%) !important; }
+.hero-media img, .hero-media video { opacity: .25; filter: grayscale(.4); }
+/* Mot mis en valeur dans les titres : gris clair, comme « Nous la rendons » sur le site */
+h1 em, .epi-hero h1 span.accent, .epi-hero h1 em { font-style: normal; color: #9AA3AF !important; }
+
+/* ---------- Textes courants : couleur douce lisible sur fond nuit ---------- */
+.g-article p, .g-list, .g-key ul, .g-table td, .g-phases ul, .eh-block p,
+.ih-lead, .pillar p, .ob-head p, .ob > p, .ob ul, .hier-text p, .feat p, .steps4 span, .faq details p { color: #C3CDD8; }
+.g-article strong, .g-article b, .g-list strong, .g-list b { color: #fff; }
+.ph-item .icon, .epi-kinds .icon { color: #DCE3EA; }
+.gl-st.ok { color: var(--ok); } .gl-st.wip { color: var(--warn); }
+.g-ev-l { background: rgba(242, 184, 75, .14); color: #F2C66E; }
+
+/* ---------- Page Industrie & BTP ---------- */
+.ih { background: radial-gradient(55% 80% at 80% 30%, rgba(224, 108, 52, .14), rgba(224, 108, 52, 0) 70%), transparent; border-bottom: 0; }
+.ih h1 em { color: #9AA3AF; }
+.ih-badges li, .sectors, .ob, .hier-text, .feat, .card-light {
+  background: linear-gradient(170deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)); border-color: var(--line); box-shadow: none; color: var(--text);
+}
+.ih-badges .icon, .pillar .icon { color: var(--signal); }
+.sectors .icon { color: #DCE3EA; }
+.law { background: rgba(255, 255, 255, .07); color: var(--muted); }
+.alt, .reg { background: transparent; border-color: transparent; }
+.chapters { background: rgba(14, 30, 48, .92); border-bottom-color: var(--line); }
+.chapters a.on { border-bottom-color: var(--signal); }
+.chapters a:hover, .chapters a.on { color: #fff; }
+.reg .ob-num { color: var(--signal); }
+.reg-list, .reg-list li { border-color: var(--line); }
+.hier-row:nth-child(1) .hier-bar { background: #1F5E45; }
+.hier-row:nth-child(2) .hier-bar { background: #2A6F55; }
+.hier-row:nth-child(3) .hier-bar { background: #8A5A12; }
+.hier-row:nth-child(4) .hier-bar { background: #A84716; }
+.steps4 li::before { background: #C4521C; }
+.sources a { color: #fff; text-decoration-color: var(--signal); }
+.pillar + .pillar { border-color: var(--line) !important; }
+/* Ordinateur du haut de page : écran clair de l'outil */
+.dash { --text: #1F2328; --muted: #5B616B; --faint: #8A9099; --line: #ECE6DE; --line-strong: #DDD5CA; --surface: #fff; color: #1F2328; border-color: #23262B; }
+.sanction { border-color: rgba(224, 108, 52, .5); background: rgba(224, 108, 52, .08); }
+.sanction b { color: var(--signal-2); }
+.tool-band { background: linear-gradient(160deg, #15304D, #0F2034); border: 1px solid rgba(224, 108, 52, .3); }
+.tool-ico { background: rgba(224, 108, 52, .14); border-color: rgba(224, 108, 52, .45); color: var(--signal); }
+.tool-tag { font-family: var(--mono); color: var(--signal); }
+.tool-cta { background: #C4521C; }
+.tool-band:hover .tool-cta { background: #D25E26; }
