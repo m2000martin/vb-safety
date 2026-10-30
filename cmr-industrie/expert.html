@@ -109,7 +109,7 @@
       <div class="app-main">
         <div class="app-top">
           <label class="app-site"><svg class="icon" aria-hidden="true"><use href="#i-factory"/></svg><span class="sr-only">Site ou unité de travail</span><input id="ev-site" placeholder="Nom du site ou de l'atelier" maxlength="80"></label>
-          <p class="app-refv" id="ev-ref">Référentiel : chargement…</p>
+          <p class="app-refv" id="ev-ref">Référentiel : chargement…</p>
           <div class="app-top-links"><a href="#methode">Aide</a><a href="#sources">Documentation</a></div>
         </div>
         <div class="app-content">
@@ -135,7 +135,7 @@
             </div>
           </div>
         <section class="ev-view" id="v-dash" aria-labelledby="h-dash" hidden>
-          <header class="ev-vh"><h2 id="h-dash">Tableau de bord</h2><p>Synthèse de l'évaluation du site : priorités, avancement du plan d'action et échéances.</p></header>
+          <header class="ev-vh"><h2 id="h-dash">Tableau de bord</h2><p>Synthèse de l'évaluation du site : priorités, avancement du plan d'action et échéances.</p></header>
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-inv" aria-labelledby="h-inv" hidden>
@@ -151,7 +151,7 @@
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-plan" aria-labelledby="h-plan" hidden>
-          <header class="ev-vh"><h2 id="h-plan">Plan d'action</h2><p>Mesures classées dans l'ordre du code du travail : substitution, système clos, réduction et protection collective, suivi, puis EPI.</p></header>
+          <header class="ev-vh"><h2 id="h-plan">Plan d'action</h2><p>Mesures classées dans l'ordre du code du travail : substitution, système clos, réduction et protection collective, suivi, puis EPI.</p></header>
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-cmr" aria-labelledby="h-cmr" hidden>
@@ -163,7 +163,7 @@
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-export" aria-labelledby="h-export" hidden>
-          <header class="ev-vh"><h2 id="h-export">Dossier DUERP</h2><p>Vos données restent dans ce navigateur : exportez-les pour les archiver, les partager ou les joindre au document unique.</p></header>
+          <header class="ev-vh"><h2 id="h-export">Dossier DUERP</h2><p>Vos données restent dans ce navigateur : exportez-les pour les archiver, les partager ou les joindre au document unique.</p></header>
           <div class="ev-body"></div>
         </section>
         <section class="ev-view" id="v-set" aria-labelledby="h-set" hidden>
@@ -189,14 +189,14 @@
       <p class="ev-intro-lead">Le DUERP est obligatoire pour tout employeur (art. R. 4121-1 du code du travail). Lorsque vos salariés utilisent des produits chimiques, il doit en contenir l'évaluation. Voici comment se déroule le parcours.</p>
       <ol class="ev-intro-steps">
         <li><b>Inventaire des produits</b><span>Saisissez chaque produit à partir de sa fiche de données de sécurité, en 3 écrans. Environ 5 minutes par produit.</span></li>
-        <li><b>Priorités</b><span>Calcul automatique : vous vérifiez le classement.</span></li>
+        <li><b>Priorités</b><span>Calcul automatique : vous vérifiez le classement.</span></li>
         <li><b>Inhalation</b><span>Calcul automatique de l'exposition à chaque poste.</span></li>
         <li><b>Plan d'action</b><span>Un responsable et une échéance pour chaque mesure proposée.</span></li>
         <li><b>Salariés exposés aux CMR</b><span>Vous vérifiez les postes et le nombre de salariés concernés.</span></li>
         <li class="last"><b>Téléchargement du dossier DUERP</b><span>Un seul PDF avec le rapport d'évaluation, la liste des travailleurs exposés et le plan d'action, à joindre à votre document unique.</span></li>
       </ol>
       <div class="ev-intro-prep"><b>À préparer</b><span>Les fiches de données de sécurité (FDS) de vos produits, les quantités achetées sur un an, la liste des postes et le nombre de salariés par poste.</span></div>
-      <p class="ev-hint">Votre saisie est enregistrée automatiquement dans ce navigateur : vous pouvez vous arrêter et reprendre plus tard.</p>
+      <p class="ev-hint">Votre saisie est enregistrée automatiquement dans ce navigateur : vous pouvez vous arrêter et reprendre plus tard.</p>
     </div>
     <div class="ev-df"><a class="btn btn-secondary" href="duerp.html#exemple">Voir un exemple rempli</a><span class="ev-wz-n"></span><a class="btn btn-primary" href="duerp.html#entreprise">Commencer l'étape 1</a></div>
   </dialog>
@@ -210,13 +210,13 @@
       </ol>
       <div class="ev-db">
         <fieldset class="ev-step" data-step="1">
-          <legend class="sr-only">Étape 1 : identification</legend>
-          <p class="ev-where"><b>Où trouver l'information :</b> fiche de données de sécurité (FDS) du fournisseur. Section 1 : nom du produit. Section 2 : mentions de danger H. Section 3 : substances et n° CAS.</p>
+          <legend class="sr-only">Étape 1 : identification</legend>
+          <p class="ev-where"><b>Où trouver l'information :</b> fiche de données de sécurité (FDS) du fournisseur. Section 1 : nom du produit. Section 2 : mentions de danger H. Section 3 : substances et n° CAS.</p>
           <div class="ev-seg" role="radiogroup" aria-label="Type">
             <label><input type="radio" name="type" value="produit" checked><span>Produit chimique</span></label>
             <label><input type="radio" name="type" value="procede"><span>Procédé émissif</span></label>
           </div>
-          <div class="field only-proc" hidden><label class="label" for="f-procede">Procédé</label><select class="input" id="f-procede" name="procede"></select><p class="ev-hint">Procédés classés cancérogènes par l'arrêté du 26 octobre 2020 : ils n'ont pas de FDS, mais doivent figurer dans l'évaluation.</p></div>
+          <div class="field only-proc" hidden><label class="label" for="f-procede">Procédé</label><select class="input" id="f-procede" name="procede"></select><p class="ev-hint">Procédés classés cancérogènes par l'arrêté du 26 octobre 2020 : ils n'ont pas de FDS, mais doivent figurer dans l'évaluation.</p></div>
           <div class="field"><label class="label" for="f-name">Nom du produit</label><input class="input" id="f-name" name="name" maxlength="120" placeholder="Nom commercial, tel qu'il figure sur l'étiquette"></div>
           <div class="field only-prod">
             <label class="label" for="f-htext">Mentions de danger H <span class="req-opt">(section 2 de la FDS)</span></label>
@@ -235,8 +235,8 @@
           </div>
         </fieldset>
         <fieldset class="ev-step" data-step="2" hidden>
-          <legend class="sr-only">Étape 2 : quantité et usage</legend>
-          <p class="ev-where"><b>Où trouver l'information :</b> quantités achetées sur les 12 derniers mois (factures ou bons de commande). Température d'ébullition : section 9 de la FDS.</p>
+          <legend class="sr-only">Étape 2 : quantité et usage</legend>
+          <p class="ev-where"><b>Où trouver l'information :</b> quantités achetées sur les 12 derniers mois (factures ou bons de commande). Température d'ébullition : section 9 de la FDS.</p>
           <div class="ev-grid2">
             <div class="field only-prod"><label class="label" for="f-etat">État physique</label><select class="input" id="f-etat" name="etat"><option value="liquide">Liquide</option><option value="solide">Solide, poudre</option><option value="gaz">Gaz, vapeur, fumée</option></select></div>
             <div class="field only-prod"><label class="label" for="f-qte">Quantité utilisée par an</label><div class="ev-qte"><input class="input" id="f-qte" name="qte" inputmode="decimal" placeholder="Ex. 250"><select class="input" name="unite" aria-label="Unité"><option value="kg">kg</option><option value="L">L</option></select></div></div>
@@ -248,13 +248,13 @@
           </div>
         </fieldset>
         <fieldset class="ev-step" data-step="3" hidden>
-          <legend class="sr-only">Étape 3 : poste de travail</legend>
-          <p class="ev-where"><b>Où trouver l'information :</b> observation du poste, avec le chef d'équipe. Le nombre de salariés sert à la liste des travailleurs exposés si le produit est CMR.</p>
+          <legend class="sr-only">Étape 3 : poste de travail</legend>
+          <p class="ev-where"><b>Où trouver l'information :</b> observation du poste, avec le chef d'équipe. Le nombre de salariés sert à la liste des travailleurs exposés si le produit est CMR.</p>
           <div class="ev-grid2">
             <div class="field"><label class="label" for="f-poste">Poste ou atelier</label><input class="input" id="f-poste" name="poste" maxlength="80" placeholder="Ex. Cabine de peinture"></div>
             <div class="field"><label class="label" for="f-nb">Salariés exposés</label><input class="input" id="f-nb" name="nb" type="number" min="0" inputmode="numeric" placeholder="Nombre"></div>
-            <div class="field ev-span2"><label class="label" for="f-proc">Comment le produit est-il utilisé ?</label><select class="input" id="f-proc" name="proc"></select></div>
-            <div class="field ev-span2"><label class="label" for="f-prot">Quelle protection collective au poste ?</label><select class="input" id="f-prot" name="prot"></select></div>
+            <div class="field ev-span2"><label class="label" for="f-proc">Comment le produit est-il utilisé ?</label><select class="input" id="f-proc" name="proc"></select></div>
+            <div class="field ev-span2"><label class="label" for="f-prot">Quelle protection collective au poste ?</label><select class="input" id="f-prot" name="prot"></select></div>
           </div>
         </fieldset>
         <p class="req-err" id="ev-form-err" role="alert" hidden></p>
@@ -287,7 +287,7 @@
           <li><a href="./#prevention">Hiérarchie de prévention</a></li>
           <li><a href="./#suivi">Suivi et interdictions</a></li>
           <li><a href="./#reglementation">Réglementation</a></li>
-          <li><a href="evaluation.html">DUERP : évaluation du risque chimique</a></li>
+          <li><a href="evaluation.html">DUERP : évaluation du risque chimique</a></li>
         </ul>
       </div>
       <div class="footer-col">

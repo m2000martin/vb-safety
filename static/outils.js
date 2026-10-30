@@ -11,5 +11,5 @@
   var SEL = 'main .card, main .ob, main .feat, main .pillar, main .hier-row, main .epi-line, main .demo-band, main .tool-band, main .eh-block, main .reg-list li, main .steps4 li, main .g-key, main .g-callout';
   var els = document.querySelectorAll(SEL);
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu-o'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
-  Array.prototype.forEach.call(els, function (el) { if (el.closest('.locked-ghost')) return; el.classList.add('app-o'); io.observe(el); });
+  Array.prototype.forEach.call(els, function (el) { if (el.closest('.locked-ghost, .roles, .frise')) return; el.classList.add('app-o'); io.observe(el); });
 })();

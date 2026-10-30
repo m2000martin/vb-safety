@@ -254,3 +254,18 @@
   #approche .section-title, #plateforme .section-title, #approche .kicker, #plateforme .kicker { text-align: center; text-align-last: center; margin-left: auto; margin-right: auto; }
   #usage .usage-cols, #usage .usage-cols p, #usage .usage-cols h3 { text-align: center; }
 }
+
+/* Téléphone : tout centré ; « Sur intervention / chantier / atelier » en cartes qui défilent de côté */
+@media (max-width: 700px) {
+  .section-inner > .kicker, #plateforme .kicker, #usage .kicker { display: block; text-align: center; }
+  .dives.pile .dive, .dives.pile .dive-head, .dives.pile .dive-body, .dive .focus, .dive .plie-btn { text-align: center; }
+  .dives.pile .dive { align-items: center; }
+  .dive .dive-cta { justify-content: center; }
+  .dive .plie-btn { margin-left: auto; margin-right: auto; }
+  .dive-list { text-align: left; }
+  #contact .section-inner > *, .contact-grid > div:first-child { text-align: center; }
+  .usage-cols { display: flex; gap: 12px; margin: 32px calc(-1 * var(--gouttiere, 16px)) 0; padding: 4px var(--gouttiere, 16px) 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; text-align: center; }
+  .usage-cols::-webkit-scrollbar { display: none; }
+  .usage-col { flex: 0 0 78%; scroll-snap-align: center; display: flex; flex-direction: column; gap: 10px; padding: 24px 20px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 18px; background: linear-gradient(160deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)); }
+  .usage-col b { display: block; }
+}

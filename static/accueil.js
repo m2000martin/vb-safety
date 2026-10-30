@@ -294,3 +294,13 @@
   resize(true);
   if (!reduce) requestAnimationFrame(animate);
 })();
+
+// Téléphone : points de position sous « Sur intervention / chantier / atelier »
+(function () {
+  var t = document.querySelector('.usage-cols'); if (!t || !window.matchMedia('(max-width: 700px)').matches) return;
+  var items = Array.prototype.slice.call(t.children), d = document.createElement('div'); d.className = 'rail-dots'; d.setAttribute('aria-hidden', 'true');
+  items.forEach(function (it, i) { var b = document.createElement('button'); b.type = 'button'; b.tabIndex = -1; b.addEventListener('click', function () { t.scrollTo({ left: it.offsetLeft - items[0].offsetLeft, behavior: 'smooth' }); }); d.appendChild(b); });
+  t.insertAdjacentElement('afterend', d);
+  function maj() { var x = t.scrollLeft, best = 0, m = 1e9; items.forEach(function (it, i) { var v = Math.abs(it.offsetLeft - items[0].offsetLeft - x); if (v < m) { m = v; best = i; } }); Array.prototype.forEach.call(d.children, function (b, i) { b.setAttribute('aria-current', i === best ? 'true' : 'false'); }); }
+  t.addEventListener('scroll', maj, { passive: true }); maj();
+})();

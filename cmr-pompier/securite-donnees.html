@@ -33,8 +33,8 @@
 <link rel="stylesheet" href="/static/barre.css?v=5">
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/fonts.css?v=2">
-<link rel="stylesheet" href="/static/nav.css?v=4">
-<link rel="stylesheet" href="/static/outils.css?v=11">
+<link rel="stylesheet" href="/static/nav.css?v=5">
+<link rel="stylesheet" href="/static/outils.css?v=12">
 <link rel="stylesheet" href="/static/anime.css?v=1">
 </head>
 <body class="a-outil">
@@ -125,7 +125,7 @@
 
 <header class="top">
   <div class="wrap">
-    <a class="marque" href="/">VB Safety</a>
+    <a class="marque" href="/">VB Safety<span class="marque-sub">Sapeur-pompier</span></a>
     <nav class="onglets" aria-label="Navigation principale">
       <div class="nav-groupe nav-metier actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Sapeurs-pompiers<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/sapeurs-pompiers/">Présentation</a><a href="/innovation/#sapeurs-pompiers">Capteur de contamination</a><a href="/cmr-pompier/">Outil CMR</a><a href="/cmr-pompier/module-epi.html">Module EPI</a><a href="/ressources/#sapeurs-pompiers">Ressources</a></div></div><div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Industrie<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/industrie/">Présentation</a><a href="/innovation/#industrie">Capteur de contamination</a><a href="/cmr-industrie/">Outil CMR</a><a href="/ressources/#industrie">Ressources</a></div></div><div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">BTP<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/btp/">Présentation</a><a href="/innovation/#btp">Capteur de contamination</a><a href="/cmr-industrie/">Outil CMR</a><a href="/ressources/#btp">Ressources</a></div></div>
     </nav>
@@ -178,7 +178,7 @@
         <article class="card oblig-card"><span class="oblig-ref">Code de la santé publique · L. 1111-8</span><h3>Hébergement certifié HDS</h3><p>En production, les données sont hébergées en France chez un hébergeur certifié pour les données de santé, ou sur l'infrastructure de votre SDIS si elle le permet. La démonstration actuelle ne contient aucune donnée réelle.</p></article>
         <article class="card oblig-card"><span class="oblig-ref">Secret médical</span><h3>Chacun ne voit que ce qui le concerne</h3><p>L'exposition individuelle est réservée à l'agent et au SSSM. Le commandement voit l'état des rapports, jamais leur contenu. L'administrateur peut restreindre les accès, jamais les élargir. Les règles sont appliquées par le serveur.</p></article>
         <article class="card oblig-card"><span class="oblig-ref">Traçabilité</span><h3>Accès et corrections journalisés</h3><p>Chaque consultation et chaque correction d'un rapport est enregistrée. Une fois validé par le médecin, le rapport est verrouillé. Les relevés annuels portent le visa du médecin et sa date.</p></article>
-        <article class="card oblig-card"><span class="oblig-ref">40 à 50 ans</span><h3>Conservation sur toute une carrière</h3><p>Au moins 40 ans pour les données d'exposition aux agents CMR (code du travail, R. 4412-93-3), 50 ans pour l'attestation d'exposition (circulaire DGSCGC du 14 janvier 2025). Les formats d'export restent ouverts : CSV et PDF.</p></article>
+        <article class="card oblig-card"><span class="oblig-ref">40 à 50 ans</span><h3>Conservation sur toute une carrière</h3><p>Au moins 40 ans pour les données d'exposition aux agents CMR (code du travail, R. 4412-93-3), 50 ans pour l'attestation d'exposition (circulaire DGSCGC du 14 janvier 2025). Les formats d'export restent ouverts : CSV et PDF.</p></article>
         <article class="card oblig-card"><span class="oblig-ref">RGPD</span><h3>Analyse d'impact préparée avec votre DPO</h3><p>Nous fournissons la description du traitement, le registre et le modèle d'analyse d'impact (AIPD). Aucun traceur, aucun service publicitaire. Les agents sont informés de leurs droits.</p></article>
         <article class="card oblig-card"><span class="oblig-ref">Réversibilité</span><h3>Vos données restent les vôtres</h3><p>Les données appartiennent au SDIS. Elles s'exportent à tout moment, en entier, dans des formats ouverts. Le contrat prévoit leur restitution et leur effacement en fin de service.</p></article>
         <article class="card oblig-card"><span class="oblig-ref">Assistant</span><h3>Aucune donnée d'exposition envoyée à l'IA</h3><p>L'assistant ouvre, cherche et explique. Il ne reçoit que la phrase de l'utilisateur, jamais ses données d'exposition. Il ne remplit et ne valide rien, et l'administrateur peut le désactiver.</p></article>
@@ -195,7 +195,7 @@
         <tbody>
           <tr><th scope="row">Données</th><td>Fictives, générées dans le navigateur</td><td>Celles de vos agents et de vos interventions</td></tr>
           <tr><th scope="row">Hébergement</th><td>Serveur en France, sans certification HDS</td><td>Hébergeur certifié HDS en France, ou infrastructure du SDIS</td></tr>
-          <tr><th scope="row">Comptes</th><td>Un compte fictif par rôle, code d'accès partagé</td><td>Comptes nominatifs ; connexion unique (SSO) avec vos comptes si vous le souhaitez</td></tr>
+          <tr><th scope="row">Comptes</th><td>Un compte fictif par rôle, code d'accès partagé</td><td>Comptes nominatifs ; connexion unique (SSO) avec vos comptes si vous le souhaitez</td></tr>
           <tr><th scope="row">Alerte</th><td>Messages CISU générés ou importés</td><td>Réception depuis le système d'alerte, selon les accès accordés</td></tr>
           <tr><th scope="row">Référentiel</th><td>Valeurs VB Safety à valider</td><td>Coefficients validés par votre médecin-chef</td></tr>
         </tbody>
@@ -271,8 +271,8 @@
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/menu.js?v=7" defer></script>
 <script src="/static/fond.js?v=2" defer></script>
-<script src="/static/outils.js?v=1" defer></script>
+<script src="/static/outils.js?v=2" defer></script>
 <script src="/static/nav.js?v=2" defer></script>
-<script src="/static/anime.js?v=1" defer></script>
+<script src="/static/anime.js?v=2" defer></script>
 </body>
 </html>

@@ -48,3 +48,6 @@
 .nav-metiers a[aria-current="page"] { position: relative; color: #fff; font-weight: 600; }
 .nav-metiers a[aria-current="page"]::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%; background: #E06C34; box-shadow: 0 0 0 3px rgba(224, 108, 52, .2); vertical-align: middle; }
 .nav-metiers a[aria-current="page"]::after { display: none !important; }
+/* Logo : « VB SAFETY » avec le métier en orange dessous */
+.marque:has(.marque-sub) { display: inline-flex; flex-direction: column; gap: 6px; line-height: 1; }
+.marque-sub { font: 700 10.5px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: #E06C34; }

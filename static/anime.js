@@ -17,7 +17,7 @@
     t.classList.add('an-tete'); io.observe(t);
   });
   // 3. Blocs, par groupe, avec un léger décalage
-  var GROUPES = 'main .offres, main .res-grille, main .faq, main .autres, main .pillars, main .oblig, main .roles, main .ob-grid, main .feat-grid, main .pillars4, main .g-cards, main .lab-list';
+  var GROUPES = 'main .offres, main .res-grille, main .faq, main .autres, main .pillars, main .oblig, main .ob-grid, main .feat-grid, main .pillars4, main .g-cards, main .lab-list';
   var BLOCS = '.offre, .res, .faq details, .autres > *, .card, .ob, .feat, .pillar, .lab-item';
   Array.prototype.forEach.call(document.querySelectorAll(GROUPES), function (g) {
     if (g.closest('.locked-ghost, .epingle, .a-bascule')) return;
