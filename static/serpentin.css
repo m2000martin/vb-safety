@@ -35,3 +35,6 @@
 @media (prefers-reduced-motion: reduce) {
   .etapes.serp li .serp-c { opacity: 1; transform: none; transition: none; }
 }
+/* Section figée pendant le dessin (ordinateur) */
+.sec.serp-epingle { height: 240vh; padding: 0; }
+.sec.serp-epingle > .wrap { position: sticky; top: 72px; min-height: calc(100vh - 72px); display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; padding-top: 24px; padding-bottom: 24px; }

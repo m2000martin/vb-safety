@@ -19,6 +19,14 @@
     var trace = document.createElementNS(NS, 'path'); trace.setAttribute('class', 'trace');
     svg.appendChild(fond); svg.appendChild(trace); ol.insertBefore(svg, ol.firstChild);
     var pts = [], len = 0, marks = [];
+    // Ordinateur : la section reste figée à l'écran pendant que le défilement dessine le tracé
+    var sec = ol.closest('section'), wrap = sec && sec.firstElementChild, mqO = window.matchMedia('(min-width: 860px)');
+    function epingler() {
+      if (!sec || !wrap || reduce) return false;
+      sec.classList.remove('serp-epingle');
+      var ok = mqO.matches && wrap.offsetHeight < window.innerHeight - 100;
+      sec.classList.toggle('serp-epingle', ok); return ok;
+    }
     function centres() {
       var o = ol.getBoundingClientRect();
       return items.map(function (li) { var r = li.querySelector('.serp-pt').getBoundingClientRect(); return { x: r.left + r.width / 2 - o.left, y: r.top + r.height / 2 - o.top }; });
@@ -38,15 +46,19 @@
     }
     function maj() {
       var p;
+      var vh = window.innerHeight;
       if (reduce) p = 1;
-      else { var r = ol.getBoundingClientRect(), vh = window.innerHeight; p = (vh * .78 - r.top) / (r.height + vh * .2); p = Math.max(0, Math.min(1, p)); }
+      else if (sec && sec.classList.contains('serp-epingle')) { var rs = sec.getBoundingClientRect(); p = (-rs.top + vh * .1) / (rs.height - vh * 1.05); }
+      else { var r = ol.getBoundingClientRect(); p = (vh * .78 - r.top) / (r.height + vh * .2); }
+      p = Math.max(0, Math.min(1, p));
       var l = p * len; trace.style.strokeDashoffset = len - l;
       items.forEach(function (li, i) { li.classList.toggle('on', l >= marks[i] - 2); });
     }
     var raf = 0;
     window.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; maj(); }); }, { passive: true });
-    window.addEventListener('resize', function () { construire(); });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(construire);
-    construire();
+    function tout() { epingler(); construire(); }
+    window.addEventListener('resize', tout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(tout);
+    tout();
   });
 })();
