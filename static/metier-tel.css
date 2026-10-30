@@ -1,0 +1,56 @@
+/* VB Safety · pages métier : réglages téléphone (voir metier-tel.js). Sur ordinateur, rien ne change. */
+.bascule { display: none; }
+.ej-btn { all: unset; display: block; }
+
+@media (max-width: 700px) {
+  /* Tout centré */
+  .hero .wrap > div, .sec-tete, .final .bande, .final .bande > div, .sec > .wrap > h2.kicker { text-align: center; }
+  .hero .ariane { justify-content: center; }
+  .hero .h1-kw, .sec-tete .titre, .sec-tete .chapeau, .hero h1, .hero .chapeau { margin-left: auto; margin-right: auto; }
+  .hero .trait { margin-left: auto; margin-right: auto; }
+  .hero .cta, .final .cta { justify-content: center; }
+  .offre { text-align: center; align-items: center; }
+  .offre ul { text-align: left; justify-self: center; }
+  .offre .lien { justify-content: center; }
+  .textes li { text-align: center; }
+  .textes li .d { justify-items: center; }
+  .bref { text-align: left; }
+
+  /* Les enjeux : liste de questions dépliables, comme la FAQ */
+  .sec-enjeux .grille-3, .grille-3 { gap: 0; background: none; border: 0; border-top: 1px solid var(--ligne); border-radius: 0; }
+  .enjeu.repli { padding: 0; background: none; border-bottom: 1px solid var(--ligne); text-align: left; }
+  .enjeu.repli .n { display: none; }
+  .enjeu.repli h3 { margin: 0; font-size: 17px; }
+  .enjeu.repli .ej-btn { display: flex; justify-content: space-between; align-items: center; gap: 18px; width: 100%; box-sizing: border-box; padding: 20px 0; cursor: pointer; font: inherit; color: inherit; }
+  .enjeu.repli .ej-btn::after { content: "+"; font: 300 26px/1 var(--sans); color: var(--signal); flex-shrink: 0; transition: transform .2s; }
+  .enjeu.repli.ouvert .ej-btn::after { content: "–"; }
+  .enjeu.repli p { display: none; margin: -6px 0 20px; }
+  .enjeu.repli.ouvert p { display: block; animation: tel-ouvre .3s ease-out; }
+
+  /* Bascules : un bloc à la fois */
+  .bascule { display: grid; grid-template-columns: repeat(var(--n), 1fr); position: relative; gap: 0; margin: 0 0 18px; padding: 4px; border-radius: 12px; background: rgba(20, 36, 56, .82); border: 1px solid rgba(255, 255, 255, .1); }
+  .bascule button { position: relative; z-index: 1; min-height: 42px; padding: 6px 6px; border: 0; background: none; color: #B8BCC6; font: 600 13px/1.25 var(--sans); cursor: pointer; transition: color .25s; }
+  .bascule button[aria-selected="true"] { color: #0E1E30; }
+  .bascule-curseur { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / var(--n)); border-radius: 9px; background: #FAFAFA; transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+  .a-bascule > *:not(.actif) { display: none; }
+  .a-bascule > .actif { display: flex; }
+  .frise.a-bascule > .fr-row.actif { display: block; }
+  .a-bascule > .de-droite { animation: tel-droite .4s cubic-bezier(.2, .7, .2, 1); }
+  .a-bascule > .de-gauche { animation: tel-gauche .4s cubic-bezier(.2, .7, .2, 1); }
+  .frise.a-bascule .fr-lab { display: none; }
+}
+@keyframes tel-ouvre { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes tel-droite { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+@keyframes tel-gauche { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .bascule-curseur, .bascule button { transition: none; } .a-bascule > *, .enjeu.repli.ouvert p { animation: none !important; } }
+@media (max-width: 700px) {
+  main .hero .chapeau, main .sec-tete .chapeau { text-align: center; }
+  /* Textes réglementaires : blocs empilés */
+  .textes.pile-textes { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; overflow: visible; }
+  .textes.pile-textes li { flex: none; position: relative; overflow: hidden; }
+  .textes.pile-textes li::before { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--signal); transform-origin: left; transform: scaleX(.18); transition: transform .9s cubic-bezier(.2, .7, .2, 1) .2s; }
+  .textes.pile-textes + .rail-points { display: none; }
+  .textes.pile-textes.apparition li { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .textes.pile-textes.apparition li.vu { opacity: 1; transform: none; }
+  .textes.pile-textes.apparition li.vu::before { transform: scaleX(1); }
+}
