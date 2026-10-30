@@ -1,4 +1,4 @@
-// VB Safety · page Capteurs et innovation (téléphone) : points de position sous les cartes qui défilent de côté.
+// VB Safety · page Capteurs de contamination (téléphone) : points de position sous les cartes qui défilent de côté.
 (function () {
   'use strict';
   var list = document.querySelector('.lab-list'); if (!list) return;

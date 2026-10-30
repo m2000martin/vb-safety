@@ -170,12 +170,12 @@
     window.vbChoisirOrdi = function (i) { choisir(i); tabs.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); };
   })();
 
-  // Premier écran : le bouton principal fait défiler « Capteurs et innovation » puis « Suivi CMR [métier] » ; il mène à la page Innovation ou à la carte du métier ; le fond suit
+  // Premier écran : le bouton principal fait défiler « Capteurs de contamination » puis « Suivi CMR [métier] » ; il mène à la page Innovation ou à la carte du métier ; le fond suit
   (function () {
     var btn = document.querySelector('.scene .btn-hero.primary'), note = document.querySelector('.scene .note'); if (!btn) return;
     // [mode des particules, début, mot en gras, index de la carte dans « Outils » ou adresse]
-    var M = EN ? [[null, '', 'Sensors & innovation', '/en/innovation/'], ['pompiers', '', 'Firefighters', 0], ['industrie', '', 'Industry', 1], ['btp', '', 'Construction', 2]]
-               : [[null, '', 'Capteurs et innovation', '/innovation/'], ['pompiers', '', 'Sapeurs-pompiers', 0], ['industrie', '', 'Industrie', 1], ['btp', '', 'BTP', 2]];
+    var M = EN ? [[null, '', 'Contamination sensors', '/en/innovation/'], ['pompiers', '', 'Firefighters', 0], ['industrie', '', 'Industry', 1], ['btp', '', 'Construction', 2]]
+               : [[null, '', 'Capteurs de contamination', '/innovation/'], ['pompiers', '', 'Sapeurs-pompiers', 0], ['industrie', '', 'Industrie', 1], ['btp', '', 'BTP', 2]];
     var lib = btn.firstElementChild;
     var tel = document.createElement('span'); tel.className = 'cta-tel'; tel.setAttribute('aria-hidden', 'true');
     var pile = document.createElement('span'); pile.className = 'nm-pile';
