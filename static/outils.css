@@ -331,3 +331,20 @@ body.a-outil [id] { scroll-margin-top: 88px; }
 .pillars-points { display: none; }
 @media (max-width: 700px) { .pillars-points { display: flex; } }
 @media (max-width: 700px) { .pillars .promises li, .pillars .steps li { justify-content: flex-start; align-items: center; text-align: left; } .pillars .promises li > div, .pillars .steps li > div { text-align: left; } }
+
+/* Module EPI sur téléphone : un seul sur-titre, titre et textes plus sobres */
+@media (max-width: 700px) {
+  .epi-new { display: none; }
+  .epi-hero h1 { font-size: clamp(40px, 13vw, 56px); margin-top: 0; }
+  .epi-sub { font-size: 19px; font-weight: 600; max-width: 22ch; margin: 18px auto 0; }
+  .epi-lead { font-size: 15.5px; margin-top: 16px; }
+  .epi-hero .h1-kw { margin-bottom: 18px; }
+  .epi-feats { margin-top: 36px; }
+}
+@media (max-width: 700px) {
+  .epi-feats { grid-template-columns: 1fr !important; gap: 22px !important; }
+  .epi-feats li { display: flex !important; flex-direction: column; align-items: center; text-align: center; }
+  .epi-feats .ring { margin: 0 auto 10px !important; }
+  .epi-hero .btn, .epi-hero .hero-cta, .epi-hero .epi-cta { justify-content: center; }
+  .epi-hero .epi-cta, .epi-hero .hero-cta { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+}

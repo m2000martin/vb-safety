@@ -43,9 +43,18 @@
     if (g.classList.contains('actif')) { try { sessionStorage.setItem(KEY, CLES[i]); } catch (e) {} }
   });
   if (!/\/innovation\/$/.test(location.pathname)) return;
-  var cle = (location.hash || '').slice(1);
-  if (CLES.indexOf(cle) < 0) { try { cle = sessionStorage.getItem(KEY); } catch (e) { cle = null; } }
-  var i = CLES.indexOf(cle); if (i < 0) return;
-  var a = groupes[i].querySelector('a[href*="innovation/#"]'); if (!a) return;
-  a.setAttribute('aria-current', 'page'); groupes[i].classList.add('actif');
+  // Le capteur est la même page pour les trois métiers : on n'allume que celui d'où l'on vient,
+  // et on suit les changements d'ancre (clic sur un autre métier, sans rechargement de page).
+  function surligner() {
+    var cle = (location.hash || '').slice(1);
+    if (CLES.indexOf(cle) < 0) { try { cle = sessionStorage.getItem(KEY); } catch (e) { cle = null; } }
+    var i = CLES.indexOf(cle);
+    Array.prototype.forEach.call(groupes, function (g, k) {
+      g.classList.toggle('actif', k === i);
+      var a = g.querySelector('a[href*="innovation/#"]');
+      if (a) { if (k === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }
+    });
+  }
+  window.addEventListener('hashchange', surligner);
+  surligner();
 })();
