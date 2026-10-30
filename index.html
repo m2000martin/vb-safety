@@ -410,13 +410,6 @@
   @media (min-width: 701px) { .qui-cadre { display: none; } }
   /* L'essentiel (ordinateur) : questions mises en avant */
   @media (min-width: 701px) {
-    #definitions .section-inner > .kicker { display: block; text-align: center; }
-    #definitions .section-title { text-align: center; margin-left: auto; margin-right: auto; }
-    #definitions .defs { counter-reset: q; gap: 20px; margin-top: 44px; }
-    #definitions .def { counter-increment: q; display: flex; flex-direction: column; padding: 28px 26px 26px; border-radius: 14px; background: linear-gradient(170deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012)); }
-    #definitions .def dt { font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.22; letter-spacing: -.02em; color: #fff; margin: 0 0 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
-    #definitions .def dt::before { content: counter(q, decimal-leading-zero); display: block; margin-bottom: 12px; font: 700 13px var(--sans); letter-spacing: .02em; color: var(--signal); }
-    #definitions .def dd { font-size: 14.5px; color: #9EA5B0; }
   }
   /* « Pensé pour votre façon de travailler » : trois situations de saisie */
   .usage-cols { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 1080px; margin: 40px auto 0; text-align: left; }
@@ -434,9 +427,6 @@
   .courriel { font-family: var(--sans); font-weight: 500; font-size: 14px; }
   /* L'essentiel (ordinateur) : questions alignées à la même hauteur d'une carte à l'autre */
   @media (min-width: 701px) {
-    #definitions .defs { grid-auto-rows: auto; }
-    #definitions .def { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 0; }
-    #definitions .def dt { align-self: stretch; }
   }
   /* Outils de suivi CMR (ordinateur) : carte du métier épurée, deux colonnes sans cadres, points clés en bande */
   @media (min-width: 960px) {
@@ -467,9 +457,6 @@
     .hero-cta { align-items: center; }
     .scene .hero-cta .btn-hero.primary { width: 100%; max-width: 340px; }
     #approche .appr-tete, #plateforme .section-inner > .kicker, #plateforme .section-inner > .section-title, #plateforme .section-inner > .section-lead,
-    #definitions .section-inner > .kicker, #definitions .section-title { text-align: center; }
-    #approche .appr-tete .kicker, #plateforme .section-inner > .kicker, #definitions .section-inner > .kicker { display: block; }
-    #approche .section-title, #plateforme .section-title, #definitions .section-title { margin-left: auto; margin-right: auto; }
     #approche .section-lead, #plateforme .section-lead { text-align-last: center; }
     #approche .plie-btn { margin-left: auto; margin-right: auto; }
     #approche .qui-cadre { text-align: center; }
@@ -677,31 +664,6 @@
     <div class="usage-cols"><div class="usage-col"><b>Sur intervention</b><span>Le chef d'agrès saisit l'exposition de l'équipage en fin d'intervention, en quelques minutes.</span></div><div class="usage-col"><b>Sur chantier</b><span>Le chef d'équipe décrit la tâche en une phrase ; l'outil reconnaît les salariés, la durée et la protection.</span></div><div class="usage-col"><b>En atelier</b><span>L'équipe HSE tient la liste des exposés et les fiches individuelles à jour, prêtes pour la santé au travail.</span></div></div>
     <div class="usage-cta"><a class="btn-hero primary" href="#contact" data-goto="contact"><span>Demander une démo</span></a></div>
     <p class="spaces-note">Pas encore de code d'accès ? <a class="text-btn" href="#contact" data-goto="contact">Demandez un accès</a></p>
-  </div>
-</section>
-
-<section class="section" id="definitions">
-  <div class="section-inner">
-    <span class="kicker">L'essentiel</span>
-    <h2 class="section-title">Quatre notions à connaître.</h2>
-    <dl class="defs">
-      <div class="def">
-        <dt>Qu'est-ce qu'un agent CMR&nbsp;?</dt>
-        <dd>Une substance, un mélange ou un procédé cancérogène, mutagène ou toxique pour la reproduction. Le code du travail vise les agents classés en catégorie 1A ou 1B par le règlement CLP et les procédés cancérogènes listés par l'<a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042483502">arrêté du 26 octobre 2020</a>, comme les travaux exposant aux fumées et suies (HAP) ou à la silice cristalline.</dd>
-      </div>
-      <div class="def">
-        <dt>Qu'est-ce que la liste des travailleurs exposés&nbsp;?</dt>
-        <dd>Depuis le <a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748">décret n° 2024-307 du 4 avril 2024</a>, en vigueur le 5 juillet 2024, l'employeur tient à jour la liste des travailleurs susceptibles d'être exposés aux agents CMR (art. R. 4412-93-1 et suivants du code du travail). Elle est transmise au service de prévention et de santé au travail, qui la conserve 40 ans. <a href="/ressources/liste-travailleurs-exposes-cmr/">Modèle gratuit</a>.</dd>
-      </div>
-      <div class="def">
-        <dt>Qu'est-ce qu'un relevé d'exposition de sapeur-pompier&nbsp;?</dt>
-        <dd>Un enregistrement, intervention par intervention, de ce à quoi chaque sapeur-pompier a été exposé : nature du feu, position tenue, durée, protection et décontamination. Il sert au suivi médical par le SSSM et, plus tard, à la reconnaissance d'une maladie professionnelle. <a href="/cmr-pompier/sante-sapeurs-pompiers.html">Maladies professionnelles des sapeurs-pompiers : le guide</a>.</dd>
-      </div>
-      <div class="def">
-        <dt>Que doit contenir le DUERP sur le risque chimique&nbsp;?</dt>
-        <dd>Le document unique d'évaluation des risques professionnels (art. R. 4121-1 du code du travail) doit comporter l'évaluation du risque chimique : produits utilisés, dangers, conditions d'emploi, salariés concernés et mesures de prévention.</dd>
-      </div>
-    </dl>
   </div>
 </section>
 

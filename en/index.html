@@ -406,13 +406,6 @@
   @media (min-width: 701px) { .qui-cadre { display: none; } }
   /* L'essentiel (ordinateur) : questions mises en avant */
   @media (min-width: 701px) {
-    #definitions .section-inner > .kicker { display: block; text-align: center; }
-    #definitions .section-title { text-align: center; margin-left: auto; margin-right: auto; }
-    #definitions .defs { counter-reset: q; gap: 20px; margin-top: 44px; }
-    #definitions .def { counter-increment: q; display: flex; flex-direction: column; padding: 28px 26px 26px; border-radius: 14px; background: linear-gradient(170deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012)); }
-    #definitions .def dt { font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.22; letter-spacing: -.02em; color: #fff; margin: 0 0 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
-    #definitions .def dt::before { content: counter(q, decimal-leading-zero); display: block; margin-bottom: 12px; font: 700 13px var(--sans); letter-spacing: .02em; color: var(--signal); }
-    #definitions .def dd { font-size: 14.5px; color: #9EA5B0; }
   }
   /* « Pensé pour votre façon de travailler » : trois situations de saisie */
   .usage-cols { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 1080px; margin: 40px auto 0; text-align: left; }
@@ -430,9 +423,6 @@
   .courriel { font-family: var(--sans); font-weight: 500; font-size: 14px; }
   /* L'essentiel (ordinateur) : questions alignées à la même hauteur d'une carte à l'autre */
   @media (min-width: 701px) {
-    #definitions .defs { grid-auto-rows: auto; }
-    #definitions .def { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 0; }
-    #definitions .def dt { align-self: stretch; }
   }
   /* Outils de suivi CMR (ordinateur) : carte du métier épurée, deux colonnes sans cadres, points clés en bande */
   @media (min-width: 960px) {
@@ -463,9 +453,6 @@
     .hero-cta { align-items: center; }
     .scene .hero-cta .btn-hero.primary { width: 100%; max-width: 340px; }
     #approche .appr-tete, #plateforme .section-inner > .kicker, #plateforme .section-inner > .section-title, #plateforme .section-inner > .section-lead,
-    #definitions .section-inner > .kicker, #definitions .section-title { text-align: center; }
-    #approche .appr-tete .kicker, #plateforme .section-inner > .kicker, #definitions .section-inner > .kicker { display: block; }
-    #approche .section-title, #plateforme .section-title, #definitions .section-title { margin-left: auto; margin-right: auto; }
     #approche .section-lead, #plateforme .section-lead { text-align-last: center; }
     #approche .plie-btn { margin-left: auto; margin-right: auto; }
     #approche .qui-cadre { text-align: center; }
@@ -673,31 +660,6 @@
     <div class="usage-cols"><div class="usage-col"><b>After a call-out</b><span>The crew commander records the crew's exposure at the end of the call-out, in a few minutes.</span></div><div class="usage-col"><b>On site</b><span>The team leader describes the task in one sentence; the tool picks up workers, duration and protection.</span></div><div class="usage-col"><b>In the workshop</b><span>The HSE team keeps the exposed workers list and individual records up to date, ready for occupational health.</span></div></div>
     <div class="usage-cta"><a class="btn-hero primary" href="#contact" data-goto="contact"><span>Request a demo</span></a></div>
     <p class="spaces-note">No access code yet? <a class="text-btn" href="#contact" data-goto="contact">Ask for access</a></p>
-  </div>
-</section>
-
-<section class="section" id="definitions">
-  <div class="section-inner">
-    <span class="kicker">Key concepts</span>
-    <h2 class="section-title">Four things to know.</h2>
-    <dl class="defs">
-      <div class="def">
-        <dt>What is a CMR agent?</dt>
-        <dd>A substance, mixture or process that is carcinogenic, mutagenic or toxic for reproduction. French labour law covers agents classified in category 1A or 1B under the EU CLP regulation and the carcinogenic processes listed by the <a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042483502" hreflang="fr">order of 26 October 2020</a>, such as work exposing to fire soot (PAHs) or crystalline silica.</dd>
-      </div>
-      <div class="def">
-        <dt>What is the list of exposed workers?</dt>
-        <dd>Since <a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748" hreflang="fr">decree no. 2024-307 of 4 April 2024</a>, in force since 5 July 2024, French employers keep an up-to-date list of workers likely to be exposed to CMR agents. It is sent to the occupational health service, which keeps it for 40 years. <a href="/ressources/liste-travailleurs-exposes-cmr/" hreflang="fr">Free template (FR)</a>.</dd>
-      </div>
-      <div class="def">
-        <dt>What is a firefighter exposure record?</dt>
-        <dd>A call-by-call record of what each firefighter was exposed to: type of fire, position held, duration, protection and decontamination. It supports medical follow-up and, later, the recognition of an occupational disease. <a href="/cmr-pompier/en/firefighter-health.html">Health and law guide</a>.</dd>
-      </div>
-      <div class="def">
-        <dt>What is the chemical risk assessment?</dt>
-        <dd>In France, the single risk assessment document (DUERP, labour code art. R. 4121-1) must include an assessment of chemical risks: products used, hazards, conditions of use, workers concerned and prevention measures.</dd>
-      </div>
-    </dl>
   </div>
 </section>
 
