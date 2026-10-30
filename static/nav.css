@@ -35,16 +35,12 @@
   .top.mm-open .onglets .nav-liste a[aria-current="page"]::after { display: block; }
 }
 
-/* « Espace métier » : trois colonnes (un métier par colonne), chacune avec Présentation et Outil CMR */
-.nav-liste.nav-metiers { min-width: 0; padding: 14px 10px 10px; gap: 0; }
-.nav-groupe:hover .nav-liste.nav-metiers, .nav-groupe:focus-within .nav-liste.nav-metiers, .nav-groupe.ouvert .nav-liste.nav-metiers { display: grid; grid-template-columns: repeat(3, minmax(170px, auto)); }
-.nav-metier .nav-liste { left: 50%; transform: translateX(-50%); }
-.nm-bloc { display: flex; flex-direction: column; padding: 0 6px; }
-.nm-bloc + .nm-bloc { border-left: 1px solid rgba(255, 255, 255, .08); }
-.nm-t { padding: 2px 12px 10px; font: 700 11px/1.2 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: #E06C34; white-space: nowrap; }
-.nm-bloc a { font-size: 14.5px; }
+/* Menus métier (Sapeurs-pompiers, Industrie, BTP) : liste simple sur ordinateur, deux liens par ligne sur téléphone */
+.nav-metier .nav-liste { min-width: 230px; }
 @media (max-width: 1040px) {
-  .top.mm-open .onglets .nav-liste.nav-metiers, .haut.has-menu.open > .haut-nav .nav-liste.nav-metiers { display: flex; flex-direction: column; transform: none; padding: 0 0 0 14px; }
-  .top.mm-open .nm-bloc, .haut.has-menu.open .nm-bloc { padding: 6px 0 4px; border-left: 0; }
-  .top.mm-open .nm-t, .haut.has-menu.open .nm-t { padding: 8px 2px 4px; color: #E06C34; }
+  .top.mm-open .onglets .nav-liste.nav-metiers, .haut.has-menu.open > .haut-nav .nav-liste.nav-metiers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px 0 10px; }
+  .top.mm-open .onglets .nav-metiers a, .haut.has-menu.open > .haut-nav .nav-metiers a { display: flex; align-items: center; min-height: 46px; padding: 8px 12px !important; font-size: 14.5px !important; line-height: 1.25; white-space: normal; border: 1px solid rgba(255, 255, 255, .1) !important; border-radius: 10px !important; background: rgba(255, 255, 255, .03); }
+  .top.mm-open .onglets .nav-metiers a[aria-current="page"], .haut.has-menu.open > .haut-nav .nav-metiers a[aria-current="page"] { border-color: rgba(224, 108, 52, .6) !important; background: rgba(224, 108, 52, .1); }
+  .top.mm-open .onglets .nav-metiers a[aria-current="page"]::after { display: none !important; }
+  .top.mm-open .onglets .nav-metier .nav-sous, .haut.has-menu.open > .haut-nav .nav-metier .nav-sous { padding-top: 16px; color: #fff; font-size: 13px; }
 }

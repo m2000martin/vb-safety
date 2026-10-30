@@ -384,3 +384,7 @@ table.cols th { font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-tran
   .sec-enjeux.epingle .enjeu.vu { opacity: 1; transform: none; }
   .sec-enjeux.epingle .enjeu.vu::before { transform: scaleX(1); }
 }
+/* Ressources rangées par métier */
+.res-groupe + .res-groupe { margin-top: clamp(40px, 5vw, 64px); }
+.res-groupe > .kicker { display: block; margin: 0 0 18px; }
+.res-groupe { scroll-margin-top: 96px; }

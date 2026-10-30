@@ -238,3 +238,38 @@ header.top .ecrire:hover { border-color: #fff; }
 }
 @media (max-width: 1040px) { .outil-nav { top: 60px; } }
 @media (max-width: 640px) { .outil-nav .brand { display: none; } }
+
+/* Le menu propre à l'outil n'est plus affiché : l'en-tête du site suffit */
+.outil-nav { display: none !important; }
+body.a-outil main, body.a-outil .site-footer { margin-left: 0 !important; }
+body.a-outil [id] { scroll-margin-top: 88px; }
+
+/* ======================================================================
+   Téléphone : tout centré, aéré, blocs qui apparaissent (comme les pages métier)
+   ====================================================================== */
+@media (max-width: 700px) {
+  main .hero .container > div:first-child, .hero-haut, .ih-grid > div:first-child, .epi-hero-grid > div:first-child, .g-hero-grid > div:first-child, .section-head, .demo-band > div:first-child, .tool-band, .sanction { text-align: center; }
+  .hero-haut { justify-content: center; }
+  .hero h1, .ih h1, .epi-hero h1, .g-hero h1, .section-head h2, .section-head p, .hero p, .ih-lead, .section-head { margin-left: auto; margin-right: auto; }
+  .hero-cta, .ih-cta, .demo-actions, .demo-links { justify-content: center; }
+  .hero-facts, .ih-badges { justify-content: center; }
+  .hero-facts li { flex-direction: column; align-items: center; text-align: center; }
+  main .card, .ob, .feat, .pillar, .epi-line, .eh-block, .reg-list li, .steps4 li, .role { text-align: center; }
+  main .card .icon-tile, .ob-ico, .feat .icon-tile, .pillar .icon, .epi-line-ico, .role-head { margin-left: auto; margin-right: auto; justify-content: center; }
+  .epi-line { flex-direction: column; }
+  .why-points, .adapt-list, .promises, .steps { text-align: left; }
+  .steps4 li::before { left: 50%; transform: translateX(-50%); }
+  .reg-list li { justify-items: center; }
+  .sanction { justify-items: center; }
+  .section { padding-top: 64px; padding-bottom: 64px; }
+  .section-head { margin-bottom: 28px; }
+  .pillars, .oblig, .roles, .ob-grid, .feat-grid, .pillars4 { gap: 16px !important; }
+  main .card, .ob, .feat, .pillar { border-radius: 18px; position: relative; overflow: hidden; }
+  main .card::after, .ob::after, .feat::after, .pillar::after { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--signal); transform-origin: left; transform: scaleX(.18); transition: transform .9s cubic-bezier(.2, .7, .2, 1) .2s; }
+  .app-o { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .app-o.vu-o { opacity: 1; transform: none; }
+  .app-o.vu-o::after { transform: scaleX(1); }
+  .pillar { border: 1px solid var(--line); margin-bottom: 0; }
+  .preview { margin-left: auto; margin-right: auto; }
+}
+.epi-line::before { background: radial-gradient(closest-side, rgba(224, 108, 52, .16), rgba(224, 108, 52, 0)); }
