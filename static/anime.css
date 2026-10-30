@@ -1,0 +1,44 @@
+/* VB Safety · pages intérieures : mêmes animations que l'accueil (titre qui monte, blocs qui apparaissent au défilement, trait orange qui se déploie) */
+.hero .h1-kw, .hero-1 .h1-kw, .ih .h1-kw, .g-hero .h1-kw, .epi-hero .h1-kw, main .hero .h1-kw { max-width: none !important; }
+
+/* En-tête de page */
+.an-hero > * { animation: an-up .8s cubic-bezier(.2, .7, .2, 1) both; }
+.an-hero > *:nth-child(2) { animation-delay: .08s; } .an-hero > *:nth-child(3) { animation-delay: .16s; } .an-hero > *:nth-child(4) { animation-delay: .26s; }
+.an-hero > *:nth-child(5) { animation-delay: .36s; } .an-hero > *:nth-child(6) { animation-delay: .46s; } .an-hero > *:nth-child(n+7) { animation-delay: .55s; }
+.an-cote { animation: an-cote 1s cubic-bezier(.2, .7, .2, 1) .35s both; }
+
+/* Titres de section */
+.an-tete { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .8s cubic-bezier(.2, .7, .2, 1); }
+.an-tete.an-vu { opacity: 1; transform: none; }
+
+/* Blocs : apparition décalée et trait orange en haut */
+.an-bloc { opacity: 0; transform: translateY(30px); transition: opacity .6s ease var(--an-d, 0s), transform .75s cubic-bezier(.2, .7, .2, 1) var(--an-d, 0s), border-color .25s, box-shadow .25s; }
+.an-bloc.an-vu { opacity: 1; transform: none; }
+.an-trait { position: relative; overflow: hidden; }
+.an-trait::before { content: ""; position: absolute; z-index: 2; left: 0; top: 0; height: 2px; width: 100%; background: #E06C34; transform-origin: left; transform: scaleX(0); transition: transform .9s cubic-bezier(.2, .7, .2, 1) calc(var(--an-d, 0s) + .25s); pointer-events: none; }
+.an-vu.an-trait::before { transform: scaleX(1); }
+/* Survol : le bloc se soulève légèrement */
+@media (hover: hover) {
+  .an-bloc.an-vu:hover { transform: translateY(-4px); border-color: rgba(224, 108, 52, .45) !important; box-shadow: 0 24px 50px -30px rgba(224, 108, 52, .55); }
+}
+@keyframes an-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes an-cote { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .an-hero > *, .an-cote { animation: none; }
+  .an-tete, .an-bloc { opacity: 1; transform: none; transition: none; }
+  .an-trait::before { transform: scaleX(1); transition: none; }
+}
+
+/* Titres de section centrés, comme sur l'accueil */
+@media (min-width: 701px) {
+  .sec-tete { text-align: center; }
+  .sec-tete .titre, .sec-tete .chapeau { margin-left: auto; margin-right: auto; }
+  .sec-tete .chapeau { text-align: center; text-align-last: center; }
+  body.a-outil .section-head { text-align: center; margin-left: auto; margin-right: auto; }
+  body.a-outil .section-head p { margin-left: auto; margin-right: auto; text-align: center; text-align-last: center; }
+}
+
+/* Note démo sous l'aperçu du rapport (page VB CMR) */
+.preview-wrap { justify-self: end; width: 100%; max-width: 400px; }
+.preview-wrap .preview { max-width: none; }
+.preview-note { margin: 14px 0 0; text-align: center; }
