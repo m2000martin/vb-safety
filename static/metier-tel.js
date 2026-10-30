@@ -5,13 +5,17 @@
   var EN = (document.documentElement.lang || '').indexOf('en') === 0;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 1. Les enjeux : chaque titre devient un bouton qui déplie son texte
-  Array.prototype.forEach.call(document.querySelectorAll('.enjeu'), function (a, i) {
-    var h = a.querySelector('h3'), p = a.querySelector('p'); if (!h || !p) return;
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'ej-btn'; b.setAttribute('aria-expanded', 'false');
-    p.id = p.id || 'enjeu-' + i; b.setAttribute('aria-controls', p.id);
-    while (h.firstChild) b.appendChild(h.firstChild); h.appendChild(b); a.classList.add('repli');
-    b.addEventListener('click', function () { b.setAttribute('aria-expanded', a.classList.toggle('ouvert') ? 'true' : 'false'); });
+  // 1. Les enjeux : grands blocs empilés, comme « Ce que disent les textes » ; le « Voir plus » de menu.js est retiré
+  var mqTel = window.matchMedia('(max-width: 700px)');
+  Array.prototype.forEach.call(document.querySelectorAll('.grille-3'), function (g) {
+    if (!g.querySelector('.enjeu')) return;
+    Array.prototype.forEach.call(g.children, function (c) { c.classList.remove('vp-cache'); });
+    var vp = g.nextElementSibling; if (vp && vp.classList.contains('vp-btn')) vp.remove();
+    g.classList.add('pile-enjeux');
+    if (reduce || !('IntersectionObserver' in window) || !mqTel.matches) return;
+    g.classList.add('apparition');
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    Array.prototype.forEach.call(g.children, function (c) { io.observe(c); });
   });
 
   // 2. Bascule générique : boutons au-dessus, un panneau visible, glissement du doigt pour passer au suivant

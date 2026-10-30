@@ -1,6 +1,5 @@
 /* VB Safety · pages métier : réglages téléphone (voir metier-tel.js). Sur ordinateur, rien ne change. */
 .bascule { display: none; }
-.ej-btn { all: unset; display: block; }
 
 @media (max-width: 700px) {
   /* Tout centré */
@@ -16,16 +15,16 @@
   .textes li .d { justify-items: center; }
   .bref { text-align: left; }
 
-  /* Les enjeux : liste de questions dépliables, comme la FAQ */
-  .sec-enjeux .grille-3, .grille-3 { gap: 0; background: none; border: 0; border-top: 1px solid var(--ligne); border-radius: 0; }
-  .enjeu.repli { padding: 0; background: none; border-bottom: 1px solid var(--ligne); text-align: left; }
-  .enjeu.repli .n { display: none; }
-  .enjeu.repli h3 { margin: 0; font-size: 17px; }
-  .enjeu.repli .ej-btn { display: flex; justify-content: space-between; align-items: center; gap: 18px; width: 100%; box-sizing: border-box; padding: 20px 0; cursor: pointer; font: inherit; color: inherit; }
-  .enjeu.repli .ej-btn::after { content: "+"; font: 300 26px/1 var(--sans); color: var(--signal); flex-shrink: 0; transition: transform .2s; }
-  .enjeu.repli.ouvert .ej-btn::after { content: "–"; }
-  .enjeu.repli p { display: none; margin: -6px 0 20px; }
-  .enjeu.repli.ouvert p { display: block; animation: tel-ouvre .3s ease-out; }
+  /* Les enjeux : grands blocs empilés, même format que les textes réglementaires */
+  .grille-3.pile-enjeux { display: flex; flex-direction: column; gap: 14px; background: none; border: 0; border-radius: 0; overflow: visible; }
+  .pile-enjeux .enjeu { position: relative; overflow: hidden; text-align: center; padding: 26px 22px 28px; border: 1px solid var(--ligne); border-radius: 18px; background: linear-gradient(160deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)); }
+  .pile-enjeux .enjeu::before { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--signal); transform-origin: left; transform: scaleX(.18); transition: transform .9s cubic-bezier(.2, .7, .2, 1) .2s; }
+  .pile-enjeux .enjeu .n { font: 700 13px/1 var(--sans); letter-spacing: .02em; }
+  .pile-enjeux .enjeu h3 { font-size: 20px; margin-top: 12px; }
+  .pile-enjeux .enjeu p { text-align: center; }
+  .pile-enjeux.apparition .enjeu { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .pile-enjeux.apparition .enjeu.vu { opacity: 1; transform: none; }
+  .pile-enjeux.apparition .enjeu.vu::before, .pile-enjeux:not(.apparition) .enjeu::before { transform: scaleX(1); }
 
   /* Bascules : un bloc à la fois */
   .bascule { display: grid; grid-template-columns: repeat(var(--n), 1fr); position: relative; gap: 0; margin: 0 0 18px; padding: 4px; border-radius: 12px; background: rgba(20, 36, 56, .82); border: 1px solid rgba(255, 255, 255, .1); }
@@ -53,4 +52,17 @@
   .textes.pile-textes.apparition li { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
   .textes.pile-textes.apparition li.vu { opacity: 1; transform: none; }
   .textes.pile-textes.apparition li.vu::before { transform: scaleX(1); }
+}
+@media (max-width: 700px) {
+  /* Textes réglementaires : tout centré dans chaque bloc */
+  .textes.pile-textes li, .textes.pile-textes li > div { align-items: center; text-align: center; }
+  .textes.pile-textes .statut { align-self: center; }
+  /* Haut de page aéré : fil d'Ariane masqué, chapeau réduit à sa première phrase, plus d'espace */
+  .hero .ariane { display: none; }
+  .hero .ch-plus { display: none; }
+  .hero h1 { margin-top: 18px; }
+  .hero .trait { margin-top: 28px; margin-bottom: 4px; }
+  .hero .chapeau { margin-top: 22px; }
+  .hero .cta { margin-top: 32px; }
+  .hero { padding-top: 40px; padding-bottom: 48px; }
 }
