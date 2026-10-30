@@ -227,3 +227,15 @@
   .scene .hero-cta .btn-hero.primary { width: 100%; max-width: 340px; }
   #approche .section-lead, #plateforme .section-lead { text-align: center; text-align-last: center; }
 }
+
+/* Pied de page allégé sur téléphone : marque, adresse, liens légaux, mentions. Secteurs, ressources et plateforme restent dans le menu. */
+@media (max-width: 700px) {
+  .site-foot { padding-top: 36px; }
+  .foot-grid { display: block; }
+  .foot-brand p, .foot-col:nth-child(2), .foot-col:nth-child(3), .foot-col:nth-child(4), .foot-col .foot-h, .foot-col a[data-goto="contact"] { display: none; }
+  .foot-col { flex-direction: row; flex-wrap: wrap; gap: 6px 18px; margin-top: 16px; }
+  .foot-col a { font-size: 13.5px; }
+  .foot-col a[href^="mailto:"] { flex-basis: 100%; color: #D4D4D8; }
+  .foot-bottom { margin-top: 20px; padding-top: 14px; font-size: 12px; }
+  .foot-bottom span + span { display: none; }
+}
