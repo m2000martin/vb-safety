@@ -6,3 +6,8 @@ main, .pied { position: relative; z-index: 1; }
 /* Titre : « visible » apparaît en blanc, comme sur l'accueil */
 .hero h1 .invis { display: inline-block; color: #fff; white-space: nowrap; will-change: opacity, filter; animation: hero-reveal 1.5s ease-out .5s both; }
 @media (prefers-reduced-motion: reduce) { .hero h1 .invis { animation: none; } }
+/* FAQ sur toute la largeur */
+.faq { max-width: none; }
+/* La barre d'action fixe ne cache plus la fin de la page */
+body.a-barre .pied, body.a-barre .site-footer { padding-bottom: 110px; }
+.sec-enjeux.epingle > .wrap, .fr-stage { padding-bottom: 100px; }

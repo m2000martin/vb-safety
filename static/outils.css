@@ -148,3 +148,41 @@ h1 em, .epi-hero h1 span.accent, .epi-hero h1 em { font-style: normal; color: #9
 .tool-tag { font-family: var(--mono); color: var(--signal); }
 .tool-cta { background: #C4521C; }
 .tool-band:hover .tool-cta { background: #D25E26; }
+
+/* ---------- Haut de page VB CMR : pas de panneau d'image (créait une bande de fond différente) ---------- */
+.hero-media { display: none !important; }
+
+/* ---------- Champs, cartes « Réservé aux membres » ---------- */
+.input, .select, .textarea { background: rgba(255, 255, 255, .04); color: #fff; border-color: var(--line-strong); }
+.input::placeholder, .textarea::placeholder { color: var(--faint); }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--signal); box-shadow: 0 0 0 3px rgba(224, 108, 52, .18); }
+.locked-cta { background: #12243A; border: 1px solid var(--line-strong); color: var(--text); box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .8); }
+.locked-ico { background: rgba(224, 108, 52, .14); color: var(--signal); }
+.locked-links a { color: var(--signal-2); }
+.demo-banner { background: rgba(224, 108, 52, .1); color: #F2A57E; border-bottom-color: rgba(224, 108, 52, .25); }
+
+/* ---------- Page de connexion (le style de l'outil commence après) ---------- */
+.login-body { background: var(--nuit); }
+.login-side-media { background: radial-gradient(55% 60% at 80% 40%, rgba(224, 108, 52, .14), rgba(224, 108, 52, 0) 70%), transparent; }
+.login-side-media::after { background: none; }
+.brand-dark .brand-sub { color: var(--signal); }
+.side-rule { background: var(--signal); height: 2px; }
+.side-main h1 { font-family: var(--serif); font-weight: 600; letter-spacing: -.045em; }
+.side-main h1 em { color: #9AA3AF; }
+.side-main p { color: var(--muted); }
+.side-facts .icon { color: var(--signal); }
+.side-secure { background: rgba(255, 255, 255, .04); border-color: var(--line); }
+.login-panel { background: rgba(10, 23, 37, .55); border-left: 1px solid var(--line); }
+.login-inner h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -.035em; }
+.back-link { color: var(--muted); } .back-link:hover { color: #fff; }
+.pick { background: rgba(255, 255, 255, .04); border-color: var(--line); color: var(--text); }
+.pick:hover { border-color: var(--line-strong); }
+.pick-icon { background: rgba(255, 255, 255, .06); color: var(--muted); }
+.pick input { accent-color: var(--signal); }
+.pick:has(input:checked) { border-color: var(--signal); background: rgba(224, 108, 52, .1); box-shadow: 0 0 0 3px rgba(224, 108, 52, .15); }
+.pick:has(input:checked) .pick-icon { background: #C4521C; color: #fff; }
+.input-icon .input { background: rgba(255, 255, 255, .04); color: #fff; border-color: var(--line); }
+.text-link { color: #fff; text-decoration-color: var(--signal); }
+.login-foot { border-top-color: var(--line); color: var(--muted); }
+.login-foot a { color: #fff; }
+.login .lang-link, .login-panel .lang-link { background: none; }
