@@ -108,3 +108,5 @@
   .barre-demo a:hover { background: #EA7A44; }
 }
 @media (min-width: 701px) and (prefers-reduced-motion: reduce) { .barre-demo { transition: none; } }
+/* En-tête des pages intérieures : le bouton Menu reste à droite, même sans bouton de langue */
+@media (max-width: 1040px) { .top .mm-btn { margin-left: auto; } .top .langue ~ .mm-btn { margin-left: 0; } }

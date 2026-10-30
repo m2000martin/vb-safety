@@ -89,17 +89,18 @@
       var ioP = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu-tel'); ioP.unobserve(e.target); } }); }, { rootMargin: '0px 0px -18% 0px', threshold: 0.2 });
       Array.prototype.forEach.call(pillars.children, function (p) { ioP.observe(p); });
     }
-    var dives = document.querySelector('.dives'), r = dives && rail(dives);
-    if (r) {
-      var seg = document.createElement('div'); seg.className = 'seg'; seg.setAttribute('role', 'tablist'); seg.setAttribute('aria-label', T.seg);
-      r.items.forEach(function (d, i) {
-        d.id = d.id || ['outil-pompiers', 'outil-industrie', 'outil-btp'][i];
-        var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', d.id);
-        b.textContent = T.metiers[i] || ('' + (i + 1));
-        b.addEventListener('click', function () { r.go(i); }); seg.appendChild(b);
-      });
-      dives.insertAdjacentElement('beforebegin', seg); window.vbOutil = r.go;
-      r.onChange(function (c) { Array.prototype.forEach.call(seg.children, function (b, i) { b.setAttribute('aria-selected', i === c ? 'true' : 'false'); }); });
+    // « Outils » sur téléphone : trois grands blocs empilés, qui apparaissent l'un après l'autre au défilement
+    var dives = document.querySelector('.dives');
+    if (dives) {
+      var dItems = Array.prototype.slice.call(dives.children);
+      dives.classList.add('pile');
+      dItems.forEach(function (d, i) { d.id = d.id || ['outil-pompiers', 'outil-industrie', 'outil-btp'][i]; });
+      window.vbOutil = function (i) { var d = dItems[i]; if (d) d.scrollIntoView({ behavior: smooth, block: 'start' }); };
+      if ('IntersectionObserver' in window && !reduce) {
+        dives.classList.add('apparition');
+        var ioD = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('vu-tel'); ioD.unobserve(e.target); } }); }, { rootMargin: '0px 0px -15% 0px', threshold: 0.15 });
+        dItems.forEach(function (d) { ioD.observe(d); });
+      }
     }
     // Barre fixe : visible après le premier écran, masquée sur le formulaire de contact
     var scene = document.querySelector('.scene'), contact = document.getElementById('contact');

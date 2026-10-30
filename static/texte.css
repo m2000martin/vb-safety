@@ -4,3 +4,5 @@ main p, .section p, main dd, .section dd { text-align: justify; -webkit-hyphens:
 .spaces-note, .hero-cta p, .cf-msg, .maj, .ariane, .contact-direct p { text-align: inherit; -webkit-hyphens: manual; hyphens: manual; }
 /* Téléphone : chapeaux en grands caractères alignés à gauche (le justifié y crée de grands blancs) */
 @media (max-width: 700px) { main p.chapeau { text-align: left; -webkit-hyphens: manual; hyphens: manual; } }
+/* Téléphone : plus de justifié du tout (colonnes trop étroites, grands blancs) ; chaque bloc reprend l'alignement de son parent */
+@media (max-width: 700px) { main p, .section p, main dd, .section dd, .capt .chapeau { text-align: inherit; text-align-last: auto; -webkit-hyphens: manual; hyphens: manual; } }
