@@ -1,0 +1,37 @@
+/* VB Safety · « Comment ça marche » : les étapes sont reliées par un tracé qui serpente et se dessine au défilement */
+.etapes.serp { position: relative; counter-reset: e; }
+.etapes.serp li { border-top: 0; padding: 0; z-index: 1; }
+.etapes.serp li::before { display: none; }
+.etapes.serp p { text-align: left; text-align-last: auto; hyphens: manual; }
+.serp-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.serp-svg .fond { fill: none; stroke: rgba(255, 255, 255, .12); stroke-width: 1.5; stroke-dasharray: 3 6; }
+.serp-svg .trace { fill: none; stroke: var(--signal); stroke-width: 2; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(224, 108, 52, .45)); }
+.serp-pt { position: absolute; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--mono); color: var(--faible); background: var(--nuit); border: 1.5px solid rgba(255, 255, 255, .22); transition: color .35s, border-color .35s, box-shadow .35s, background-color .35s; z-index: 2; }
+.etapes.serp li.on .serp-pt { color: #fff; border-color: var(--signal); background: #2A1D18; box-shadow: 0 0 0 6px rgba(224, 108, 52, .12); }
+.etapes.serp li .serp-c { padding: 18px 20px; border-radius: 14px; border: 1px solid transparent; transition: border-color .3s, background-color .3s, opacity .5s, transform .5s; opacity: .45; transform: translateY(6px); }
+.etapes.serp li.on .serp-c { opacity: 1; transform: none; }
+.etapes.serp li:hover .serp-c, .etapes.serp li.actif .serp-c { border-color: rgba(224, 108, 52, .35); background: rgba(255, 255, 255, .03); }
+.etapes.serp h3 { margin: 0; }
+
+/* Ordinateur : 4 colonnes, cartes en alternance au-dessus et au-dessous de la vague */
+@media (min-width: 860px) {
+  .etapes.serp { grid-template-columns: repeat(4, 1fr); grid-template-rows: auto 150px auto; gap: 0 24px; }
+  .etapes.serp li { display: contents; }
+  .etapes.serp li .serp-c { position: relative; }
+  .etapes.serp li:nth-of-type(1) .serp-c { grid-column: 1; grid-row: 1; align-self: end; }
+  .etapes.serp li:nth-of-type(2) .serp-c { grid-column: 2; grid-row: 3; align-self: start; }
+  .etapes.serp li:nth-of-type(3) .serp-c { grid-column: 3; grid-row: 1; align-self: end; }
+  .etapes.serp li:nth-of-type(4) .serp-c { grid-column: 4; grid-row: 3; align-self: start; }
+  .etapes.serp li:nth-of-type(odd) .serp-pt { bottom: -58px; left: 20px; }
+  .etapes.serp li:nth-of-type(even) .serp-pt { top: -58px; left: 20px; }
+}
+/* Téléphone et tablette : une colonne, le tracé ondule à gauche */
+@media (max-width: 859px) {
+  .etapes.serp { padding-left: 52px; gap: 18px; }
+  .etapes.serp li { position: relative; }
+  .etapes.serp li .serp-c { padding: 12px 14px; }
+  .serp-pt { left: -52px; top: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .etapes.serp li .serp-c { opacity: 1; transform: none; transition: none; }
+}
