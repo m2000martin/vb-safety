@@ -68,3 +68,28 @@
   .lab-points button::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .28); transition: width .25s, background-color .25s; }
   .lab-points button[aria-current="true"]::before { width: 18px; background: #FAFAFA; }
 }
+
+/* Comparaison avant / maintenant et bloc « technologie confidentielle » */
+.cmp-t { margin: 0 0 clamp(24px, 3vw, 36px); font: 600 clamp(26px, 3vw, 40px)/1.1 var(--serif); letter-spacing: -.03em; color: #fff; }
+.cmp-grille { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: clamp(14px, 2vw, 28px); }
+.cmp-c { display: flex; flex-direction: column; gap: 10px; padding: clamp(24px, 3vw, 40px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, .1); background: linear-gradient(170deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012)); }
+.cmp-l { font: 600 12px var(--mono, monospace); letter-spacing: .14em; text-transform: uppercase; color: #8B97A8; }
+.cmp-v { font: 600 clamp(64px, 9vw, 120px)/.95 var(--serif); letter-spacing: -.05em; color: #8B97A8; }
+.cmp-d { font-size: 15px; color: #A9B4C2; }
+.cmp-ap { border-color: rgba(224, 108, 52, .55); background: linear-gradient(170deg, rgba(224, 108, 52, .14), rgba(224, 108, 52, .03)); }
+.cmp-ap .cmp-l { color: var(--signal); }
+.cmp-ap .cmp-v { color: #fff; }
+.cmp-ap .cmp-d { color: #E4E4E7; }
+.cmp-fl { align-self: center; width: 34px; height: 2px; background: var(--signal); position: relative; }
+.cmp-fl::after { content: ""; position: absolute; right: -1px; top: -5px; width: 10px; height: 10px; border-top: 2px solid var(--signal); border-right: 2px solid var(--signal); transform: rotate(45deg); }
+.conf { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: clamp(32px, 4vw, 48px); padding: clamp(22px, 3vw, 32px); border-radius: 16px; border: 1px dashed rgba(255, 255, 255, .18); }
+.conf p { flex: 1 1 260px; margin: 0; text-align: left; text-align-last: auto; font-size: 16px; color: #D4D4D8; }
+.conf .lab-st { margin: 0; }
+.lab .maj { display: block; margin-top: 28px; }
+@media (max-width: 700px) {
+  .cmp-grille { grid-template-columns: 1fr; }
+  .cmp-fl { justify-self: center; width: 2px; height: 26px; }
+  .cmp-fl::after { right: -5px; top: auto; bottom: -1px; transform: rotate(135deg); }
+  .cmp-t { text-align: center; }
+  .conf .btn { width: 100%; justify-content: center; }
+}
