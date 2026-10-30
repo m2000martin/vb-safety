@@ -73,3 +73,5 @@
 /* Étapes apportées par VB Safety (vérification, fiche d'exposition) : même vert que le point d'arrivée */
 .fr-steps li.fr-ok i { background: var(--ok); }
 .fr-steps li.fr-ok b { color: var(--ok); }
+.fr-line small a { color: inherit; text-decoration: underline; text-decoration-color: rgba(224, 108, 52, .6); text-underline-offset: 3px; }
+.fr-line small a:hover { color: #fff; }
