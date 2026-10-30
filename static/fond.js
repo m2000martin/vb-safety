@@ -3,7 +3,9 @@
   'use strict';
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var p0 = location.pathname, mode = /pompier|firefighter/.test(p0) ? 'pompiers' : /industr/.test(p0) ? 'industrie' : /btp|construction/.test(p0) ? 'btp' : null;
-  var canvas = document.createElement('canvas'); canvas.id = 'fond-particules'; canvas.setAttribute('aria-hidden', 'true');
+  // Pages de lecture (guides, mentions) : particules plus discrètes pour ne pas gêner le texte
+  var doux = /\/ressources\/.+|mentions-legales|confidentialite/.test(p0);
+  var canvas = document.createElement('canvas'); canvas.id = 'fond-particules'; if (doux) canvas.style.opacity = '.4'; canvas.setAttribute('aria-hidden', 'true');
   document.body.insertBefore(canvas, document.body.firstChild);
   var ctx = canvas.getContext('2d'), width = 0, height = 0, parts = [], t = 0;
   function resize(force) {
