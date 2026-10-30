@@ -14,7 +14,7 @@
 - [VB CMR Industrie et BTP](https://vb-safety.com/cmr-industrie/) : obligations de l'employeur face aux agents CMR (inventaire, liste des salariés exposés, contrôles VLEP, suivi individuel renforcé, hiérarchie de prévention). En préparation · accès anticipé.
 
 ## Capteurs de contamination (en développement)
-- [Capteurs de contamination](https://vb-safety.com/innovation/) : contrôle de la contamination cutanée post-incendie sur les lieux, qualité laboratoire, en quelques secondes. Technologie confidentielle, aucun détail technique publié.
+- [Capteurs de contamination](https://vb-safety.com/innovation/) : contrôle de la contamination cutanée sur le terrain, qualité laboratoire, en quelques secondes. Technologie confidentielle, aucun détail technique publié.
 
 ## Outils et ressources gratuits
 - [Dossier de preuve CMR](https://vb-safety.com/cmr-industrie/outil/) : suite gratuite de l'évaluation, sans compte, données dans le navigateur. Registre des agents et de leur régime (art. R. 4412-59), révisions datées de l'évaluation, étude de substitution et grille des treize mesures (art. R. 4412-66 à R. 4412-70), liste nominative datée et versionnée des travailleurs exposés avec extrait individuel, version anonyme pour le CSE, extrait pour l'agence d'intérim et bordereau d'envoi au SPST (art. R. 4412-93-1 à R. 4412-93-4), sommaire des 45 obligations CMR.
