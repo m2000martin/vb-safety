@@ -31,9 +31,10 @@
 <link rel="stylesheet" href="/static/barre.css?v=5">
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/fonts.css?v=2">
-<link rel="stylesheet" href="/static/outils.css?v=6">
+<link rel="stylesheet" href="/static/nav.css?v=2">
+<link rel="stylesheet" href="/static/outils.css?v=8">
 </head>
-<body>
+<body class="a-outil">
 
 <!-- Icônes (tracés inspirés de Lucide, licence ISC) -->
 <svg class="sprite" width="0" height="0" aria-hidden="true">
@@ -72,7 +73,16 @@
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></symbol>
 </svg>
 
-<header class="site-header" id="top">
+<header class="top">
+  <div class="wrap">
+    <a class="marque" href="/">VB Safety</a>
+    <nav class="onglets" aria-label="Navigation principale">
+      <a href="/innovation/">Capteurs de contamination</a><div class="nav-groupe nav-metier actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Espace métier<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><div class="nm-bloc"><span class="nm-t">Sapeurs-pompiers</span><a href="/sapeurs-pompiers/">Présentation</a><a href="/cmr-pompier/">Outil CMR</a></div><div class="nm-bloc"><span class="nm-t">Industrie</span><a href="/industrie/">Présentation</a><a href="/cmr-industrie/" aria-current="page">Outil CMR</a></div><div class="nm-bloc"><span class="nm-t">BTP</span><a href="/btp/">Présentation</a><a href="/cmr-industrie/">Outil CMR</a></div></div></div><a href="/ressources/">Ressources</a>
+    </nav>
+    <a class="ecrire" href="/#contact">Contact</a>
+  </div>
+</header>
+<header class="site-header outil-nav" id="top" data-etiquette="Outil CMR · Industrie et BTP">
   <div class="container">
     <a class="vbs-retour" href="/" aria-label="Retour au site VB Safety" hreflang="fr"><span aria-hidden="true">←</span><span class="vbs-retour-t">VB Safety</span></a>
     <a class="brand" href="./" aria-label="VB Safety Industrie &amp; BTP, accueil">
@@ -84,7 +94,7 @@
       </svg>
       <span class="brand-name">VB Safety<span class="brand-sub">Industrie &amp; BTP</span></span>
     </a>
-    <nav class="nav" id="main-nav" aria-label="Navigation principale">
+    <nav class="nav" id="main-nav" aria-label="Navigation de l'outil">
       <a href="#obligations">Obligations</a>
       <a href="#prevention">Prévention</a>
       <a href="#suivi">Suivi</a>
@@ -477,5 +487,6 @@
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/menu.js?v=7" defer></script>
 <script src="/static/fond.js?v=2" defer></script>
+<script src="/static/nav.js?v=1" defer></script>
 </body>
 </html>

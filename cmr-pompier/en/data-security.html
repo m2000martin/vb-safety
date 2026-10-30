@@ -33,9 +33,10 @@
 <link rel="stylesheet" href="/static/barre.css?v=5">
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/fonts.css?v=2">
-<link rel="stylesheet" href="/static/outils.css?v=6">
+<link rel="stylesheet" href="/static/nav.css?v=2">
+<link rel="stylesheet" href="/static/outils.css?v=8">
 </head>
-<body>
+<body class="a-outil">
 
 <!-- Icons (paths inspired by Lucide, ISC licence) -->
 <svg class="sprite" width="0" height="0" aria-hidden="true">
@@ -121,7 +122,17 @@
 </svg>
 
 
-<header class="site-header" id="top" data-no-i18n>
+<header class="top">
+  <div class="wrap">
+    <a class="marque" href="/en/">VB Safety</a>
+    <nav class="onglets" aria-label="Main navigation">
+      <a href="/en/innovation/">Contamination sensors</a><div class="nav-groupe nav-metier actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Sector spaces<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><div class="nm-bloc"><span class="nm-t">Firefighters</span><a href="/en/firefighters/">Overview</a><a href="/cmr-pompier/en/" aria-current="page">CMR tool</a></div><div class="nm-bloc"><span class="nm-t">Industry</span><a href="/en/industry/">Overview</a><a href="/cmr-industrie/" hreflang="fr">CMR tool (FR)</a></div><div class="nm-bloc"><span class="nm-t">Construction</span><a href="/en/construction/">Overview</a><a href="/cmr-industrie/" hreflang="fr">CMR tool (FR)</a></div></div></div><a href="/ressources/" hreflang="fr">Resources (FR)</a>
+    </nav>
+    <a class="langue" href="/cmr-pompier/securite-donnees.html" hreflang="fr" lang="fr">FR</a>
+    <a class="ecrire" href="/en/#contact">Contact</a>
+  </div>
+</header>
+<header class="site-header outil-nav" id="top" data-etiquette="CMR tool · Firefighters" data-no-i18n>
   <div class="container">
     <a class="vbs-retour" href="/en/" aria-label="Back to the VB Safety website" hreflang="en"><span aria-hidden="true">←</span><span class="vbs-retour-t">VB Safety</span></a>
     <a class="brand" href="./" aria-label="VB Safety Firefighters, home">
@@ -134,7 +145,7 @@
       <span class="brand-name">VB Safety<span class="brand-sub">Firefighters</span></span>
     </a>
 
-    <nav class="nav" id="main-nav" aria-label="Main navigation">
+    <nav class="nav" id="main-nav" aria-label="Tool navigation">
       <a href="./">Home</a>
       <a href="./#fonctionnement">How it works</a>
       <a href="./#roles">Roles</a>
@@ -261,5 +272,6 @@
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/menu.js?v=7" defer></script>
 <script src="/static/fond.js?v=2" defer></script>
+<script src="/static/nav.js?v=1" defer></script>
 </body>
 </html>
