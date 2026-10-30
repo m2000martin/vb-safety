@@ -42,7 +42,7 @@ img, svg { display: block; }
 .btn .tag { font: 700 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; background: rgba(255, 255, 255, .22); padding: 4px 6px; border-radius: 3px; }
 
 /* Typo */
-.kicker { display: inline-block; font: 500 12.5px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--signal); }
+.kicker { display: inline-block; font: 700 12.5px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--signal); }
 h1, h2 { font-family: var(--serif); font-weight: 600; letter-spacing: -.03em; margin: 0; }
 h3, h4 { margin: 0; }
 .titre { font-size: clamp(30px, 4vw, 44px); line-height: 1.12; margin-top: 12px; max-width: 22ch; }
@@ -174,12 +174,12 @@ h3, h4 { margin: 0; }
 .evitement { position: absolute; left: 12px; top: -60px; z-index: 50; background: #fff; color: #0E1E30; padding: 10px 14px; border-radius: 6px; font-weight: 600; }
 .evitement:focus { top: 12px; }
 .hero h1 { max-width: 20ch; }
-.h1-kw { display: block; font: 500 13px/1.45 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--signal); margin-bottom: 18px; max-width: 46ch; }
+.h1-kw { display: block; font: 700 13px/1.45 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--signal); margin-bottom: 18px; max-width: 46ch; }
 .hero .chapeau a, .prose a, .faq a, .textes a { color: #fff; text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 3px; }
 .textes .source { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 600; }
 .pied-h { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faible); margin: 0 0 14px; }
 @media (min-width: 820px) { .pied-grille { grid-template-columns: 1.3fr 1fr 1.2fr 1fr 1fr; } }
-h2.kicker { font-family: var(--mono); font-weight: 500; letter-spacing: .14em; margin: 0; }
+h2.kicker { font-family: var(--mono); font-weight: 700; letter-spacing: .14em; margin: 0; }
 
 /* Texte courant */
 .prose { max-width: 760px; }
