@@ -311,3 +311,23 @@ body.a-outil [id] { scroll-margin-top: 88px; }
 /* Connexion : panneau droit sans particules, dégradé uni */
 .login-side { position: relative; z-index: 1; }
 .login-panel { position: relative; z-index: 2; background: linear-gradient(165deg, #16304D 0%, #0F2236 55%, #0B1828 100%) !important; border-left: 1px solid rgba(255, 255, 255, .08); }
+
+/* VB CMR sapeurs-pompiers, téléphone : « Pourquoi / Comment / Vos données » allégés, en cartes qui défilent de côté */
+@media (max-width: 700px) {
+  .pillars { display: flex !important; gap: 12px !important; margin: 24px calc(-1 * var(--gutter, 16px)) 0 !important; padding: 4px var(--gutter, 16px) 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; align-items: stretch; }
+  .pillars::-webkit-scrollbar { display: none; }
+  .pillars > .card { flex: 0 0 86%; scroll-snap-align: center; opacity: 1 !important; transform: none !important; padding: 28px 22px; }
+  .pillars > .card::after { transform: scaleX(1) !important; }
+  .pillars .role-tag, .why-points span, .promises li > div > span { display: none !important; }
+  .steps li > div > span { font-size: 14px; }
+  .steps, .promises { gap: 16px; text-align: left; }
+  .why-points { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .why-points strong { font-size: 13px; }
+  .pillars .card-text { font-size: 15px; line-height: 1.6; }
+  .pillars-points { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+  .pillars-points span { width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .28); transition: width .25s, background-color .25s; }
+  .pillars-points span.on { width: 18px; background: #fff; }
+}
+.pillars-points { display: none; }
+@media (max-width: 700px) { .pillars-points { display: flex; } }
+@media (max-width: 700px) { .pillars .promises li, .pillars .steps li { justify-content: flex-start; align-items: center; text-align: left; } .pillars .promises li > div, .pillars .steps li > div { text-align: left; } }
