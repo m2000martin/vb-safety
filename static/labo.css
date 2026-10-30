@@ -101,7 +101,7 @@
 .capt .ariane { margin-bottom: clamp(20px, 3vw, 36px); }
 .capt h1 { margin: 0; font: 600 clamp(44px, 5vw, 72px)/1 var(--serif); letter-spacing: -.05em; color: #fff; }
 .capt h1 em { font-style: normal; color: #9AA3AF; }
-.capt .chapeau { margin: 24px 0 0; max-width: 40ch; font-size: clamp(16.5px, 1.5vw, 19px); text-align: left; text-align-last: auto; }
+.capt .chapeau { margin: 24px 0 0; max-width: 34em; font-size: clamp(16.5px, 1.5vw, 19px); text-align: justify; text-align-last: left; hyphens: auto; }
 .capt-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 34px; }
 .capt-conf { font: 500 12.5px/1.4 var(--sans); color: #8B97A8; }
 .capt-vis { aspect-ratio: 16 / 11; border-radius: 18px; }
