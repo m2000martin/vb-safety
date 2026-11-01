@@ -1,0 +1,66 @@
+/* VB Safety · page Module EPI : mise en page centrée et bandeau défilant des EPI concernés.
+   Se charge après epi.css et outils.css, et ne s'applique qu'aux pages portant .p-epi. */
+
+/* ---- Tout centré ---- */
+.p-epi .section-head,
+.p-epi .epi-steps-wrap,
+.p-epi .epi-kinds,
+.p-epi .epi-health .eh-block,
+.p-epi .epi-roles article { text-align: center; }
+
+.p-epi .section-head .kicker,
+.p-epi .epi-steps-wrap .kicker,
+.p-epi .epi-kinds .kicker { display: block; }
+
+.p-epi .section-head h2,
+.p-epi .section-head p,
+.p-epi .epi-steps-wrap h2,
+.p-epi .epi-kinds h2 { margin-left: auto; margin-right: auto; }
+
+/* une seule colonne : les étapes, l'encadré santé et les EPI concernés se suivent, centrés */
+@media (min-width: 900px) {
+  .p-epi .epi-how-grid { grid-template-columns: 1fr; gap: 56px; }
+  .p-epi .epi-steps-wrap { grid-column: auto; }
+}
+.p-epi .epi-health { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 760px) { .p-epi .epi-health { grid-template-columns: 1fr 1fr; } }
+.p-epi .epi-health .eh-block h3 { justify-content: center; }
+.p-epi .epi-health .eh-block p { margin-left: auto; margin-right: auto; max-width: 46ch; }
+
+/* ---- Les 4 étapes : quatre cartes carrées, sans trait de liaison ---- */
+.p-epi .epi-stepper { gap: 14px; margin-top: 28px; }
+.p-epi .epi-stepper::before { display: none; }
+.p-epi .epi-stepper li {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 26px 20px 24px; border: 1px solid var(--line, rgba(255, 255, 255, .12));
+  border-radius: 14px; background: rgba(255, 255, 255, .03);
+}
+.p-epi .epi-stepper .num { width: 30px; height: 30px; font-size: 13.5px; }
+.p-epi .epi-stepper .sico { margin: 14px 0 12px; }
+.p-epi .epi-stepper strong { font-size: 16px; }
+.p-epi .epi-stepper li > span:last-child { max-width: 26ch; margin-left: auto; margin-right: auto; }
+@media (max-width: 899px) {
+  .p-epi .epi-stepper li { display: flex; padding: 22px 18px; }
+  .p-epi .epi-stepper .num { grid-row: auto; }
+  .p-epi .epi-stepper .sico { display: flex; }
+}
+
+/* ---- EPI concernés : bandeau défilant sans fin ---- */
+.p-epi .epi-how-grid > *, .p-epi .epi-kinds { min-width: 0; }
+.p-epi .epi-cadre { position: relative; width: 100%; max-width: 100%; min-width: 0; margin-top: 18px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.p-epi .kinds5.defile { display: flex; width: max-content; gap: 14px; margin: 0; padding: 0;
+  grid-template-columns: none; animation: epi-defile 46s linear infinite; will-change: transform; }
+.p-epi .kinds5.defile li { flex: 0 0 236px; width: 236px; }
+.p-epi .epi-cadre:hover .kinds5.defile,
+.p-epi .epi-cadre:focus-within .kinds5.defile { animation-play-state: paused; }
+@keyframes epi-defile { from { transform: none; } to { transform: translateX(calc(-50% - 7px)); } }
+@media (prefers-reduced-motion: reduce) { .p-epi .kinds5.defile { animation: none; } }
+
+/* image de l'EPI centrée dans sa carte */
+.p-epi .epi-kinds li { display: flex; flex-direction: column; align-items: center; }
+.p-epi .epi-kinds .kpic { display: flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; margin: 0 auto 10px; }
+.p-epi .epi-kinds .kpic .pic { width: 46px; height: 46px; }
+.p-epi .epi-kinds li > span { max-width: 28ch; }
