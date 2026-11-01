@@ -1,7 +1,9 @@
 // Frise « avec / sans traçabilité » (pages Sapeurs-pompiers et VB CMR).
-// Ordinateur : la section s'épingle sous l'en-tête ; le défilement trace d'abord la ligne « avec », puis la ligne « sans » ;
-// une fois la frise complète, la page reprend son défilement normal. En remontant, la frise se défait dans l'ordre inverse.
-// Téléphone, mouvement réduit, ou écran trop bas pour contenir la frise : frise complète et statique.
+// Ordinateur, écran assez haut : la section s'épingle sous l'en-tête ; le défilement trace d'abord la ligne « avec »,
+// puis la ligne « sans » ; une fois la frise complète, la page reprend son défilement normal.
+// Ordinateur, écran trop bas pour épingler : les deux lignes se tracent quand même, au rythme du passage de la
+// section dans la fenêtre, sans épinglage.
+// Téléphone ou mouvement réduit : frise complète et statique (le téléphone a sa propre bascule).
 (function () {
   var frises = document.querySelectorAll('[data-frise]');
   if (!frises.length || !window.matchMedia || !window.requestAnimationFrame) return;
@@ -20,7 +22,7 @@
         return { el: li, at: li.classList.contains('fr-end') ? 1 : (i / COLS) / end };
       }) };
     });
-    scenes.push({ f: f, section: section, stage: stage, lines: lines, on: false, top: 0, dist: 0 });
+    scenes.push({ f: f, section: section, stage: stage, lines: lines, mode: 'off', top: 0, dist: 0 });
   });
 
   function setLine(l, q) {
@@ -30,18 +32,23 @@
     l.items.forEach(function (it) { it.el.classList.toggle('on', q >= it.at - 0.01); });
   }
 
+  function mode(s, m) {
+    if (s.mode === m) return;
+    s.section.classList.toggle('fr-pin', m === 'pin');
+    s.stage.classList.toggle('fr-stage', m === 'pin');
+    s.f.classList.toggle('anim', m !== 'off');
+    if (m !== 'pin') { s.section.style.removeProperty('--fr-top'); s.section.style.removeProperty('--fr-vis'); s.section.style.removeProperty('--fr-h'); }
+    if (m === 'off') s.lines.forEach(function (l) { l.q = -1; l.el.style.removeProperty('--q'); });
+    s.mode = m;
+  }
+
   function layout() {
     var desktop = matchMedia('(min-width: 900px)').matches, vh = window.innerHeight;
     var top = header ? header.getBoundingClientRect().height : 0;
     scenes.forEach(function (s) {
       var fits = desktop && s.f.offsetHeight + 160 <= vh - top;
-      if (fits && !s.on) {
-        s.on = true; s.section.classList.add('fr-pin'); s.stage.classList.add('fr-stage'); s.f.classList.add('anim');
-      } else if (!fits && s.on) {
-        s.on = false; s.section.classList.remove('fr-pin'); s.stage.classList.remove('fr-stage'); s.f.classList.remove('anim');
-        s.lines.forEach(function (l) { l.q = -1; l.el.style.removeProperty('--q'); });
-      }
-      if (!s.on) return;
+      mode(s, fits ? 'pin' : desktop ? 'flux' : 'off');
+      if (s.mode !== 'pin') return;
       s.top = top; s.dist = Math.round(vh * SPAN);
       s.section.style.setProperty('--fr-top', top + 'px');
       s.section.style.setProperty('--fr-vis', (vh - top) + 'px');
@@ -51,12 +58,20 @@
 
   function update() {
     ticking = false;
+    var vh = window.innerHeight;
     scenes.forEach(function (s) {
-      if (!s.on) return;
-      var p = (s.top - s.section.getBoundingClientRect().top) / s.dist;      // 0 → 1 pendant l'épinglage
-      var t = Math.max(0, Math.min(1, (p - 0.04) / 0.86));                   // petite pause au début et à la fin
+      if (s.mode === 'off') return;
+      var r = s.section.getBoundingClientRect(), t;
+      if (s.mode === 'pin') {
+        var p = (s.top - r.top) / s.dist;                                    // 0 → 1 pendant l'épinglage
+        t = (p - 0.04) / 0.86;                                               // petite pause au début et à la fin
+      } else {
+        var trav = (vh - r.top) / (r.height + vh);                           // 0 quand la section entre, 1 quand elle sort
+        t = (trav - 0.14) / 0.46;                                            // tracé fini quand la section est à peu près centrée
+      }
+      t = Math.max(0, Math.min(1, t));
       var n = s.lines.length;
-      s.lines.forEach(function (l, i) {                                        // les lignes se tracent l'une après l'autre
+      s.lines.forEach(function (l, i) {                                      // les lignes se tracent l'une après l'autre
         var a = i / n * 0.8, b = a + 1 / n + 0.2 / n;
         setLine(l, Math.max(0, Math.min(1, (t - a) / (b - a))));
       });

@@ -12,7 +12,8 @@
   .a-bascule > .de-droite { animation: tel-droite .4s cubic-bezier(.2, .7, .2, 1); }
   .a-bascule > .de-gauche { animation: tel-gauche .4s cubic-bezier(.2, .7, .2, 1); }
   .frise.a-bascule .fr-lab { display: none; }
+  /* en bascule, les étapes sont toutes visibles : le tracé au défilement est réservé à l'ordinateur */
+  .frise.a-bascule .fr-steps li { opacity: 1 !important; transform: none !important; }
 }
 @keyframes tel-droite { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
 @keyframes tel-gauche { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: none; } }
-.frise.a-bascule .fr-steps li { opacity: 1 !important; }
