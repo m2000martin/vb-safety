@@ -236,7 +236,8 @@
   .cf-pills span { display: block; padding: 9px 15px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.04); border-radius: 999px; font: 600 13px var(--sans); color: #E4E4E7; cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
   .cf-pills input:focus-visible + span { border-color: var(--signal); box-shadow: 0 0 0 3px rgba(224, 108, 52, 0.2); }
   .cf-pills input:checked + span { border-color: var(--signal); background: rgba(224, 108, 52, 0.16); color: #FAFAFA; }
-  @media (max-width: 599px) { .cf-pills { justify-content: center; } }
+  #cf-quand .cf-pills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #cf-quand .cf-pills span { text-align: center; padding-left: 8px; padding-right: 8px; }
   .cf label.cf-consent { display: flex; gap: 12px; align-items: flex-start; font: 400 13px var(--sans); margin: 0; line-height: 1.5; color: #A1A1AA; }
   .cf-consent input[type=checkbox] { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--signal); flex-shrink: 0; }
   .cf-consent a { color: #FAFAFA; }
@@ -702,7 +703,7 @@
         <input class="cf-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required>
       </div>
       <div>
-        <label for="cf-tel">Téléphone <small>— facultatif</small></label>
+        <label for="cf-tel">Téléphone <small>— pour être rappelé</small></label>
         <input class="cf-input" id="cf-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30">
       </div>
       <div>
@@ -717,11 +718,13 @@
         </select>
       </div>
       <div id="cf-quand" hidden>
-        <span class="cf-lab">Moment préféré pour l'appel</span>
+        <span class="cf-lab">Créneaux qui vous conviennent</span>
         <div class="cf-pills">
-          <label><input type="radio" name="creneau" value="Matin"><span>Matin</span></label>
-          <label><input type="radio" name="creneau" value="Après-midi"><span>Après-midi</span></label>
-          </div>
+          <label><input type="checkbox" name="creneau" value="8h–10h"><span>8h–10h</span></label>
+          <label><input type="checkbox" name="creneau" value="10h–12h"><span>10h–12h</span></label>
+          <label><input type="checkbox" name="creneau" value="14h–16h"><span>14h–16h</span></label>
+          <label><input type="checkbox" name="creneau" value="16h–18h"><span>16h–18h</span></label>
+        </div>
       </div>
       <div class="full">
         <label for="cf-message"><span>Message</span> <i>*</i></label>
@@ -781,7 +784,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=45" defer></script>
+<script src="/static/accueil.js?v=46" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=3" defer></script>
 </body>

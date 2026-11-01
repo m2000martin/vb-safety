@@ -233,7 +233,9 @@
     var data = new FormData(form), subject = M.subject + data.get('organisation');
     var payload = { access_key: KEY, from_name: 'Site VB Safety', subject: subject };
     data.forEach(function (v, k) { payload[k] = v; });
-    if (!(payload.telephone || '').trim()) { delete payload.telephone; delete payload.creneau; }
+    payload.creneau = data.getAll('creneau').join(', ');
+    if (!(payload.telephone || '').trim() || !payload.creneau) delete payload.creneau;
+    if (!(payload.telephone || '').trim()) delete payload.telephone;
     if (payload.email) payload.replyto = payload.email;
     btn.disabled = true; btn.firstElementChild.textContent = M.sending; msg.hidden = true;
     try {
@@ -244,7 +246,7 @@
       form.reset();
     } catch (err) {
       msg.className = 'cf-msg full warn'; msg.textContent = M.fallback; msg.hidden = false;
-      var tel = (data.get('telephone') || '').trim(), creneau = data.get('creneau');
+      var tel = (data.get('telephone') || '').trim(), creneau = data.getAll('creneau').join(', ');
       var body = data.get('message') + '\n\n—\n' + data.get('nom') + '\n' + data.get('organisation') + '\n' + data.get('email')
         + (tel ? '\n' + (EN ? 'Phone' : 'Téléphone') + ' : ' + tel + (creneau ? ' (' + creneau + ')' : '') : '')
         + '\n' + (EN ? 'Profile' : 'Profil') + ' : ' + data.get('profil');
