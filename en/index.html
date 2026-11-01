@@ -224,6 +224,15 @@
   select.cf-input { padding-right: 36px; background-repeat: no-repeat; background-position: right 12px center; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23A1A1AA' stroke-width='1.6'/%3E%3C/svg%3E"); }
   select.cf-input option { color: #09090b; background: #fff; }
   textarea.cf-input { resize: vertical; min-height: 132px; line-height: 1.5; }
+  .cf label small, .cf .cf-lab small { font: 400 12px var(--sans); color: #A1A1AA; }
+  .cf .cf-lab { display: block; font: 600 13px var(--sans); color: #E4E4E7; margin-bottom: 7px; }
+  .cf-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cf-pills label { margin: 0; }
+  .cf-pills input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .cf-pills span { display: block; padding: 9px 15px; border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.04); border-radius: 999px; font: 600 13px var(--sans); color: #E4E4E7; cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
+  .cf-pills input:focus-visible + span { border-color: var(--signal); box-shadow: 0 0 0 3px rgba(224, 108, 52, 0.2); }
+  .cf-pills input:checked + span { border-color: var(--signal); background: rgba(224, 108, 52, 0.16); color: #FAFAFA; }
+  @media (max-width: 599px) { .cf-pills { justify-content: center; } }
   .cf label.cf-consent { display: flex; gap: 12px; align-items: flex-start; font: 400 13px var(--sans); margin: 0; line-height: 1.5; color: #A1A1AA; }
   .cf-consent input[type=checkbox] { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--signal); flex-shrink: 0; }
   .cf-consent a { color: #FAFAFA; }
@@ -689,6 +698,10 @@
         <input class="cf-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required>
       </div>
       <div>
+        <label for="cf-tel">Phone <small>— optional</small></label>
+        <input class="cf-input" id="cf-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30">
+      </div>
+      <div>
         <label for="cf-profil">You are</label>
         <select class="cf-input" id="cf-profil" name="profil">
           <option value="SDIS">Fire and rescue service</option>
@@ -698,6 +711,13 @@
           <option value="Presse">Press</option>
           <option value="Autre">Other</option>
         </select>
+      </div>
+      <div id="cf-quand" hidden>
+        <span class="cf-lab">Preferred time to call</span>
+        <div class="cf-pills">
+          <label><input type="radio" name="creneau" value="Matin"><span>Morning</span></label>
+          <label><input type="radio" name="creneau" value="Après-midi"><span>Afternoon</span></label>
+          </div>
       </div>
       <div class="full">
         <label for="cf-message"><span>Message</span> <i>*</i></label>
@@ -757,7 +777,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=44" defer></script>
+<script src="/static/accueil.js?v=45" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=3" defer></script>
 </body>

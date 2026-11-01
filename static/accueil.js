@@ -210,6 +210,17 @@
   // Formulaire de contact (Web3Forms ; si l'envoi échoue, ouverture de la messagerie)
   var ENDPOINT = 'https://api.web3forms.com/submit', KEY = '0752cc8d-b82f-4ae5-ab72-50183aee5216', MAIL = 'contact@vb-safety.com';
   var form = document.getElementById('contact-form');
+  // Le créneau d'appel n'apparaît que si un numéro est saisi
+  var champTel = document.getElementById('cf-tel'), blocQuand = document.getElementById('cf-quand');
+  if (champTel && blocQuand) {
+    var majQuand = function () {
+      var avec = champTel.value.trim() !== '';
+      blocQuand.hidden = !avec;
+      if (!avec) Array.prototype.forEach.call(blocQuand.querySelectorAll('input'), function (r) { r.checked = false; });
+    };
+    champTel.addEventListener('input', majQuand);
+    majQuand();
+  }
   if (form) form.addEventListener('submit', async function (e) {
     e.preventDefault();
     var btn = document.getElementById('cf-submit'), msg = document.getElementById('cf-msg');
@@ -222,6 +233,7 @@
     var data = new FormData(form), subject = M.subject + data.get('organisation');
     var payload = { access_key: KEY, from_name: 'Site VB Safety', subject: subject };
     data.forEach(function (v, k) { payload[k] = v; });
+    if (!(payload.telephone || '').trim()) { delete payload.telephone; delete payload.creneau; }
     if (payload.email) payload.replyto = payload.email;
     btn.disabled = true; btn.firstElementChild.textContent = M.sending; msg.hidden = true;
     try {
@@ -232,7 +244,10 @@
       form.reset();
     } catch (err) {
       msg.className = 'cf-msg full warn'; msg.textContent = M.fallback; msg.hidden = false;
-      var body = data.get('message') + '\n\n—\n' + data.get('nom') + '\n' + data.get('organisation') + '\n' + data.get('email') + '\nProfil : ' + data.get('profil');
+      var tel = (data.get('telephone') || '').trim(), creneau = data.get('creneau');
+      var body = data.get('message') + '\n\n—\n' + data.get('nom') + '\n' + data.get('organisation') + '\n' + data.get('email')
+        + (tel ? '\n' + (EN ? 'Phone' : 'Téléphone') + ' : ' + tel + (creneau ? ' (' + creneau + ')' : '') : '')
+        + '\n' + (EN ? 'Profile' : 'Profil') + ' : ' + data.get('profil');
       setTimeout(function () { location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }, 600);
     } finally {
       btn.disabled = false; btn.firstElementChild.textContent = M.submit;
