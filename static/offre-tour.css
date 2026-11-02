@@ -1,0 +1,26 @@
+/* VB Safety · mise en avant tournante des cartes « Ce que nous faisons pour vous ».
+   La classe .vedette se déplace d'une carte à l'autre ; ce fichier n'ajoute que la transition
+   et l'état de repos, le déclenchement est dans offre-tour.js. */
+
+.offres[data-tour] .offre {
+  transition: border-color .55s ease, box-shadow .55s ease, transform .55s ease;
+}
+.offres[data-tour] .offre.vedette { transform: translateY(-4px); }
+
+/* repère discret : la barre de progression du tour sur la carte en avant */
+.offres[data-tour] .offre { position: relative; overflow: hidden; }
+.offres[data-tour] .offre::after {
+  content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%;
+  background: var(--signal); transform: scaleX(0); transform-origin: left;
+  opacity: 0; transition: opacity .3s;
+}
+.offres[data-tour] .offre.vedette::after {
+  opacity: .85; animation: offre-jauge var(--tour, 6s) linear forwards;
+}
+@keyframes offre-jauge { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .offres[data-tour] .offre { transition: none; }
+  .offres[data-tour] .offre.vedette { transform: none; }
+  .offres[data-tour] .offre.vedette::after { animation: none; transform: scaleX(1); }
+}
