@@ -57,29 +57,3 @@
   .offres[data-tour] .offre.vedette { transform: none; }
   .offres[data-tour] .offre.vedette::after { animation: none; transform: scaleX(1); }
 }
-
-/* ---- Points repliés : deux visibles, le reste sur la carte active ---- */
-.offres[data-tour] .offre li.sup { display: none; }
-.offres[data-tour] .offre.vedette li.sup,
-.offres[data-tour] .offre.deplie li.sup { display: block; animation: offre-point .45s ease both; }
-.offres[data-tour] .offre.vedette li.sup:nth-of-type(3) { animation-delay: .03s; }
-.offres[data-tour] .offre.vedette li.sup:nth-of-type(4) { animation-delay: .07s; }
-.offres[data-tour] .offre.vedette li.sup:nth-of-type(5) { animation-delay: .11s; }
-@keyframes offre-point { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
-
-.offre-plus {
-  align-self: flex-start; margin-top: 12px;
-  font: 600 11.5px/1 var(--mono); letter-spacing: .08em;
-  color: var(--signal); border: 1px solid rgba(224, 108, 52, .35);
-  border-radius: 999px; padding: 5px 10px;
-  transition: opacity .35s ease, transform .35s ease;
-}
-.offres[data-tour] .offre.vedette .offre-plus,
-.offres[data-tour] .offre.deplie .offre-plus { opacity: 0; transform: scale(.9); pointer-events: none; }
-
-/* la carte suit la souris : on l'indique */
-.offres[data-tour] .offre { cursor: default; }
-
-@media (prefers-reduced-motion: reduce) {
-  .offres[data-tour] .offre.vedette li.sup { animation: none; }
-}
