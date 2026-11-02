@@ -1,12 +1,12 @@
 /* VB Safety · la mise en avant passe d'une carte d'offre à la suivante toutes les six secondes,
    et suit la souris dès qu'un visiteur survole une carte.
-   La carte active montre tous ses points ; les autres n'en montrent que trois, avec un repère
+   La carte active montre tous ses points ; les autres n'en montrent que deux, avec un repère
    « +N ». La hauteur est réservée au chargement pour qu'aucun bloc ne saute pendant le tour. */
 (function () {
   'use strict';
 
   var PAS = 6000;
-  var VISIBLES = 3;
+  var VISIBLES = 2;
 
   function tour(grille) {
     var cartes = Array.prototype.slice.call(grille.querySelectorAll('.offre'));
@@ -14,7 +14,7 @@
 
     grille.style.setProperty('--tour', (PAS / 1000) + 's');
 
-    // points au-delà des trois premiers : masqués, et comptés dans un repère
+    // points au-delà des deux premiers : masqués, et comptés dans un repère
     cartes.forEach(function (carte) {
       var pts = Array.prototype.slice.call(carte.querySelectorAll('ul > li'));
       var sup = pts.slice(VISIBLES);

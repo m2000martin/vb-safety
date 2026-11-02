@@ -58,12 +58,13 @@
   .offres[data-tour] .offre.vedette::after { animation: none; transform: scaleX(1); }
 }
 
-/* ---- Points repliés : trois visibles, le reste sur la carte active ---- */
+/* ---- Points repliés : deux visibles, le reste sur la carte active ---- */
 .offres[data-tour] .offre li.sup { display: none; }
 .offres[data-tour] .offre.vedette li.sup,
 .offres[data-tour] .offre.deplie li.sup { display: block; animation: offre-point .45s ease both; }
-.offres[data-tour] .offre.vedette li.sup:nth-of-type(4) { animation-delay: .04s; }
-.offres[data-tour] .offre.vedette li.sup:nth-of-type(5) { animation-delay: .09s; }
+.offres[data-tour] .offre.vedette li.sup:nth-of-type(3) { animation-delay: .03s; }
+.offres[data-tour] .offre.vedette li.sup:nth-of-type(4) { animation-delay: .07s; }
+.offres[data-tour] .offre.vedette li.sup:nth-of-type(5) { animation-delay: .11s; }
 @keyframes offre-point { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
 
 .offre-plus {
