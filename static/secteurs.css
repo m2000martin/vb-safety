@@ -388,3 +388,8 @@ table.cols th { font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-tran
 .res-groupe + .res-groupe { margin-top: clamp(40px, 5vw, 64px); }
 .res-groupe > .kicker { display: block; margin: 0 0 18px; }
 .res-groupe { scroll-margin-top: 96px; }
+
+/* Renvoi de source sous une grille de constats */
+.src-note { margin: 16px 0 0; font-size: 13px; color: var(--faible); text-align: center; }
+.src-note a { color: var(--doux); text-underline-offset: 3px; }
+.src-note a:hover { color: #fff; }
