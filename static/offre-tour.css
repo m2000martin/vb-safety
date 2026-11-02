@@ -1,26 +1,59 @@
-/* VB Safety · mise en avant tournante des cartes « Ce que nous faisons pour vous ».
-   La classe .vedette se déplace d'une carte à l'autre ; ce fichier n'ajoute que la transition
-   et l'état de repos, le déclenchement est dans offre-tour.js. */
+/* VB Safety · mise en avant tournante des cartes d'offre.
+   La classe .vedette se déplace d'une carte à l'autre ; le mouvement porte sur la lumière,
+   pas sur la position : la carte active s'éclaire, les autres reculent d'un cran.
+   Le déclenchement est dans offre-tour.js. */
+
+.offres[data-tour] { --tour: 6s; }
 
 .offres[data-tour] .offre {
-  transition: border-color .55s ease, box-shadow .55s ease, transform .55s ease;
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #0C1B2C, #0A1624);
+  border-color: rgba(255, 255, 255, .055);
+  transition: background .6s ease, border-color .6s ease, box-shadow .6s ease,
+              transform .6s cubic-bezier(.2, .7, .3, 1);
 }
-.offres[data-tour] .offre.vedette { transform: translateY(-4px); }
 
-/* repère discret : la barre de progression du tour sur la carte en avant */
-.offres[data-tour] .offre { position: relative; overflow: hidden; }
+/* cartes en retrait : titre et puces gardent leur contraste, le reste s'estompe */
+.offres[data-tour] .offre > p,
+.offres[data-tour] .offre li { color: #8695A6; transition: color .6s ease; }
+.offres[data-tour] .offre h3 { color: #BAC6D2; transition: color .6s ease; }
+.offres[data-tour] .offre .lien { color: #B4C1CE; transition: color .6s ease; }
+
+/* carte active : fond plus clair, liseré orange, léger soulèvement */
+.offres[data-tour] .offre.vedette {
+  background: linear-gradient(180deg, #1D3650, #13263B);
+  border-color: rgba(224, 108, 52, .5);
+  box-shadow: 0 36px 72px -40px rgba(224, 108, 52, .9),
+              0 0 0 1px rgba(224, 108, 52, .18) inset;
+  transform: translateY(-6px);
+}
+.offres[data-tour] .offre.vedette h3 { color: #fff; }
+.offres[data-tour] .offre.vedette > p { color: #BCC9D6; }
+.offres[data-tour] .offre.vedette li { color: #DCE3EA; }
+.offres[data-tour] .offre.vedette .lien { color: #fff; }
+
+/* jauge du tour, en haut de la carte active */
 .offres[data-tour] .offre::after {
   content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%;
-  background: var(--signal); transform: scaleX(0); transform-origin: left;
-  opacity: 0; transition: opacity .3s;
+  background: linear-gradient(90deg, var(--signal), var(--signal-2));
+  transform: scaleX(0); transform-origin: left; opacity: 0; transition: opacity .3s;
 }
 .offres[data-tour] .offre.vedette::after {
-  opacity: .85; animation: offre-jauge var(--tour, 6s) linear forwards;
+  opacity: .9; animation: offre-jauge var(--tour) linear forwards;
 }
 @keyframes offre-jauge { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
+/* halo très diffus derrière la carte active, pour que la lumière ne s'arrête pas au bord */
+.offres[data-tour] .offre::before {
+  content: ""; position: absolute; inset: -1px; pointer-events: none;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(224, 108, 52, .2), transparent 64%);
+  opacity: 0; transition: opacity .6s ease;
+}
+.offres[data-tour] .offre.vedette::before { opacity: 1; }
+
 @media (prefers-reduced-motion: reduce) {
-  .offres[data-tour] .offre { transition: none; }
+  .offres[data-tour] .offre,
+  .offres[data-tour] .offre * { transition: none; }
   .offres[data-tour] .offre.vedette { transform: none; }
   .offres[data-tour] .offre.vedette::after { animation: none; transform: scaleX(1); }
 }
