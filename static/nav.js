@@ -20,7 +20,30 @@
     g.addEventListener('mouseenter', function () { b.setAttribute('aria-expanded', 'true'); });
     g.addEventListener('mouseleave', function () { if (!g.classList.contains('ouvert')) b.setAttribute('aria-expanded', 'false'); });
   });
-  document.addEventListener('click', function (e) { if (!e.target.closest('.nav-groupe')) fermer(null); });
+  var surTel = function () { return window.matchMedia('(max-width: 900px)').matches; };
+  // Sur ordinateur, un clic en dehors referme le sous-menu. Sur téléphone le menu est un
+  // accordéon dans un panneau : on garde le métier ouvert.
+  document.addEventListener('click', function (e) {
+    if (surTel()) return;
+    if (!e.target.closest('.nav-groupe')) fermer(null);
+  });
+  // Téléphone : le menu est un accordéon, un seul métier ouvert à la fois.
+  // Celui de la page en cours s'ouvre d'emblée ; les autres se déplient au toucher.
+  (function () {
+    var tel = window.matchMedia('(max-width: 900px)');
+    function etat() {
+      if (!tel.matches) return;
+      var a = document.querySelector('.nav-metier.actif');
+      if (!a || a.classList.contains('ouvert')) return;
+      fermer(a);
+      a.classList.add('ouvert');
+      var b = a.querySelector('.nav-sous'); if (b) b.setAttribute('aria-expanded', 'true');
+    }
+    etat();
+    if (tel.addEventListener) tel.addEventListener('change', etat);
+    var btn = document.querySelector('#menu-btn, .menu-btn, .mm-btn');
+    if (btn) btn.addEventListener('click', function () { window.setTimeout(etat, 0); });
+  })();
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     var g = document.activeElement && document.activeElement.closest && document.activeElement.closest('.nav-groupe');

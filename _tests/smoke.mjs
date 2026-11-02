@@ -299,7 +299,10 @@ for (const p of pages) {
   const pg = await ctx.newPage(); await pg.goto(BASE + '/sapeurs-pompiers/'); await pg.waitForTimeout(300);
   ok(!(await pg.locator('.onglets').isVisible()), 'Téléphone · onglets masqués derrière le bouton Menu');
   await pg.tap('.mm-btn'); await pg.waitForTimeout(200);
-  ok(await pg.locator('.onglets a[href="/btp/"]').isVisible() && await pg.locator('.onglets .mm-cta').isVisible(), 'Téléphone · le menu déroulant affiche les pages et « Demander un devis »');
+  ok(await pg.locator('.onglets a[href="/sapeurs-pompiers/"]').isVisible() && await pg.locator('.onglets .mm-cta').isVisible(), 'Téléphone · le menu ouvre le métier de la page et garde « Demander un devis »');
+  ok(!(await pg.locator('.onglets a[href="/btp/"]').isVisible()), 'Téléphone · les autres métiers restent repliés');
+  await pg.tap('.onglets .nav-metier:last-of-type > .nav-sous'); await pg.waitForTimeout(300);
+  ok(await pg.locator('.onglets a[href="/btp/"]').isVisible() && !(await pg.locator('.onglets a[href="/sapeurs-pompiers/"]').isVisible()), 'Téléphone · toucher un métier le déplie et referme le précédent');
   await pg.goto(BASE + '/cmr-industrie/'); await pg.waitForTimeout(400);
   ok(await pg.locator('.vp-btn').count() === 0 && await pg.locator('.vp-cache').count() === 0, 'Téléphone · pages VB CMR : tous les blocs affichés, sans « Voir plus »');
   await ctx.close();

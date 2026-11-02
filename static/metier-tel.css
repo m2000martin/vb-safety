@@ -66,3 +66,39 @@
   .hero .cta { margin-top: 32px; }
   .hero { padding-top: 40px; padding-bottom: 48px; }
 }
+
+/* ---------- Téléphone : densité de lecture ----------
+   Le centrage systématique et la grande typographie faisaient paraître chaque section deux
+   fois plus longue qu'elle ne l'est. Les titres restent centrés, les paragraphes et les
+   cartes repassent au fer à gauche, et tout se resserre d'un cran. */
+@media (max-width: 700px) {
+  .sec { padding: 40px 0; }
+  .sec-tete { margin-bottom: 20px; }
+  .sec-tete .titre { font-size: 25px; line-height: 1.16; }
+  main .sec-tete .chapeau { font-size: 15.5px; line-height: 1.55; text-align: left; }
+
+  /* Enjeux : texte au fer à gauche, carte resserrée */
+  .pile-enjeux .enjeu { padding: 20px 18px 22px; text-align: left; }
+  .pile-enjeux .enjeu h3 { font-size: 17.5px; line-height: 1.3; margin-top: 9px; }
+  .pile-enjeux .enjeu p { text-align: left; font-size: 14.5px; line-height: 1.55; }
+
+  /* Offre : même traitement, le titre et le lien restent centrés */
+  .offre { text-align: left; align-items: stretch; padding: 22px 18px 20px; }
+  .offre .statut, .offre h3 { text-align: center; }
+  .offre h3 { font-size: 21px; margin-top: 11px; }
+  .offre > p { font-size: 14.5px; line-height: 1.55; }
+  .offre ul { margin-top: 14px; gap: 7px; }
+  .offre li { font-size: 14px; }
+  .offre .lien { padding-top: 16px; }
+
+  /* Textes réglementaires : idem */
+  .textes.pile-textes li, .textes.pile-textes li > div { align-items: flex-start; text-align: left; }
+  .textes.pile-textes .statut { align-self: flex-start; }
+
+  /* le libellé du métier sort du bandeau collant et laissait passer le texte dessous ;
+     le menu indique déjà le métier en cours */
+  .top .marque-sub { display: none; }
+
+  /* le bouton fixé en bas ne doit pas manger la dernière ligne */
+  main { padding-bottom: 72px; }
+}

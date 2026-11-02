@@ -54,3 +54,37 @@
 
 /* En-tête des pages intérieures : sans ligne de séparation, comme l'accueil */
 header.top { border-bottom: 0 !important; }
+
+/* ---------- Téléphone : menu en accordéon, un seul métier ouvert ---------- */
+@media (max-width: 900px) {
+  /* seuls les liens du métier ouvert sont affichés */
+  .top.mm-open .onglets .nav-metier:not(.ouvert) .nav-liste.nav-metiers,
+  .haut.has-menu.open > .haut-nav .nav-metier:not(.ouvert) .nav-liste.nav-metiers { display: none; }
+  /* l'intitulé du métier redevient un bouton, avec son chevron */
+  .top.mm-open .onglets .nav-metier > .nav-sous,
+  .haut.has-menu.open > .haut-nav .nav-metier > .nav-sous {
+    display: flex; align-items: center; justify-content: flex-start;
+    min-height: 50px; padding: 12px 2px !important; font-size: 15px !important;
+    pointer-events: auto; cursor: pointer;
+    font-weight: 600 !important; letter-spacing: .02em !important; text-transform: none !important;
+    color: #fff !important; border-bottom: 1px solid rgba(255, 255, 255, .09);
+  }
+  .top.mm-open .onglets .nav-metier > .nav-sous .nav-fl,
+  .haut.has-menu.open > .haut-nav .nav-metier > .nav-sous .nav-fl {
+    display: block; width: 8px; height: 8px; border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor; transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform .22s ease; opacity: .7; margin-left: auto;
+  }
+  .top.mm-open .onglets .nav-metier.ouvert > .nav-sous .nav-fl,
+  .haut.has-menu.open > .haut-nav .nav-metier.ouvert > .nav-sous .nav-fl {
+    transform: rotate(-135deg) translate(-2px, -2px); opacity: 1;
+  }
+  .top.mm-open .onglets .nav-metier.ouvert > .nav-sous,
+  .haut.has-menu.open > .haut-nav .nav-metier.ouvert > .nav-sous { border-bottom-color: transparent; }
+  /* le métier de la page en cours se repère au liseré orange */
+  .top.mm-open .onglets .nav-metier.actif > .nav-sous::before,
+  .haut.has-menu.open > .haut-nav .nav-metier.actif > .nav-sous::before {
+    content: ""; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%;
+    background: var(--signal, #E06C34); flex: none;
+  }
+}
