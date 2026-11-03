@@ -697,6 +697,9 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
 }
 .road.rv li.in .dot { transform: none; }
 .marque-nimbo { color: var(--signal); margin-left: .45em; }
+.foot-k { font: 500 11.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.foot-brand .marque-nimbo { margin-left: 0; }
+.foot-brand .by { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); margin: 0 .2em; }
 </style>
 </head>
 <body>
@@ -1029,7 +1032,8 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
 <footer class="site-foot pad">
   <div class="foot-row">
     <div>
-      <span class="marque">VB Safety <span class="marque-nimbo">Nimbo</span></span>
+      <p class="foot-k" data-i18n="ft_k">Recherche en cours</p>
+      <span class="marque foot-brand"><span class="marque-nimbo">Nimbo</span> <span class="by">by</span> VB Safety</span>
       <p data-i18n="ft1">Projet de recherche et développement sur la protection autonome des habitations face aux feux de forêt, mené par VB Safety. Nimbo est en cours de développement.</p>
     </div>
     <div>
@@ -1089,7 +1093,7 @@ const EN = {
   req: "* Required fields", submit: "Send", ms_back: "Back", ms_next: "Next", fs1: "Your profile", fs2: "Your experience", fs3: "Your details", ph_msg: "What you went through, what was missing, what worked…", m_step: "Please fill in the highlighted fields.",
   ft1: "Research and development project on autonomous home protection against wildfires, run by VB Safety. Project under development.",
   ft2: "Personal data: form data is used only to contact you about the project. It is never sold or shared. This site uses no cookies and no analytics.",
-  ft3: "Legal notice", ft4: "Privacy",
+  ft_k: "Research in progress", ft3: "Legal notice", ft4: "Privacy",
   m_ok: "Thank you, your registration is recorded. We will contact you about the pilots.",
   m_err: "Please fill in name, email, town and tick the consent box.",
   m_fail: "Sending failed. Please try again in a moment.",
