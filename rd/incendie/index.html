@@ -467,13 +467,24 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
 @media (max-width: 999px) { .pip.fs { padding: 52px 10px 10px; justify-content: flex-start; } .pip.fs .chat { flex: 1; } .pip.fs .chat-body { max-height: none; } .pip.fs .pip-grid { flex: 1; grid-template-rows: auto 1fr; } }
 @media (max-width: 700px) { .pip-fs span { display: none; } .pip-fs { bottom: 46px; right: 8px; display: inline-flex !important; } .pip.fs .pip-fs { display: none !important; } }
 
+/* Plein écran : la fenêtre entière, sans la largeur imposée par la mise en page de la page */
+.pip:fullscreen, .pip:-webkit-full-screen { width: 100%; margin: 0; padding: 56px 24px 24px;
+  min-height: 0; height: 100%; background: var(--nuit); justify-content: center; }
+.pip:fullscreen .pip-view, .pip:-webkit-full-screen .pip-view { max-height: calc(100% - 90px);
+  max-width: calc((100vh - 90px) * 640 / 316); }
+.pip:fullscreen .pip-fs, .pip:-webkit-full-screen .pip-fs { display: none; }
+.pip:fullscreen .fs-close, .pip:-webkit-full-screen .fs-close { display: inline-flex; gap: 8px;
+  align-items: center; position: absolute; top: 14px; right: 18px; background: none;
+  border: 1px solid var(--line-strong); color: var(--soft); font: 600 13px var(--sans);
+  border-radius: 6px; padding: 7px 12px; cursor: pointer; z-index: 6; }
+.pip:fullscreen .fs-close:hover { border-color: var(--signal); color: #fff; }
+
 /* simulation full screen by default (in the page flow) */
 .pip { width: 100vw; max-width: none; margin: 8px 0 0 calc(50% - 50vw); min-height: 100vh; min-height: 100svh; padding: 20px max(16px, 2vw); display: flex; flex-direction: column; justify-content: center; }
 .pip .pip-grid { width: 100%; max-width: 1700px; margin: 0 auto; }
 .pip .pip-view { width: 100%; max-height: calc(100svh - 40px); max-width: calc((100svh - 40px) * 640 / 316); margin: 0 auto; }
 @media (min-width: 1000px) { .pip .pip-grid { grid-template-columns: minmax(0, 1fr) 360px; align-items: center; } .pip .chat { height: auto; min-height: 0; max-height: calc(100svh - 40px); align-self: stretch; } }
 @media (max-width: 999px) { .pip { justify-content: flex-start; padding: 12px 10px; } .pip .pip-grid { flex: 1; grid-template-rows: auto 1fr; } .pip .chat-body { max-height: none; min-height: 200px; } }
-#fs-open, #fs-close { display: none !important; }
 
 .pip-gate { display: none; }
 .pip.locked { position: relative; }
@@ -683,7 +694,6 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
 <section class="scene pad">
 <header class="haut">
   <a class="marque" href="/">VB Safety <span class="marque-nimbo">Nimbo</span></a>
-  <span class="tag" data-i18n="tag">R&amp;D · Feux de forêt</span>
   <nav class="haut-nav">
     <a href="#parcours" data-i18n="nav1">L'équipe</a>
     <a href="#pilotes" data-i18n="nav3">Premiers essais</a>
@@ -1566,6 +1576,51 @@ form.addEventListener("submit", async (e) => {
   ["lang-fr", "lang-en"].forEach(id => { const b = document.getElementById(id); if (b) b.addEventListener("click", () => setTimeout(() => render(0), 0)); });
   window.msReset = () => { cur = 0; render(0); };
   render(0);
+})();
+/* Plein écran de la simulation. On utilise l'API du navigateur quand elle existe ; sinon
+   (iPhone, qui ne la propose pas sur un élément) on retombe sur la classe .fs, déjà stylée. */
+(function () {
+  var pip = document.querySelector('.pip');
+  var ouvrir = document.getElementById('fs-open');
+  var fermer = document.getElementById('fs-close');
+  if (!pip || !ouvrir || !fermer) return;
+
+  var api = pip.requestFullscreen || pip.webkitRequestFullscreen;
+
+  function replier() {
+    pip.classList.add('fs');
+    document.documentElement.classList.add('fs-lock');
+  }
+  function deplier() {
+    pip.classList.remove('fs');
+    document.documentElement.classList.remove('fs-lock');
+  }
+
+  ouvrir.addEventListener('click', function () {
+    if (!api) { replier(); return; }
+    var p = api.call(pip);
+    if (p && p.catch) p.catch(replier);
+  });
+
+  fermer.addEventListener('click', function () {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      deplier();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && pip.classList.contains('fs') && !document.fullscreenElement) deplier();
+  });
+
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) {
+    document.addEventListener(ev, function () {
+      var dedans = document.fullscreenElement === pip || document.webkitFullscreenElement === pip;
+      if (!dedans) deplier();
+      window.dispatchEvent(new Event('resize'));
+    });
+  });
 })();
 </script>
 </body>
