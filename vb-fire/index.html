@@ -754,16 +754,16 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
   <h2 class="section-title center-t wide" data-i18n="sch_t">Nous n'arrêtons pas le feu. Nous créons une bulle de protection autour de votre bien.</h2>
 
   <figure class="film">
-    <video id="film" playsinline muted loop preload="metadata"
-           poster="/static/video/nimbo-principe.jpg"
+    <video id="film" playsinline controls preload="metadata"
+           poster="/static/video/vb-fire-film.jpg"
            aria-label="Séquence de trente secondes : les braises portées par le vent atteignent une maison vide, le système s'active et maintient la maison et ses abords humides.">
-      <source src="/static/video/nimbo-principe.mp4" type="video/mp4">
+      <source src="/static/video/vb-fire-film.mp4" type="video/mp4">
     </video>
     <button type="button" class="film-btn" id="film-btn" aria-label="Lire la séquence">
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-      <span data-i18n="film_cta">Voir en 30 secondes</span>
+      <span data-i18n="film_cta">Voir le film</span>
     </button>
-    <figcaption data-i18n="film_leg">Trente secondes, sans son. Illustration de principe.</figcaption>
+    <figcaption data-i18n="film_leg">Une minute, avec le son. Images de synthèse : illustration de principe.</figcaption>
   </figure>
 
   <div class="prop">
@@ -1064,7 +1064,7 @@ const EN = {
   av_k: "Project status", av_t: "A system developed with the field.", r1t: "Research and design", r1w: "In progress · 2026", r2t: "Prototypes and lab tests", r2w: "Winter – spring 2027", r3t: "Field trials on pilot sites", r3w: "Summer 2027", r4t: "Lessons learned and next steps", r4w: "End of 2027",
   tab1: "Home", tab2: "Business site", cover: "With or without a pool: the system adapts to every property.",
   kicker_b: "Research project · Field trials summer 2027", cta: "Sign up for the trials", bas_l: "Share your experience", discover: "Discover",
-  film_cta: "Watch in 30 seconds", film_leg: "Thirty seconds, no sound. Illustration of the principle.",
+  film_cta: "Watch the film", film_leg: "One minute, with sound. Computer-generated images: illustration of the principle.",
   sch_k: "The principle", sch_t: "We don't stop the fire. We create a protective bubble around your property.",
   pa_h: "Before / after", pa_p: "Drag to compare without and with the system.", ba_l: "Without system", ba_r: "With system",
   pb_h: "Animation", pb_p: "The fire approaches, the system starts on its own.",
@@ -1663,25 +1663,26 @@ form.addEventListener("submit", async (e) => {
     });
   });
 })();
-/* Film d'explication : lecture au clic, et lancement automatique quand il entre à l'écran
-   (muet, donc autorisé). Il se met en pause dès qu'il en sort, pour ne pas tourner pour rien. */
+/* Film d'explication : lecture au clic, avec le son. Pas de démarrage automatique —
+   les navigateurs le bloquent dès qu'il y a du son, et une voix off qui part seule
+   pendant qu'on lit la page est une mauvaise surprise. Le film se met en pause s'il
+   sort de l'écran, pour qu'on ne l'entende pas parler dans le vide. */
 (function () {
   var fig = document.querySelector('.film'), v = document.getElementById('film'),
       btn = document.getElementById('film-btn');
   if (!fig || !v || !btn) return;
-  // aucune source lisible : on masque le bloc plutôt que d'afficher un cadre noir.
-  // On regarde networkState, et non l'événement d'erreur, qui remonte aussi quand une
-  // seule des deux sources échoue alors que l'autre convient.
+  // aucune source lisible : on masque le bloc plutôt que d'afficher un cadre noir
   window.setTimeout(function () { if (v.networkState === 3) fig.hidden = true; }, 2500);
-  function lire() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-  btn.addEventListener('click', lire);
+  btn.addEventListener('click', function () {
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  });
   v.addEventListener('playing', function () { fig.classList.add('joue'); });
   v.addEventListener('pause', function () { fig.classList.remove('joue'); });
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  v.addEventListener('ended', function () { fig.classList.remove('joue'); });
   if (!('IntersectionObserver' in window)) return;
   new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) lire(); else v.pause(); });
-  }, { threshold: 0.45 }).observe(v);
+    es.forEach(function (e) { if (!e.isIntersecting && !v.paused) v.pause(); });
+  }, { threshold: 0.25 }).observe(v);
 })();
 </script>
 </body>
