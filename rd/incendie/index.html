@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="theme-color" content="#0E1E30">
-<title>R&amp;D incendie – Protection autonome des habitations face aux feux de forêt · VB Safety</title>
-<meta name="description" content="Projet de recherche et développement de VB Safety : système autonome de protection des maisons pendant les feux de forêt. Inscription aux premiers essais terrain.">
+<title>Nimbo – Protection autonome des habitations face aux feux de forêt · VB Safety R&amp;D</title>
+<meta name="description" content="Nimbo, projet de recherche et développement de VB Safety : système autonome de protection des maisons pendant les feux de forêt. Inscription aux premiers essais terrain.">
 <style>
 @font-face{font-family:"Inter";font-weight:400;font-display:swap;src:url(/static/fonts/inter-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"Inter";font-weight:500;font-display:swap;src:url(/static/fonts/inter-latin-500-normal.woff2) format("woff2")}
@@ -670,6 +670,7 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
   #avancement.pin .section-title { font-size: 26px; }
 }
 .road.rv li.in .dot { transform: none; }
+.marque-nimbo { color: var(--signal); margin-left: .45em; }
 </style>
 </head>
 <body>
@@ -681,7 +682,7 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
 <main>
 <section class="scene pad">
 <header class="haut">
-  <a class="marque" href="/">VB Safety</a>
+  <a class="marque" href="/">VB Safety <span class="marque-nimbo">Nimbo</span></a>
   <span class="tag" data-i18n="tag">R&amp;D · Feux de forêt</span>
   <nav class="haut-nav">
     <a href="#parcours" data-i18n="nav1">L'équipe</a>
@@ -776,7 +777,7 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
       <div class="legend-air"><span><i class="lg-f"></i><span data-i18n="la_f">Front de flamme</span></span><span><i class="lg-b"></i><span data-i18n="la_b">Zone brûlée</span></span><span><i class="lg-p"></i><span data-i18n="la_p">Zone protégée</span></span></div>
     </div>
       <div class="pip-ctrl">
-        <div class="pseg" role="group" aria-label="Protection"><button type="button" aria-pressed="false" data-m="off" data-i18n="m_off">Sans protection</button><button type="button" aria-pressed="true" data-m="on" data-i18n="m_on">Avec protection</button></div>
+        <div class="pseg" role="group" aria-label="Protection"><button type="button" aria-pressed="false" data-m="off" data-i18n="m_off">Sans protection</button><button type="button" aria-pressed="true" data-m="on" data-i18n="m_on">Avec Nimbo</button></div>
       </div>
       <button class="replay pip-replay" type="button" id="replay" data-i18n="replay">Recommencer</button>
       <ol class="hist" id="hist" aria-hidden="true"></ol>
@@ -990,8 +991,8 @@ html.fs-lock, html.fs-lock body { overflow: hidden; }
 <footer class="site-foot pad">
   <div class="foot-row">
     <div>
-      <span class="marque">VB Safety</span>
-      <p data-i18n="ft1">Projet de recherche et développement sur la protection autonome des habitations face aux feux de forêt, mené par VB Safety. Projet en cours de développement.</p>
+      <span class="marque">VB Safety <span class="marque-nimbo">Nimbo</span></span>
+      <p data-i18n="ft1">Projet de recherche et développement sur la protection autonome des habitations face aux feux de forêt, mené par VB Safety. Nimbo est en cours de développement.</p>
     </div>
     <div>
       <p data-i18n="ft2">Données personnelles : les informations du formulaire servent uniquement à vous recontacter au sujet du projet. Elles ne sont ni vendues ni cédées. Ce site n'utilise aucun cookie ni outil de mesure d'audience.</p>
@@ -1014,7 +1015,7 @@ const EN = {
   fs: "Full screen", close: "Close",
   chat_t: "Assistant", chat_s: "Live",
   ai_chip: "AI · optimised watering", ai_line: "Water use is optimised by AI: the system waters at the right time and in the right place, based on the fire's approach, the wind and the water available.",
-  m_on: "With protection", m_off: "No protection", st_off: ["STANDBY", "FIRE APPROACHING", "NO PROTECTION", "HOUSE DESTROYED"],
+  m_on: "With Nimbo", m_off: "No protection", st_off: ["STANDBY", "FIRE APPROACHING", "NO PROTECTION", "HOUSE DESTROYED"],
   v_side: "Side view", v_air: "Aerial view", la_f: "Flame front", la_b: "Burnt area", la_p: "Protected zone",
   l_want: "I would like to", w_exp: "Share my experience of wildfires", w_info: "Receive information about the project", w_pil: "Take part in the field trials", w_part: "Partnership (municipality, insurer, company)",
   ref_k: "International reference", hnote: "System under development. First field trials in summer 2027.", disc: "Illustrations of the principle. The system is under research and development: nothing is on sale yet.",
