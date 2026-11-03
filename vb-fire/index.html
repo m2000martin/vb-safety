@@ -1671,8 +1671,6 @@ form.addEventListener("submit", async (e) => {
   var fig = document.querySelector('.film'), v = document.getElementById('film'),
       btn = document.getElementById('film-btn');
   if (!fig || !v || !btn) return;
-  // aucune source lisible : on masque le bloc plutôt que d'afficher un cadre noir
-  window.setTimeout(function () { if (v.networkState === 3) fig.hidden = true; }, 2500);
   btn.addEventListener('click', function () {
     var p = v.play(); if (p && p.catch) p.catch(function () {});
   });
