@@ -50,7 +50,9 @@
 .nav-metiers a[aria-current="page"]::after { display: none !important; }
 /* Logo : « VB SAFETY » avec le métier en orange dessous */
 .marque:has(.marque-sub) { position: relative; }
-.marque-sub { position: absolute; left: 0; top: calc(100% + 6px); white-space: nowrap; pointer-events: none; font: 700 10.5px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: #E06C34; }
+/* calé sous le TEXTE du logo, pas sous sa boîte : celle-ci fait 14 px sur les pages outil
+   et 44 px sur les pages métier (zone de touche), ce qui décalait le libellé de 30 px. */
+.marque-sub { position: absolute; left: 0; top: calc(50% + 13px); white-space: nowrap; pointer-events: none; font: 700 10.5px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; color: #E06C34; }
 
 /* En-tête des pages intérieures : sans ligne de séparation, comme l'accueil */
 header.top { border-bottom: 0 !important; }

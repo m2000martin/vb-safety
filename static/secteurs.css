@@ -393,3 +393,8 @@ table.cols th { font: 500 12px/1.3 var(--mono); letter-spacing: .06em; text-tran
 .src-note { margin: 16px 0 0; font-size: 13px; color: var(--faible); text-align: center; }
 .src-note a { color: var(--doux); text-underline-offset: 3px; }
 .src-note a:hover { color: #fff; }
+
+/* Page À propos : grilles de deux cartes, et libellés de rôle plus longs que « 01 » */
+.duo-fond { grid-template-columns: 1fr; }
+@media (min-width: 860px) { .duo-fond { grid-template-columns: 1fr 1fr; } }
+.duo-fond .enjeu .n { letter-spacing: .14em; text-transform: uppercase; font-size: 11px; line-height: 1.5; }
