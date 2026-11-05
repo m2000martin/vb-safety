@@ -90,21 +90,3 @@ header.top { border-bottom: 0 !important; }
     background: var(--signal, #E06C34); flex: none;
   }
 }
-
-/* ---------- Entrée de menu sans liste déroulante (lien direct) ---------- */
-.nav-sous.nav-lien { text-decoration: none; }
-.onglets .nav-groupe.actif > .nav-sous.nav-lien,
-.haut-nav .nav-groupe.actif > .nav-sous.nav-lien { color: #fff; }
-/* pas de flèche sur un lien direct : le liseré va jusqu'au bord du libellé */
-.onglets .nav-groupe.actif > .nav-sous.nav-lien::after { right: 14px; }
-.haut-nav .nav-groupe.actif > .nav-sous.nav-lien { border-bottom-color: var(--signal, #E06C34); }
-@media (max-width: 1040px) {
-  .top.mm-open .onglets .nav-sous.nav-lien,
-  .haut.has-menu.open > .haut-nav .nav-sous.nav-lien {
-    pointer-events: auto; text-transform: none; letter-spacing: 0;
-    font-size: 14.5px; font-weight: 500; color: #D4D4D8;
-    padding: 16px 2px 16px 14px;
-  }
-  .top.mm-open .onglets .nav-groupe.actif > .nav-sous.nav-lien,
-  .haut.has-menu.open > .haut-nav .nav-groupe.actif > .nav-sous.nav-lien { color: #fff; font-weight: 600; }
-}

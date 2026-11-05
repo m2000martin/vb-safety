@@ -168,8 +168,8 @@
   (function () {
     var btn = document.querySelector('.scene .btn-hero.primary'), note = document.querySelector('.scene .note'); if (!btn) return;
     // [mode des particules, début, mot en gras, index de la carte dans « Outils » ou adresse]
-    var M = EN ? [[null, '', 'Contamination sensors', '/en/innovation/'], ['pompiers', '', 'Firefighters', 0], ['industrie', '', 'Industry', 1], ['pompiers', '', 'Wildfire R&D', '/vb-fire/']]
-               : [[null, '', 'Capteurs de contamination', '/innovation/'], ['pompiers', '', 'Sapeurs-pompiers', 0], ['industrie', '', 'Industrie', 1], ['pompiers', '', 'R&D feu de forêt', '/vb-fire/']];
+    var M = EN ? [[null, '', 'Contamination sensors', '/en/innovation/'], ['pompiers', '', 'Firefighters', 0], ['industrie', '', 'Industry', 1]]
+               : [[null, '', 'Capteurs de contamination', '/innovation/'], ['pompiers', '', 'Sapeurs-pompiers', 0], ['industrie', '', 'Industrie', 1]];
     var lib = btn.firstElementChild;
     var tel = document.createElement('span'); tel.className = 'cta-tel'; tel.setAttribute('aria-hidden', 'true');
     var pile = document.createElement('span'); pile.className = 'nm-pile';
