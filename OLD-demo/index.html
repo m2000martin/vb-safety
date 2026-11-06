@@ -1,196 +1,189 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Démo – risque feux de végétation</title><meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Préparation aux feux de végétation (démo)</title>
 <style>.leaflet-image-layer,.leaflet-layer,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-pane,.leaflet-pane>canvas,.leaflet-pane>svg,.leaflet-tile,.leaflet-tile-container,.leaflet-zoom-box{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:0 0}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-bottom,.leaflet-top{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-pan-anim .leaflet-tile,.leaflet-zoom-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-control,.leaflet-popup-pane{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-image-layer,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-image-layer.leaflet-interactive,.leaflet-marker-icon.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:rgba(255,255,255,.5)}.leaflet-container{font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.65);border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:focus,.leaflet-bar a:hover{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px rgba(0,0,0,.4);background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:url(images/layers.png);width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:url(images/layers-2x.png);background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:url(images/marker-icon.png)}.leaflet-container .leaflet-control-attribution{background:#fff;background:rgba(255,255,255,.8);margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:focus,.leaflet-control-attribution a:hover{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:rgba(255,255,255,.8);text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-bar,.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers{box-shadow:none}.leaflet-touch .leaflet-bar,.leaflet-touch .leaflet-control-layers{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:17px 0;margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px rgba(0,0,0,.4)}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:0 0}.leaflet-container a.leaflet-popup-close-button:focus,.leaflet-container a.leaflet-popup-close-button:hover{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto}.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.4)}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before,.leaflet-tooltip-top:before{position:absolute;pointer-events:none;border:6px solid transparent;background:0 0;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-.tabs{overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab,#tg{flex:none}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:#1c2126}
-#map{position:absolute;inset:0;background:#f1efe9}
-.card{background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.22)}
-#top{position:absolute;top:8px;left:8px;right:8px;z-index:1000;padding:8px 10px}
-.row{display:flex;gap:6px;align-items:center}
-.seg{display:inline-flex;background:#f0ece4;border-radius:9px;padding:2px}
-.seg button{border:none;background:none;padding:5px 10px;font-size:13px;border-radius:7px;color:#3a4148;cursor:pointer}
-.seg button.on{background:#1c2126;color:#fff}
-#top .s{font-size:11.5px;color:#5d6670;margin-top:5px;line-height:1.3}
-.chips{display:flex;gap:6px;margin-top:7px;overflow-x:auto;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
-.chip{border:1px solid #d6d0c6;background:#fff;border-radius:16px;padding:5px 11px;font-size:12.5px;white-space:nowrap;cursor:pointer}
-.chip.on{background:#1c2126;color:#fff;border-color:#1c2126}
-.chip b{font-weight:700}
-#sheet{position:absolute;left:8px;right:8px;bottom:8px;z-index:1000;padding:0;max-height:58%;display:flex;flex-direction:column}
-#sheet.min{max-height:none}
-#sheet.min .body{display:none}
-.tabs{display:flex;gap:4px;padding:8px 10px 6px;border-bottom:1px solid #eee;align-items:center}
-.tab{border:none;background:none;font-size:13px;padding:4px 8px;border-radius:7px;color:#5d6670;cursor:pointer}
-.tab.on{background:#f0ece4;color:#1c2126;font-weight:600}
-#tg{margin-left:auto;border:none;background:#f0ece4;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer}
-.body{overflow:auto;padding:8px 12px 12px;font-size:13px;line-height:1.4}
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:4px 0 8px}
-.kpi{background:#f7f5f0;border-radius:9px;padding:7px 9px}
-.kpi .n{font-size:20px;font-weight:700;line-height:1.1}
-.kpi .l{font-size:11.5px;color:#5d6670}
-.sum{font-size:13px;padding:8px 12px}
-.sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.muted{color:#5d6670;font-size:12px}
-.warn{background:#fff6e5;border-left:3px solid #e0a020;padding:6px 8px;border-radius:4px;font-size:12px;margin:6px 0}
-table{border-collapse:collapse;width:100%;font-size:12.5px}
-td,th{padding:5px 4px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}
-th{font-size:11.5px;color:#5d6670;font-weight:600}
-tr.click{cursor:pointer} tr.click:hover{background:#f7f5f0}
-.num{text-align:right;white-space:nowrap}
-.leaflet-popup-content{font-size:12.5px;margin:9px 11px;line-height:1.4;min-width:190px}
-.pp b{font-weight:650} .pp .t{font-weight:700;font-size:13.5px;margin-bottom:3px}
-.lg{font-size:12px;line-height:1.7}
-h3{font-size:13.5px;margin:10px 0 4px}
-#lgm{position:absolute;left:8px;z-index:999;padding:7px 9px;font-size:11.5px;line-height:1.55;max-width:200px}
-#lgm .h{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:12px;cursor:pointer;gap:10px}
-#lgm.min .it{display:none}
-#lgm .sw{width:10px;height:10px}
-#lgm .ln{display:inline-block;width:14px;height:0;margin-right:5px;vertical-align:3px}
-@media(min-width:900px){#sheet{left:auto;width:400px;top:150px;bottom:8px;max-height:none}#sheet.min{top:auto}}
+html,body{margin:0;height:100%;font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:#1c2126;background:#f1efe9}
+#map{position:absolute;inset:0}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 8px rgba(0,0,0,.18)}
+#head{position:absolute;top:10px;left:10px;z-index:1000;padding:12px 14px;max-width:calc(100% - 20px)}
+#head h1{font-size:16px;margin:0}
+#head .sub{font-size:12px;color:#5d6670;margin-top:1px}
+.kpi{display:flex;align-items:center;gap:10px;margin-top:9px}
+.kpi .pc{font-size:26px;font-weight:800;line-height:1}
+.kpi .tx{font-size:12.5px;line-height:1.35}
+.leg{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.lb{display:flex;align-items:center;gap:6px;border:1.5px solid #e2ddd3;background:#fff;border-radius:20px;padding:5px 11px 5px 8px;font-size:13px;cursor:pointer}
+.lb i{width:13px;height:13px;border-radius:4px;display:inline-block}
+.lb b{font-weight:700}
+.lb.on{border-color:#1c2126;background:#1c2126;color:#fff}
+#panel{position:absolute;z-index:1000;display:flex;flex-direction:column;overflow:hidden}
+.tabs{display:flex;gap:2px;padding:8px 8px 0;border-bottom:1px solid #eee;flex:none;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:none;padding:9px 12px;font-size:14px;color:#5d6670;border-bottom:2.5px solid transparent;cursor:pointer;white-space:nowrap}
+.tab.on{color:#1c2126;font-weight:650;border-bottom-color:#1c2126}
+#grip{display:none}
+.body{overflow:auto;padding:12px 16px 18px;font-size:14px;line-height:1.5;flex:1}
+.step{display:flex;gap:10px;margin:10px 0}
+.step .n{flex:none;width:24px;height:24px;border-radius:50%;background:#1c2126;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.box{border:1px solid #e6e1d7;border-radius:11px;padding:11px 12px;margin:10px 0}
+.box h3{margin:0;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.pill{background:#c62828;color:#fff;border-radius:12px;padding:1px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.btn{border:1px solid #d6d0c6;background:#fff;border-radius:9px;padding:6px 10px;font-size:13px;cursor:pointer}
+.btn.dark{background:#1c2126;color:#fff;border-color:#1c2126}
+.letter{background:#faf8f3;border-left:3px solid #c62828;padding:8px 10px;font-size:13px;margin-top:8px;display:none}
+.adrs{columns:2;font-size:13px;margin-top:8px;display:none}
+.adrs a{display:block;color:#1c2126;text-decoration:none;padding:2px 0;break-inside:avoid;cursor:pointer}
+.adrs a:hover{text-decoration:underline}
+.muted{color:#5d6670;font-size:12.5px}
+table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt th{border-bottom:1px solid #eee;padding:5px 4px;text-align:left}table.pt th{font-size:12px;color:#5d6670;font-weight:600}table.pt tr.c{cursor:pointer}table.pt tr.c:hover{background:#faf8f3}.r{text-align:right}
+details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font-weight:600}
+.pop h4{margin:0 0 2px;font-size:15px}.pop .tag{display:inline-block;border-radius:10px;padding:1px 8px;font-size:12px;font-weight:700;color:#fff;margin-bottom:6px}
+.pop ul{margin:4px 0 6px 16px;padding:0}.pop li{margin:2px 0}
+.leaflet-popup-content{font-size:13.5px;line-height:1.45;margin:12px 14px;min-width:220px}
+@media(min-width:900px){#panel{top:10px;right:10px;bottom:10px;width:400px}#head{max-width:calc(100% - 440px)}}
+@media(max-width:899px){
+ #head{padding:10px 12px}#head h1{font-size:15px}.kpi .pc{font-size:22px}
+ #panel{left:8px;right:8px;bottom:8px;max-height:46%}
+ #panel.min{max-height:none}#panel.min .body{display:none}
+ #grip{display:block;width:40px;height:4px;background:#d6d0c6;border-radius:3px;margin:7px auto 0;flex:none}
+}
 </style></head><body>
 <div id="map"></div>
-<div id="top" class="card">
- <div class="row"><div class="seg" id="com" style="display:none"><button data-c="sam" class="on">Samoreau</button></div><div style="font-weight:700;font-size:14px">Samoreau <span style="font-weight:400;color:#5d6670;font-size:12px">· espace maire</span></div>
- <div class="seg" id="mode" style="margin-left:auto"><button data-m="a" class="on" title="Comparé aux maisons touchées au Porge et à Biscarrosse en 2026">Niveau</button><button data-m="c" title="Classement à l'intérieur de la commune">Rang</button></div></div>
- <div id="kpi" style="margin-top:6px;font-size:12.5px"></div><div class="s" id="sub"></div>
- <div class="chips" id="chips"></div>
+<div id="head" class="card">
+ <h1 id="ttl"></h1>
+ <div class="sub"><span id="stt">Espace maire · démonstration · données IGN 2024–2025</span> · <a href="#" id="chg" style="color:#5d6670">changer de ville</a></div>
+ <div class="kpi"><div class="pc" id="pc"></div><div class="tx" id="pctx"></div></div>
+ <div class="leg" id="leg"></div>
 </div>
-<div id="lgm" class="card"><div class="h" id="lgh">Légende <span id="lgt">−</span></div><div class="it" id="lgi"></div></div>
-<div id="sheet" class="card min">
- <div class="tabs"><button class="tab on" data-t="syn">Synthèse</button><button class="tab" data-t="rues">Rues</button><button class="tab" data-t="leg">Légende</button><button class="tab" data-t="met">Méthode</button><button class="tab" id="rapbtn" style="color:#7b1fa2;font-weight:700">Rapport</button><button id="tg">Ouvrir</button></div>
- <div class="sum" id="sum"></div>
+<div id="panel" class="card">
+ <div id="grip"></div>
+ <div class="tabs" id="tabs"></div>
  <div class="body" id="body"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-let D;function start(data){D=data;
-const COL={r:'#c62828',o:'#ef8a17',v:'#3d8b40'};
-let com='sam',mode='a',filt='all',tab='syn';
-const map=L.map('map',{zoomControl:false,preferCanvas:true,attributionControl:false});
-L.control.zoom({position:'topright'}).addTo(map);
-const cv=L.canvas({padding:0.5,tolerance:5});
-let layers=[],H=null,labels=[];
-const FIL={all:['Toutes',p=>true],prio:['Prioritaires',p=>p.p],old:['Soumises OLD',p=>p.o],oldd:['OLD + végétation dense',p=>p.o&&p.d],dense:['Végétation dense',p=>p.d],photo:['Végétation (photo 2024)',p=>p.ph],deux:['Prio. + photo',p=>p.p&&p.ph],imp:['Accès unique',p=>p.i&&(p.a!='v')],champ:['Bordure de champs',p=>p.ch],pei:['Poteau > 200 m',p=>p.h>200]};
-function cls(p){return mode=='a'?p.a:p.c}
-function sty(f){const p=f.properties,show=FIL[filt][1](p);
- const dl=(filt=='photo')?p.ph:(p.d&&((cls(p)!='v'&&p.nf)||filt=='dense'||filt=='oldd'));
- return {stroke:show&&dl,color:'#6a1b9a',weight:1.6,fillColor:COL[cls(p)],fillOpacity:show?.9:.07,opacity:show?1:0};}
-const LAB={r:'élevé',o:'moyen',v:'faible'};
-function pop(p){const c=D[com];
- let s='<div class="pp"><div class="t"><span class="sw" style="background:'+COL[p.a]+'"></span>Exposition : '+LAB[p.a]+'</div>';
- s+='<div class="muted">Rang dans la commune : '+(p.c=='r'?'30 % les plus exposées':p.c=='o'?'milieu':'30 % les moins exposées')+'</div>';
- s+='<div style="margin-top:5px"><b>Végétation basse 0–30 m</b> : '+(p.sb==null?'n.d.':p.sb+' %')+(p.d?' <span style="color:#6a1b9a;font-weight:700">· dense</span>':'')+'<br><span class="muted">tiers le plus dense de la commune ≥ '+c.st.p67+' % (LiDAR IGN 2024)</span></div>';
- if(!p.nf) s+='<div class="muted">Pas de massif (forêt de 5 ha ou plus, ou bois relié à des champs) à moins de 100 m : cette végétation est celle des jardins et haies. Elle n\'est pas comptée dans la priorité.</div>';
- if(p.ch) s+='<div><b>Bordure de champs ou prairie</b> (moins de 50 m) : risque de feu de récolte ou de chaume en été. Indication non testée sur les feux étudiés.</div>';
- s+='<div><b>Végétation 10–30 m (photo infrarouge IGN été 2024)</b> : '+(p.pv==null?'n.d.':p.pv+' % du sol')+(p.ph?' <span style="color:#6a1b9a;font-weight:700">· tiers haut</span>':'')+'</div>';
- s+='<div><b>Forêt à 100 m</b> : '+p.f+' % de la surface'+(p.rs>0?', dont résineux '+p.rs+' %':'')+(p.df>0?' · lisière à '+p.df+' m':' · bâti dans la forêt')+'</div>';
- s+='<div><b>OLD</b> : '+(p.o?'<span style="color:#c62828;font-weight:700">soumise</span> (moins de 200 m d\'un massif classé)':'non soumise d\'après le zonage publié')+'</div>';
- s+='<div><b>Accès</b> : '+(p.i?'<span style="font-weight:700">une seule voie d\'accès</span>':'plusieurs voies')+(p.w!=null?' · chaussée '+p.w+' m':'')+'</div>';
- s+='<div><b>Poteau incendie (OSM)</b> : '+p.h+' m</div>';
- if(p.v) s+='<div class="muted" style="margin-top:4px">'+p.v+'</div>';
- return s+'</div>';}
-function draw(){
- layers.forEach(l=>map.removeLayer(l));labels.forEach(l=>map.removeLayer(l));layers=[];labels=[];
- const c=D[com];
- map.fitBounds(c.core,{padding:[10,10]});
- const add=l=>{l.addTo(map);layers.push(l);return l};
- add(L.geoJSON(c.for,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#a9cfa0',fillOpacity:.55}}));
- if(c.res) add(L.geoJSON(c.res,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#4f8a52',fillOpacity:.55}}));
- add(L.geoJSON(c.old,{renderer:cv,interactive:false,style:{color:'#b26a00',weight:1.2,fill:false,opacity:.9}}));
- add(L.geoJSON(c.old200,{renderer:cv,interactive:false,style:{color:'#b26a00',weight:1.6,dashArray:'5 4',fill:false}}));
- D.feux.forEach(f=>{if(f.d>'2026') add(L.geoJSON(f.g,{renderer:cv,style:{stroke:false,fillColor:'#6d4c41',fillOpacity:.55}}).bindPopup('<b>Feu du '+f.d.split('-').reverse().join('/')+'</b><br>'+f.ha+' ha (EFFIS, contour satellite)'))});
- add(L.geoJSON(c.rt,{renderer:cv,interactive:false,style:{color:'#8f8f8f',weight:1,opacity:.8}}));
- add(L.geoJSON(c.com,{renderer:cv,interactive:false,style:{color:'#333',weight:1.6,dashArray:'2 5',fill:false}}));
- c.pei.forEach(q=>add(L.circleMarker(q,{renderer:cv,radius:1.8,stroke:false,fillColor:'#1565c0',fillOpacity:.7,interactive:false})));
- H=add(L.geoJSON(c.h,{renderer:cv,style:sty,onEachFeature:(f,l)=>l.bindPopup(()=>pop(f.properties),{autoPanPaddingTopLeft:[10,200],autoPanPaddingBottomRight:[10,90]})}));
- chips();ui();
-}
-function count(k){return D[com].h.features.filter(f=>FIL[k][1](f.properties)).length}
-function chips(){const el=document.getElementById('chips');el.innerHTML='';
- Object.keys(FIL).forEach(k=>{if(k=='old'||k=='oldd'){if(!D[com].st.old)return;}
-  const b=document.createElement('button');b.className='chip'+(k==filt?' on':'');b.innerHTML=FIL[k][0]+' <b>'+count(k)+'</b>';
-  b.onclick=()=>{filt=k;H.setStyle(sty);chips();};el.appendChild(b);});}
-function lgm(){const r=mode=='a'?['Exposition élevée','Exposition moyenne','Exposition faible']:['30 % les plus exposées','Milieu','30 % les moins exposées'];
- let h='<span class="sw" style="background:'+COL.r+'"></span>'+r[0]+'<br><span class="sw" style="background:'+COL.o+'"></span>'+r[1]+'<br><span class="sw" style="background:'+COL.v+'"></span>'+r[2]+'<br><span class="sw" style="background:#fff;border:2px solid #6a1b9a"></span>Végétation basse dense<br><span class="sw" style="background:#a9cfa0"></span>Forêt <span class="sw" style="background:#4f8a52;margin-left:4px"></span>résineux';
- if(D[com].st.old||com=='fbl') h+='<br><span class="ln" style="border-top:2px solid #b26a00"></span>Massif classé<br><span class="ln" style="border-top:2px dashed #b26a00"></span>Limite OLD 200 m';
- h+='<br><span class="sw" style="background:#6d4c41"></span>Brûlé juillet 2026<br><span class="sw" style="background:#1565c0;border-radius:6px;width:7px;height:7px;margin:0 8px 0 2px"></span>Poteau incendie (OSM)';
- document.getElementById('lgi').innerHTML=h;
- document.getElementById('lgm').style.top=(document.getElementById('top').offsetHeight+16)+'px';}
-function pct(a,b){return Math.round(100*a/b)+' %'}
-function ui(){const c=D[com],s=c.st;lgm();
- document.getElementById('sub').innerHTML=(mode=='a'?'Couleur = exposition comparée aux maisons touchées au Porge et à Biscarrosse (2026).':'Couleur = rang dans la commune : 30 % rouges, 30 % vertes par construction.')+' Contour violet = végétation basse dense à moins de 30 m, sur les maisons exposées à moins de 100 m d\'un massif.';
- document.getElementById('sum').innerHTML='<b>'+s.prio+' maisons prioritaires</b> sur '+s.n+' : exposition élevée ou moyenne, massif à moins de 100 m <i>et</i> végétation basse dense autour.'+(s.old?' <b>'+s.old+'</b> sont soumises aux OLD.':' Aucune n\'est soumise aux OLD.');
- let h='';
- if(tab=='syn'){
-  h+='<div class="kpis">';
-  const k=(n,l)=>h+='<div class="kpi"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';
-  k(s.prio,'prioritaires (exposées, massif < 100 m, végétation dense)');
-  k(s.rouge_abs+' / '+s.orange_abs,'exposition élevée / moyenne');
-  if(s.old){k(s.old,'soumises OLD (< 200 m d\'un massif classé)');k(s.old_dense,'dont végétation dense : à contrôler en premier');}
-  else k('non','soumise aux OLD : massif classé à '+s.dmassif+' m minimum');
-  k(s.prio_ph,'prioritaires confirmées par la photo infrarouge 2024');
-  k(s.imp_rouge,'exposées avec une seule voie d\'accès');
-  k(s.pei200,'à plus de 200 m d\'un poteau incendie connu d\'OSM');
-  h+='</div>';
-  if(com=='fbl') h+='<div class="warn"><b>Juillet 2026</b> : le feu du 13 juillet (650 ha, commune de Fontainebleau) est passé à 156 m des maisons les plus proches. Sur les 12 maisons à moins de 1 km, 8 sont en exposition élevée ; au rang de la commune, 11 rouges, 1 orange, aucune verte. Le feu de Noisy-sur-École (1 306 ha) est à 2,9 km.</div>';
-  else h+='<div class="warn">Samoreau est à l\'écart des massifs classés : les OLD ne s\'y appliquent pas d\'après le zonage publié. L\'outil sert ici à la prévention volontaire et au plan communal de sauvegarde, pas au contrôle.</div>';
-  h+='<h3>Ce que la mairie peut faire avec</h3><div>1. Contrôler en premier les maisons '+(s.old?'soumises OLD avec végétation dense ('+s.old_dense+')':'prioritaires ('+s.prio+')')+', rue par rue (onglet Rues).<br>2. Courrier ciblé aux rues concernées avant le printemps.<br>3. Vérifier avec le SDIS les secteurs à accès unique et loin d\'un poteau.<br>4. Refaire le calcul à chaque nouveau vol LiDAR ou image.</div>';
+let D,map,H,MK,filt=null,tab='res',showX=true,PL=null;
+const COL={a:'#c62828',s:'#f0a020',n:'#cfc9bd'};
+const CAT={a:['À dégager','Habitation exposée avec de la végétation dense autour'],s:['À surveiller','Habitation exposée, abords dégagés aujourd\'hui'],n:['Non concernée','Pas de bois important à proximité']};
+const MSGT={contre:'Végétation dense contre la maison',terrain:'Broussaille sur le terrain',lisiere:'Lisière boisée chez un voisin',foret:'Lisière de forêt publique'};
+function sty(f){const p=f.properties,on=!filt||filt(p),x=D.porge&&showX&&p.x;return {stroke:on&&(p.c!=='n'||x),color:x?'#000':'#fff',weight:x?2.5:1,fillColor:COL[p.c],fillOpacity:on?(p.c==='n'?.75:.95):.12,opacity:on?1:0}}
+function pop(p){
+ let s='<div class="pop"><span class="tag" style="background:'+(p.c==='n'?'#8a8478':COL[p.c])+'">'+CAT[p.c][0]+'</span>';
+ s+='<h4>'+(p.a||'Habitation')+'</h4>';
+ if(D.porge) s+='<div style="margin-bottom:6px"><b>'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</b> <span class="muted">(classement fait avec des données d\'avant le feu)</span></div>';
+ if(p.c==='n') return s+'<div>'+CAT.n[1]+'. Rien à faire.</div></div>';
+ s+='<b>Pourquoi</b><ul><li>Bois ou forêt à '+(p.df<=10?'moins de 10':p.df)+' m</li>';
+ if(p.c==='a') s+='<li>'+(p.c10>=150?'Végétation dense <b>contre la maison</b> (moins de 10 m)':'Végétation dense dans les 30 m autour')+'</li>';
+ else s+='<li>Abords dégagés sur le relevé de 2024</li>';
+ if(p.i) s+='<li>Rue sans issue : un seul accès pour les secours</li>';
+ if(p.ch) s+='<li>En bordure de champ ou prairie</li>';
+ s+='</ul>';if(!D.porge) s+='<b>Que faire</b><div>'+(p.c==='a'?'Courrier « '+MSGT[p.m]+' »':'Rien pour l\'instant ; à revoir au prochain relevé')+'</div>';s+='</div>';
+ return s;}
+function counts(){const c={a:0,s:0,n:0};D.h.features.forEach(f=>c[f.properties.c]++);return c}
+function legend(){const c=counts(),el=document.getElementById('leg');el.innerHTML='';
+ [['a'],['s'],['n']].forEach(([k])=>{const b=document.createElement('button');b.className='lb'+(filt&&filt.k===k?' on':'');
+  b.innerHTML='<i style="background:'+COL[k]+'"></i>'+CAT[k][0]+' <b>'+c[k]+'</b>';
+  b.onclick=()=>{setFilt(filt&&filt.k===k?null:Object.assign(p=>p.c===k,{k}))};el.appendChild(b)});
+ if(D.porge){const b=document.createElement('button');b.className='lb'+(showX?' on':'');b.innerHTML='<i style="background:#fff;border:2.5px solid #000"></i>Détruites en juillet 2026 <b>'+D.k.det+'</b>';b.onclick=()=>{showX=!showX;restyle();legend()};el.appendChild(b);}}
+function restyle(){H.setStyle(sty);if(MK)MK.eachLayer(m=>{const p=m.p,on=!filt||filt(p),x=D.porge&&showX&&p.x;m.setStyle({stroke:true,color:x?'#000':'#fff',weight:x?2.5:1.2,fillColor:COL[p.c],fillOpacity:on?.95:.1,opacity:on?1:.1});if(p.c==='a'&&on)m.bringToFront()})}
+function setFilt(f){filt=f;restyle();legend();}
+function zoomTo(lat,lon,z){map.setView([lat,lon],z||18);if(innerWidth<900)document.getElementById('panel').classList.add('min');}
+function ui(){const k=D.k,b=document.getElementById('body');let h='';
+ if(tab==='res'&&D.porge){
+  h+='<p style="margin-top:0"><b>Ce que l\'outil aurait montré au maire du Porge avant le feu du 22 juillet 2026.</b> Classement fait uniquement avec des données d\'avant le feu (relevé laser IGN, occupation du sol 2021, masque forêt 2021).</p>';
+  h+='<div class="box"><h3>Résultat après le feu</h3><p style="margin:6px 0 0">Habitations « à dégager » : <b>'+D.k.ta+' %</b> détruites. Autres habitations : <b>'+D.k.to+' %</b>.<br>Les '+D.k.a+' habitations à dégager contenaient '+D.k.det_a+' des '+D.k.det+' maisons détruites.</p></div>';
+  h+='<p class="muted">Le contour noir montre les maisons détruites (relevé par images satellite après le feu). Beaucoup de maisons détruites ne sont pas « à dégager » : au cœur des hameaux en pleine pinède, le feu a tout pris. L\'outil sert à choisir où contrôler en premier, il ne prédit pas quelles maisons vont brûler.</p>';
  }
- if(tab=='rues'){
-  h+='<div class="muted">Rues classées par nombre de maisons prioritaires. Toucher une ligne pour y aller.</div><table><tr><th>Rue</th><th class="num">Prio.</th>'+(s.old?'<th class="num">OLD</th>':'')+'<th class="num">Accès<br>unique</th></tr>';
-  c.rues.slice(0,40).forEach((r,i)=>h+='<tr class="click" data-i="'+i+'"><td>'+r.v+' <span class="muted">/ '+r.t+'</span></td><td class="num"><b>'+r.n+'</b></td>'+(s.old?'<td class="num">'+r.o+'</td>':'')+'<td class="num">'+r.i+'</td></tr>');
-  h+='</table><div class="muted" style="margin-top:6px">« / N » = nombre total de maisons rattachées à la rue. '+c.rues.length+' rues ont au moins une maison prioritaire.</div>';
+ if(tab==='res'&&!D.porge){
+  h+='<p style="margin-top:0"><b>'+k.a+' habitations ont des abords à dégager avant l\'été.</b> Elles sont près d\'un bois et entourées de végétation dense. '+k.degag+' autres sont aussi près d\'un bois mais déjà dégagées.</p>';
+  h+='<div class="step"><div class="n">1</div><div><b>Envoyer les courriers</b><br>'+D.g.length+' courriers types, un par situation, '+k.a+' adresses. <a href="#" onclick="go(\'cou\');return false">Voir les courriers</a></div></div>';
+  h+='<div class="step"><div class="n">2</div><div><b>Contacter les propriétaires des parcelles boisées</b><br>Environ '+k.brou_hors+' % de la broussaille autour de ces habitations n\'est pas sur leur terrain mais sur des parcelles voisines, souvent boisées. Les 10 parcelles principales en contiennent '+k.par10+' %. <a href="#" onclick="go(\'par\');return false">Voir les parcelles</a> · <a href="#" onclick="go(\'sec\');return false">les '+D.z.length+' secteurs</a></div></div>';
+  h+='<div class="step"><div class="n">3</div><div><b>Mettre à jour le plan communal de sauvegarde</b><br>'+k.imp+' habitations exposées sont dans une rue sans issue, '+k.ch+' en bordure de champ.</div></div>';
+  h+='<details><summary>Comment c\'est calculé</summary><p>Une habitation est <b>exposée</b> si elle est entourée de beaucoup de nature et de peu de bâti (jardins exclus) et qu\'un bois de 5 ha ou plus (ou relié à des champs) est à moins de 100 m. Elle est <b>à dégager</b> si, en plus, la végétation entre 0,5 et 3 m de haut est dense dans les 30 m (relevé laser aérien IGN, mars 2024).</p><p>Testé sur les feux du Porge et de Biscarrosse (juillet 2026) : les habitations « à dégager » y ont été détruites environ 2 fois plus souvent que les autres.</p><p>Indicateur de préparation : part des habitations exposées dont les abords sont dégagés. Repère : bien préparée à partir de 80 %.</p><p class="muted">Samoreau n\'est pas soumise aux obligations légales de débroussaillement d\'après le zonage publié : les courriers sont des recommandations. Données 2024–2025 : un terrain débroussaillé depuis apparaît encore à dégager.</p></details>';
  }
- if(tab=='leg'){
-  h+='<div class="lg"><span class="sw" style="background:'+COL.r+'"></span>Exposition élevée<br><span class="sw" style="background:'+COL.o+'"></span>Exposition moyenne<br><span class="sw" style="background:'+COL.v+'"></span>Exposition faible<br><span class="sw" style="background:#fff;border:2px solid #6a1b9a"></span>Végétation basse dense à moins de 30 m<br><span class="sw" style="background:#a9cfa0"></span>Forêt (BD Forêt v2 ; distance à la forêt : masque forêt IGN 2021)<br><span class="sw" style="background:#4f8a52"></span>Forêt de résineux ou mixte à résineux<br><span class="sw" style="background:#fff;border:1.5px solid #b26a00"></span>Massif classé à risque (zonage OLD)<br><span class="sw" style="background:#fff;border:1.5px dashed #b26a00"></span>Limite des 200 m : maisons soumises aux OLD à l\'intérieur<br><span class="sw" style="background:#6d4c41"></span>Surface brûlée juillet 2026 (EFFIS)<br><span class="sw" style="background:#1565c0;border-radius:6px"></span>Poteau incendie connu d\'OpenStreetMap<br><span class="sw" style="border-top:2px dotted #333;border-radius:0;height:0"></span>Limite communale</div>';
-  h+='<p class="muted"><b>Niveau</b> : comparé aux maisons des zones touchées au Porge et à Biscarrosse en 2026 (élevé = aussi exposée que les 30 % les plus exposées là-bas). <b>Rang</b> : classement interne à la commune (30 % rouges par construction).</p>';
+ if(tab==='cou'){
+  h+='<p class="muted" style="margin-top:0">Un même texte pour toutes les adresses d\'une situation. Chaque adresse ne reçoit qu\'un courrier.</p>';
+  D.g.forEach((g,i)=>{const L=g.k==='prop'?D.par.map(q=>({a:'Parcelle '+q.idu.slice(-6)})):D.h.features.filter(f=>f.properties.m===g.k).map(f=>f.properties).sort((a,b)=>a.a.localeCompare(b.a,'fr',{numeric:true}));
+   h+='<div class="box"><h3>'+g.t+'<span class="pill">'+g.n+(g.k==='prop'?' parcelles':' adresses')+'</span></h3><div class="btns">'+(g.k==='prop'?'<button class="btn dark" onclick="go(\'par\')">Voir les parcelles</button>':'<button class="btn dark" onclick="showMsg(\''+g.k+'\')">Voir sur la carte</button>')+'<button class="btn" onclick="tog(\'l'+i+'\')">Lire le courrier</button><button class="btn" onclick="cp('+i+',this)">Copier le texte</button><button class="btn" onclick="tog(\'a'+i+'\')">Adresses</button></div>';
+   h+='<div class="letter" id="l'+i+'">'+g.x+'</div><div class="adrs" id="a'+i+'">'+L.map((p,j)=>g.k==='prop'?'<a onclick="goPar('+j+')">'+p.a+'</a>':'<a onclick="goAdr(\''+p.a.replace(/'/g,"\\'")+'\')">'+p.a+'</a>').join('')+'</div></div>';});
  }
- if(tab=='met'){
-  h+='<h3>Ce qui est calculé, par maison</h3><div>• <b>Exposition</b> : part de nature entre 50 et 200 m (hors pixels à moins de 20 m du bâti, c\'est-à-dire hors jardins) et part de bâti entre 50 et 200 m. Score non réajusté sur ces communes.<br>• <b>Végétation basse</b> : part des points LiDAR entre 0,5 et 3 m dans les 30 m autour du bâtiment. « Dense » = tiers le plus haut de la commune. Comptée seulement à moins de 100 m d\'un massif (forêt de 5 ha ou plus, ou bois relié à des champs ou prairies déclarés, l\'ensemble faisant 5 ha ou plus) : en ville et près des petits bois de parc, ce sont des haies et jardins d\'ornement.<br>• <b>Bordure de champs</b> : champ ou prairie déclaré à la PAC (registre parcellaire RPG) à moins de 50 m. Information, non comptée dans la priorité (pas de champs dans les feux testés).<br>• <b>Végétation (photo)</b> : part du sol végétalisé entre 10 et 30 m sur la photo aérienne infrarouge IGN de l\'été 2024 (20 cm), bâtiments exclus. Tiers haut de la commune ≥ '+s.q67+' %.<br>• <b>OLD</b> : distance au massif classé du zonage informatif publié.<br>• <b>Accès</b> : la voie la plus proche est-elle dans une partie du réseau routier qui n\'a qu\'une seule sortie ; largeur de chaussée.<br>• <b>Eau</b> : distance au poteau incendie le plus proche connu d\'OpenStreetMap.</div>';
-  h+='<h3>Performance mesurée (zones brûlées réelles)</h3><div>• 7 feux européens : les maisons rouges ont été détruites <b>près de 4 fois plus</b> souvent que les vertes (9,3 % contre 2,4 %). Les 30 % rouges contenaient <b>55 %</b> des maisons détruites (30 % au hasard). Version de novembre 2026 : jardins exclus de la nature, pente retirée ; meilleure sur 6 feux sur 7 que la version précédente (51 %).<br>• Le Porge et Biscarrosse 2026 : végétation basse dense → <b>+50 %</b> de maisons touchées (13 → 21 % et 29 → 43 %).<br>• Le Porge et Biscarrosse 2026, photo infrarouge IGN 2024 : tiers le plus végétalisé à 10–30 m → <b>×2</b> de maisons détruites (5 → 11 % et 7 → 16 %), un peu mieux que le LiDAR.<br>• Données utilisées 2 à 5 ans avant chaque feu : l\'outil fonctionne avec des données « anciennes ».</div>';
-  h+='<h3>Données</h3><table><tr><td>LiDAR HD IGN</td><td>vols janv.–mars 2024, ~10 pts/m², couverture '+Math.round(s.cov*100)+' % autour des maisons</td></tr><tr><td>BD TOPO IGN</td><td>bâtiments résidentiels ≥ 40 m², routes, largeurs (2026)</td></tr><tr><td>Zonage OLD</td><td>Géoplateforme, couche DEBROUSSAILLEMENT (DDT 77)</td></tr><tr><td>Ortho IRC IGN</td><td>photo aérienne infrarouge 20 cm, été 2024</td></tr><tr><td>BD Forêt v2 IGN</td><td>type de peuplement</td></tr><tr><td>RPG (registre parcellaire)</td><td>champs et prairies déclarés à la PAC</td></tr><tr><td>Masque forêt IGN</td><td>forêts détectées par IA sur images 2021, hors « forêt urbaine probable », ≥ 0,5 ha : distance à la forêt</td></tr><tr><td>ESA WorldCover</td><td>occupation du sol 10 m (2021)</td></tr><tr><td>Copernicus DEM</td><td>pente 30 m</td></tr><tr><td>EFFIS (Copernicus)</td><td>contours des feux 2020 et 2026</td></tr><tr><td>OpenStreetMap</td><td>poteaux incendie (non exhaustif)</td></tr></table>';
-  h+='<h3>Limites</h3><div class="muted">Le LiDAR date de 2024 : un terrain débroussaillé depuis apparaît encore dense, et inversement. Les points bas mesurent un volume de végétation, pas la conformité juridique au cas par cas. Le zonage OLD utilisé est le zonage informatif publié ; l\'arrêté préfectoral fait foi. Les poteaux OSM sont incomplets : la base du SDIS fait référence. Les 2 communes n\'ont pas brûlé : la performance vient d\'autres feux. Document réservé à la mairie : il désigne des maisons réelles.</div>';
+ if(tab==='par'){
+  h+='<p class="muted" style="margin-top:0">Parcelles cadastrales où se trouve la broussaille dans les 50 m autour des habitations à dégager, de la plus importante à la moins importante. Le nom du propriétaire s\'obtient en mairie (cadastre). Toucher une ligne pour la voir.</p><table class="pt"><tr><th>Parcelle</th><th class="r">Broussaille</th><th class="r">Part</th><th class="r">Maisons concernées</th></tr>';
+  D.par.forEach((q,i)=>{h+='<tr class="c" onclick="goPar('+i+')"><td>'+q.idu.slice(-6)+(q.nb==0?' <span class="muted">· sans bâti</span>':'')+'</td><td class="r">'+q.b.toLocaleString('fr')+' m²</td><td class="r">'+q.pc+' %</td><td class="r">'+q.nm+'</td></tr>'});
+  h+='</table><p class="muted">Courrier type disponible dans l\'onglet Courriers (« Propriétaires des parcelles boisées »).</p>';
  }
- document.getElementById('body').innerHTML=h;
- document.querySelectorAll('tr.click').forEach(tr=>tr.onclick=()=>{const r=c.rues[+tr.dataset.i];map.setView([r.lat,r.lon],17);filt='prio';H.setStyle(sty);chips();document.getElementById('sheet').classList.add('min');document.getElementById('tg').textContent='Ouvrir';});
-}
-document.querySelectorAll('#com button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#com button').forEach(x=>x.classList.remove('on'));b.classList.add('on');com=b.dataset.c;filt='all';draw();});
-document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mode button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.m;H.setStyle(sty);ui();});
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');tab=b.dataset.t;ui();const s=document.getElementById('sheet');s.classList.remove('min');document.getElementById('tg').textContent='Réduire';});
-document.getElementById('tg').onclick=()=>{const s=document.getElementById('sheet');s.classList.toggle('min');document.getElementById('tg').textContent=s.classList.contains('min')?'Ouvrir':'Réduire';};
-document.querySelectorAll('#com button').forEach(x=>x.classList.toggle('on',x.dataset.c==com));
-document.getElementById('lgh').onclick=()=>{const e=document.getElementById('lgm');e.classList.toggle('min');document.getElementById('lgt').textContent=e.classList.contains('min')?'+':'−';};
-window.addEventListener('resize',lgm);
-map.on('popupopen',()=>{document.getElementById('lgm').classList.add('min');document.getElementById('lgt').textContent='+';});
-if(innerWidth<600&&innerHeight<700){document.getElementById('lgm').classList.add('min');document.getElementById('lgt').textContent='+';}
-draw();
-const k=D.kpi,pc=Math.round(100*k.degag/k.expo),cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828'),et=pc>=80?'bien préparée':(pc>=60?'à consolider':'à améliorer');
-document.getElementById('kpi').innerHTML='<span style="display:inline-block;background:'+cl+';color:#fff;border-radius:8px;padding:2px 8px;font-weight:700">Préparation été : '+pc+' %</span> <b>'+et+'</b> · '+k.degag+' / '+k.expo+' maisons exposées ont des abords dégagés';
-document.getElementById('rapbtn').onclick=e=>{e.stopPropagation();openRapport();};
+ if(tab==='sec'){
+  h+='<p class="muted" style="margin-top:0">Secteurs où plusieurs habitations à dégager sont regroupées. Toucher un secteur pour y aller.</p>';
+  D.z.forEach(z=>{h+='<div class="box" style="cursor:pointer" onclick="zoomTo('+z.lat+','+z.lon+',17)"><h3>'+z.t+'<span class="pill">'+z.n+' maison'+(z.n>1?'s':'')+'</span></h3><ul style="margin:6px 0 0 16px;padding:0;font-size:13px">'+z.mes.map(m=>'<li>'+m+'</li>').join('')+'</ul></div>'});
+ }
+ b.innerHTML=h;}
+function go(t){if(PL){if(t==='par')PL.addTo(map);else map.removeLayer(PL);}document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===t));tab=t;ui();document.getElementById('panel').classList.remove('min');}
+function tog(id){const e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block'}
+function cp(i,b){navigator.clipboard&&navigator.clipboard.writeText(D.g[i].x).then(()=>{b.textContent='Copié ✓'})}
+function showMsg(k){setFilt(Object.assign(p=>p.m===k,{k:'m'}));const L=[];H.eachLayer(l=>{if(l.feature.properties.m===k)L.push(l)});if(L.length)map.fitBounds(L3(L),{padding:[40,40]});if(innerWidth<900)document.getElementById('panel').classList.add('min');}
+function goPar(i){const q=D.par[i];const l=L.geoJSON(q.g);map.fitBounds(l.getBounds(),{padding:[60,60],maxZoom:18});if(PL)PL.eachLayer(x=>x.setStyle({weight:x.idx===i?4:2}));if(innerWidth<900)document.getElementById('panel').classList.add('min');}
+function L3(L){return L.reduce((b,l)=>b.extend(l.getBounds()),L[0].getBounds())}
+function goAdr(a){H.eachLayer(l=>{if(l.feature.properties.a===a){map.fitBounds(l.getBounds(),{maxZoom:18});(l.mk||l).openPopup();}});if(innerWidth<900)document.getElementById('panel').classList.add('min');}
+function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' · préparation aux feux de végétation';if(D.porge)document.getElementById('stt').textContent='Démonstration sur un feu réel · données d\'avant le feu';
+ const T=[['res','Résumé']];if(D.g)T.push(['cou','Courriers']);if(D.par)T.push(['par','Parcelles']);if(D.z)T.push(['sec','Secteurs']);
+ document.getElementById('tabs').innerHTML=T.map((t,i)=>'<button class="tab'+(i?'':' on')+'" data-t="'+t[0]+'">'+t[1]+'</button>').join('')+(D.rapport?'<button class="tab" id="rapbtn">Rapport ↗</button>':'');const k=D.k,pc=Math.round(100*k.degag/k.expo),cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828'),et=pc>=80?'bien préparée':(pc>=60?'à consolider':'à améliorer');
+ document.getElementById('pc').textContent=pc+' %';document.getElementById('pc').style.color=cl;
+ document.getElementById('pctx').innerHTML='<b style="color:'+cl+'">Commune '+et+' pour l\'été</b><br>'+k.degag+' des '+k.expo+' habitations exposées ont des abords dégagés';
+ map=L.map('map',{zoomControl:false,preferCanvas:true,attributionControl:false});const A=D.h.features.filter(f=>f.properties.c==='a').map(f=>L.geoJSON(f).getBounds().getCenter());const q=(a,p)=>{a=a.slice().sort((x,y)=>x-y);return a[Math.floor(p*(a.length-1))]};
+ const FB=L.latLngBounds([q(A.map(c=>c.lat),.05),q(A.map(c=>c.lng),.05)],[q(A.map(c=>c.lat),.95),q(A.map(c=>c.lng),.95)]);map.fitBounds(FB,{paddingTopLeft:[20,innerWidth<900?190:170],paddingBottomRight:[innerWidth<900?0:420,innerWidth<900?120:0]});
+ L.control.zoom({position:innerWidth<900?'topright':'bottomleft'}).addTo(map);
+ const cv=L.canvas({padding:.5,tolerance:6});
+ L.geoJSON(D.fo,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#b9d8b0',fillOpacity:.6}}).addTo(map);
+ L.geoJSON(D.rt,{renderer:cv,interactive:false,style:{color:'#a7a297',weight:1}}).addTo(map);
+ if(D.com)L.geoJSON(D.com,{renderer:cv,interactive:false,style:{color:'#555',weight:1.5,dashArray:'2 5',fill:false}}).addTo(map);
+ if(D.burn)L.geoJSON(D.burn,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#6d4c41',fillOpacity:.25}}).addTo(map);
+ if(D.par){PL=L.layerGroup();D.par.forEach((q,i)=>{const l=L.geoJSON(q.g,{renderer:cv,style:{color:'#5b3a8c',weight:2,dashArray:'6 4',fill:true,fillOpacity:.04}});l.eachLayer(x=>{x.idx=i;x.bindPopup('<b>Parcelle '+q.idu.slice(-6)+'</b><br>'+q.b.toLocaleString('fr')+' m² de broussaille à moins de 50 m de '+q.nm+' habitation(s) à dégager ('+q.pc+' % du total)')});PL.addLayer(l)});}
+ H=L.geoJSON(D.h,{renderer:cv,style:sty,onEachFeature:(f,l)=>l.bindPopup(()=>pop(f.properties),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]})}).addTo(map);
+ MK=L.layerGroup().addTo(map);
+ H.eachLayer(l=>{const p=l.feature.properties;if(p.c==='n')return;const c=l.getBounds().getCenter();
+  const m=L.circleMarker(c,{renderer:cv,radius:p.c==='a'?6:4.5});m.p=p;m.bindPopup(()=>pop(p),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]});l.mk=m;MK.addLayer(m)});
+ restyle();legend();ui();
+ document.querySelectorAll('.tab[data-t]').forEach(b=>b.onclick=()=>go(b.dataset.t));
+ if(D.rapport)document.getElementById('rapbtn').onclick=()=>openRapport();
+ document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
+ if(innerWidth<900)document.getElementById('panel').classList.add('min');
 }
 </script>
-<div id="gate" style="position:fixed;inset:0;z-index:5000;background:#f4f1ea;display:flex;align-items:center;justify-content:center;font-family:-apple-system,system-ui,Segoe UI,Roboto,sans-serif">
+<div id="gate" style="position:fixed;inset:0;z-index:5000;background:#f4f1ea;display:flex;align-items:center;justify-content:center">
 <form id="gf" style="background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.15);padding:22px 22px 18px;width:min(340px,90vw)">
-<div style="font-weight:700;font-size:17px;margin-bottom:4px">Démonstration – espace maire</div>
-<div style="font-size:13px;color:#5d6670;margin-bottom:14px">Carte des risques feux de végétation et rapports. Accès réservé : saisissez le code qui vous a été communiqué.</div>
-<input id="gc" autocomplete="off" autocapitalize="characters" placeholder="Code d'accès" style="width:100%;box-sizing:border-box;font-size:16px;padding:10px 12px;border:1px solid #d6d0c6;border-radius:9px;letter-spacing:2px">
+<div style="font-weight:700;font-size:17px;margin-bottom:4px">Démonstration · espace maire</div>
+<div style="font-size:13px;color:#5d6670;margin-bottom:14px">Carte de préparation aux feux de végétation et rapport. Accès réservé : saisissez le code qui vous a été communiqué.</div>
+<input id="gc" autocomplete="off" autocapitalize="characters" placeholder="Code d'accès" style="width:100%;font-size:16px;padding:10px 12px;border:1px solid #d6d0c6;border-radius:9px;letter-spacing:2px">
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='0LWGWHLpr+61D8wx9le7Og==',ITER=600000;let KEY=null;
+const SALT='BJSfgNaZyLdZj87fLy1lMQ==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
 async function dec(url){const b=new Uint8Array(await (await fetch(url,{cache:'no-store'})).arrayBuffer());
 return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b.slice(0,12)},KEY,b.slice(12)));}
 let RAP=null;
-async function openRapport(){const w=window.open('','_blank');if(!RAP){RAP=URL.createObjectURL(new Blob([await dec('rapport.bin')],{type:'text/html'}));}
+async function openRapport(){const w=window.open('','_blank');if(!RAP){RAP=URL.createObjectURL(new Blob([await dec('rapport_samoreau.bin')],{type:'text/html'}));}
 if(w)w.location=RAP;else location.href=RAP;}
 document.getElementById('gf').onsubmit=async e=>{e.preventDefault();const ge=document.getElementById('ge');ge.textContent='Vérification…';
-try{KEY=await derive(document.getElementById('gc').value.trim().toUpperCase());const d=JSON.parse(new TextDecoder().decode(await dec('carte.bin')));
-try{sessionStorage.setItem('oldk',document.getElementById('gc').value.trim().toUpperCase())}catch(_){}
-document.getElementById('gate').remove();start(d);}catch(err){ge.textContent='Code incorrect.';KEY=null;}};
+const code=document.getElementById('gc').value.trim().toUpperCase();
+try{KEY=await derive(code);const d=JSON.parse(new TextDecoder().decode(await dec('carte_samoreau.bin')));
+try{sessionStorage.setItem('oldk',code)}catch(_){}
+const v=(()=>{try{return sessionStorage.getItem('oldv')}catch(_){return null}})();
+if(v){await choose(v,d);return}
+document.getElementById('gf').innerHTML='<div style="font-weight:700;font-size:17px;margin-bottom:4px">Choisir une commune</div><div style="font-size:13px;color:#5d6670;margin-bottom:12px">Deux exemples.</div>'+
+'<button type="button" class="cv" data-v="samoreau"><b>Samoreau (77)</b><br><span>Espace maire : carte, courriers, parcelles, rapport</span></button>'+
+'<button type="button" class="cv" data-v="porge"><b>Le Porge (33)</b><br><span>Feu de juillet 2026 : ce que l\'outil aurait montré avant le feu</span></button>';
+document.querySelectorAll('.cv').forEach(b=>{b.style.cssText='display:block;width:100%;text-align:left;margin:8px 0;padding:11px 12px;border:1px solid #d6d0c6;border-radius:10px;background:#fff;cursor:pointer;font-size:14px;line-height:1.35';b.querySelector('span').style.cssText='font-size:12.5px;color:#5d6670';b.onclick=()=>choose(b.dataset.v,d)});
+}catch(err){ge.textContent='Code incorrect.';KEY=null;}};
+async function choose(v,dsam){try{sessionStorage.setItem('oldv',v)}catch(_){}
+const d=v==='samoreau'?dsam:JSON.parse(new TextDecoder().decode(await dec('carte_porge.bin')));
+document.getElementById('gate').remove();start(d);}
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='chg'){e.preventDefault();try{sessionStorage.removeItem('oldv')}catch(_){}location.reload()}});
 try{const c=sessionStorage.getItem('oldk');if(c){document.getElementById('gc').value=c;document.getElementById('gf').requestSubmit();}}catch(_){}
 </script>
 </body></html>
