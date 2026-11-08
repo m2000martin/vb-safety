@@ -11,7 +11,7 @@ html,body{margin:0;height:100%;font-family:-apple-system,system-ui,"Segoe UI",Ro
 #head h1{font-size:16px;margin:0}
 #head .sub{font-size:12px;color:#5d6670;margin-top:1px}
 .kpi{display:flex;align-items:center;gap:10px;margin-top:9px}
-.kpi .pc{font-size:26px;font-weight:800;line-height:1}
+.kpi .pc{font-size:26px;font-weight:800;line-height:1;white-space:nowrap}
 .kpi .tx{font-size:12.5px;line-height:1.35}
 .leg{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .lb{display:flex;align-items:center;gap:6px;border:1.5px solid #e2ddd3;background:#fff;border-radius:20px;padding:5px 11px 5px 8px;font-size:13px;cursor:pointer}
@@ -44,6 +44,15 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:6px 0 4px;background:#eee}.bar div{height:100%}
 .bl{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px}.bl i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .sec{margin-top:14px}.sec h4{margin:0 0 4px;font-size:14px}
+.fnav{display:flex;align-items:center;gap:6px;position:sticky;top:-12px;background:#fff;margin:-12px -16px 0;padding:10px 16px 8px;border-bottom:1px solid #f0ede6;z-index:2}.fnav .sp{flex:1}.btn.ic{width:34px;padding:6px 0;font-size:16px;line-height:1}
+.cta{margin-top:12px;width:100%;padding:12px;font-size:15px;font-weight:600;border-radius:10px}
+.cst{margin-top:12px;border:1px solid #e6e1d7;border-radius:12px;overflow:hidden}.cst .row{display:flex;gap:10px;padding:10px 12px;border-top:1px solid #f0ede6;cursor:pointer}.cst .row:first-child{border-top:0}.cst .row:hover{background:#faf8f3}
+.cst .ic{flex:none;width:8px;border-radius:4px}.cst .t{font-weight:650;font-size:14px}.cst .d{font-size:13px;color:#3a4148}.cst .a{font-size:12.5px;color:#5d6670;margin-top:2px}.cst .a b{color:#1c2126}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.chip{font-size:12px;border-radius:12px;padding:2px 9px;background:#f1efe9;color:#3a4148}
+.srch{width:100%;font-size:15px;padding:9px 12px;border:1px solid #d6d0c6;border-radius:10px;margin:2px 0 8px}
+.fl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.fl button{border:1.5px solid #e2ddd3;background:#fff;border-radius:16px;padding:4px 10px;font-size:12.5px;cursor:pointer}.fl button.on{background:#1c2126;color:#fff;border-color:#1c2126}
+.li{display:flex;align-items:center;gap:9px;padding:8px 4px;border-bottom:1px solid #f0ede6;cursor:pointer}.li:hover{background:#faf8f3}.li .dt{flex:none;width:11px;height:11px;border-radius:3px}.li .ad{flex:1;font-size:14px;min-width:0}.li .bs{display:block;margin-top:3px}.li .bd{display:inline-block;font-size:11px;border-radius:9px;padding:1px 7px;background:#f1efe9;color:#3a4148;margin:0 4px 2px 0;white-space:nowrap}.li .bd.k{background:#1c2126;color:#fff}
+.leaflet-tooltip.tt{font-size:12.5px;padding:4px 8px;border-radius:7px}
 .ileg{font-size:11.5px;color:#5d6670;margin-top:4px;line-height:1.5}.ileg i{display:inline-block;width:12px;height:3px;margin:0 3px 2px 6px;vertical-align:middle}
 details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font-weight:600}
 .pop h4{margin:0 0 2px;font-size:15px}.pop .tag{display:inline-block;border-radius:10px;padding:1px 8px;font-size:12px;font-weight:700;color:#fff;margin-bottom:6px}
@@ -51,7 +60,7 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
 .leaflet-popup-content{font-size:13.5px;line-height:1.45;margin:12px 14px;min-width:220px}
 @media(min-width:900px){#panel{top:10px;right:10px;bottom:10px;width:400px}#head{max-width:calc(100% - 440px)}}
 @media(max-width:899px){
- #head{padding:10px 12px}#head h1{font-size:15px}.kpi .pc{font-size:22px}
+ #head{padding:9px 11px;top:8px;left:8px;right:8px;max-width:none}#head h1{font-size:14.5px}#head .sub{font-size:11px}.kpi{margin-top:6px}.kpi .pc{font-size:21px}.kpi .tx{font-size:11.5px}.leg{gap:4px;margin-top:7px}.lb{font-size:11.5px;padding:3px 8px 3px 6px;gap:4px}.lb i{width:10px;height:10px}
  #panel{left:8px;right:8px;bottom:8px;max-height:46%}
  #panel.min{max-height:none}#panel.min .body{display:none}
  #grip{display:block;width:40px;height:4px;background:#d6d0c6;border-radius:3px;margin:7px auto 0;flex:none}
@@ -71,11 +80,11 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-let D,map,H,MK,filt=null,tab='res',showX=true,PL=null;
+let D,map,H,MK,CV,SELP=null,NAV=[],NI=0,Q='',LF='a',filt=null,tab='res',showX=true,PL=null;
 const COL={a:'#c62828',s:'#f0a020',n:'#cfc9bd'};
 const CAT={a:['À dégager','Habitation exposée avec de la végétation dense autour ou des branches contre la maison'],s:['À surveiller','Habitation exposée, abords dégagés aujourd\'hui'],n:['Non concernée','Pas de bois important à proximité']};
 const MSGT={contre:'Végétation dense contre la maison',terrain:'Broussaille sur le terrain',lisiere:'Lisière boisée chez un voisin',foret:'Lisière de forêt publique',branches:'Branches contre la maison'};
-function sty(f){const p=f.properties,on=!filt||filt(p),x=D.porge&&showX&&p.x;return {stroke:on&&(p.c!=='n'||x),color:x?'#000':'#fff',weight:x?2.5:1,fillColor:COL[p.c],fillOpacity:on?(p.c==='n'?.75:.95):.12,opacity:on?1:0}}
+function sty(f){if(f.properties===SELP)return {stroke:true,color:'#1c2126',weight:4,opacity:1,fillColor:COL[f.properties.c],fillOpacity:1};const p=f.properties,on=!filt||filt(p),x=D.porge&&showX&&p.x;return {stroke:on&&(p.c!=='n'||x),color:x?'#000':'#fff',weight:x?2.5:1,fillColor:COL[p.c],fillOpacity:on?(p.c==='n'?.75:.95):.12,opacity:on?1:0}}
 function pop(p){
  let s='<div class="pop"><span class="tag" style="background:'+(p.c==='n'?'#8a8478':COL[p.c])+'">'+CAT[p.c][0]+'</span>';
  s+='<h4>'+(p.a||'Habitation')+'</h4>';
@@ -151,41 +160,48 @@ function whyList(p,F){let s='<li>Bois ou forêt à '+(p.df<=10?'moins de 10':p.d
  if(p.ch) s+='<li>En bordure de champ ou prairie</li>';return s;}
 async function openFiche(p,l){
  const ll=l.getBounds?l.getBounds().getCenter():l.getLatLng();
- if(SEL)map.removeLayer(SEL);SEL=L.circleMarker(ll,{radius:16,color:'#1c2126',weight:3,fill:false,interactive:false}).addTo(map);
- if(innerWidth<900){map.setView(map.unproject(map.project(ll,18).add([0,innerHeight*0.24]),18),18);document.getElementById('panel').classList.remove('min');}
- else map.setView(map.unproject(map.project(ll,18).add([210,0]),18),18);
+ if(SEL)map.removeLayer(SEL);SEL=L.circleMarker(ll,{renderer:CV,radius:18,color:'#1c2126',weight:3,fill:false,interactive:false}).addTo(map);
+ SELP=p;restyle();const mob=innerWidth<900;if(mob)document.getElementById('panel').classList.remove('min');
+ const z=Math.max(map.getZoom(),17.5),sz=map.getSize(),hb=document.getElementById('head').getBoundingClientRect(),pb=document.getElementById('panel').getBoundingClientRect();
+ const x0=0,x1=mob?sz.x:pb.left,y0=mob?hb.bottom:Math.min(hb.bottom,sz.y*0.3),y1=mob?pb.top:sz.y,tx=(x0+x1)/2,ty=(y0+y1)/2;
+ const cur=map.latLngToContainerPoint(ll),vis=map.getZoom()>=17&&cur.x>x0+40&&cur.x<x1-40&&cur.y>y0+30&&cur.y<y1-30;
+ if(!vis)map.flyTo(map.unproject(map.project(ll,z).add(L.point(sz.x/2-tx,sz.y/2-ty)),z),z,{duration:.45});
+ NAV=navList();NI=Math.max(0,NAV.findIndex(q=>q.k===p.k));
  if(tab!=='fic')PREV=tab;tab='fic';document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.remove('on'));
  const b=document.getElementById('body');b.innerHTML='<p class="muted">Chargement de la fiche…</p>';b.scrollTop=0;
  const key=D.city+'_'+p.k;let F=FCACHE[key];
  try{if(!F){F=JSON.parse(new TextDecoder().decode(await dec('f/'+key+'.bin')));FCACHE[key]=F;}}catch(e){b.innerHTML='<p>Fiche indisponible.</p>';return}
- if(tab==='fic')b.innerHTML=ficHTML(p,F);}
+ if(tab==='fic'&&SELP===p){CUR={p:p,F:F};b.innerHTML=ficHTML(p,F);b.scrollTop=0;}}
+function navList(){const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&(!filt||filt(p)));const o={a:0,s:1,n:2};return L.sort((a,b)=>o[a.c]-o[b.c]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}))}
+function nav(d){if(!NAV.length)return;NI=(NI+d+NAV.length)%NAV.length;openByK(NAV[NI].k)}
+function openByK(k){let L0=null;H.eachLayer(l=>{if(l.feature.properties.k===k)L0=l});if(L0)openFiche(L0.feature.properties,L0)}
+function constats(p,F){const br=F.br||{},hors=F.v+F.f,dist=D.porge?'3 m':'2,5 m',C=[];
+ if(br.fl)C.push({c:'#c62828',t:'Branches contre la maison',d:(br.toit>=2?'Arbres au-dessus du toit et à moins de 2,5 m des murs':'Arbres à moins de 2,5 m des murs')+' · '+m2(br.a25+br.toit)+' de feuillage',a:'<b>Propriétaire :</b> élaguer, rien à moins de '+dist+' ni au-dessus du toit',i:3});
+ if(F.t>=50)C.push({c:'#e65100',t:'Broussaille sur le terrain',d:m2(F.t)+' dans les 50 m'+(F.c10>=50?', dont '+m2(F.c10)+' à moins de 10 m':''),a:'<b>Propriétaire :</b> débroussailler et évacuer',i:2});
+ if(hors>=200)C.push({c:'#7b5aa6',t:'Broussaille chez les voisins',d:m2(hors)+' à moins de 50 m'+(F.f>=200?' (dont forêt publique '+m2(F.f)+')':''),a:'<b>Propriétaire de la maison</b>, avec l\'accord du voisin'+(F.f>=200?' · forêt publique : mairie / ONF':''),i:2});
+ if(!C.length)C.push({c:'#2e7d32',t:'Abords dégagés',d:'Rien de notable sur la photo 2025 ni sur le relevé laser',a:'Rappel annuel avant l\'été',i:0});
+ return C;}
 function ficHTML(p,F){
- const tot=F.t+F.v+F.f,hors=tot?Math.round(100*(F.v+F.f)/tot):0,pc=x=>tot?(100*x/tot)+'%':'0';
- let h='<button class="btn" onclick="go(PREV)">← Retour</button>';
+ const tot=F.t+F.v+F.f,hors=tot?Math.round(100*(F.v+F.f)/tot):0,pc=x=>tot?(100*x/tot)+'%':'0',br=F.br||{};
+ let h='<div class="fnav"><button class="btn" onclick="go(PREV)" title="Échap">← '+({lst:'Liste',cou:'Courriers',sec:'Secteurs',par:'Parcelles'}[PREV]||'Résumé')+'</button><span class="sp"></span><button class="btn ic" onclick="nav(-1)" title="Précédente (←)">‹</button><span class="muted">'+(NI+1)+' / '+NAV.length+'</span><button class="btn ic" onclick="nav(1)" title="Suivante (→)">›</button></div>';
  h+='<div style="margin-top:12px"><span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.c==='n'?'#8a8478':COL[p.c])+'">'+CAT[p.c][0]+'</span>';
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
- h+='</div><h3 style="font-size:18px;margin:8px 0 0">'+(F.adr||'Habitation')+'</h3><div class="muted">'+(F.parc?'Parcelle '+F.parc:'')+'</div>';
- h+='<button class="btn dark" style="margin-top:10px;width:100%;padding:11px;font-size:15px" onclick="lettre()">Courrier prêt à envoyer ↗</button>';CUR={p:p,F:F};
- h+='<div class="fimg"><img id="fimg" src="'+F.img[0]+'"><div class="seg3"><button class="on" onclick="fimg(0,this)">Photo 2025</button><button onclick="fimg(1,this)">Infrarouge 2024</button><button onclick="fimg(2,this)">Broussaille</button>'+(F.imgb?'<button onclick="fimg(3,this)">Branches</button>':'')+'</div><div class="ileg" id="fcap"></div></div>';
- h+='<div class="sec"><h4>Pourquoi</h4><ul style="margin:0 0 0 18px;padding:0">'+whyList(p,F)+'</ul></div>';
- h+='<div class="sec"><h4>Où est la broussaille, dans les 50 m</h4>';
- if(tot<50)h+='<div class="muted">Peu de broussaille mesurée dans les 50 m.</div>';
- else{h+='<div class="bar"><div style="width:'+pc(F.t)+';background:#c62828"></div><div style="width:'+pc(F.v)+';background:#7b5aa6"></div><div style="width:'+pc(F.f)+';background:#2e7d32"></div></div>';
-  h+='<div class="bl"><span><i style="background:#c62828"></i>Sur le terrain : '+F.t.toLocaleString('fr')+' m²</span><span><i style="background:#7b5aa6"></i>Terrains voisins : '+F.v.toLocaleString('fr')+' m²</span>'+(F.f?'<span><i style="background:#2e7d32"></i>Forêt publique : '+F.f.toLocaleString('fr')+' m²</span>':'')+'</div>';
-  h+='<div style="margin-top:6px"><b>'+hors+' %</b> de cette broussaille n\'est pas sur le terrain de l\'habitation.</div>';
-  if(F.par&&F.par.length)h+='<div class="muted" style="margin-top:6px">Parcelles principales : '+F.par.map(q=>q.idu+(q.own?' (la sienne)':'')+' '+q.m2.toLocaleString('fr')+' m²').join(' · ')+'</div>';}
- h+='</div>';
- if(F.c10>=50)h+='<div class="muted" style="margin-top:6px">Dont '+F.c10.toLocaleString('fr')+' m² à moins de 10 m de la maison.</div>';
- h+='<div class="sec"><h4>Que faire</h4>';
- if(D.porge){h+='<div>'+(p.c==='a'?'Avant le feu, cette habitation aurait été signalée « à dégager ».':'Avant le feu, cette habitation n\'était pas signalée « à dégager ».')+' '+(p.x?'Elle a été détruite.':'Elle n\'a pas été détruite.')+'</div>';}
- else{const g=D.g.find(x=>x.k===p.m);const oth=(F.par||[]).find(q=>!q.own);
-  if(g)h+='<div class="box" style="margin-top:4px"><h3 style="font-size:14px">Courrier « '+g.t+' »</h3><div style="font-size:13px;margin-top:6px">'+g.x+'</div><div class="btns"><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(D.g.find(x=>x.k===\''+p.m+'\').x).then(()=>{this.textContent=\'Copié ✓\'})">Copier le texte</button></div></div>';
-  if(hors>=50&&oth)h+='<div>Contacter aussi le propriétaire de la parcelle <b>'+oth.idu+'</b> (courrier « Propriétaires des parcelles boisées »).</div>';}
- h+='</div>';setTimeout(()=>fimg(0),0);return h;}
+ h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||'Habitation').replace(/^≈ /,''))+'</h3><div class="muted">'+(F.parc?'Parcelle '+F.parc:'')+'</div>';
+ const C=constats(p,F);
+ h+='<div class="cst">'+C.map(c=>'<div class="row" onclick="fimg('+c.i+')"><div class="ic" style="background:'+c.c+'"></div><div><div class="t">'+c.t+'</div><div class="d">'+c.d+'</div><div class="a">'+c.a+'</div></div></div>').join('')+'</div>';
+ h+='<button class="btn dark cta" onclick="lettre()">Préparer le courrier ↗</button>';
+ h+='<div class="fimg"><img id="fimg" alt=""><div class="seg3">'+['Photo 2025','Infrarouge','Broussaille'].map((t,i)=>'<button data-i="'+i+'" onclick="fimg('+i+')">'+t+'</button>').join('')+(F.imgb?'<button data-i="3" onclick="fimg(3)">Branches</button>':'')+'</div><div class="ileg" id="fcap"></div></div>';
+ h+='<div class="chips"><span class="chip">Bois à '+(p.df<=10?'moins de 10':p.df)+' m</span>'+(p.i?'<span class="chip">Rue sans issue</span>':'')+(p.ch?'<span class="chip">Bord de champ</span>':'')+'</div>';
+ if(D.porge)h+='<div class="sec"><h4>Résultat</h4><div>'+(p.c==='a'?'Avant le feu, cette habitation aurait été signalée « à dégager ».':'Avant le feu, cette habitation n\'était pas signalée « à dégager ».')+' '+(p.x?'Elle a été détruite.':'Elle n\'a pas été détruite.')+'</div></div>';
+ if(tot>=50){h+='<details><summary>Détail de la broussaille dans les 50 m</summary><div class="bar"><div style="width:'+pc(F.t)+';background:#c62828"></div><div style="width:'+pc(F.v)+';background:#7b5aa6"></div><div style="width:'+pc(F.f)+';background:#2e7d32"></div></div>';
+  h+='<div class="bl"><span><i style="background:#c62828"></i>Terrain : '+m2(F.t)+'</span><span><i style="background:#7b5aa6"></i>Voisins : '+m2(F.v)+'</span>'+(F.f?'<span><i style="background:#2e7d32"></i>Forêt publique : '+m2(F.f)+'</span>':'')+'</div>';
+  h+='<div style="margin-top:6px"><b>'+hors+' %</b> hors du terrain de l\'habitation.</div>';
+  if(F.par&&F.par.length)h+='<div class="muted" style="margin-top:4px">Parcelles principales : '+F.par.map(q=>q.idu+(q.own?' (la sienne)':'')+' '+m2(q.m2)).join(' · ')+'</div>';h+='</details>';}
+ setTimeout(()=>fimg(br.fl?3:0),0);return h;}
 const FCAP=['Photo aérienne IGN, été 2025','Infrarouge IGN, été 2024 : végétation vivante en rouge','Relevé laser IGN, 2024 : broussaille (0,5 à 3 m de haut) en rouge','Photo IGN 2025, vue rapprochée : arbres à moins de 2,5 m de la maison en rouge (bande jaune = 2,5 m)'];let CUR=null;
-function fimg(i,b){
- const el=document.getElementById('fimg');if(!el||!CUR)return;const F=CUR.F;el.src=i===3?F.imgb:F.img[i];
- if(b){b.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');}
+function fimg(i){
+ const el=document.getElementById('fimg');if(!el||!CUR)return;const F=CUR.F;if(i===3&&!F.imgb)i=0;el.src=i===3?F.imgb:F.img[i];
+ document.querySelectorAll('.seg3 button').forEach(x=>x.classList.toggle('on',+x.dataset.i===i));
  document.getElementById('fcap').innerHTML=FCAP[i]+(i===3?'':'<br><i style="background:#9b1ebe"></i>habitation<i style="background:#fff;border:1px solid #999;height:6px"></i>sa parcelle<i style="background:#ffd200"></i>50 m'+(D.porge?'':'')+'<i style="background:#1e8c3c"></i>forêt publique');}
 
 function counts(){const c={a:0,s:0,n:0};D.h.features.forEach(f=>c[f.properties.c]++);return c}
@@ -212,6 +228,10 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';
   h+='<div class="step"><div class="n">3</div><div><b>Mettre à jour le plan communal de sauvegarde</b><br>'+k.imp+' habitations exposées sont dans une rue sans issue, '+k.ch+' en bordure de champ.</div></div>';
   h+='<details><summary>Comment c\'est calculé</summary><p>Une habitation est <b>exposée</b> si elle est entourée de beaucoup de nature et de peu de bâti (jardins exclus) et qu\'un bois de 5 ha ou plus (ou relié à des champs) est à moins de 100 m. Elle est <b>à dégager</b> si, en plus, la végétation entre 0,5 et 3 m de haut est dense dans les 30 m (relevé laser aérien IGN, mars 2024), ou si des arbres ou des branches sont à moins de 2,5 m de la maison ou au-dessus du toit (occupation du sol COSIA de l\'IGN, calculée sur la photo aérienne 2025).</p><p>Testé sur les feux du Porge et de Biscarrosse (juillet 2026) : les habitations « à dégager » y ont été détruites 3,4 et 1,9 fois plus souvent que les autres, et regroupaient 69 % et 50 % des maisons détruites.</p><p>Indicateur de préparation : part des habitations exposées dont les abords sont dégagés. Repère : bien préparée à partir de 80 %.</p><p class="muted">Samoreau n\'est pas soumise aux obligations légales de débroussaillement d\'après le zonage publié : les courriers sont des recommandations. Données 2024–2025 : un terrain débroussaillé depuis apparaît encore à dégager.</p></details>';
  }
+ if(tab==='lst'){
+  h+='<input id="q" class="srch" placeholder="Rechercher une adresse…" autocomplete="off">';
+  h+='<div class="fl">'+[['a',CAT.a[0]],['s',CAT.s[0]]].concat(D.porge?[['x','Détruites']]:[]).concat([['*','Toutes']]).map(x=>'<button data-f="'+x[0]+'" class="'+(LF===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div><div id="lst"></div>';
+ }
  if(tab==='cou'){
   h+='<p class="muted" style="margin-top:0">Un même texte pour toutes les adresses d\'une situation. Chaque adresse ne reçoit qu\'un courrier.</p>';
   D.g.forEach((g,i)=>{const L=g.k==='prop'?D.par.map(q=>({a:'Parcelle '+q.idu.slice(-6)})):D.h.features.filter(f=>f.properties.m===g.k).map(f=>f.properties).sort((a,b)=>a.a.localeCompare(b.a,'fr',{numeric:true}));
@@ -227,8 +247,12 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';
   h+='<p class="muted" style="margin-top:0">Secteurs où plusieurs habitations à dégager sont regroupées. Toucher un secteur pour y aller.</p>';
   D.z.forEach(z=>{h+='<div class="box" style="cursor:pointer" onclick="zoomTo('+z.lat+','+z.lon+',17)"><h3>'+z.t+'<span class="pill">'+z.n+' maison'+(z.n>1?'s':'')+'</span></h3><ul style="margin:6px 0 0 16px;padding:0;font-size:13px">'+z.mes.map(m=>'<li>'+m+'</li>').join('')+'</ul></div>'});
  }
- b.innerHTML=h;}
-function go(t){if(PL){if(t==='par')PL.addTo(map);else map.removeLayer(PL);}document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===t));tab=t;ui();document.getElementById('panel').classList.remove('min');}
+ b.innerHTML=h;if(tab==='lst'){const q=document.getElementById('q');q.value=Q;q.oninput=()=>{Q=q.value;drawList()};document.querySelectorAll('.fl button').forEach(x=>x.onclick=()=>{LF=x.dataset.f;ui()});drawList();}}
+function drawList(){const qq=Q.trim().toLowerCase();const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&(LF==='*'||(LF==='x'?p.x:p.c===LF))&&(!qq||(p.a||'').toLowerCase().includes(qq)));const o={a:0,s:1,n:2};
+ L.sort((a,b)=>o[a.c]-o[b.c]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));const el=document.getElementById('lst');
+ el.innerHTML='<div class="muted" style="margin-bottom:4px">'+L.length+' habitation'+(L.length>1?'s':'')+'</div>'+L.slice(0,400).map(p=>'<div class="li" data-k="'+p.k+'"><span class="dt" style="background:'+COL[p.c]+'"></span><span class="ad">'+esc(p.a||'Habitation')+'<span class="bs">'+(p.b?'<span class="bd">branches</span>':'')+(p.ft?'<span class="bd">broussaille terrain</span>':'')+(p.fv?'<span class="bd">broussaille voisins</span>':'')+(p.x?'<span class="bd k">détruite</span>':'')+'</span></span><span class="muted">›</span></div>').join('')+(L.length>400?'<div class="muted">… affinez la recherche</div>':'');
+ el.querySelectorAll('.li').forEach(x=>x.onclick=()=>{PREV='lst';openByK(+x.dataset.k)});}
+function go(t){if(t!=='fic'&&tab==='fic'){SELP=null;if(SEL){map.removeLayer(SEL);SEL=null}restyle();}if(PL){if(t==='par')PL.addTo(map);else map.removeLayer(PL);}document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===t));tab=t;ui();document.getElementById('panel').classList.remove('min');}
 function tog(id){const e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block'}
 function cp(i,b){navigator.clipboard&&navigator.clipboard.writeText(D.g[i].x).then(()=>{b.textContent='Copié ✓'})}
 function showMsg(k){setFilt(Object.assign(p=>p.m===k,{k:'m'}));const L=[];H.eachLayer(l=>{if(l.feature.properties.m===k)L.push(l)});if(L.length)map.fitBounds(L3(L),{padding:[40,40]});if(innerWidth<900)document.getElementById('panel').classList.add('min');}
@@ -236,29 +260,31 @@ function goPar(i){const q=D.par[i];const l=L.geoJSON(q.g);map.fitBounds(l.getBou
 function L3(L){return L.reduce((b,l)=>b.extend(l.getBounds()),L[0].getBounds())}
 function goAdr(a){let done=false;H.eachLayer(l=>{if(done||l.feature.properties.a!==a)return;done=true;if(l.feature.properties.k!==undefined)openFiche(l.feature.properties,l);else{map.fitBounds(l.getBounds(),{maxZoom:18});(l.mk||l).openPopup();if(innerWidth<900)document.getElementById('panel').classList.add('min');}});}
 function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' · préparation aux feux de végétation';if(D.porge)document.getElementById('stt').textContent='Démonstration sur un feu réel · données d\'avant le feu';
- const T=[['res','Résumé']];if(D.g)T.push(['cou','Courriers']);if(D.par)T.push(['par','Parcelles']);if(D.z)T.push(['sec','Secteurs']);
+ const T=[['res','Résumé'],['lst','Maisons']];if(D.g)T.push(['cou','Courriers']);if(D.par)T.push(['par','Parcelles']);if(D.z)T.push(['sec','Secteurs']);
  document.getElementById('tabs').innerHTML=T.map((t,i)=>'<button class="tab'+(i?'':' on')+'" data-t="'+t[0]+'">'+t[1]+'</button>').join('')+(D.rapport?'<button class="tab" id="rapbtn">Rapport ↗</button>':'');const k=D.k,pc=Math.round(100*k.degag/k.expo),cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828'),et=pc>=80?'bien préparée':(pc>=60?'à consolider':'à améliorer');
  document.getElementById('pc').textContent=pc+' %';document.getElementById('pc').style.color=cl;
  document.getElementById('pctx').innerHTML='<b style="color:'+cl+'">Commune '+et+' pour l\'été</b><br>'+k.degag+' des '+k.expo+' habitations exposées ont des abords dégagés';
  map=L.map('map',{zoomControl:false,preferCanvas:true,attributionControl:false});const A=D.h.features.filter(f=>f.properties.c==='a').map(f=>L.geoJSON(f).getBounds().getCenter());const q=(a,p)=>{a=a.slice().sort((x,y)=>x-y);return a[Math.floor(p*(a.length-1))]};
  const FB=L.latLngBounds([q(A.map(c=>c.lat),.05),q(A.map(c=>c.lng),.05)],[q(A.map(c=>c.lat),.95),q(A.map(c=>c.lng),.95)]);map.fitBounds(FB,{paddingTopLeft:[20,innerWidth<900?190:170],paddingBottomRight:[innerWidth<900?0:420,innerWidth<900?120:0]});
  L.control.zoom({position:innerWidth<900?'topright':'bottomleft'}).addTo(map);
- const cv=L.canvas({padding:.5,tolerance:6});
+ const cv=CV=L.canvas({padding:.5,tolerance:6});
  L.geoJSON(D.fo,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#b9d8b0',fillOpacity:.6}}).addTo(map);
  L.geoJSON(D.rt,{renderer:cv,interactive:false,style:{color:'#a7a297',weight:1}}).addTo(map);
  if(D.com)L.geoJSON(D.com,{renderer:cv,interactive:false,style:{color:'#555',weight:1.5,dashArray:'2 5',fill:false}}).addTo(map);
  if(D.burn)L.geoJSON(D.burn,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#6d4c41',fillOpacity:.25}}).addTo(map);
  if(D.par){PL=L.layerGroup();D.par.forEach((q,i)=>{const l=L.geoJSON(q.g,{renderer:cv,style:{color:'#5b3a8c',weight:2,dashArray:'6 4',fill:true,fillOpacity:.04}});l.eachLayer(x=>{x.idx=i;x.bindPopup('<b>Parcelle '+q.idu.slice(-6)+'</b><br>'+q.b.toLocaleString('fr')+' m² de broussaille à moins de 50 m de '+q.nm+' habitation(s) à dégager ('+q.pc+' % du total)')});PL.addLayer(l)});}
- H=L.geoJSON(D.h,{renderer:cv,style:sty,onEachFeature:(f,l)=>f.properties.k!==undefined?l.on('click',()=>openFiche(f.properties,l)):l.bindPopup(()=>pop(f.properties),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]})}).addTo(map);
+ const tip=p=>'<b>'+esc(p.a||'Habitation')+'</b><br>'+CAT[p.c][0]+(D.porge&&p.x?' · détruite':'')+(p.k!==undefined?'<br><span class="muted">Cliquer pour la fiche</span>':'');
+ H=L.geoJSON(D.h,{renderer:cv,style:sty,onEachFeature:(f,l)=>f.properties.k!==undefined?l.on('click',()=>openFiche(f.properties,l)).bindTooltip(()=>tip(f.properties),{sticky:true,direction:'top',className:'tt',offset:[0,-8]}):l.bindPopup(()=>pop(f.properties),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]})}).addTo(map);
  MK=L.layerGroup().addTo(map);
  H.eachLayer(l=>{const p=l.feature.properties;if(p.c==='n')return;const c=l.getBounds().getCenter();
-  const m=L.circleMarker(c,{renderer:cv,radius:p.c==='a'?6:4.5});m.p=p;if(p.k!==undefined)m.on('click',()=>openFiche(p,m));else m.bindPopup(()=>pop(p),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]});l.mk=m;MK.addLayer(m)});
+  const m=L.circleMarker(c,{renderer:cv,radius:p.c==='a'?6:4.5});m.p=p;if(p.k!==undefined){m.on('click',()=>openFiche(p,m));m.bindTooltip(()=>tip(p),{direction:'top',className:'tt',offset:[0,-6]});}else m.bindPopup(()=>pop(p),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]});l.mk=m;MK.addLayer(m)});
  restyle();legend();ui();
  map.on('zoomend',()=>{const z=map.getZoom();if(z>=17)map.removeLayer(MK);else if(!map.hasLayer(MK))MK.addTo(map);});
  document.querySelectorAll('.tab[data-t]').forEach(b=>b.onclick=()=>go(b.dataset.t));
  if(D.rapport)document.getElementById('rapbtn').onclick=()=>openRapport();
  document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
  if(innerWidth<900)document.getElementById('panel').classList.add('min');
+ document.onkeydown=e=>{if(tab!=='fic'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape')go(PREV);else if(e.key==='ArrowRight')nav(1);else if(e.key==='ArrowLeft')nav(-1);};
 }
 </script>
 <div id="gate" style="position:fixed;inset:0;z-index:5000;background:#f4f1ea;display:flex;align-items:center;justify-content:center">
@@ -269,7 +295,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='C8owjyqm5viTnwdc9L147w==',ITER=600000;let KEY=null;
+const SALT='OtTFqYrMCawA5GWQEGQPdw==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
