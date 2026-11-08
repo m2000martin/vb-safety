@@ -73,8 +73,8 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
 <script>
 let D,map,H,MK,filt=null,tab='res',showX=true,PL=null;
 const COL={a:'#c62828',s:'#f0a020',n:'#cfc9bd'};
-const CAT={a:['À dégager','Habitation exposée avec de la végétation dense autour'],s:['À surveiller','Habitation exposée, abords dégagés aujourd\'hui'],n:['Non concernée','Pas de bois important à proximité']};
-const MSGT={contre:'Végétation dense contre la maison',terrain:'Broussaille sur le terrain',lisiere:'Lisière boisée chez un voisin',foret:'Lisière de forêt publique'};
+const CAT={a:['À dégager','Habitation exposée avec de la végétation dense autour ou des branches contre la maison'],s:['À surveiller','Habitation exposée, abords dégagés aujourd\'hui'],n:['Non concernée','Pas de bois important à proximité']};
+const MSGT={contre:'Végétation dense contre la maison',terrain:'Broussaille sur le terrain',lisiere:'Lisière boisée chez un voisin',foret:'Lisière de forêt publique',branches:'Branches contre la maison'};
 function sty(f){const p=f.properties,on=!filt||filt(p),x=D.porge&&showX&&p.x;return {stroke:on&&(p.c!=='n'||x),color:x?'#000':'#fff',weight:x?2.5:1,fillColor:COL[p.c],fillOpacity:on?(p.c==='n'?.75:.95):.12,opacity:on?1:0}}
 function pop(p){
  let s='<div class="pop"><span class="tag" style="background:'+(p.c==='n'?'#8a8478':COL[p.c])+'">'+CAT[p.c][0]+'</span>';
@@ -82,17 +82,71 @@ function pop(p){
  if(D.porge) s+='<div style="margin-bottom:6px"><b>'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</b> <span class="muted">(classement fait avec des données d\'avant le feu)</span></div>';
  if(p.c==='n') return s+'<div>'+CAT.n[1]+'. Rien à faire.</div></div>';
  s+='<b>Pourquoi</b><ul><li>Bois ou forêt à '+(p.df<=10?'moins de 10':p.df)+' m</li>';
- if(p.c==='a') s+='<li>'+(p.c10>=150?'Végétation dense <b>contre la maison</b> (moins de 10 m)':'Végétation dense dans les 30 m autour')+'</li>';
- else s+='<li>Abords dégagés sur le relevé de 2024</li>';
+ if(p.c==='a') s+='<li>'+(p.b?'Arbres ou branches à moins de 2,5 m de la maison':(p.c10>=150?'Végétation dense <b>contre la maison</b> (moins de 10 m)':'Végétation dense dans les 30 m autour'))+'</li>';
+ else s+='<li>Abords dégagés (photo 2025, relevé laser)</li>';
  if(p.i) s+='<li>Rue sans issue : un seul accès pour les secours</li>';
  if(p.ch) s+='<li>En bordure de champ ou prairie</li>';
  s+='</ul>';if(!D.porge) s+='<b>Que faire</b><div>'+(p.c==='a'?'Courrier « '+MSGT[p.m]+' »':'Rien pour l\'instant ; à revoir au prochain relevé')+'</div>';s+='</div>';
  return s;}
 
+function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function m2(x){return Math.round(x).toLocaleString('fr')+' m²'}
+function lettre(){
+ if(!CUR)return;const p=CUR.p,F=CUR.F,br=F.br||{},gir=!!D.porge,dist=gir?'3 m':'2,5 m';
+ const adr=(F.adr||'').replace(/^≈ /,''),today=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+ const items=[],imgs=[];
+ imgs.push([F.img[0],'Photo aérienne IGN (été 2025). En violet : votre habitation. En jaune : la zone de 50 m à débroussailler.']);
+ if(br.fl){
+  let t,a;
+  if(br.toit>=2&&br.a25>=4&&br.toit>40) t='La maison est en grande partie sous les arbres : des branches couvrent la toiture (environ '+m2(br.toit)+') et entourent les murs.';
+  else t='Des arbres ou des branches se trouvent à moins de 2,5 m de la maison (environ '+m2(br.a25)+' de feuillage dans cette bande)'+(br.toit>=2?', et des branches surplombent la toiture (environ '+m2(br.toit)+')':'')+'.';
+  a='Élaguer ou couper pour qu\'aucune branche ne se trouve à moins de '+dist+' des murs et de la toiture, et supprimer toute branche au-dessus du toit. Nettoyer les gouttières et la toiture (aiguilles, feuilles).';
+  items.push(['Arbres et branches contre la maison',t,a]);imgs.push([F.imgb,'Vue rapprochée (photo IGN 2025). En rouge : arbres et branches à moins de 2,5 m de la maison. Trait jaune : 2,5 m.']);}
+ if(F.t>=50){
+  items.push(['Végétation dense sur votre terrain','Environ '+m2(F.t)+' de végétation basse et dense (broussailles, arbustes, 0,5 à 3 m de haut) sur votre terrain, dans les 50 m autour de la maison'+(F.c10>=50?', dont '+m2(F.c10)+' à moins de 10 m':'')+'.',
+   'Couper la végétation basse et les arbustes, élaguer les arbres conservés sur le bas du tronc, espacer les arbres, et évacuer les déchets verts (broyage ou déchetterie).']);}
+ const hors=F.v+F.f;
+ if(hors>=200){
+  let a='Le débroussaillement des 50 m s\'impose même au-delà de votre limite de propriété. Prévenez le propriétaire voisin et demandez-lui l\'autorisation d\'intervenir'+(F.v>=200?'':'')+' ; en cas de refus, informez la mairie.';
+  if(F.f>=200)a+=' Pour la partie en forêt publique, contactez la mairie, qui fera le lien avec l\'ONF.';
+  items.push(['Végétation dense chez vos voisins, à moins de 50 m','Environ '+m2(hors)+' de végétation dense hors de votre terrain mais à moins de 50 m de votre maison'+(F.v>=200&&F.f>=200?' (terrains voisins : '+m2(F.v)+', forêt publique : '+m2(F.f)+')':(F.f>=200?' (forêt publique)':' (terrains voisins)'))+'.',a]);}
+ if(F.t>=50||hors>=200)imgs.push([F.img[2],'Relevé laser IGN : en rouge, végétation basse et dense (0,5 à 3 m de haut).']);
+ const none=!items.length;
+ const obl='<p>Votre habitation se trouve à moins de 200 m d\'un bois ou d\'une forêt exposé au risque d\'incendie. À ce titre, vous devez débroussailler et maintenir en état débroussaillé les abords de votre habitation sur une profondeur de 50 m, y compris au-delà des limites de votre terrain, ainsi que 10 m de part et d\'autre de votre chemin d\'accès (Code forestier, articles L.131-10 et suivants et L.134-6, et arrêté préfectoral en vigueur'+(gir?' : en Gironde, les arbres et leurs branches doivent être à au moins 3 m des constructions':'')+'). En zone urbaine du PLU, l\'obligation porte sur la totalité du terrain.</p>';
+ const rec='<p>Votre habitation se trouve à proximité d\'un bois ou d\'une forêt. En cas de feu de végétation, ce sont les broussailles et les branches proches de la maison qui transmettent les flammes et les braises. La commune recommande de dégager les abords de votre habitation sur 50 m, selon les règles appliquées dans les communes soumises aux obligations légales de débroussaillement.</p>';
+ const sanc='<p class="obl">Nous vous demandons de réaliser ces travaux avant le <span class="ed" contenteditable>15 juin 2027</span>. À défaut, la commune peut faire exécuter les travaux d\'office à vos frais, et le non-respect de l\'obligation est passible d\'une amende.</p><p class="rec">Nous vous remercions de réaliser ces travaux avant le <span class="ed" contenteditable>15 juin 2027</span>.</p>';
+ let L='';
+ items.forEach((it,i)=>{L+='<div class="it"><div class="n">'+(i+1)+'</div><div><b>'+it[0]+'</b><br>'+it[1]+'<div class="act"><b>À faire :</b> '+it[2]+'</div></div></div>'});
+ const html='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Courrier débroussaillement - '+esc(adr)+'</title><style>'+
+ '@page{size:A4;margin:16mm 16mm 14mm}body{font:11pt/1.45 Georgia,"Times New Roman",serif;color:#111;margin:0;background:#e9e6df}'+
+ '.bar{position:sticky;top:0;background:#1c2126;color:#fff;font:14px system-ui,sans-serif;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}'+
+ '.bar button{font:inherit;border:0;border-radius:8px;padding:8px 12px;cursor:pointer;background:#fff;color:#1c2126}.bar button.pr{background:#c62828;color:#fff;font-weight:700}.bar span{opacity:.8}'+
+ '.pg{background:#fff;width:178mm;margin:14px auto;padding:16mm;box-shadow:0 1px 6px rgba(0,0,0,.15)}'+
+ '.hd{display:flex;justify-content:space-between;gap:20px}.hd .m b{font-size:13pt}.ed{background:#fff6c2;outline:1px dashed #d9b800;padding:0 2px}'+
+ '.dest{margin:18px 0 18px 55%}.obj{margin:14px 0}.it{display:flex;gap:10px;margin:10px 0;page-break-inside:avoid}.it .n{flex:0 0 22px;height:22px;border-radius:50%;background:#c62828;color:#fff;font:bold 12px/22px system-ui;text-align:center}'+
+ '.act{margin-top:4px;padding:6px 9px;background:#f4f1ea;border-left:3px solid #c62828}.sig{margin:22px 0 0 55%}.ft{font-size:8.5pt;color:#555;margin-top:18px;border-top:1px solid #ccc;padding-top:6px}'+
+ '.im{display:grid;grid-template-columns:1fr 1fr;gap:10px}.im figure{margin:0;page-break-inside:avoid}.im img{width:100%;border:1px solid #bbb}.im figcaption{font-size:8.5pt;color:#333}'+
+ 'body.R .obl{display:none}body:not(.R) .rec{display:none}'+
+ '@media print{body{background:#fff}.bar{display:none}.pg{box-shadow:none;margin:0;width:auto;padding:0}.pg+.pg{page-break-before:always}.ed{background:none;outline:none}}'+
+ '</style></head><body class="'+(D.old?'':'R')+'"><div class="bar"><button class="pr" onclick="print()">Imprimer / enregistrer en PDF</button><button onclick="document.body.classList.toggle(\'R\');this.textContent=document.body.classList.contains(\'R\')?\'Ton : recommandation\':\'Ton : obligation légale\'">'+(D.old?'Ton : obligation légale':'Ton : recommandation')+'</button><span>Les zones en jaune sont modifiables : cliquez pour écrire.</span></div>'+
+ '<div class="pg"><div class="hd"><div class="m"><b>Mairie de '+esc(D.nom)+'</b><br><span class="ed" contenteditable>Adresse de la mairie</span><br><span class="ed" contenteditable>Téléphone · courriel</span></div><div style="text-align:right">'+esc(D.nom)+', le <span class="ed" contenteditable>'+today+'</span><br><span style="font-size:9pt;color:#555">Réf. OLD-'+D.city+'-'+p.k+(F.parc?' · parcelle '+esc(F.parc):'')+'</span></div></div>'+
+ '<div class="dest">À l\'occupant ou au propriétaire<br><span class="ed" contenteditable>'+esc(adr||'Adresse')+'</span><br><span class="ed" contenteditable>'+esc(D.cp||'')+' '+esc(D.nom)+'</span></div>'+
+ '<div class="obj"><b>Objet : '+(none?'rappel – ':'')+'débroussaillement des abords de votre habitation'+(adr?' – '+esc(adr):'')+'</b></div>'+
+ '<p>Madame, Monsieur,</p><div class="obl">'+obl+'</div><div class="rec">'+rec+'</div>'+
+ (none?'<p>Les photographies aériennes récentes de l\'IGN ne font pas apparaître de point particulier autour de votre habitation. Nous vous rappelons qu\'il faut entretenir ces abords chaque année, avant l\'été.</p>':
+ '<p>L\'examen des photographies aériennes de l\'IGN (été 2025) et du relevé laser aérien de l\'IGN fait apparaître '+(items.length>1?'les points suivants':'le point suivant')+' :</p>'+L+sanc)+
+ '<p>Ces constats ont été établis à distance, à partir de données publiques de l\'IGN. Si les travaux ont déjà été faits depuis, merci de nous le signaler. Pour toute question ou pour organiser une visite, contactez la mairie au <span class="ed" contenteditable>numéro de téléphone</span>.</p>'+
+ '<p>Veuillez agréer, Madame, Monsieur, l\'expression de nos salutations distinguées.</p><div class="sig"><span class="ed" contenteditable>Le Maire</span><br><span class="ed" contenteditable>Nom et signature</span></div>'+
+ '<div class="ft">Images en annexe. Sources : IGN, photographie aérienne 2025, infrarouge 2024, relevé laser LiDAR HD, occupation du sol COSIA ; cadastre DGFiP.</div></div>'+
+ '<div class="pg"><b>Annexe – images de votre habitation</b><p style="font-size:9.5pt;margin:4px 0 10px">'+esc(adr)+'</p><div class="im">'+imgs.map(x=>'<figure><img src="'+x[0]+'"><figcaption>'+x[1]+'</figcaption></figure>').join('')+'</div>'+
+ '<div class="ft">Rappel des règles principales : débroussailler sur 50 m autour de la maison (même chez le voisin, après l\'avoir prévenu) et 10 m de part et d\'autre du chemin d\'accès ; aucune branche à moins de '+dist+' des murs et au-dessus du toit ; élaguer les arbres conservés ; évacuer les déchets verts. Le détail figure dans l\'arrêté préfectoral, consultable en mairie.</div></div></body></html>';
+ const u=URL.createObjectURL(new Blob([html],{type:'text/html'}));const w=window.open(u,'_blank');if(!w)location.href=u;}
+
 let PREV='res',FCACHE={},SEL=null;
-function whyList(p){let s='<li>Bois ou forêt à '+(p.df<=10?'moins de 10':p.df)+' m</li>';
- if(p.c==='a') s+='<li>'+(p.c10>=150?'Végétation dense <b>contre la maison</b> (moins de 10 m)':'Végétation dense dans les 30 m autour')+'</li>';
- else if(p.c==='s') s+='<li>Abords dégagés sur le relevé de 2024</li>';
+function whyList(p,F){let s='<li>Bois ou forêt à '+(p.df<=10?'moins de 10':p.df)+' m</li>';const fb=F&&F.br&&F.br.fl;
+ if(fb) s+='<li><b>Arbres ou branches à moins de 2,5 m</b> de la maison'+(F.br.toit>=2?', dont au-dessus du toit':'')+' (photo 2025)</li>';
+ if(p.c==='a'&&!(fb&&F.t<50&&F.c10<50)) s+='<li>'+(F&&F.c10>=150||p.c10>=150?'Végétation dense <b>contre la maison</b> (moins de 10 m)':'Végétation dense dans les 30 m autour')+'</li>';
+ else if(p.c==='s') s+='<li>Abords dégagés (photo 2025, relevé laser)</li>';
  if(p.i) s+='<li>Rue sans issue : un seul accès pour les secours</li>';
  if(p.ch) s+='<li>En bordure de champ ou prairie</li>';return s;}
 async function openFiche(p,l){
@@ -111,8 +165,9 @@ function ficHTML(p,F){
  h+='<div style="margin-top:12px"><span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.c==='n'?'#8a8478':COL[p.c])+'">'+CAT[p.c][0]+'</span>';
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
  h+='</div><h3 style="font-size:18px;margin:8px 0 0">'+(F.adr||'Habitation')+'</h3><div class="muted">'+(F.parc?'Parcelle '+F.parc:'')+'</div>';
- h+='<div class="fimg"><img id="fimg" src="'+F.img[0]+'"><div class="seg3"><button class="on" onclick="fimg(0,this)">Photo 2025</button><button onclick="fimg(1,this)">Infrarouge 2024</button><button onclick="fimg(2,this)">Broussaille</button></div><div class="ileg" id="fcap"></div></div>';
- h+='<div class="sec"><h4>Pourquoi</h4><ul style="margin:0 0 0 18px;padding:0">'+whyList(p)+'</ul></div>';
+ h+='<button class="btn dark" style="margin-top:10px;width:100%;padding:11px;font-size:15px" onclick="lettre()">Courrier prêt à envoyer ↗</button>';CUR={p:p,F:F};
+ h+='<div class="fimg"><img id="fimg" src="'+F.img[0]+'"><div class="seg3"><button class="on" onclick="fimg(0,this)">Photo 2025</button><button onclick="fimg(1,this)">Infrarouge 2024</button><button onclick="fimg(2,this)">Broussaille</button>'+(F.imgb?'<button onclick="fimg(3,this)">Branches</button>':'')+'</div><div class="ileg" id="fcap"></div></div>';
+ h+='<div class="sec"><h4>Pourquoi</h4><ul style="margin:0 0 0 18px;padding:0">'+whyList(p,F)+'</ul></div>';
  h+='<div class="sec"><h4>Où est la broussaille, dans les 50 m</h4>';
  if(tot<50)h+='<div class="muted">Peu de broussaille mesurée dans les 50 m.</div>';
  else{h+='<div class="bar"><div style="width:'+pc(F.t)+';background:#c62828"></div><div style="width:'+pc(F.v)+';background:#7b5aa6"></div><div style="width:'+pc(F.f)+';background:#2e7d32"></div></div>';
@@ -127,11 +182,11 @@ function ficHTML(p,F){
   if(g)h+='<div class="box" style="margin-top:4px"><h3 style="font-size:14px">Courrier « '+g.t+' »</h3><div style="font-size:13px;margin-top:6px">'+g.x+'</div><div class="btns"><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(D.g.find(x=>x.k===\''+p.m+'\').x).then(()=>{this.textContent=\'Copié ✓\'})">Copier le texte</button></div></div>';
   if(hors>=50&&oth)h+='<div>Contacter aussi le propriétaire de la parcelle <b>'+oth.idu+'</b> (courrier « Propriétaires des parcelles boisées »).</div>';}
  h+='</div>';setTimeout(()=>fimg(0),0);return h;}
-const FCAP=['Photo aérienne IGN, été 2025','Infrarouge IGN, été 2024 : végétation vivante en rouge','Relevé laser IGN, 2024 : broussaille (0,5 à 3 m de haut) en rouge'];
+const FCAP=['Photo aérienne IGN, été 2025','Infrarouge IGN, été 2024 : végétation vivante en rouge','Relevé laser IGN, 2024 : broussaille (0,5 à 3 m de haut) en rouge','Photo IGN 2025, vue rapprochée : arbres à moins de 2,5 m de la maison en rouge (bande jaune = 2,5 m)'];let CUR=null;
 function fimg(i,b){
- const el=document.getElementById('fimg');if(!el)return;const K=Object.keys(FCACHE).find(k=>FCACHE[k].img.indexOf(el.src)>=0);if(K)el.src=FCACHE[K].img[i];
+ const el=document.getElementById('fimg');if(!el||!CUR)return;const F=CUR.F;el.src=i===3?F.imgb:F.img[i];
  if(b){b.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');}
- document.getElementById('fcap').innerHTML=FCAP[i]+'<br><i style="background:#9b1ebe"></i>habitation<i style="background:#fff;border:1px solid #999;height:6px"></i>sa parcelle<i style="background:#ffd200"></i>50 m'+(D.porge?'':'')+'<i style="background:#1e8c3c"></i>forêt publique';}
+ document.getElementById('fcap').innerHTML=FCAP[i]+(i===3?'':'<br><i style="background:#9b1ebe"></i>habitation<i style="background:#fff;border:1px solid #999;height:6px"></i>sa parcelle<i style="background:#ffd200"></i>50 m'+(D.porge?'':'')+'<i style="background:#1e8c3c"></i>forêt publique');}
 
 function counts(){const c={a:0,s:0,n:0};D.h.features.forEach(f=>c[f.properties.c]++);return c}
 function legend(){const c=counts(),el=document.getElementById('leg');el.innerHTML='';
@@ -144,18 +199,18 @@ function setFilt(f){filt=f;restyle();legend();}
 function zoomTo(lat,lon,z){map.setView([lat,lon],z||18);if(innerWidth<900)document.getElementById('panel').classList.add('min');}
 function ui(){const k=D.k,b=document.getElementById('body');let h='';
  if(tab==='res'&&D.porge){
-  h+='<p style="margin-top:0"><b>Ce que l\'outil aurait montré au maire du Porge avant le feu du 22 juillet 2026.</b> Classement fait uniquement avec des données d\'avant le feu (relevé laser IGN, occupation du sol 2021, masque forêt 2021).</p>';
+  h+='<p style="margin-top:0"><b>Ce que l\'outil aurait montré au maire du Porge avant le feu du 22 juillet 2026.</b> Classement fait uniquement avec des données d\'avant le feu (relevé laser IGN, occupation du sol 2021, masque forêt 2021, photo aérienne 2025).</p>';
   h+='<div class="box"><h3>Résultat après le feu</h3><p style="margin:6px 0 0">Habitations « à dégager » : <b>'+D.k.ta+' %</b> détruites. Autres habitations : <b>'+D.k.to+' %</b>.<br>Les '+D.k.a+' habitations à dégager contenaient '+D.k.det_a+' des '+D.k.det+' maisons détruites.</p></div>';
-  h+='<p class="muted">Touchez une maison rouge ou une maison détruite pour voir sa fiche.</p>';
+  h+='<p class="muted">Touchez une maison rouge, orange ou détruite pour voir sa fiche et le courrier qui aurait pu être envoyé.</p>';
   h+='<p class="muted">Le contour noir montre les maisons détruites (relevé par images satellite après le feu). Beaucoup de maisons détruites ne sont pas « à dégager » : au cœur des hameaux en pleine pinède, le feu a tout pris. L\'outil sert à choisir où contrôler en premier, il ne prédit pas quelles maisons vont brûler.</p>';
  }
  if(tab==='res'&&!D.porge){
-  h+='<p style="margin-top:0"><b>'+k.a+' habitations ont des abords à dégager avant l\'été.</b> Elles sont près d\'un bois et entourées de végétation dense. '+k.degag+' autres sont aussi près d\'un bois mais déjà dégagées.</p>';
-  h+='<div class="muted" style="margin:-4px 0 8px">Touchez une maison rouge pour voir sa fiche : photos, broussaille, parcelles, courrier.</div>';
+  h+='<p style="margin-top:0"><b>'+k.a+' habitations ont des abords à dégager avant l\'été.</b> Elles sont près d\'un bois et ont de la végétation dense autour ou des arbres à moins de 2,5 m de la maison ('+k.br+' cas). '+k.degag+' autres sont aussi près d\'un bois mais déjà dégagées.</p>';
+  h+='<div class="muted" style="margin:-4px 0 8px">Touchez une maison rouge ou orange pour voir sa fiche et son courrier prêt à envoyer.</div>';
   h+='<div class="step"><div class="n">1</div><div><b>Envoyer les courriers</b><br>'+D.g.length+' courriers types, un par situation, '+k.a+' adresses. <a href="#" onclick="go(\'cou\');return false">Voir les courriers</a></div></div>';
   h+='<div class="step"><div class="n">2</div><div><b>Contacter les propriétaires des parcelles boisées</b><br>Environ '+k.brou_hors+' % de la broussaille autour de ces habitations n\'est pas sur leur terrain mais sur des parcelles voisines, souvent boisées. Les 10 parcelles principales en contiennent '+k.par10+' %. <a href="#" onclick="go(\'par\');return false">Voir les parcelles</a> · <a href="#" onclick="go(\'sec\');return false">les '+D.z.length+' secteurs</a></div></div>';
   h+='<div class="step"><div class="n">3</div><div><b>Mettre à jour le plan communal de sauvegarde</b><br>'+k.imp+' habitations exposées sont dans une rue sans issue, '+k.ch+' en bordure de champ.</div></div>';
-  h+='<details><summary>Comment c\'est calculé</summary><p>Une habitation est <b>exposée</b> si elle est entourée de beaucoup de nature et de peu de bâti (jardins exclus) et qu\'un bois de 5 ha ou plus (ou relié à des champs) est à moins de 100 m. Elle est <b>à dégager</b> si, en plus, la végétation entre 0,5 et 3 m de haut est dense dans les 30 m (relevé laser aérien IGN, mars 2024).</p><p>Testé sur les feux du Porge et de Biscarrosse (juillet 2026) : les habitations « à dégager » y ont été détruites environ 2 fois plus souvent que les autres.</p><p>Indicateur de préparation : part des habitations exposées dont les abords sont dégagés. Repère : bien préparée à partir de 80 %.</p><p class="muted">Samoreau n\'est pas soumise aux obligations légales de débroussaillement d\'après le zonage publié : les courriers sont des recommandations. Données 2024–2025 : un terrain débroussaillé depuis apparaît encore à dégager.</p></details>';
+  h+='<details><summary>Comment c\'est calculé</summary><p>Une habitation est <b>exposée</b> si elle est entourée de beaucoup de nature et de peu de bâti (jardins exclus) et qu\'un bois de 5 ha ou plus (ou relié à des champs) est à moins de 100 m. Elle est <b>à dégager</b> si, en plus, la végétation entre 0,5 et 3 m de haut est dense dans les 30 m (relevé laser aérien IGN, mars 2024), ou si des arbres ou des branches sont à moins de 2,5 m de la maison ou au-dessus du toit (occupation du sol COSIA de l\'IGN, calculée sur la photo aérienne 2025).</p><p>Testé sur les feux du Porge et de Biscarrosse (juillet 2026) : les habitations « à dégager » y ont été détruites 3,4 et 1,9 fois plus souvent que les autres, et regroupaient 69 % et 50 % des maisons détruites.</p><p>Indicateur de préparation : part des habitations exposées dont les abords sont dégagés. Repère : bien préparée à partir de 80 %.</p><p class="muted">Samoreau n\'est pas soumise aux obligations légales de débroussaillement d\'après le zonage publié : les courriers sont des recommandations. Données 2024–2025 : un terrain débroussaillé depuis apparaît encore à dégager.</p></details>';
  }
  if(tab==='cou'){
   h+='<p class="muted" style="margin-top:0">Un même texte pour toutes les adresses d\'une situation. Chaque adresse ne reçoit qu\'un courrier.</p>';
@@ -214,7 +269,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='7JO9EbvWk4OFh5xiolPNFw==',ITER=600000;let KEY=null;
+const SALT='C8owjyqm5viTnwdc9L147w==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
