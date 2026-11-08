@@ -306,11 +306,11 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
  const cv=CV=L.canvas({padding:.5,tolerance:6});
  const FO=L.geoJSON(D.fo,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#b9d8b0',fillOpacity:.6}}),RT=L.geoJSON(D.rt,{renderer:cv,interactive:false,style:{color:'#a7a297',weight:1}});
  const SAT=L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',{maxNativeZoom:19,maxZoom:20});
- const setBase=v=>{BASE=v;try{localStorage.setItem('oldbase',v)}catch(_){}
+ const setBase=v=>{BASE=v;try{localStorage.setItem('oldbase2',v)}catch(_){}
   if(v==='sat'){map.removeLayer(FO);map.removeLayer(RT);SAT.addTo(map);SAT.bringToBack();}else{map.removeLayer(SAT);FO.addTo(map);RT.addTo(map);FO.bringToBack();}
   document.querySelectorAll('#basesw button').forEach(b=>b.classList.toggle('on',b.dataset.b===v));};
  const BC=L.control({position:innerWidth<900?'topright':'bottomleft'});BC.onAdd=()=>{const d=L.DomUtil.create('div','basesw');d.id='basesw';d.innerHTML='<button data-b="plan">Plan</button><button data-b="sat">Satellite</button>';L.DomEvent.disableClickPropagation(d);d.querySelectorAll('button').forEach(b=>b.onclick=()=>setBase(b.dataset.b));return d};BC.addTo(map);
- let BASE='plan';try{BASE=localStorage.getItem('oldbase')||'plan'}catch(_){}setBase(BASE);
+ let BASE='sat';try{BASE=localStorage.getItem('oldbase2')||'sat'}catch(_){}setBase(BASE);
  if(D.com)L.geoJSON(D.com,{renderer:cv,interactive:false,style:{color:'#555',weight:1.5,dashArray:'2 5',fill:false}}).addTo(map);
  if(D.burn)L.geoJSON(D.burn,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#6d4c41',fillOpacity:.25}}).addTo(map);
  if(D.par){PL=L.layerGroup();D.par.forEach((q,i)=>{const l=L.geoJSON(q.g,{renderer:cv,style:{color:'#5b3a8c',weight:2,dashArray:'6 4',fill:true,fillOpacity:.04}});l.eachLayer(x=>{x.idx=i;x.bindPopup('<b>Parcelle '+q.idu.slice(-6)+'</b><br>'+q.b.toLocaleString('fr')+' m² de broussaille à moins de 50 m de '+q.nm+' habitation(s) à dégager ('+q.pc+' % du total)')});PL.addLayer(l)});}
@@ -336,7 +336,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='N/sind9/X2YKi59x2+E1Mg==',ITER=600000;let KEY=null;
+const SALT='kashkOd7JWrFDIhrYD39mg==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
