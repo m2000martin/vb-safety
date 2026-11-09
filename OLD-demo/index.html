@@ -82,6 +82,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .tm{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1px solid #e2ddd3;background:#faf8f3;color:#1c2126;border-radius:11px;padding:7px 12px;font:inherit;font-size:13.5px;cursor:pointer;white-space:nowrap}
 .tm b{font-weight:650}.tm i{font-style:normal;font-size:11.5px;font-weight:700;background:#ebe7de;color:#3a4148;border-radius:9px;padding:1px 7px}.tm i.hot{background:#fdecea;color:#a31515}
 .tm.on{flex:1 1 240px;max-width:420px;flex-direction:column;align-items:flex-start;gap:0;background:#1c2126;color:#fff;border-color:#1c2126;padding:5px 14px}.tm.on b{font-size:14.5px}.tm.on span{font-size:11.5px;opacity:.8}
+#risk{display:flex;gap:2px;background:#f1efe9;border-radius:10px;padding:3px;flex:none}.rk{border:0;background:none;border-radius:8px;padding:6px 10px;font:inherit;font-size:12.5px;cursor:pointer;color:#3a4148;white-space:nowrap}.rk.on{background:#fff;color:#1c2126;font-weight:650;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 #chg3{flex:none;font-size:12px;color:#5d6670}
 #page{position:fixed;top:56px;left:0;right:0;bottom:0;overflow:auto;background:#f1efe9;display:none;padding:18px 20px 40px;box-sizing:border-box;z-index:1500}
 .ph{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 auto 14px;max-width:1400px}.ph h1{font-size:22px;margin:0}.ph .sp{flex:1}.ph2{font-size:16px;max-width:1400px;margin:22px auto 8px}
@@ -93,7 +94,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:1400px;margin:0 auto 14px}.kc{background:#fff;border:1px solid #e2ddd3;border-radius:14px;padding:14px}.kv{font-size:30px;font-weight:800;margin-top:2px}.kd{font-size:12.5px;color:#3a4148}
 .pcols{max-width:1400px;margin:0 auto;columns:2 460px;column-gap:14px}.pcols .box{break-inside:avoid;background:#fff;margin:0 0 14px}
 #topm .sh{display:none}
-@media(max-width:899px){#topm .lg{display:none}#topm .sh{display:inline}.tm{padding:7px 10px}.tbl{display:none}#chg3{display:none}.tm.on{flex:0 0 auto}.tm.on span{display:none}#page{padding:12px}}
+@media(max-width:899px){.rk{padding:5px 7px;font-size:11.5px}#topbar{height:auto;min-height:56px;flex-wrap:wrap;padding:6px 8px;gap:6px}#topm .lg{display:none}#topm .sh{display:inline}.tm{padding:7px 10px}.tbl{display:none}#chg3{display:none}.tm.on{flex:0 0 auto}.tm.on span{display:none}#page{padding:12px}}
 .mdesc{font-size:12px;color:#5d6670;margin-top:5px;max-width:420px}
 #hx{display:none}
 .leaflet-tooltip.tt{font-size:12.5px;padding:4px 8px;border-radius:7px}
@@ -111,7 +112,7 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
  #grip{display:block;width:40px;height:4px;background:#d6d0c6;border-radius:3px;margin:7px auto 0;flex:none}
 }
 </style></head><body>
-<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><nav id="topm" aria-label="Modes"></nav><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
+<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
 <div id="map"></div><div id="page"></div>
 <div id="head" class="card">
  <button id="hx" onclick="this.parentNode.classList.toggle('cmp');this.textContent=this.parentNode.classList.contains('cmp')?'▾ détails':'▴ réduire'">▴ réduire</button><h1 id="ttl"></h1>
@@ -435,7 +436,7 @@ async function openFiche(p,l){
  if(tab==='fic'&&SELP===p){CUR={p:p,F:F};b.innerHTML=ficHTML(p,F);b.scrollTop=0;drawAcc(F);showParcel(p,F);applyLay();}}
 let ACC=null;function drawAcc(F){if(ACC){map.removeLayer(ACC);ACC=null}const A=F&&F.acc;if(!A||!A.g||A.l<8)return;ACC=L.layerGroup([L.polygon(A.c,{renderer:CV,interactive:false,stroke:false,fillColor:'#ffd200',fillOpacity:.28}),L.polyline(A.g,{renderer:CV,interactive:false,color:'#b8860b',weight:3,dashArray:'6 5'})]).addTo(map);}
 function showAcc(){if(ACC)map.fitBounds(ACC.getLayers()[0].getBounds().pad(0.6),{maxZoom:19});}
-function navList(){const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(!filt||filt(p)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3};return L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}))}
+function navList(){const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(!filt||filt(p)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3,tr:0,to:1,tv:2,fr:0,fo:1,fi:2,fv:3};return L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}))}
 function nav(d){if(!NAV.length)return;NI=(NI+d+NAV.length)%NAV.length;openByK(NAV[NI].k)}
 function openByK(k){if(typeof TOP!=='undefined'&&TOP!=='map'){setTop('map');setTimeout(()=>openByK(k),120);return}let L0=null;H.eachLayer(l=>{if(l.feature.properties.k===k)L0=l});if(L0)openFiche(L0.feature.properties,L0)}
 function constats(p,F){const br=F.br||{},hors=F.v+F.f,dist=D.porge?'3 m':'3 m',C=[];
@@ -451,10 +452,10 @@ function ficHTML(p,F){
  const tot=F.t+F.v+F.f,hors=tot?Math.round(100*(F.v+F.f)/tot):0,pc=x=>tot?(100*x/tot)+'%':'0',br=F.br||{};
  let h='<div class="fnav"><button class="btn" onclick="go(PREV)" title="Échap">← '+({lst:'Liste',ctl:'Suivi',cou:'Courriers',sec:'Secteurs',par:'Parcelles',act:'Actions',eta:'Commune'}[PREV]||'Résumé')+'</button><span class="sp"></span><button class="btn ic" onclick="nav(-1)" title="Précédente (←)">‹</button><span class="muted">'+(NI+1)+' / '+NAV.length+'</span><button class="btn ic" onclick="nav(1)" title="Suivante (→)">›</button></div>';
  const TG=(t,c)=>' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+c+'">'+t+'</span>';
- h+='<div style="margin-top:12px">'+(MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):(MODE==='leg'&&!p.l?TG('Hors zone légale'+((p.g||'v')!=='v'?' · '+GN[p.g][0].toLowerCase()+' (recommandé)':''),'#8a8478'):TG(GN[p.g||'v'][0],COLG[p.g||'v'])));
+ h+='<div style="margin-top:12px">'+(RISK!=='feu'?TG(kname(key(p)),colOf(p)):MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):(MODE==='leg'&&!p.l?TG('Hors zone légale'+((p.g||'v')!=='v'?' · '+GN[p.g][0].toLowerCase()+' (recommandé)':''),'#8a8478'):TG(GN[p.g||'v'][0],COLG[p.g||'v'])));
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
  h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(p.t?'<b>'+typName(p)+'</b> · ':'')+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+' · priorité : '+CAT[p.c][0].toLowerCase()+'</div>';
- const C=constats(p,F);
+ h+=riskFiche(p);const C=constats(p,F);
  h+='<div class="cst">'+C.map(c=>'<div class="row" onclick="'+(c.i<0?'showAcc()':'fimg('+c.i+')')+'"><div class="ic" style="background:'+c.c+'"></div><div><div class="t">'+c.t+'</div><div class="d">'+c.d+'</div><div class="a">'+c.a+'</div></div></div>').join('')+'</div>';
  h+='<div class="acts"><button class="btn dark" onclick="lettre()">Courrier / rapport PDF</button><button class="btn" onclick="mail()">Envoyer par e-mail</button><button class="btn'+(CTL()[p.k]?' on':'')+'" id="ctlb" onclick="togCtl()">'+(CTL()[p.k]?'✓ Dans la liste à contrôler':'+ À contrôler sur place')+'</button></div>';
  h+='<div class="fsub"><button data-s="c" class="'+(FSUB==='c'?'on':'')+'" onclick="setFS(\'c\')">Constats et plan d\'action</button><button data-s="e" class="'+(FSUB==='e'?'on':'')+'" onclick="setFS(\'e\')">Contrôle et envois'+(nEnv(p.k)?' ('+nEnv(p.k)+')':'')+'</button></div><div id="fs-c" style="display:'+(FSUB==='c'?'block':'none')+'">';
@@ -478,7 +479,7 @@ function fimg(i){
 function counts(){const c={};keys().forEach(k=>c[k]=0);D.h.features.forEach(f=>{const k=key(f.properties);c[k]=(c[k]||0)+1});return c}
 function legend(){const c=counts(),el=document.getElementById('leg');el.innerHTML='';
  keys().forEach(k=>{const b=document.createElement('button');b.className='lb'+(filt&&filt.k===k?' on':'');
-  b.innerHTML='<i style="background:'+(MODE==='pri'?COL[k]:COLG[k])+'"></i>'+kname(k)+' <b>'+c[k]+'</b>';
+  b.innerHTML='<i style="background:'+kcol(k)+'"></i>'+kname(k)+' <b>'+c[k]+'</b>';
   b.onclick=()=>{setFilt(filt&&filt.k===k?null:Object.assign(p=>key(p)===k,{k}))};el.appendChild(b)});
  if(D.porge){const b=document.createElement('button');b.className='lb'+(showX?' on':'');b.innerHTML='<i style="background:#fff;border:2.5px solid #000"></i>Détruites en juillet 2026 <b>'+D.k.det+'</b>';b.onclick=()=>{showX=!showX;restyle();legend()};el.appendChild(b);}}
 function restyle(){H.setStyle(sty);if(MK)MK.eachLayer(m=>{const p=m.p,on=!filt||filt(p),x=D.porge&&showX&&p.x;m.setStyle({stroke:true,color:x?'#000':'#fff',weight:x?2.5:1.2,fillColor:colOf(p),fillOpacity:on?.95:.1,opacity:on?1:.1});if((key(p)==='a'||key(p)==='r')&&on)m.bringToFront()})}
@@ -486,6 +487,9 @@ function buildMK(){MK.clearLayers();H.eachLayer(l=>{const p=l.feature.properties
   const m=L.circleMarker(c,{renderer:CV,radius:(k==='a'||k==='r')?6:4.5});m.p=p;if(p.k!==undefined){m.on('click',()=>{FSUB='c';openFiche(p,m)});m.bindTooltip(()=>TIP(p),{direction:'top',className:'tt',offset:[0,-6]});}l.mk=m;MK.addLayer(m)});restyle();}
 let SP=null,TIP=null;
 function kpi(){let n,d,t;const F=D.h.features.map(f=>f.properties);
+ if(RISK!=='feu'){const G=F.filter(p=>p.k!==undefined),bad=G.filter(p=>/r$|i$/.test(key(p))).length;const pc=G.length?Math.round(100*bad/G.length):0;
+  document.getElementById('pc').textContent=bad;document.getElementById('pc').style.color=RISK==='tem'?'#8e24aa':'#0d47a1';
+  document.getElementById('pctx').innerHTML=RISK==='tem'?'<b style="color:#6a1b9a">Tempête</b><br>constructions avec beaucoup d\'arbres pouvant tomber dessus':'<b style="color:#0d47a1">Inondation</b><br>constructions avec plus de 1 m d\'eau ou isolées (crue de référence)';return}
  if(MODE==='pri'){n=D.k.degag;d=D.k.expo;t=' des '+d+' habitations exposées ont des abords dégagés';}
  else{const S=F.filter(inScope);d=S.length;n=S.filter(p=>{const r=p.k!==undefined?lastSt(p.k):null;return r?r.s==='conforme':p.g==='v'}).length;t=' des '+d+' constructions '+(MODE==='leg'?'de la zone légale'+(D.zsrc==='est'?' (estimée)':''):'de la commune')+' n\'ont rien à signaler';}
  const pc=d?Math.round(100*n/d):0,cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828'),et=pc>=80?'bien préparée':(pc>=60?'à consolider':'à améliorer');
@@ -497,7 +501,7 @@ function setMode(m){MODE=m;try{localStorage.setItem('oldmode',m)}catch(_){}filt=
  buildMK();legend();kpi();if(tab==='fic'&&CUR){document.getElementById('body').innerHTML=ficHTML(CUR.p,CUR.F);}else ui();}
 function setFilt(f){filt=f;restyle();legend();}
 function zoomTo(lat,lon,z){map.setView([lat,lon],z||18);if(innerWidth<900)document.getElementById('panel').classList.add('min');}
-function ui(){const k=D.k,b=document.getElementById('body');let h='';
+function ui(){const k=D.k,b=document.getElementById('body');let h='';if(tab==='res'&&RISK!=='feu'){b.innerHTML=riskRes();return}
  if(tab==='res')h+='<button class="btn dark" style="width:100%;margin:0 0 12px;padding:10px" onclick="rapportCommune()">Rapport d\'état de la commune (PDF) ↗</button>';
  if(tab==='res'&&MODE!=='pri'){const F=D.h.features.map(f=>f.properties).filter(inScope),n=g=>F.filter(p=>p.g===g).length,out=D.h.features.length-F.length;
   if(MODE==='leg')h+='<p style="margin-top:0"><b>Mode légal : '+F.length+' maisons soumises aux obligations légales de débroussaillement</b> (à moins de 200 m d\'un bois ou d\'une forêt classés). '+(D.zsrc==='est'?'<span class="muted">Zone estimée : le zonage officiel publié par l\'IGN n\'inclut pas encore '+D.nom+'.</span>':'<span class="muted">Zonage officiel IGN.</span>')+'</p>';
@@ -528,7 +532,7 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';
  if(tab==='eta')h+=etaHTML();
  if(tab==='lst'){
   h+='<input id="q" class="srch" placeholder="Rechercher une adresse…" autocomplete="off">';
-  h+='<div class="fl">'+(MODE==='pri'?[['a',CAT.a[0]],['s',CAT.s[0]],['lis','Lisière (mairie)']]:[['r',GN.r[0]],['o',GN.o[0]],['v',GN.v[0]]]).concat(D.porge?[['x','Détruites']]:[]).concat([['*','Toutes']]).map(x=>'<button data-f="'+x[0]+'" class="'+(LF===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div><div id="lst"></div>';
+  h+='<div class="fl">'+(RISK!=='feu'?keys().map(k=>[k,kname(k)]):MODE==='pri'?[['a',CAT.a[0]],['s',CAT.s[0]],['lis','Lisière (mairie)']]:[['r',GN.r[0]],['o',GN.o[0]],['v',GN.v[0]]]).concat(D.porge?[['x','Détruites']]:[]).concat([['*','Toutes']]).map(x=>'<button data-f="'+x[0]+'" class="'+(LF===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div><div id="lst"></div>';
  }
  if(tab==='ctl'){const o=CTL(),K=Object.keys(o).filter(k=>{const r=lastSt(+k);return !r||r.s!=='conforme'});
   if(K.length){h+='<h4 style="margin:0 0 2px">À contrôler sur place ('+K.length+')</h4><div class="muted">Ajoutées depuis la fiche. Elles sortent de la liste une fois contrôlées conformes.</div>';
@@ -554,7 +558,7 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';
  b.innerHTML=h;if(tab==='lst'){const q=document.getElementById('q');q.value=Q;q.oninput=()=>{Q=q.value;drawList()};document.querySelectorAll('.fl button').forEach(x=>x.onclick=()=>{LF=x.dataset.f;ui()});drawList();}}
 function isLis(p){return p.c==='s'&&p.df<=20&&!p.ft&&!p.fv&&!p.b}
 function lis(){return D.h.features.filter(f=>isLis(f.properties)).length}
-function drawList(){const qq=Q.trim().toLowerCase();const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(LF==='*'||(LF==='x'?p.x:(LF==='lis'?isLis(p):key(p)===LF)))&&(!qq||(p.a||'').toLowerCase().includes(qq)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3};
+function drawList(){const qq=Q.trim().toLowerCase();const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(LF==='*'||(LF==='x'?p.x:(LF==='lis'?isLis(p):key(p)===LF)))&&(!qq||(p.a||'').toLowerCase().includes(qq)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3,tr:0,to:1,tv:2,fr:0,fo:1,fi:2,fv:3};
  L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));const el=document.getElementById('lst');
  el.innerHTML='<div class="muted" style="margin-bottom:4px">'+L.length+' habitation'+(L.length>1?'s':'')+'</div>'+L.slice(0,400).map(p=>'<div class="li" data-k="'+p.k+'"><span class="dt" style="background:'+colOf(p)+'"></span><span class="ad">'+esc(p.a||'Habitation sans adresse')+'<span class="bs">'+(p.b?'<span class="bd">branches</span>':'')+(p.ft?'<span class="bd">broussaille terrain</span>':'')+(p.fv?'<span class="bd">broussaille voisins</span>':'')+(p.x?'<span class="bd k">détruite</span>':'')+'</span></span><span class="muted">›</span></div>').join('')+(L.length>400?'<div class="muted">… affinez la recherche</div>':'');
  el.querySelectorAll('.li').forEach(x=>x.onclick=()=>{PREV='lst';openByK(+x.dataset.k)});}
@@ -698,7 +702,72 @@ function etaPage(){const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),
  const kp=(t,v,d,c)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div><div class="kd">'+d+'</div></div>';
  let h='<div class="ph"><h1>État de la commune</h1><span class="muted">'+esc(D.nom)+' · '+imgTxt()+'</span><span class="sp"></span><button class="btn dark" onclick="rapportCommune()">Rapport d\'état (PDF) ↗</button></div>';
  h+='<div class="kgrid">'+kp('Zone légale',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('Travaux à faire',Z.filter(p=>p.g==='r').length,'en zone légale')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
- h+='<div class="pcols">'+etaHTML().replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
+ h+='<div class="pcols">'+etaRisk()+etaHTML().replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
+ return h}
+
+/* ===== Sélecteur de risque : Feu de forêt · Tempête · Inondation ===== */
+let RISK='feu';
+const RC={tr:'#8e24aa',to:'#ce93d8',tv:'#cfc9bd',fr:'#0d47a1',fo:'#42a5f5',fi:'#ffb300',fv:'#cfc9bd'};
+const RN={tr:'Arbres pouvant tomber dessus',to:'Quelques arbres à portée',tv:'Rien de notable',fr:'Plus de 1 m d\'eau (estimé)',fo:'Moins de 1 m d\'eau',fi:'Hors d\'eau mais isolée',fv:'Hors zone inondable'};
+function stG(p){const s=D.st&&D.st.b[p.k];if(!s)return 'v';return (s[0]>=300||s[1]>=20)?'r':(s[0]>=100?'o':'v')}
+function flG(p){const f=D.fl&&D.fl.b[p.k];if(!f)return 'v';return f[0]>=100?'r':(f[0]>0||f[2]?'o':(f[1]?'i':'v'))}
+const F0={key,colOf,keys,kname,low,inScope};
+key=p=>RISK==='feu'?F0.key(p):(RISK==='tem'?'t'+stG(p):'f'+flG(p));
+colOf=p=>RISK==='feu'?F0.colOf(p):RC[key(p)];
+keys=()=>RISK==='feu'?F0.keys():(RISK==='tem'?['tr','to','tv']:['fr','fo','fi','fv']);
+kname=k=>RISK==='feu'?F0.kname(k):RN[k];
+low=p=>RISK==='feu'?F0.low(p):/v$/.test(key(p));
+inScope=p=>RISK==='feu'?F0.inScope(p):true;
+function kcol(k){return RISK!=='feu'?RC[k]:(MODE==='pri'?COL[k]:COLG[k])}
+function fixTop(){const th=document.getElementById('topbar').offsetHeight;document.getElementById('map').style.top=th+'px';document.getElementById('page').style.top=th+'px';document.getElementById('head').style.top=(th+(innerWidth<900?8:10))+'px';if(innerWidth>=900)document.getElementById('panel').style.top=(th+10)+'px';if(map)map.invalidateSize()}
+addEventListener('resize',()=>{try{fixTop()}catch(_){}});
+function riskBar(){setTimeout(fixTop,0);const R=[['feu','Feu de forêt'],['tem','Tempête']].concat(D.fl?[['inond','Inondation']]:[]);
+ document.getElementById('risk').innerHTML=R.map(r=>'<button class="rk'+(r[0]===RISK?' on':'')+'" aria-pressed="'+(r[0]===RISK)+'" onclick="setRisk(\''+r[0]+'\')">'+r[1]+'</button>').join('')}
+function setRisk(r){RISK=r;document.getElementById('ttl').textContent=D.nom+' · '+{feu:'préparation aux feux de végétation',tem:'risque tempête',inond:'risque inondation'}[r];try{localStorage.setItem('oldrisk',r)}catch(_){}filt=null;
+ document.getElementById('modes').style.display=r==='feu'?'':'none';
+ document.getElementById('mdesc').textContent=r==='feu'?MDESC[MODE]:(r==='tem'?'Arbres de plus de 8 m capables de tomber sur une construction, une route ou une ligne électrique (relevé laser IGN).':'Zone inondable réglementaire (PPRI) et hauteur d\'eau estimée avec le relief laser IGN.');
+ riskBar();applyRiskLayers();if(typeof SELP!=='undefined'&&SELP===null&&tab==='fic')go('res');buildMK();legend();kpi();if(tab==='fic'&&CUR)document.getElementById('body').innerHTML=ficHTML(CUR.p,CUR.F);else ui();if(TOP!=='map')refreshTop()}
+/* couches propres aux risques */
+let RL={};
+function initRiskLayers(){
+ if(D.st){
+  RL.stl=L.layerGroup(D.st.l.map(s=>L.polyline(s.g,{renderer:CV,color:s.r>=300?'#8e24aa':(s.r>=120?'#ce93d8':'#9e9e9e'),weight:s.r>=120?5:3,dashArray:'1 6',lineCap:'round'}).bindTooltip('<b>Ligne '+esc(s.t)+'</b> · '+esc(s.ge)+'<br>'+m2(s.r)+' de couronne d\'arbre à portée'+(s.d>=10?'<br>dont '+m2(s.d)+' d\'arbres secs ou dépérissants (indice)':''),{sticky:true,className:'tt'})));
+  RL.stv=L.layerGroup(D.cm?D.cm.v.map((s,i)=>{const v=D.st.v[i];if(!v||v[0]<600)return null;return L.polyline(s.g,{renderer:CV,color:v[0]>=1500?'#8e24aa':'#ce93d8',weight:4,opacity:.85}).bindTooltip('<b>'+esc(s.n||'Voie')+'</b><br>'+m2(v[0])+' de couronne pouvant tomber sur la voie',{sticky:true,className:'tt'})}).filter(Boolean):[]);
+  RL.stp=L.layerGroup(D.st.p.slice(0,400).map(q=>L.polygon(q.g,{renderer:CV,color:'#6a1b9a',weight:q.s>=20000?1.5:1.2,dashArray:q.s>=20000?'4 4':null,fill:q.s<20000,fillColor:'#8e24aa',fillOpacity:Math.min(.4,.1+q.r/3000)}).bindTooltip('<b>Terrain '+q.i.slice(-6)+'</b> · '+esc(q.o)+(q.o==='personnes morales non remarquables'?' (société ou association)':'')+'<br>'+m2(q.r)+' d\'arbres pouvant tomber sur une maison, une route ou une ligne'+(q.d>=20?'<br>'+m2(q.d)+' d\'arbres secs ou dépérissants (indice)':'')+(q.sb>=0.15?'<br>sous-bois dense':''),{sticky:true,className:'tt'})))}
+ if(D.fl){
+  RL.fenv=L.layerGroup(D.fl.env.map(p=>L.polygon(p,{renderer:CV,interactive:false,stroke:true,color:'#1565c0',weight:1,fillColor:'#1e88e5',fillOpacity:.18})));
+  RL.frd=L.layerGroup(D.fl.r.map(r=>L.polyline(r.g,{renderer:CV,color:'#d500f9',weight:4}).bindTooltip('<b>'+esc(r.n||'Voie')+'</b><br>Submergée : environ '+(r.h/100).toFixed(1).replace('.',',')+' m d\'eau (estimé)',{sticky:true,className:'tt'})))}}
+function applyRiskLayers(){const on=(k,v)=>{const l=RL[k];if(!l)return;if(v){if(!map.hasLayer(l))l.addTo(map)}else if(map.hasLayer(l))map.removeLayer(l)};
+ on('stp',RISK==='tem');on('stv',RISK==='tem');on('stl',RISK==='tem');on('fenv',RISK==='inond');on('frd',RISK==='inond');
+ if(H)H.bringToFront&&0}
+/* panneau Résumé selon le risque */
+function riskRes(){const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),c=g=>F.filter(p=>key(p)===g).length;
+ if(RISK==='tem'){const S=D.st,lr=S.l.filter(s=>s.r>=300),lo=S.l.filter(s=>s.r>=120&&s.r<300),km=L_=>(L_.length*0.05).toFixed(1).replace('.',',');
+  const byG=g=>S.l.filter(s=>s.ge===g&&s.r>=120).length,vr=D.cm?Object.keys(S.v).filter(i=>S.v[i][0]>=1500).length:0;
+  let h='<p style="margin-top:0"><b>Tempête : arbres de plus de 8 m capables de tomber</b> sur une construction, une route ou une ligne électrique (chute dans l\'axe, hauteur ≥ distance). Relevé laser IGN ; arbres secs repérés à l\'infrarouge (indice, à vérifier).</p>';
+  h+='<div class="step"><div class="n" style="background:#8e24aa">'+c('tr')+'</div><div><b>Constructions</b> avec beaucoup d\'arbres pouvant tomber dessus · '+c('to')+' avec quelques arbres. <a href="#" onclick="LF=\'tr\';go(\'lst\');return false">Voir la liste</a></div></div>';
+  h+='<div class="step"><div class="n" style="background:#8e24aa">'+km(lr)+'</div><div><b>km de lignes électriques</b> très exposés (+'+km(lo)+' km à surveiller) : '+byG('Enedis')*50+' m Enedis, '+byG('RTE')*50+' m RTE. Liste à transmettre au gestionnaire du réseau, qui élague ses tracés.</div></div>';
+  h+='<div class="step"><div class="n" style="background:#8e24aa">'+(vr*0.05).toFixed(1).replace('.',',')+'</div><div><b>km de voies</b> bordées d\'arbres pouvant les couper : itinéraires à reconnaître en premier après une tempête.</div></div>';
+  const pl=q=>'<div class="li" onclick="zoomP(\''+q.i+'\')"><span class="dt" style="background:#8e24aa"></span><span class="ad">Parcelle '+q.i.slice(-6)+' · '+(q.s>=10000?(q.s/10000).toFixed(1).replace('.',',')+' ha':m2(q.s))+'<span class="bs muted">'+m2(q.r)+' d\'arbres à portée · '+(q.o==='personnes morales non remarquables'?'société ou association':esc(q.o))+(q.d>=20?' · arbres secs (indice)':'')+(q.sb>=0.15?' · sous-bois dense':'')+'</span></span><span class="muted">›</span></div>';
+  h+='<h4 style="margin:12px 0 2px">Terrains boisés à voir en premier (moins de 2 ha)</h4><div class="muted">Jardins et petits bois dont les arbres peuvent tomber sur une maison, une route ou une ligne. Propriétaire : personnes morales d\'après le fichier DGFiP ; particuliers, nom en mairie (cadastre).</div>'+S.p.filter(q=>q.s<20000).slice(0,12).map(pl).join('');
+  h+='<h4 style="margin:12px 0 2px">Lisières de grands bois (2 ha et plus)</h4><div class="muted">Seule la bande au contact des maisons, routes et lignes compte.</div>'+S.p.filter(q=>q.s>=20000).slice(0,8).map(pl).join('');
+  h+=''+[].slice(0,0).map(q=>'<div class="li" onclick="zoomP(\''+q.i+'\')"><span class="dt" style="background:#8e24aa"></span><span class="ad">Parcelle '+q.i.slice(-6)+'<span class="bs muted">'+m2(q.r)+' d\'arbres à portée · '+(q.o==='personnes morales non remarquables'?'société ou association':esc(q.o))+(q.d>=20?' · arbres secs (indice)':'')+(q.sb>=0.15?' · sous-bois dense':'')+'</span></span><span class="muted">›</span></div>').join('');
+  h+='<p class="muted">Limite : l\'image donne la taille et la position des arbres, pas leur solidité (racines, pourriture). C\'est un tri pour orienter les visites.</p>';return h}
+ const Fl=D.fl;let h='<p style="margin-top:0"><b>Inondation : crue de référence du PPRI de la Seine</b>. Niveau local déduit du bord de la zone réglementaire (environ '+String(Fl.level).replace('.',',')+' m NGF) et relief laser IGN.</p>';
+ h+='<div class="step"><div class="n" style="background:#0d47a1">'+c('fr')+'</div><div><b>Constructions avec plus de 1 m d\'eau</b> estimé au pied des murs · '+c('fo')+' avec moins de 1 m. <a href="#" onclick="LF=\'fr\';go(\'lst\');return false">Voir la liste</a></div></div>';
+ h+='<div class="step"><div class="n" style="background:#ffb300">'+c('fi')+'</div><div><b>Hors d\'eau mais isolées</b> : toutes les routes d\'accès sont submergées (évacuation, ravitaillement, secours). <a href="#" onclick="LF=\'fi\';go(\'lst\');return false">Les voir</a></div></div>';
+ h+='<div class="step"><div class="n">'+Fl.lg+'</div><div><b>Logements</b> dans les constructions inondables (BD TOPO), pour dimensionner l\'évacuation dans le plan communal de sauvegarde.</div></div>';
+ if(Fl.sites.length)h+='<h4 style="margin:12px 0 2px">Sites sensibles en zone inondable</h4>'+Fl.sites.map(s=>'<div class="li" style="cursor:default"><span class="dt" style="background:#0d47a1"></span><span class="ad">'+esc(s.n)+'<span class="bs muted">'+esc(s.na)+'</span></span></div>').join('');
+ h+='<p class="muted">'+esc(Fl.note)+' Le zonage officiel (rouge, jaune, bleu) et ses prescriptions sont dans le PPRI ; seule son enveloppe est publiée en données.</p>';return h}
+function zoomP(id){const q=D.st.p.find(x=>x.i===id);map.fitBounds(L.polygon(q.g).getBounds().pad(.3),{maxZoom:18});if(innerWidth<900)document.getElementById('panel').classList.add('min')}
+/* encadré dans la fiche */
+function riskFiche(p){if(RISK==='tem'){const s=D.st.b[p.k];return '<div class="eff" style="background:#f5eef8;border-color:#e1cdea;margin-top:10px"><b style="color:#6a1b9a">Tempête</b><br>'+(s?m2(s[0])+' de couronne d\'arbres de plus de 8 m capables de tomber sur la construction'+(s[1]>=10?', dont '+m2(s[1])+' d\'arbres secs ou dépérissants (indice infrarouge, à vérifier)':'')+'.':'Pas d\'arbre de plus de 8 m à portée.')+'<div class="muted" style="margin-top:3px">Conseil : faire examiner ces arbres par un élagueur ; l\'image ne dit rien de leur solidité.</div></div>'}
+ if(RISK==='inond'){const f=D.fl.b[p.k];return '<div class="eff" style="background:#e8f1fb;border-color:#bfd7f2;margin-top:10px"><b style="color:#0d47a1">Inondation (crue de référence)</b><br>'+(!f?'Hors de la zone inondable réglementaire.':(f[0]>0?'Environ <b>'+(f[0]/100).toFixed(1).replace('.',',')+' m d\'eau</b> estimés au pied des murs.':(f[2]?'Dans la zone réglementaire, terrain au-dessus du niveau estimé.':''))+(f[1]?' <b>Isolée</b> : routes d\'accès submergées.':''))+'<div class="muted" style="margin-top:3px">Estimation à partir du relief : hauteur du rez-de-chaussée et caves non connues.</div></div>'}
+ return ''}
+function etaRisk(){let h='';
+ if(D.st){const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),n=F.filter(p=>stG(p)==='r').length,lr=D.st.l.filter(s=>s.r>=300).length;
+  h+='<div class="box"><h3>Tempête</h3><div class="chips"><span class="chip">Constructions très exposées : <b>'+n+'</b></span><span class="chip">Lignes électriques très exposées : <b>'+(lr*0.05).toFixed(1).replace('.',',')+' km</b></span><span class="chip">Terrains à voir : <b>'+Math.min(D.st.p.length,50)+'</b></span></div><div class="btns"><button class="btn" onclick="setTop(\'map\');setRisk(\'tem\')">Voir sur la carte</button></div></div>'}
+ if(D.fl)h+='<div class="box"><h3>Inondation</h3><div class="chips"><span class="chip">Constructions inondables : <b>'+D.fl.n_fl+'</b></span><span class="chip">Isolées : <b>'+D.fl.n_iso+'</b></span><span class="chip">Logements : <b>'+D.fl.lg+'</b></span><span class="chip">Sites sensibles : <b>'+D.fl.sites.length+'</b></span></div><div class="btns"><button class="btn" onclick="setTop(\'map\');setRisk(\'inond\')">Voir sur la carte</button></div></div>';
  return h}
 
 function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' · préparation aux feux de végétation';if(D.porge)document.getElementById('stt').textContent='Démonstration sur un feu réel · données d\'avant le feu';
@@ -733,7 +802,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
  loadSuivi().then(()=>{restyle();legend();kpi();updTabs()});if(innerWidth<900){const t=document.querySelector('.leaflet-top.leaflet-right');if(t)t.style.top=(document.getElementById('head').offsetHeight+14)+'px';}
  map.on('zoomend',()=>{const z=map.getZoom();if(z>=17)map.removeLayer(MK);else if(!map.hasLayer(MK))MK.addTo(map);});
  document.querySelectorAll('.tab[data-t]').forEach(b=>b.onclick=()=>go(b.dataset.t));
- updTabs();initLayers();document.getElementById('tbn').textContent=D.nom;let T0='map';try{T0=localStorage.getItem('oldtop')||'map'}catch(_){}setTop(T0);
+ updTabs();initLayers();initRiskLayers();try{const r0=localStorage.getItem('oldrisk');if(r0&&(r0!=='inond'||D.fl))setRisk(r0);else riskBar()}catch(_){riskBar()}document.getElementById('tbn').textContent=D.nom;let T0='map';try{T0=localStorage.getItem('oldtop')||'map'}catch(_){}setTop(T0);
  document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
  if(innerWidth<900)document.getElementById('panel').classList.add('min');
  document.onkeydown=e=>{if(tab!=='fic'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape')go(PREV);else if(e.key==='ArrowRight')nav(1);else if(e.key==='ArrowLeft')nav(-1);};
