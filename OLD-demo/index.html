@@ -105,13 +105,24 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 #pcch .pt1{display:flex;flex-direction:column}#pcch .pt1 b{font-size:17px}#pcch .pt1 span{font-size:12px;opacity:.75}
 #pcch .pb{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}#pcch .btn{font-size:12.5px}#pcch .btn.dark{background:#b71c1c;border-color:#b71c1c}
 #pcct{display:none}
-.pccb{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(360px,1fr)}
+.pccb{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}
 #pccL{display:flex;flex-direction:column;min-height:0;border-right:1px solid #d6d0c6}#pccS{flex:none;padding:10px 12px;background:#f6f4ef}#pccmap{flex:1;min-height:0}
 #pccR{overflow:auto;padding:10px 12px;background:#f6f4ef}
 .pcol2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5d6670;margin:0 0 6px}
-.pcs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:10px;align-items:stretch}
-.pkk{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;background:#fff;border:1px solid #e2ddd3;border-radius:12px;padding:10px}.pkk div{display:flex;flex-direction:column}.pkk b{font-size:24px;line-height:1.1}.pkk span{font-size:11.5px;color:#3a4148}
+.pcs{display:grid;grid-template-columns:1fr;gap:10px;align-items:stretch}
+.pkk{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;background:#fff;border:1px solid #e2ddd3;border-radius:12px;padding:10px}.pkk div{display:flex;flex-direction:column}.pkk b{font-size:24px;line-height:1.1}.pkk span{font-size:11.5px;color:#3a4148}
 .pcs2{font-size:12.5px;color:#3a4148;margin-top:8px}
+.kbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 8px;font-size:12.5px}.kbar .btn{margin-left:auto;font-size:12.5px}.kbar select{font-size:12.5px;border:1px solid #d6d0c6;border-radius:7px;padding:3px}
+.seg{display:flex;background:#e9e6df;border-radius:9px;padding:2px}.seg button{border:0;background:none;border-radius:7px;padding:5px 10px;font:inherit;font-size:12.5px;cursor:pointer}.seg button.on{background:#fff;font-weight:650;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.kan{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:8px;overflow-x:auto;padding-bottom:4px}
+.kcol{background:#ebe8e1;border-radius:12px;padding:6px;min-height:160px;border:2px dashed transparent}.kcol.ov,.klist.ov,.kwrap.ov{border-color:#1565c0}
+.kh{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 6px;font-size:13px}.kh span{font-weight:700;background:#fff;border-radius:9px;padding:0 7px;font-size:12px}
+.knew .kh b{color:#5d6670}.k1 .kh b{color:#b71c1c}.k2 .kh b{color:#c77700}.k3 .kh b{color:#3a4148}.knew{background:#fdecea}
+.kwrap{border:2px dashed transparent;border-radius:12px;cursor:grab}.kwrap .ic{margin-bottom:4px}
+.kval{background:#fff7e0;border:1px solid #f0d98a;border-radius:9px;padding:6px 8px;margin:-2px 0 8px;font-size:12px}.kval div{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.kval .btn{font-size:11.5px;padding:4px 7px}
+.kemp{font-size:12px;color:#8a8478;text-align:center;padding:16px 4px}.kdone{margin-top:10px;font-size:13px}.kdone summary{cursor:pointer;font-weight:650;margin-bottom:6px}
+.klist{border:2px dashed transparent;border-radius:12px}
+@media(max-width:899px){.kan{grid-template-columns:1fr}.kcol{min-height:0}}
 .cth{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5d6670;margin:2px 0 6px;display:flex;justify-content:space-between;gap:8px}.cth .muted{text-transform:none;letter-spacing:0;font-weight:400}
 .ic{background:#fff;border:1px solid #e2ddd3;border-radius:10px;padding:9px 10px;margin-bottom:7px;cursor:pointer}.ic.sel{border-color:#1c2126;box-shadow:0 0 0 1px #1c2126}
 .ih{display:flex;align-items:center;gap:8px}.ih b{flex:1;font-size:14px}.in,.cmk{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;color:#fff;font-weight:800;font-size:12px;flex:none}
@@ -936,13 +947,13 @@ const _lettre0=lettre;
 lettre=function(){if(RISK==='feu')return _lettre0();if(RISK==='all'){const p=CUR.p;return lettreTheme(['feu'].concat(D.st&&rTem(p)||D.st&&D.st.b[p.k]?['tem']:[]).concat(D.fl&&D.fl.b[p.k]?['inond']:[]))}return lettreTheme([RISK])};
 
 /* ===== Cellule de crise communale : écran unique (démonstration : tempête, incidents fictifs, rien n'est stocké) ===== */
-let CM=null,CML=null,CSEL=null,CTAB='map',CLOG=[],CT0=null,CRPREV=null;
+let CM=null,CML=null,CSEL=null,CTAB='map',CLOG=[],CT0=null,CRPREV=null,KV='col',KS='chrono',DRG=null,NEWN=0;
 const TEAMS=[{id:'A',n:'Équipe A',r:'Services techniques'},{id:'B',n:'Équipe B',r:'Élagage'},{id:'C',n:'Équipe C',r:'Élus d\'astreinte'}];
 const IST={nouveau:['À traiter','#c62828'],pris:['Pris en compte','#ef8a17'],affecte:['Équipe en route','#1565c0'],transmis:['Transmis','#6a1b9a'],clos:['Terminé','#2e7d32']};
 const PRN={1:'Urgent',2:'Important',3:'Normal'};
 const PRIO={cable:1,fumee:1,isole:1,arbre_maison:1,arbre_route:2,eau:2,route:2,toiture:3,autre:3};
 function hnow(){return new Date().toTimeString().slice(0,5)}
-function incs(){const S=SIG();S.forEach(x=>{if(!x.ist){x.ist=x.st==='d'?'clos':(x.st==='p'?'affecte':'nouveau');x.pr=PRIO[x.t]||3;x.team=x.st==='p'?TEAMS[x.id%2].id:null;x.log=[[x.h,'Signalé par un habitant'+(x.n>1?' ('+x.n+' signalements regroupés)':'')]];if(x.team)x.log.push([x.h,TEAMS.find(t=>t.id===x.team).n+' envoyée'])
+function incs(){const S=SIG();S.forEach(x=>{if(x.o===undefined)x.o=x.id;if(x.ok===undefined)x.ok=x.ist?true:!(x.st==='s'&&x.id>=7);if(!x.ist){x.ist=x.st==='d'?'clos':(x.st==='p'?'affecte':'nouveau');x.pr=PRIO[x.t]||3;x.team=x.st==='p'?TEAMS[x.id%2].id:null;x.log=[[x.h,'Signalé par un habitant'+(x.n>1?' ('+x.n+' signalements regroupés)':'')]];if(x.team)x.log.push([x.h,TEAMS.find(t=>t.id===x.team).n+' envoyée'])
  ;if(x.ist==='clos')x.log.push([x.h,'Terminé'])}});return S}
 function jlog(x,txt){const h=hnow();x.log.push([h,txt]);CLOG.unshift([h,'n°'+x.id+' '+STY[x.t]+' · '+x.v,txt])}
 function pccOpen(){CT0=CT0||hnow();if(CRPREV===null){CRPREV=RISK;if(D.st&&RISK!=='tem')setRisk('tem')}
@@ -954,19 +965,31 @@ function pccMap(fit){if(!CM)return;if(CML)CM.removeLayer(CML);const S=incs(),G=[
  if(D.st&&D.cm)D.cm.v.forEach((s,i)=>{const v=D.st.v[i];if(v&&v[0]>=1500)G.push(L.polyline(s.g,{interactive:false,color:'#8e24aa',weight:3,opacity:.4}))});
  S.forEach(x=>{const sel=CSEL===x.id,c=IST[x.ist][1];G.push(L.marker([x.lat,x.lng],{icon:L.divIcon({className:'',html:'<div class="cmk'+(sel?' sel':'')+'" style="background:'+c+'">'+x.id+'</div>',iconSize:[28,28],iconAnchor:[14,14]})}).on('click',()=>{CSEL=x.id;pccRender();pccMap();if(innerWidth<900)pccTab('act')}))});
  CML=L.layerGroup(G).addTo(CM);if(fit&&S.length)CM.fitBounds(L.latLngBounds(S.map(x=>[x.lat,x.lng])).pad(.3),{maxZoom:16})}
+function newAlert(){const S=incs(),T=RISK==='tem'?['arbre_route','cable','toiture','arbre_maison']:RISK==='inond'?['eau','isole']:['fumee','route'],src=S[NEWN%S.length];NEWN++;
+ const id=Math.max(...S.map(x=>x.id))+1,t=T[NEWN%T.length];
+ const x={id,t,lat:src.lat+0.0012*Math.cos(NEWN),lng:src.lng+0.0016*Math.sin(NEWN),v:src.v,h:hnow(),st:'s',n:1,ist:'nouveau',pr:3,sug:PRIO[t]||3,ok:false,o:id,team:null,log:[[hnow(),'Signalé par un habitant']]};
+ S.push(x);CLOG.unshift([x.h,'n°'+id+' '+STY[t]+' · '+x.v,'Nouvelle alerte, catégorie à valider']);CSEL=id;pccRender();pccMap()}
+function setCat(id,p){const x=incs().find(y=>y.id===id);if(!x)return;const was=x.ok;x.pr=+p;x.ok=true;jlog(x,(was?'Catégorie changée : ':'Catégorie validée : ')+PRN[p]);pccRender();pccMap()}
+function kDrag(e,id){DRG=id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',String(id))}catch(_){}}
+function kOver(e){e.preventDefault();e.currentTarget.classList.add('ov')}
+function kLeave(e){e.currentTarget.classList.remove('ov')}
+function kDrop(e,col,beforeId){e.preventDefault();e.stopPropagation();e.currentTarget.classList.remove('ov');const id=DRG||+e.dataTransfer.getData('text/plain');DRG=null;const S=incs(),x=S.find(y=>y.id===id);if(!x)return;
+ if(col&&col!=='new'&&(+col!==x.pr||!x.ok)){x.pr=+col;const was=x.ok;x.ok=true;jlog(x,(was?'Catégorie changée : ':'Catégorie validée : ')+PRN[col])}
+ if(beforeId!==undefined&&beforeId!==id){const b=S.find(y=>y.id===beforeId);if(b){x.o=b.o-0.5;S.slice().sort((a,c)=>a.o-c.o).forEach((y,i)=>y.o=i+1)}if(KV==='list')KS='man'}
+ pccRender();pccMap()}
 function pccAct(id,a,arg){const x=incs().find(y=>y.id===id);if(!x)return;
  if(a==='pris'){x.ist='pris';jlog(x,'Pris en compte par la cellule de crise')}
  if(a==='team'){if(!arg)return;x.team=arg;x.ist='affecte';const q=incs().filter(y=>y.team===arg&&y.ist==='affecte').length;jlog(x,'Ajouté à la liste de '+TEAMS.find(t=>t.id===arg).n+' (n°'+q+' dans la file)')}
  if(a==='sdis'){x.ist='transmis';x.sdis=1;jlog(x,'Noté : transmis aux pompiers (appel fait par la cellule)')}
  if(a==='enedis'){x.ist='transmis';x.enedis=1;jlog(x,'Noté : signalé au dépannage Enedis (appel fait par la cellule)')}
  if(a==='clos'){x.ist='clos';jlog(x,'Terminé')}
- if(a==='prio'){x.pr=+arg;jlog(x,'Niveau : '+PRN[arg])}
+ if(a==='prio'){x.pr=+arg;x.ok=true;jlog(x,'Catégorie : '+PRN[arg])}
  x.st=x.ist==='clos'?'d':(x.ist==='nouveau'?'s':'p');pccRender();pccMap()}
 function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist==='clos')||a.pr-b.pr||a.id-b.id),c=k=>S.filter(x=>x.ist===k).length,open=S.filter(x=>x.ist!=='clos').length;
  document.getElementById('pcch').innerHTML='<div class="pt1"><b>Cellule de crise · '+esc(D.nom)+'</b><span>Tempête en cours · cellule ouverte à '+CT0+' · démonstration (incidents fictifs)</span></div>'+
   '<div class="pb"><button class="btn" onclick="pccPrint()">Imprimer le journal</button><button class="btn" onclick="csvSig()">Exporter</button><button class="btn dark" onclick="crisisOff()">Fermer la cellule de crise</button></div>';
  const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),nt=D.st?F.filter(p=>stG(p)==='r').length:0,ln=D.st?(D.st.l.filter(s=>s.r>=300).length*0.05).toFixed(1).replace('.',','):'–';
- document.getElementById('pccS').innerHTML='<div class="pcs"><div class="pkk"><div><b>'+open+'</b><span>incidents en cours</span></div><div style="color:#c62828"><b>'+c('nouveau')+'</b><span>à traiter</span></div><div style="color:#1565c0"><b>'+c('affecte')+'</b><span>équipe en route</span></div><div style="color:#6a1b9a"><b>'+c('transmis')+'</b><span>transmis</span></div><div style="color:#2e7d32"><b>'+c('clos')+'</b><span>terminés</span></div></div>'+
+ document.getElementById('pccS').innerHTML='<div class="pcs"><div class="pkk"><div><b>'+open+'</b><span>incidents en cours</span></div><div style="color:#c62828"><b>'+S.filter(x=>x.ist!=='clos'&&!x.ok).length+'</b><span>à classer</span></div><div style="color:#c62828"><b>'+c('nouveau')+'</b><span>à traiter</span></div><div style="color:#1565c0"><b>'+c('affecte')+'</b><span>équipe en route</span></div><div style="color:#6a1b9a"><b>'+c('transmis')+'</b><span>transmis</span></div><div style="color:#2e7d32"><b>'+c('clos')+'</b><span>terminés</span></div></div>'+
   '<div id="metP"></div></div><div class="pcs2">Commune : <b>'+nt+'</b> constructions et <b>'+ln+' km</b> de lignes électriques très exposées aux chutes d\'arbres · voies à risque en violet sur la carte</div>';
  const card=x=>{const sel=CSEL===x.id,tm=x.team?TEAMS.find(t=>t.id===x.team):null;
   let h='<div class="ic'+(sel?' sel':'')+'" onclick="CSEL='+x.id+';pccRender();pccMap();CM&&CM.setView(['+x.lat+','+x.lng+'],17)"><div class="ih"><span class="in" style="background:'+IST[x.ist][1]+'">'+x.id+'</span><b>'+STY[x.t]+'</b><span class="ip p'+x.pr+'">'+PRN[x.pr]+'</span></div>'+
@@ -978,7 +1001,17 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
    '<button class="btn ok" onclick="pccAct('+x.id+',\'clos\')">Terminé</button></div>';
    h+='<div class="ij">'+x.log.slice().reverse().map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'</div>').join('')+'</div>'}
   return h+'</div>'};
- document.getElementById('pccl').innerHTML='<div class="cth">Incidents ('+S.length+')<span class="muted">cliquer pour agir · aucun envoi automatique vers les pompiers ou Enedis</span></div>'+S.map(card).join('');
+ const live=S.filter(x=>x.ist!=='clos'),done=S.filter(x=>x.ist==='clos');
+ const kc=x=>'<div class="kwrap" draggable="true" ondragstart="kDrag(event,'+x.id+')" ondragover="kOver(event)" ondragleave="kLeave(event)" ondrop="kDrop(event,'+(KV==='col'?(x.ok?x.pr:'\'new\''):'null')+','+x.id+')">'+card(x)+(!x.ok?'<div class="kval" onclick="event.stopPropagation()">Catégorie proposée : <b>'+PRN[x.sug||x.pr]+'</b><div>'+[1,2,3].map(p=>'<button class="btn'+(p===(x.sug||x.pr)?' dark':'')+'" onclick="setCat('+x.id+','+p+')">'+(p===(x.sug||x.pr)?'Valider : ':'')+PRN[p]+'</button>').join('')+'</div></div>':'')+'</div>';
+ const ord={chrono:(a,b)=>a.h<b.h?-1:a.h>b.h?1:a.id-b.id,prio:(a,b)=>(a.ok?a.pr:0)-(b.ok?b.pr:0)||(a.h<b.h?-1:1),man:(a,b)=>a.o-b.o};
+ let h='<div class="kbar"><div class="seg"><button class="'+(KV==='col'?'on':'')+'" onclick="KV=\'col\';pccRender()">Colonnes</button><button class="'+(KV==='list'?'on':'')+'" onclick="KV=\'list\';pccRender()">Liste</button></div>'+
+  (KV==='list'?'<label>Trier : <select onchange="KS=this.value;pccRender()"><option value="chrono"'+(KS==='chrono'?' selected':'')+'>Chronologique</option><option value="prio"'+(KS==='prio'?' selected':'')+'>Par priorité</option><option value="man"'+(KS==='man'?' selected':'')+'>Manuel (glisser-déposer)</option></select></label>':'<span class="muted">Glisser une carte pour changer de colonne ou d\'ordre</span>')+
+  '<button class="btn" onclick="newAlert()">Simuler une nouvelle alerte</button></div>';
+ if(KV==='col'){const cols=[['new','Nouveaux · à classer',live.filter(x=>!x.ok)],[1,'Urgent',live.filter(x=>x.ok&&x.pr===1)],[2,'Important',live.filter(x=>x.ok&&x.pr===2)],[3,'Normal',live.filter(x=>x.ok&&x.pr===3)]];
+  h+='<div class="kan">'+cols.map(c=>'<div class="kcol k'+c[0]+'" ondragover="kOver(event)" ondragleave="kLeave(event)" ondrop="kDrop(event,'+(c[0]==='new'?'\'new\'':c[0])+')"><div class="kh"><b>'+c[1]+'</b><span>'+c[2].length+'</span></div>'+c[2].sort(ord.man).map(kc).join('')+(c[2].length?'':'<div class="kemp">'+(c[0]==='new'?'Aucune alerte en attente':'Déposer ici')+'</div>')+'</div>').join('')+'</div>';}
+ else h+='<div class="klist" ondragover="kOver(event)" ondragleave="kLeave(event)" ondrop="kDrop(event,null)">'+live.slice().sort(ord[KS]).map(kc).join('')+'</div>';
+ if(done.length)h+='<details class="kdone"><summary>Terminés ('+done.length+')</summary>'+done.map(card).join('')+'</details>';
+ document.getElementById('pccl').innerHTML='<div class="cth">Incidents en cours ('+live.length+')<span class="muted">aucun envoi automatique vers les pompiers ou Enedis</span></div>'+h;
  const tq=t=>S.filter(x=>x.team===t.id&&x.ist==='affecte');
  document.getElementById('pccr').innerHTML='<div class="cth" style="margin-top:12px">Équipes</div>'+TEAMS.map(t=>{const q=tq(t);return '<div class="tm2"><div><b>'+t.n+'</b> <span class="muted">'+t.r+'</span><span class="tq">'+(q.length?q.length+' en file':'disponible')+'</span></div>'+q.map((x,i)=>'<div class="tqi" onclick="CSEL='+x.id+';pccRender();pccMap()">'+(i+1)+'. n°'+x.id+' '+STY[x.t]+' · '+esc(x.v)+'</div>').join('')+'</div>'}).join('')+
   '<div class="cth" style="margin-top:12px">Journal</div><div class="mc">'+(CLOG.length?CLOG.map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'<br><span>'+esc(l[2])+'</span></div>').join(''):'<div class="muted">Chaque décision est enregistrée ici avec l\'heure.</div>')+'</div>';
