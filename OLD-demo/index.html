@@ -957,8 +957,8 @@ function pccMap(fit){if(!CM)return;if(CML)CM.removeLayer(CML);const S=incs(),G=[
 function pccAct(id,a,arg){const x=incs().find(y=>y.id===id);if(!x)return;
  if(a==='pris'){x.ist='pris';jlog(x,'Pris en compte par la cellule de crise')}
  if(a==='team'){if(!arg)return;x.team=arg;x.ist='affecte';const q=incs().filter(y=>y.team===arg&&y.ist==='affecte').length;jlog(x,'Ajouté à la liste de '+TEAMS.find(t=>t.id===arg).n+' (n°'+q+' dans la file)')}
- if(a==='sdis'){x.ist='transmis';x.sdis=1;jlog(x,'Transmis aux pompiers (18)')}
- if(a==='enedis'){x.ist='transmis';x.enedis=1;jlog(x,'Signalé au dépannage Enedis')}
+ if(a==='sdis'){x.ist='transmis';x.sdis=1;jlog(x,'Noté : transmis aux pompiers (appel fait par la cellule)')}
+ if(a==='enedis'){x.ist='transmis';x.enedis=1;jlog(x,'Noté : signalé au dépannage Enedis (appel fait par la cellule)')}
  if(a==='clos'){x.ist='clos';jlog(x,'Terminé')}
  if(a==='prio'){x.pr=+arg;jlog(x,'Niveau : '+PRN[arg])}
  x.st=x.ist==='clos'?'d':(x.ist==='nouveau'?'s':'p');pccRender();pccMap()}
@@ -973,12 +973,12 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
    '<div class="il">'+esc(x.v)+' · '+x.h+(x.n>1?' · '+x.n+' signalements':'')+'</div><div class="is" style="color:'+IST[x.ist][1]+'">'+IST[x.ist][0]+(tm?' · '+tm.n:'')+(x.sdis?' · pompiers':'')+(x.enedis?' · Enedis':'')+'</div>';
   if(sel&&x.ist!=='clos'){h+='<div class="ia" onclick="event.stopPropagation()">'+(x.ist==='nouveau'?'<button class="btn" onclick="pccAct('+x.id+',\'pris\')">Prendre en compte</button>':'')+
    '<select aria-label="Envoyer une équipe" onchange="pccAct('+x.id+',\'team\',this.value)"><option value="">Envoyer une équipe…</option>'+TEAMS.map(t=>'<option value="'+t.id+'">'+t.n+' – '+t.r+'</option>').join('')+'</select>'+
-   '<button class="btn" onclick="pccAct('+x.id+',\'sdis\')">Transmettre aux pompiers</button>'+(x.t==='cable'?'<button class="btn" onclick="pccAct('+x.id+',\'enedis\')">Signaler à Enedis</button>':'')+
+   '<button class="btn" onclick="pccAct('+x.id+',\'sdis\')" title="Aucun envoi automatique : l\'appel se fait par téléphone, le bouton l\'enregistre">Noter : transmis aux pompiers</button>'+(x.t==='cable'?'<button class="btn" onclick="pccAct('+x.id+',\'enedis\')" title="Aucun envoi automatique : le signalement se fait par téléphone, le bouton l\'enregistre">Noter : signalé à Enedis</button>':'')+
    '<select aria-label="Niveau" onchange="pccAct('+x.id+',\'prio\',this.value)">'+[1,2,3].map(p=>'<option value="'+p+'"'+(x.pr===p?' selected':'')+'>'+PRN[p]+'</option>').join('')+'</select>'+
    '<button class="btn ok" onclick="pccAct('+x.id+',\'clos\')">Terminé</button></div>';
    h+='<div class="ij">'+x.log.slice().reverse().map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'</div>').join('')+'</div>'}
   return h+'</div>'};
- document.getElementById('pccl').innerHTML='<div class="cth">Incidents ('+S.length+')<span class="muted">cliquer pour agir</span></div>'+S.map(card).join('');
+ document.getElementById('pccl').innerHTML='<div class="cth">Incidents ('+S.length+')<span class="muted">cliquer pour agir · aucun envoi automatique vers les pompiers ou Enedis</span></div>'+S.map(card).join('');
  const tq=t=>S.filter(x=>x.team===t.id&&x.ist==='affecte');
  document.getElementById('pccr').innerHTML='<div class="cth" style="margin-top:12px">Équipes</div>'+TEAMS.map(t=>{const q=tq(t);return '<div class="tm2"><div><b>'+t.n+'</b> <span class="muted">'+t.r+'</span><span class="tq">'+(q.length?q.length+' en file':'disponible')+'</span></div>'+q.map((x,i)=>'<div class="tqi" onclick="CSEL='+x.id+';pccRender();pccMap()">'+(i+1)+'. n°'+x.id+' '+STY[x.t]+' · '+esc(x.v)+'</div>').join('')+'</div>'}).join('')+
   '<div class="cth" style="margin-top:12px">Journal</div><div class="mc">'+(CLOG.length?CLOG.map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'<br><span>'+esc(l[2])+'</span></div>').join(''):'<div class="muted">Chaque décision est enregistrée ici avec l\'heure.</div>')+'</div>';
