@@ -120,6 +120,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .knew .kh b{color:#5d6670}.k1 .kh b{color:#b71c1c}.k2 .kh b{color:#c77700}.k3 .kh b{color:#3a4148}.knew{background:#fdecea}
 .kwrap{border:2px dashed transparent;border-radius:12px;cursor:grab}.kwrap .ic{margin-bottom:4px}
 .kval{background:#fff7e0;border:1px solid #f0d98a;border-radius:9px;padding:6px 8px;margin:-2px 0 8px;font-size:12px}.kval div{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.kval .btn{font-size:11.5px;padding:4px 7px}
+.kcol .ia>*{flex:1 1 100%;min-width:0;max-width:100%}.kcol .ih b{font-size:13px}
 .kemp{font-size:12px;color:#8a8478;text-align:center;padding:16px 4px}.kdone{margin-top:10px;font-size:13px}.kdone summary{cursor:pointer;font-weight:650;margin-bottom:6px}
 .klist{border:2px dashed transparent;border-radius:12px}
 @media(max-width:899px){.kan{grid-template-columns:1fr}.kcol{min-height:0}}
@@ -992,7 +993,7 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
  document.getElementById('pccS').innerHTML='<div class="pcs"><div class="pkk"><div><b>'+open+'</b><span>incidents en cours</span></div><div style="color:#c62828"><b>'+S.filter(x=>x.ist!=='clos'&&!x.ok).length+'</b><span>à classer</span></div><div style="color:#c62828"><b>'+c('nouveau')+'</b><span>à traiter</span></div><div style="color:#1565c0"><b>'+c('affecte')+'</b><span>équipe en route</span></div><div style="color:#6a1b9a"><b>'+c('transmis')+'</b><span>transmis</span></div><div style="color:#2e7d32"><b>'+c('clos')+'</b><span>terminés</span></div></div>'+
   '<div id="metP"></div></div><div class="pcs2">Commune : <b>'+nt+'</b> constructions et <b>'+ln+' km</b> de lignes électriques très exposées aux chutes d\'arbres · voies à risque en violet sur la carte</div>';
  const card=x=>{const sel=CSEL===x.id,tm=x.team?TEAMS.find(t=>t.id===x.team):null;
-  let h='<div class="ic'+(sel?' sel':'')+'" onclick="CSEL='+x.id+';pccRender();pccMap();CM&&CM.setView(['+x.lat+','+x.lng+'],17)"><div class="ih"><span class="in" style="background:'+IST[x.ist][1]+'">'+x.id+'</span><b>'+STY[x.t]+'</b><span class="ip p'+x.pr+'">'+PRN[x.pr]+'</span></div>'+
+  let h='<div class="ic'+(sel?' sel':'')+'" onclick="CSEL='+x.id+';pccRender();pccMap();CM&&CM.setView(['+x.lat+','+x.lng+'],17)"><div class="ih"><span class="in" style="background:'+IST[x.ist][1]+'">'+x.id+'</span><b>'+STY[x.t]+'</b>'+(x.ok?'<span class="ip p'+x.pr+'">'+PRN[x.pr]+'</span>':'<span class="ip">À classer</span>')+'</div>'+
    '<div class="il">'+esc(x.v)+' · '+x.h+(x.n>1?' · '+x.n+' signalements':'')+'</div><div class="is" style="color:'+IST[x.ist][1]+'">'+IST[x.ist][0]+(tm?' · '+tm.n:'')+(x.sdis?' · pompiers':'')+(x.enedis?' · Enedis':'')+'</div>';
   if(sel&&x.ist!=='clos'){h+='<div class="ia" onclick="event.stopPropagation()">'+(x.ist==='nouveau'?'<button class="btn" onclick="pccAct('+x.id+',\'pris\')">Prendre en compte</button>':'')+
    '<select aria-label="Envoyer une équipe" onchange="pccAct('+x.id+',\'team\',this.value)"><option value="">Envoyer une équipe…</option>'+TEAMS.map(t=>'<option value="'+t.id+'">'+t.n+' – '+t.r+'</option>').join('')+'</select>'+
