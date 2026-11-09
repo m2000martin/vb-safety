@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Prévention des feux de forêt – votre réponse</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:#1c2126;background:#f1efe9}
+.w{max-width:620px;margin:0 auto;padding:14px}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 6px rgba(0,0,0,.1);padding:16px;margin:12px 0}
+h1{font-size:19px;margin:4px 0}h2{font-size:16px;margin:0 0 6px}.muted{color:#5d6670;font-size:13px}
+.id{background:#eef5ef;border:1px solid #cfe3d2;border-radius:12px;padding:12px;font-size:14px}
+.demo{background:#fff3cd;border:1px solid #e6c65c;border-radius:12px;padding:10px 12px;font-size:13px}
+.cst{border-left:6px solid #c62828;padding:6px 10px;margin:8px 0;background:#faf8f3;border-radius:6px}.cst.o{border-color:#e65100}
+ol{margin:4px 0 0 20px;padding:0}li{margin:3px 0}
+.ch{display:block;border:1.5px solid #e2ddd3;border-radius:12px;padding:11px 12px;margin:8px 0;cursor:pointer}.ch input{margin-right:8px}.ch.on{border-color:#1c2126;background:#faf8f3}
+.f{display:none;margin-top:8px}.f.on{display:block}
+input[type=date],textarea,select{width:100%;font:inherit;border:1px solid #d6d0c6;border-radius:9px;padding:8px;margin:4px 0}
+button.go{width:100%;font:600 16px system-ui;border:0;border-radius:11px;padding:13px;background:#1c2126;color:#fff;cursor:pointer;margin-top:10px}
+.ok{display:none;text-align:center}.ok b{font-size:18px}
+a{color:#1c2126}
+</style></head><body><div class="w">
+<div class="muted" id="com">Commune · prévention des feux de forêt</div>
+<h1>Les abords de votre habitation</h1>
+<div class="muted">Référence du courrier : <b id="ref">—</b></div>
+
+<div class="card id"><b>Votre identité n'est pas enregistrée.</b> Ce service ne connaît que l'adresse de l'habitation, pas le nom de ses occupants ni de son propriétaire. Il ne vous demande ni nom, ni e-mail, ni téléphone : merci de ne pas en indiquer dans le commentaire, et de photographier la végétation, pas les personnes.<br>
+<span class="muted">Si la mairie doit un jour engager une procédure prévue par le Code forestier (mise en demeure, travaux d'office), elle identifie le propriétaire par le cadastre, comme aujourd'hui, en dehors de ce service.</span></div>
+
+<div class="card demo"><b>Démonstration.</b> Le contenu ci-dessous est un exemple fictif. En service, cette page reprend les constats du courrier reçu, pour cette adresse uniquement. Aucune réponse n'est envoyée depuis cette démonstration.</div>
+
+<div class="card"><h2>Ce que montrent les images</h2>
+<div class="cst"><b>Branches contre la maison</b><br>Arbres à moins de 3 m des murs, environ 30 m² de feuillage.</div>
+<div class="cst o"><b>Broussaille sur le terrain</b><br>Environ 400 m² dans les 50 m autour de la maison.</div>
+<h2 style="margin-top:12px">Ce que vous pouvez faire</h2>
+<ol><li>Élaguer les branches à moins de 3 m des murs et au-dessus du toit.</li><li>Débroussailler le terrain dans les 50 m, en commençant près de la maison.</li><li>Évacuer les déchets verts (broyage, déchetterie).</li></ol>
+<p class="muted" style="margin-bottom:0">Lors des feux du Porge et de Biscarrosse, parmi les maisons exposées, celles sans branches contre elles ni broussaille dense autour ont été détruites environ deux fois moins souvent. C'est une comparaison observée, pas une garantie.</p></div>
+
+<div class="card"><h2>Votre réponse</h2>
+<label class="ch"><input type="radio" name="r" value="fait">J'ai fait les travaux</label>
+<div class="f" id="f-fait">Date des travaux<input type="date" id="d"><br>Photo de la végétation (facultative)<input type="file" accept="image/*" id="ph"><div class="muted" id="phm">Les informations cachées de la photo (position GPS, modèle de téléphone, date) sont supprimées avant l'envoi.</div></div>
+<label class="ch"><input type="radio" name="r" value="erreur">Les constats sont inexacts ou je ne suis pas concerné</label>
+<div class="f" id="f-erreur"><select id="mot"><option>Les travaux étaient déjà faits</option><option>Ce n'est pas mon terrain / la maison a été vendue</option><option>L'image ne correspond pas à la réalité</option><option>Autre</option></select></div>
+<label class="ch"><input type="radio" name="r" value="conseil">Je souhaite un conseil ou une visite</label>
+<div class="f" id="f-conseil"><div class="muted">La mairie vous propose un rendez-vous. Son numéro figure sur le courrier ; le vôtre n'est pas demandé.</div></div>
+<label class="ch"><input type="radio" name="r" value="voisin">Mon voisin refuse l'accès à son terrain</label>
+<div class="f" id="f-voisin"><div class="muted">La mairie prend le relais (Code forestier, art. R.131-14).</div></div>
+<textarea id="cm" rows="3" placeholder="Commentaire (facultatif, sans nom ni coordonnées)"></textarea>
+<button class="go" onclick="send()">Envoyer à la mairie</button></div>
+<div class="card ok" id="ok"><b>Merci.</b><p>Votre réponse a été transmise à la mairie. Une déclaration de travaux ne vaut pas contrôle : la mairie peut valider sur photo ou passer vérifier.</p><p class="muted">(Démonstration : rien n'a été envoyé.)</p></div>
+
+<div class="card"><p style="margin-top:0">Ce système d'analyse est encore en cours d'amélioration : merci de signaler toute information inexacte (ci-dessus).</p><p style="margin-bottom:0">Vous souhaitez contribuer ou donner votre point de vue d'utilisateur ? <a href="https://vb-safety.com/contribuer">Inscrivez-vous ici</a>.</p></div>
+<div class="muted" style="margin:10px 4px 30px"><b>Données personnelles.</b> Traitement mis en œuvre par la mairie pour l'information et le contrôle relatifs aux obligations légales de débroussaillement (mission d'intérêt public, Code forestier). Données enregistrées : la référence du courrier, la date, la réponse choisie, le commentaire et la photo éventuelle. Adresse IP non enregistrée avec la réponse ; journaux techniques conservés 7 jours au plus. Conservation : une saison. Droits d'accès, de rectification et d'opposition auprès de la mairie.</div>
+</div>
+<script>
+const ref=decodeURIComponent((location.hash||'#DEMO').slice(1)).replace(/[^A-Z0-9-]/gi,'').slice(0,20)||'DEMO';document.getElementById('ref').textContent=ref;
+document.querySelectorAll('input[name=r]').forEach(i=>i.onchange=()=>{document.querySelectorAll('.ch').forEach(c=>c.classList.toggle('on',c.querySelector('input').checked));document.querySelectorAll('.f').forEach(f=>f.classList.toggle('on',f.id==='f-'+i.value))});
+let clean=null;
+document.getElementById('ph').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,1600/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(b=>{clean=b;document.getElementById('phm').textContent='Photo prête ('+Math.round(b.size/1024)+' ko), informations cachées supprimées.'},'image/jpeg',.85)};im.src=URL.createObjectURL(f)};
+function send(){if(!document.querySelector('input[name=r]:checked')){alert('Choisissez une réponse.');return}document.querySelectorAll('.card').forEach(c=>{if(!c.classList.contains('id')&&!c.classList.contains('ok'))c.style.display='none'});document.getElementById('ok').style.display='block';scrollTo(0,0)}
+</script></body></html>
