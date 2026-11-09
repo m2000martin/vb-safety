@@ -21,6 +21,7 @@ html,body{margin:0;height:100%;font-family:-apple-system,system-ui,"Segoe UI",Ro
 #panel{position:absolute;z-index:1000;display:flex;flex-direction:column;overflow:hidden}
 .tabs{display:flex;gap:2px;padding:8px 8px 0;border-bottom:1px solid #eee;flex:none;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
+.tabs{mask-image:linear-gradient(90deg,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent)}.tab{padding:9px 10px}
 .tab{border:0;background:none;padding:9px 12px;font-size:14px;color:#5d6670;border-bottom:2.5px solid transparent;cursor:pointer;white-space:nowrap}
 .tab.on{color:#1c2126;font-weight:650;border-bottom-color:#1c2126}
 #grip{display:none}
@@ -54,12 +55,19 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .srch{width:100%;font-size:15px;padding:9px 12px;border:1px solid #d6d0c6;border-radius:10px;margin:2px 0 8px}
 .fl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.fl button{border:1.5px solid #e2ddd3;background:#fff;border-radius:16px;padding:4px 10px;font-size:12.5px;cursor:pointer}.fl button.on{background:#1c2126;color:#fff;border-color:#1c2126}
 .li{display:flex;align-items:center;gap:9px;padding:8px 4px;border-bottom:1px solid #f0ede6;cursor:pointer}.li:hover{background:#faf8f3}.li .dt{flex:none;width:11px;height:11px;border-radius:3px}.li .ad{flex:1;font-size:14px;min-width:0}.li .bs{display:block;margin-top:3px}.li .bd{display:inline-block;font-size:11px;border-radius:9px;padding:1px 7px;background:#f1efe9;color:#3a4148;margin:0 4px 2px 0;white-space:nowrap}.li .bd.k{background:#1c2126;color:#fff}
+.msrch{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.25);width:220px}.msrch input{width:100%;border:0;border-radius:10px;padding:8px 10px;font-size:14px;outline:none}#mqr{max-height:40vh;overflow:auto}#mqr div{padding:6px 10px;font-size:13px;border-top:1px solid #f0ede6;cursor:pointer;display:flex;gap:7px;align-items:center}#mqr div:hover{background:#faf8f3}#mqr .dt{width:10px;height:10px;border-radius:3px;flex:none}
+@media(max-width:899px){.msrch{width:160px}}
 .basesw{display:flex;background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.25);overflow:hidden}.basesw button{border:0;background:#fff;padding:7px 12px;font-size:13px;cursor:pointer}.basesw button.on{background:#1c2126;color:#fff}
 .modes{display:flex;gap:0;margin-top:9px;background:#f1efe9;border-radius:10px;padding:3px;width:max-content;max-width:100%}.modes button{border:0;background:none;border-radius:8px;padding:6px 11px;font-size:13px;cursor:pointer;color:#3a4148;white-space:nowrap}.modes button.on{background:#fff;color:#1c2126;font-weight:650;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 @media(max-width:899px){.modes button{padding:5px 8px;font-size:12px}}
 .stb{border:1.5px solid;border-radius:10px;padding:7px 9px;margin:4px 0 8px}.lnk{border:0;background:none;color:#5d6670;text-decoration:underline;cursor:pointer;font-size:12px;padding:0;display:block;margin-top:3px}
 .ctlf input,.ctlf textarea{width:100%;box-sizing:border-box;font:inherit;font-size:13.5px;border:1px solid #d6d0c6;border-radius:8px;padding:6px 8px;margin-bottom:5px}.btns3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}.btns3 .btn{padding:9px 4px;font-size:13px}.btn.ok{background:#2e7d32;color:#fff;border-color:#2e7d32}.btn.ko{background:#6d0f0f;color:#fff;border-color:#6d0f0f}
+.fsub{display:flex;gap:4px;margin-top:12px;background:#f1efe9;border-radius:10px;padding:3px}.fsub button{flex:1;border:0;background:none;border-radius:8px;padding:7px 4px;font-size:13px;cursor:pointer;color:#3a4148}.fsub button.on{background:#fff;color:#1c2126;font-weight:650;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.eff{background:#eef5ef;border:1px solid #cfe3d2;border-radius:10px;padding:8px 10px;margin:8px 0;font-size:13px}.eff b{color:#1b5e20}
+.hint{background:#fff8e1;border:1px solid #f0d98a;border-radius:10px;padding:8px 10px;margin:0 0 10px;font-size:13px}
 .pl{margin:6px 0}.pl ol{margin:3px 0 0 18px;padding:0}.pl li{margin:2px 0;font-size:13.5px}
+.mdesc{font-size:12px;color:#5d6670;margin-top:5px;max-width:420px}
+#hx{display:none}
 .leaflet-tooltip.tt{font-size:12.5px;padding:4px 8px;border-radius:7px}
 .ileg{font-size:11.5px;color:#5d6670;margin-top:4px;line-height:1.5}.ileg i{display:inline-block;width:12px;height:3px;margin:0 3px 2px 6px;vertical-align:middle}
 details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font-weight:600}
@@ -69,16 +77,17 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
 @media(min-width:900px){#panel{top:10px;right:10px;bottom:10px;width:400px}#head{max-width:calc(100% - 440px)}}
 @media(max-width:899px){
  #head{padding:9px 11px;top:8px;left:8px;right:8px;max-width:none}#head h1{font-size:14.5px}#head .sub{font-size:11px}.kpi{margin-top:6px}.kpi .pc{font-size:21px}.kpi .tx{font-size:11.5px}.leg{gap:4px;margin-top:7px}.lb{font-size:11.5px;padding:3px 8px 3px 6px;gap:4px}.lb i{width:10px;height:10px}
- #panel{left:8px;right:8px;bottom:8px;max-height:46%}
+ #head .sub,.mdesc{display:none}#hx{display:inline-block;float:right;border:0;background:none;font-size:13px;color:#5d6670;padding:0 0 0 8px;cursor:pointer}#head.cmp .kpi,#head.cmp .leg{display:none}
+ #panel{left:8px;right:8px;bottom:8px;max-height:52%}
  #panel.min{max-height:none}#panel.min .body{display:none}
  #grip{display:block;width:40px;height:4px;background:#d6d0c6;border-radius:3px;margin:7px auto 0;flex:none}
 }
 </style></head><body>
 <div id="map"></div>
 <div id="head" class="card">
- <h1 id="ttl"></h1>
+ <button id="hx" onclick="this.parentNode.classList.toggle('cmp');this.textContent=this.parentNode.classList.contains('cmp')?'▾ détails':'▴ réduire'">▴ réduire</button><h1 id="ttl"></h1>
  <div class="sub"><span id="stt">Espace maire · démonstration · données IGN</span> · <a href="#" id="chg" style="color:#5d6670">changer de ville</a></div>
- <div class="modes" id="modes"></div>
+ <div class="modes" id="modes"></div><div class="mdesc" id="mdesc"></div>
  <div class="kpi"><div class="pc" id="pc"></div><div class="tx" id="pctx"></div></div>
  <div class="leg" id="leg"></div>
 </div>
@@ -95,6 +104,7 @@ const CAT={a:['À contrôler en priorité','Habitation exposée avec de la vég�
 let MODE='leg';const COLG={r:'#c62828',o:'#f0a020',v:'#2e7d32',h:'#cfc9bd'};
 const GN={r:['Travaux à faire','Branches contre la maison, broussaille sur le terrain ou le long du chemin'],o:['À vérifier','Broussaille chez les voisins ou en petite quantité'],v:['Rien à signaler','Rien de notable sur les images'],h:['Hors zone légale','Pas soumise aux obligations légales de débroussaillement']};
 const MODES={leg:'Mode légal',com:'Toute la commune',pri:'Priorités'};
+const MDESC={leg:'Maisons soumises à l\'obligation de débroussailler : qui doit faire quoi.',com:'Toutes les maisons, y compris hors zone légale (courrier de recommandation).',pri:'Par où commencer les contrôles : maisons et secteurs les plus exposés.'};
 function inScope(p){return MODE!=='leg'||!!p.l}
 function key(p){return MODE==='pri'?p.c:(inScope(p)?(p.g||'v'):'h')}
 function colOf(p){return (typeof stColor==='function'&&stColor(p))||(MODE==='pri'?COL[p.c]:COLG[key(p)])}
@@ -141,8 +151,20 @@ function plan(p,F){const br=F.br||{},A=F.acc||{},P={terrain:[],voisins:[],mairie
 function planHTML(p,F){const P=plan(p,F),sec=(t,L,c)=>L.length?'<div class="pl"><b style="color:'+c+'">'+t+'</b><ol>'+L.map(x=>'<li>'+x+'</li>').join('')+'</ol></div>':'';
  return '<div class="sec"><h4>Plan d\'action pour le propriétaire</h4>'+(P.terrain.length||P.voisins.length||P.mairie.length?'':'<div class="muted">Rien de particulier à faire d\'après les images ; entretien annuel.</div>')+
   sec('Sur votre terrain',P.terrain,'#c62828')+sec('Chez vos voisins (dans vos 50 m)',P.voisins,'#7b5aa6')+sec('Pour la mairie',P.mairie,'#1e8c3c')+
-  '<details><summary>Bons gestes (pour tous)</summary><ul style="margin:4px 0 0 18px;padding:0">'+P.gestes.map(x=>'<li>'+x+'</li>').join('')+'</ul></details>'+
+  effHTML(p,F)+'<details><summary>Bons gestes (pour tous)</summary><ul style="margin:4px 0 0 18px;padding:0">'+P.gestes.map(x=>'<li>'+x+'</li>').join('')+'</ul></details>'+
   '<div class="muted" style="margin-top:4px">Règles : '+dept().src+'.</div></div>'}
+/* ===== Effet observé (feux du Porge et de Biscarrosse, maisons exposées, données d'avant feu) =====
+ branches <3 m : 14,7 % vs 10,5 % (Porge) ; 17,1 % vs 11,3 % (Biscarrosse)  -> 1,4 à 1,5 fois
+ sous-bois dense : 15,2 vs 10,9 ; 19,2 vs 11,9 -> 1,4 à 1,6 fois
+ ni l'un ni l'autre vs les deux : 8,6 vs 14,8 ; 10,0 vs 20,0 -> 1,7 à 2 fois
+ branches, forêt <=30 m : 12,6 vs 11,4 ; 14,3 vs 13,7 -> écart faible. Toit : non concordant, pas de chiffre. */
+function effet(p,F){const br=F.br||{},b=!!br.fl,s=F.t>=50,lis=p.df<=30;if(!b&&!s)return null;
+ const what=b&&s?'sans branches contre elles ni broussaille dense autour':b?'sans branches à moins de 3 m':'sans broussaille dense autour';
+ const x=b&&s?'environ deux fois':b?'environ 1,5 fois':'environ 1,5 fois';
+ let m='Lors des feux du Porge (Gironde) et de Biscarrosse (Landes), parmi les maisons exposées, celles '+what+' ont été détruites '+x+' moins souvent que les autres.';
+ if(lis)m+=b&&!s?' À moins de 30 m de la forêt, l\'écart mesuré pour les branches était faible : le risque dépend surtout de la lisière, que la commune suit de son côté.':' À moins de 30 m de la forêt, le risque dépend aussi de la lisière, que la commune suit de son côté.';
+ return {m,lis,b,s}}
+function effHTML(p,F){const e=effet(p,F);if(!e)return '';return '<div class="eff"><b>Effet attendu des travaux</b><br>'+e.m+'<div class="muted" style="margin-top:3px">Comparaison observée sur deux feux réels (2 000 maisons exposées), pas une garantie pour cette maison.</div></div>'}
 /* ===== Courrier : 5 tons ===== */
 function defTon(p,F){if(!p.l)return 'hors_zone';const P=plan(p,F);if(!P.terrain.length&&!P.voisins.length)return 'rappel';return OBL(p)?'legal':'bienveillant'}
 function lettre(){
@@ -169,7 +191,8 @@ function lettre(){
   rappel:{obj:'Prévention des feux de forêt – merci pour l\'entretien de vos abords',intro:'<p>'+(p.l?zone+' ':'')+'Les photographies aériennes récentes de l\'IGN ne montrent pas de point particulier autour de votre habitation : merci pour l\'entretien de vos abords.</p><p>Nous vous rappelons qu\'il doit être renouvelé chaque année, avant l\'été.</p>',fin:''}};
  let body='';
  Object.keys(T).forEach(k=>{const t=T[k],hasPlan=k!=='rappel'&&planL;
-  body+='<div class="tv t-'+k+'"><div class="obj"><b>Objet : '+t.obj+(adr?' – '+esc(adr):'')+'</b></div><p>Madame, Monsieur,</p>'+t.intro+(hasPlan?planL:(k==='rappel'?'':'<p><i>Rien de particulier n\'apparaît sur les images.</i></p>'))+
+  const ef=effet(p,F),efp=ef&&hasPlan&&k!=='ferme'?'<p><i>'+ef.m+'</i></p>':'';
+  body+='<div class="tv t-'+k+'"><div class="obj"><b>Objet : '+t.obj+(adr?' – '+esc(adr):'')+'</b></div><p>Madame, Monsieur,</p>'+t.intro+(hasPlan?planL+efp:(k==='rappel'?'':'<p><i>Rien de particulier n\'apparaît sur les images.</i></p>'))+
   '<h3>Bons gestes</h3><ul>'+P.gestes.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+t.fin+'</div>'});
  const bt=Object.keys(TONS).map(k=>'<button data-t="'+k+'" onclick="setT(\''+k+'\')">'+TONS[k]+'</button>').join('');
  const html='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Courrier débroussaillement - '+esc(adr)+'</title><style>'+
@@ -182,7 +205,7 @@ function lettre(){
  '.sig{margin:18px 0 0 55%}.ft{font-size:8pt;color:#555;margin-top:14px;border-top:1px solid #ccc;padding-top:5px}'+
  '.im{display:grid;grid-template-columns:1fr 1fr;gap:10px}.im figure{margin:0;page-break-inside:avoid}.im img{width:100%;border:1px solid #bbb}.im figcaption{font-size:8.5pt;color:#333}'+
  '.tv{display:none}'+Object.keys(T).map(k=>'body.t-'+k+' .t-'+k+'{display:block}').join('')+
- '@media print{body{background:#fff}.bar{display:none}.pg{box-shadow:none;margin:0;width:auto;padding:0}.pg+.pg{page-break-before:always}.ed{background:none;outline:none}}'+
+ '@media(max-width:600px){.bar button{padding:5px 7px;font-size:12px}.bar button.pr{margin-left:0;width:100%}}@media print{body{background:#fff}.bar{display:none}.pg{box-shadow:none;margin:0;width:auto;padding:0}.pg+.pg{page-break-before:always}.ed{background:none;outline:none}}'+
  '</style></head><body class="t-'+t0+'"><div class="bar"><b style="margin-right:4px">Ton :</b>'+bt+'<button class="pr" onclick="env(\'courrier\')">Imprimer / PDF et enregistrer l\'envoi</button><span>Zones jaunes modifiables. Ton proposé : '+TONS[t0].toLowerCase()+'.</span></div>'+
  '<div class="pg"><div class="hd"><div><b>'+esc(D.mairie||('Mairie de '+D.nom))+'</b><br>'+ED('Adresse de la mairie')+'<br>'+ED('Téléphone · courriel')+'</div><div style="text-align:right">'+esc(D.nom)+', le '+ED(today)+'<br><span style="font-size:9pt;color:#555">Réf. OLD-'+D.city+'-'+p.k+(F.parc?' · parcelle '+esc(F.parc):'')+'</span></div></div>'+
  '<div class="dest">À l\'occupant ou au propriétaire<br>'+ED(esc(adr||'Adresse'))+'<br>'+ED(esc(D.cp||'')+' '+esc(D.nom))+'</div>'+body+
@@ -296,11 +319,11 @@ const ST={c:'À contrôler',e:'Courrier envoyé',ok:'Contrôlée conforme',nc:'N
 function CTL(){try{return JSON.parse(localStorage.getItem('oldctl_'+D.city)||'{}')}catch(_){return MEM[D.city]||(MEM[D.city]={})}}
 const MEM={};function saveCtl(o){try{localStorage.setItem('oldctl_'+D.city,JSON.stringify(o))}catch(_){MEM[D.city]=o}updTabs()}
 function togCtl(){const o=CTL(),p=CUR.p;if(o[p.k])delete o[p.k];else o[p.k]={a:(CUR.F.adr||p.a||'Habitation').replace(/^≈ /,''),c:p.c,s:'c',d:new Date().toISOString().slice(0,10),n:constats(p,CUR.F).map(x=>x.t).join(' ; ')};saveCtl(o);
- const b=document.getElementById('ctlb');if(b){b.classList.toggle('on',!!o[p.k]);b.textContent=o[p.k]?'✓ Dans la liste à contrôler':'+ Liste à contrôler'}}
+ const b=document.getElementById('ctlb');if(b){b.classList.toggle('on',!!o[p.k]);b.textContent=o[p.k]?'✓ À contrôler sur place':'+ À contrôler sur place'}}
 function updTabs(){const t=document.querySelector('.tab[data-t=ctl]');if(t){const n=(typeof relances==='function')?relances().length:0;t.textContent='Suivi'+(n?' ('+n+' relance'+(n>1?'s':'')+')':'')}}
 function setSt(k,v){const o=CTL();if(o[k]){o[k].s=v;saveCtl(o)}}
 function delCtl(k){const o=CTL();delete o[k];saveCtl(o);ui()}
-function csvCtl(){const o=CTL(),rows=[['Adresse','Catégorie','Constats','Statut','Ajoutée le']].concat(Object.values(o).map(r=>[r.a,CAT[r.c][0],r.n,ST[r.s],r.d]));
+function csvCtl(){const o=CTL(),rows=[['Adresse','Catégorie','Constats','Statut','Ajoutée le']].concat(Object.values(o).map(r=>[r.a,CAT[r.c][0],r.n,(lastSt(+Object.keys(o).find(k=>o[k]===r))||{}).s?STATUTS[lastSt(+Object.keys(o).find(k=>o[k]===r)).s][0]:'À contrôler',r.d]));
  const csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='controles_'+D.city+'.csv';a.click();}
 function mail(){const p=CUR.p,F=CUR.F,adr=(F.adr||'').replace(/^≈ /,''),C=constats(p,F);
  const own=C.filter(c=>!/mairie/i.test(c.t)&&c.t!=='Abords dégagés');
@@ -347,23 +370,26 @@ function constats(p,F){const br=F.br||{},hors=F.v+F.f,dist=D.porge?'3 m':'3 m',C
  return C;}
 function ficHTML(p,F){
  const tot=F.t+F.v+F.f,hors=tot?Math.round(100*(F.v+F.f)/tot):0,pc=x=>tot?(100*x/tot)+'%':'0',br=F.br||{};
- let h='<div class="fnav"><button class="btn" onclick="go(PREV)" title="Échap">← '+({lst:'Liste',ctl:'À contrôler',cou:'Courriers',sec:'Secteurs',par:'Parcelles'}[PREV]||'Résumé')+'</button><span class="sp"></span><button class="btn ic" onclick="nav(-1)" title="Précédente (←)">‹</button><span class="muted">'+(NI+1)+' / '+NAV.length+'</span><button class="btn ic" onclick="nav(1)" title="Suivante (→)">›</button></div>';
+ let h='<div class="fnav"><button class="btn" onclick="go(PREV)" title="Échap">← '+({lst:'Liste',ctl:'Suivi',cou:'Courriers',sec:'Secteurs',par:'Parcelles'}[PREV]||'Résumé')+'</button><span class="sp"></span><button class="btn ic" onclick="nav(-1)" title="Précédente (←)">‹</button><span class="muted">'+(NI+1)+' / '+NAV.length+'</span><button class="btn ic" onclick="nav(1)" title="Suivante (→)">›</button></div>';
  const TG=(t,c)=>' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+c+'">'+t+'</span>';
- h+='<div style="margin-top:12px">'+(MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):TG(GN[p.g||'v'][0],COLG[p.g||'v']));
+ h+='<div style="margin-top:12px">'+(MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):(MODE==='leg'&&!p.l?TG('Hors zone légale'+((p.g||'v')!=='v'?' · '+GN[p.g][0].toLowerCase()+' (recommandé)':''),'#8a8478'):TG(GN[p.g||'v'][0],COLG[p.g||'v'])));
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
- h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||'Habitation').replace(/^≈ /,''))+'</h3><div class="muted">'+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+' · priorité : '+CAT[p.c][0].toLowerCase()+'</div>';
+ h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+' · priorité : '+CAT[p.c][0].toLowerCase()+'</div>';
  const C=constats(p,F);
  h+='<div class="cst">'+C.map(c=>'<div class="row" onclick="'+(c.i<0?'showAcc()':'fimg('+c.i+')')+'"><div class="ic" style="background:'+c.c+'"></div><div><div class="t">'+c.t+'</div><div class="d">'+c.d+'</div><div class="a">'+c.a+'</div></div></div>').join('')+'</div>';
- h+='<div class="acts"><button class="btn dark" onclick="lettre()">Courrier / rapport PDF</button><button class="btn" onclick="mail()">Envoyer par e-mail</button><button class="btn'+(CTL()[p.k]?' on':'')+'" id="ctlb" onclick="togCtl()">'+(CTL()[p.k]?'✓ Dans la liste à contrôler':'+ Liste à contrôler')+'</button></div>';
+ h+='<div class="acts"><button class="btn dark" onclick="lettre()">Courrier / rapport PDF</button><button class="btn" onclick="mail()">Envoyer par e-mail</button><button class="btn'+(CTL()[p.k]?' on':'')+'" id="ctlb" onclick="togCtl()">'+(CTL()[p.k]?'✓ Dans la liste à contrôler':'+ À contrôler sur place')+'</button></div>';
+ h+='<div class="fsub"><button data-s="c" class="'+(FSUB==='c'?'on':'')+'" onclick="setFS(\'c\')">Constats et plan d\'action</button><button data-s="e" class="'+(FSUB==='e'?'on':'')+'" onclick="setFS(\'e\')">Contrôle et envois'+(nEnv(p.k)?' ('+nEnv(p.k)+')':'')+'</button></div><div id="fs-c" style="display:'+(FSUB==='c'?'block':'none')+'">';
  h+='<div class="fimg"><img id="fimg" alt=""><div class="seg3">'+(F.imgb?'<button data-i="3" onclick="fimg(3)">Arbres</button>':'')+['Photo','Infrarouge','Broussaille'].map((t,i)=>'<button data-i="'+i+'" onclick="fimg('+i+')">'+t+'</button>').join('')+'</div><div class="ileg" id="fcap"></div></div>';
- h+=planHTML(p,F)+ctrlHTML(p);
+ h+='</div><div id="fs-e" style="display:'+(FSUB==='e'?'block':'none')+'">'+ctrlHTML(p)+'</div><div id="fs-c2" style="display:'+(FSUB==='c'?'block':'none')+'">'+planHTML(p,F);
  h+='<div class="chips"><span class="chip">Bois à '+(p.df<=10?'moins de 10':p.df)+' m</span>'+(p.i?'<span class="chip">Rue sans issue</span>':'')+(p.ch?'<span class="chip">Bord de champ</span>':'')+'</div>';
  if(D.porge)h+='<div class="sec"><h4>Résultat</h4><div>'+(p.c==='a'?'Avant le feu, cette habitation aurait été signalée « à dégager ».':'Avant le feu, cette habitation n\'était pas signalée « à dégager ».')+' '+(p.x?'Elle a été détruite.':'Elle n\'a pas été détruite.')+'</div></div>';
  if(tot>=50){h+='<details><summary>Détail de la broussaille dans les 50 m</summary><div class="bar"><div style="width:'+pc(F.t)+';background:#c62828"></div><div style="width:'+pc(F.v)+';background:#7b5aa6"></div><div style="width:'+pc(F.f)+';background:#2e7d32"></div></div>';
   h+='<div class="bl"><span><i style="background:#c62828"></i>Terrain : '+m2(F.t)+'</span><span><i style="background:#7b5aa6"></i>Voisins : '+m2(F.v)+'</span>'+(F.f?'<span><i style="background:#2e7d32"></i>Forêt publique : '+m2(F.f)+'</span>':'')+'</div>';
   h+='<div style="margin-top:6px"><b>'+hors+' %</b> hors du terrain de l\'habitation.</div>';
   if(F.par&&F.par.length)h+='<div class="muted" style="margin-top:4px">Parcelles principales : '+F.par.map(q=>q.idu+(q.own?' (la sienne)':'')+' '+m2(q.m2)).join(' · ')+'</div>';h+='</details>';}
- setTimeout(()=>fimg(3),0);return h;}
+ h+='</div>';setTimeout(()=>fimg(3),0);return h;}
+let FSUB='c';function nEnv(k){return (typeof envois==='function')?envois(k).length+(lastSt(k)?1:0):0}
+function setFS(x){FSUB=x;['c','c2'].forEach(i=>{const e=document.getElementById('fs-'+i);if(e)e.style.display=x==='c'?'block':'none'});const e=document.getElementById('fs-e');if(e)e.style.display=x==='e'?'block':'none';document.querySelectorAll('.fsub button').forEach(b=>b.classList.toggle('on',b.dataset.s===x))}
 const FCAP=['Photo aérienne IGN','Infrarouge IGN : végétation vivante en rouge','Relevé laser IGN : broussaille (0,5 à 3 m de haut) en rouge','Photo aérienne IGN, vue rapprochée : arbres et branches à moins de 3 m de la maison en rouge (trait jaune = 3 m)'];let CUR=null;
 function fimg(i){
  const el=document.getElementById('fimg');if(!el||!CUR)return;const F=CUR.F;if(i===3&&!F.imgb)i=0;el.src=i===3?F.imgb:F.img[i];
@@ -378,7 +404,7 @@ function legend(){const c=counts(),el=document.getElementById('leg');el.innerHTM
  if(D.porge){const b=document.createElement('button');b.className='lb'+(showX?' on':'');b.innerHTML='<i style="background:#fff;border:2.5px solid #000"></i>Détruites en juillet 2026 <b>'+D.k.det+'</b>';b.onclick=()=>{showX=!showX;restyle();legend()};el.appendChild(b);}}
 function restyle(){H.setStyle(sty);if(MK)MK.eachLayer(m=>{const p=m.p,on=!filt||filt(p),x=D.porge&&showX&&p.x;m.setStyle({stroke:true,color:x?'#000':'#fff',weight:x?2.5:1.2,fillColor:colOf(p),fillOpacity:on?.95:.1,opacity:on?1:.1});if((key(p)==='a'||key(p)==='r')&&on)m.bringToFront()})}
 function buildMK(){MK.clearLayers();H.eachLayer(l=>{const p=l.feature.properties;if(low(p))return;const k=key(p),c=l.getBounds().getCenter();
-  const m=L.circleMarker(c,{renderer:CV,radius:(k==='a'||k==='r')?6:4.5});m.p=p;if(p.k!==undefined){m.on('click',()=>openFiche(p,m));m.bindTooltip(()=>TIP(p),{direction:'top',className:'tt',offset:[0,-6]});}l.mk=m;MK.addLayer(m)});restyle();}
+  const m=L.circleMarker(c,{renderer:CV,radius:(k==='a'||k==='r')?6:4.5});m.p=p;if(p.k!==undefined){m.on('click',()=>{FSUB='c';openFiche(p,m)});m.bindTooltip(()=>TIP(p),{direction:'top',className:'tt',offset:[0,-6]});}l.mk=m;MK.addLayer(m)});restyle();}
 let SP=null,TIP=null;
 function kpi(){let n,d,t;const F=D.h.features.map(f=>f.properties);
  if(MODE==='pri'){n=D.k.degag;d=D.k.expo;t=' des '+d+' habitations exposées ont des abords dégagés';}
@@ -387,7 +413,7 @@ function kpi(){let n,d,t;const F=D.h.features.map(f=>f.properties);
  document.getElementById('pc').textContent=pc+' %';document.getElementById('pc').style.color=cl;
  document.getElementById('pctx').innerHTML='<b style="color:'+cl+'">Commune '+et+' pour l\'été</b><br>'+n+t;}
 function setMode(m){MODE=m;try{localStorage.setItem('oldmode',m)}catch(_){}filt=null;LF=MODE==='pri'?'a':'r';
- document.querySelectorAll('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+ document.querySelectorAll('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));document.getElementById('mdesc').textContent=MDESC[m];
  if(SP){if(m==='pri')SP.addTo(map);else map.removeLayer(SP);}
  buildMK();legend();kpi();if(tab==='fic'&&CUR){document.getElementById('body').innerHTML=ficHTML(CUR.p,CUR.F);}else ui();}
 function setFilt(f){filt=f;restyle();legend();}
@@ -397,6 +423,7 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';
  if(tab==='res'&&MODE!=='pri'){const F=D.h.features.map(f=>f.properties).filter(inScope),n=g=>F.filter(p=>p.g===g).length,out=D.h.features.length-F.length;
   if(MODE==='leg')h+='<p style="margin-top:0"><b>Mode légal : '+F.length+' maisons soumises aux obligations légales de débroussaillement</b> (à moins de 200 m d\'un bois ou d\'une forêt classés). '+(D.zsrc==='est'?'<span class="muted">Zone estimée : le zonage officiel publié par l\'IGN n\'inclut pas encore '+D.nom+'.</span>':'<span class="muted">Zonage officiel IGN.</span>')+'</p>';
   else h+='<p style="margin-top:0"><b>Toute la commune : '+F.length+' maisons analysées</b>, y compris hors de la zone légale. Pour celles-ci, le courrier prend la forme d\'une recommandation.</p>';
+  if(F.length&&n('r')/F.length>0.4)h+='<div class="hint"><b>'+Math.round(100*n('r')/F.length)+' % des maisons ont des travaux à faire.</b> Pour choisir par où commencer, passez en mode <a href="#" onclick="setMode(\'pri\');return false">Priorités</a> : il classe les maisons et les secteurs les plus exposés.</div>';
   h+='<div class="step"><div class="n" style="background:'+COLG.r+'">'+n('r')+'</div><div><b>Travaux à faire</b><br>Arbres contre la maison, broussaille sur le terrain ou le long du chemin d\'accès. Courrier au propriétaire. <a href="#" onclick="LF=\'r\';go(\'lst\');return false">Voir la liste</a></div></div>';
   h+='<div class="step"><div class="n" style="background:'+COLG.o+'">'+n('o')+'</div><div><b>À vérifier</b><br>Broussaille surtout chez les voisins ou en petite quantité. Courrier rappelant que les 50 m se débroussaillent aussi chez le voisin. <a href="#" onclick="LF=\'o\';go(\'lst\');return false">Voir la liste</a></div></div>';
   h+='<div class="step"><div class="n" style="background:'+COLG.v+'">'+n('v')+'</div><div><b>Rien à signaler</b><br>Rien de notable sur les images. Courrier de rappel annuel possible. <a href="#" onclick="LF=\'v\';go(\'lst\');return false">Voir la liste</a></div></div>';
@@ -422,12 +449,11 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';
   h+='<input id="q" class="srch" placeholder="Rechercher une adresse…" autocomplete="off">';
   h+='<div class="fl">'+(MODE==='pri'?[['a',CAT.a[0]],['s',CAT.s[0]],['lis','Lisière (mairie)']]:[['r',GN.r[0]],['o',GN.o[0]],['v',GN.v[0]]]).concat(D.porge?[['x','Détruites']]:[]).concat([['*','Toutes']]).map(x=>'<button data-f="'+x[0]+'" class="'+(LF===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div><div id="lst"></div>';
  }
- if(tab==='ctl'){h+=suiviHTML();h+='<h4 style="margin:16px 0 2px">Liste à contrôler</h4>';const o=CTL(),K=Object.keys(o);
-  h+='<p class="muted" style="margin-top:0">Maisons ajoutées depuis leur fiche (bouton « + Liste à contrôler »). Démo : la liste est gardée dans ce navigateur.</p>';
-  if(!K.length)h+='<div class="box">Aucune maison pour l\'instant. Ouvrez une fiche et touchez « + Liste à contrôler ».</div>';
-  else{const n=s=>K.filter(k=>o[k].s===s).length;h+='<div class="chips" style="margin:0 0 8px">'+Object.keys(ST).map(s=>'<span class="chip">'+ST[s]+' : <b>'+n(s)+'</b></span>').join('')+'</div>';
-   h+='<div class="btns" style="margin:0 0 6px"><button class="btn" onclick="csvCtl()">Exporter (tableur)</button></div>';
-   K.forEach(k=>{const r=o[k];h+='<div class="li ctl" style="cursor:default"><span class="dt" style="background:'+COL[r.c]+'"></span><span class="ad"><a href="#" onclick="PREV=\'ctl\';openByK('+k+');return false" style="color:#1c2126">'+esc(r.a)+'</a><span class="bs muted">'+esc(r.n)+'</span></span><select onchange="setSt('+k+',this.value)">'+Object.keys(ST).map(s=>'<option value="'+s+'"'+(r.s===s?' selected':'')+'>'+ST[s]+'</option>').join('')+'</select><button class="btn ic" title="Retirer" onclick="delCtl('+k+')">×</button></div>'});}
+ if(tab==='ctl'){const o=CTL(),K=Object.keys(o).filter(k=>{const r=lastSt(+k);return !r||r.s!=='conforme'});
+  if(K.length){h+='<h4 style="margin:0 0 2px">À contrôler sur place ('+K.length+')</h4><div class="muted">Ajoutées depuis la fiche. Elles sortent de la liste une fois contrôlées conformes.</div>';
+   K.forEach(k=>{const r=o[k],st=lastSt(+k);h+='<div class="li" onclick="PREV=\'ctl\';FSUB=\'e\';openByK('+k+')"><span class="dt" style="background:'+COL[r.c]+'"></span><span class="ad">'+esc(r.a)+'<span class="bs muted">'+(st?'<b style="color:'+STATUTS[st.s][1]+'">'+STATUTS[st.s][0]+'</b> le '+fdate(st.d)+' · ':'')+esc(r.n)+'</span></span><button class="btn ic" title="Retirer" onclick="event.stopPropagation();delCtl('+k+')">×</button></div>'});
+   h+='<div class="btns" style="margin:6px 0 14px"><button class="btn" onclick="csvCtl()">Exporter la liste (tableur)</button></div>';}
+  h+=suiviHTML();
  }
  if(tab==='cou'){
   h+='<p class="muted" style="margin-top:0">Un même texte pour toutes les adresses d\'une situation. Chaque adresse ne reçoit qu\'un courrier.</p>';
@@ -449,7 +475,7 @@ function isLis(p){return p.c==='s'&&p.df<=20&&!p.ft&&!p.fv&&!p.b}
 function lis(){return D.h.features.filter(f=>isLis(f.properties)).length}
 function drawList(){const qq=Q.trim().toLowerCase();const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(LF==='*'||(LF==='x'?p.x:(LF==='lis'?isLis(p):key(p)===LF)))&&(!qq||(p.a||'').toLowerCase().includes(qq)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3};
  L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));const el=document.getElementById('lst');
- el.innerHTML='<div class="muted" style="margin-bottom:4px">'+L.length+' habitation'+(L.length>1?'s':'')+'</div>'+L.slice(0,400).map(p=>'<div class="li" data-k="'+p.k+'"><span class="dt" style="background:'+colOf(p)+'"></span><span class="ad">'+esc(p.a||'Habitation')+'<span class="bs">'+(p.b?'<span class="bd">branches</span>':'')+(p.ft?'<span class="bd">broussaille terrain</span>':'')+(p.fv?'<span class="bd">broussaille voisins</span>':'')+(p.x?'<span class="bd k">détruite</span>':'')+'</span></span><span class="muted">›</span></div>').join('')+(L.length>400?'<div class="muted">… affinez la recherche</div>':'');
+ el.innerHTML='<div class="muted" style="margin-bottom:4px">'+L.length+' habitation'+(L.length>1?'s':'')+'</div>'+L.slice(0,400).map(p=>'<div class="li" data-k="'+p.k+'"><span class="dt" style="background:'+colOf(p)+'"></span><span class="ad">'+esc(p.a||'Habitation sans adresse')+'<span class="bs">'+(p.b?'<span class="bd">branches</span>':'')+(p.ft?'<span class="bd">broussaille terrain</span>':'')+(p.fv?'<span class="bd">broussaille voisins</span>':'')+(p.x?'<span class="bd k">détruite</span>':'')+'</span></span><span class="muted">›</span></div>').join('')+(L.length>400?'<div class="muted">… affinez la recherche</div>':'');
  el.querySelectorAll('.li').forEach(x=>x.onclick=()=>{PREV='lst';openByK(+x.dataset.k)});}
 function go(t){if(t!=='fic'&&tab==='fic'){SELP=null;drawAcc(null);if(SEL){map.removeLayer(SEL);SEL=null}restyle();}if(PL){if(t==='par')PL.addTo(map);else map.removeLayer(PL);}document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===t));tab=t;ui();document.getElementById('panel').classList.remove('min');}
 function tog(id){const e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block'}
@@ -473,11 +499,16 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
   if(v==='sat'){map.removeLayer(FO);map.removeLayer(RT);SAT.addTo(map);SAT.bringToBack();}else{map.removeLayer(SAT);FO.addTo(map);RT.addTo(map);FO.bringToBack();}
   document.querySelectorAll('#basesw button').forEach(b=>b.classList.toggle('on',b.dataset.b===v));};
  const BC=L.control({position:innerWidth<900?'topright':'bottomleft'});BC.onAdd=()=>{const d=L.DomUtil.create('div','basesw');d.id='basesw';d.innerHTML='<button data-b="plan">Plan</button><button data-b="sat">Satellite</button>';L.DomEvent.disableClickPropagation(d);d.querySelectorAll('button').forEach(b=>b.onclick=()=>setBase(b.dataset.b));return d};BC.addTo(map);
+ const SC=L.control({position:innerWidth<900?'topright':'bottomleft'});SC.onAdd=()=>{const d=L.DomUtil.create('div','msrch');d.innerHTML='<input id="mq" placeholder="🔍 Adresse…" autocomplete="off"><div id="mqr"></div>';L.DomEvent.disableClickPropagation(d);L.DomEvent.disableScrollPropagation(d);
+  const i=d.querySelector('input'),r=d.querySelector('#mqr');const nz=x=>(x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  i.oninput=()=>{const q=nz(i.value.trim());if(q.length<2){r.innerHTML='';return}const M=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&nz(p.a).includes(q)).slice(0,8);
+   r.innerHTML=M.map(p=>'<div data-k="'+p.k+'"><span class="dt" style="background:'+colOf(p)+'"></span>'+esc(p.a)+'</div>').join('')||'<div class="muted">Aucune adresse</div>';
+   r.querySelectorAll('[data-k]').forEach(e=>e.onclick=()=>{r.innerHTML='';i.value='';openByK(+e.dataset.k)})};return d};SC.addTo(map);
  let BASE='sat';try{BASE=localStorage.getItem('oldbase2')||'sat'}catch(_){}setBase(BASE);
  if(D.com)L.geoJSON(D.com,{renderer:cv,interactive:false,style:{color:'#555',weight:1.5,dashArray:'2 5',fill:false}}).addTo(map);
  if(D.burn)L.geoJSON(D.burn,{renderer:cv,interactive:false,style:{stroke:false,fillColor:'#6d4c41',fillOpacity:.25}}).addTo(map);
  if(D.par){PL=L.layerGroup();D.par.forEach((q,i)=>{const l=L.geoJSON(q.g,{renderer:cv,style:{color:'#5b3a8c',weight:2,dashArray:'6 4',fill:true,fillOpacity:.04}});l.eachLayer(x=>{x.idx=i;x.bindPopup('<b>Parcelle '+q.idu.slice(-6)+'</b><br>'+q.b.toLocaleString('fr')+' m² de broussaille à moins de 50 m de '+q.nm+' habitation(s) à dégager ('+q.pc+' % du total)')});PL.addLayer(l)});}
- const tip=p=>'<b>'+esc(p.a||'Habitation')+'</b><br>'+kname(key(p))+(D.porge&&p.x?' · détruite':'')+(p.k!==undefined?'<br><span class="muted">Cliquer pour la fiche</span>':'');
+ const tip=p=>'<b>'+esc(p.a||'Habitation sans adresse')+'</b><br>'+kname(key(p))+(D.porge&&p.x?' · détruite':'')+(p.k!==undefined?'<br><span class="muted">Cliquer pour la fiche</span>':'');
  H=L.geoJSON(D.h,{renderer:cv,style:sty,onEachFeature:(f,l)=>f.properties.k!==undefined?l.on('click',()=>openFiche(f.properties,l)).bindTooltip(()=>tip(f.properties),{sticky:true,direction:'top',className:'tt',offset:[0,-8]}):l.bindPopup(()=>pop(f.properties),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]})}).addTo(map);
  MK=L.layerGroup().addTo(map);TIP=tip;
  if(D.sp&&D.sp.length){SP=L.layerGroup(D.sp.map((z,i)=>L.geoJSON(z.g,{renderer:cv,interactive:false,style:{color:'#b71c1c',weight:2,dashArray:'6 4',fillColor:'#c62828',fillOpacity:.10}})));}
