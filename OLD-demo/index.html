@@ -67,11 +67,14 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .hint{background:#fff8e1;border:1px solid #f0d98a;border-radius:10px;padding:8px 10px;margin:0 0 10px;font-size:13px}
 .pl{margin:6px 0}.pl ol{margin:3px 0 0 18px;padding:0}.pl li{margin:2px 0;font-size:13.5px}
 .hbtn{border:1px solid #d6d0c6;background:#fff;border-radius:8px;padding:3px 9px;font-size:12px;cursor:pointer;margin-top:6px}
-#homeov{position:fixed;inset:0;z-index:3000;background:rgba(241,239,233,.97);display:none;align-items:center;justify-content:center;padding:16px}
-.home{width:min(860px,100%)}.hh{margin-bottom:14px;font-size:18px}.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.tile{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;background:#fff;border:1px solid #e2ddd3;border-radius:14px;padding:18px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.08);font:inherit}
-.tile:hover{border-color:#1c2126}.tile .ti{font-size:22px}.tile b{font-size:16px}.tile .big{font-size:26px;font-weight:800}.tile .ts{font-size:12.5px;color:#5d6670}
-@media(max-width:700px){.tiles{grid-template-columns:1fr}.tile{padding:12px}.tile .big{font-size:20px}}
+#homeov{position:fixed;inset:0;z-index:3000;background:#f1efe9;overflow:auto;display:none;align-items:center;justify-content:center;padding:16px}
+.home{width:min(560px,100%)}.hh{margin-bottom:16px}.hh h2{font-size:24px;margin:2px 0}.hk{font-size:12px;color:#5d6670;text-transform:uppercase;letter-spacing:.06em}
+.menu{display:flex;flex-direction:column;gap:10px}
+.mi{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid #e2ddd3;border-radius:14px;padding:16px 16px;cursor:pointer;font:inherit;color:#1c2126;transition:border-color .1s,transform .1s}
+.mi:hover{border-color:#1c2126;transform:translateX(2px)}.mic{flex:none;width:44px;height:44px;border-radius:11px;background:#1c2126;display:flex;align-items:center;justify-content:center}
+.mic svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mtx{flex:1;display:flex;flex-direction:column;gap:2px}.mtx b{font-size:16.5px}.mtx span{font-size:13px;color:#5d6670}.mtx i{font-style:normal;font-size:12px;color:#b71c1c;font-weight:600;margin-top:3px}
+.mar{font-size:26px;color:#8a8478;flex:none}.hf{text-align:center;margin-top:16px;font-size:13px}.hf a{color:#5d6670}
 .layc{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.25);font-size:13px;max-width:250px}.lyb{border:0;background:none;padding:7px 12px;font-size:13px;cursor:pointer;width:100%;text-align:left}.lyl{display:none;padding:0 10px 8px}.layc.op .lyl{display:block}.lyl label{display:block;padding:3px 0;cursor:pointer}
 .mdesc{font-size:12px;color:#5d6670;margin-top:5px;max-width:420px}
 #hx{display:none}
@@ -550,14 +553,13 @@ async function getF(p){const key=D.city+'_'+p.k;if(FCACHE[key])return FCACHE[key
 function typName(p){return p.t==='c'?'Camping / hébergement de loisirs':p.t==='e'?((p.u&&p.u!=='Annexe'&&p.u!=='Indifférencié')?'Bâtiment '+p.u.toLowerCase():'Bâtiment (hors habitation)'):'Habitation'}
 function today_(){return new Date().toISOString().slice(0,10)}
 /* --- Accueil : 3 tuiles --- */
-function homeHTML(){const F=D.h.features.map(f=>f.properties),R=relances(),c=x=>F.filter(p=>p.l&&(p.g||'v')===x).length,n=F.filter(p=>p.l).length,v=c('v');
- const sansEnv=F.filter(p=>p.k!==undefined&&p.l&&p.g==='r'&&!envois(p.k).length).length,cm=D.cm?D.cm.v.filter(s=>s.q==='r'&&s.ge==='com').length:0;
- const t=(id,ic,h,big,sub)=>'<button class="tile" onclick="homeGo(\''+id+'\')"><span class="ti">'+ic+'</span><b>'+h+'</b><span class="big">'+big+'</span><span class="ts">'+sub+'</span></button>';
- return '<div class="home"><div class="hh"><div><b>'+esc(D.nom)+'</b><div class="muted">Préparation aux feux de végétation · '+esc(D.mairie||('Mairie de '+D.nom))+'</div></div></div><div class="tiles">'+
- t('act','✓','Actions en cours',R.length+' relance'+(R.length>1?'s':''),sansEnv+' maisons avec travaux sans courrier · résumé du jour')+
- t('map','◉','Carte',(F.filter(p=>p.k!==undefined).length)+' constructions','Fiches, courriers, contrôles · 3 modes')+
- t('eta','▤','État de la commune',(n?Math.round(100*v/n):0)+' %','sans rien à signaler en zone légale · '+cm+' tronçons de voie communale à dégager')+
- '</div><div class="muted" style="text-align:center;margin-top:10px">Données IGN · démonstration</div></div>'}
+function homeHTML(){const F=D.h.features.map(f=>f.properties),R=relances(),sansEnv=F.filter(p=>p.k!==undefined&&p.l&&p.g==='r'&&!envois(p.k).length).length;
+ const it=(id,ic,h,d,badge)=>'<button class="mi" onclick="homeGo(\''+id+'\')"><span class="mic">'+ic+'</span><span class="mtx"><b>'+h+'</b><span>'+d+'</span>'+(badge?'<i>'+badge+'</i>':'')+'</span><span class="mar">›</span></button>';
+ return '<div class="home"><div class="hh"><div class="hk">VB OLD · obligations légales de débroussaillement</div><h2>'+esc(D.nom)+'</h2><div class="muted">Que voulez-vous faire ?</div></div><div class="menu">'+
+ it('map','<svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zm0 0v14m6-12v14"/></svg>','Carte des constructions','Voir chaque maison ou bâtiment, sa fiche, préparer un courrier','')+
+ it('act','<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/><path d="m16 17 2 2 4-4"/></svg>','Actions en cours','Relances, contrôles sur place, courriers à envoyer, résumé du jour',(R.length?R.length+' relance'+(R.length>1?'s':'')+' due'+(R.length>1?'s':'')+' · ':'')+sansEnv+' courriers à envoyer')+
+ it('eta','<svg viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"/></svg>','État de la commune','Bilan, obligations de la commune (voies, bâtiments communaux), rapport PDF','')+
+ '</div><div class="hf"><a href="#" onclick="homeGo(\'map\');rapportCommune();return false">Rapport PDF</a> · <a href="#" id="chg2" onclick="try{sessionStorage.removeItem(\'oldv\')}catch(_){}location.reload();return false">Changer de commune</a></div></div>'}
 function showHome(){let h=document.getElementById('homeov');if(!h){h=document.createElement('div');h.id='homeov';document.body.appendChild(h)}h.innerHTML=homeHTML();h.style.display='flex'}
 function homeGo(id){document.getElementById('homeov').style.display='none';if(id==='act')go('act');else if(id==='eta')go('eta');else go('res');if(innerWidth<900&&id!=='map')document.getElementById('panel').classList.remove('min')}
 /* --- Actions en cours --- */
