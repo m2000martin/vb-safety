@@ -16,7 +16,7 @@ button.go{width:100%;font:600 16px system-ui;border:0;border-radius:11px;padding
 .bt2{font:inherit;font-size:14px;border:1px solid #d6d0c6;background:#fff;border-radius:10px;padding:9px 12px;cursor:pointer;margin-top:6px}
 .ok{display:none;text-align:center}
 </style></head><body><div class="w">
-<div class="muted">Commune · tempête en cours</div>
+<div class="muted">Commune · signalement pendant une crise (tempête, inondation, feu)</div>
 <h1>Signaler un dégât</h1>
 <div class="urg"><b>Danger immédiat ?</b> Appelez le <a href="tel:18">18</a> ou le <a href="tel:112">112</a>.<br>Câble électrique tombé : ne vous approchez pas, appelez le dépannage électricité (numéro sur votre facture).<br>Ce formulaire n'est pas un service d'urgence.</div>
 <div class="card demo"><b>Démonstration.</b> Rien n'est envoyé depuis cette page.</div>
@@ -26,6 +26,7 @@ button.go{width:100%;font:600 16px system-ui;border:0;border-radius:11px;padding
 <label><input type="radio" name="t" value="toiture">Toiture, bâtiment</label>
 <label><input type="radio" name="t" value="arbre_maison">Arbre sur une maison</label>
 <label><input type="radio" name="t" value="eau">Route inondée</label>
+<label><input type="radio" name="t" value="fumee">Fumée ou feu (appelez d'abord le 18)</label>
 <label><input type="radio" name="t" value="autre">Autre</label></div></div>
 <div class="card"><h2>2. Où ?</h2><button class="bt2" onclick="loc()">Utiliser ma position</button><div class="muted" id="lm">Ou touchez la carte pour placer le point.</div><div id="m"></div></div>
 <div class="card"><h2>3. Photo (facultative)</h2><input type="file" accept="image/*" capture="environment" id="ph"><div class="muted" id="phm">Seule la position du signalement est gardée ; les autres informations cachées de la photo (téléphone, date) sont supprimées.</div>

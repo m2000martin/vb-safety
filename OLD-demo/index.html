@@ -83,6 +83,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .tm b{font-weight:650}.tm i{font-style:normal;font-size:11.5px;font-weight:700;background:#ebe7de;color:#3a4148;border-radius:9px;padding:1px 7px}.tm i.hot{background:#fdecea;color:#a31515}
 .tm.on{flex:1 1 240px;max-width:420px;flex-direction:column;align-items:flex-start;gap:0;background:#1c2126;color:#fff;border-color:#1c2126;padding:5px 14px}.tm.on b{font-size:14.5px}.tm.on span{font-size:11.5px;opacity:.8}
 #risk{display:flex;gap:2px;background:#f1efe9;border-radius:10px;padding:3px;flex:none}.rk{border:0;background:none;border-radius:8px;padding:6px 10px;font:inherit;font-size:12.5px;cursor:pointer;color:#3a4148;white-space:nowrap}.rk.on{background:#fff;color:#1c2126;font-weight:650;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.crb{flex:none;border:1.5px solid #b71c1c;color:#b71c1c;background:#fff;border-radius:10px;padding:7px 12px;font:inherit;font-size:13px;font-weight:650;cursor:pointer;white-space:nowrap}.crb.on{background:#b71c1c;color:#fff}
 #chg3{flex:none;font-size:12px;color:#5d6670}
 #page{position:fixed;top:56px;left:0;right:0;bottom:0;overflow:auto;background:#f1efe9;display:none;padding:18px 20px 40px;box-sizing:border-box;z-index:1500}
 .ph{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 auto 14px;max-width:1400px}.ph h1{font-size:22px;margin:0}.ph .sp{flex:1}.ph2{font-size:16px;max-width:1400px;margin:22px auto 8px}
@@ -94,6 +95,26 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:1400px;margin:0 auto 14px}.kc{background:#fff;border:1px solid #e2ddd3;border-radius:14px;padding:14px}.kv{font-size:30px;font-weight:800;margin-top:2px}.kd{font-size:12.5px;color:#3a4148}
 .pcols{max-width:1400px;margin:0 auto;columns:2 460px;column-gap:14px}.pcols .box{break-inside:avoid;background:#fff;margin:0 0 14px}
 #topm .sh{display:none}
+.met{background:#fff;border:1px solid #e2ddd3;border-radius:12px;padding:10px 12px}.met .mh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.met .mg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.met .mg>div{display:flex;flex-direction:column}.met .mv{font-size:22px;font-weight:800;line-height:1.1}.met .mu{font-size:11px;color:#5d6670}.met .ml{font-size:11.5px;color:#3a4148}
+.met.big .mv{font-size:44px}.met.big .mg{gap:14px}.met.big .ml{font-size:13px}
+.met .mb{display:flex;gap:3px;align-items:flex-end;height:56px;margin-top:10px}.met .mb>div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.met .mb i{display:block;width:100%;border-radius:3px 3px 0 0;min-height:2px}.met .mb span{font-size:9.5px;color:#5d6670}
+.met.big .mb{height:110px}
+.crv{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;margin:0 0 10px;padding:8px 10px;background:#faf8f3;border-radius:10px}.crv label{cursor:pointer;white-space:nowrap}
+@media(max-width:899px){
+ #topbar{height:auto;min-height:0;padding:6px 8px;gap:6px}
+ #risk{flex:1;justify-content:stretch}.crb{padding:6px 8px;font-size:12px}#risk .rk{flex:1;padding:7px 4px;font-size:12.5px}
+ #topm{position:fixed;left:0;right:0;bottom:0;height:58px;background:#fff;border-top:1px solid #e2ddd3;display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:4px 6px calc(4px + env(safe-area-inset-bottom));box-sizing:content-box;z-index:2100;overflow:visible}
+ #topm .tm,#topm .tm.on{flex:none;max-width:none;flex-direction:column;justify-content:center;align-items:center;gap:1px;border:0;border-radius:10px;padding:4px;background:none;color:#5d6670}
+ #topm .tm.on{background:#1c2126;color:#fff}#topm .tm.on>span{display:none}#topm .tm.on b{color:#fff}#topm .tm b{font-size:13.5px}#topm .tm i{font-size:10.5px;padding:0 6px}
+ #map{bottom:62px!important}#page{bottom:62px!important}
+ #panel{bottom:70px!important;max-height:calc(100% - 200px)!important}
+ #head{padding:8px 10px}#head h1{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 70px)}
+ #head .modes{margin-top:6px}#head .kpi{margin-top:6px;gap:8px}#head .kpi .pc{font-size:20px}#head .kpi .tx{font-size:11.5px}
+ #head .leg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:6px}#head .leg::-webkit-scrollbar{display:none}#head .lb{flex:none}
+ .msrch{width:40px;transition:width .15s}.msrch:focus-within{width:210px}.msrch input{padding:9px 8px;font-size:15px}
+ .basesw button{padding:6px 9px;font-size:12px}.lyb{padding:7px 10px;font-size:12px}
+}
 @media(max-width:899px){.rk{padding:5px 7px;font-size:11.5px}#topbar{height:auto;min-height:56px;flex-wrap:wrap;padding:6px 8px;gap:6px}#topm .lg{display:none}#topm .sh{display:inline}.tm{padding:7px 10px}.tbl{display:none}#chg3{display:none}.tm.on{flex:0 0 auto}.tm.on span{display:none}#page{padding:12px}}
 .mdesc{font-size:12px;color:#5d6670;margin-top:5px;max-width:420px}
 #hx{display:none}
@@ -106,16 +127,16 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
 @media(min-width:900px){#panel{top:66px;right:10px;bottom:10px;width:400px}#head{max-width:calc(100% - 440px)}}
 @media(max-width:899px){
  #head{padding:9px 11px;top:64px;left:8px;right:8px;max-width:none}#head h1{font-size:14.5px}#head .sub{font-size:11px}.kpi{margin-top:6px}.kpi .pc{font-size:21px}.kpi .tx{font-size:11.5px}.leg{gap:4px;margin-top:7px}.lb{font-size:11.5px;padding:3px 8px 3px 6px;gap:4px}.lb i{width:10px;height:10px}
- #head .sub,.mdesc{display:none}#hx{display:inline-block;float:right;border:0;background:none;font-size:13px;color:#5d6670;padding:0 0 0 8px;cursor:pointer}#head.cmp .kpi,#head.cmp .leg{display:none}
+ #head .sub,.mdesc{display:none}#hx{display:inline-block;float:right;border:0;background:none;font-size:13px;color:#5d6670;padding:0 0 0 8px;cursor:pointer}#head.cmp .leg,#head.cmp .modes,#head.cmp .mdesc{display:none}
  #panel{left:8px;right:8px;bottom:8px;max-height:52%}
  #panel.min{max-height:none}#panel.min .body{display:none}
  #grip{display:block;width:40px;height:4px;background:#d6d0c6;border-radius:3px;margin:7px auto 0;flex:none}
 }
 </style></head><body>
-<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
+<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Vue de crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
 <div id="map"></div><div id="page"></div>
 <div id="head" class="card">
- <button id="hx" onclick="this.parentNode.classList.toggle('cmp');this.textContent=this.parentNode.classList.contains('cmp')?'▾ détails':'▴ réduire'">▴ réduire</button><h1 id="ttl"></h1>
+ <button id="hx" onclick="this.parentNode.classList.toggle('cmp');setTimeout(placeCtl,0);this.textContent=this.parentNode.classList.contains('cmp')?'▾ détails':'▴ réduire'">▴ réduire</button><h1 id="ttl"></h1>
  <div class="sub"><span id="stt">Espace maire · démonstration · données IGN</span> · <a href="#" id="chg" style="color:#5d6670">changer de ville</a></div>
  <div class="modes" id="modes"></div><div class="mdesc" id="mdesc"></div>
  <div class="kpi"><div class="pc" id="pc"></div><div class="tx" id="pctx"></div></div>
@@ -487,9 +508,9 @@ function buildMK(){MK.clearLayers();H.eachLayer(l=>{const p=l.feature.properties
   const m=L.circleMarker(c,{renderer:CV,radius:(k==='a'||k==='r')?6:4.5});m.p=p;if(p.k!==undefined){m.on('click',()=>{FSUB='c';openFiche(p,m)});m.bindTooltip(()=>TIP(p),{direction:'top',className:'tt',offset:[0,-6]});}l.mk=m;MK.addLayer(m)});restyle();}
 let SP=null,TIP=null;
 function kpi(){let n,d,t;const F=D.h.features.map(f=>f.properties);
- if(RISK!=='feu'){const G=F.filter(p=>p.k!==undefined),bad=G.filter(p=>/r$|i$/.test(key(p))).length;const pc=G.length?Math.round(100*bad/G.length):0;
-  document.getElementById('pc').textContent=bad;document.getElementById('pc').style.color=RISK==='tem'?'#8e24aa':'#0d47a1';
-  document.getElementById('pctx').innerHTML=RISK==='tem'?'<b style="color:#6a1b9a">Tempête</b><br>constructions avec beaucoup d\'arbres pouvant tomber dessus':'<b style="color:#0d47a1">Inondation</b><br>constructions avec plus de 1 m d\'eau ou isolées (crue de référence)';return}
+ if(RISK!=='feu'){const G=F.filter(p=>p.k!==undefined),bad=RISK==='all'?G.filter(p=>nRisk(p)>=2).length:G.filter(p=>/r$|i$/.test(key(p))).length;const pc=G.length?Math.round(100*bad/G.length):0;
+  document.getElementById('pc').textContent=bad;document.getElementById('pc').style.color=RISK==='all'?'#c62828':RISK==='tem'?'#8e24aa':'#0d47a1';
+  document.getElementById('pctx').innerHTML=RISK==='all'?'<b>Vue générale</b><br>constructions exposées à plusieurs risques forts':RISK==='tem'?'<b style="color:#6a1b9a">Tempête</b><br>constructions avec beaucoup d\'arbres pouvant tomber dessus':'<b style="color:#0d47a1">Inondation</b><br>constructions avec plus de 1 m d\'eau ou isolées (crue de référence)';return}
  if(MODE==='pri'){n=D.k.degag;d=D.k.expo;t=' des '+d+' habitations exposées ont des abords dégagés';}
  else{const S=F.filter(inScope);d=S.length;n=S.filter(p=>{const r=p.k!==undefined?lastSt(p.k):null;return r?r.s==='conforme':p.g==='v'}).length;t=' des '+d+' constructions '+(MODE==='leg'?'de la zone légale'+(D.zsrc==='est'?' (estimée)':''):'de la commune')+' n\'ont rien à signaler';}
  const pc=d?Math.round(100*n/d):0,cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828'),et=pc>=80?'bien préparée':(pc>=60?'à consolider':'à améliorer');
@@ -501,7 +522,7 @@ function setMode(m){MODE=m;try{localStorage.setItem('oldmode',m)}catch(_){}filt=
  buildMK();legend();kpi();if(tab==='fic'&&CUR){document.getElementById('body').innerHTML=ficHTML(CUR.p,CUR.F);}else ui();}
 function setFilt(f){filt=f;restyle();legend();}
 function zoomTo(lat,lon,z){map.setView([lat,lon],z||18);if(innerWidth<900)document.getElementById('panel').classList.add('min');}
-function ui(){const k=D.k,b=document.getElementById('body');let h='';if(tab==='res'&&RISK==='tem'&&CRISE){b.innerHTML=crisisRes();return}if(tab==='res'&&RISK!=='feu'){b.innerHTML=riskRes();return}
+function ui(){const k=D.k,b=document.getElementById('body');let h='';if(tab==='res'&&CRISE){b.innerHTML=crisisRes();return}if(tab==='res'&&RISK!=='feu'){b.innerHTML=riskRes();return}
  if(tab==='res')h+='<button class="btn dark" style="width:100%;margin:0 0 12px;padding:10px" onclick="rapportCommune()">Rapport d\'état de la commune (PDF) ↗</button>';
  if(tab==='res'&&MODE!=='pri'){const F=D.h.features.map(f=>f.properties).filter(inScope),n=g=>F.filter(p=>p.g===g).length,out=D.h.features.length-F.length;
   if(MODE==='leg')h+='<p style="margin-top:0"><b>Mode légal : '+F.length+' maisons soumises aux obligations légales de débroussaillement</b> (à moins de 200 m d\'un bois ou d\'une forêt classés). '+(D.zsrc==='est'?'<span class="muted">Zone estimée : le zonage officiel publié par l\'IGN n\'inclut pas encore '+D.nom+'.</span>':'<span class="muted">Zonage officiel IGN.</span>')+'</p>';
@@ -697,7 +718,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
   '<div class="btns"><button class="btn" onclick="selAll(1);refreshTop()">Cocher 50</button><button class="btn" onclick="selAll(0);refreshTop()">Décocher</button><button class="btn dark" id="grpb" onclick="lettresGroupees([...ASEL])">Courriers groupés ('+ASEL.size+')</button></div>',S.length);
  h+='</div><h2 class="ph2">Suivi complet</h2><div class="pwide">'+suiviHTML()+'</div>';
  return h}
-function etaPage(){const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828');
+function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828');
  const ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),km=D.cm?(D.cm.v.filter(s=>s.ge==='com'&&s.q==='r').length*0.05).toFixed(1).replace('.',','):'–';
  const kp=(t,v,d,c)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div><div class="kd">'+d+'</div></div>';
  let h='<div class="ph"><h1>État de la commune</h1><span class="muted">'+esc(D.nom)+' · '+imgTxt()+'</span><span class="sp"></span><button class="btn dark" onclick="rapportCommune()">Rapport d\'état (PDF) ↗</button></div>';
@@ -719,13 +740,14 @@ kname=k=>RISK==='feu'?F0.kname(k):RN[k];
 low=p=>RISK==='feu'?F0.low(p):/v$/.test(key(p));
 inScope=p=>RISK==='feu'?F0.inScope(p):true;
 function kcol(k){return RISK!=='feu'?RC[k]:(MODE==='pri'?COL[k]:COLG[k])}
-function fixTop(){const th=document.getElementById('topbar').offsetHeight;document.getElementById('map').style.top=th+'px';document.getElementById('page').style.top=th+'px';document.getElementById('head').style.top=(th+(innerWidth<900?8:10))+'px';if(innerWidth>=900)document.getElementById('panel').style.top=(th+10)+'px';if(map)map.invalidateSize()}
+function fixTop(){const th=document.getElementById('topbar').offsetHeight;if(innerWidth<900&&!window._hc){window._hc=1;const hd=document.getElementById('head');hd.classList.add('cmp');const hx=document.getElementById('hx');if(hx)hx.textContent='▾ détails'}document.getElementById('map').style.top=th+'px';document.getElementById('page').style.top=th+'px';document.getElementById('head').style.top=(th+(innerWidth<900?8:10))+'px';if(innerWidth>=900)document.getElementById('panel').style.top=(th+10)+'px';if(map)map.invalidateSize();placeCtl()}
+function placeCtl(){if(innerWidth>=900)return;const t=document.querySelector('.leaflet-top.leaflet-right'),hd=document.getElementById('head');if(t&&hd)t.style.top=(hd.offsetHeight+16)+'px';const pn=document.getElementById('panel');if(pn&&hd){const top=hd.getBoundingClientRect().bottom+6;pn.style.setProperty('max-height',Math.max(240,innerHeight-top-70)+'px','important')}}
 addEventListener('resize',()=>{try{fixTop()}catch(_){}});
-function riskBar(){setTimeout(fixTop,0);const R=[['feu','Feu de forêt'],['tem','Tempête']].concat(D.fl?[['inond','Inondation']]:[]);
+function riskBar(){setTimeout(fixTop,0);const R=[['all','Vue générale'],['feu','Feu de forêt'],['tem','Tempête']].concat(D.fl?[['inond','Inondation']]:[]);
  document.getElementById('risk').innerHTML=R.map(r=>'<button class="rk'+(r[0]===RISK?' on':'')+'" aria-pressed="'+(r[0]===RISK)+'" onclick="setRisk(\''+r[0]+'\')">'+r[1]+'</button>').join('')}
-function setRisk(r){RISK=r;if(r!=='tem'&&CRISE){CRISE=false;if(SIGL){map.removeLayer(SIGL);SIGL=null}}document.getElementById('ttl').textContent=D.nom+' · '+{feu:'préparation aux feux de végétation',tem:'risque tempête',inond:'risque inondation'}[r];try{localStorage.setItem('oldrisk',r)}catch(_){}filt=null;
+function setRisk(r){RISK=r;if(CRISE)setTimeout(()=>{drawSig();applyCrise();ui()},0);document.getElementById('ttl').textContent=D.nom+' · '+{all:'vue générale des risques',feu:'préparation aux feux de végétation',tem:'risque tempête',inond:'risque inondation'}[r];try{localStorage.setItem('oldrisk',r)}catch(_){}filt=null;
  document.getElementById('modes').style.display=r==='feu'?'':'none';
- document.getElementById('mdesc').textContent=r==='feu'?MDESC[MODE]:(r==='tem'?'Arbres de plus de 8 m capables de tomber sur une construction, une route ou une ligne électrique (relevé laser IGN).':'Zone inondable réglementaire (PPRI) et hauteur d\'eau estimée avec le relief laser IGN.');
+ document.getElementById('mdesc').textContent=r==='feu'?MDESC[MODE]:r==='all'?'Nombre de risques forts par construction : feu de forêt, tempête, inondation.':(r==='tem'?'Arbres de plus de 8 m capables de tomber sur une construction, une route ou une ligne électrique (relevé laser IGN).':'Zone inondable réglementaire (PPRI) et hauteur d\'eau estimée avec le relief laser IGN.');
  riskBar();applyRiskLayers();if(typeof SELP!=='undefined'&&SELP===null&&tab==='fic')go('res');buildMK();legend();kpi();if(tab==='fic'&&CUR)document.getElementById('body').innerHTML=ficHTML(CUR.p,CUR.F);else ui();if(TOP!=='map')refreshTop()}
 /* couches propres aux risques */
 let RL={};
@@ -738,13 +760,13 @@ function initRiskLayers(){
   RL.fenv=L.layerGroup(D.fl.env.map(p=>L.polygon(p,{renderer:CV,interactive:false,stroke:true,color:'#1565c0',weight:1,fillColor:'#1e88e5',fillOpacity:.18})));
   RL.frd=L.layerGroup(D.fl.r.map(r=>L.polyline(r.g,{renderer:CV,color:'#d500f9',weight:4}).bindTooltip('<b>'+esc(r.n||'Voie')+'</b><br>Submergée : environ '+(r.h/100).toFixed(1).replace('.',',')+' m d\'eau (estimé)',{sticky:true,className:'tt'})))}}
 function applyRiskLayers(){const on=(k,v)=>{const l=RL[k];if(!l)return;if(v){if(!map.hasLayer(l))l.addTo(map)}else if(map.hasLayer(l))map.removeLayer(l)};
- on('stp',RISK==='tem');on('stv',RISK==='tem');on('stl',RISK==='tem');on('fenv',RISK==='inond');on('frd',RISK==='inond');
+ on('stp',RISK==='tem'&&(!CRISE||CRV.p));on('stv',RISK==='tem'&&(!CRISE||CRV.v));on('stl',RISK==='tem'&&(!CRISE||CRV.l));on('fenv',RISK==='inond'&&(!CRISE||CRV.z));on('frd',RISK==='inond'&&(!CRISE||CRV.r));
  if(H)H.bringToFront&&0}
 /* panneau Résumé selon le risque */
-function riskRes(){const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),c=g=>F.filter(p=>key(p)===g).length;
+function riskRes(){if(RISK==='all')return allRes();const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),c=g=>F.filter(p=>key(p)===g).length;
  if(RISK==='tem'){const S=D.st,lr=S.l.filter(s=>s.r>=300),lo=S.l.filter(s=>s.r>=120&&s.r<300),km=L_=>(L_.length*0.05).toFixed(1).replace('.',',');
   const byG=g=>S.l.filter(s=>s.ge===g&&s.r>=120).length,vr=D.cm?Object.keys(S.v).filter(i=>S.v[i][0]>=1500).length:0;
-  let h='<button class="btn dark" style="width:100%;margin:0 0 12px;padding:10px;background:#b71c1c;border-color:#b71c1c" onclick="crisisOn()">Ouvrir la vue de crise (démonstration)</button><p style="margin-top:0"><b>Tempête : arbres de plus de 8 m capables de tomber</b> sur une construction, une route ou une ligne électrique (chute dans l\'axe, hauteur ≥ distance). Relevé laser IGN ; arbres secs repérés à l\'infrarouge (indice, à vérifier).</p>';
+  let h='<p style="margin-top:0"><b>Tempête : arbres de plus de 8 m capables de tomber</b> sur une construction, une route ou une ligne électrique (chute dans l\'axe, hauteur ≥ distance). Relevé laser IGN ; arbres secs repérés à l\'infrarouge (indice, à vérifier).</p>';
   h+='<div class="step"><div class="n" style="background:#8e24aa">'+c('tr')+'</div><div><b>Constructions</b> avec beaucoup d\'arbres pouvant tomber dessus · '+c('to')+' avec quelques arbres. <a href="#" onclick="LF=\'tr\';go(\'lst\');return false">Voir la liste</a></div></div>';
   h+='<div class="step"><div class="n" style="background:#8e24aa">'+km(lr)+'</div><div><b>km de lignes électriques</b> très exposés (+'+km(lo)+' km à surveiller) : '+byG('Enedis')*50+' m Enedis, '+byG('RTE')*50+' m RTE. Liste à transmettre au gestionnaire du réseau, qui élague ses tracés.</div></div>';
   h+='<div class="step"><div class="n" style="background:#8e24aa">'+(vr*0.05).toFixed(1).replace('.',',')+'</div><div><b>km de voies</b> bordées d\'arbres pouvant les couper : itinéraires à reconnaître en premier après une tempête.</div></div>';
@@ -760,28 +782,45 @@ function riskRes(){const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==und
  if(Fl.sites.length)h+='<h4 style="margin:12px 0 2px">Sites sensibles en zone inondable</h4>'+Fl.sites.map(s=>'<div class="li" style="cursor:default"><span class="dt" style="background:#0d47a1"></span><span class="ad">'+esc(s.n)+'<span class="bs muted">'+esc(s.na)+'</span></span></div>').join('');
  h+='<p class="muted">'+esc(Fl.note)+' Le zonage officiel (rouge, jaune, bleu) et ses prescriptions sont dans le PPRI ; seule son enveloppe est publiée en données.</p>';return h}
 
-/* ===== Vue de crise tempête (démonstration : signalements fictifs, rien n'est stocké) ===== */
-let CRISE=false,SIG=[],SIGL=null;
-const STY={arbre_route:'Arbre sur la route',cable:'Câble ou poteau tombé',toiture:'Toiture, bâtiment',arbre_maison:'Arbre sur une maison',eau:'Route inondée'};
-const SST={s:['Signalé','#c62828'],p:['Pris en charge','#ef8a17'],d:['Dégagé','#2e7d32']};
-function demoSig(){const V=D.cm?D.cm.v.map((s,i)=>[s,(D.st.v[i]||[0])[0]]).filter(x=>x[1]>=1500).slice(0,40):[],T=['arbre_route','arbre_route','cable','arbre_route','toiture','arbre_maison','arbre_route','cable'],out=[];
- for(let j=0;j<Math.min(8,V.length);j++){const s=V[(j*5)%V.length][0],c=s.g[Math.floor(s.g.length/2)];out.push({id:j+1,t:T[j],lat:c[0]+(j%2?0.00005:-0.00004),lng:c[1],v:s.n||'Voie sans nom',h:['07:12','07:20','07:31','07:44','07:58','08:05','08:17','08:26'][j],st:j<2?'d':(j<4?'p':'s'),n:(j===2?2:1)})}return out}
-function crisisOn(){CRISE=true;if(!SIG.length)SIG=demoSig();drawSig();if(RISK!=='tem')setRisk('tem');else ui();}
-function crisisOff(){CRISE=false;if(SIGL){map.removeLayer(SIGL);SIGL=null}ui()}
-function drawSig(){if(SIGL)map.removeLayer(SIGL);SIGL=L.layerGroup(SIG.map(x=>L.circleMarker([x.lat,x.lng],{renderer:CV,radius:11,color:'#fff',weight:3,fillColor:SST[x.st][1],fillOpacity:1}).bindTooltip('<b>'+STY[x.t]+'</b> · '+esc(x.v)+'<br>'+x.h+' · '+SST[x.st][0]+(x.n>1?' · '+x.n+' signalements regroupés':''),{className:'tt'}))).addTo(map)}
-function setSig(id,st){const x=SIG.find(y=>y.id===id);if(x)x.st=st;drawSig();ui()}
-function crisisRes(){const c=k=>SIG.filter(x=>x.st===k).length;
- let h='<div class="hint" style="background:#fdecea;border-color:#f5b7b1"><b>Vue de crise · démonstration</b> : signalements fictifs pour montrer le fonctionnement. En service, ils arrivent de la page habitant <a href="r/signal.html" target="_blank">(voir la page)</a>.</div>';
+/* ===== Vue de crise (tous risques ; démonstration : signalements fictifs, rien n'est stocké) ===== */
+let CRISE=false,SIGS={},SIGL=null,CRV={b:false,p:false,l:true,v:true,z:true,r:true};
+const STY={arbre_route:'Arbre sur la route',cable:'Câble ou poteau tombé',toiture:'Toiture, bâtiment',arbre_maison:'Arbre sur une maison',eau:'Route inondée',isole:'Habitants isolés',fumee:'Fumée ou feu',route:'Route bloquée',autre:'Autre'};
+const SST={s:['Signalé','#c62828'],p:['Pris en charge','#ef8a17'],d:['Traité','#2e7d32']};
+const HH=['07:12','07:20','07:31','07:44','07:58','08:05','08:17','08:26'];
+function mkSig(pts,T){return pts.slice(0,8).map((x,j)=>({id:j+1,t:T[j%T.length],lat:x[0]+(j%2?0.00005:-0.00004),lng:x[1],v:x[2]||'Voie sans nom',h:HH[j],st:j<2?'d':(j<4?'p':'s'),n:(j===2?2:1)}))}
+function demoSig(){const mid=g=>g[Math.floor(g.length/2)];
+ if(RISK==='tem'){const V=D.cm?D.cm.v.map((s,i)=>[s,(D.st.v[i]||[0])[0]]).filter(x=>x[1]>=1500):[];return mkSig(V.filter((x,i)=>i%5===0).map(x=>{const c=mid(x[0].g);return [c[0],c[1],x[0].n]}),['arbre_route','arbre_route','cable','arbre_route','toiture','arbre_maison','arbre_route','cable'])}
+ if(RISK==='inond'){const R=D.fl.r.filter(r=>r.h>=30);return mkSig(R.filter((x,i)=>i%3===0).map(r=>{const c=mid(r.g);return [c[0],c[1],r.n]}),['eau','eau','isole','eau','eau','isole','eau','eau'])}
+ const P=D.h.features.filter(f=>f.properties.k!==undefined&&f.properties.df<=15).map(f=>{const c=L.geoJSON(f).getBounds().getCenter();return [c.lat,c.lng,f.properties.a]});
+ return mkSig(P.filter((x,i)=>i%9===0),['fumee','route','fumee','route','fumee','autre','route','fumee'])}
+function SIG(){if(RISK==='all')return SIGS.all||(SIGS.all=SIGall());return SIGS[RISK]||(SIGS[RISK]=demoSig())}
+function crisisToggle(){if(CRISE)crisisOff();else crisisOn()}
+function crisisOn(){CRISE=true;if(TOP==='act')setTop('map');else if(TOP==='eta')refreshTop();drawSig();applyCrise();go('res');if(innerWidth<900)document.getElementById('panel').classList.remove('min');crisisBtn()}
+function crisisOff(){CRISE=false;if(SIGL){map.removeLayer(SIGL);SIGL=null}applyCrise();ui();crisisBtn();if(TOP==='eta')refreshTop()}
+function crisisBtn(){const b=document.getElementById('crisebtn');if(b){b.classList.toggle('on',CRISE);b.setAttribute('aria-pressed',CRISE);b.textContent=CRISE?'Vue de crise : active':'Vue de crise'}}
+function applyCrise(){applyRiskLayers();const hb=!CRISE||CRV.b;[H,MK].forEach(l=>{if(!l)return;if(hb){if(!map.hasLayer(l))l.addTo(map)}else if(map.hasLayer(l))map.removeLayer(l)});if(hb&&map.getZoom()>=17&&MK)map.removeLayer(MK);if(SIGL)SIGL.eachLayer(x=>x.bringToFront())}
+function crv(k,v){CRV[k]=v;applyCrise()}
+function drawSig(){if(SIGL){map.removeLayer(SIGL);SIGL=null}if(!CRISE)return;SIGL=L.layerGroup(SIG().map(x=>L.circleMarker([x.lat,x.lng],{renderer:CV,radius:11,color:'#fff',weight:3,fillColor:SST[x.st][1],fillOpacity:1}).bindTooltip('<b>'+STY[x.t]+'</b> · '+esc(x.v)+'<br>'+x.h+' · '+SST[x.st][0]+(x.n>1?' · '+x.n+' signalements regroupés':''),{className:'tt'}))).addTo(map)}
+function setSig(id,st){const x=SIG().find(y=>y.id===id);if(x)x.st=st;drawSig();ui()}
+function crisisRes(){const S=SIG(),c=k=>S.filter(x=>x.st===k).length;
+ const RN_={all:'tous risques',feu:'feu de forêt',tem:'tempête',inond:'inondation'}[RISK];
+ let h='<div id="metC" style="margin:0 0 10px"></div><div class="hint" style="background:#fdecea;border-color:#f5b7b1"><b>Vue de crise · '+RN_+' · démonstration</b> : signalements fictifs pour montrer le fonctionnement. En service, ils arrivent de la page habitant <a href="r/signal.html" target="_blank">(voir la page)</a>. Le risque se change en haut à gauche.</div>';
+ const opts=RISK==='tem'?[['v','Voies à risque'],['l','Lignes électriques'],['p','Terrains boisés'],['b','Constructions à risque']]:RISK==='inond'?[['z','Zone inondable'],['r','Routes submergées'],['b','Constructions']]:[['b','Constructions']];
+ h+='<div class="crv">Afficher : '+opts.map(x=>'<label><input type="checkbox" '+(CRV[x[0]]?'checked':'')+' onchange="crv(\''+x[0]+'\',this.checked)"> '+x[1]+'</label>').join('')+'</div>';
  h+='<div class="chips" style="margin:0 0 8px">'+Object.keys(SST).map(k=>'<span class="chip"><b style="color:'+SST[k][1]+'">●</b> '+SST[k][0]+' : <b>'+c(k)+'</b></span>').join('')+'</div>';
- h+=SIG.map(x=>'<div class="li" style="cursor:default"><span class="dt" style="background:'+SST[x.st][1]+'"></span><span class="ad"><a href="#" onclick="map.setView(['+x.lat+','+x.lng+'],18);return false" style="color:#1c2126">'+STY[x.t]+' · '+esc(x.v)+'</a><span class="bs muted">'+x.h+(x.n>1?' · '+x.n+' signalements regroupés':'')+'</span></span><select aria-label="Statut" onchange="setSig('+x.id+',this.value)" style="font-size:12.5px;border:1px solid #d6d0c6;border-radius:7px;padding:3px">'+Object.keys(SST).map(k=>'<option value="'+k+'"'+(x.st===k?' selected':'')+'>'+SST[k][0]+'</option>').join('')+'</select></div>').join('');
- const V=D.cm?D.cm.v.map((s,i)=>[s,(D.st.v[i]||[0])[0]]).filter(x=>x[1]>=1500&&x[0].n):[],seen={},top=[];V.sort((a,b)=>b[1]-a[1]).forEach(x=>{if(!seen[x[0].n]){seen[x[0].n]=1;top.push(x[0].n)}});
- h+='<h4 style="margin:12px 0 2px">Voies à reconnaître en premier</h4><div class="muted">Bordées d\'arbres pouvant les couper (calcul avant tempête).</div><div style="font-size:13px;margin-top:4px">'+top.slice(0,10).map(esc).join(' · ')+'</div>';
- h+='<div class="btns" style="margin-top:12px"><button class="btn" onclick="csvSig()">Exporter pour les services techniques</button><button class="btn" onclick="crisisOff()">Fermer la vue de crise</button></div>';return h}
-function csvSig(){const rows=[['N°','Heure','Type','Voie','Latitude','Longitude','Statut','Signalements regroupés']].concat(SIG.map(x=>[x.id,x.h,STY[x.t],x.v,x.lat,x.lng,SST[x.st][0],x.n]));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\n')],{type:'text/csv'}));a.download='signalements_'+D.city+'.csv';a.click()}
+ h+=S.map(x=>'<div class="li" style="cursor:default"><span class="dt" style="background:'+SST[x.st][1]+'"></span><span class="ad"><a href="#" onclick="map.setView(['+x.lat+','+x.lng+'],18);return false" style="color:#1c2126">'+STY[x.t]+' · '+esc(x.v)+'</a><span class="bs muted">'+x.h+(x.n>1?' · '+x.n+' signalements regroupés':'')+'</span></span><select aria-label="Statut" onchange="setSig('+x.id+',this.value)" style="font-size:12.5px;border:1px solid #d6d0c6;border-radius:7px;padding:3px">'+Object.keys(SST).map(k=>'<option value="'+k+'"'+(x.st===k?' selected':'')+'>'+SST[k][0]+'</option>').join('')+'</select></div>').join('');
+ let top=[],tt='';
+ if(RISK==='tem'&&D.st){tt='Voies à reconnaître en premier';const seen={};(D.cm?D.cm.v.map((s,i)=>[s,(D.st.v[i]||[0])[0]]).filter(x=>x[1]>=1500&&x[0].n):[]).sort((a,b)=>b[1]-a[1]).forEach(x=>{if(!seen[x[0].n]){seen[x[0].n]=1;top.push(x[0].n)}})}
+ else if(RISK==='inond'&&D.fl){tt='Routes submergées (crue de référence)';const seen={};D.fl.r.filter(r=>r.n).sort((a,b)=>b.h-a.h).forEach(r=>{if(!seen[r.n]){seen[r.n]=1;top.push(r.n)}})}
+ else{tt='Maisons en lisière à vérifier en premier';top=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&p.df<=10&&p.a).slice(0,10).map(p=>p.a)}
+ if(top.length)h+='<h4 style="margin:12px 0 2px">'+tt+'</h4><div style="font-size:13px;margin-top:4px">'+top.slice(0,10).map(esc).join(' · ')+'</div>';
+ if(RISK==='inond'&&D.fl)h+='<div class="muted" style="margin-top:6px">'+D.fl.n_iso+' constructions isolées et '+D.fl.lg+' logements en zone inondable (plan communal de sauvegarde).</div>';
+ setTimeout(()=>fillMet('metC',0),0);h+='<div class="btns" style="margin-top:12px"><button class="btn" onclick="csvSig()">Exporter pour les services techniques</button><button class="btn" onclick="crisisOff()">Fermer la vue de crise</button></div>';return h}
+function csvSig(){const rows=[['N°','Heure','Type','Lieu','Latitude','Longitude','Statut','Signalements regroupés']].concat(SIG().map(x=>[x.id,x.h,STY[x.t],x.v,x.lat,x.lng,SST[x.st][0],x.n]));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\n')],{type:'text/csv'}));a.download='signalements_'+D.city+'_'+RISK+'.csv';a.click()}
 
 function zoomP(id){const q=D.st.p.find(x=>x.i===id);map.fitBounds(L.polygon(q.g).getBounds().pad(.3),{maxZoom:18});if(innerWidth<900)document.getElementById('panel').classList.add('min')}
 /* encadré dans la fiche */
-function riskFiche(p){if(RISK==='tem'){const s=D.st.b[p.k];return '<div class="eff" style="background:#f5eef8;border-color:#e1cdea;margin-top:10px"><b style="color:#6a1b9a">Tempête</b><br>'+(s?m2(s[0])+' de couronne d\'arbres de plus de 8 m capables de tomber sur la construction'+(s[1]>=10?', dont '+m2(s[1])+' d\'arbres secs ou dépérissants (indice infrarouge, à vérifier)':'')+'.':'Pas d\'arbre de plus de 8 m à portée.')+'<div class="muted" style="margin-top:3px">Conseil : faire examiner ces arbres par un élagueur ; l\'image ne dit rien de leur solidité.</div></div>'}
+function riskFiche(p){if(RISK==='all')return allFiche(p);if(RISK==='tem'){const s=D.st.b[p.k];return '<div class="eff" style="background:#f5eef8;border-color:#e1cdea;margin-top:10px"><b style="color:#6a1b9a">Tempête</b><br>'+(s?m2(s[0])+' de couronne d\'arbres de plus de 8 m capables de tomber sur la construction'+(s[1]>=10?', dont '+m2(s[1])+' d\'arbres secs ou dépérissants (indice infrarouge, à vérifier)':'')+'.':'Pas d\'arbre de plus de 8 m à portée.')+'<div class="muted" style="margin-top:3px">Conseil : faire examiner ces arbres par un élagueur ; l\'image ne dit rien de leur solidité.</div></div>'}
  if(RISK==='inond'){const f=D.fl.b[p.k];return '<div class="eff" style="background:#e8f1fb;border-color:#bfd7f2;margin-top:10px"><b style="color:#0d47a1">Inondation (crue de référence)</b><br>'+(!f?'Hors de la zone inondable réglementaire.':(f[0]>0?'Environ <b>'+(f[0]/100).toFixed(1).replace('.',',')+' m d\'eau</b> estimés au pied des murs.':(f[2]?'Dans la zone réglementaire, terrain au-dessus du niveau estimé.':''))+(f[1]?' <b>Isolée</b> : routes d\'accès submergées.':''))+'<div class="muted" style="margin-top:3px">Estimation à partir du relief : hauteur du rez-de-chaussée et caves non connues.</div></div>'}
  return ''}
 function etaRisk(){let h='';
@@ -789,6 +828,78 @@ function etaRisk(){let h='';
   h+='<div class="box"><h3>Tempête</h3><div class="chips"><span class="chip">Constructions très exposées : <b>'+n+'</b></span><span class="chip">Lignes électriques très exposées : <b>'+(lr*0.05).toFixed(1).replace('.',',')+' km</b></span><span class="chip">Terrains à voir : <b>'+Math.min(D.st.p.length,50)+'</b></span></div><div class="btns"><button class="btn" onclick="setTop(\'map\');setRisk(\'tem\')">Voir sur la carte</button></div></div>'}
  if(D.fl)h+='<div class="box"><h3>Inondation</h3><div class="chips"><span class="chip">Constructions inondables : <b>'+D.fl.n_fl+'</b></span><span class="chip">Isolées : <b>'+D.fl.n_iso+'</b></span><span class="chip">Logements : <b>'+D.fl.lg+'</b></span><span class="chip">Sites sensibles : <b>'+D.fl.sites.length+'</b></span></div><div class="btns"><button class="btn" onclick="setTop(\'map\');setRisk(\'inond\')">Voir sur la carte</button></div></div>';
  return h}
+
+/* ===== Vue générale (tous risques), météo de crise, KPI de crise, courriers par thème et multirisque ===== */
+RC.a3='#4a148c';RC.a2='#c62828';RC.a1='#f0a020';RC.a0='#cfc9bd';
+RN.a3='3 risques forts';RN.a2='2 risques forts';RN.a1='1 risque fort';RN.a0='Aucun risque fort';
+function rFeu(p){return !!(p.l&&p.g==='r')}
+function rTem(p){return !!D.st&&stG(p)==='r'}
+function rInd(p){if(!D.fl)return false;const g=flG(p);return g==='r'||g==='i'}
+function nRisk(p){return (rFeu(p)?1:0)+(rTem(p)?1:0)+(rInd(p)?1:0)}
+const _key2=key,_keys2=keys;
+key=p=>RISK==='all'?'a'+nRisk(p):_key2(p);
+keys=()=>RISK==='all'?['a3','a2','a1','a0'].filter(k=>D.fl||k!=='a3'):_keys2();
+/* résumé « vue générale » */
+function allRes(){const F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),n=f=>F.filter(f).length;
+ const multi=F.filter(p=>nRisk(p)>=2).sort((a,b)=>nRisk(b)-nRisk(a));
+ let h='<p style="margin-top:0"><b>Vue générale</b> : chaque construction est colorée selon le nombre de risques forts qui la concernent. Le détail se voit dans chaque thème.</p>';
+ const row=(c,t,v,r)=>'<div class="step"><div class="n" style="background:'+c+'">'+v+'</div><div><b>'+t+'</b> <a href="#" onclick="setRisk(\''+r+'\');return false">Voir le thème</a></div></div>';
+ h+=row('#c62828','Feu de forêt : travaux de débroussaillement à faire (zone légale)',n(rFeu),'feu');
+ if(D.st)h+=row('#8e24aa','Tempête : beaucoup d\'arbres pouvant tomber sur la construction',n(rTem),'tem');
+ if(D.fl)h+=row('#0d47a1','Inondation : plus de 1 m d\'eau estimé ou construction isolée',n(rInd),'inond');
+ h+='<h4 style="margin:12px 0 2px">Exposées à plusieurs risques ('+multi.length+')</h4><div class="muted">À traiter en premier, avec un courrier multirisque.</div>'+
+  multi.slice(0,40).map(p=>'<div class="li" onclick="openByK('+p.k+')"><span class="dt" style="background:'+colOf(p)+'"></span><span class="ad">'+esc(p.a||'Sans adresse')+'<span class="bs muted">'+[rFeu(p)?'feu':'',rTem(p)?'tempête':'',rInd(p)?'inondation':''].filter(Boolean).join(' · ')+'</span></span><span class="muted">›</span></div>').join('');
+ return h}
+function allFiche(p){const L_=[];
+ L_.push('<b style="color:#c62828">Feu</b> : '+(p.l?GN[p.g||'v'][0].toLowerCase():'hors zone légale'+(p.g&&p.g!=='v'?' ('+GN[p.g][0].toLowerCase()+', recommandé)':'')));
+ if(D.st){const s=D.st.b[p.k];L_.push('<b style="color:#8e24aa">Tempête</b> : '+(s?m2(s[0])+' de couronne d\'arbres à portée':'pas d\'arbre de plus de 8 m à portée'))}
+ if(D.fl){const f=D.fl.b[p.k];L_.push('<b style="color:#0d47a1">Inondation</b> : '+(!f?'hors zone inondable':(f[0]>0?'environ '+(f[0]/100).toFixed(1).replace('.',',')+' m d\'eau estimé':'zone inondable')+(f[1]?', isolée':'')))}
+ return '<div class="eff" style="background:#f6f4ef;border-color:#e2ddd3;margin-top:10px">'+L_.join('<br>')+'</div>'}
+/* météo locale (Open-Meteo, modèles Météo-France) */
+let MET=null,METT=0;
+function metCenter(){const b=L.geoJSON(D.h).getBounds().getCenter();return [b.lat.toFixed(3),b.lng.toFixed(3)]}
+async function meteo(){if(MET&&Date.now()-METT<600000)return MET;const c=metCenter();
+ try{const r=await fetch('https://api.open-meteo.com/v1/meteofrance?latitude='+c[0]+'&longitude='+c[1]+'&current=temperature_2m,precipitation,wind_speed_10m,wind_gusts_10m,wind_direction_10m&hourly=wind_gusts_10m,precipitation&forecast_hours=12&timezone=Europe%2FParis&wind_speed_unit=kmh');MET=await r.json();METT=Date.now();return MET}catch(e){return null}}
+function dirTxt(d){return ['N','NE','E','SE','S','SO','O','NO'][Math.round(d/45)%8]}
+function metHTML(m,big){if(!m||!m.current)return '<div class="muted">Météo indisponible.</div>';const c=m.current,H_=m.hourly||{},g=H_.wind_gusts_10m||[],pr=H_.precipitation||[],mx=Math.max(60,...g);
+ const col=v=>v>=100?'#b71c1c':v>=70?'#e65100':v>=50?'#f0a020':'#90a4ae';
+ return '<div class="met'+(big?' big':'')+'"><div class="mh"><b>Météo locale</b><span class="muted">'+esc(D.nom)+' · '+c.time.slice(11)+'</span></div><div class="mg">'+
+  '<div><span class="mv" style="color:'+col(c.wind_gusts_10m)+'">'+Math.round(c.wind_gusts_10m)+'</span><span class="mu">km/h</span><span class="ml">rafales</span></div>'+
+  '<div><span class="mv">'+Math.round(c.wind_speed_10m)+'</span><span class="mu">km/h</span><span class="ml">vent moyen, '+dirTxt(c.wind_direction_10m)+'</span></div>'+
+  '<div><span class="mv">'+String(c.precipitation).replace('.',',')+'</span><span class="mu">mm</span><span class="ml">pluie (15 min)</span></div>'+
+  '<div><span class="mv">'+Math.round(c.temperature_2m)+'</span><span class="mu">°C</span><span class="ml">température</span></div></div>'+
+  '<div class="mb" aria-label="Rafales des 12 prochaines heures">'+g.map((v,i)=>'<div title="'+(H_.time?H_.time[i].slice(11):'')+' : '+Math.round(v)+' km/h, '+pr[i]+' mm"><i style="height:'+Math.round(100*v/mx)+'%;background:'+col(v)+'"></i><span>'+(H_.time?H_.time[i].slice(11,13):'')+'</span></div>').join('')+'</div>'+
+  '<div class="muted" style="margin-top:4px">Rafales des 12 prochaines heures (modèles Météo-France via Open-Meteo). Vigilance officielle : <a href="https://vigilance.meteofrance.fr" target="_blank">vigilance.meteofrance.fr</a></div></div>'}
+function fillMet(id,big){meteo().then(m=>{const e=document.getElementById(id);if(e)e.innerHTML=metHTML(m,big)})}
+/* signalements en vue générale = tous les thèmes */
+function SIGall(){const keep=RISK;const out=[];['feu','tem','inond'].forEach(r=>{if(r==='tem'&&!D.st)return;if(r==='inond'&&!D.fl)return;RISK=r;SIG().forEach(x=>out.push(Object.assign({},x,{id:out.length+1,r:r})))});RISK=keep;return out}
+/* écran État en mode crise : uniquement la crise */
+function crisisEta(){const S=RISK==='all'?SIGall():SIG(),c=k=>S.filter(x=>x.st===k).length,T={};S.forEach(x=>T[x.t]=(T[x.t]||0)+1);
+ const RN_={all:'tous risques',feu:'feu de forêt',tem:'tempête',inond:'inondation'}[RISK];
+ let h='<div class="ph"><h1>Crise en cours · '+RN_+'</h1><span class="muted">Démonstration : signalements fictifs</span><span class="sp"></span><button class="btn" onclick="csvSig()">Exporter</button><button class="btn" onclick="crisisOff();setTop(\'eta\')">Fermer la vue de crise</button></div>';
+ h+='<div id="metE" class="pwide" style="margin-bottom:14px"><div class="muted">Chargement de la météo…</div></div>';
+ const kp=(t,v,d,col)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv" style="color:'+(col||'#1c2126')+'">'+v+'</div><div class="kd">'+d+'</div></div>';
+ h+='<div class="kgrid">'+kp('Signalements reçus',S.length,S.reduce((a,x)=>a+x.n,0)+' en comptant les doublons regroupés')+kp('À prendre en charge',c('s'),'signalés, personne affecté','#c62828')+kp('En cours',c('p'),'pris en charge','#ef8a17')+kp('Traités',c('d'),'route dégagée, mise en sécurité faite','#2e7d32')+'</div>';
+ h+='<div class="pcols"><div class="box"><h3>Par type</h3><table class="pt">'+Object.keys(T).map(k=>'<tr><td>'+STY[k]+'</td><td class="r">'+T[k]+'</td></tr>').join('')+'</table></div>';
+ if((RISK==='inond'||RISK==='all')&&D.fl)h+='<div class="box"><h3>Inondation</h3><div class="chips"><span class="chip">Constructions inondables : <b>'+D.fl.n_fl+'</b></span><span class="chip">Isolées : <b>'+D.fl.n_iso+'</b></span><span class="chip">Logements : <b>'+D.fl.lg+'</b></span><span class="chip">Routes submergées : <b>'+D.fl.r.length+'</b> tronçons</span></div></div>';
+ if((RISK==='tem'||RISK==='all')&&D.st)h+='<div class="box"><h3>Tempête</h3><div class="chips"><span class="chip">Constructions très exposées : <b>'+D.h.features.filter(f=>f.properties.k!==undefined&&stG(f.properties)==='r').length+'</b></span><span class="chip">Lignes très exposées : <b>'+(D.st.l.filter(s=>s.r>=300).length*0.05).toFixed(1).replace('.',',')+' km</b></span></div></div>';
+ h+='<div class="box"><h3>Signalements</h3>'+S.map(x=>'<div class="li" style="cursor:default"><span class="dt" style="background:'+SST[x.st][1]+'"></span><span class="ad">'+STY[x.t]+' · '+esc(x.v)+'<span class="bs muted">'+x.h+' · '+SST[x.st][0]+'</span></span></div>').join('')+'</div></div>';
+ setTimeout(()=>fillMet('metE',1),0);return h}
+/* courrier par thème (tempête, inondation) et multirisque (vue générale) */
+function themeBody(p,F,t){const H=HAB(p),Hc=HAB(p,1);
+ if(t==='tem'){const s=D.st&&D.st.b[p.k];if(!s)return '';return '<h3>Tempête : arbres proches</h3><p>Le relevé laser de l\'IGN montre environ <b>'+m2(s[0])+'</b> de couronne d\'arbres de plus de 8 m assez hauts pour atteindre '+H+' s\'ils tombaient'+(s[1]>=10?', dont environ '+m2(s[1])+' d\'arbres qui paraissent secs ou dépérissants (à vérifier)':'')+'.</p><ol><li>Faire examiner ces arbres par un élagueur ou un professionnel de l\'arbre : l\'image ne dit rien de leur solidité (racines, pourriture).</li><li>Élaguer ou abattre les arbres dangereux, en priorité ceux qui penchent vers la maison, la route ou une ligne électrique.</li><li>Pour un arbre sur votre terrain proche d\'une ligne électrique, ne pas intervenir soi-même : contacter le gestionnaire du réseau.</li></ol><p>Le propriétaire d\'un arbre est responsable des dégâts qu\'il cause en tombant.</p>'}
+ if(t==='inond'){const f=D.fl&&D.fl.b[p.k];if(!f)return '';return '<h3>Inondation</h3><p>'+Hc+' se trouve '+(f[2]?'dans la zone inondable du plan de prévention des risques d\'inondation de la Seine':'à proximité de la zone inondable')+'. '+(f[0]>0?'Pour la crue de référence, la hauteur d\'eau au pied des murs est estimée à environ <b>'+(f[0]/100).toFixed(1).replace('.',',')+' m</b> (estimation à partir du relief, rez-de-chaussée et caves non connus). ':'')+(f[1]?'En cas de crue, <b>les routes d\'accès seraient coupées</b> : prévoyez de quoi tenir plusieurs jours ou de partir tôt. ':'')+'</p><ol><li>Préparer un kit d\'urgence (papiers, médicaments, lampe, radio à piles, eau).</li><li>Mettre en hauteur les objets de valeur et les produits dangereux ; savoir couper l\'électricité et le gaz.</li><li>S\'inscrire au système d\'alerte de la commune et suivre les consignes de la mairie.</li><li>Consulter en mairie le règlement du plan de prévention : il peut imposer des mesures aux maisons existantes.</li></ol>'}
+ if(t==='feu'){const P=plan(p,F);if(!P.terrain.length&&!P.voisins.length)return '';return '<h3>Feu de forêt</h3><ol>'+P.terrain.concat(P.voisins).map(x=>'<li>'+x+'</li>').join('')+'</ol>'}
+ return ''}
+function lettreTheme(themes){if(!CUR)return;const p=CUR.p,F=CUR.F,X=lettreParts(p,F),body=themes.map(t=>themeBody(p,F,t)).join('');
+ const T={tem:'Prévention tempête – arbres proches de '+HAB(p),inond:'Information inondation – '+HAB(p),all:'Prévention des risques naturels – '+HAB(p)};const k=themes.length>1?'all':themes[0];
+ const intro=k==='all'?'<p>La commune fait le point, maison par maison, sur les risques naturels qui la concernent : feu de forêt, tempête et inondation. Voici ce qui ressort pour '+HAB(p)+', à partir des données publiques de l\'IGN.</p>':k==='tem'?'<p>Après les tempêtes de ces dernières années, la commune repère les arbres qui pourraient tomber sur les maisons, les routes et les lignes électriques. Ce courrier est un conseil, pas une mise en demeure.</p>':'<p>La commune informe les habitants situés en zone inondable ou qui pourraient être isolés en cas de crue.</p>';
+ const html='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Courrier – '+esc(X.adr)+'</title><style>'+LCSS+'</style></head><body><div class="bar"><b>'+(k==='all'?'Courrier multirisque':k==='tem'?'Courrier tempête':'Courrier inondation')+'</b><button class="pr" onclick="env()">Imprimer / PDF et enregistrer l\'envoi</button><span>Zones jaunes modifiables.</span></div>'+
+ '<div class="pg">'+X.head+'<div class="obj"><b>Objet : '+T[k]+(X.adr?' – '+esc(X.adr):'')+'</b></div><p>Madame, Monsieur,</p>'+intro+(body||'<p><i>Rien de particulier n\'apparaît pour '+HAB(p)+'.</i></p>')+X.tail+'</div>'+X.annex+
+ '<script>function env(){try{window.opener&&window.opener.logEnvoi&&window.opener.logEnvoi('+p.k+',"courrier","'+(k==='all'?'premier':'bienveillant')+'")}catch(e){}window.print()}<\/script></body></html>';
+ const u=URL.createObjectURL(new Blob([html],{type:'text/html'}));const w=window.open(u,'_blank');if(!w)location.href=u}
+const _lettre0=lettre;
+lettre=function(){if(RISK==='feu')return _lettre0();if(RISK==='all'){const p=CUR.p;return lettreTheme(['feu'].concat(D.st&&rTem(p)||D.st&&D.st.b[p.k]?['tem']:[]).concat(D.fl&&D.fl.b[p.k]?['inond']:[]))}return lettreTheme([RISK])};
 
 function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' · préparation aux feux de végétation';if(D.porge)document.getElementById('stt').textContent='Démonstration sur un feu réel · données d\'avant le feu';
  const T=[['res','Résumé'],['lst','Liste']];if(D.g)T.push(['cou','Courriers']);if(D.par)T.push(['par','Parcelles']);if(D.z)T.push(['sec','Secteurs']);
@@ -822,7 +933,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
  loadSuivi().then(()=>{restyle();legend();kpi();updTabs()});if(innerWidth<900){const t=document.querySelector('.leaflet-top.leaflet-right');if(t)t.style.top=(document.getElementById('head').offsetHeight+14)+'px';}
  map.on('zoomend',()=>{const z=map.getZoom();if(z>=17)map.removeLayer(MK);else if(!map.hasLayer(MK))MK.addTo(map);});
  document.querySelectorAll('.tab[data-t]').forEach(b=>b.onclick=()=>go(b.dataset.t));
- updTabs();initLayers();initRiskLayers();try{const r0=localStorage.getItem('oldrisk');if(r0&&(r0!=='inond'||D.fl))setRisk(r0);else riskBar()}catch(_){riskBar()}document.getElementById('tbn').textContent=D.nom;let T0='map';try{T0=localStorage.getItem('oldtop')||'map'}catch(_){}setTop(T0);
+ updTabs();initLayers();initRiskLayers();try{const r0=localStorage.getItem('oldrisk');if(r0&&(r0!=='inond'||D.fl))setRisk(r0);else setRisk('all')}catch(_){riskBar()}document.getElementById('tbn').textContent=D.nom;let T0='map';try{T0=localStorage.getItem('oldtop')||'map'}catch(_){}setTop(T0);
  document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
  if(innerWidth<900)document.getElementById('panel').classList.add('min');
  document.onkeydown=e=>{if(tab!=='fic'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape')go(PREV);else if(e.key==='ArrowRight')nav(1);else if(e.key==='ArrowLeft')nav(-1);};
