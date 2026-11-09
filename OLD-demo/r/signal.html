@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Signaler un dégât – tempête</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:#1c2126;background:#f1efe9}
+.w{max-width:620px;margin:0 auto;padding:14px}.card{background:#fff;border-radius:14px;box-shadow:0 1px 6px rgba(0,0,0,.1);padding:16px;margin:12px 0}
+h1{font-size:20px;margin:4px 0}h2{font-size:16px;margin:0 0 8px}.muted{color:#5d6670;font-size:13px}
+.urg{background:#b71c1c;color:#fff;border-radius:14px;padding:12px 14px;font-size:14px}.urg b{font-size:16px}.urg a{color:#fff;font-weight:700}
+.demo{background:#fff3cd;border:1px solid #e6c65c;border-radius:12px;padding:10px 12px;font-size:13px}
+.types{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.types label{border:1.5px solid #e2ddd3;border-radius:12px;padding:12px;cursor:pointer;font-weight:600;font-size:14px;display:flex;gap:8px;align-items:center;min-height:52px}.types input{accent-color:#1c2126}.types label.on{border-color:#1c2126;background:#faf8f3}
+#m{height:240px;border-radius:12px;margin-top:8px}
+textarea,input[type=file]{width:100%;font:inherit;border:1px solid #d6d0c6;border-radius:9px;padding:8px;margin:4px 0}
+button.go{width:100%;font:600 16px system-ui;border:0;border-radius:11px;padding:14px;background:#1c2126;color:#fff;cursor:pointer;margin-top:10px}
+.bt2{font:inherit;font-size:14px;border:1px solid #d6d0c6;background:#fff;border-radius:10px;padding:9px 12px;cursor:pointer;margin-top:6px}
+.ok{display:none;text-align:center}
+</style></head><body><div class="w">
+<div class="muted">Commune · tempête en cours</div>
+<h1>Signaler un dégât</h1>
+<div class="urg"><b>Danger immédiat ?</b> Appelez le <a href="tel:18">18</a> ou le <a href="tel:112">112</a>.<br>Câble électrique tombé : ne vous approchez pas, appelez le dépannage électricité (numéro sur votre facture).<br>Ce formulaire n'est pas un service d'urgence.</div>
+<div class="card demo"><b>Démonstration.</b> Rien n'est envoyé depuis cette page.</div>
+<div class="card"><h2>1. Quoi ?</h2><div class="types" id="ty">
+<label><input type="radio" name="t" value="arbre_route">Arbre sur la route</label>
+<label><input type="radio" name="t" value="cable">Câble ou poteau tombé</label>
+<label><input type="radio" name="t" value="toiture">Toiture, bâtiment</label>
+<label><input type="radio" name="t" value="arbre_maison">Arbre sur une maison</label>
+<label><input type="radio" name="t" value="eau">Route inondée</label>
+<label><input type="radio" name="t" value="autre">Autre</label></div></div>
+<div class="card"><h2>2. Où ?</h2><button class="bt2" onclick="loc()">Utiliser ma position</button><div class="muted" id="lm">Ou touchez la carte pour placer le point.</div><div id="m"></div></div>
+<div class="card"><h2>3. Photo (facultative)</h2><input type="file" accept="image/*" capture="environment" id="ph"><div class="muted" id="phm">Seule la position du signalement est gardée ; les autres informations cachées de la photo (téléphone, date) sont supprimées.</div>
+<textarea id="cm" rows="3" placeholder="Précision (facultatif, sans nom ni coordonnées) : route coupée dans les deux sens, câble sur la chaussée…"></textarea>
+<button class="go" onclick="send()">Envoyer à la mairie</button></div>
+<div class="card ok" id="ok"><b>Merci, signalement reçu.</b><p>La mairie le voit sur sa carte de crise et l'attribue aux services concernés. Inutile de le renvoyer.</p><p class="muted">(Démonstration : rien n'a été envoyé.)</p></div>
+<div class="muted" style="margin:10px 4px 30px"><b>Votre identité n'est pas enregistrée.</b> Données conservées : type, position, photo et précision, pour la durée de la crise. Traitement mis en œuvre par la mairie (gestion de crise, mission d'intérêt public).</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const map=L.map('m').setView([48.424,2.757],15);L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/png&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',{maxZoom:19,attribution:'IGN'}).addTo(map);
+let mk=null;function put(ll){if(mk)mk.setLatLng(ll);else mk=L.marker(ll).addTo(map);document.getElementById('lm').textContent='Point placé. Touchez la carte pour le déplacer.'}
+map.on('click',e=>put(e.latlng));
+function loc(){if(!navigator.geolocation){alert('Position indisponible : touchez la carte.');return}navigator.geolocation.getCurrentPosition(p=>{const ll=[p.coords.latitude,p.coords.longitude];map.setView(ll,17);put(L.latLng(ll))},()=>alert('Position refusée : touchez la carte.'))}
+document.querySelectorAll('#ty input').forEach(i=>i.onchange=()=>document.querySelectorAll('#ty label').forEach(l=>l.classList.toggle('on',l.querySelector('input').checked)));
+document.getElementById('ph').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,1600/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(b=>document.getElementById('phm').textContent='Photo prête ('+Math.round(b.size/1024)+' ko), informations cachées supprimées.','image/jpeg',.85)};im.src=URL.createObjectURL(f)};
+function send(){if(!document.querySelector('#ty input:checked')){alert('Choisissez le type de dégât.');return}if(!mk){alert('Indiquez le lieu (position ou carte).');return}document.querySelectorAll('.card').forEach(c=>{if(!c.classList.contains('ok'))c.style.display='none'});document.getElementById('ok').style.display='block';scrollTo(0,0)}
+</script></body></html>
