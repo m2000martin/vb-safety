@@ -187,8 +187,17 @@ details{margin-top:14px;font-size:13px;color:#3a4148}summary{cursor:pointer;font
 #afm .ok{color:#2e7d32;font-size:12.5px;margin-top:4px}#afm .err{color:#c62828;font-size:13px;margin-top:8px}#afm .cb{display:flex;gap:8px;align-items:center;font-weight:600;margin-top:12px}#afm .fb{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 #afpick{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:5001;background:#1c2126;color:#fff;border-radius:10px;padding:9px 14px;font-size:13.5px;box-shadow:0 4px 18px rgba(0,0,0,.3)}
 .idsc{font-size:12.5px;color:#3a4148;margin-top:3px;line-height:1.4}
-</style><style>#chg{display:none!important}</style></head><body>
-<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a class="rdvt" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">Demander un rdv pour ma ville</a><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Ouvrir une crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
+.wx{background:#fff;border:1px solid #e6e1d8;border-radius:14px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.wh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}.wh b{font-size:14.5px;letter-spacing:-.01em}.wh span{font-size:12px;color:#7a8590}
+.wv{display:flex;align-items:center;gap:8px;font-size:13px;border:1px solid #e6e1d8;border-radius:9px;padding:7px 10px;margin-bottom:6px;background:#f8f7f3}.wv i{flex:none;width:9px;height:9px;border-radius:50%}.wv span{color:#7a8590;font-size:12px}
+details.wv{display:block}details.wv summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;flex-wrap:wrap}details.wv summary::-webkit-details-marker{display:none}details.wv b{text-transform:none}details.wv p{margin:6px 0 2px 17px;font-size:12.5px;line-height:1.45;color:#3a4148}details.wv .wc{color:#5d6670}
+.wg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.wt{background:#f8f7f3;border-radius:10px;padding:8px 10px}.wt b{display:block;font-size:20px;font-weight:750;letter-spacing:-.02em;line-height:1.15;color:#1c2126}.wt b small{font-size:11.5px;font-weight:500;color:#7a8590;margin-left:2px}.wt span{font-size:11.5px;color:#5d6670}
+.wb{display:flex;gap:4px;align-items:flex-end;height:46px;margin-top:12px}.wb>div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.wb i{display:block;width:100%;max-width:18px;border-radius:4px 4px 1px 1px}.wb span{font-size:10px;color:#9aa3ab;height:12px;margin-top:3px}
+.wl{font-size:11px;color:#9aa3ab;margin-top:2px}.wf{font-size:11px;color:#9aa3ab;margin-top:10px;padding-top:8px;border-top:1px solid #f0ede6}.wf a{color:#7a8590;text-decoration:none}.wf a:hover{color:#1c2126;text-decoration:underline}.wx-na{font-size:12.5px;color:#7a8590;margin-top:6px}
+.wx.big .wt b{font-size:30px}.wx.big .wb{height:70px}
+@media(max-width:560px){.wg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style><style>#chg,#chg3{display:none!important}</style></head><body>
+<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a class="rdvt" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">Demander un rdv pour ma ville</a><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Activer la cellule de crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
 <div id="map"></div><div id="page"></div><div id="pcc"><div id="pcch"></div><div id="pcct"><button data-t="map" onclick="pccTab('map')">Carte et état de la commune</button><button data-t="act" onclick="pccTab('act')">Actions en cours</button></div><div class="pccb"><section id="pccL" aria-label="Carte et état de la commune"><div id="pccS"></div><div id="pccmap"></div></section><section id="pccR" aria-label="Actions en cours"><div id="pccl"></div><div id="pccr"></div></section></div></div>
 <div id="head" class="card">
  <button id="hx" onclick="this.parentNode.classList.toggle('cmp');setTimeout(placeCtl,0);this.textContent=this.parentNode.classList.contains('cmp')?'▾ détails':'▴ réduire'">▴ réduire</button><h1 id="ttl"></h1>
@@ -869,7 +878,7 @@ function SIG(){if(RISK==='all')return SIGS.all||(SIGS.all=SIGall());return SIGS[
 function crisisToggle(){if(CRISE)crisisOff();else crisisOn()}
 function crisisOn(){CRISE=true;pccOpen();crisisBtn()}
 function crisisOff(){CRISE=false;pccClose();if(SIGL){map.removeLayer(SIGL);SIGL=null}applyCrise();ui();crisisBtn();if(TOP==='eta')refreshTop()}
-function crisisBtn(){const b=document.getElementById('crisebtn');if(b){b.classList.toggle('on',CRISE);b.setAttribute('aria-pressed',CRISE);b.textContent=CRISE?'Crise en cours':'Ouvrir une crise'}}
+function crisisBtn(){const b=document.getElementById('crisebtn');if(b){b.classList.toggle('on',CRISE);b.setAttribute('aria-pressed',CRISE);b.textContent=CRISE?'Cellule de crise active':'Activer la cellule de crise'}}
 function applyCrise(){applyRiskLayers();const hb=!CRISE||CRV.b;[H,MK].forEach(l=>{if(!l)return;if(hb){if(!map.hasLayer(l))l.addTo(map)}else if(map.hasLayer(l))map.removeLayer(l)});if(hb&&map.getZoom()>=17&&MK)map.removeLayer(MK);if(SIGL)SIGL.eachLayer(x=>x.bringToFront())}
 function crv(k,v){CRV[k]=v;applyCrise()}
 function drawSig(){if(SIGL){map.removeLayer(SIGL);SIGL=null}if(!CRISE)return;SIGL=L.layerGroup(SIG().map(x=>L.circleMarker([x.lat,x.lng],{renderer:CV,radius:11,color:'#fff',weight:3,fillColor:SST[x.st][1],fillOpacity:1}).bindTooltip('<b>'+STY[x.t]+'</b> · '+esc(x.v)+'<br>'+x.h+' · '+SST[x.st][0]+(x.n>1?' · '+x.n+' signalements regroupés':''),{className:'tt'}))).addTo(map)}
@@ -950,7 +959,20 @@ function metHTML(m,big){if(!m||!m.current)return '<div class="muted">Météo ind
   '<div><span class="mv">'+Math.round(c.temperature_2m)+'</span><span class="mu">°C</span><span class="ml">température</span></div></div>'+
   '<div class="mb" aria-label="Rafales des 12 prochaines heures">'+g.map((v,i)=>'<div title="'+(H_.time?H_.time[i].slice(11):'')+' : '+Math.round(v)+' km/h, '+pr[i]+' mm"><i style="height:'+Math.round(100*v/mx)+'%;background:'+col(v)+'"></i><span>'+(H_.time?H_.time[i].slice(11,13):'')+'</span></div>').join('')+'</div>'+
   '<div class="muted" style="margin-top:4px">Rafales des 12 prochaines heures (modèles Météo-France via Open-Meteo). </div></div>'}
-function fillMet(id,big){Promise.all([meteo(),vigi()]).then(([m,v])=>{const e=document.getElementById(id);if(e)e.innerHTML=vigHTML(v)+metHTML(m,big)})}
+function wxHTML(m,v,big){const C={jaune:['#f2c200','#fff8d6','#6b5600'],orange:['#ef7d00','#fff0e0','#8a4300'],rouge:['#d32f2f','#fdeaea','#8e1b1b']};
+ const fd=t=>{if(!t)return'';const d=new Date(t);return d.toLocaleDateString('fr-FR',{weekday:'short'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})};
+ let vg;if(!v)vg='<div class="wv wv0"><i style="background:#9aa3ab"></i>Vigilance Météo-France indisponible</div>';
+ else if(!v.l.length)vg='<div class="wv wv0"><i style="background:#2e9e4f"></i>Aucune vigilance Météo-France en cours <span>· dép. '+esc(v.dep||'?')+'</span></div>';
+ else vg=v.l.map(x=>{const c=C[x.couleur]||C.jaune;return '<details class="wv" style="background:'+c[1]+';border-color:'+c[0]+'"><summary><i style="background:'+c[0]+'"></i><b style="color:'+c[2]+'">Vigilance '+x.couleur+' '+esc(x.type)+'</b><span>jusqu\'à '+fd(x.fin)+' · dép. '+esc(v.dep)+'</span></summary>'+(x.texte?'<p>'+esc(x.texte)+'</p>':'')+(x.consigne?'<p class="wc">'+esc(x.consigne)+'</p>':'')+'</details>'}).join('');
+ let mt='<div class="wx-na">Prévisions indisponibles pour le moment.</div>';
+ if(m&&m.current){const c=m.current,H_=m.hourly||{},g=H_.wind_gusts_10m||[],pr=H_.precipitation||[],mx=Math.max(60,...g),col=x=>x>=100?'#b71c1c':x>=70?'#e65100':x>=50?'#e0a100':'#b9c1c8';
+  const tile=(val,u,l,cl)=>'<div class="wt"><b'+(cl?' style="color:'+cl+'"':'')+'>'+val+'<small>'+u+'</small></b><span>'+l+'</span></div>';
+  mt='<div class="wg">'+tile(Math.round(c.wind_gusts_10m),' km/h','Rafales',c.wind_gusts_10m>=50?col(c.wind_gusts_10m):'')+tile(Math.round(c.wind_speed_10m),' km/h','Vent '+dirTxt(c.wind_direction_10m))+tile(String(c.precipitation).replace('.',','),' mm','Pluie 15 min')+tile(Math.round(c.temperature_2m),' °C','Température')+'</div>'+
+   '<div class="wb" aria-label="Rafales des 12 prochaines heures">'+g.map((x,i)=>'<div title="'+(H_.time?H_.time[i].slice(11):'')+' : rafales '+Math.round(x)+' km/h, pluie '+pr[i]+' mm"><i style="height:'+Math.max(6,Math.round(100*x/mx))+'%;background:'+col(x)+'"></i>'+(i%3===0?'<span>'+(H_.time?H_.time[i].slice(11,13)+'h':'')+'</span>':'<span></span>')+'</div>').join('')+'</div><div class="wl">Rafales prévues, 12 prochaines heures</div>'}
+ const tm=m&&m.current?m.current.time.slice(11):'';
+ return '<div class="wx'+(big?' big':'')+'"><div class="wh"><b>Météo et vigilance</b><span>'+esc(D.nom)+(tm?' · '+tm:'')+'</span></div>'+vg+mt+
+  '<div class="wf">Météo-France (vigilance, modèle AROME via Open-Meteo) · <a href="https://vigilance.meteofrance.fr" target="_blank" rel="noopener">Vigilance</a> · <a href="https://www.vigicrues.gouv.fr" target="_blank" rel="noopener">Vigicrues</a> · <a href="https://meteofrance.com/meteo-des-forets" target="_blank" rel="noopener">Météo des forêts</a></div></div>'}
+function fillMet(id,big){Promise.all([meteo(),vigi()]).then(([m,v])=>{const e=document.getElementById(id);if(e)e.innerHTML=wxHTML(m,v,big)})}
 /* signalements en vue générale = tous les thèmes */
 function SIGall(){const keep=RISK;const out=[];['feu','tem','inond'].forEach(r=>{if(r==='tem'&&!D.st)return;if(r==='inond'&&!D.fl)return;RISK=r;SIG().forEach(x=>out.push(Object.assign({},x,{id:out.length+1,r:r})))});RISK=keep;return out}
 /* écran État en mode crise : uniquement la crise */
@@ -1073,7 +1095,7 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
  const ord={chrono:(a,b)=>a.h<b.h?-1:a.h>b.h?1:a.id-b.id,prio:(a,b)=>(a.ok?a.pr:0)-(b.ok?b.pr:0)||(a.h<b.h?-1:1),man:(a,b)=>a.o-b.o};
  let h='<div class="kbar"><div class="seg"><button class="'+(KV==='col'?'on':'')+'" onclick="KV=\'col\';pccRender()">Colonnes</button><button class="'+(KV==='list'?'on':'')+'" onclick="KV=\'list\';pccRender()">Liste</button></div>'+
   (KV==='list'?'<label>Trier : <select onchange="KS=this.value;pccRender()"><option value="chrono"'+(KS==='chrono'?' selected':'')+'>Chronologique</option><option value="prio"'+(KS==='prio'?' selected':'')+'>Par priorité</option><option value="man"'+(KS==='man'?' selected':'')+'>Manuel (glisser-déposer)</option></select></label>':'<span class="muted">Glisser une carte pour changer de colonne ou d\'ordre</span>')+
-  '<button class="btn dark" onclick="alertForm()">+ Ajouter une alerte</button><button class="btn" onclick="newAlert()">Simuler une alerte d\'habitant</button></div>';
+  '<span style="display:inline-flex;gap:8px;flex-wrap:wrap;margin-left:auto"><button class="btn dark" onclick="alertForm()">+ Ajouter une alerte</button><button class="btn" onclick="newAlert()">Simuler une alerte d\'habitant</button></span></div>';
  if(KV==='col'){const cols=[['new','Nouveaux · à classer',live.filter(x=>!x.ok)],[1,'Urgent',live.filter(x=>x.ok&&x.pr===1)],[2,'Important',live.filter(x=>x.ok&&x.pr===2)],[3,'Normal',live.filter(x=>x.ok&&x.pr===3)]];
   h+='<div class="kan">'+cols.map(c=>'<div class="kcol k'+c[0]+'" ondragover="kOver(event)" ondragleave="kLeave(event)" ondrop="kDrop(event,'+(c[0]==='new'?'\'new\'':c[0])+')"><div class="kh"><b>'+c[1]+'</b><span>'+c[2].length+'</span></div>'+c[2].sort(ord.man).map(kc).join('')+(c[2].length?'':'<div class="kemp">'+(c[0]==='new'?'Aucune alerte en attente':'Déposer ici')+'</div>')+'</div>').join('')+'</div>';}
  else h+='<div class="klist" ondragover="kOver(event)" ondragleave="kLeave(event)" ondrop="kDrop(event,null)">'+live.slice().sort(ord[KS]).map(kc).join('')+'</div>';
@@ -1137,7 +1159,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='BsAiqz5t95NOySAxnW/EFA==',ITER=600000;let KEY=null;
+const SALT='T225LglBu3HWfnr+swH15g==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
