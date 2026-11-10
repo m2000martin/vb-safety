@@ -23,7 +23,7 @@
       return;
     }
     var interets = Array.prototype.slice.call(f.querySelectorAll('input[name="interet"]:checked')).map(function (c) { return c.value; });
-    var lignes = ['[Collectivités] Type : ' + v('type_org'), 'Habitants : ' + (v('effectif') || 'non précisé'), 'Échéance : ' + (v('echeance') || 'non précisée'),
+    var lignes = ['[Collectivités] Type : ' + v('type_org'), 'Code postal : ' + (v('effectif') || 'non précisé'),
       'Intérêt : ' + (interets.join(', ') || 'non précisé')];
     if (v('telephone')) lignes.push('Téléphone : ' + v('telephone'));
     if (v('message')) lignes.push('', v('message'));
