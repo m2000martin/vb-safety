@@ -651,7 +651,7 @@
     <div>
       <span class="kicker">Contact</span>
       <h2 class="section-title">Let's talk about your exposures.</h2>
-      <p class="section-lead">Fire service, occupational health service, company or investor: tell us about your context and we will get back to you quickly.</p>
+      <p class="section-lead">Fire service, occupational health service, company, municipality or investor: tell us about your context and we will get back to you quickly.</p>
       <div class="contact-direct">
         <div><span>Write directly</span><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></div>
         <div><span>Based in</span><strong>Paris, France</strong></div>
@@ -681,9 +681,21 @@
           <option value="SDIS">Fire and rescue service</option>
           <option value="Santé au travail">Occupational health service</option>
           <option value="Entreprise">Company · construction · industry</option>
+          <option value="Municipalité">Municipality · local authority</option>
           <option value="Investisseur / partenaire">Investor · partner</option>
           <option value="Presse">Press</option>
           <option value="Autre">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="cf-outil">Tool you are interested in</label>
+        <select class="cf-input" id="cf-outil" name="outil">
+          <option value="Non précisé">Not sure yet / several</option>
+          <option value="Suivi des expositions CMR">CMR exposure tracking</option>
+          <option value="Module EPI">PPE module</option>
+          <option value="Capteur de contamination">Contamination sensor</option>
+          <option value="Débroussaillement (OLD)">Vegetation clearance (OLD)</option>
+          <option value="Cellule de crise">Crisis cell: storm, fire</option>
         </select>
       </div>
       <div id="cf-quand" hidden>
@@ -753,7 +765,7 @@
   </div>
 </footer>
 
-<script src="/static/accueil.js?v=49" defer></script>
+<script src="/static/accueil.js?v=50" defer></script>
 <script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>

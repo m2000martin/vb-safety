@@ -321,6 +321,29 @@ main{overflow-x:clip}
 .cv-it{display:flex;gap:9px;align-items:center;background:#fff;border-radius:10px;padding:8px 10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}.cv-it.on{outline:2px solid #c62828}.cv-it .n{width:24px;height:24px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:700;font-size:11px;flex:none}.cv-it div{flex:1;min-width:0}.cv-it b{display:block;font-size:13px}.cv-it small{color:#5d6670;font-size:11.5px}.cv-it em{font-style:normal;font-size:10.5px;font-weight:700;border-radius:6px;padding:3px 7px;white-space:nowrap}
 .cv-cap{max-width:1180px;margin:16px auto 0;display:flex;gap:28px;flex-wrap:wrap;color:var(--doux);font-size:14px}.cv-cap b{color:#fff;font-weight:600}
 @media (max-width:900px){.cv-in{grid-template-columns:1fr;height:auto}.cv-map{height:340px}.cv-side .cv-it:nth-of-type(n+4){display:none}}
+
+.ph-u{color:#fff!important;line-height:1.6!important;letter-spacing:.04em}
+.fx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(28px,5vw,72px);align-items:center;padding:clamp(28px,4vw,48px) 0;border-top:1px solid var(--c-line)}
+.fx:first-of-type{border-top:0}.fx.inv>div:first-child{order:2}
+.fx h3{margin:6px 0 0;font:650 clamp(22px,2.3vw,30px)/1.15 var(--sans);letter-spacing:-.02em;color:#fff}
+.fx p{color:var(--doux);font-size:16px;line-height:1.55;margin:12px 0 0;max-width:52ch}
+.fx ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:7px;color:var(--doux);font-size:15px}.fx li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--c-or);margin-right:10px;vertical-align:2px}
+.ap{background:#f6f4ef;color:#1c2126;border-radius:14px;overflow:hidden;box-shadow:0 40px 90px -35px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.1);font:400 13px/1.4 var(--sans)}
+.ap-t{display:flex;align-items:center;gap:6px;background:#1c2126;color:#fff;padding:9px 13px;font-weight:650;font-size:13px}.ap-t i{width:9px;height:9px;border-radius:50%;background:#3a4553}.ap-t span{margin-left:8px}.ap-t em{margin-left:auto;font-style:normal;font-weight:500;font-size:11.5px;opacity:.6}
+.ap-b{padding:14px 16px}
+.fl{font:650 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#5d6670;margin:12px 0 6px}.fl:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips span{border:1.5px solid #ddd6c8;background:#fff;border-radius:999px;padding:5px 10px;font-size:12px}.chips .on{border-color:#c62828;background:#fdecea;color:#c62828;font-weight:700}
+.inp{background:#fff;border:1.5px solid #ddd6c8;border-radius:9px;padding:8px 10px;font-size:13px}.inp.f{border-color:#1565c0;box-shadow:0 0 0 3px rgba(21,101,192,.12)}
+.sug{background:#fff;border:1px solid #ddd6c8;border-radius:9px;margin-top:4px;overflow:hidden}.sug div{padding:7px 10px;border-top:1px solid #eee9df;font-size:12.5px}.sug div:first-child{border-top:0;background:#eef4fc}.sug small{color:#5d6670}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;border:1.5px solid #ddd6c8;border-radius:9px;overflow:hidden;background:#fff}.seg span{flex:1;text-align:center;padding:7px 4px;font-size:12px;font-weight:600;color:#5d6670}.seg .u{background:#c62828;color:#fff}
+.ap-f{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}.ap-f span{border-radius:9px;padding:9px 14px;font-weight:700;font-size:12.5px}.ap-f .g{background:#e9e4d9}.ap-f .p{background:#c62828;color:#fff}
+.lg{width:100%;border-collapse:collapse;font-size:12.5px}.lg th{text-align:left;font:650 10.5px var(--sans);letter-spacing:.05em;text-transform:uppercase;color:#5d6670;padding:0 8px 8px;border-bottom:1px solid #ddd6c8}.lg td{padding:8px;border-bottom:1px solid #eee9df;vertical-align:top}.lg td:first-child{font:600 12px var(--mono);color:#5d6670;white-space:nowrap}.lg b{font-weight:650}
+.tg{display:inline-block;border-radius:6px;padding:1px 6px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.ap-x{display:flex;gap:8px;margin-top:12px}.ap-x span{border:1.5px solid #ddd6c8;background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600}
+.big .ic-m{width:100%;margin:0;padding:16px 18px}
+.mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(20px,3vw,36px)}
+@media (max-width:900px){.fx{grid-template-columns:1fr}.fx.inv>div:first-child{order:0}.mini{grid-template-columns:1fr}.lg .hm{display:none}}
 </style>
 </head>
 <body>
@@ -442,20 +465,62 @@ main{overflow-x:clip}
 </section>
 
 <section class="c-sec">
-  <div class="rv wrap">
+  <div class="wrap">
     <span class="c-k">Dans la cellule</span>
     <h2 class="c-h2">Ce que la cellule a sous les yeux.</h2>
-    <div class="cc-grid">
-      <div class="cc-card"><span class="k">Alertes</span><h3>Saisie d'une alerte</h3><p>Motif, adresse trouvée dans la Base Adresse Nationale ou point placé sur la carte, précisions, source de l'information et personne à rappeler.</p></div>
-      <div class="cc-card"><span class="k">Priorités</span><h3>Fiche d'incident en étapes</h3><p>À traiter, pris en compte, équipe sur le coup, terminé. Une action principale à la fois ; l'équipe s'envoie en un clic.</p></div>
-      <div class="cc-card"><span class="k">Équipes</span><h3>Statut de chaque équipe</h3><p>Disponible, en route, sur place, en pause : mis à jour par le terrain ou par la cellule, avec l'heure de la dernière mise à jour.</p></div>
-      <div class="cc-card"><span class="k">Météo</span><h3>Vigilance Météo-France</h3><p>Les vigilances en cours pour le département et les rafales prévues sur 12 heures, rafraîchies toutes les 30 minutes.</p></div>
-      <div class="cc-card"><span class="k">Partenaires</span><h3>Pompiers et Enedis</h3><p>Aucun envoi automatique : l'appel se fait par téléphone, comme aujourd'hui. Un bouton l'inscrit au journal avec l'heure.</p></div>
-      <div class="cc-card"><span class="k">Trace</span><h3>Journal de crise</h3><p>Toutes les décisions, horodatées. Impression du journal et export en tableur pour le compte rendu.</p></div>
+
+    <div class="fx rv"><div>
+      <span class="c-k">Saisie d'une alerte</span>
+      <h3>Un appel à la mairie devient une alerte sur la carte.</h3>
+      <p>L'agent d'accueil saisit le motif et l'adresse ; l'adresse est retrouvée dans la Base Adresse Nationale et placée sur la carte.</p>
+      <ul><li>Motif en un clic, précisions en texte libre</li><li>Source de l'information et personne à rappeler</li><li>Danger pour les personnes signalé à part</li></ul>
+    </div><div aria-hidden="true">
+      <div class="ap"><div class="ap-t"><i></i><i></i><i></i><span>Nouvelle alerte</span><em>14:02</em></div><div class="ap-b">
+        <div class="fl">Motif</div><div class="chips"><span>Arbre tombé</span><span class="on">Câble au sol</span><span>Route inondée</span><span>Toiture</span><span>Fumée</span><span>Autre</span></div>
+        <div class="fl">Adresse</div><div class="inp f">12 rue de la Ga|</div>
+        <div class="sug"><div><b>12 Rue de la Gare</b> <small>· Commune exemple</small></div><div>12 Rue de la Garenne <small>· Commune exemple</small></div></div>
+        <div class="row2"><div><div class="fl">Source</div><div class="inp">Appel d'un habitant</div></div><div><div class="fl">À rappeler</div><div class="inp">06 •• •• •• 41</div></div></div>
+        <div class="fl">Priorité</div><div class="seg"><span class="u">Urgent</span><span>Important</span><span>Normal</span></div>
+        <div class="ap-f"><span class="g">Annuler</span><span class="p">Créer l'alerte</span></div>
+      </div></div>
+    </div></div>
+
+    <div class="fx inv rv"><div>
+      <span class="c-k">Fiche d'incident</span>
+      <h3>Une étape à la fois, une action principale.</h3>
+      <p>Chaque incident avance de « À traiter » à « Terminé ». La fiche montre l'équipe envoyée et son statut, mis à jour depuis le terrain.</p>
+      <ul><li>Signalements au même endroit regroupés</li><li>Choix de l'équipe avec sa disponibilité</li><li>Appel aux pompiers ou à Enedis noté avec l'heure</li></ul>
+    </div><div class="big" aria-hidden="true">
+      <div class="ic-m"><div class="h"><span class="n">7</span><b>Arbre sur la route</b><span class="p">Urgent</span></div><div class="l">Rue de la Gare · 14:02 · 2 signalements</div><div class="stp"><span class="d"></span><span class="d"></span><span class="c"></span><span></span></div><div class="sl">Équipe sur le coup</div><div class="tm"><span><b>Équipe A</b><i style="background:#2e7d32"></i>Disponible</span><span style="border-color:#1565c0;background:#eef4fc"><b>Équipe B</b><i style="background:#1565c0"></i>En route</span><span><b>Équipe C</b><i style="background:#7a8590"></i>En pause</span></div><div class="ap-x"><span>📷 2 photos</span><span>☎ Pompiers prévenus</span><span>Historique (5)</span></div></div>
+    </div></div>
+
+    <div class="fx rv"><div>
+      <span class="c-k">Journal de crise</span>
+      <h3>Chaque décision, avec l'heure.</h3>
+      <p>Le journal se remplit seul à chaque action de la cellule ou des équipes. Il sert au compte rendu au préfet, au retour d'expérience et, si besoin, au dossier de catastrophe naturelle.</p>
+      <ul><li>Impression en un clic</li><li>Export en tableur</li><li>Horodatage automatique, sans saisie</li></ul>
+    </div><div aria-hidden="true">
+      <div class="ap"><div class="ap-t"><i></i><i></i><i></i><span>Journal de crise · Tempête</span><em>Imprimer · Exporter</em></div><div class="ap-b">
+        <table class="lg"><thead><tr><th>Heure</th><th>Action</th><th class="hm">Par</th></tr></thead><tbody>
+        <tr><td>13:42</td><td><b>Cellule activée</b> · vigilance orange vent violent</td><td class="hm">Maire</td></tr>
+        <tr><td>13:51</td><td>Alerte n° 9 · Route inondée, Route de la Forêt <span class="tg" style="background:#fff3e0;color:#b45309">Important</span></td><td class="hm">Accueil</td></tr>
+        <tr><td>14:02</td><td>Alerte n° 7 · Arbre sur la route, Rue de la Gare <span class="tg" style="background:#fdecea;color:#c62828">Urgent</span></td><td class="hm">Habitant</td></tr>
+        <tr><td>14:04</td><td>N° 7 confiée à <b>Équipe B</b></td><td class="hm">Cellule</td></tr>
+        <tr><td>14:06</td><td>Équipe B en route</td><td class="hm">Équipe B</td></tr>
+        <tr><td>14:09</td><td>Pompiers prévenus par téléphone (n° 7)</td><td class="hm">Cellule</td></tr>
+        <tr><td>14:31</td><td>N° 2 terminée · Équipe A disponible</td><td class="hm">Équipe A</td></tr>
+        </tbody></table>
+      </div></div>
+    </div></div>
+
+    <div class="mini">
+      <div class="cc-card"><span class="k">Météo</span><h3>Vigilance Météo-France</h3><p>Vigilances en cours pour le département et rafales prévues sur 12 heures, rafraîchies toutes les 30 minutes.</p></div>
+      <div class="cc-card"><span class="k">Partenaires</span><h3>Pompiers et Enedis</h3><p>Aucun envoi automatique : l'appel se fait par téléphone, comme aujourd'hui. L'outil l'inscrit au journal.</p></div>
+      <div class="cc-card"><span class="k">Habitants</span><h3>Signalement par lien ou QR code</h3><p>Une page web : photo, position, description. Les signalements arrivent directement sur la carte de la cellule.</p></div>
     </div>
-    <div class="ic-m" aria-hidden="true"><div class="h"><span class="n">7</span><b>Arbre sur la route</b><span class="p">Urgent</span></div><div class="l">Chemin des Prés · 14:02 · 2 signalements</div><div class="stp"><span class="d"></span><span class="d"></span><span class="c"></span><span></span></div><div class="sl">Équipe sur le coup</div><div class="tm"><span><b>Équipe A</b><i style="background:#2e7d32"></i>Disponible</span><span style="border-color:#1565c0;background:#eef4fc"><b>Équipe B</b><i style="background:#1565c0"></i>En route</span><span><b>Équipe C</b><i style="background:#7a8590"></i>En pause</span></div></div>
   </div>
 </section>
+
 
 <section class="c-sec">
   <div class="rv wrap c-faq">
