@@ -55,7 +55,6 @@ main{overflow-x:clip}
 
 /* DEVISE + BANDEAU */
 .devise{margin:0;padding:0 0 12px;font:700 13px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
-@media (prefers-reduced-motion:reduce){
 /* CHIFFRES */
 .c-chiffres{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--c-line);border-radius:12px;overflow:hidden;margin-top:clamp(48px,6vw,72px)}
 .c-chiffres div{padding:26px 24px;background:var(--c-card2)}
@@ -64,7 +63,7 @@ main{overflow-x:clip}
 .c-chiffres span{display:block;margin-top:10px;font-size:14px;color:var(--doux);line-height:1.45}
 
 /* FICHE (maquette) */
-.c-duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,5vw,80px);align-items:center}
+.c-duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
 .c-liste{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:18px}
 .c-liste li{display:grid;grid-template-columns:34px 1fr;gap:14px}
 .c-liste .n{align-self:start;height:34px;font:700 13px/34px var(--mono);color:var(--c-or);border:1px solid rgba(224,108,52,.4);border-radius:8px;text-align:center}
@@ -87,6 +86,14 @@ main{overflow-x:clip}
 .c-mini{flex:1;text-align:center;padding:11px;border-radius:7px;font:600 13.5px var(--sans);border:1px solid var(--c-line);color:var(--doux)}
 .c-mini.p{background:#C4521C;border-color:#C4521C;color:#fff}
 
+.c-shot{margin:40px 0 0;background:var(--c-card2);border:1px solid var(--c-line);border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8)}
+.c-shot img{display:block;width:100%;height:auto}
+.c-shot figcaption{padding:12px 16px;border-top:1px solid var(--c-line);font-size:13px;color:var(--faible)}
+.c-pts{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.c-pts li{display:grid;grid-template-columns:34px 1fr;gap:14px}
+.c-pts .n{align-self:start;height:34px;font:700 13px/34px var(--mono);color:var(--c-or);border:1px solid rgba(224,108,52,.4);border-radius:8px;text-align:center}
+.c-pts b{display:block;font-size:17px;color:#fff}.c-pts span{color:var(--doux);font-size:15px}
+@media (max-width:980px){.c-pts{grid-template-columns:1fr}}
 /* TROIS PARTIES */
 .c-trois{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
 .c-carte{position:relative;background:var(--c-card2);border:1px solid var(--c-line);border-radius:12px;padding:28px 26px 26px;display:flex;flex-direction:column}
@@ -234,30 +241,18 @@ main{overflow-x:clip}
 </section>
 
 <section class="c-sec">
-  <div class="wrap c-duo">
-    <div>
-      <span class="c-k">Ce que voit la mairie</span>
-      <h2 class="c-h2">Pour chaque maison, ce qui reste à faire.</h2>
-      <ul class="c-liste">
-        <li><span class="n">01</span><div><b>Les écarts mesurés</b><span>Végétation trop haute dans les 50 m, arbres trop proches de la maison ou entre eux, accès.</span></div></li>
-        <li><span class="n">02</span><div><b>Les règles du département</b><span>Les distances et hauteurs de l'arrêté préfectoral de votre département sont appliquées automatiquement.</span></div></li>
-        <li><span class="n">03</span><div><b>Le courrier prêt</b><span>Information, rappel ou mise en demeure. Rien ne part sans votre validation.</span></div></li>
-      </ul>
-    </div>
-    <div class="c-app" aria-label="Exemple de fiche, données fictives">
-      <div class="c-app-top"><i></i><i></i><i></i><span>VB OLD · fiche construction</span></div>
-      <div class="c-app-b">
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
-          <div><h3>Construction n° 0412</h3><div class="sub">Exemple · image IGN du 12/06/2025</div></div>
-          <span class="c-badge b-rouge">2 écarts</span>
-        </div>
-        <div class="c-row"><div><b>Végétation trop haute dans les 50 m</b><small>38 % de la zone au-dessus de 0,5 m</small></div><span class="c-badge b-rouge">À traiter</span></div>
-        <div class="c-row"><div><b>Arbres trop proches de la maison</b><small>3 arbres à moins de 3 m du toit</small></div><span class="c-badge b-rouge">À traiter</span></div>
-        <div class="c-row"><div><b>Arbres serrés dans la zone</b><small>Conseil, non obligatoire dans ce département</small></div><span class="c-badge b-jaune">Conseil</span></div>
-        <div class="c-row"><div><b>Accès</b><small>Voie dégagée sur 5 m de large</small></div><span class="c-badge b-vert">Conforme</span></div>
-        <div class="c-app-foot"><span class="c-mini">Voir sur la carte</span><span class="c-mini p">Préparer le courrier</span></div>
-      </div>
-    </div>
+  <div class="wrap">
+    <span class="c-k">Ce que voit la mairie</span>
+    <h2 class="c-h2">Pour chaque maison, ce qui reste à faire.</h2>
+    <figure class="c-shot">
+      <img src="/collectivites/img/fiche.jpg" width="1600" height="937" loading="lazy" alt="Capture de la démonstration VB OLD : à gauche la carte de la commune et le taux de constructions sans observation, à droite la fiche d'une construction avec les constats et le bouton Courrier / rapport PDF.">
+      <figcaption>Capture réelle de la démonstration (Samoreau, 77). Carte floutée et adresse masquée : les constats maison par maison ne sont visibles que par la mairie.</figcaption>
+    </figure>
+    <ul class="c-pts">
+      <li><span class="n">01</span><div><b>Les écarts mesurés</b><span>Végétation trop haute dans les 50 m, arbres trop proches de la maison ou entre eux, accès.</span></div></li>
+      <li><span class="n">02</span><div><b>Les règles du département</b><span>Les distances et hauteurs de l'arrêté préfectoral de votre département sont appliquées automatiquement.</span></div></li>
+      <li><span class="n">03</span><div><b>Le courrier prêt</b><span>Information, rappel ou mise en demeure. Rien ne part sans votre validation.</span></div></li>
+    </ul>
   </div>
 </section>
 
@@ -288,15 +283,10 @@ main{overflow-x:clip}
 
 <section class="c-sec">
   <div class="wrap c-duo">
-    <div class="c-app" aria-label="Exemple de cellule de crise, données fictives">
-      <div class="c-app-top"><i></i><i></i><i></i><span>VB OLD · cellule de crise · exercice</span></div>
-      <div class="c-cols">
-        <div class="c-col"><h4>Nouveaux <em>2</em></h4><div class="c-tk"><b>Arbre sur la chaussée</b><small>Signalement habitant · photo · 14:02</small></div><div class="c-tk"><b>Fumée visible en lisière</b><small>Appel mairie · 14:05</small></div></div>
-        <div class="c-col"><h4>Urgent <em>1</em></h4><div class="c-tk r"><b>Ligne électrique au sol</b><small>Enregistré, Enedis prévenu · 13:51</small></div></div>
-        <div class="c-col"><h4>En cours <em>1</em></h4><div class="c-tk v"><b>Équipe A : route dégagée</b><small>Services techniques · 13:40</small></div></div>
-      </div>
-      <div class="c-log"><div><b>14:05</b>Appel reçu, signalement créé</div><div><b>14:02</b>Photo reçue d'un habitant</div><div><b>13:51</b>Signalement classé urgent</div></div>
-    </div>
+    <figure class="c-shot" style="margin:0">
+      <img src="/collectivites/img/crise.jpg" width="1600" height="937" loading="lazy" alt="Capture de la cellule de crise VB OLD : incidents classés en colonnes (à classer, urgent, important, normal), météo locale et carte des incidents.">
+      <figcaption>Capture réelle de la démonstration, exercice tempête avec incidents fictifs.</figcaption>
+    </figure>
     <div>
       <span class="c-k">Le jour de la crise</span>
       <h2 class="c-h2">Les signalements des habitants et vos décisions au même endroit.</h2>
