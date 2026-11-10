@@ -61,7 +61,7 @@
       '/en/firefighters/': ['/cmr-pompier/en/', 'Open the firefighter CMR tool'], '/en/industry/': ['/cmr-industrie/', 'Open the industry CMR tool'], '/en/construction/': ['/cmr-industrie/', 'Open the construction CMR tool'] };
     var cible = OUTILS[chemin]; if (/^\/collectivites\//.test(chemin)) cible = ['/collectivites/demande/', 'Demander une présentation']; if (/^\/en\/municipalities\//.test(chemin)) cible = ['/en/municipalities/request/', 'Request a demo'];
     var bar = document.createElement('div'); bar.className = 'barre-action barre-demo'; bar.setAttribute('aria-hidden', 'true'); bar.setAttribute('data-no-i18n', '');
-    var a = document.createElement('a'); a.className = 'principal'; a.href = cible ? cible[0] : (EN ? '/en/#contact' : '/#contact'); a.tabIndex = -1;
+    var a = document.createElement('a'); a.className = 'principal'; a.href = cible ? cible[0] : (EN ? '/en/contact/' : '/contact/'); a.tabIndex = -1;
     a.textContent = cible ? cible[1] : (EN ? 'Request a demo' : 'Demander une démo');
     bar.appendChild(a); document.body.appendChild(bar); document.body.classList.add('a-barre');
     var bas = false, formulaires = 0;
