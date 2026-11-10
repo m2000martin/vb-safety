@@ -90,3 +90,9 @@ header.top { border-bottom: 0 !important; }
     background: var(--signal, #E06C34); flex: none;
   }
 }
+
+/* thème (CMR, Toxiques, Risques naturels) au-dessus du lien */
+.nav-liste a .nav-th{display:block;font:700 10.5px/1.3 var(--mono,ui-monospace,monospace);letter-spacing:.1em;text-transform:uppercase;color:#E06C34;margin-bottom:2px}
+@media (max-width: 1040px) {
+  .top.mm-open .onglets .nav-metiers a:has(.nav-th), .haut.has-menu.open > .haut-nav .nav-metiers a:has(.nav-th) { flex-direction: column; align-items: flex-start; justify-content: center; }
+}
