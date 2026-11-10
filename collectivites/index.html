@@ -24,12 +24,38 @@
 <link rel="stylesheet" href="/static/secteurs.css?v=21">
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/nav.css?v=13">
-<link rel="stylesheet" href="/static/texte.css?v=3">
-<link rel="stylesheet" href="/static/fond.css?v=4">
-<link rel="stylesheet" href="/static/anime.css?v=3">
 <style>
-.devise{margin:0;padding:22px 0 10px;font:700 13px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--signal)}
-.defile{position:relative;overflow:hidden;background:var(--signal);color:#0E1E30;border-top:1px solid var(--signal-2);border-bottom:1px solid var(--signal-2)}
+:root{--c-card:#112338;--c-card2:#0C1B2C;--c-line:rgba(255,255,255,.09);--c-or:#E06C34;--c-or2:#F29A63;--c-vert:#3BB98A;--c-rouge:#E5484D;--c-jaune:#F2B84B}
+main{overflow-x:clip}
+.c-sec{padding:clamp(64px,8vw,112px) 0}
+.c-sec+.c-sec{border-top:1px solid var(--c-line)}
+.c-k{display:inline-block;font:700 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
+.c-h2{font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.035em;margin:12px 0 0;max-width:22ch}
+.c-lead{color:var(--doux);font-size:clamp(16px,1.4vw,18px);max-width:58ch;margin:18px 0 0}
+
+/* HERO */
+.c-hero{position:relative;padding:clamp(36px,5vw,72px) 0 clamp(48px,6vw,88px)}
+.c-hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:70%;height:120%;background:radial-gradient(closest-side,rgba(224,108,52,.14),transparent);pointer-events:none}
+.c-hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
+.c-hero h1{font-size:clamp(38px,5vw,66px);line-height:1.02;letter-spacing:-.045em;margin:14px 0 0}
+.c-hero h1 em{font-style:normal;color:var(--c-or2)}
+.c-hero p.c-lead{margin-top:22px}
+.c-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.c-note{margin:14px 0 0;color:var(--faible);font-size:13.5px}
+.c-ariane{font-size:13px;color:var(--faible)}.c-ariane a{color:var(--doux);text-decoration:none}.c-ariane span{margin:0 8px}
+
+/* ILLUSTRATION */
+.c-ill{position:relative;background:linear-gradient(180deg,#0F2236,#0B1A2A);border:1px solid var(--c-line);border-radius:14px;padding:14px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+.c-ill svg{width:100%;height:auto}
+.c-ill-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 12px;font:600 12px/1 var(--mono);color:var(--doux);letter-spacing:.06em}
+.c-ill-bar b{color:#fff;font-weight:700}
+.c-ill-leg{display:flex;flex-wrap:wrap;gap:8px 18px;padding:12px 6px 2px;font-size:12.5px;color:var(--doux)}
+.c-ill-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
+.c-ill-cap{position:absolute;right:14px;bottom:-26px;font:500 11.5px var(--mono);color:var(--faible)}
+
+/* DEVISE + BANDEAU */
+.devise{margin:0;padding:0 0 12px;font:700 13px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
+.defile{position:relative;overflow:hidden;background:var(--c-or);border-block:1px solid var(--signal-2)}
 .defile ul{display:flex;width:max-content;margin:0;padding:0;list-style:none;animation:defile 30s linear infinite}
 .defile:hover ul,.defile:focus-within ul{animation-play-state:paused}
 .defile li{display:flex;align-items:center;white-space:nowrap}
@@ -39,7 +65,92 @@
 .defile li::after{content:"";width:6px;height:6px;border-radius:50%;background:#0E1E30;opacity:.55}
 @keyframes defile{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.defile ul{animation:none;flex-wrap:wrap;width:auto;justify-content:center}.defile li.dbl{display:none}}
-.code-note{margin-top:14px;color:var(--doux);font-size:14px}
+
+/* CHIFFRES */
+.c-chiffres{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--c-line);border-radius:12px;overflow:hidden;margin-top:clamp(48px,6vw,72px)}
+.c-chiffres div{padding:26px 24px;background:var(--c-card2)}
+.c-chiffres div+div{border-left:1px solid var(--c-line)}
+.c-chiffres b{display:block;font:600 clamp(30px,3vw,40px)/1 var(--serif);letter-spacing:-.03em;color:#fff}
+.c-chiffres span{display:block;margin-top:10px;font-size:14px;color:var(--doux);line-height:1.45}
+
+/* FICHE (maquette) */
+.c-duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,5vw,80px);align-items:center}
+.c-liste{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:18px}
+.c-liste li{display:grid;grid-template-columns:34px 1fr;gap:14px}
+.c-liste .n{align-self:start;height:34px;font:700 13px/34px var(--mono);color:var(--c-or);border:1px solid rgba(224,108,52,.4);border-radius:8px;text-align:center}
+.c-liste b{display:block;font-size:17px;color:#fff}
+.c-liste span{color:var(--doux);font-size:15px}
+.c-app{background:var(--c-card);border:1px solid var(--c-line);border-radius:14px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
+.c-app-top{display:flex;gap:7px;padding:12px 14px;border-bottom:1px solid var(--c-line);background:var(--c-card2)}
+.c-app-top i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14)}
+.c-app-top span{margin-left:10px;font:600 12px/10px var(--mono);color:var(--faible)}
+.c-app-b{padding:22px}
+.c-app h3{margin:0;font:600 19px/1.2 var(--serif);letter-spacing:-.02em}
+.c-app .sub{margin-top:4px;font-size:13px;color:var(--faible)}
+.c-badge{display:inline-flex;white-space:nowrap;flex-shrink:0;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;font:700 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.b-rouge{background:rgba(229,72,77,.14);color:#FF8A8D}.b-vert{background:rgba(59,185,138,.14);color:#6FDDB2}.b-jaune{background:rgba(242,184,75,.14);color:#F6CD7E}
+.c-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 0;border-top:1px solid var(--c-line)}
+.c-row:first-of-type{margin-top:16px}
+.c-row b{display:block;font-size:14.5px;font-weight:600}
+.c-row small{display:block;color:var(--faible);font-size:12.5px;margin-top:2px}
+.c-app-foot{display:flex;gap:10px;margin-top:18px}
+.c-mini{flex:1;text-align:center;padding:11px;border-radius:7px;font:600 13.5px var(--sans);border:1px solid var(--c-line);color:var(--doux)}
+.c-mini.p{background:#C4521C;border-color:#C4521C;color:#fff}
+
+/* TROIS PARTIES */
+.c-trois{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+.c-carte{position:relative;background:var(--c-card2);border:1px solid var(--c-line);border-radius:12px;padding:28px 26px 26px;display:flex;flex-direction:column}
+.c-carte .ico{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;background:rgba(224,108,52,.12);color:var(--c-or)}
+.c-carte h3{margin:20px 0 0;font:600 21px/1.2 var(--serif);letter-spacing:-.02em}
+.c-carte p{margin:10px 0 0;color:var(--doux);font-size:15px}
+.c-carte ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px;color:#D7DEE6}
+.c-carte li{padding-left:18px;position:relative}.c-carte li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:2px;background:var(--c-or)}
+.c-carte a{margin-top:auto;padding-top:22px;color:#fff;font-weight:600;font-size:14.5px;text-decoration:none}
+.c-carte a:hover{color:var(--c-or2)}
+
+/* ÉTAPES */
+.c-etapes{list-style:none;margin:48px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:e}
+.c-etapes li{position:relative;padding:0 26px 0 0;counter-increment:e}
+.c-etapes li::before{content:"0" counter(e);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--nuit);border:1px solid var(--c-or);color:var(--c-or);font:700 14px var(--mono);position:relative;z-index:1}
+.c-etapes li::after{content:"";position:absolute;left:46px;right:0;top:23px;height:1px;background:linear-gradient(90deg,rgba(224,108,52,.6),rgba(224,108,52,.1))}
+.c-etapes li:last-child::after{display:none}
+.c-etapes h3{margin:20px 0 0;font:600 18px/1.25 var(--serif);letter-spacing:-.015em}
+.c-etapes p{margin:8px 0 0;color:var(--doux);font-size:14.5px}
+
+/* CRISE */
+.c-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px;background:var(--c-card2)}
+.c-col h4{margin:0 0 10px;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faible);display:flex;justify-content:space-between}
+.c-col h4 em{font-style:normal;color:#fff}
+.c-tk{background:var(--c-card);border:1px solid var(--c-line);border-left:3px solid var(--c-jaune);border-radius:8px;padding:10px 11px;margin-bottom:8px;font-size:13px}
+.c-tk.r{border-left-color:var(--c-rouge)}.c-tk.v{border-left-color:var(--c-vert)}
+.c-tk b{display:block;font-weight:600}
+.c-tk small{color:var(--faible);font-size:11.5px}
+.c-log{padding:12px 16px 16px;border-top:1px solid var(--c-line);font:500 12px/1.9 var(--mono);color:var(--doux)}
+.c-log b{color:var(--c-or2);font-weight:600;margin-right:10px}
+
+/* FAQ + FINAL */
+.c-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,80px)}
+.c-faq .faq{max-width:none}
+.c-faq .faq p{color:var(--doux)}
+.c-final{position:relative;overflow:hidden;border:1px solid rgba(224,108,52,.35);border-radius:16px;padding:clamp(32px,4vw,56px);background:radial-gradient(120% 140% at 100% 0,rgba(224,108,52,.22),transparent 55%),var(--c-card2);display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:center}
+.c-final h2{font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.035em}
+.c-final p{color:var(--doux);margin:14px 0 0}
+.c-final .c-cta{margin:0;justify-content:flex-end}
+
+@media (max-width:980px){
+ .c-hero .wrap,.c-duo,.c-faq,.c-final{grid-template-columns:1fr}
+ .c-trois{grid-template-columns:1fr}
+ .c-chiffres{grid-template-columns:1fr 1fr}.c-chiffres div:nth-child(3){border-left:0}.c-chiffres div:nth-child(n+3){border-top:1px solid var(--c-line)}
+ .c-etapes{grid-template-columns:1fr 1fr;row-gap:36px}.c-etapes li:nth-child(2)::after{display:none}
+ .c-final .c-cta{justify-content:flex-start}
+ .c-duo .c-app{order:2}
+}
+@media (max-width:560px){
+ .c-etapes{grid-template-columns:1fr}.c-etapes li::after{display:none}
+ .c-cols{grid-template-columns:1fr}
+ .c-chiffres div{padding:20px 18px}
+ .c-cta .btn{width:100%}
+}
 </style>
 </head>
 <body>
@@ -54,17 +165,65 @@
   </div>
 </header>
 <main id="contenu">
-<section class="hero">
+
+<section class="c-hero">
   <div class="wrap">
     <div>
-      <nav class="ariane" aria-label="Fil d'Ariane"><a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Collectivités</span></nav>
-      <h1><span class="h1-kw">Débroussaillement et gestion de crise pour les communes</span>Chaque maison de la commune, <em>vérifiée <span class="invis">sur carte.</span></em></h1>
-      <div class="trait" aria-hidden="true"></div>
-      <p class="chapeau">VB OLD établit l'état du débroussaillement autour de chaque construction à partir des données LiDAR et des photos aériennes de l'IGN. <span class="ch-plus">La mairie voit les écarts, prépare les courriers et suit les relances. Le même outil sert de cellule de crise : signalements des habitants, carte et main courante horodatée.</span></p>
-      <div class="cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Nous contacter</a></div>
-      <p class="code-note">Démonstration sur deux communes réelles, données anonymisées. Code d'accès sur demande.</p>
+      <span class="c-k">Pour les mairies</span>
+      <h1 style="margin-top:14px">Le débroussaillement de chaque maison de votre commune, <em>vérifié depuis la mairie.</em></h1>
+      <p class="c-lead">Sans faire le tour des propriétés, vous voyez quelles maisons ne respectent pas l'obligation de débroussaillement, vous envoyez les courriers et vous gardez une trace datée de chaque étape. L'analyse utilise les relevés aériens publics de l'IGN.</p>
+      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander une présentation en mairie</a></div>
+      <p class="c-note">Démonstration sur deux communes réelles. Code d'accès sur demande. Rien à installer.</p>
     </div>
-    <aside class="bref" aria-label="En bref"><span class="bref-t">En bref</span><div><b>50 m</b><span>autour de chaque construction : la zone à débroussailler à moins de 200 m des bois.</span></div><div><b>Maison par maison</b><span>hauteur de la végétation mesurée par LiDAR, arbres trop proches, accès.</span></div><div><b>Le maire décide</b><span>l'outil fournit un constat daté ; les courriers partent après sa validation.</span></div></aside>
+    <figure class="c-ill" style="margin:0">
+      <div class="c-ill-bar"><span><b>Construction n° 0412</b> · exemple</span><span>Relevé aérien IGN</span></div>
+      <svg viewBox="0 0 560 400" role="img" aria-label="Schéma : une maison, la zone des 50 mètres à débroussailler, la végétation haute en orange et des arbres trop proches entourés en rouge.">
+        <defs>
+          <pattern id="hach" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="rgba(224,108,52,.16)"/><line x1="0" y1="0" x2="0" y2="7" stroke="rgba(242,154,99,.55)" stroke-width="2"/></pattern>
+          <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="rgba(255,255,255,.035)"/></pattern>
+          <radialGradient id="zone" r=".5"><stop offset=".7" stop-color="rgba(224,108,52,0)"/><stop offset="1" stop-color="rgba(224,108,52,.10)"/></radialGradient>
+        </defs>
+        <rect width="560" height="400" fill="url(#grid)"/>
+        <!-- forêt en bordure -->
+        <g fill="#1E4A3A" opacity=".9">
+          <circle cx="30" cy="40" r="26"/><circle cx="70" cy="22" r="22"/><circle cx="18" cy="92" r="24"/><circle cx="58" cy="70" r="20"/><circle cx="24" cy="150" r="22"/><circle cx="106" cy="30" r="18"/>
+          <circle cx="40" cy="210" r="20"/><circle cx="16" cy="262" r="22"/><circle cx="50" cy="318" r="24"/><circle cx="20" cy="372" r="22"/><circle cx="84" cy="384" r="20"/>
+        </g>
+        <!-- parcelle -->
+        <path d="M150 58 L470 70 L486 338 L140 350 Z" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.18)" stroke-dasharray="2 4"/>
+        <!-- zone 50 m -->
+        <circle cx="318" cy="206" r="168" fill="url(#zone)" stroke="#E06C34" stroke-width="1.5" stroke-dasharray="7 6"/>
+        <!-- végétation haute -->
+        <path d="M168 132 C186 104 232 98 246 122 C258 146 226 172 196 170 C176 168 160 154 168 132Z" fill="url(#hach)" stroke="rgba(242,154,99,.8)"/>
+        <path d="M352 300 C380 286 432 290 438 316 C444 342 398 352 370 344 C350 338 338 312 352 300Z" fill="url(#hach)" stroke="rgba(242,154,99,.8)"/>
+        <path d="M174 262 C184 248 210 250 214 266 C218 282 196 292 182 286 C172 282 168 272 174 262Z" fill="url(#hach)" stroke="rgba(242,154,99,.8)"/>
+        <!-- arbres isolés -->
+        <g fill="rgba(59,185,138,.22)" stroke="#3BB98A" stroke-width="1.5">
+          <circle cx="430" cy="118" r="17"/><circle cx="452" cy="210" r="15"/><circle cx="230" cy="322" r="14"/>
+        </g>
+        <!-- arbres trop proches -->
+        <g fill="rgba(229,72,77,.18)" stroke="#E5484D" stroke-width="1.5">
+          <circle cx="250" cy="248" r="16"/><circle cx="276" cy="262" r="14"/><circle cx="256" cy="276" r="13"/>
+          <circle cx="386" cy="148" r="15"/><circle cx="404" cy="166" r="13"/>
+        </g>
+        <!-- maison -->
+        <g>
+          <rect x="292" y="182" width="58" height="46" rx="3" fill="#E9EEF3"/>
+          <path d="M292 205 H350 M321 182 V228" stroke="#9AA6B2" stroke-width="1.2"/>
+        </g>
+        <!-- accès -->
+        <path d="M486 214 C440 214 400 210 350 208" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="7" stroke-linecap="round" opacity=".35"/>
+        <!-- étiquettes -->
+        <g font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="700">
+          <line x1="318" y1="38" x2="318" y2="206" stroke="rgba(224,108,52,.5)" stroke-dasharray="2 3"/>
+          <rect x="331" y="94" width="54" height="22" rx="4" fill="#E06C34"/><text x="358" y="109" text-anchor="middle" fill="#0E1E30">50 m</text>
+          <rect x="146" y="86" width="132" height="22" rx="4" fill="#0E1E30" stroke="rgba(242,154,99,.8)"/><text x="212" y="101" text-anchor="middle" fill="#F29A63">végétation 1,8 m</text>
+          <rect x="176" y="222" width="116" height="22" rx="4" fill="#0E1E30" stroke="#E5484D"/><text x="234" y="237" text-anchor="middle" fill="#FF8A8D">3 arbres serrés</text>
+        </g>
+      </svg>
+      <div class="c-ill-leg"><span><i style="background:#E06C34"></i>Zone des 50 m</span><span><i style="background:repeating-linear-gradient(45deg,#F29A63 0 2px,transparent 2px 5px)"></i>Végétation trop haute</span><span><i style="background:#E5484D"></i>Arbres trop proches</span><span><i style="background:#3BB98A"></i>Arbres isolés</span></div>
+      <figcaption class="c-ill-cap">Schéma d'illustration, construction fictive</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -92,39 +251,105 @@
   </ul>
 </nav>
 
-<section class="sec">
+<section class="c-sec" style="padding-top:clamp(48px,6vw,80px)">
   <div class="wrap">
-    <div class="sec-tete"><span class="kicker">Les enjeux</span><h2 class="titre">Une obligation qui s'étend, peu de moyens pour la contrôler</h2></div>
-    <div class="grille-3"><article class="enjeu"><span class="n">01</span><h3>De nouvelles communes concernées</h3><p>Le classement des bois et forêts exposés au feu s'étend : en Seine-et-Marne, l'arrêté du 13 avril 2026 fait entrer de nouvelles communes dans l'obligation de débroussaillement.</p></article><article class="enjeu"><span class="n">02</span><h3>Un contrôle à la charge du maire</h3><p>Le maire veille au respect des obligations de débroussaillement. Faire le tour de chaque propriété demande un temps que la plupart des mairies n'ont pas.</p></article><article class="enjeu"><span class="n">03</span><h3>Une crise mal tracée</h3><p>Le jour d'un feu ou d'une tempête, les appels, les signalements et les décisions se notent sur papier. Après coup, il est difficile de retrouver qui a fait quoi, et quand.</p></article></div>
+    <span class="c-k">Les enjeux</span>
+    <h2 class="c-h2">Une obligation qui s'étend, peu de moyens pour la contrôler.</h2>
+    <p class="c-lead">En Seine-et-Marne, l'arrêté du 13 avril 2026 fait entrer de nouvelles communes dans l'obligation de débroussaillement. C'est au maire de veiller à son respect, souvent sans agent disponible pour faire le tour de chaque propriété.</p>
+    <div class="c-chiffres">
+      <div><b>1 298</b><span>constructions analysées à Samoreau (77)</span></div>
+      <div><b>3 817</b><span>constructions analysées au Porge (33)</span></div>
+      <div><b>22 655</b><span>arbres repérés autour des maisons de Samoreau</span></div>
+      <div><b>0</b><span>visite nécessaire pour la première analyse de la commune</span></div>
+    </div>
   </div>
 </section>
 
-<section class="sec" id="offre">
-  <div class="wrap">
-    <div class="sec-tete"><span class="kicker">Ce que fait l'outil</span><h2 class="titre">VB OLD en trois parties</h2></div>
-    <div class="offres" style="--cols:3"><article class="offre vedette"><span class="statut ok">Démo disponible</span><h3>État du débroussaillement</h3><p>Pour chaque construction : végétation haute dans les 50 m, arbres trop proches de la maison ou entre eux, accès.</p><ul><li>Données LiDAR HD et photos aériennes de l'IGN, datées</li><li>Règles nationales et départementales appliquées</li></ul><a class="lien" href="/OLD-demo/">Voir la démo <span aria-hidden="true">→</span></a></article><article class="offre"><span class="statut ok">Démo disponible</span><h3>Suivi et courriers</h3><p>La liste des écarts, du plus urgent au moins urgent, avec un courrier prêt pour chaque propriétaire.</p><ul><li>Information, rappel, mise en demeure</li><li>Envoi après validation du maire</li></ul><a class="lien" href="/OLD-demo/">Voir la démo <span aria-hidden="true">→</span></a></article><article class="offre"><span class="statut ok">Démo disponible</span><h3>Cellule de crise</h3><p>La carte de la commune, les signalements envoyés par les habitants et les actions en cours sur un seul écran.</p><ul><li>Main courante horodatée, exportable</li><li>Compatible avec le plan communal de sauvegarde existant</li></ul><a class="lien" href="/OLD-demo/">Voir la démo <span aria-hidden="true">→</span></a></article></div>
+<section class="c-sec">
+  <div class="wrap c-duo">
+    <div>
+      <span class="c-k">Ce que voit la mairie</span>
+      <h2 class="c-h2">Pour chaque maison, ce qui reste à faire.</h2>
+      <ul class="c-liste">
+        <li><span class="n">01</span><div><b>Les écarts mesurés</b><span>Végétation trop haute dans les 50 m, arbres trop proches de la maison ou entre eux, accès.</span></div></li>
+        <li><span class="n">02</span><div><b>Les règles du département</b><span>Les distances et hauteurs de l'arrêté préfectoral de votre département sont appliquées automatiquement.</span></div></li>
+        <li><span class="n">03</span><div><b>Le courrier prêt</b><span>Information, rappel ou mise en demeure. Rien ne part sans votre validation.</span></div></li>
+      </ul>
+    </div>
+    <div class="c-app" aria-label="Exemple de fiche, données fictives">
+      <div class="c-app-top"><i></i><i></i><i></i><span>VB OLD · fiche construction</span></div>
+      <div class="c-app-b">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+          <div><h3>Construction n° 0412</h3><div class="sub">Exemple · image IGN du 12/06/2025</div></div>
+          <span class="c-badge b-rouge">2 écarts</span>
+        </div>
+        <div class="c-row"><div><b>Végétation trop haute dans les 50 m</b><small>38 % de la zone au-dessus de 0,5 m</small></div><span class="c-badge b-rouge">À traiter</span></div>
+        <div class="c-row"><div><b>Arbres trop proches de la maison</b><small>3 arbres à moins de 3 m du toit</small></div><span class="c-badge b-rouge">À traiter</span></div>
+        <div class="c-row"><div><b>Arbres serrés dans la zone</b><small>Conseil, non obligatoire dans ce département</small></div><span class="c-badge b-jaune">Conseil</span></div>
+        <div class="c-row"><div><b>Accès</b><small>Voie dégagée sur 5 m de large</small></div><span class="c-badge b-vert">Conforme</span></div>
+        <div class="c-app-foot"><span class="c-mini">Voir sur la carte</span><span class="c-mini p">Préparer le courrier</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="c-sec" id="offre">
   <div class="wrap">
-    <div class="sec-tete"><span class="kicker">Comment ça marche</span><h2 class="titre">4 étapes</h2></div>
-    <ol class="etapes"><li><h3>Analyse de la commune</h3><p>Chaque construction est analysée à partir des données publiques de l'IGN. Aucune visite n'est nécessaire à ce stade.</p></li><li><h3>La mairie consulte</h3><p>Carte, fiche par maison et liste des écarts, triée par urgence.</p></li><li><h3>Le maire valide les courriers</h3><p>Il choisit les envois et les dates de relance. Une vérification sur place reste possible avant toute mise en demeure.</p></li><li><h3>Le suivi est conservé</h3><p>Constats, courriers et réponses sont datés. La même base sert le jour d'une crise.</p></li></ol>
+    <span class="c-k">Ce que fait l'outil</span>
+    <h2 class="c-h2">Trois usages, une seule carte de la commune.</h2>
+    <div class="c-trois">
+      <article class="c-carte"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg></span><h3>État du débroussaillement</h3><p>Chaque construction analysée, classée de la plus urgente à la moins urgente.</p><ul><li>Relevés aériens et photos de l'IGN, datés</li><li>Règles nationales et départementales</li></ul><a href="/OLD-demo/">Voir la démo →</a></article>
+      <article class="c-carte"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><h3>Courriers et relances</h3><p>Un courrier prêt pour chaque propriétaire concerné, et le suivi des réponses.</p><ul><li>Information, rappel, mise en demeure</li><li>Envoi après validation du maire</li></ul><a href="/OLD-demo/">Voir la démo →</a></article>
+      <article class="c-carte"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg></span><h3>Cellule de crise</h3><p>Le jour d'un feu ou d'une tempête : signalements des habitants, actions en cours, main courante.</p><ul><li>Main courante horodatée, exportable</li><li>Compatible avec votre plan communal de sauvegarde</li></ul><a href="/OLD-demo/">Voir la démo →</a></article>
+    </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="c-sec">
   <div class="wrap">
-    <div class="sec-tete"><span class="kicker">Questions fréquentes</span><h2 class="titre">Ce que les mairies nous demandent</h2></div>
-    <div class="faq"><details><summary>Le constat remplace-t-il une visite ?</summary><p>Non. C'est un constat d'aide à la décision, daté, établi à partir d'images et de mesures. Il indique où regarder en priorité. Les décisions et les mises en demeure relèvent du maire.</p></details><details><summary>Qui voit les données ?</summary><p>Les constats maison par maison ne sont visibles que par la mairie. Aucun nom de propriétaire n'est stocké dans la démonstration.</p></details><details><summary>Faut-il changer notre plan communal de sauvegarde ?</summary><p>Non. Le PCS reste celui de la commune. La cellule de crise fournit la carte des enjeux, les signalements et la main courante ; elle ne modifie pas l'organisation prévue.</p></details><details><summary>Comment tester la démonstration ?</summary><p>Demandez un code d'accès par le formulaire de contact. La démonstration porte sur deux communes, en Seine-et-Marne et en Gironde.</p></details></div>
+    <span class="c-k">Comment ça marche</span>
+    <h2 class="c-h2">De l'analyse au courrier, en quatre étapes.</h2>
+    <ol class="c-etapes">
+      <li><h3>Analyse de la commune</h3><p>Nous analysons chaque construction à partir des relevés publics de l'IGN, sans visite sur place.</p></li>
+      <li><h3>Vous consultez</h3><p>Carte, fiche par maison et liste des écarts triée par urgence.</p></li>
+      <li><h3>Vous validez</h3><p>Vous choisissez les courriers et les relances. Une vérification sur place reste possible avant toute mise en demeure.</p></li>
+      <li><h3>Tout est daté</h3><p>Constats, courriers et réponses sont conservés. La même base sert le jour d'une crise.</p></li>
+    </ol>
   </div>
 </section>
 
-<section class="final">
+<section class="c-sec">
+  <div class="wrap c-duo">
+    <div class="c-app" aria-label="Exemple de cellule de crise, données fictives">
+      <div class="c-app-top"><i></i><i></i><i></i><span>VB OLD · cellule de crise · exercice</span></div>
+      <div class="c-cols">
+        <div class="c-col"><h4>Nouveaux <em>2</em></h4><div class="c-tk"><b>Arbre sur la chaussée</b><small>Signalement habitant · photo · 14:02</small></div><div class="c-tk"><b>Fumée visible en lisière</b><small>Appel mairie · 14:05</small></div></div>
+        <div class="c-col"><h4>Urgent <em>1</em></h4><div class="c-tk r"><b>Ligne électrique au sol</b><small>Enregistré, Enedis prévenu · 13:51</small></div></div>
+        <div class="c-col"><h4>En cours <em>1</em></h4><div class="c-tk v"><b>Équipe A : route dégagée</b><small>Services techniques · 13:40</small></div></div>
+      </div>
+      <div class="c-log"><div><b>14:05</b>Appel reçu, signalement créé</div><div><b>14:02</b>Photo reçue d'un habitant</div><div><b>13:51</b>Signalement classé urgent</div></div>
+    </div>
+    <div>
+      <span class="c-k">Le jour de la crise</span>
+      <h2 class="c-h2">Les signalements des habitants et vos décisions au même endroit.</h2>
+      <p class="c-lead">Les habitants signalent un problème avec une photo depuis leur téléphone. La mairie classe, envoie une équipe et suit l'avancement. Chaque action est horodatée dans la main courante, exportable en PDF.</p>
+      <p class="c-lead" style="margin-top:12px">Votre plan communal de sauvegarde reste celui de la commune : l'outil sert à l'appliquer.</p>
+    </div>
+  </div>
+</section>
+
+<section class="c-sec">
+  <div class="wrap c-faq">
+    <div><span class="c-k">Questions fréquentes</span><h2 class="c-h2">Les questions des élus.</h2></div>
+    <div class="faq"><details><summary>Le constat remplace-t-il une visite ?</summary><p>Non. C'est un constat d'aide à la décision, daté, établi à partir d'images et de mesures. Il indique où regarder en priorité. Les décisions et les mises en demeure relèvent du maire.</p></details><details><summary>Qui voit les données ?</summary><p>Les constats maison par maison ne sont visibles que par la mairie. Aucun nom de propriétaire n'est stocké dans la démonstration.</p></details><details><summary>Faut-il changer notre plan communal de sauvegarde ?</summary><p>Non. Le PCS reste celui de la commune. La cellule de crise fournit la carte, les signalements et la main courante ; elle ne modifie pas l'organisation prévue.</p></details><details><summary>Que faut-il à la mairie pour commencer ?</summary><p>Rien à installer. Nous analysons la commune à partir des données publiques, puis la mairie consulte les résultats depuis un navigateur.</p></details><details><summary>Comment tester la démonstration ?</summary><p>Demandez un code d'accès par le formulaire de contact. La démonstration porte sur deux communes, en Seine-et-Marne et en Gironde.</p></details></div>
+  </div>
+</section>
+
+<section class="c-sec" style="border-top:0;padding-top:0">
   <div class="wrap">
-    <div class="bande">
-      <div><span class="kicker">Pour votre commune</span><h2>Voir l'état du débroussaillement de votre commune</h2><p>Testez la démonstration, puis demandez l'analyse de votre commune.</p></div>
-      <div class="cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander l'analyse de ma commune</a></div>
+    <div class="c-final">
+      <div><span class="c-k">Pour votre commune</span><h2 style="margin-top:12px">Voir l'état du débroussaillement de votre commune.</h2><p>Testez la démonstration, puis demandez l'analyse de votre commune.</p></div>
+      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander l'analyse de ma commune</a></div>
     </div>
   </div>
 </section>
@@ -139,10 +364,7 @@
     <div class="pied-bas"><span>© 2026 VB Safety SAS</span></div>
   </div>
 </footer>
-<script src="/static/vu.js?v=1" defer></script>
 <script src="/static/menu.js?v=7" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
-<script src="/static/fond.js?v=2" defer></script>
-<script src="/static/anime.js?v=2" defer></script>
 </body>
 </html>
