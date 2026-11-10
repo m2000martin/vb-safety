@@ -106,7 +106,7 @@
     <p class="plus">Vous préférez écrire ? <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></p>
   </div>
 </section>
-<script>(function(){var f=document.getElementById('devis'),pr=document.querySelectorAll('.dm-prog span');if(!f)return;f.setAttribute('data-e','1');
+<script>(function(){var f=document.getElementById('devis'),pr=document.querySelectorAll('.dm-prog span');if(!f)return;f.setAttribute('data-e','1');var cm=new URLSearchParams(location.search).get('commune');if(cm)f.elements.organisme.value=cm.slice(0,160);
 function go(n){f.setAttribute('data-e',n);pr[0].classList.toggle('on',n==1);pr[1].classList.toggle('on',n==2);f.scrollIntoView({block:'start',behavior:'smooth'})}
 f.querySelector('.dm-next').addEventListener('click',function(){var c=f.elements.organisme;if(!c.value.trim()){c.focus();c.reportValidity&&c.reportValidity();return}go(2);setTimeout(function(){f.elements.nom.focus({preventScroll:true})},300)});
 f.querySelector('.dm-back').addEventListener('click',function(){go(1)});})();</script>

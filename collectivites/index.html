@@ -74,6 +74,37 @@ main{overflow-x:clip}
 .st>li::after{content:"";position:absolute;left:0;top:-2px;height:2px;width:calc(var(--t,0) * 100%);background:var(--c-or)}
 @media (max-width:900px){.c-steps.st{display:grid;grid-template-columns:1fr;gap:22px;overflow:visible;margin-right:0;padding-right:0}.c-steps.st li{flex:none;background:none;border:0;border-top:2px solid;border-radius:0;padding:14px 0 0}.pin{height:220vh}}
 @media (prefers-reduced-motion:reduce){.pin{height:auto;padding:clamp(56px,7vw,96px) 0!important}.pin-in{position:static;height:auto;padding-top:0}.st>li{opacity:1;transform:none}.st>li::after{width:100%}}
+.vw-syn{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#EEF1F4;color:#56636F;font:600 11px/1.4 var(--sans);vertical-align:2px}
+.vw-real{margin-top:2px;letter-spacing:0!important;font-size:11.5px!important}
+.vw-guide{list-style:none;margin:0;padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;background:#1C2733;color:#AEB8C2;font:500 13.5px var(--sans)}
+.vw-guide li{display:flex;align-items:center;gap:8px}
+.vw-guide li b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid #56636F;font-size:12px;color:#AEB8C2}
+.vw-guide li.cur{color:#fff;font-weight:700}
+.vw-guide li.cur b{background:#E06C34;border-color:#E06C34;color:#fff;animation:gp 1.4s ease-in-out infinite}
+.vw-guide li.ok b{background:#2E9E4F;border-color:#2E9E4F;color:#fff;font-size:0}.vw-guide li.ok b::before{content:"✓";font-size:13px}
+.vw-guide li+li::before{content:"→";color:#56636F;margin-right:10px}
+.vw-guide a{margin-left:auto;color:#F29A63;font-weight:700;text-decoration:none}.vw-guide a:hover{color:#fff}
+@keyframes gp{0%,100%{box-shadow:0 0 0 0 rgba(224,108,52,.6)}50%{box-shadow:0 0 0 6px rgba(224,108,52,0)}}
+.vw-teaser.new{background:#C4521C;border-color:#C4521C;color:#fff}
+.vw-teaser.new span span{color:rgba(255,255,255,.85)}.vw-teaser.new em{color:#fff}
+.vw-teaser.new:hover{background:#D25E26}
+@media (max-width:560px){.vw-guide{font-size:12px;gap:6px 10px;padding:9px 10px}.vw-guide li+li::before{margin-right:4px}.vw-guide a{margin-left:0;width:100%}.vw-syn{display:none}}
+@media (prefers-reduced-motion:reduce){.vw-guide li.cur b{animation:none}}
+.c-final2{position:relative;overflow:hidden;text-align:center;border:1px solid rgba(224,108,52,.3);border-radius:20px;padding:clamp(40px,6vw,80px) clamp(20px,4vw,48px);background:linear-gradient(180deg,rgba(12,27,44,.82),rgba(12,27,44,.95)),url(/collectivites/img/village.jpg) center/cover}
+.c-final2::before{content:"";position:absolute;left:50%;top:0;width:70%;height:100%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(224,108,52,.18),transparent);pointer-events:none}
+.c-final2>*{position:relative}
+.c-final2 h2{font-size:clamp(30px,4.2vw,54px);line-height:1.05;letter-spacing:-.04em;margin:12px auto 0;max-width:16ch}
+.c-final2 h2 span{color:#9AA3AF}
+.c-final2 p{color:var(--doux);max-width:46ch;margin:16px auto 0;font-size:clamp(15.5px,1.4vw,18px)}
+.cf2{display:flex;gap:10px;max-width:560px;margin:28px auto 0;padding:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px}
+.cf2 input{flex:1;min-width:0;background:transparent;border:0;color:#fff;font:500 16px var(--sans);padding:0 12px;outline:none}
+.cf2 input::placeholder{color:#8E9AA6}
+.cf2:focus-within{border-color:#E06C34}
+.cf2 .btn{min-height:48px;white-space:nowrap}
+.c-final2 .c-lien{display:inline-block;margin-top:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:560px){.cf2{flex-direction:column;background:none;border:0;padding:0}.cf2 input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;min-height:50px}}
+@media (min-width:901px){.vw-map{aspect-ratio:auto!important;min-height:560px}}
 /* carte */
 .vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
 .vw-top{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #E3E7EB}
@@ -277,9 +308,10 @@ main{overflow-x:clip}
     <p class="c-lead">VB OLD repère, à partir des relevés aériens de l'IGN, les maisons où le débroussaillement n'est pas fait, et prépare pour chacune un courrier qui explique quoi faire et pourquoi.</p>
     <div class="vw" id="vw">
       <div class="vw-top">
-        <div class="vw-brand"><small>VB OLD · feux de forêt</small><b>Commune exemple</b></div>
+        <div class="vw-brand"><small>VB OLD · feux de forêt</small><b>Commune exemple <span class="vw-syn">image de synthèse</span></b><small class="vw-real">Dans l'outil : photo aérienne réelle de l'IGN</small></div>
         <div class="vw-kpi"><b id="vw-pct">–</b><span>des maisons sans observation</span></div>
       </div>
+      <ol class="vw-guide" id="vw-guide"><li class="cur"><b>1</b>Cliquez sur une maison</li><li><b>2</b>Ouvrez le courrier</li><li><b>3</b>Validez l'envoi</li></ol>
       <div class="vw-chips" id="vw-chips"></div>
       <div class="vw-body">
         <div class="vw-map">
@@ -287,7 +319,7 @@ main{overflow-x:clip}
             <image href="/collectivites/img/village.jpg" x="0" y="0" width="1280" height="840" preserveAspectRatio="none"/>
           </svg>
           <div class="vw-hint" id="vw-hint">Cliquez sur une maison colorée</div>
-          <span class="vw-src">Vue aérienne fictive</span>
+          <span class="vw-src">Image de synthèse</span>
         </div>
         <div class="vw-side" id="vw-side" aria-live="polite"></div>
       </div>
@@ -358,9 +390,12 @@ main{overflow-x:clip}
 
 <section class="c-sec" style="border-top:0;padding-top:0">
   <div class="wrap">
-    <div class="c-final rv">
-      <h2>Voir l'état du débroussaillement de votre commune.</h2>
-      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/collectivites/demande/">Demander une présentation</a></div>
+    <div class="c-final2 rv">
+      <span class="c-k">Pour votre commune</span>
+      <h2>Voyez votre commune <span>dans l'outil.</span></h2>
+      <p>Nous préparons une démonstration avec les données de votre commune et vous la présentons, en mairie ou à distance.</p>
+      <form class="cf2" action="/collectivites/demande/" method="get"><label class="sr" for="cf2-c">Votre commune</label><input id="cf2-c" name="commune" type="text" placeholder="Nom de votre commune" autocomplete="address-level2" required><button class="btn btn-p" type="submit">Préparer ma démonstration</button></form>
+      <a class="c-lien" href="/OLD-demo/">ou accéder à la démonstration complète →</a>
     </div>
   </div>
 </section>
@@ -407,7 +442,8 @@ function fit(){svg.setAttribute('viewBox',window.matchMedia('(max-width:900px)')
 fit();window.addEventListener('resize',fit);
 function cnt(k){return D.filter(function(h){return h.s===k}).length}
 side.innerHTML='<div class="vw-sub">Maisons à moins de 200 m du bois</div><h3>'+inP.length+' maisons soumises au débroussaillement</h3><div class="vw-sum"><div><span>Débroussaillement à réaliser</span><b>'+cnt('r')+'</b></div><div><span>À vérifier</span><b>'+cnt('o')+'</b></div><div><span>Sans observation</span><b>'+cnt('v')+'</b></div></div><p class="vw-empty"><b>Cliquez sur une maison</b>pour voir ses constats et préparer le courrier.</p>';
-function pick(h){
+function gstep(n){var L=document.querySelectorAll('#vw-guide li');for(var k=0;k<L.length;k++){L[k].classList.toggle('ok',k<n);L[k].classList.toggle('cur',k===n)}var g=document.getElementById('vw-guide');if(n>=3&&!document.getElementById('vw-fin')){var a=document.createElement('a');a.id='vw-fin';a.href='/collectivites/demande/';a.textContent='Voir la même chose sur votre commune →';g.appendChild(a)}}
+function pick(h){if(!document.querySelector('#vw-guide li.ok'))gstep(1);
   if(sel)sel.g.classList.remove('sel');sel=h;h.g.classList.add('sel');hint.style.opacity=0;
   ring.setAttribute('cx',h.x);ring.setAttribute('cy',h.y);ring.setAttribute('opacity',h.s==='g'?0:1);
   var t='<div><span class="vw-st" style="background:'+S[h.s][1]+'">'+S[h.s][0]+'</span></div><h3>Maison n° '+h.n+'</h3><div class="vw-sub">'+(h.s==='g'?'À '+h.d+' m du bois : hors zone':'À '+h.d+' m du bois · cercle des 50 m affiché')+'</div>';
@@ -421,7 +457,7 @@ function pick(h){
     if(done[h.n])t+='<div class="vw-toast">'+esc(done[h.n])+'</div>';
   }
   side.innerHTML=t;
-  var b1=document.getElementById('vw-l');if(b1)b1.onclick=function(){seen=true;letter(h)};var bt=document.getElementById('vw-t');if(bt)bt.onclick=function(){seen=true;letter(h)};
+  var b1=document.getElementById('vw-l');if(b1)b1.onclick=function(){seen=true;letter(h)};var bt=document.getElementById('vw-t');if(bt)bt.onclick=function(){seen=true;gstep(2);letter(h)};
   var b2=document.getElementById('vw-c');if(b2)b2.onclick=function(){done[h.n]='Ajoutée à la liste des contrôles sur place.';pick(h)};
   if(touched&&window.matchMedia('(max-width:900px)').matches&&side.getBoundingClientRect().top>window.innerHeight-80)side.scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -451,7 +487,7 @@ function letter(h){
    '<div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
   modal.hidden=false;
   Array.prototype.forEach.call(document.querySelectorAll('.lt-ton button'),function(b){b.onclick=function(){TON=+b.getAttribute('data-t');letter(h)}});
-  document.getElementById('vw-ok').onclick=function(){done[h.n]='Courrier « '+['information','rappel'][TON]+' » validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
+  document.getElementById('vw-ok').onclick=function(){gstep(3);done[h.n]='Courrier « '+['information','rappel'][TON]+' » validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
 }
 
 var vw=document.getElementById('vw'),touched=false;
