@@ -57,6 +57,13 @@ main{overflow-x:clip}
 @keyframes hxl{to{transform:none}}
 @media (max-width:560px){.c-hero h1{font-size:clamp(32px,9.6vw,44px)}.c-hero .c-cta .btn{width:100%}.c-hero .c-cta{align-self:stretch}.c-tags li{font-size:12.5px;padding:7px 11px}}
 @media (prefers-reduced-motion:reduce){.hx,.hl>.hx{animation:none;opacity:1;transform:none}.c-cue i{animation:none}}
+.st>li{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.st>li{border-top-color:transparent!important;position:relative}
+.st>li::after{content:"";position:absolute;left:0;top:-2px;height:2px;width:0;background:var(--c-or);transition:width .7s ease}
+.vu .st>li{opacity:1;transform:none}.vu .st>li::after{width:100%}
+.vu .st>li:nth-child(2){transition-delay:.18s}.vu .st>li:nth-child(2)::after{transition-delay:.18s}
+.vu .st>li:nth-child(3){transition-delay:.36s}.vu .st>li:nth-child(3)::after{transition-delay:.36s}
+@media (prefers-reduced-motion:reduce){.st>li{opacity:1;transform:none;transition:none;border-top-color:var(--c-or)!important}.st>li::after{display:none}}
 /* carte */
 .vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
 .vw-top{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #E3E7EB}
@@ -91,7 +98,25 @@ main{overflow-x:clip}
 .vw-modal[hidden]{display:none}
 .vw-letter{position:relative;background:#fff;width:min(560px,100%);max-height:100%;overflow:auto;border-radius:10px;padding:26px 28px;font:400 13.5px/1.55 Georgia,serif;color:#222;box-shadow:0 30px 60px rgba(0,0,0,.35)}
 .vw-letter h4{font:700 14px/1.4 Georgia,serif;margin:12px 0 6px}.vw-letter ol{padding-left:18px;margin:6px 0}.vw-letter .hl{background:#FFF3B0;padding:0 3px}
-.vw-x{position:absolute;right:10px;top:8px;border:0;background:none;font-size:18px;cursor:pointer;color:#56636F}
+.vw-letter{width:min(720px,100%);padding:0;font:400 13.5px/1.55 Georgia,serif}
+.lt-ton{position:sticky;top:0;z-index:2;display:flex;gap:4px;padding:10px 44px 10px 14px;background:#F4F6F8;border-bottom:1px solid #E3E7EB;font-family:var(--sans)}
+.lt-ton button{border:1px solid #D5DBE1;background:#fff;border-radius:7px;padding:6px 11px;font:600 12.5px var(--sans);color:#1C2733;cursor:pointer}
+.lt-ton button.on{background:#1C2733;color:#fff;border-color:#1C2733}
+.lt-ton button:disabled{opacity:.5;cursor:not-allowed}.lt-ton small{font-weight:400}
+.lt-doc{padding:24px 30px 6px}
+.lt-h{display:flex;justify-content:space-between;gap:16px}
+.lt-dest{text-align:right;margin:16px 0}
+.lt-fig{margin:14px 0;border-radius:8px;overflow:hidden;border:1px solid #E3E7EB}
+.lt-fig svg{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:240px}
+.lt-fig figcaption{padding:6px 10px;font:400 11.5px var(--sans);color:#56636F;background:#F7F9FA}
+.lt-t{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 10px}
+.lt-t th{text-align:left;font:700 11.5px var(--sans);text-transform:uppercase;letter-spacing:.04em;color:#56636F;border-bottom:2px solid #1C2733;padding:6px}
+.lt-t td{vertical-align:top;border-bottom:1px solid #E3E7EB;padding:8px 6px}
+.lt-c{background:#FFF8E1;border-left:3px solid #C9A227;padding:8px 10px;font-size:12.5px}
+.lt-p{padding-left:18px;margin:4px 0}.lt-p li{margin:3px 0}
+.vw-letter>.vw-btns{position:sticky;bottom:0;background:#fff;padding:12px 30px;border-top:1px solid #E3E7EB}
+@media (max-width:560px){.lt-doc{padding:18px 16px 4px}.lt-t thead{display:none}.lt-t td{display:block;border:0;padding:3px 0}.lt-t tr{display:block;border-bottom:1px solid #E3E7EB;padding:8px 0}.lt-t td:nth-child(2)::before{content:"À faire : ";font-weight:700}.lt-t td:nth-child(3)::before{content:"Pourquoi : ";font-weight:700}.lt-t td:nth-child(3){color:#56636F}.vw-letter>.vw-btns{padding:10px 16px}.lt-ton{overflow-x:auto}}
+.vw-x{position:absolute;z-index:3;right:10px;top:8px;border:0;background:none;font-size:18px;cursor:pointer;color:#56636F}
 .vw-src{position:absolute;right:8px;bottom:6px;font:500 10.5px var(--sans);color:rgba(255,255,255,.85);text-shadow:0 1px 2px rgba(0,0,0,.6);pointer-events:none}
 /* étapes */
 .c-steps{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:e}
@@ -232,7 +257,7 @@ main{overflow-x:clip}
     <ul class="c-tags hx" style="--d:.8s"><li>Débroussaillement (OLD)</li><li>Tempête et vents forts</li><li>Signalements des habitants</li></ul>
     <div class="c-cta hx" style="--d:.9s"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a></div>
   </div>
-  <div class="wrap c-bas hx" style="--d:1.1s"><a class="c-mail" href="/#contact">Demander une présentation</a><a class="c-cue" href="#essayer"><span>Découvrir</span><i aria-hidden="true"></i></a></div>
+  <div class="wrap c-bas hx" style="--d:1.1s"><a class="c-mail" href="/collectivites/demande/">Demander une présentation</a><a class="c-cue" href="#essayer"><span>Découvrir</span><i aria-hidden="true"></i></a></div>
 </section>
 
 <section id="essayer" style="padding:clamp(56px,7vw,96px) 0;border-top:1px solid var(--c-line)">
@@ -271,7 +296,7 @@ main{overflow-x:clip}
   <div class="rv wrap">
     <span class="c-k">Comment ça marche</span>
     <h2 class="c-h2">Trois étapes, sans visite préalable.</h2>
-    <ol class="c-steps">
+    <ol class="c-steps st">
       <li><h3>Nous analysons la commune</h3><p>Chaque maison, à partir des relevés aériens publics de l'IGN et des règles de votre département.</p></li>
       <li><h3>Des courriers détaillés</h3><p>Pour chaque maison, un courrier explique au propriétaire ce qu'il doit faire et pourquoi. Rien ne part sans votre validation.</p></li>
       <li><h3>Tout est daté</h3><p>Constats, courriers et relances sont conservés et suivis jusqu'à la mise en conformité.</p></li>
@@ -281,7 +306,7 @@ main{overflow-x:clip}
 
 <section class="c-sec" id="signalements">
   <div class="rv wrap">
-    <span class="c-k">Le jour d'un événement</span>
+    <span class="c-k">En cas de crise : tempête, feu</span>
     <h2 class="c-h2">Les habitants signalent, vous coordonnez.</h2>
     <div class="sg" id="sg">
       <div class="sg-tabs" role="tablist">
@@ -324,7 +349,7 @@ main{overflow-x:clip}
   <div class="wrap">
     <div class="c-final rv">
       <h2>Voir l'état du débroussaillement de votre commune.</h2>
-      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander l'analyse</a></div>
+      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/collectivites/demande/">Demander une présentation</a></div>
     </div>
   </div>
 </section>
@@ -380,7 +405,7 @@ function pick(h){
     var real=h.c.filter(function(c){return c[0]!=='y'});
     if(!real.length)t+='<p class="vw-empty"><b>Rien à signaler</b>Aucun écart visible sur les images.</p>';
     h.c.forEach(function(c){t+='<div class="vw-c"><i style="background:'+col[c[0]]+'"></i><div><b>'+esc(c[1])+'</b><span>'+esc(c[2])+'</span><em><b style="display:inline;font-size:12.5px">À faire :</b> '+esc(c[3])+'</em></div></div>'});
-    t+='<div class="vw-btns"><button class="vw-b p" type="button" id="vw-l">'+(real.length?'Préparer le courrier':'Préparer un courrier de rappel')+'</button><button class="vw-b" type="button" id="vw-c">+ À contrôler sur place</button></div>';
+    t+='<div class="vw-btns"><button class="vw-b p" type="button" id="vw-l">'+(real.length?'Voir le courrier prêt à envoyer':'Voir le courrier de rappel')+'</button><button class="vw-b" type="button" id="vw-c">+ À contrôler sur place</button></div>';
     if(done[h.n])t+='<div class="vw-toast">'+esc(done[h.n])+'</div>';
   }
   side.innerHTML=t;
@@ -389,13 +414,32 @@ function pick(h){
   if(touched&&window.matchMedia('(max-width:900px)').matches&&side.getBoundingClientRect().top>window.innerHeight-80)side.scrollIntoView({behavior:'smooth',block:'start'});
 }
 var modal=document.getElementById('vw-modal');
+var TON=0;
+var WHY={'Branches contre la maison':'des branches au contact des murs ou au-dessus du toit transmettent le feu à la maison, souvent par les braises','Broussaille sur le terrain':'la végétation basse et sèche conduit le feu jusqu\'aux murs','Broussaille en limite de terrain':'la végétation basse et sèche conduit le feu jusqu\'aux murs','Arbre proche de la maison':'un arbre trop proche peut enflammer la toiture et les gouttières','Accès encombré':'les véhicules de secours doivent pouvoir accéder à la maison','Arbres serrés dans la zone':'des arbres dont les couronnes se touchent laissent le feu passer de l\'un à l\'autre'};
+function todo(c){return c[0]==='o'?'vérifier et, si nécessaire, '+(/arbre/i.test(c[1])?'élaguer ou abattre':'débroussailler'):c[3]}
 function letter(h){
-  var items=h.c.filter(function(c){return c[0]!=='y'});
-  var WHY={'Branches contre la maison':'des branches au contact des murs ou du toit transmettent le feu à la maison','Broussaille sur le terrain':'la végétation basse conduit le feu jusqu\'aux murs','Broussaille en limite de terrain':'la végétation basse conduit le feu jusqu\'aux murs','Arbre proche de la maison':'un arbre trop proche peut enflammer la toiture','Accès encombré':'les secours doivent pouvoir passer avec leurs véhicules'};
-  var body=items.length?'<h4>Sur votre terrain</h4><ol>'+items.map(function(c){return'<li><b>'+esc(c[1])+'</b> : '+esc(c[2])+'.<br>À faire : '+esc(c[3])+'.'+(WHY[c[1]]?'<br><i>Pourquoi : '+esc(WHY[c[1]])+'.</i>':'')+'</li>'}).join('')+'</ol>':'<p>Les images ne montrent pas d\'écart. Nous vous rappelons l\'obligation d\'entretenir les abords de votre habitation sur 50 m.</p>';
-  document.getElementById('vw-letter').innerHTML='<p style="display:flex;justify-content:space-between;gap:10px"><b>Mairie de la commune exemple</b><span>Le <span class="hl">[date]</span></span></p><p style="text-align:right;margin-top:12px">À l\'occupant ou au propriétaire<br>Maison n° '+h.n+'</p><p><b>Objet : débroussaillement autour de votre habitation</b></p><p>Madame, Monsieur,</p><p>Votre habitation se trouve à moins de 200 m d\'un bois classé à risque d\'incendie. Les photographies aériennes de l\'IGN montrent les points suivants :</p>'+body+'<p>Le débroussaillement dans un rayon de 50 m autour des constructions est une obligation légale dans les communes exposées au risque d\'incendie de forêt. Ces constats sont faits à distance : si la situation a changé, vous pouvez nous l\'indiquer.</p><p style="text-align:right">Le maire</p><div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
+  var items=h.c.filter(function(c){return c[0]!=='y'}),cons=h.c.filter(function(c){return c[0]==='y'});
+  var ref='OLD-2026-'+('0'+h.n).slice(-3);
+  var obj=['Débroussaillement autour de votre habitation : information','Rappel : débroussaillement autour de votre habitation','Mise en demeure de débroussailler'][TON];
+  var x0=h.x-140,y0=h.y-105;
+  var fig='<figure class="lt-fig"><svg viewBox="'+x0+' '+y0+' 280 210" preserveAspectRatio="xMidYMid slice"><image href="/collectivites/img/village.jpg" x="0" y="0" width="1280" height="840"/><circle cx="'+h.x+'" cy="'+h.y+'" r="100" fill="rgba(255,170,60,.12)" stroke="#FFB347" stroke-width="2.5" stroke-dasharray="8 6"/><polygon points="'+grow(h.p,h.x,h.y,1.5)+'" fill="none" stroke="#fff" stroke-width="3"/></svg><figcaption>Vue aérienne IGN du <span class="hl">[date]</span>. Cercle : 50 m autour de votre habitation.</figcaption></figure>';
+  var tab=items.length?'<table class="lt-t"><thead><tr><th>Ce que montre l\'image</th><th>Ce qu\'il faut faire</th><th>Pourquoi</th></tr></thead><tbody>'+items.map(function(c){return'<tr><td><b>'+esc(c[1])+'</b><br>'+esc(c[2])+'</td><td>'+esc(todo(c))+'</td><td>'+esc(WHY[c[1]]||'')+'</td></tr>'}).join('')+'</tbody></table>':'<p>Les images ne montrent pas d\'écart à ce jour. Ce courrier vous rappelle l\'obligation d\'entretenir les abords de votre habitation chaque année, avant l\'été.</p>';
+  var conseil=cons.length?'<p class="lt-c"><b>Conseil, non obligatoire :</b> '+esc(cons[0][2])+'. Éclaircir limite la propagation du feu d\'arbre en arbre.</p>':'';
+  var intro=['Votre habitation se trouve à '+h.d+' m d\'un bois exposé au risque d\'incendie. Dans ce cas, la loi impose de débroussailler dans un rayon de 50 m autour des constructions (articles L134-6 et suivants du code forestier). Cette obligation incombe au propriétaire, y compris lorsque les 50 m débordent sur un terrain voisin.',
+    'Par un courrier du <span class="hl">[date du premier courrier]</span>, nous vous avons informé de l\'obligation de débroussailler dans un rayon de 50 m autour de votre habitation. Les images les plus récentes montrent que les points suivants restent à traiter.',''][TON];
+  var delai=['Nous vous invitons à réaliser ces travaux avant le <span class="hl">[date]</span>, puis à les entretenir chaque année.','Merci de réaliser ces travaux avant le <span class="hl">[date]</span>. À défaut, un contrôle sur place sera organisé.',''][TON];
+  document.getElementById('vw-letter').innerHTML=
+   '<div class="lt-ton" role="tablist">'+['Information','Rappel','Mise en demeure'].map(function(t,k){return'<button type="button" data-t="'+k+'" class="'+(k===TON?'on':'')+'"'+(k===2?' disabled title="Uniquement après un contrôle sur place"':'')+'>'+t+(k===2?' <small>après contrôle</small>':'')+'</button>'}).join('')+'</div>'+
+   '<div class="lt-doc"><div class="lt-h"><div><b>Mairie de la commune exemple</b><br><span class="hl">[adresse de la mairie]</span></div><div style="text-align:right">Le <span class="hl">[date]</span><br><small>Réf. '+ref+'</small></div></div>'+
+   '<p class="lt-dest">À l\'occupant ou au propriétaire<br>Maison n° '+h.n+'</p>'+
+   '<p><b>Objet : '+obj+'</b></p><p>Madame, Monsieur,</p><p>'+intro+'</p>'+fig+
+   (items.length?'<h4>Sur votre terrain</h4>':'')+tab+conseil+'<p>'+delai+'</p>'+
+   '<h4>En pratique</h4><ul class="lt-p"><li>Les déchets verts se déposent en déchetterie ou se broient ; leur brûlage est en principe interdit.</li><li>Si les travaux sont déjà faits, signalez-le à la mairie : la fiche de votre habitation sera mise à jour.</li><li>Ces constats sont établis à distance, à partir d\'images aériennes. Ils ne constituent pas une sanction.</li></ul>'+
+   '<p style="text-align:right;margin-top:16px">Le maire<br><span class="hl">[nom]</span></p></div>'+
+   '<div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
   modal.hidden=false;
-  document.getElementById('vw-ok').onclick=function(){done[h.n]='Courrier validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
+  Array.prototype.forEach.call(document.querySelectorAll('.lt-ton button'),function(b){b.onclick=function(){TON=+b.getAttribute('data-t');letter(h)}});
+  document.getElementById('vw-ok').onclick=function(){done[h.n]='Courrier « '+['information','rappel'][TON]+' » validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
 }
 
 var vw=document.getElementById('vw'),touched=false;
@@ -429,7 +473,7 @@ if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){auto=false;sg.c
 if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){go(0);o.disconnect()}})},{threshold:.4}).observe(sg)}else go(0);
 })();
 </script>
-<script src="/static/menu.js?v=7" defer></script>
+<script src="/static/menu.js?v=8" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>
 </html>
