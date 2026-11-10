@@ -2,57 +2,74 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#1c2126">
-<title>Équipe · statut terrain</title>
+<title>Équipe terrain · missions</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font:15px/1.45 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:#1c2126;background:#f1efe9}
-.top{background:#1c2126;color:#fff;padding:14px 16px calc(14px + env(safe-area-inset-top,0)) ;padding-top:max(14px,env(safe-area-inset-top))}
-.top small{display:block;opacity:.7;font-size:12px}.top b{font-size:18px}
+.top{background:#1c2126;color:#fff;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top))}
+.top small{display:block;opacity:.7;font-size:12px}.top .r{display:flex;align-items:center;gap:10px}.top b{font-size:17px}
+.top select{margin-left:auto;font:600 14px system-ui;border:0;border-radius:9px;padding:7px 10px;background:#fff;color:#1c2126}
+.stb{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px}.stb i{width:10px;height:10px;border-radius:50%}
 .w{max-width:520px;margin:0 auto;padding:12px}
-.card{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:14px;margin:0 0 12px}
-h2{font-size:14px;margin:0 0 10px;color:#5d6670;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.tabs{display:flex;gap:6px;overflow-x:auto}.tabs button{flex:1;min-width:0;border:1.5px solid #e2ddd3;background:#fff;border-radius:11px;padding:10px 8px;font:600 14px system-ui;cursor:pointer;color:#1c2126}.tabs button.on{background:#1c2126;color:#fff;border-color:#1c2126}.tabs small{display:block;font-weight:400;font-size:11.5px;opacity:.75}
-.cur{display:flex;align-items:center;gap:10px}.cur i{width:14px;height:14px;border-radius:50%;flex:none}.cur b{font-size:20px}.cur span{display:block;font-size:13px;color:#5d6670}
-.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st button{border:2px solid #e2ddd3;background:#fff;border-radius:12px;padding:14px 8px;font:650 15px system-ui;cursor:pointer;color:#1c2126;display:flex;align-items:center;gap:8px;justify-content:center}.st button i{width:11px;height:11px;border-radius:50%}.st button.on{color:#fff}
-.mi{border:1.5px solid #e2ddd3;border-radius:12px;padding:11px 12px;margin-top:8px}.mi b{display:block}.mi .v{font-size:13px;color:#5d6670}.mi .d{font-size:13px;margin-top:3px}.mi .a{display:flex;gap:8px;margin-top:9px}.mi .a button{flex:1;border:0;border-radius:10px;padding:11px;font:650 14px system-ui;cursor:pointer}.go{background:#1c2126;color:#fff}.fin{background:#2e7d32;color:#fff}
-.mi.act{border-color:#ef8a17;background:#fff8ef}.p1{color:#c62828;font-size:12px;font-weight:700}
-textarea{width:100%;font:inherit;border:1px solid #d6d0c6;border-radius:10px;padding:10px;min-height:64px}
-.save{width:100%;border:0;border-radius:11px;padding:13px;background:#1c2126;color:#fff;font:650 15px system-ui;margin-top:8px;cursor:pointer}
-.muted{color:#5d6670;font-size:13px}.demo{background:#fff3cd;border:1px solid #e6c65c;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:12px}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1c2126;color:#fff;border-radius:10px;padding:10px 14px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none}.toast.on{opacity:1}
+h2{font-size:13px;margin:16px 2px 8px;color:#5d6670;font-weight:650;text-transform:uppercase;letter-spacing:.05em}
+.act{background:#fff;border:2px solid #ef8a17;border-radius:16px;padding:16px;box-shadow:0 4px 14px rgba(239,138,23,.18)}
+.act .k{font-size:12px;font-weight:700;color:#ef8a17;text-transform:uppercase;letter-spacing:.05em}
+.act .t{font-size:20px;font-weight:750;margin:2px 0}.act .v{font-size:14px;color:#3a4148}.act .d{font-size:14px;margin-top:6px}
+.big{display:block;width:100%;border:0;border-radius:13px;padding:16px;font:700 17px system-ui;cursor:pointer;margin-top:10px}
+.b-on{background:#1565c0;color:#fff}.b-ok{background:#2e7d32;color:#fff}.b-go{background:#1c2126;color:#fff}
+.mi{background:#fff;border-radius:14px;padding:13px 14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.07);display:flex;gap:12px;align-items:center}
+.mi .x{flex:1;min-width:0}.mi b{display:block;font-size:15.5px}.mi .v{font-size:13px;color:#5d6670}.mi .d{font-size:13px;margin-top:2px;color:#3a4148}
+.mi button{flex:none;border:0;border-radius:11px;padding:12px 14px;font:700 14px system-ui;background:#1c2126;color:#fff;cursor:pointer}
+.mi button:disabled{background:#d6d0c6;color:#7a8590}
+.p1{display:inline-block;background:#c62828;color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-bottom:3px}
+.mine{border-left:4px solid #1565c0}
+.emp{background:#fff;border-radius:14px;padding:16px;color:#5d6670;font-size:14px;text-align:center}
+.oth{display:flex;gap:6px;flex-wrap:wrap}.oth button{flex:1;border:1.5px solid #e2ddd3;background:#fff;border-radius:11px;padding:11px 8px;font:600 14px system-ui;cursor:pointer;color:#1c2126}.oth button.on{background:#1c2126;color:#fff;border-color:#1c2126}
+details{background:#fff;border-radius:14px;padding:12px 14px;margin-top:8px}summary{cursor:pointer;font-weight:600;font-size:14px}
+textarea{width:100%;font:inherit;border:1px solid #d6d0c6;border-radius:10px;padding:10px;min-height:60px;margin-top:8px}
+.sv{width:100%;border:0;border-radius:11px;padding:12px;background:#1c2126;color:#fff;font:650 15px system-ui;margin-top:6px;cursor:pointer}
+.demo{background:#fff3cd;border:1px solid #e6c65c;border-radius:12px;padding:9px 12px;font-size:12.5px;margin-top:16px;color:#5a4a10}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1c2126;color:#fff;border-radius:10px;padding:11px 16px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9}.toast.on{opacity:1}
 </style></head><body>
-<div class="top"><small id="com">Commune</small><b>Statut des équipes</b></div>
+<div class="top"><small id="com">Commune</small><div class="r"><b>Missions de l'équipe</b><select id="me" aria-label="Mon équipe"></select></div><div class="stb" id="stb"></div></div>
 <div class="w">
-<div class="demo"><b>Démonstration.</b> Ouvrez cette page dans un autre onglet que la cellule de crise : chaque mise à jour s'y affiche aussitôt. En service, le responsable du service technique l'ouvre sur son téléphone avec son profil, et la cellule la voit en direct.</div>
-<div class="card"><h2>Mon équipe</h2><div class="tabs" id="tabs"></div></div>
-<div class="card"><h2>Statut actuel</h2><div class="cur" id="cur"></div></div>
-<div class="card"><h2>Changer le statut</h2><div class="st" id="st"></div></div>
-<div class="card"><h2>Missions affectées</h2><div id="mis"></div></div>
-<div class="card"><h2>Tâche en cours</h2><textarea id="task" placeholder="Ex. : dégagement du chêne, rue du Port, fin estimée 15 h"></textarea><button class="save" onclick="saveTask()">Enregistrer</button></div>
+<div id="cur"></div>
+<h2 id="h-mine">Missions pour mon équipe</h2><div id="mine"></div>
+<h2 id="h-free">Incidents à prendre</h2><div id="free"></div>
+<h2>Autre statut</h2><div class="oth" id="oth"></div>
+<details><summary>Ajouter une précision pour la cellule</summary><textarea id="task" placeholder="Ex. : route dégagée, reste à évacuer le bois ; fin estimée 15 h"></textarea><button class="sv" onclick="saveNote()">Envoyer à la cellule</button></details>
+<div class="demo"><b>Démonstration.</b> Ouvrez cette page dans un autre onglet que la cellule de crise : chaque action s'y affiche aussitôt. En service, le responsable du service technique l'utilise sur son téléphone avec son compte.</div>
 </div>
 <div class="toast" id="toast"></div>
 <script>
 const Q=new URLSearchParams(location.search),C=Q.get('c')||'sam';
-const TST={dispo:['Disponible','#2e7d32'],route:['En route','#1565c0'],inter:['En intervention','#ef8a17'],pause:['En pause','#7a8590'],indispo:['Indisponible','#6d0f0f']};
-const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TST={dispo:['Disponible','#2e7d32'],route:['En route','#1565c0'],inter:['Sur place','#ef8a17'],pause:['En pause','#7a8590'],indispo:['Indisponible','#6d0f0f']};
+const esc=t=>String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const J=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}};
 const hnow=()=>new Date().toTimeString().slice(0,5);
-let DEF=J('vbteamdef_'+C)||{nom:'Commune',t:[{id:'A',n:'Équipe A',r:'Services techniques'},{id:'B',n:'Équipe B',r:'Élagage'},{id:'C',n:'Équipe C',r:'Élus d\'astreinte'}]};
+let DEF=J('vbteamdef_'+C)||{nom:'Commune',t:[{id:'A',n:'Équipe A',r:'Services techniques'},{id:'B',n:'Équipe B',r:'Élagage'},{id:'C',n:'Équipe C',r:"Élus d'astreinte"}]};
 let ME=Q.get('t')||localStorage.getItem('vbteam_me_'+C)||DEF.t[0].id;
-function all(){return J('vbteams_'+C)||{}}
-function put(fn){const o=all(),t=o[ME]||{};fn(t);t.h=hnow();t.by='terrain';o[ME]=t;localStorage.setItem('vbteams_'+C,JSON.stringify(o));render()}
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)}
-function setS(s){put(t=>{t.s=s;t.logS=Date.now()});toast('Statut envoyé : '+TST[s][0])}
-function saveTask(){const v=document.getElementById('task').value.trim();put(t=>{t.task=v;t.logS=Date.now()});toast('Tâche envoyée à la cellule')}
-function startM(id,l){put(t=>{t.s='inter';t.task='n°'+id+' '+l;t.start=id;t.logS=Date.now()});toast('Sur place : la cellule est prévenue')}
-function endM(id){const rest=(J('vbinc_'+C)||[]).filter(x=>x.team===ME&&x.id!==id);put(t=>{t.done=id;t.s=rest.length?'route':'dispo';t.task=rest.length?'n°'+rest[0].id+' '+rest[0].l:'';t.logS=Date.now()});toast('Mission terminée')}
+const all=()=>J('vbteams_'+C)||{},me=()=>all()[ME]||{},incs=()=>J('vbinc_'+C)||[];
+function put(fn){const o=all(),t=o[ME]||{};fn(t);t.h=hnow();t.by='terrain';t.logS=Date.now();o[ME]=t;localStorage.setItem('vbteams_'+C,JSON.stringify(o));render()}
+function toast(s){const e=document.getElementById('toast');e.textContent=s;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1900)}
+const lab=x=>'n°'+x.id+' '+x.l;
+function go(id){const x=incs().find(y=>y.id===id);if(!x)return;if(me().cur&&me().cur!==id&&!confirm('Une mission est déjà en cours. Passer à celle-ci ?'))return;
+ put(t=>{t.cur=id;t.s='route';t.task=lab(x)+' · '+x.v;t.go=id;if(x.team!==ME)t.take=id});toast('En route : la cellule est prévenue')}
+function arrive(){const id=me().cur;put(t=>{t.s='inter';t.start=id});toast('Sur place')}
+function done(){const id=me().cur;if(!id)return;put(t=>{t.done=id;t.cur=null;t.s='dispo';t.task=''});toast('Mission terminée')}
+function setS(s){put(t=>{t.s=s;if(s==='dispo'||s==='indispo'){t.cur=null;t.task=''}});toast('Statut : '+TST[s][0])}
+function saveNote(){const v=document.getElementById('task').value.trim();if(!v)return;put(t=>{t.task=(me().cur?(t.task||'').split(' — ')[0]+' — ':'')+v});document.getElementById('task').value='';toast('Précision envoyée')}
+function row(x,mine){const busy=me().cur===x.id;return '<div class="mi'+(mine?' mine':'')+'"><div class="x">'+(x.pr===1?'<span class="p1">URGENT</span>':'')+'<b>'+esc(x.l)+'</b><div class="v">📍 '+esc(x.v)+(x.h?' · '+esc(x.h):'')+'</div>'+(x.d?'<div class="d">'+esc(x.d)+'</div>':'')+'</div><button onclick="go('+x.id+')"'+(busy?' disabled':'')+'>'+(busy?'En cours':'J\'y vais')+'</button></div>'}
 function render(){DEF=J('vbteamdef_'+C)||DEF;document.getElementById('com').textContent=DEF.nom||'Commune';
- document.getElementById('tabs').innerHTML=DEF.t.map(t=>'<button class="'+(t.id===ME?'on':'')+'" onclick="ME=\''+t.id+'\';localStorage.setItem(\'vbteam_me_'+C+'\',ME);render()">'+esc(t.n)+'<small>'+esc(t.r)+'</small></button>').join('');
- const t=all()[ME]||{},s=TST[t.s||'dispo'];
- document.getElementById('cur').innerHTML='<i style="background:'+s[1]+'"></i><div><b>'+s[0]+'</b><span>'+(t.task?esc(t.task)+' · ':'')+(t.h?'mis à jour à '+t.h:'pas encore de mise à jour')+'</span></div>';
- document.getElementById('st').innerHTML=Object.keys(TST).map(k=>'<button class="'+((t.s||'dispo')===k?'on':'')+'" style="'+((t.s||'dispo')===k?'background:'+TST[k][1]+';border-color:'+TST[k][1]:'')+'" onclick="setS(\''+k+'\')"><i style="background:'+((t.s||'dispo')===k?'#fff':TST[k][1])+'"></i>'+TST[k][0]+'</button>').join('');
- const M=(J('vbinc_'+C)||[]).filter(x=>x.team===ME).sort((a,b)=>a.pr-b.pr||a.id-b.id);
- document.getElementById('mis').innerHTML=M.length?M.map((x,i)=>{const act=(t.task||'').startsWith('n°'+x.id+' ')&&t.s==='inter';return '<div class="mi'+(act?' act':'')+'">'+(x.pr===1?'<span class="p1">URGENT</span>':'')+'<b>'+(i+1)+'. n°'+x.id+' · '+esc(x.l)+'</b><div class="v">📍 '+esc(x.v)+'</div>'+(x.d?'<div class="d">'+esc(x.d)+'</div>':'')+'<div class="a">'+(act?'':'<button class="go" onclick="startM('+x.id+',\''+esc(x.l).replace(/'/g,"\\'")+'\')">Sur place</button>')+'<button class="fin" onclick="endM('+x.id+')">Terminé</button></div></div>'}).join(''):'<div class="muted">Aucune mission affectée pour le moment. Les missions envoyées par la cellule de crise apparaissent ici.</div>';
- const ta=document.getElementById('task');if(document.activeElement!==ta)ta.value=t.task||''}
+ document.getElementById('me').innerHTML=DEF.t.map(t=>'<option value="'+t.id+'"'+(t.id===ME?' selected':'')+'>'+esc(t.n)+' · '+esc(t.r)+'</option>').join('');
+ const t=me(),s=TST[t.s||'dispo'],I=incs(),cx=t.cur?I.find(y=>y.id===t.cur):null;
+ document.getElementById('stb').innerHTML='<i style="background:'+s[1]+'"></i>'+s[0]+(t.h?' · mis à jour à '+t.h:'');
+ document.getElementById('cur').innerHTML=cx?'<div class="act"><div class="k">Mission en cours · '+s[0]+'</div><div class="t">'+esc(cx.l)+'</div><div class="v">📍 '+esc(cx.v)+'</div>'+(cx.d?'<div class="d">'+esc(cx.d)+'</div>':'')+
+  (t.s==='route'?'<button class="big b-on" onclick="arrive()">Arrivé sur place</button>':'')+'<button class="big b-ok" onclick="done()">✓ Terminé</button></div>':'';
+ const mine=I.filter(x=>x.team===ME&&x.id!==t.cur).sort((a,b)=>a.pr-b.pr||a.id-b.id),free=I.filter(x=>!x.team).sort((a,b)=>a.pr-b.pr||a.id-b.id);
+ document.getElementById('mine').innerHTML=mine.length?mine.map(x=>row(x,1)).join(''):'<div class="emp">'+(cx?'Rien d\'autre en attente pour votre équipe.':'Aucune mission envoyée par la cellule pour le moment.')+'</div>';
+ document.getElementById('free').innerHTML=free.length?free.map(x=>row(x,0)).join(''):'<div class="emp">Aucun incident sans équipe.</div>';
+ document.getElementById('oth').innerHTML=['dispo','pause','indispo'].map(k=>'<button class="'+((t.s||'dispo')===k?'on':'')+'" onclick="setS(\''+k+'\')">'+TST[k][0]+'</button>').join('')}
+document.getElementById('me').onchange=e=>{ME=e.target.value;localStorage.setItem('vbteam_me_'+C,ME);render()};
 addEventListener('storage',e=>{if(e.key&&e.key.endsWith('_'+C))render()});
 render();
 </script>

@@ -197,6 +197,22 @@ details.wv{display:block}details.wv summary{display:flex;align-items:center;gap:
 .wx.big .wt b{font-size:30px}.wx.big .wb{height:70px}
 @media(max-width:560px){.wg{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .tmh{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.tsel{margin-left:auto;font:600 12px var(--sans,system-ui);border:1.5px solid;border-radius:999px;padding:3px 8px;background:#fff;cursor:pointer}.ttk{font-size:12.5px;margin-top:5px;color:#1c2126}.tmt{font-size:11.5px;color:#7a8590;margin-top:4px}.cth .muted a{color:#5d6670;font-weight:500;font-size:12px;margin-left:8px}
+.ia2{margin-top:10px;border-top:1px solid #f0ede6;padding-top:10px;display:flex;flex-direction:column;gap:8px;cursor:default}
+.stp{display:flex;gap:3px}.stp span{flex:1;font-size:10.5px;line-height:1.2;color:#9aa3ab;border-top:3px solid #e6e1d8;padding-top:4px;text-align:center}.stp span.dn{color:#2e7d32;border-color:#2e7d32}.stp span.cu{color:#1c2126;font-weight:700;border-color:#ef8a17}
+.bpri{width:100%;border:0;border-radius:10px;padding:11px;background:#1c2126;color:#fff;font:650 14px var(--sans,system-ui);cursor:pointer}.bpri.ok{background:#2e7d32}.bpri:hover{filter:brightness(1.12)}
+.bsec{width:100%;border:1px solid #e2ddd3;border-radius:10px;padding:8px;background:#fff;color:#5d6670;font:500 12.5px var(--sans,system-ui);cursor:pointer}
+.ilb{font-size:12px;color:#5d6670}.tchs{display:grid;grid-template-columns:1fr;gap:5px}
+.tch{display:flex;align-items:center;gap:9px;text-align:left;border:1.5px solid #e2ddd3;border-radius:10px;padding:7px 10px;background:#fff;cursor:pointer;font:inherit}.tch:hover{border-color:#1c2126}.tch.on{border-color:#1565c0;background:#eef4fc}.tch i{flex:none;width:10px;height:10px;border-radius:50%}.tch b{display:block;font-size:13px}.tch small{display:block;font-size:11.5px;color:#5d6670}
+.tcur{display:flex;align-items:center;gap:8px;font-size:13.5px;background:#eef4fc;border-radius:9px;padding:8px 10px}.tcur i{width:10px;height:10px;border-radius:50%}
+.chg summary,.ijd summary{cursor:pointer;font-size:12px;color:#5d6670;margin:2px 0}.chg .tchs{margin-top:6px}
+.sec2{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.seg{display:flex;border:1px solid #e2ddd3;border-radius:9px;overflow:hidden}.seg button{border:0;background:#fff;font:600 12px var(--sans,system-ui);padding:6px 9px;cursor:pointer;color:#5d6670}.seg button+button{border-left:1px solid #e2ddd3}.seg button.on.p1{background:#c62828;color:#fff}.seg button.on.p2{background:#ef8a17;color:#fff}.seg button.on.p3{background:#5d6670;color:#fff}
+.tg{border:1px solid #e2ddd3;border-radius:999px;background:#fff;font:600 12px var(--sans,system-ui);padding:6px 10px;cursor:pointer;color:#3a4148}.tg.on{background:#f3e8fb;border-color:#6a1b9a;color:#6a1b9a}
+.ijd{margin-top:8px}.ijd .ij{margin-top:4px}
+.stp span{font-size:0;padding-top:0;border-top-width:4px;border-radius:2px}.stp span.cu{font-size:11px;padding-top:4px;text-align:left;white-space:nowrap}.stp{gap:4px}
+.tchs{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}.tch{padding:6px 8px;gap:7px}.tch b{font-size:12.5px}.tch small{font-size:11px}
+.seg{width:100%}.seg button{flex:1;padding:6px 4px;font-size:11.5px}.tg{font-size:11.5px;padding:5px 9px}.bpri{padding:10px;font-size:13.5px}
+.tcur{flex-wrap:wrap}
+.seg{border:0;background:none;padding:0;overflow:visible;flex-wrap:wrap;gap:4px;width:auto}.seg button{flex:none;border:1px solid #e2ddd3!important;border-radius:999px;padding:5px 9px}
 </style><style>#chg,#chg3{display:none!important}</style></head><body>
 <div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a class="rdvt" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">Demander un rdv pour ma ville</a><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Activer la cellule de crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
 <div id="map"></div><div id="page"></div><div id="pcc"><div id="pcch"></div><div id="pcct"><button data-t="map" onclick="pccTab('map')">Carte et état de la commune</button><button data-t="act" onclick="pccTab('act')">Actions en cours</button></div><div class="pccb"><section id="pccL" aria-label="Carte et état de la commune"><div id="pccS"></div><div id="pccmap"></div></section><section id="pccR" aria-label="Actions en cours"><div id="pccl"></div><div id="pccr"></div></section></div></div>
@@ -1067,23 +1083,25 @@ function kDrop(e,col,beforeId){e.preventDefault();e.stopPropagation();e.currentT
  if(col&&col!=='new'&&(+col!==x.pr||!x.ok)){x.pr=+col;const was=x.ok;x.ok=true;jlog(x,(was?'Catégorie changée : ':'Catégorie validée : ')+PRN[col])}
  if(beforeId!==undefined&&beforeId!==id){const b=S.find(y=>y.id===beforeId);if(b){x.o=b.o-0.5;S.slice().sort((a,c)=>a.o-c.o).forEach((y,i)=>y.o=i+1)}if(KV==='list')KS='man'}
  pccRender();pccMap()}
-const TST={dispo:['Disponible','#2e7d32'],route:['En route','#1565c0'],inter:['En intervention','#ef8a17'],pause:['En pause','#7a8590'],indispo:['Indisponible','#6d0f0f']};
+const TST={dispo:['Disponible','#2e7d32'],route:['En route','#1565c0'],inter:['Sur place','#ef8a17'],pause:['En pause','#7a8590'],indispo:['Indisponible','#6d0f0f']};
 function tKey(){return 'vbteams_'+D.city}
 function tGet(){try{return JSON.parse(localStorage.getItem(tKey())||'{}')}catch(_){return {}}}
 function tSet(o){try{localStorage.setItem(tKey(),JSON.stringify(o))}catch(_){}}
 function tUpd(id,s,task){const o=tGet(),t=o[id]||{};t.s=s;if(task!==undefined)t.task=task;t.h=hnow();t.by='cellule';o[id]=t;tSet(o)}
-function tPub(){try{localStorage.setItem('vbteamdef_'+D.city,JSON.stringify({nom:D.nom,t:TEAMS}));localStorage.setItem('vbinc_'+D.city,JSON.stringify(incs().filter(x=>x.team&&x.ist!=='clos').map(x=>({id:x.id,team:x.team,l:STY[x.t],v:x.v,d:x.d||'',pr:x.pr}))))}catch(_){}}
+function tPub(){try{localStorage.setItem('vbteamdef_'+D.city,JSON.stringify({nom:D.nom,t:TEAMS}));localStorage.setItem('vbinc_'+D.city,JSON.stringify(incs().filter(x=>x.ist!=='clos').map(x=>({id:x.id,team:x.team&&x.ist==='affecte'?x.team:null,l:STY[x.t],v:x.v,d:x.d||'',pr:x.pr,h:x.h}))))}catch(_){}}
 function tLink(){return '/OLD-demo/r/equipe.html?c='+encodeURIComponent(D.city)}
 addEventListener('storage',e=>{if(!D||e.key!==tKey())return;const o=tGet();let ch=false;Object.keys(o).forEach(id=>{const t=o[id],T=TEAMS.find(z=>z.id===id)||{n:id};
  if(t.done){const x=incs().find(y=>y.id===t.done);if(x&&x.ist!=='clos'){x.ist='clos';x.st='d';jlog(x,'Terminé, signalé depuis le terrain par '+T.n)}delete t.done;ch=true}
+ if(t.take){const x=incs().find(y=>y.id===t.take);if(x&&x.ist!=='clos'){const was=x.team;x.team=id;x.ist='affecte';x.st='p';jlog(x,T.n+(was&&was!==id?' reprend l\'incident':' part sur l\'incident')+' (depuis le terrain)')}delete t.take;ch=true}
+ if(t.go){const x=incs().find(y=>y.id===t.go);if(x)jlog(x,T.n+' en route');delete t.go;ch=true}
  if(t.start){const x=incs().find(y=>y.id===t.start);if(x)jlog(x,T.n+' sur place (signalé depuis le terrain)');delete t.start;ch=true}
  if(t.logS&&t.logS!==t.logged){CLOG.unshift([t.h||hnow(),T.n,'Statut : '+(TST[t.s]||['?'])[0]+(t.task?' · '+t.task:'')+' (depuis le terrain)']);t.logged=t.logS;ch=true}});
  if(ch)tSet(o);if(document.getElementById('pcc').style.display==='flex'){pccRender();pccMap()}});
 function pccAct(id,a,arg){const x=incs().find(y=>y.id===id);if(!x)return;
  if(a==='pris'){x.ist='pris';jlog(x,'Pris en compte par la cellule de crise')}
- if(a==='team'){if(!arg)return;x.team=arg;x.ist='affecte';{const t=tGet()[arg];if(!t||!t.s||t.s==='dispo')tUpd(arg,'route','n°'+x.id+' '+STY[x.t]+' · '+x.v)}const q=incs().filter(y=>y.team===arg&&y.ist==='affecte').length;jlog(x,'Ajouté à la liste de '+TEAMS.find(t=>t.id===arg).n+' (n°'+q+' dans la file)')}
- if(a==='sdis'){x.ist='transmis';x.sdis=1;jlog(x,'Noté : transmis aux pompiers (appel fait par la cellule)')}
- if(a==='enedis'){x.ist='transmis';x.enedis=1;jlog(x,'Noté : signalé au dépannage Enedis (appel fait par la cellule)')}
+ if(a==='team'){if(!arg||x.team===arg&&x.ist==='affecte')return;x.team=arg;x.ist='affecte';{const t=tGet()[arg];if(!t||!t.s||t.s==='dispo')tUpd(arg,'route','n°'+x.id+' '+STY[x.t]+' · '+x.v)}const q=incs().filter(y=>y.team===arg&&y.ist==='affecte').length;jlog(x,'Ajouté à la liste de '+TEAMS.find(t=>t.id===arg).n+' (n°'+q+' dans la file)')}
+ if(a==='sdis'){if(x.sdis)return;if(x.ist==='nouveau'||x.ist==='pris')x.ist='transmis';x.sdis=1;jlog(x,'Noté : transmis aux pompiers (appel fait par la cellule)')}
+ if(a==='enedis'){if(x.enedis)return;if(x.ist==='nouveau'||x.ist==='pris')x.ist='transmis';x.enedis=1;jlog(x,'Noté : signalé au dépannage Enedis (appel fait par la cellule)')}
  if(a==='clos'){x.ist='clos';jlog(x,'Terminé');if(x.team&&!incs().some(y=>y.team===x.team&&y.ist==='affecte'))tUpd(x.team,'dispo','')}
  if(a==='prio'){x.pr=+arg;x.ok=true;jlog(x,'Catégorie : '+PRN[arg])}
  x.st=x.ist==='clos'?'d':(x.ist==='nouveau'?'s':'p');pccRender();pccMap()}
@@ -1096,12 +1114,15 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
  const card=x=>{const sel=CSEL===x.id,tm=x.team?TEAMS.find(t=>t.id===x.team):null;
   let h='<div class="ic'+(sel?' sel':'')+'" onclick="CSEL='+x.id+';pccRender();pccMap();CM&&CM.setView(['+x.lat+','+x.lng+'],17)"><div class="ih"><span class="in" style="background:'+IST[x.ist][1]+'">'+x.id+'</span><b>'+STY[x.t]+'</b>'+(x.ok?'<span class="ip p'+x.pr+'">'+PRN[x.pr]+'</span>':'<span class="ip">À classer</span>')+'</div>'+
    '<div class="il">'+esc(x.v)+' · '+x.h+(x.n>1?' · '+x.n+' signalements':'')+'</div>'+(x.dan?'<div class="is" style="color:#c62828;font-weight:700">Personnes en danger</div>':'')+(x.d?'<div class="idsc">'+esc(x.d)+'</div>':'')+(sel&&(x.src||x.ct)?'<div class="idsc muted">'+esc(x.src||'')+(x.ct?' · à rappeler : '+esc(x.ct):'')+'</div>':'')+'<div class="is" style="color:'+IST[x.ist][1]+'">'+IST[x.ist][0]+(tm?' · '+tm.n:'')+(x.sdis?' · pompiers':'')+(x.enedis?' · Enedis':'')+'</div>';
-  if(sel&&x.ist!=='clos'){h+='<div class="ia" onclick="event.stopPropagation()">'+(x.ist==='nouveau'?'<button class="btn" onclick="pccAct('+x.id+',\'pris\')">Prendre en compte</button>':'')+
-   '<select aria-label="Envoyer une équipe" onchange="pccAct('+x.id+',\'team\',this.value)"><option value="">Envoyer une équipe…</option>'+TEAMS.map(t=>'<option value="'+t.id+'">'+t.n+' – '+t.r+'</option>').join('')+'</select>'+
-   '<button class="btn" onclick="pccAct('+x.id+',\'sdis\')" title="Aucun envoi automatique : l\'appel se fait par téléphone, le bouton l\'enregistre">Noter : transmis aux pompiers</button>'+(x.t==='cable'?'<button class="btn" onclick="pccAct('+x.id+',\'enedis\')" title="Aucun envoi automatique : le signalement se fait par téléphone, le bouton l\'enregistre">Noter : signalé à Enedis</button>':'')+
-   '<select aria-label="Niveau" onchange="pccAct('+x.id+',\'prio\',this.value)">'+[1,2,3].map(p=>'<option value="'+p+'"'+(x.pr===p?' selected':'')+'>'+PRN[p]+'</option>').join('')+'</select>'+
-   '<button class="btn ok" onclick="pccAct('+x.id+',\'clos\')">Terminé</button></div>';
-   h+='<div class="ij">'+x.log.slice().reverse().map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'</div>').join('')+'</div>'}
+  if(sel&&x.ist!=='clos'){const TS=tGet(),cur={nouveau:0,pris:1,transmis:1,affecte:2}[x.ist]||0,tm=x.team?TEAMS.find(t=>t.id===x.team):null;
+   const chips=TEAMS.map(t=>{const st=TST[(TS[t.id]||{}).s||'dispo'],nq=S.filter(y=>y.team===t.id&&y.ist==='affecte'&&y.id!==x.id).length;return '<button class="tch'+(x.team===t.id?' on':'')+'" onclick="pccAct('+x.id+',\'team\',\''+t.id+'\')"><i style="background:'+st[1]+'"></i><span><b>'+t.n+'</b><small>'+st[0]+(nq?' · '+nq+' en file':'')+'</small></span></button>'}).join('');
+   h+='<div class="ia2" onclick="event.stopPropagation()"><div class="stp">'+['À traiter','Pris en compte','Équipe sur le coup','Terminé'].map((l,i)=>'<span class="'+(i<cur?'dn':i===cur?'cu':'')+'">'+l+'</span>').join('')+'</div>';
+   if(x.ist==='nouveau')h+='<button class="bpri" onclick="pccAct('+x.id+',\'pris\')">Prendre en compte</button><div class="ilb">ou envoyer directement une équipe :</div><div class="tchs">'+chips+'</div>';
+   else if(x.ist==='affecte')h+='<div class="tcur"><i style="background:'+TST[(TS[x.team]||{}).s||'route'][1]+'"></i><b>'+tm.n+'</b> · '+TST[(TS[x.team]||{}).s||'route'][0]+'</div><button class="bpri ok" onclick="pccAct('+x.id+',\'clos\')">✓ Marquer terminé</button><details class="chg"><summary>Changer d\'équipe</summary><div class="tchs">'+chips+'</div></details>';
+   else h+='<div class="ilb">Envoyer une équipe :</div><div class="tchs">'+chips+'</div><button class="bsec" onclick="pccAct('+x.id+',\'clos\')">Clore sans intervention</button>';
+   h+='<div class="sec2"><div class="seg" role="group" aria-label="Niveau">'+[1,2,3].map(p=>'<button class="'+(x.pr===p?'on p'+p:'')+'" onclick="pccAct('+x.id+',\'prio\','+p+')">'+PRN[p]+'</button>').join('')+'</div>'+
+    '<button class="tg'+(x.sdis?' on':'')+'" onclick="pccAct('+x.id+',\'sdis\')" title="Aucun envoi automatique : l\'appel se fait par téléphone, le bouton l\'enregistre">'+(x.sdis?'✓ ':'')+'Pompiers prévenus</button>'+(x.t==='cable'?'<button class="tg'+(x.enedis?' on':'')+'" onclick="pccAct('+x.id+',\'enedis\')" title="Aucun envoi automatique : le signalement se fait par téléphone, le bouton l\'enregistre">'+(x.enedis?'✓ ':'')+'Enedis prévenu</button>':'')+'</div></div>';
+   h+='<details class="ijd" onclick="event.stopPropagation()"><summary>Historique ('+x.log.length+')</summary><div class="ij">'+x.log.slice().reverse().map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'</div>').join('')+'</div></details>'}
   return h+'</div>'};
  const live=S.filter(x=>x.ist!=='clos'),done=S.filter(x=>x.ist==='clos');
  const kc=x=>'<div class="kwrap" draggable="true" ondragstart="kDrag(event,'+x.id+')" ondragover="kOver(event)" ondragleave="kLeave(event)" ondrop="kDrop(event,'+(KV==='col'?(x.ok?x.pr:'\'new\''):'null')+','+x.id+')">'+card(x)+(!x.ok?'<div class="kval" onclick="event.stopPropagation()">Catégorie proposée : <b>'+PRN[x.sug||x.pr]+'</b><div>'+[1,2,3].map(p=>'<button class="btn'+(p===(x.sug||x.pr)?' dark':'')+'" onclick="setCat('+x.id+','+p+')">'+(p===(x.sug||x.pr)?'Valider : ':'')+PRN[p]+'</button>').join('')+'</div></div>':'')+'</div>';
@@ -1173,7 +1194,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='JV8TUpy5VAtKF8rdV6Iqsg==',ITER=600000;let KEY=null;
+const SALT='MItiPYHsbiCkJajH0v4yAw==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
