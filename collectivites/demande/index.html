@@ -39,6 +39,19 @@
 .dm-form .devis{background:#0C1B2C;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:clamp(20px,3vw,36px)}
 .dm-form .plus{text-align:center}
 .dm-form .btn{width:100%;margin-top:6px}
+.dm-prog{display:none}
+.devis{scroll-margin-top:84px}
+.dm-next,.dm-back{display:none}
+.dm-row{display:flex;gap:12px;align-items:center}
+@media (max-width:700px){
+ .dm-prog{display:flex;gap:6px;margin-bottom:18px}
+ .dm-prog span{flex:1;font:600 12.5px var(--sans);color:var(--faible);border-top:3px solid rgba(255,255,255,.12);padding-top:8px}
+ .dm-prog span.on{color:#fff;border-top-color:#E06C34}
+ .devis[data-e="1"] .e2,.devis[data-e="2"] .e1{display:none!important}
+ .devis[data-e="1"] .dm-next{display:flex;width:100%}
+ .devis[data-e="2"] .dm-back{display:block;background:none;border:0;color:var(--doux);font:600 14px var(--sans);padding:12px 4px;white-space:nowrap;cursor:pointer}
+ .dm-row .btn{flex:1}
+}
 </style>
 </head>
 <body>
@@ -64,17 +77,19 @@
 <section class="dm-form">
   <div class="wrap">
     <form class="devis" id="devis" novalidate>
-      <fieldset><legend>Votre commune</legend>
+      <div class="dm-prog" aria-hidden="true"><span class="on">1. Votre commune</span><span>2. Vos coordonnées</span></div>
+      <fieldset class="e1"><legend>Votre commune</legend>
         <input type="hidden" name="type_org" value="Commune">
         <div class="dv-2">
           <div class="dv-f"><label for="dv-org">Nom de la commune <i>obligatoire</i></label><input id="dv-org" name="organisme" type="text" maxlength="160" autocomplete="address-level2" required placeholder="Ex. : Fontainebleau"></div>
           <div class="dv-f"><label for="dv-eff">Code postal</label><input id="dv-eff" name="effectif" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code"></div>
         </div>
       </fieldset>
-      <fieldset><legend>Ce qui vous intéresse</legend>
+      <fieldset class="e1"><legend>Ce qui vous intéresse</legend>
         <div class="dv-choix"><label><input type="checkbox" name="interet" value="Débroussaillement (OLD)"> Débroussaillement (OLD)</label><label><input type="checkbox" name="interet" value="Tempête et vents forts"> Tempête et vents forts</label><label><input type="checkbox" name="interet" value="Signalements des habitants et cellule de crise"> Signalements des habitants et cellule de crise</label></div>
       </fieldset>
-      <fieldset><legend>Vos coordonnées</legend>
+      <button type="button" class="btn btn-p dm-next e1">Continuer <span aria-hidden="true">→</span></button>
+      <fieldset class="e2"><legend>Vos coordonnées</legend>
         <div class="dv-2">
           <div class="dv-f"><label for="dv-nom">Nom et prénom <i>obligatoire</i></label><input id="dv-nom" name="nom" type="text" maxlength="120" autocomplete="name" required></div>
           <div class="dv-f"><label for="dv-fct">Fonction</label><input id="dv-fct" name="fonction" type="text" maxlength="80" autocomplete="organization-title" list="dv-fcts"><datalist id="dv-fcts"><option value="Maire"><option value="Adjoint au maire"><option value="Directeur général des services"><option value="Secrétaire de mairie"><option value="Responsable des services techniques"></datalist></div>
@@ -84,13 +99,17 @@
         <div class="dv-f"><label for="dv-msg-t">Une précision ? (facultatif)</label><textarea id="dv-msg-t" name="message" rows="3" maxlength="1500"></textarea></div>
       </fieldset>
       <div class="dv-piege" aria-hidden="true"><label for="dv-site">Ne pas remplir</label><input id="dv-site" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
-      <label class="dv-accord"><input type="checkbox" name="accord" required> <span>J'accepte que VB Safety utilise ces informations pour répondre à ma demande. <a href="/confidentialite/">Politique de confidentialité</a></span></label>
-      <button class="btn btn-p" id="dv-envoyer" type="submit"><span>Demander ma démonstration</span> <span aria-hidden="true">→</span></button>
+      <label class="dv-accord e2"><input type="checkbox" name="accord" required> <span>J'accepte que VB Safety utilise ces informations pour répondre à ma demande. <a href="/confidentialite/">Politique de confidentialité</a> et <a href="/mentions-legales/">mentions légales</a></span></label>
+      <div class="dm-row e2"><button type="button" class="dm-back">← Retour</button><button class="btn btn-p" id="dv-envoyer" type="submit"><span>Demander ma démonstration</span> <span aria-hidden="true">→</span></button></div>
     </form>
     <p class="dv-msg" id="dv-msg" role="status" hidden></p>
     <p class="plus">Vous préférez écrire ? <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></p>
   </div>
 </section>
+<script>(function(){var f=document.getElementById('devis'),pr=document.querySelectorAll('.dm-prog span');if(!f)return;f.setAttribute('data-e','1');
+function go(n){f.setAttribute('data-e',n);pr[0].classList.toggle('on',n==1);pr[1].classList.toggle('on',n==2);f.scrollIntoView({block:'start',behavior:'smooth'})}
+f.querySelector('.dm-next').addEventListener('click',function(){var c=f.elements.organisme;if(!c.value.trim()){c.focus();c.reportValidity&&c.reportValidity();return}go(2);setTimeout(function(){f.elements.nom.focus({preventScroll:true})},300)});
+f.querySelector('.dm-back').addEventListener('click',function(){go(1)});})();</script>
 <script src="/collectivites/demande/demande.js?v=2" defer></script>
 </main>
 <footer class="pied">
