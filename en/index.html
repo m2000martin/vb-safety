@@ -498,11 +498,11 @@
       <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Firefighters<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/firefighters/">Overview</a><a href="/cmr-pompier/en/"><span class="nav-th">CMR risk</span>Exposure tracking tool</a><a href="/cmr-pompier/en/ppe-module.html"><span class="nav-th">CMR risk</span>PPE module</a><a href="/en/innovation/#sapeurs-pompiers"><span class="nav-th">Toxic risk</span>Contamination sensor</a><a href="/ressources/#sapeurs-pompiers" hreflang="fr">Resources (FR)</a></div></div>
       <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Industry<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/industry/">Overview</a><a href="/cmr-industrie/" hreflang="fr"><span class="nav-th">CMR risk</span>Exposure tracking tool (FR)</a><a href="/en/innovation/#industrie"><span class="nav-th">Toxic risk</span>Contamination sensor</a><a href="/ressources/#industrie" hreflang="fr">Resources (FR)</a></div></div>
       <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Municipalities<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/municipalities/">Overview</a><a href="/en/municipalities/"><span class="nav-th">Natural hazards</span>Vegetation clearance / storm</a><a href="/en/municipalities/#signalements">Crisis cell</a></div></div>
-      <a class="nav-ecrire" href="/en/contact/">Contact</a>
+      <a class="nav-ecrire" href="#contact" data-goto="contact">Contact</a>
     </nav>
     <div class="actions-group">
       <a class="lang-link" href="/" hreflang="fr" lang="fr">FR</a>
-      <a class="ecrire" href="/en/contact/">Contact</a>
+      <a class="ecrire" href="#contact" data-goto="contact">Contact</a>
       <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu" hidden><span class="menu-ico" aria-hidden="true"></span><span>Menu</span></button>
     </div>
   </header>
@@ -524,11 +524,105 @@
 
   <div class="bas">
     <a class="courriel" href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
-    
+    <a class="scroll-cue" href="#parcours" data-goto="parcours"><span>Discover</span><span class="line" aria-hidden="true"></span></a>
   </div>
 </div>
 
+<main>
+<section class="section" id="parcours">
+  <div class="section-inner">
+    <span class="kicker">Team background</span>
+    <h2 class="section-title">Our team has studied and worked at the heart of the problem.</h2>
+  </div>
+  <div class="defile" aria-label="Team background"><ul><li><b>SDIS 77</b><span>Firefighters · France</span></li><li><b>Dräger</b><span>Safety and decontamination · Germany</span></li><li><b>INSA Lyon</b><span>Engineering · France</span></li><li><b>SDIS 66</b><span>Firefighters · France</span></li><li><b>KAIST</b><span>Academic research · South Korea</span></li></ul><ul aria-hidden="true"><li><b>SDIS 77</b><span>Firefighters · France</span></li><li><b>Dräger</b><span>Safety and decontamination · Germany</span></li><li><b>INSA Lyon</b><span>Engineering · France</span></li><li><b>SDIS 66</b><span>Firefighters · France</span></li><li><b>KAIST</b><span>Academic research · South Korea</span></li></ul></div>
+</section>
 
+
+
+
+
+
+
+
+<section class="section" id="contact">
+  <div class="section-inner contact-grid">
+    <div>
+      <span class="kicker">Contact</span>
+      <h2 class="section-title">Let's talk about your risks.</h2>
+      <p class="section-lead">Fire service, occupational health service, company, municipality or investor: tell us about your context and we will get back to you quickly.</p>
+      <div class="contact-direct">
+        <div><span>Write directly</span><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></div>
+        <div><span>Based in</span><strong>Paris, France</strong></div>
+      </div>
+    </div>
+
+    <form class="cf" id="contact-form" novalidate>
+      <div>
+        <label for="cf-nom"><span>Full name</span> <i>*</i></label>
+        <input class="cf-input" id="cf-nom" name="nom" type="text" autocomplete="name" required>
+      </div>
+      <div>
+        <label for="cf-org"><span>Organisation</span> <i>*</i></label>
+        <input class="cf-input" id="cf-org" name="organisation" type="text" autocomplete="organization" required>
+      </div>
+      <div>
+        <label for="cf-email"><span>Work email</span> <i>*</i></label>
+        <input class="cf-input" id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required>
+      </div>
+      <div>
+        <label for="cf-tel">Phone <small>— if you'd like a call</small></label>
+        <input class="cf-input" id="cf-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30">
+      </div>
+      <div>
+        <label for="cf-profil">You are</label>
+        <select class="cf-input" id="cf-profil" name="profil">
+          <option value="SDIS">Fire and rescue service</option>
+          <option value="Santé au travail">Occupational health service</option>
+          <option value="Entreprise">Company · construction · industry</option>
+          <option value="Municipalité">Municipality · local authority</option>
+          <option value="Investisseur / partenaire">Investor · partner</option>
+          <option value="Presse">Press</option>
+          <option value="Autre">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="cf-outil">Tool you are interested in</label>
+        <select class="cf-input" id="cf-outil" name="outil">
+          <option value="Non précisé">Not sure yet / several</option>
+          <option value="Suivi des expositions CMR">CMR exposure tracking</option>
+          <option value="Module EPI">PPE module</option>
+          <option value="Capteur de contamination">Contamination sensor</option>
+          <option value="Débroussaillement (OLD)">Vegetation clearance (OLD)</option>
+          <option value="Cellule de crise">Crisis cell: storm, fire</option>
+        </select>
+      </div>
+      <div id="cf-quand" hidden>
+        <span class="cf-lab">Time slots that suit you</span>
+        <div class="cf-pills">
+          <label><input type="checkbox" name="creneau" value="8h–10h"><span>8–10am</span></label>
+          <label><input type="checkbox" name="creneau" value="10h–12h"><span>10am–12pm</span></label>
+          <label><input type="checkbox" name="creneau" value="14h–16h"><span>2–4pm</span></label>
+          <label><input type="checkbox" name="creneau" value="16h–18h"><span>4–6pm</span></label>
+        </div>
+      </div>
+      <div class="full">
+        <label for="cf-message"><span>Message</span> <i>*</i></label>
+        <textarea class="cf-input" id="cf-message" name="message" rows="5" required placeholder="Your needs, your context, the number of firefighters or workers involved…"></textarea>
+      </div>
+      <div class="hp" aria-hidden="true"><label for="cf-gotcha">Do not fill in</label><input id="cf-gotcha" name="botcheck" type="text" tabindex="-1" autocomplete="off"></div>
+      <label class="cf-consent full" for="cf-consent">
+        <input type="checkbox" id="cf-consent" name="consentement" value="oui" required>
+        <span>I agree that VB Safety may use this information to answer my request. <a href="/confidentialite/" hreflang="fr">Privacy policy (FR)</a></span>
+      </label>
+      <div class="cf-foot full">
+        <small>* Required fields</small>
+        <button type="submit" class="cf-submit" id="cf-submit"><span>Send message</span><span class="arr" aria-hidden="true">→</span></button>
+      </div>
+      <p class="cf-msg full" id="cf-msg" role="status" hidden></p>
+    </form>
+  </div>
+</section>
+</main>
 
 <footer class="site-foot">
   <div class="section-inner foot-grid">
@@ -558,7 +652,7 @@
     <div class="foot-col">
       <h2 class="foot-h">Contact</h2>
       <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
-      <a href="/en/contact/">Contact form</a>
+      <a href="#contact" data-goto="contact">Contact form</a>
       <a href="/mentions-legales/" hreflang="fr">Legal notice (FR)</a>
       <a href="/confidentialite/" hreflang="fr">Privacy policy (FR)</a>
     </div>
@@ -570,7 +664,7 @@
 </footer>
 
 <script src="/static/accueil.js?v=51" defer></script>
-<script src="/static/vu.js?v=2" defer></script>
+<script src="/static/vu.js?v=1" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>
 </html>

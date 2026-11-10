@@ -39,7 +39,7 @@
       else if (/\/devis\/$/.test(h)) n = 'devis';
       else if (/\.(xlsx|pdf)$/.test(h)) n = 'telechargement';
       else if (/^mailto:/.test(h)) n = 'email';
-      else if (/(\/contact\/|#contact)$/.test(h)) n = 'contact';
+      else if (/#contact$/.test(h)) n = 'contact';
     }
     if (n) send('clic:' + n);
   }, true);
