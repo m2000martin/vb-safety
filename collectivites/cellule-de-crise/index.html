@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1E30">
+<title>Cellule de crise communale : signalements, équipes, vigilance · VB Safety</title>
+<meta name="description" content="Cellule de crise pour les communes : signalements des habitants sur une carte, équipes municipales suivies depuis leur téléphone, vigilance Météo-France et journal horodaté.">
+<link rel="canonical" href="https://vb-safety.com/collectivites/cellule-de-crise/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VB Safety">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Cellule de crise communale">
+<meta property="og:description" content="Signalements des habitants, équipes municipales et vigilance Météo-France sur une seule carte.">
+<meta property="og:url" content="https://vb-safety.com/collectivites/cellule-de-crise/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="/static/fonts/inter-tight-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/fonts.css?v=2">
+<link rel="stylesheet" href="/static/secteurs.css?v=21">
+<link rel="stylesheet" href="/static/mobile.css?v=10">
+<link rel="stylesheet" href="/static/nav.css?v=16">
+<link rel="stylesheet" href="/static/fond.css?v=4">
+<link rel="stylesheet" href="/static/serpentin.css?v=3">
+<style>
+:root{--c-line:rgba(255,255,255,.09);--c-or:#E06C34;--c-or2:#F29A63;--c-card2:#0C1B2C}
+main{overflow-x:clip}
+.c-sec{padding:clamp(56px,7vw,96px) 0}
+
+.c-k{display:inline-block;font:700 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
+.c-h2{font-size:clamp(26px,3.2vw,40px);line-height:1.08;letter-spacing:-.035em;margin:10px 0 0;max-width:24ch}
+.c-lead{color:var(--doux);font-size:clamp(15.5px,1.4vw,18px);max-width:56ch;margin:14px 0 0}
+.c-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin-top:26px}
+.c-lien{color:var(--doux);text-decoration:none;font-weight:600;font-size:15px}.c-lien:hover{color:#fff}
+.c-note{margin:12px 0 0;color:var(--faible);font-size:13.5px}
+.c-hero{position:relative;min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.c-hero::before{content:"";position:absolute;left:50%;top:45%;width:min(900px,120vw);height:min(900px,120vw);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(224,108,52,.12),transparent 70%);pointer-events:none}
+.c-hero-in{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;padding-bottom:60px}
+.c-hero h1{font-size:clamp(34px,5.4vw,72px);line-height:1.04;letter-spacing:-.045em;margin:18px 0 0;max-width:18ch}
+.c-hero .hl{display:block;overflow:hidden;padding-bottom:.08em}
+.c-gris{color:#9AA3AF}.c-gris em{font-style:normal;color:#fff;white-space:nowrap}
+.c-trait{width:44px;height:2px;background:var(--c-or);margin:28px auto 0}
+.c-sous{margin:22px auto 0;max-width:58ch;color:var(--doux);font-size:clamp(15.5px,1.45vw,18.5px);line-height:1.5}.c-sous b{color:#fff;font-weight:600}
+.c-tags{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin:22px 0 0;padding:0}
+.c-tags li{font:500 13.5px/1 var(--sans);color:var(--doux);border:1px solid var(--c-line);border-radius:999px;padding:8px 13px;background:rgba(255,255,255,.02)}
+.c-hero .c-cta{justify-content:center;margin-top:30px}
+.c-bas{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:space-between;align-items:center}
+.c-mail{color:#fff;text-decoration:none;font-size:14.5px;border-bottom:1px solid var(--c-or);padding-bottom:3px}
+.c-cue{display:flex;align-items:center;gap:10px;color:var(--doux);text-decoration:none;font-size:13.5px}
+.c-cue i{width:1px;height:26px;background:linear-gradient(var(--doux),transparent);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+.hx{opacity:0;transform:translateY(18px);animation:hx .9s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
+.hl>.hx{transform:translateY(105%);opacity:1;animation-name:hxl}
+@keyframes hx{to{opacity:1;transform:none}}
+@keyframes hxl{to{transform:none}}
+@media (max-width:560px){.c-hero h1{font-size:clamp(32px,9.6vw,44px)}.c-hero .c-cta .btn{width:100%}.c-hero .c-cta{align-self:stretch}.c-tags li{font-size:12.5px;padding:7px 11px}}
+@media (prefers-reduced-motion:reduce){.hx,.hl>.hx{animation:none;opacity:1;transform:none}.c-cue i{animation:none}}
+.vw-teaser{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center;width:100%;text-align:left;margin-top:14px;padding:12px;border:1px solid #E3E7EB;border-radius:10px;background:#F7F9FA;cursor:pointer;font:400 13px/1.4 var(--sans);color:#1C2733;transition:border-color .2s,background .2s}
+.vw-teaser:hover{border-color:#1C2733;background:#fff}
+.vw-teaser b{display:block;font-size:14.5px}.vw-teaser span span{display:block;color:#56636F;margin-top:2px}.vw-teaser em{display:block;font-style:normal;font-weight:700;color:#C4521C;margin-top:6px}
+.vw-mini{display:flex;flex-direction:column;gap:4px;width:64px;height:84px;padding:8px 7px;background:#fff;border:1px solid #D5DBE1;border-radius:4px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.vw-mini i{display:block;height:3px;border-radius:2px;background:#C9D0D7}.vw-mini i:nth-child(2){width:70%}.vw-mini i.img{height:22px;background:linear-gradient(135deg,#8FA86A,#6F8C55);border-radius:2px}.vw-mini i.s{width:40%;margin-left:auto;margin-top:auto}
+.vw-teaser.new{border-color:#E06C34;animation:tz 1.6s ease-in-out 3}
+@keyframes tz{0%,100%{box-shadow:0 0 0 0 rgba(224,108,52,0)}50%{box-shadow:0 0 0 5px rgba(224,108,52,.22)}}
+@media (prefers-reduced-motion:reduce){.vw-teaser.new{animation:none}}
+.pin{height:200vh;padding:0!important}
+#signalements{padding-top:clamp(24px,3vw,40px)}
+.pin-in{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding-top:60px;box-sizing:border-box}
+.pin-in>.wrap{width:100%}
+.pin .c-h2{font-size:clamp(28px,4vw,52px);max-width:none}
+@media (min-width:901px){.st{margin-top:56px;gap:40px}.st h3{font-size:24px}.st p{font-size:16.5px}}
+.st>li{opacity:var(--t,0);transform:translateY(calc((1 - var(--t,0)) * 40px));position:relative;border-top-color:rgba(224,108,52,.15)!important;transition:opacity .2s linear,transform .2s linear}
+.st>li::after{content:"";position:absolute;left:0;top:-2px;height:2px;width:calc(var(--t,0) * 100%);background:var(--c-or)}
+@media (max-width:900px){.c-steps.st{display:grid;grid-template-columns:1fr;gap:22px;overflow:visible;margin-right:0;padding-right:0}.c-steps.st li{flex:none;background:none;border:0;border-top:2px solid;border-radius:0;padding:14px 0 0}.pin{height:220vh}}
+@media (prefers-reduced-motion:reduce){.pin{height:auto;padding:clamp(56px,7vw,96px) 0!important}.pin-in{position:static;height:auto;padding-top:0}.st>li{opacity:1;transform:none}.st>li::after{width:100%}}
+.vw-syn{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#EEF1F4;color:#56636F;font:600 11px/1.4 var(--sans);vertical-align:2px}
+.vw-real{margin-top:2px;letter-spacing:0!important;font-size:11.5px!important}
+.vw-guide{list-style:none;margin:0;padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;background:#1C2733;color:#AEB8C2;font:500 13.5px var(--sans)}
+.vw-guide li{display:flex;align-items:center;gap:8px}
+.vw-guide li b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid #56636F;font-size:12px;color:#AEB8C2}
+.vw-guide li.cur{color:#fff;font-weight:700}
+.vw-guide li.cur b{background:#E06C34;border-color:#E06C34;color:#fff;animation:gp 1.4s ease-in-out infinite}
+.vw-guide li.ok b{background:#2E9E4F;border-color:#2E9E4F;color:#fff;font-size:0}.vw-guide li.ok b::before{content:"✓";font-size:13px}
+.vw-guide li+li::before{content:"→";color:#56636F;margin-right:10px}
+.vw-guide a{margin-left:auto;color:#F29A63;font-weight:700;text-decoration:none}.vw-guide a:hover{color:#fff}
+@keyframes gp{0%,100%{box-shadow:0 0 0 0 rgba(224,108,52,.6)}50%{box-shadow:0 0 0 6px rgba(224,108,52,0)}}
+.vw-teaser.new{background:#C4521C;border-color:#C4521C;color:#fff}
+.vw-teaser.new span span{color:rgba(255,255,255,.85)}.vw-teaser.new em{color:#fff}
+.vw-teaser.new:hover{background:#D25E26}
+@media (max-width:560px){.vw-guide{font-size:12px;gap:6px 10px;padding:9px 10px}.vw-guide li+li::before{margin-right:4px}.vw-guide a{margin-left:0;width:100%}.vw-syn{display:none}}
+@media (prefers-reduced-motion:reduce){.vw-guide li.cur b{animation:none}}
+.c-final2{position:relative;overflow:hidden;text-align:center;border:1px solid rgba(224,108,52,.3);border-radius:20px;padding:clamp(40px,6vw,80px) clamp(20px,4vw,48px);background:linear-gradient(180deg,rgba(12,27,44,.82),rgba(12,27,44,.95)),url(/collectivites/img/village.jpg) center/cover}
+.c-final2::before{content:"";position:absolute;left:50%;top:0;width:70%;height:100%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(224,108,52,.18),transparent);pointer-events:none}
+.c-final2>*{position:relative}
+.c-final2 h2{font-size:clamp(30px,4.2vw,54px);line-height:1.05;letter-spacing:-.04em;margin:12px auto 0;max-width:16ch}
+.c-final2 h2 span{color:#9AA3AF}
+.c-final2 p{color:var(--doux);max-width:46ch;margin:16px auto 0;font-size:clamp(15.5px,1.4vw,18px)}
+.cf2{display:flex;gap:10px;max-width:560px;margin:28px auto 0;padding:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px}
+.cf2 input{flex:1;min-width:0;background:transparent;border:0;color:#fff;font:500 16px var(--sans);padding:0 12px;outline:none}
+.cf2 input::placeholder{color:#8E9AA6}
+.cf2:focus-within{border-color:#E06C34}
+.cf2 .btn{min-height:48px;white-space:nowrap}
+.c-final2 .c-lien{display:inline-block;margin-top:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:560px){.cf2{flex-direction:column;background:none;border:0;padding:0}.cf2 input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;min-height:50px}}
+@media (min-width:901px){.vw-map{aspect-ratio:auto!important;min-height:560px}}
+/* carte */
+.vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
+.vw-top{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #E3E7EB}
+.vw-brand small{display:block;font-size:10.5px;letter-spacing:.08em;color:#7A8794}.vw-brand b{font-size:15px}
+.vw-kpi{margin-left:auto;display:flex;align-items:baseline;gap:8px;white-space:nowrap}.vw-kpi b{font:700 22px/1 var(--sans);color:#C62828}.vw-kpi span{font-size:12.5px;color:#56636F}
+.vw-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(290px,1fr)}
+.vw-map{position:relative;background:#7d8c5c;aspect-ratio:1280/840}
+.vw-map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vw-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid #E3E7EB;background:#F7F9FA}
+.vw-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid #DDE2E7;font:500 12.5px var(--sans);cursor:pointer;color:#1C2733}
+.vw-chip i{width:10px;height:10px;border-radius:3px}.vw-chip b{font-weight:700}.vw-chip.off{opacity:.4}
+.vw-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(28,39,51,.92);color:#fff;padding:7px 13px;border-radius:999px;font-size:12.5px;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.vw-h{cursor:pointer}
+.vw-h .hit{fill:transparent}
+.vw-h .shape{stroke-width:3;fill-opacity:.38;transition:fill-opacity .15s}
+.vw-h:hover .shape{fill-opacity:.65}
+.vw-h.sel .shape{stroke:#fff;stroke-width:4;fill-opacity:.75}
+.vw-h.hide{display:none}
+.vw-side{border-left:1px solid #E3E7EB;padding:18px;display:flex;flex-direction:column;min-height:0}
+.vw-side h3{margin:8px 0 2px;font:700 19px/1.2 var(--sans);letter-spacing:-.01em;color:#1C2733}
+.vw-sub{font-size:12.5px;color:#7A8794}
+.vw-st{display:inline-block;padding:4px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:700}
+.vw-c{display:grid;grid-template-columns:5px 1fr;gap:12px;padding:10px 12px;border:1px solid #E6EAEE;border-radius:9px;margin-top:9px}
+.vw-c i{border-radius:3px}.vw-c b{display:block;font-size:14px}.vw-c span{display:block;font-size:12.5px;color:#56636F}.vw-c em{font-style:normal;font-size:12.5px}
+.vw-btns{margin-top:auto;display:grid;gap:8px;padding-top:14px}
+.vw-b{border:1px solid #D5DBE1;background:#fff;color:#1C2733;border-radius:8px;padding:10px;font:600 13.5px var(--sans);cursor:pointer}
+.vw-b.p{background:#1C2733;border-color:#1C2733;color:#fff}
+.vw-empty{margin:14px 0 0;color:#56636F;font-size:14px}.vw-empty b{display:block;font-size:16px;color:#1C2733;margin-bottom:4px}
+.vw-sum{display:grid;gap:7px;margin-top:14px}.vw-sum div{display:flex;justify-content:space-between;padding:9px 12px;border-radius:8px;background:#F4F6F8;font-size:13.5px}
+.vw-toast{margin-top:10px;padding:9px 12px;border-radius:8px;background:#E7F5EE;color:#1E6B47;font-size:13px}
+.vw-modal{position:absolute;inset:0;background:rgba(14,30,48,.55);display:grid;place-items:center;z-index:5;padding:14px}
+.vw-modal[hidden]{display:none}
+.vw-letter{position:relative;background:#fff;width:min(560px,100%);max-height:100%;overflow:auto;border-radius:10px;padding:26px 28px;font:400 13.5px/1.55 Georgia,serif;color:#222;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.vw-letter h4{font:700 14px/1.4 Georgia,serif;margin:12px 0 6px}.vw-letter ol{padding-left:18px;margin:6px 0}.vw-letter .hl{background:#FFF3B0;padding:0 3px}
+.vw-letter{width:min(720px,100%);padding:0;font:400 13.5px/1.55 Georgia,serif}
+.lt-ton{position:sticky;top:0;z-index:2;display:flex;gap:4px;padding:10px 44px 10px 14px;background:#F4F6F8;border-bottom:1px solid #E3E7EB;font-family:var(--sans)}
+.lt-ton button{border:1px solid #D5DBE1;background:#fff;border-radius:7px;padding:6px 11px;font:600 12.5px var(--sans);color:#1C2733;cursor:pointer}
+.lt-ton button.on{background:#1C2733;color:#fff;border-color:#1C2733}
+.lt-ton button:disabled{opacity:.5;cursor:not-allowed}.lt-ton small{font-weight:400}
+.lt-doc{padding:24px 30px 6px}
+.lt-h{display:flex;justify-content:space-between;gap:16px}
+.lt-dest{text-align:right;margin:16px 0}
+.lt-fig{margin:14px 0;border-radius:8px;overflow:hidden;border:1px solid #E3E7EB}
+.lt-fig svg{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:240px}
+.lt-fig figcaption{padding:6px 10px;font:400 11.5px var(--sans);color:#56636F;background:#F7F9FA}
+.lt-t{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 10px}
+.lt-t th{text-align:left;font:700 11.5px var(--sans);text-transform:uppercase;letter-spacing:.04em;color:#56636F;border-bottom:2px solid #1C2733;padding:6px}
+.lt-t td{vertical-align:top;border-bottom:1px solid #E3E7EB;padding:8px 6px}
+.lt-c{background:#FFF8E1;border-left:3px solid #C9A227;padding:8px 10px;font-size:12.5px}
+.lt-p{padding-left:18px;margin:4px 0}.lt-p li{margin:3px 0}
+.vw-letter>.vw-btns{position:sticky;bottom:0;background:#fff;padding:12px 30px;border-top:1px solid #E3E7EB}
+@media (max-width:560px){.lt-doc{padding:18px 16px 4px}.lt-t thead{display:none}.lt-t td{display:block;border:0;padding:3px 0}.lt-t tr{display:block;border-bottom:1px solid #E3E7EB;padding:8px 0}.lt-t td:nth-child(2)::before{content:"À faire : ";font-weight:700}.lt-t td:nth-child(3)::before{content:"Pourquoi : ";font-weight:700}.lt-t td:nth-child(3){color:#56636F}.vw-letter>.vw-btns{padding:10px 16px}.lt-ton{overflow-x:auto}}
+.vw-x{position:absolute;z-index:3;right:10px;top:8px;border:0;background:none;font-size:18px;cursor:pointer;color:#56636F}
+.vw-src{position:absolute;right:8px;bottom:6px;font:500 10.5px var(--sans);color:rgba(255,255,255,.85);text-shadow:0 1px 2px rgba(0,0,0,.6);pointer-events:none}
+/* étapes */
+.c-steps{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:e}
+.c-steps li{counter-increment:e;border-top:2px solid var(--c-or);padding-top:16px}
+.c-steps li::before{content:"0" counter(e);font:700 13px var(--mono);color:var(--c-or)}
+.c-steps h3{margin:8px 0 0;font:600 19px/1.25 var(--serif);letter-spacing:-.015em}
+.c-steps p{margin:6px 0 0;color:var(--doux);font-size:15px}
+.c-chiffres{display:flex;flex-wrap:wrap;gap:12px 40px;margin-top:36px;padding-top:24px;border-top:1px solid var(--c-line)}
+.c-chiffres div{display:flex;align-items:baseline;gap:10px}
+.c-chiffres b{font:600 28px/1 var(--serif);letter-spacing:-.03em;color:#fff}
+.c-chiffres span{font-size:14px;color:var(--doux)}
+/* crise */
+.c-duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.c-shot{margin:0;border:1px solid var(--c-line);border-radius:12px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.c-shot img{display:block;width:100%;height:auto}
+.c-shot figcaption{padding:10px 14px;font-size:12.5px;color:var(--faible);background:var(--c-card2)}
+/* faq + final */
+.c-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px)}
+.c-faq .faq{max-width:none}.c-faq .faq p{color:var(--doux)}
+.c-final{border:1px solid rgba(224,108,52,.35);border-radius:16px;padding:clamp(28px,4vw,52px);background:radial-gradient(120% 140% at 100% 0,rgba(224,108,52,.2),transparent 55%),var(--c-card2);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.c-final h2{font-size:clamp(24px,2.6vw,34px);line-height:1.1;letter-spacing:-.03em;max-width:20ch}
+.c-final .c-cta{margin:0}
+@media (max-width:900px){
+ .vw-body{grid-template-columns:1fr}.vw-side{border-left:0;border-top:1px solid #E3E7EB}
+ .vw-map{aspect-ratio:620/680}
+ .vw-kpi span{display:none}
+ .c-steps{grid-template-columns:1fr;gap:20px}
+ .c-duo,.c-faq{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+ .c-cta .btn{width:100%}
+  .c-hero .c-cta{flex-direction:column;align-items:stretch;text-align:center}
+ .vw-chip{font-size:12px;padding:5px 8px}
+ .c-chiffres{gap:14px 24px}.c-chiffres b{font-size:24px}
+}
+
+/* animations */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.vu{opacity:1;transform:none}
+.vw-h .shape{opacity:0;transition:opacity .4s ease,fill-opacity .15s}
+.vw.on .vw-h .shape{opacity:1}
+.vw-h.pulse .shape{animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{stroke-width:3}50%{stroke-width:9}}
+.vw-side>*{animation:fin .35s ease}
+@keyframes fin{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.vw-side>*{animation-name:fup}@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+@media (max-width:900px){
+ .c-steps{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-right:calc(-1*var(--gut));padding-right:var(--gut);scrollbar-width:none}
+ .c-steps::-webkit-scrollbar{display:none}
+ .c-steps li{flex:0 0 78%;scroll-snap-align:start;background:var(--c-card2);border:1px solid var(--c-line);border-top:2px solid var(--c-or);border-radius:10px;padding:16px}
+}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.vw-h .shape{opacity:1}.vw-h.pulse .shape,.vw-side>*{animation:none}}
+
+.sg{margin-top:30px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:22px;align-items:stretch}
+.sg-tabs{display:grid;gap:10px;align-content:center}
+.sg-tab{position:relative;text-align:left;background:transparent;border:1px solid var(--c-line);border-radius:12px;padding:16px 18px 16px;color:var(--doux);cursor:pointer;font:400 14.5px/1.45 var(--sans);transition:background .25s,border-color .25s}
+.sg-tab b{display:block;color:#fff;font-size:16.5px;margin-bottom:4px}
+.sg-tab.on{background:var(--c-card2);border-color:rgba(224,108,52,.5)}
+.sg-bar{position:absolute;left:18px;right:18px;bottom:0;height:2px;background:transparent;overflow:hidden}
+.sg-bar i{display:block;height:100%;width:0;background:var(--c-or)}
+.sg-tab.on .sg-bar i{animation:sgfill var(--sgt,4.2s) linear forwards}
+.sg.stop .sg-tab.on .sg-bar i{animation:none;width:100%}
+@keyframes sgfill{to{width:100%}}
+.sg-stage{position:relative;border-radius:14px;overflow:hidden;min-height:430px;background:#7d8c5c;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.sg-map{position:absolute;inset:0;background:url(/collectivites/img/village.jpg) 38% 30%/170% auto no-repeat;transition:filter .5s}
+.sg-stage[data-s="0"] .sg-map{filter:brightness(.55) saturate(.8)}
+.sg-pin{position:absolute;left:44%;top:30%;transform:translate(-50%,-100%) translateY(-60px);opacity:0;transition:transform .55s cubic-bezier(.3,1.6,.5,1),opacity .3s;z-index:2}
+.sg-stage:not([data-s="0"]) .sg-pin{opacity:1;transform:translate(-50%,-100%)}
+.sg-pulse{position:absolute;left:44%;top:30%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:rgba(211,47,47,.5);opacity:0}
+.sg-stage[data-s="1"] .sg-pulse{animation:sgp 1.4s ease-out .5s infinite}
+@keyframes sgp{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(5)}}
+.sg-card{position:absolute;left:calc(44% + 26px);top:12%;width:250px;background:#fff;color:#1C2733;border-radius:12px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.35);opacity:0;transform:translateY(10px) scale(.97);transition:opacity .4s .35s,transform .4s .35s;z-index:3;font:400 13px/1.4 var(--sans)}
+.sg-stage:not([data-s="0"]) .sg-card{opacity:1;transform:none}
+.sg-card b{display:block;font-size:15px;margin:6px 0 8px}
+.sg-card-h{display:flex;align-items:center;gap:6px}.sg-card-h small{margin-left:auto;color:#7A8794}
+.sg-badge{padding:3px 8px;border-radius:999px;font:700 11px/1.2 var(--sans)}
+.sg-badge.n{background:#FDECEA;color:#C62828}.sg-badge.e{display:none;background:#E7F5EE;color:#1E6B47}
+.sg-stage[data-s="2"] .sg-badge.n{display:none}.sg-stage[data-s="2"] .sg-badge.e{display:inline-block}
+.sg-ph{height:70px;border-radius:8px;overflow:hidden}
+.sg-meta{display:block;color:#7A8794;margin-top:6px}
+.sg-assign{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #E6EAEE;font-size:12.5px;color:#56636F}
+.sg-sel{position:relative;flex:1;border:1px solid #D5DBE1;border-radius:7px;padding:6px 8px;font-weight:600;color:#1C2733;overflow:hidden;height:30px}
+.sg-sel span{position:absolute;left:8px;right:8px;top:6px;transition:transform .35s,opacity .35s}
+.sg-sel .b{transform:translateY(20px);opacity:0;color:#1E6B47}
+.sg-stage[data-s="2"] .sg-sel{border-color:#2E9E4F;background:#F1FAF5}
+.sg-stage[data-s="2"] .sg-sel .a{transform:translateY(-20px);opacity:0}.sg-stage[data-s="2"] .sg-sel .b{transform:none;opacity:1;transition-delay:.5s}
+.sg-log{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(12,27,44,.9);color:#C9D2DB;border-radius:10px;padding:10px 14px;font:500 12.5px/1.8 var(--mono);opacity:0;transition:opacity .4s .6s;z-index:3}
+.sg-log b{color:var(--c-or2);margin-right:10px}
+.sg-log .l2{display:none}
+.sg-stage:not([data-s="0"]) .sg-log{opacity:1}
+.sg-stage[data-s="2"] .sg-log .l2{display:block;animation:fup .4s .7s both}
+.sg-phone{position:absolute;left:50%;top:50%;width:230px;margin:-195px 0 0 -115px;height:390px;background:#fff;color:#1C2733;border-radius:28px;border:8px solid #0B1320;box-shadow:0 30px 60px rgba(0,0,0,.5);padding:14px 12px;z-index:4;transition:transform .55s ease,opacity .45s;font:400 12.5px/1.4 var(--sans)}
+.sg-stage:not([data-s="0"]) .sg-phone{transform:translateY(40px) scale(.9);opacity:0;pointer-events:none}
+.sg-ph-top{font-weight:700;font-size:14px}.sg-ph-top small{display:block;font-weight:400;color:#7A8794;font-size:11.5px}
+.sg-ph-img{position:relative;height:120px;border-radius:10px;overflow:hidden;margin-top:10px}
+.sg-ph-img span{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.5);color:#fff;border-radius:6px;padding:2px 7px;font-size:11px}
+.sg-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.sg-chips span{border:1px solid #D5DBE1;border-radius:999px;padding:4px 8px;font-size:11.5px}
+.sg-chips .on{background:#1C2733;color:#fff;border-color:#1C2733}
+.sg-field{margin-top:10px;border:1px solid #D5DBE1;border-radius:8px;padding:8px;font-size:12px}
+.sg-send{position:relative;margin-top:12px;height:40px;border-radius:9px;background:#C4521C;color:#fff;font-weight:700;overflow:hidden}
+.sg-send span{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .3s}
+.sg-send .b{opacity:0;background:#2E9E4F}
+.sg-stage[data-s="0"].sent .sg-send .a{opacity:0}.sg-stage[data-s="0"].sent .sg-send .b{opacity:1}
+.sg-stage[data-s="0"] .sg-send{animation:tap .5s 1.6s both}
+@keyframes tap{50%{transform:scale(.95)}}
+@media (max-width:900px){
+ .sg{grid-template-columns:1fr}
+ .sg-tabs{grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+ .sg-tab{padding:10px 10px 12px;font-size:12.5px}.sg-tab b{font-size:13.5px}.sg-tab>span:not(.sg-bar){display:none}
+ .sg-stage{min-height:460px}
+ .sg-map{background-size:340% auto;background-position:30% 22%}
+ .sg-pin,.sg-pulse{left:22%;top:36%}
+ .sg-card{left:auto;right:12px;top:40%;width:min(250px,calc(100% - 24px))}
+}
+@media (prefers-reduced-motion:reduce){.sg-tab.on .sg-bar i{animation:none;width:100%}.sg-pin,.sg-card,.sg-phone,.sg-log{transition:none}.sg-pulse{animation:none!important}}
+
+.cc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
+.cc-card{border:1px solid var(--c-line);border-radius:14px;padding:20px;background:rgba(12,27,44,.6)}
+.cc-card h3{margin:0;font:600 18px/1.25 var(--sans);letter-spacing:-.01em;color:#fff}
+.cc-card p{margin:8px 0 0;color:var(--doux);font-size:15px;line-height:1.5}
+.cc-card .k{display:block;font:700 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c-or);margin-bottom:8px}
+.cc-duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center;margin-top:10px}
+.cc-list{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px}.cc-list li{display:grid;grid-template-columns:26px 1fr;gap:10px;color:var(--doux);font-size:15.5px}.cc-list b{color:#fff;font-weight:600}
+.cc-list i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--sans);font-style:normal;background:rgba(224,108,52,.15);color:var(--c-or2)}
+/* téléphone d'équipe (maquette) */
+.ph{width:300px;max-width:100%;margin:0 auto;background:#f1efe9;border:9px solid #0B1320;border-radius:34px;box-shadow:0 40px 80px -30px rgba(0,0,0,.8);overflow:hidden;color:#1c2126;font:400 13px/1.4 var(--sans)}
+.ph-top{background:#1c2126;color:#fff;padding:14px 14px 10px}.ph-top small{display:block;opacity:.65;font-size:11px}.ph-top b{font-size:15px}.ph-st{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:12px}.ph-st i{width:8px;height:8px;border-radius:50%;background:#1565c0}
+.ph-b{padding:10px}
+.ph-act{background:#fff;border:2px solid #ef8a17;border-radius:13px;padding:11px}.ph-act .kk{font:700 10px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#ef8a17}.ph-act b{display:block;font-size:15px;margin-top:2px}.ph-act .v{color:#5d6670;font-size:12px}
+.ph-btn{display:block;text-align:center;border-radius:10px;padding:10px;font-weight:700;margin-top:7px;color:#fff;font-size:13px}.ph-btn.b1{background:#1565c0}.ph-btn.b2{background:#2e7d32}
+.ph-h{font:650 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#5d6670;margin:12px 2px 6px}
+.ph-mi{display:flex;align-items:center;gap:8px;background:#fff;border-radius:11px;padding:9px 10px;margin-bottom:6px;box-shadow:0 1px 2px rgba(0,0,0,.06)}.ph-mi div{flex:1}.ph-mi b{display:block;font-size:13px}.ph-mi span{color:#5d6670;font-size:11.5px}.ph-mi em{font-style:normal;background:#1c2126;color:#fff;border-radius:8px;padding:7px 9px;font-weight:700;font-size:11.5px;white-space:nowrap}
+.ph-u{display:inline-block;background:#c62828;color:#fff;font-size:9.5px;font-weight:700;border-radius:4px;padding:0 5px;margin-bottom:2px}
+/* carte d'incident (maquette) */
+.ic-m{width:330px;max-width:100%;margin:22px auto 0;background:#fff;color:#1c2126;border-radius:14px;padding:13px 14px;box-shadow:0 30px 60px -30px rgba(0,0,0,.8);font:400 13px/1.4 var(--sans)}
+.ic-m .h{display:flex;align-items:center;gap:8px}.ic-m .n{width:26px;height:26px;border-radius:50%;background:#c62828;color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px}.ic-m .h b{font-size:15px}.ic-m .p{margin-left:auto;background:#c62828;color:#fff;border-radius:7px;padding:2px 8px;font-size:11px;font-weight:700}
+.ic-m .l{color:#5d6670;margin-top:4px}.ic-m .stp{display:flex;gap:4px;margin:10px 0 4px}.ic-m .stp span{flex:1;height:4px;border-radius:2px;background:#e6e1d8}.ic-m .stp .d{background:#2e7d32}.ic-m .stp .c{background:#ef8a17}
+.ic-m .sl{font-size:11px;font-weight:700}
+.ic-m .tm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:9px}.ic-m .tm span{border:1.5px solid #e2ddd3;border-radius:9px;padding:6px 7px;font-size:11.5px}.ic-m .tm b{display:block;font-size:12px}.ic-m .tm i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+@media (max-width:900px){.cc-grid{grid-template-columns:1fr}.cc-duo{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<header class="top">
+  <div class="wrap">
+    <a class="marque" href="/">VB Safety<span class="marque-sub">Collectivités</span></a>
+    <nav class="onglets" aria-label="Navigation principale">
+      <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Sapeurs-pompiers<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/sapeurs-pompiers/">Présentation</a><a href="/cmr-pompier/"><span class="nav-th">Risque CMR</span>Outil de suivi des expositions</a><a href="/cmr-pompier/module-epi.html"><span class="nav-th">Risque CMR</span>Module EPI</a><a href="/innovation/#sapeurs-pompiers"><span class="nav-th">Risque toxique</span>Capteur de contamination</a><a href="/ressources/#sapeurs-pompiers">Ressources</a></div></div><div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Industrie<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/industrie/">Présentation</a><a href="/cmr-industrie/"><span class="nav-th">Risque CMR</span>Outil de suivi des expositions</a><a href="/innovation/#industrie"><span class="nav-th">Risque toxique</span>Capteur de contamination</a><a href="/ressources/#industrie">Ressources</a></div></div><div class="nav-groupe nav-metier actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Collectivités<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/collectivites/"><span class="nav-th">Risques naturels</span>Présentation</a><a href="/collectivites/#essayer"><span class="nav-th">Risques naturels</span>Débroussaillement (OLD)</a><a href="/collectivites/cellule-de-crise/" aria-current="page"><span class="nav-th">Risques naturels</span>Cellule de crise : tempête, feu</a><a href="/collectivites/demande/">Demander une démo pour ma commune</a></div></div>
+    </nav>
+    <a class="langue" href="/en/municipalities/#signalements" hreflang="en" lang="en">EN</a>
+    <a class="ecrire" href="/#contact">Contact</a>
+  </div>
+</header>
+<main id="contenu">
+
+<section class="c-hero">
+  <div class="wrap c-hero-in">
+    <span class="c-k hx" style="--d:.05s">Collectivités · risques naturels</span>
+    <h1><span class="hl"><span class="hx" style="--d:.15s">La cellule de crise de la commune,</span></span><span class="hl"><span class="hx c-gris" style="--d:.35s">sur <em>une seule carte.</em></span></span></h1>
+    <div class="c-trait hx" style="--d:.6s" aria-hidden="true"></div>
+    <p class="c-sous hx" style="--d:.7s">Tempête, feu de forêt, inondation : <b>les signalements des habitants</b>, <b>les équipes municipales</b> et <b>la vigilance Météo-France</b> au même endroit. Chaque décision est horodatée.</p>
+    <ul class="c-tags hx" style="--d:.8s"><li>Signalements des habitants</li><li>Équipes en direct</li><li>Journal de crise</li></ul>
+    <div class="c-cta hx" style="--d:.9s"><a class="btn btn-p" href="/collectivites/demande/?interet=crise">Demander une démo</a><a class="c-lien" href="#fonctionnement">Voir le fonctionnement ↓</a></div>
+  </div>
+  <div class="wrap c-bas hx" style="--d:1.1s"><a class="c-mail" href="/collectivites/">Débroussaillement (OLD) →</a><a class="c-cue" href="#fonctionnement"><span>Découvrir</span><i aria-hidden="true"></i></a></div>
+</section>
+
+<section class="sec" id="fonctionnement">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">Comment ça marche</span><h2 class="titre">Du signalement à l'intervention terminée</h2></div>
+    <ol class="etapes"><li><h3>Les habitants signalent</h3><p>Photo et position depuis leur téléphone, par un lien ou un QR code diffusé par la mairie. Sans application à installer. Un appel à la mairie se saisit aussi, avec l'adresse.</p></li><li><h3>La cellule classe</h3><p>Chaque alerte arrive sur la carte. La cellule la classe Urgent, Important ou Normal ; les signalements au même endroit sont regroupés.</p></li><li><h3>Les équipes partent</h3><p>Le responsable d'équipe voit les missions sur son téléphone : « J'y vais », « Sur place », « Terminé ». La cellule suit le statut de chaque équipe.</p></li><li><h3>Tout est tracé</h3><p>Chaque action est inscrite au journal avec l'heure. Le journal s'imprime et s'exporte pour le compte rendu et le retour d'expérience.</p></li></ol>
+  </div>
+</section>
+
+<section class="c-sec" id="signalements">
+  <div class="rv wrap">
+    <span class="c-k">En cas de crise : tempête, feu</span>
+    <h2 class="c-h2">Les habitants signalent, vous coordonnez.</h2>
+    <div class="sg" id="sg">
+      <div class="sg-tabs" role="tablist">
+        <button type="button" class="sg-tab on" data-i="0" role="tab"><span class="sg-bar"><i></i></span><b>1 · Un habitant signale</b><span>Photo et position depuis son téléphone, sans application à installer.</span></button>
+        <button type="button" class="sg-tab" data-i="1" role="tab"><span class="sg-bar"><i></i></span><b>2 · Ça apparaît sur votre carte</b><span>À l'endroit exact, avec la photo et l'heure.</span></button>
+        <button type="button" class="sg-tab" data-i="2" role="tab"><span class="sg-bar"><i></i></span><b>3 · Vous l'affectez à une équipe</b><span>Suivi de l'intervention, tout est noté dans la main courante.</span></button>
+      </div>
+      <div class="sg-stage" data-s="0" aria-live="polite">
+        <div class="sg-map"></div>
+        <div class="sg-pin" aria-hidden="true"><svg viewBox="0 0 24 32" width="34" height="46"><path d="M12 0C5.4 0 0 5.3 0 11.9 0 21 12 32 12 32s12-11 12-20.1C24 5.3 18.6 0 12 0z" fill="#D32F2F"/><circle cx="12" cy="12" r="5" fill="#fff"/></svg></div>
+        <div class="sg-pulse" aria-hidden="true"></div>
+        <div class="sg-card">
+          <div class="sg-card-h"><span class="sg-badge n">Nouveau</span><span class="sg-badge e">Équipe en route</span><small>14:02</small></div>
+          <b>Arbre tombé dans le parc</b>
+          <div class="sg-ph"><svg viewBox="0 0 120 60" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><rect width="120" height="60" fill="#8FB070"/><rect y="38" width="120" height="22" fill="#7FA060"/><path d="M8 44 L96 30" stroke="#6B4A2E" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="26" r="14" fill="#3F6B32"/><circle cx="108" cy="34" r="10" fill="#4C7A3B"/><circle cx="88" cy="34" r="9" fill="#46733A"/><rect x="2" y="40" width="10" height="8" rx="2" fill="#6B4A2E"/></svg></div>
+          <small class="sg-meta">Signalé par un habitant · photo · position GPS</small>
+          <div class="sg-assign"><span>Affecter à</span><div class="sg-sel"><span class="a">Choisir une équipe ▾</span><span class="b">Équipe espaces verts ✓</span></div></div>
+        </div>
+        <div class="sg-log"><div class="l1"><b>14:02</b>Signalement reçu, photo jointe</div><div class="l2"><b>14:04</b>Affecté à l'équipe espaces verts</div></div>
+        <div class="sg-phone">
+          <div class="sg-ph-top">Signaler un problème<small>Commune exemple</small></div>
+          <div class="sg-ph-img"><svg viewBox="0 0 120 70" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><rect width="120" height="70" fill="#9DBB7C"/><rect y="44" width="120" height="26" fill="#86A866"/><path d="M6 52 L92 34" stroke="#6B4A2E" stroke-width="7" stroke-linecap="round"/><circle cx="96" cy="30" r="16" fill="#3F6B32"/><circle cx="108" cy="40" r="11" fill="#4C7A3B"/><circle cx="84" cy="40" r="10" fill="#46733A"/></svg><span>Photo</span></div>
+          <div class="sg-chips"><span class="on">Arbre tombé</span><span>Câble au sol</span><span>Inondation</span></div>
+          <div class="sg-field">📍 Parc municipal · position GPS</div>
+          <div class="sg-send"><span class="a">Envoyer</span><span class="b">✓ Envoyé à la mairie</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="c-sec">
+  <div class="rv wrap cc-duo">
+    <div>
+      <span class="c-k">Les équipes techniques</span>
+      <h2 class="c-h2">Qui fait quoi, en direct.</h2>
+      <p class="c-lead">Le responsable du service technique met à jour son équipe depuis son téléphone. La cellule voit tout de suite qui est disponible, en route ou sur place, et sur quelle intervention.</p>
+      <ul class="cc-list"><li><i>1</i><span><b>Missions en attente</b> : celles envoyées par la cellule, et les incidents encore sans équipe.</span></li><li><i>2</i><span><b>« J'y vais »</b> : l'équipe passe en route, la cellule est prévenue.</span></li><li><i>3</i><span><b>« Terminé »</b> : l'incident est clos dans la cellule, l'équipe redevient disponible.</span></li></ul>
+    </div>
+    <div aria-hidden="true">
+      <div class="ph"><div class="ph-top"><small>Commune exemple</small><b>Équipe B · Élagage</b><div class="ph-st"><i></i>En route · 14:06</div></div>
+      <div class="ph-b"><div class="ph-act"><div class="kk">Mission en cours</div><b>Arbre sur la route</b><div class="v">📍 Chemin des Prés</div><span class="ph-btn b1">Arrivé sur place</span><span class="ph-btn b2">✓ Terminé</span></div>
+      <div class="ph-h">Incidents à prendre</div>
+      <div class="ph-mi"><div><span class="ph-u">URGENT</span><b>Câble au sol</b><span>📍 Rue de la Gare · 14:02</span></div><em>J'y vais</em></div>
+      <div class="ph-mi"><div><b>Route inondée</b><span>📍 Place du Marché · 13:51</span></div><em>J'y vais</em></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="c-sec">
+  <div class="rv wrap">
+    <span class="c-k">Dans la cellule</span>
+    <h2 class="c-h2">Ce que la cellule a sous les yeux.</h2>
+    <div class="cc-grid">
+      <div class="cc-card"><span class="k">Alertes</span><h3>Saisie d'une alerte</h3><p>Motif, adresse trouvée dans la Base Adresse Nationale ou point placé sur la carte, précisions, source de l'information et personne à rappeler.</p></div>
+      <div class="cc-card"><span class="k">Priorités</span><h3>Fiche d'incident en étapes</h3><p>À traiter, pris en compte, équipe sur le coup, terminé. Une action principale à la fois ; l'équipe s'envoie en un clic.</p></div>
+      <div class="cc-card"><span class="k">Équipes</span><h3>Statut de chaque équipe</h3><p>Disponible, en route, sur place, en pause : mis à jour par le terrain ou par la cellule, avec l'heure de la dernière mise à jour.</p></div>
+      <div class="cc-card"><span class="k">Météo</span><h3>Vigilance Météo-France</h3><p>Les vigilances en cours pour le département et les rafales prévues sur 12 heures, rafraîchies toutes les 30 minutes.</p></div>
+      <div class="cc-card"><span class="k">Partenaires</span><h3>Pompiers et Enedis</h3><p>Aucun envoi automatique : l'appel se fait par téléphone, comme aujourd'hui. Un bouton l'inscrit au journal avec l'heure.</p></div>
+      <div class="cc-card"><span class="k">Trace</span><h3>Journal de crise</h3><p>Toutes les décisions, horodatées. Impression du journal et export en tableur pour le compte rendu.</p></div>
+    </div>
+    <div class="ic-m" aria-hidden="true"><div class="h"><span class="n">7</span><b>Arbre sur la route</b><span class="p">Urgent</span></div><div class="l">Chemin des Prés · 14:02 · 2 signalements</div><div class="stp"><span class="d"></span><span class="d"></span><span class="c"></span><span></span></div><div class="sl">Équipe sur le coup</div><div class="tm"><span><b>Équipe A</b><i style="background:#2e7d32"></i>Disponible</span><span style="border-color:#1565c0;background:#eef4fc"><b>Équipe B</b><i style="background:#1565c0"></i>En route</span><span><b>Équipe C</b><i style="background:#7a8590"></i>En pause</span></div></div>
+  </div>
+</section>
+
+<section class="c-sec">
+  <div class="rv wrap c-faq">
+    <div><span class="c-k">Questions</span><h2 class="c-h2">Les questions des élus.</h2></div>
+    <div class="faq"><details><summary>Est-ce un plan communal de sauvegarde ?</summary><p>Non. Le plan communal de sauvegarde reste celui de la commune. L'outil sert à le mettre en œuvre pendant l'événement : recevoir les signalements, répartir les équipes, garder la trace des décisions.</p></details><details><summary>Faut-il installer une application ?</summary><p>Non. La cellule utilise un navigateur ; les habitants et les équipes ouvrent une page sur leur téléphone.</p></details><details><summary>L'outil prévient-il les pompiers ?</summary><p>Non. Les appels aux secours et à Enedis se font par téléphone, comme aujourd'hui. L'outil enregistre qu'ils ont été faits, et à quelle heure.</p></details><details><summary>Où sont les données ?</summary><p>Sur un serveur en France. Les signalements ne sont visibles que par la commune.</p></details></div>
+  </div>
+</section>
+
+<section class="c-sec" style="border-top:0;padding-top:0">
+  <div class="wrap">
+    <div class="c-final2 rv">
+      <span class="c-k">Pour votre commune</span>
+      <h2>Préparez la prochaine <span>tempête.</span></h2>
+      <p>Nous préparons une démonstration avec la carte de votre commune et vos équipes, et vous la présentons, en mairie ou à distance.</p>
+      <form class="cf2" action="/collectivites/demande/" method="get"><label class="sr" for="cf2-c">Votre commune</label><input id="cf2-c" name="commune" type="text" placeholder="Nom de votre commune" autocomplete="address-level2" required><button class="btn btn-p" type="submit">Préparer ma démonstration</button></form>
+      <a class="c-lien" href="/collectivites/">ou voir le débroussaillement (OLD) →</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="pied">
+  <div class="wrap">
+    <div class="pied-grille">
+      <div><a class="marque" href="/">VB Safety</a><p>Détection et traçabilité : exposition professionnelle aux agents CMR, risque feu de forêt et risque communal.</p></div>
+      <div><h2 class="pied-h">Secteurs</h2><ul><li><a href="/industrie/">Industrie</a></li><li><a href="/btp/">BTP</a></li><li><a href="/sapeurs-pompiers/">Sapeurs-pompiers</a></li><li><a href="/collectivites/">Collectivités</a></li></ul></div>
+      <div><h2 class="pied-h">Contact</h2><ul><li><a href="/#contact">Formulaire de contact</a></li><li><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></li><li><a href="/mentions-legales/">Mentions légales</a></li><li><a href="/confidentialite/">Confidentialité</a></li></ul></div>
+    </div>
+    <div class="pied-bas"><span>© 2026 VB Safety SAS</span></div>
+  </div>
+</footer>
+<script>
+(function(){
+var sg=document.getElementById('sg'),st=sg.querySelector('.sg-stage'),tabs=sg.querySelectorAll('.sg-tab'),i=0,tm=null,auto=true,T=4200;
+function go(n){
+  i=n;st.setAttribute('data-s',n);st.classList.remove('sent');
+  tabs.forEach(function(t,k){t.classList.toggle('on',k===n);var b=t.querySelector('.sg-bar i');b.style.animation='none';b.offsetWidth;b.style.animation=''});
+  if(n===0)setTimeout(function(){if(i===0)st.classList.add('sent')},2000);
+  clearTimeout(tm);if(auto)tm=setTimeout(function(){go((i+1)%3)},n===0?T+600:T);
+}
+tabs.forEach(function(t,k){t.addEventListener('click',function(){auto=false;sg.classList.add('stop');go(k)})});
+if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){auto=false;sg.classList.add('stop')}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){go(0);o.disconnect()}})},{threshold:.4}).observe(sg)}else go(0);
+})();
+</script>
+<script>(function(){var r=document.querySelectorAll(".rv");if(!("IntersectionObserver" in window)){r.forEach(function(e){e.classList.add("vu")});return}var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("vu");o.unobserve(e.target)}})},{threshold:.12});r.forEach(function(e){o.observe(e)})})();</script>
+<script src="/static/menu.js?v=9" defer></script>
+<script src="/static/fond.js?v=2" defer></script>
+<script src="/static/serpentin.js?v=2" defer></script>
+<script src="/static/nav.js?v=4" defer></script>
+</body>
+</html>
