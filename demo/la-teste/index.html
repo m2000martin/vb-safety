@@ -196,6 +196,7 @@ details.wv{display:block}details.wv summary{display:flex;align-items:center;gap:
 .wl{font-size:11px;color:#9aa3ab;margin-top:2px}.wf{font-size:11px;color:#9aa3ab;margin-top:10px;padding-top:8px;border-top:1px solid #f0ede6}.wf a{color:#7a8590;text-decoration:none}.wf a:hover{color:#1c2126;text-decoration:underline}.wx-na{font-size:12.5px;color:#7a8590;margin-top:6px}
 .wx.big .wt b{font-size:30px}.wx.big .wb{height:70px}
 @media(max-width:560px){.wg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tmh{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.tsel{margin-left:auto;font:600 12px var(--sans,system-ui);border:1.5px solid;border-radius:999px;padding:3px 8px;background:#fff;cursor:pointer}.ttk{font-size:12.5px;margin-top:5px;color:#1c2126}.tmt{font-size:11.5px;color:#7a8590;margin-top:4px}.cth .muted a{color:#5d6670;font-weight:500;font-size:12px;margin-left:8px}
 </style><style>#chg,#chg3{display:none!important}</style></head><body>
 <div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a class="rdvt" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">Demander un rdv pour ma ville</a><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Activer la cellule de crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
 <div id="map"></div><div id="page"></div><div id="pcc"><div id="pcch"></div><div id="pcct"><button data-t="map" onclick="pccTab('map')">Carte et état de la commune</button><button data-t="act" onclick="pccTab('act')">Actions en cours</button></div><div class="pccb"><section id="pccL" aria-label="Carte et état de la commune"><div id="pccS"></div><div id="pccmap"></div></section><section id="pccR" aria-label="Actions en cours"><div id="pccl"></div><div id="pccr"></div></section></div></div>
@@ -1066,12 +1067,24 @@ function kDrop(e,col,beforeId){e.preventDefault();e.stopPropagation();e.currentT
  if(col&&col!=='new'&&(+col!==x.pr||!x.ok)){x.pr=+col;const was=x.ok;x.ok=true;jlog(x,(was?'Catégorie changée : ':'Catégorie validée : ')+PRN[col])}
  if(beforeId!==undefined&&beforeId!==id){const b=S.find(y=>y.id===beforeId);if(b){x.o=b.o-0.5;S.slice().sort((a,c)=>a.o-c.o).forEach((y,i)=>y.o=i+1)}if(KV==='list')KS='man'}
  pccRender();pccMap()}
+const TST={dispo:['Disponible','#2e7d32'],route:['En route','#1565c0'],inter:['En intervention','#ef8a17'],pause:['En pause','#7a8590'],indispo:['Indisponible','#6d0f0f']};
+function tKey(){return 'vbteams_'+D.city}
+function tGet(){try{return JSON.parse(localStorage.getItem(tKey())||'{}')}catch(_){return {}}}
+function tSet(o){try{localStorage.setItem(tKey(),JSON.stringify(o))}catch(_){}}
+function tUpd(id,s,task){const o=tGet(),t=o[id]||{};t.s=s;if(task!==undefined)t.task=task;t.h=hnow();t.by='cellule';o[id]=t;tSet(o)}
+function tPub(){try{localStorage.setItem('vbteamdef_'+D.city,JSON.stringify({nom:D.nom,t:TEAMS}));localStorage.setItem('vbinc_'+D.city,JSON.stringify(incs().filter(x=>x.team&&x.ist!=='clos').map(x=>({id:x.id,team:x.team,l:STY[x.t],v:x.v,d:x.d||'',pr:x.pr}))))}catch(_){}}
+function tLink(){return '/OLD-demo/r/equipe.html?c='+encodeURIComponent(D.city)}
+addEventListener('storage',e=>{if(!D||e.key!==tKey())return;const o=tGet();let ch=false;Object.keys(o).forEach(id=>{const t=o[id],T=TEAMS.find(z=>z.id===id)||{n:id};
+ if(t.done){const x=incs().find(y=>y.id===t.done);if(x&&x.ist!=='clos'){x.ist='clos';x.st='d';jlog(x,'Terminé, signalé depuis le terrain par '+T.n)}delete t.done;ch=true}
+ if(t.start){const x=incs().find(y=>y.id===t.start);if(x)jlog(x,T.n+' sur place (signalé depuis le terrain)');delete t.start;ch=true}
+ if(t.logS&&t.logS!==t.logged){CLOG.unshift([t.h||hnow(),T.n,'Statut : '+(TST[t.s]||['?'])[0]+(t.task?' · '+t.task:'')+' (depuis le terrain)']);t.logged=t.logS;ch=true}});
+ if(ch)tSet(o);if(document.getElementById('pcc').style.display==='flex'){pccRender();pccMap()}});
 function pccAct(id,a,arg){const x=incs().find(y=>y.id===id);if(!x)return;
  if(a==='pris'){x.ist='pris';jlog(x,'Pris en compte par la cellule de crise')}
- if(a==='team'){if(!arg)return;x.team=arg;x.ist='affecte';const q=incs().filter(y=>y.team===arg&&y.ist==='affecte').length;jlog(x,'Ajouté à la liste de '+TEAMS.find(t=>t.id===arg).n+' (n°'+q+' dans la file)')}
+ if(a==='team'){if(!arg)return;x.team=arg;x.ist='affecte';{const t=tGet()[arg];if(!t||!t.s||t.s==='dispo')tUpd(arg,'route','n°'+x.id+' '+STY[x.t]+' · '+x.v)}const q=incs().filter(y=>y.team===arg&&y.ist==='affecte').length;jlog(x,'Ajouté à la liste de '+TEAMS.find(t=>t.id===arg).n+' (n°'+q+' dans la file)')}
  if(a==='sdis'){x.ist='transmis';x.sdis=1;jlog(x,'Noté : transmis aux pompiers (appel fait par la cellule)')}
  if(a==='enedis'){x.ist='transmis';x.enedis=1;jlog(x,'Noté : signalé au dépannage Enedis (appel fait par la cellule)')}
- if(a==='clos'){x.ist='clos';jlog(x,'Terminé')}
+ if(a==='clos'){x.ist='clos';jlog(x,'Terminé');if(x.team&&!incs().some(y=>y.team===x.team&&y.ist==='affecte'))tUpd(x.team,'dispo','')}
  if(a==='prio'){x.pr=+arg;x.ok=true;jlog(x,'Catégorie : '+PRN[arg])}
  x.st=x.ist==='clos'?'d':(x.ist==='nouveau'?'s':'p');pccRender();pccMap()}
 function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist==='clos')||a.pr-b.pr||a.id-b.id),c=k=>S.filter(x=>x.ist===k).length,open=S.filter(x=>x.ist!=='clos').length;
@@ -1102,10 +1115,11 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
  if(done.length)h+='<details class="kdone"><summary>Terminés ('+done.length+')</summary>'+done.map(card).join('')+'</details>';
  document.getElementById('pccl').innerHTML='<div class="cth">Incidents en cours ('+live.length+')<span class="muted">aucun envoi automatique vers les pompiers ou Enedis</span></div>'+h;
  const tq=t=>S.filter(x=>x.team===t.id&&x.ist==='affecte');
- document.getElementById('pccr').innerHTML='<div class="cth" style="margin-top:12px">Équipes</div>'+TEAMS.map(t=>{const q=tq(t);return '<div class="tm2"><div><b>'+t.n+'</b> <span class="muted">'+t.r+'</span><span class="tq">'+(q.length?q.length+' en file':'disponible')+'</span></div>'+q.map((x,i)=>'<div class="tqi" onclick="CSEL='+x.id+';pccRender();pccMap()">'+(i+1)+'. n°'+x.id+' '+STY[x.t]+' · '+esc(x.v)+'</div>').join('')+'</div>'}).join('')+
+ const TS=tGet();
+ document.getElementById('pccr').innerHTML='<div class="cth" style="margin-top:12px">Équipes<span class="muted"><a href="'+tLink()+'" target="_blank" rel="noopener" title="Le responsable d\'équipe met à jour le statut depuis son téléphone">Vue chef d\'équipe (téléphone) ↗</a></span></div>'+TEAMS.map(t=>{const q=tq(t),ts=TS[t.id]||{},st=TST[ts.s||(q.length?'route':'dispo')];return '<div class="tm2"><div class="tmh"><b>'+t.n+'</b> <span class="muted">'+t.r+'</span><select class="tsel" style="border-color:'+st[1]+';color:'+st[1]+'" aria-label="Statut de '+t.n+'" onchange="tUpd(\''+t.id+'\',this.value);pccRender()">'+Object.keys(TST).map(k=>'<option value="'+k+'"'+(TST[k]===st?' selected':'')+'>'+TST[k][0]+'</option>').join('')+'</select></div>'+(ts.task?'<div class="ttk">'+esc(ts.task)+'</div>':'')+'<div class="tmt">'+(ts.h?'Mis à jour à '+ts.h+(ts.by==='terrain'?' depuis le terrain':' par la cellule'):'Pas encore de mise à jour')+(q.length?' · '+q.length+' mission'+(q.length>1?'s':'')+' en file':'')+'</div>'+q.map((x,i)=>'<div class="tqi" onclick="CSEL='+x.id+';pccRender();pccMap()">'+(i+1)+'. n°'+x.id+' '+STY[x.t]+' · '+esc(x.v)+'</div>').join('')+'</div>'}).join('')+
   '<div class="cth" style="margin-top:12px">Journal</div><div class="mc">'+(CLOG.length?CLOG.map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'<br><span>'+esc(l[2])+'</span></div>').join(''):'<div class="muted">Chaque décision est enregistrée ici avec l\'heure.</div>')+'</div>';
  document.querySelectorAll('#pcct button').forEach(b=>b.classList.toggle('on',b.dataset.t===CTAB));document.getElementById('pcc').dataset.tab=CTAB;
- fillMet('metP',0)}
+ fillMet('metP',0);tPub()}
 function pccTab(t){CTAB=t;pccRender();if(t==='map'&&CM)setTimeout(()=>{CM.invalidateSize();pccMap(true)},60)}
 function pccPrint(){const S=incs(),w=window.open('','_blank');if(!w)return;w.document.write('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Journal de crise</title><style>body{font:11pt system-ui;margin:15mm}td,th{border-bottom:1px solid #ddd;padding:3px 6px;text-align:left;vertical-align:top}table{border-collapse:collapse;width:100%}</style></head><body><h2>Journal de crise – '+esc(D.nom)+' – tempête – cellule ouverte à '+CT0+'</h2><table><tr><th>N°</th><th>Incident</th><th>Lieu</th><th>État</th><th>Journal</th></tr>'+S.map(x=>'<tr><td>'+x.id+'</td><td>'+STY[x.t]+' ('+PRN[x.pr]+')</td><td>'+esc(x.v)+'</td><td>'+IST[x.ist][0]+'</td><td>'+x.log.map(l=>l[0]+' '+esc(l[1])).join('<br>')+'</td></tr>').join('')+'</table></body></html>');w.document.close();setTimeout(()=>w.print(),300)}
 
@@ -1159,7 +1173,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='lUx+CtOwPtZltHGGPS+nWA==',ITER=600000;let KEY=null;
+const SALT='JV8TUpy5VAtKF8rdV6Iqsg==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
