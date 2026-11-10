@@ -1,32 +1,52 @@
 # vb-safety.com · robots d'indexation et d'IA bienvenus
 User-agent: *
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: Googlebot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: Applebot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /demo/
+Disallow: /OLD-demo/
 
 Sitemap: https://vb-safety.com/sitemap.xml
