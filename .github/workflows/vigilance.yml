@@ -1,0 +1,29 @@
+name: Vigilance météo (démos VB OLD)
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: vigilance
+  cancel-in-progress: true
+jobs:
+  maj:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: _outils
+      - name: Résumer la vigilance en cours
+        run: mkdir -p /tmp/out && python3 _outils/vigilance.py /tmp/out/vigilance.json
+      - name: Publier sur la branche donnees
+        run: |
+          cd /tmp/out
+          git init -q -b donnees
+          git config user.name "vigilance-bot"
+          git config user.email "contact@vb-safety.com"
+          git add vigilance.json
+          git commit -q -m "Vigilance $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" donnees
