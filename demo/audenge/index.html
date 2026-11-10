@@ -1121,7 +1121,7 @@ function pccRender(){const S=incs().slice().sort((a,b)=>(a.ist==='clos')-(b.ist=
    else if(x.ist==='affecte')h+='<div class="tcur"><i style="background:'+TST[(TS[x.team]||{}).s||'route'][1]+'"></i><b>'+tm.n+'</b> · '+TST[(TS[x.team]||{}).s||'route'][0]+'</div><button class="bpri ok" onclick="pccAct('+x.id+',\'clos\')">✓ Marquer terminé</button><details class="chg"><summary>Changer d\'équipe</summary><div class="tchs">'+chips+'</div></details>';
    else h+='<div class="ilb">Envoyer une équipe :</div><div class="tchs">'+chips+'</div><button class="bsec" onclick="pccAct('+x.id+',\'clos\')">Clore sans intervention</button>';
    h+='<div class="sec2"><div class="seg" role="group" aria-label="Niveau">'+[1,2,3].map(p=>'<button class="'+(x.pr===p?'on p'+p:'')+'" onclick="pccAct('+x.id+',\'prio\','+p+')">'+PRN[p]+'</button>').join('')+'</div>'+
-    '<button class="tg'+(x.sdis?' on':'')+'" onclick="pccAct('+x.id+',\'sdis\')" title="Aucun envoi automatique : l\'appel se fait par téléphone, le bouton l\'enregistre">'+(x.sdis?'✓ ':'')+'Pompiers prévenus</button>'+(x.t==='cable'?'<button class="tg'+(x.enedis?' on':'')+'" onclick="pccAct('+x.id+',\'enedis\')" title="Aucun envoi automatique : le signalement se fait par téléphone, le bouton l\'enregistre">'+(x.enedis?'✓ ':'')+'Enedis prévenu</button>':'')+'</div></div>';
+    (x.sdis||(x.ist!=='affecte'&&(x.dan||['fumee','isole','arbre_maison'].includes(x.t)))?'<button class="tg'+(x.sdis?' on':'')+'" onclick="pccAct('+x.id+',\'sdis\')" title="Aucun envoi automatique : l\'appel se fait par téléphone, le bouton l\'enregistre">'+(x.sdis?'✓ ':'')+'Pompiers prévenus</button>':'')+(x.t==='cable'&&(x.enedis||x.ist!=='affecte')?'<button class="tg'+(x.enedis?' on':'')+'" onclick="pccAct('+x.id+',\'enedis\')" title="Aucun envoi automatique : le signalement se fait par téléphone, le bouton l\'enregistre">'+(x.enedis?'✓ ':'')+'Enedis prévenu</button>':'')+'</div></div>';
    h+='<details class="ijd" onclick="event.stopPropagation()"><summary>Historique ('+x.log.length+')</summary><div class="ij">'+x.log.slice().reverse().map(l=>'<div><b>'+l[0]+'</b> '+esc(l[1])+'</div>').join('')+'</div></details>'}
   return h+'</div>'};
  const live=S.filter(x=>x.ist!=='clos'),done=S.filter(x=>x.ist==='clos');
@@ -1194,7 +1194,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='AFoytTb1EJ8WTgKTY2RaAg==',ITER=600000;let KEY=null;
+const SALT='50O7Xv4euGzy3gmSr9ck7A==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
