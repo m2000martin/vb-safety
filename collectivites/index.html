@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1E30">
+<title>Débroussaillement et gestion de crise pour les communes · VB Safety</title>
+<meta name="description" content="VB OLD : constat du débroussaillement maison par maison à partir des données LiDAR de l'IGN, préparation des courriers, cellule de crise communale avec signalements des habitants et main courante.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://vb-safety.com/collectivites/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VB Safety">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Débroussaillement et gestion de crise pour les communes">
+<meta property="og:description" content="Constat du débroussaillement maison par maison, courriers prêts à envoyer, cellule de crise communale.">
+<meta property="og:url" content="https://vb-safety.com/collectivites/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="/static/fonts/inter-tight-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/fonts.css?v=2">
+<link rel="stylesheet" href="/static/secteurs.css?v=21">
+<link rel="stylesheet" href="/static/mobile.css?v=10">
+<link rel="stylesheet" href="/static/nav.css?v=13">
+<link rel="stylesheet" href="/static/texte.css?v=3">
+<link rel="stylesheet" href="/static/fond.css?v=4">
+<link rel="stylesheet" href="/static/anime.css?v=3">
+<style>
+.devise{margin:0;padding:22px 0 10px;font:700 13px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--signal)}
+.defile{position:relative;overflow:hidden;background:var(--signal);color:#0E1E30;border-top:1px solid var(--signal-2);border-bottom:1px solid var(--signal-2)}
+.defile ul{display:flex;width:max-content;margin:0;padding:0;list-style:none;animation:defile 30s linear infinite}
+.defile:hover ul,.defile:focus-within ul{animation-play-state:paused}
+.defile li{display:flex;align-items:center;white-space:nowrap}
+.defile a{display:block;padding:11px 34px;font:700 14px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#0E1E30;text-decoration:none}
+.defile a:hover,.defile a:focus-visible{text-decoration:underline}
+.defile a[aria-current]{color:#fff}
+.defile li::after{content:"";width:6px;height:6px;border-radius:50%;background:#0E1E30;opacity:.55}
+@keyframes defile{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.defile ul{animation:none;flex-wrap:wrap;width:auto;justify-content:center}.defile li.dbl{display:none}}
+.code-note{margin-top:14px;color:var(--doux);font-size:14px}
+</style>
+</head>
+<body>
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<header class="top">
+  <div class="wrap">
+    <a class="marque" href="/">VB Safety<span class="marque-sub">Collectivités</span></a>
+    <nav class="onglets" aria-label="Navigation principale">
+      <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Sapeurs-pompiers<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/sapeurs-pompiers/">Présentation</a><a href="/innovation/#sapeurs-pompiers">Capteur de contamination</a><a href="/cmr-pompier/">Outil CMR</a><a href="/cmr-pompier/module-epi.html">Module EPI</a><a href="/ressources/#sapeurs-pompiers">Ressources</a></div></div><div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Industrie<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/industrie/">Présentation</a><a href="/innovation/#industrie">Capteur de contamination</a><a href="/cmr-industrie/">Outil CMR</a><a href="/ressources/#industrie">Ressources</a></div></div><div class="nav-groupe nav-metier actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Collectivités<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/collectivites/" aria-current="page">Présentation</a><a href="/OLD-demo/">Démonstration VB OLD</a></div></div>
+    </nav>
+    <a class="ecrire" href="/#contact">Contact</a>
+  </div>
+</header>
+<main id="contenu">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <nav class="ariane" aria-label="Fil d'Ariane"><a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Collectivités</span></nav>
+      <h1><span class="h1-kw">Débroussaillement et gestion de crise pour les communes</span>Chaque maison de la commune, <em>vérifiée <span class="invis">sur carte.</span></em></h1>
+      <div class="trait" aria-hidden="true"></div>
+      <p class="chapeau">VB OLD établit l'état du débroussaillement autour de chaque construction à partir des données LiDAR et des photos aériennes de l'IGN. <span class="ch-plus">La mairie voit les écarts, prépare les courriers et suit les relances. Le même outil sert de cellule de crise : signalements des habitants, carte et main courante horodatée.</span></p>
+      <div class="cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Nous contacter</a></div>
+      <p class="code-note">Démonstration sur deux communes réelles, données anonymisées. Code d'accès sur demande.</p>
+    </div>
+    <aside class="bref" aria-label="En bref"><span class="bref-t">En bref</span><div><b>50 m</b><span>autour de chaque construction : la zone à débroussailler à moins de 200 m des bois.</span></div><div><b>Maison par maison</b><span>hauteur de la végétation mesurée par LiDAR, arbres trop proches, accès.</span></div><div><b>Le maire décide</b><span>l'outil fournit un constat daté ; les courriers partent après sa validation.</span></div></aside>
+  </div>
+</section>
+
+<div class="wrap"><p class="devise">Détection et traçabilité</p></div>
+<nav class="defile" aria-label="Nos domaines">
+  <ul>
+    <li><a href="/sapeurs-pompiers/">Sapeurs-pompiers</a></li>
+    <li><a href="/industrie/">Industrie</a></li>
+    <li><a href="/collectivites/" aria-current="page">Collectivités</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
+    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
+  </ul>
+</nav>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">Les enjeux</span><h2 class="titre">Une obligation qui s'étend, peu de moyens pour la contrôler</h2></div>
+    <div class="grille-3"><article class="enjeu"><span class="n">01</span><h3>De nouvelles communes concernées</h3><p>Le classement des bois et forêts exposés au feu s'étend : en Seine-et-Marne, l'arrêté du 13 avril 2026 fait entrer de nouvelles communes dans l'obligation de débroussaillement.</p></article><article class="enjeu"><span class="n">02</span><h3>Un contrôle à la charge du maire</h3><p>Le maire veille au respect des obligations de débroussaillement. Faire le tour de chaque propriété demande un temps que la plupart des mairies n'ont pas.</p></article><article class="enjeu"><span class="n">03</span><h3>Une crise mal tracée</h3><p>Le jour d'un feu ou d'une tempête, les appels, les signalements et les décisions se notent sur papier. Après coup, il est difficile de retrouver qui a fait quoi, et quand.</p></article></div>
+  </div>
+</section>
+
+<section class="sec" id="offre">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">Ce que fait l'outil</span><h2 class="titre">VB OLD en trois parties</h2></div>
+    <div class="offres" style="--cols:3"><article class="offre vedette"><span class="statut ok">Démo disponible</span><h3>État du débroussaillement</h3><p>Pour chaque construction : végétation haute dans les 50 m, arbres trop proches de la maison ou entre eux, accès.</p><ul><li>Données LiDAR HD et photos aériennes de l'IGN, datées</li><li>Règles nationales et départementales appliquées</li></ul><a class="lien" href="/OLD-demo/">Voir la démo <span aria-hidden="true">→</span></a></article><article class="offre"><span class="statut ok">Démo disponible</span><h3>Suivi et courriers</h3><p>La liste des écarts, du plus urgent au moins urgent, avec un courrier prêt pour chaque propriétaire.</p><ul><li>Information, rappel, mise en demeure</li><li>Envoi après validation du maire</li></ul><a class="lien" href="/OLD-demo/">Voir la démo <span aria-hidden="true">→</span></a></article><article class="offre"><span class="statut ok">Démo disponible</span><h3>Cellule de crise</h3><p>La carte de la commune, les signalements envoyés par les habitants et les actions en cours sur un seul écran.</p><ul><li>Main courante horodatée, exportable</li><li>Compatible avec le plan communal de sauvegarde existant</li></ul><a class="lien" href="/OLD-demo/">Voir la démo <span aria-hidden="true">→</span></a></article></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">Comment ça marche</span><h2 class="titre">4 étapes</h2></div>
+    <ol class="etapes"><li><h3>Analyse de la commune</h3><p>Chaque construction est analysée à partir des données publiques de l'IGN. Aucune visite n'est nécessaire à ce stade.</p></li><li><h3>La mairie consulte</h3><p>Carte, fiche par maison et liste des écarts, triée par urgence.</p></li><li><h3>Le maire valide les courriers</h3><p>Il choisit les envois et les dates de relance. Une vérification sur place reste possible avant toute mise en demeure.</p></li><li><h3>Le suivi est conservé</h3><p>Constats, courriers et réponses sont datés. La même base sert le jour d'une crise.</p></li></ol>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">Questions fréquentes</span><h2 class="titre">Ce que les mairies nous demandent</h2></div>
+    <div class="faq"><details><summary>Le constat remplace-t-il une visite ?</summary><p>Non. C'est un constat d'aide à la décision, daté, établi à partir d'images et de mesures. Il indique où regarder en priorité. Les décisions et les mises en demeure relèvent du maire.</p></details><details><summary>Qui voit les données ?</summary><p>Les constats maison par maison ne sont visibles que par la mairie. Aucun nom de propriétaire n'est stocké dans la démonstration.</p></details><details><summary>Faut-il changer notre plan communal de sauvegarde ?</summary><p>Non. Le PCS reste celui de la commune. La cellule de crise fournit la carte des enjeux, les signalements et la main courante ; elle ne modifie pas l'organisation prévue.</p></details><details><summary>Comment tester la démonstration ?</summary><p>Demandez un code d'accès par le formulaire de contact. La démonstration porte sur deux communes, en Seine-et-Marne et en Gironde.</p></details></div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <div class="bande">
+      <div><span class="kicker">Pour votre commune</span><h2>Voir l'état du débroussaillement de votre commune</h2><p>Testez la démonstration, puis demandez l'analyse de votre commune.</p></div>
+      <div class="cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander l'analyse de ma commune</a></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="pied">
+  <div class="wrap">
+    <div class="pied-grille">
+      <div><a class="marque" href="/">VB Safety</a><p>Détection et traçabilité : exposition professionnelle aux agents CMR, risque feu de forêt et risque communal.</p></div>
+      <div><h2 class="pied-h">Secteurs</h2><ul><li><a href="/industrie/">Industrie</a></li><li><a href="/btp/">BTP</a></li><li><a href="/sapeurs-pompiers/">Sapeurs-pompiers</a></li><li><a href="/collectivites/">Collectivités</a></li></ul></div>
+      <div><h2 class="pied-h">Contact</h2><ul><li><a href="/#contact">Formulaire de contact</a></li><li><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></li><li><a href="/mentions-legales/">Mentions légales</a></li><li><a href="/confidentialite/">Confidentialité</a></li></ul></div>
+    </div>
+    <div class="pied-bas"><span>© 2026 VB Safety SAS</span></div>
+  </div>
+</footer>
+<script src="/static/vu.js?v=1" defer></script>
+<script src="/static/menu.js?v=7" defer></script>
+<script src="/static/nav.js?v=4" defer></script>
+<script src="/static/fond.js?v=2" defer></script>
+<script src="/static/anime.js?v=2" defer></script>
+</body>
+</html>
