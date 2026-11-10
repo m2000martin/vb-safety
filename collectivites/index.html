@@ -55,17 +55,7 @@ main{overflow-x:clip}
 
 /* DEVISE + BANDEAU */
 .devise{margin:0;padding:0 0 12px;font:700 13px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
-.defile{position:relative;overflow:hidden;background:var(--c-or);border-block:1px solid var(--signal-2)}
-.defile ul{display:flex;width:max-content;margin:0;padding:0;list-style:none;animation:defile 30s linear infinite}
-.defile:hover ul,.defile:focus-within ul{animation-play-state:paused}
-.defile li{display:flex;align-items:center;white-space:nowrap}
-.defile a{display:block;padding:11px 34px;font:700 14px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#0E1E30;text-decoration:none}
-.defile a:hover,.defile a:focus-visible{text-decoration:underline}
-.defile a[aria-current]{color:#fff}
-.defile li::after{content:"";width:6px;height:6px;border-radius:50%;background:#0E1E30;opacity:.55}
-@keyframes defile{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.defile ul{animation:none;flex-wrap:wrap;width:auto;justify-content:center}.defile li.dbl{display:none}}
-
+@media (prefers-reduced-motion:reduce){
 /* CHIFFRES */
 .c-chiffres{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--c-line);border-radius:12px;overflow:hidden;margin-top:clamp(48px,6vw,72px)}
 .c-chiffres div{padding:26px 24px;background:var(--c-card2)}
@@ -227,29 +217,7 @@ main{overflow-x:clip}
   </div>
 </section>
 
-<div class="wrap"><p class="devise">Détection et traçabilité</p></div>
-<nav class="defile" aria-label="Nos domaines">
-  <ul>
-    <li><a href="/sapeurs-pompiers/">Sapeurs-pompiers</a></li>
-    <li><a href="/industrie/">Industrie</a></li>
-    <li><a href="/collectivites/" aria-current="page">Collectivités</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/sapeurs-pompiers/" tabindex="-1">Sapeurs-pompiers</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/industrie/" tabindex="-1">Industrie</a></li>
-    <li class="dbl" aria-hidden="true"><a href="/collectivites/" tabindex="-1">Collectivités</a></li>
-  </ul>
-</nav>
+<div class="wrap" style="border-bottom:1px solid var(--c-line)"><p class="devise">Détection et traçabilité</p></div>
 
 <section class="c-sec" style="padding-top:clamp(48px,6vw,80px)">
   <div class="wrap">
