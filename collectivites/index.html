@@ -35,9 +35,10 @@ main{overflow-x:clip}
 .c-hero{position:relative;padding:clamp(36px,5vw,72px) 0 clamp(28px,3vw,40px)}
 .c-hero::before{content:"";position:absolute;inset:-30% -10% auto auto;width:60%;height:140%;background:radial-gradient(closest-side,rgba(224,108,52,.13),transparent);pointer-events:none}
 .c-hero .wrap{position:relative}
-.c-hero h1{font-size:clamp(34px,5vw,64px);line-height:1.03;letter-spacing:-.045em;margin:12px 0 0;max-width:17ch}
+.c-hero h1{font-size:clamp(31px,4.6vw,60px);line-height:1.03;letter-spacing:-.045em;margin:12px 0 0;max-width:17ch}
 .c-hero h1 em{font-style:normal;color:var(--c-or2)}
-.c-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.c-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin-top:26px}
+.c-lien{color:var(--doux);text-decoration:none;font-weight:600;font-size:15px}.c-lien:hover{color:#fff}
 .c-note{margin:12px 0 0;color:var(--faible);font-size:13.5px}
 /* carte */
 .vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
@@ -106,6 +107,7 @@ main{overflow-x:clip}
 @media (max-width:560px){
  .c-cta .btn{width:100%}
  .c-hero h1{max-width:none}
+ .c-hero .c-cta{flex-direction:column;align-items:stretch;text-align:center}
  .vw-chip{font-size:12px;padding:5px 8px}
  .c-chiffres{gap:14px 24px}.c-chiffres b{font-size:24px}
 }
@@ -126,6 +128,70 @@ main{overflow-x:clip}
  .c-steps li{flex:0 0 78%;scroll-snap-align:start;background:var(--c-card2);border:1px solid var(--c-line);border-top:2px solid var(--c-or);border-radius:10px;padding:16px}
 }
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.vw-h .shape{opacity:1}.vw-h.pulse .shape,.vw-side>*{animation:none}}
+
+.sg{margin-top:30px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:22px;align-items:stretch}
+.sg-tabs{display:grid;gap:10px;align-content:center}
+.sg-tab{position:relative;text-align:left;background:transparent;border:1px solid var(--c-line);border-radius:12px;padding:16px 18px 16px;color:var(--doux);cursor:pointer;font:400 14.5px/1.45 var(--sans);transition:background .25s,border-color .25s}
+.sg-tab b{display:block;color:#fff;font-size:16.5px;margin-bottom:4px}
+.sg-tab.on{background:var(--c-card2);border-color:rgba(224,108,52,.5)}
+.sg-bar{position:absolute;left:18px;right:18px;bottom:0;height:2px;background:transparent;overflow:hidden}
+.sg-bar i{display:block;height:100%;width:0;background:var(--c-or)}
+.sg-tab.on .sg-bar i{animation:sgfill var(--sgt,4.2s) linear forwards}
+.sg.stop .sg-tab.on .sg-bar i{animation:none;width:100%}
+@keyframes sgfill{to{width:100%}}
+.sg-stage{position:relative;border-radius:14px;overflow:hidden;min-height:430px;background:#7d8c5c;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.sg-map{position:absolute;inset:0;background:url(/collectivites/img/village.jpg) 38% 30%/170% auto no-repeat;transition:filter .5s}
+.sg-stage[data-s="0"] .sg-map{filter:brightness(.55) saturate(.8)}
+.sg-pin{position:absolute;left:44%;top:30%;transform:translate(-50%,-100%) translateY(-60px);opacity:0;transition:transform .55s cubic-bezier(.3,1.6,.5,1),opacity .3s;z-index:2}
+.sg-stage:not([data-s="0"]) .sg-pin{opacity:1;transform:translate(-50%,-100%)}
+.sg-pulse{position:absolute;left:44%;top:30%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:rgba(211,47,47,.5);opacity:0}
+.sg-stage[data-s="1"] .sg-pulse{animation:sgp 1.4s ease-out .5s infinite}
+@keyframes sgp{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(5)}}
+.sg-card{position:absolute;left:calc(44% + 26px);top:12%;width:250px;background:#fff;color:#1C2733;border-radius:12px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.35);opacity:0;transform:translateY(10px) scale(.97);transition:opacity .4s .35s,transform .4s .35s;z-index:3;font:400 13px/1.4 var(--sans)}
+.sg-stage:not([data-s="0"]) .sg-card{opacity:1;transform:none}
+.sg-card b{display:block;font-size:15px;margin:6px 0 8px}
+.sg-card-h{display:flex;align-items:center;gap:6px}.sg-card-h small{margin-left:auto;color:#7A8794}
+.sg-badge{padding:3px 8px;border-radius:999px;font:700 11px/1.2 var(--sans)}
+.sg-badge.n{background:#FDECEA;color:#C62828}.sg-badge.e{display:none;background:#E7F5EE;color:#1E6B47}
+.sg-stage[data-s="2"] .sg-badge.n{display:none}.sg-stage[data-s="2"] .sg-badge.e{display:inline-block}
+.sg-ph{height:70px;border-radius:8px;overflow:hidden}
+.sg-meta{display:block;color:#7A8794;margin-top:6px}
+.sg-assign{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #E6EAEE;font-size:12.5px;color:#56636F}
+.sg-sel{position:relative;flex:1;border:1px solid #D5DBE1;border-radius:7px;padding:6px 8px;font-weight:600;color:#1C2733;overflow:hidden;height:30px}
+.sg-sel span{position:absolute;left:8px;right:8px;top:6px;transition:transform .35s,opacity .35s}
+.sg-sel .b{transform:translateY(20px);opacity:0;color:#1E6B47}
+.sg-stage[data-s="2"] .sg-sel{border-color:#2E9E4F;background:#F1FAF5}
+.sg-stage[data-s="2"] .sg-sel .a{transform:translateY(-20px);opacity:0}.sg-stage[data-s="2"] .sg-sel .b{transform:none;opacity:1;transition-delay:.5s}
+.sg-log{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(12,27,44,.9);color:#C9D2DB;border-radius:10px;padding:10px 14px;font:500 12.5px/1.8 var(--mono);opacity:0;transition:opacity .4s .6s;z-index:3}
+.sg-log b{color:var(--c-or2);margin-right:10px}
+.sg-log .l2{display:none}
+.sg-stage:not([data-s="0"]) .sg-log{opacity:1}
+.sg-stage[data-s="2"] .sg-log .l2{display:block;animation:fup .4s .7s both}
+.sg-phone{position:absolute;left:50%;top:50%;width:230px;margin:-195px 0 0 -115px;height:390px;background:#fff;color:#1C2733;border-radius:28px;border:8px solid #0B1320;box-shadow:0 30px 60px rgba(0,0,0,.5);padding:14px 12px;z-index:4;transition:transform .55s ease,opacity .45s;font:400 12.5px/1.4 var(--sans)}
+.sg-stage:not([data-s="0"]) .sg-phone{transform:translateY(40px) scale(.9);opacity:0;pointer-events:none}
+.sg-ph-top{font-weight:700;font-size:14px}.sg-ph-top small{display:block;font-weight:400;color:#7A8794;font-size:11.5px}
+.sg-ph-img{position:relative;height:120px;border-radius:10px;overflow:hidden;margin-top:10px}
+.sg-ph-img span{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.5);color:#fff;border-radius:6px;padding:2px 7px;font-size:11px}
+.sg-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.sg-chips span{border:1px solid #D5DBE1;border-radius:999px;padding:4px 8px;font-size:11.5px}
+.sg-chips .on{background:#1C2733;color:#fff;border-color:#1C2733}
+.sg-field{margin-top:10px;border:1px solid #D5DBE1;border-radius:8px;padding:8px;font-size:12px}
+.sg-send{position:relative;margin-top:12px;height:40px;border-radius:9px;background:#C4521C;color:#fff;font-weight:700;overflow:hidden}
+.sg-send span{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .3s}
+.sg-send .b{opacity:0;background:#2E9E4F}
+.sg-stage[data-s="0"].sent .sg-send .a{opacity:0}.sg-stage[data-s="0"].sent .sg-send .b{opacity:1}
+.sg-stage[data-s="0"] .sg-send{animation:tap .5s 1.6s both}
+@keyframes tap{50%{transform:scale(.95)}}
+@media (max-width:900px){
+ .sg{grid-template-columns:1fr}
+ .sg-tabs{grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+ .sg-tab{padding:10px 10px 12px;font-size:12.5px}.sg-tab b{font-size:13.5px}.sg-tab>span:not(.sg-bar){display:none}
+ .sg-stage{min-height:460px}
+ .sg-map{background-size:340% auto;background-position:30% 22%}
+ .sg-pin,.sg-pulse{left:22%;top:36%}
+ .sg-card{left:auto;right:12px;top:40%;width:min(250px,calc(100% - 24px))}
+}
+@media (prefers-reduced-motion:reduce){.sg-tab.on .sg-bar i{animation:none;width:100%}.sg-pin,.sg-card,.sg-phone,.sg-log{transition:none}.sg-pulse{animation:none!important}}
 </style>
 </head>
 <body>
@@ -145,9 +211,8 @@ main{overflow-x:clip}
   <div class="wrap">
     <span class="c-k">Pour les mairies</span>
     <h1>Le débroussaillement de chaque maison, <em>vérifié depuis la mairie.</em></h1>
-    <p class="c-lead">VB OLD repère, à partir des relevés aériens de l'IGN, les maisons où le débroussaillement n'est pas fait. Vous validez les courriers, chaque étape est datée.</p>
-    <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander une présentation</a></div>
-    <p class="c-note">Démonstration complète sur deux communes réelles, code d'accès sur demande. Rien à installer.</p>
+    <p class="c-lead">Repérage à partir des relevés aériens de l'IGN, courriers prêts à envoyer, suivi daté.</p>
+    <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="c-lien" href="/#contact">ou demander une présentation →</a></div>
   </div>
 </section>
 
@@ -178,7 +243,7 @@ main{overflow-x:clip}
         </div>
       </div>
     </div>
-    <p class="c-note">Village et données fictifs. Dans l'outil, chaque constat est daté et calculé à partir des relevés aériens de l'IGN.</p>
+    <p class="c-note">Village et données fictifs. Dans l'outil, chaque constat est daté et calculé à partir des relevés aériens de l'IGN, et chaque courrier explique au propriétaire quoi faire et pourquoi.</p>
   </div>
 </section>
 
@@ -188,26 +253,42 @@ main{overflow-x:clip}
     <h2 class="c-h2">Trois étapes, sans visite préalable.</h2>
     <ol class="c-steps">
       <li><h3>Nous analysons la commune</h3><p>Chaque maison, à partir des relevés aériens publics de l'IGN et des règles de votre département.</p></li>
-      <li><h3>Vous validez</h3><p>Vous consultez les écarts et choisissez les courriers. Rien ne part sans votre accord.</p></li>
-      <li><h3>Tout est daté</h3><p>Constats, courriers et relances sont conservés, et servent aussi le jour d'une crise.</p></li>
+      <li><h3>Des courriers détaillés</h3><p>Pour chaque maison, un courrier explique au propriétaire ce qu'il doit faire et pourquoi. Rien ne part sans votre validation.</p></li>
+      <li><h3>Tout est daté</h3><p>Constats, courriers et relances sont conservés et suivis jusqu'à la mise en conformité.</p></li>
     </ol>
-    <div class="c-chiffres">
-      <div><b>1 298</b><span>maisons analysées à Samoreau (77)</span></div>
-      <div><b>3 817</b><span>au Porge (33)</span></div>
-    </div>
   </div>
 </section>
 
-<section class="c-sec">
-  <div class="rv wrap c-duo">
-    <figure class="c-shot">
-      <picture><source media="(max-width:900px)" srcset="/collectivites/img/crise-m.jpg"><img src="/collectivites/img/crise.jpg" width="1600" height="937" loading="lazy" alt="Capture de la cellule de crise VB OLD : incidents classés en colonnes, météo locale et carte des incidents."></picture>
-      <figcaption>Capture de la démonstration, exercice tempête avec incidents fictifs.</figcaption>
-    </figure>
-    <div>
-      <span class="c-k">Le jour de la crise</span>
-      <h2 class="c-h2">Signalements des habitants et décisions au même endroit.</h2>
-      <p class="c-lead">Les habitants envoient une photo depuis leur téléphone. La mairie classe, envoie une équipe et suit l'avancement. Tout est horodaté. Votre plan communal de sauvegarde reste le vôtre.</p>
+<section class="c-sec" id="signalements">
+  <div class="rv wrap">
+    <span class="c-k">Le jour d'un événement</span>
+    <h2 class="c-h2">Les habitants signalent, vous coordonnez.</h2>
+    <div class="sg" id="sg">
+      <div class="sg-tabs" role="tablist">
+        <button type="button" class="sg-tab on" data-i="0" role="tab"><span class="sg-bar"><i></i></span><b>1 · Un habitant signale</b><span>Photo et position depuis son téléphone, sans application à installer.</span></button>
+        <button type="button" class="sg-tab" data-i="1" role="tab"><span class="sg-bar"><i></i></span><b>2 · Ça apparaît sur votre carte</b><span>À l'endroit exact, avec la photo et l'heure.</span></button>
+        <button type="button" class="sg-tab" data-i="2" role="tab"><span class="sg-bar"><i></i></span><b>3 · Vous l'affectez à une équipe</b><span>Suivi de l'intervention, tout est noté dans la main courante.</span></button>
+      </div>
+      <div class="sg-stage" data-s="0" aria-live="polite">
+        <div class="sg-map"></div>
+        <div class="sg-pin" aria-hidden="true"><svg viewBox="0 0 24 32" width="34" height="46"><path d="M12 0C5.4 0 0 5.3 0 11.9 0 21 12 32 12 32s12-11 12-20.1C24 5.3 18.6 0 12 0z" fill="#D32F2F"/><circle cx="12" cy="12" r="5" fill="#fff"/></svg></div>
+        <div class="sg-pulse" aria-hidden="true"></div>
+        <div class="sg-card">
+          <div class="sg-card-h"><span class="sg-badge n">Nouveau</span><span class="sg-badge e">Équipe en route</span><small>14:02</small></div>
+          <b>Arbre tombé dans le parc</b>
+          <div class="sg-ph"><svg viewBox="0 0 120 60" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><rect width="120" height="60" fill="#8FB070"/><rect y="38" width="120" height="22" fill="#7FA060"/><path d="M8 44 L96 30" stroke="#6B4A2E" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="26" r="14" fill="#3F6B32"/><circle cx="108" cy="34" r="10" fill="#4C7A3B"/><circle cx="88" cy="34" r="9" fill="#46733A"/><rect x="2" y="40" width="10" height="8" rx="2" fill="#6B4A2E"/></svg></div>
+          <small class="sg-meta">Signalé par un habitant · photo · position GPS</small>
+          <div class="sg-assign"><span>Affecter à</span><div class="sg-sel"><span class="a">Choisir une équipe ▾</span><span class="b">Équipe espaces verts ✓</span></div></div>
+        </div>
+        <div class="sg-log"><div class="l1"><b>14:02</b>Signalement reçu, photo jointe</div><div class="l2"><b>14:04</b>Affecté à l'équipe espaces verts</div></div>
+        <div class="sg-phone">
+          <div class="sg-ph-top">Signaler un problème<small>Commune exemple</small></div>
+          <div class="sg-ph-img"><svg viewBox="0 0 120 70" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><rect width="120" height="70" fill="#9DBB7C"/><rect y="44" width="120" height="26" fill="#86A866"/><path d="M6 52 L92 34" stroke="#6B4A2E" stroke-width="7" stroke-linecap="round"/><circle cx="96" cy="30" r="16" fill="#3F6B32"/><circle cx="108" cy="40" r="11" fill="#4C7A3B"/><circle cx="84" cy="40" r="10" fill="#46733A"/></svg><span>Photo</span></div>
+          <div class="sg-chips"><span class="on">Arbre tombé</span><span>Câble au sol</span><span>Inondation</span></div>
+          <div class="sg-field">📍 Parc municipal · position GPS</div>
+          <div class="sg-send"><span class="a">Envoyer</span><span class="b">✓ Envoyé à la mairie</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -290,8 +371,9 @@ function pick(h){
 var modal=document.getElementById('vw-modal');
 function letter(h){
   var items=h.c.filter(function(c){return c[0]!=='y'});
-  var body=items.length?'<h4>Sur votre terrain</h4><ol>'+items.map(function(c){return'<li>'+esc(c[1])+' : '+esc(c[2])+'. À faire : '+esc(c[3])+'.</li>'}).join('')+'</ol>':'<p>Les images ne montrent pas d\'écart. Nous vous rappelons l\'obligation d\'entretenir les abords de votre habitation sur 50 m.</p>';
-  document.getElementById('vw-letter').innerHTML='<p style="display:flex;justify-content:space-between;gap:10px"><b>Mairie de la commune exemple</b><span>Le <span class="hl">[date]</span></span></p><p style="text-align:right;margin-top:12px">À l\'occupant ou au propriétaire<br>Maison n° '+h.n+'</p><p><b>Objet : débroussaillement autour de votre habitation</b></p><p>Madame, Monsieur,</p><p>Votre habitation se trouve à moins de 200 m d\'un bois classé à risque d\'incendie. Les photographies aériennes de l\'IGN montrent les points suivants :</p>'+body+'<p>Ces constats sont faits à distance. Si la situation a changé, vous pouvez nous l\'indiquer.</p><p style="text-align:right">Le maire</p><div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
+  var WHY={'Branches contre la maison':'des branches au contact des murs ou du toit transmettent le feu à la maison','Broussaille sur le terrain':'la végétation basse conduit le feu jusqu\'aux murs','Broussaille en limite de terrain':'la végétation basse conduit le feu jusqu\'aux murs','Arbre proche de la maison':'un arbre trop proche peut enflammer la toiture','Accès encombré':'les secours doivent pouvoir passer avec leurs véhicules'};
+  var body=items.length?'<h4>Sur votre terrain</h4><ol>'+items.map(function(c){return'<li><b>'+esc(c[1])+'</b> : '+esc(c[2])+'.<br>À faire : '+esc(c[3])+'.'+(WHY[c[1]]?'<br><i>Pourquoi : '+esc(WHY[c[1]])+'.</i>':'')+'</li>'}).join('')+'</ol>':'<p>Les images ne montrent pas d\'écart. Nous vous rappelons l\'obligation d\'entretenir les abords de votre habitation sur 50 m.</p>';
+  document.getElementById('vw-letter').innerHTML='<p style="display:flex;justify-content:space-between;gap:10px"><b>Mairie de la commune exemple</b><span>Le <span class="hl">[date]</span></span></p><p style="text-align:right;margin-top:12px">À l\'occupant ou au propriétaire<br>Maison n° '+h.n+'</p><p><b>Objet : débroussaillement autour de votre habitation</b></p><p>Madame, Monsieur,</p><p>Votre habitation se trouve à moins de 200 m d\'un bois classé à risque d\'incendie. Les photographies aériennes de l\'IGN montrent les points suivants :</p>'+body+'<p>Le débroussaillement dans un rayon de 50 m autour des constructions est une obligation légale dans les communes exposées au risque d\'incendie de forêt. Ces constats sont faits à distance : si la situation a changé, vous pouvez nous l\'indiquer.</p><p style="text-align:right">Le maire</p><div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
   modal.hidden=false;
   document.getElementById('vw-ok').onclick=function(){done[h.n]='Courrier validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
 }
@@ -313,6 +395,20 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.hidden
 })();
 </script>
 <script>(function(){var r=document.querySelectorAll(".rv");if(!("IntersectionObserver" in window)){r.forEach(function(e){e.classList.add("vu")});return}var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("vu");o.unobserve(e.target)}})},{threshold:.12});r.forEach(function(e){o.observe(e)})})();</script>
+<script>
+(function(){
+var sg=document.getElementById('sg'),st=sg.querySelector('.sg-stage'),tabs=sg.querySelectorAll('.sg-tab'),i=0,tm=null,auto=true,T=4200;
+function go(n){
+  i=n;st.setAttribute('data-s',n);st.classList.remove('sent');
+  tabs.forEach(function(t,k){t.classList.toggle('on',k===n);var b=t.querySelector('.sg-bar i');b.style.animation='none';b.offsetWidth;b.style.animation=''});
+  if(n===0)setTimeout(function(){if(i===0)st.classList.add('sent')},2000);
+  clearTimeout(tm);if(auto)tm=setTimeout(function(){go((i+1)%3)},n===0?T+600:T);
+}
+tabs.forEach(function(t,k){t.addEventListener('click',function(){auto=false;sg.classList.add('stop');go(k)})});
+if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){auto=false;sg.classList.add('stop')}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){go(0);o.disconnect()}})},{threshold:.4}).observe(sg)}else go(0);
+})();
+</script>
 <script src="/static/menu.js?v=7" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>
