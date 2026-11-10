@@ -74,7 +74,7 @@
     // Masqué quand un formulaire est à l'écran, pour ne pas le recouvrir
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (es) { es.forEach(function (e) { formulaires += e.isIntersecting ? 1 : (e.target._vu ? -1 : 0); e.target._vu = e.isIntersecting; }); formulaires = Math.max(0, formulaires); etat(); }, { threshold: 0.05 });
-      Array.prototype.forEach.call(document.querySelectorAll('form, .site-footer, footer'), function (f) { io.observe(f); });
+      Array.prototype.forEach.call(document.querySelectorAll('form, .site-footer, footer, ol.etapes'), function (f) { io.observe(f); });
     }
     if (mq.addEventListener) mq.addEventListener('change', etat);
   })();
