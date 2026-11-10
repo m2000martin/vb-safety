@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/nav.css?v=13">
 <link rel="stylesheet" href="/static/fond.css?v=4">
+<link rel="stylesheet" href="/static/serpentin.css?v=3">
 <style>
 :root{--c-line:rgba(255,255,255,.09);--c-or:#E06C34;--c-or2:#F29A63;--c-card2:#0C1B2C}
 main{overflow-x:clip}
@@ -307,7 +308,7 @@ main{overflow-x:clip}
   <div class="wrap">
     <span class="c-k">Essayez</span>
     <h2 class="c-h2">Cliquez sur une maison.</h2>
-    <p class="c-lead">VB OLD repère, à partir des relevés aériens de l'IGN, les maisons où le débroussaillement n'est pas fait, et prépare pour chacune un courrier qui explique quoi faire et pourquoi.</p>
+    <p class="c-lead">Exemple sur une commune fictive : choisissez une maison, puis ouvrez le courrier préparé pour son propriétaire.</p>
     <div class="vw" id="vw">
       <div class="vw-top">
         <div class="vw-brand"><small>VB OLD · feux de forêt</small><b>Commune exemple <span class="vw-syn">image de synthèse</span></b><small class="vw-real">Dans l'outil : photo aérienne réelle de l'IGN</small></div>
@@ -336,17 +337,11 @@ main{overflow-x:clip}
   </div>
 </section>
 
-<section class="c-sec pin" id="etapes">
-  <div class="pin-in"><div class="wrap">
-    <span class="c-k">Comment ça marche</span>
-    <h2 class="c-h2">Trois étapes, sans visite préalable.</h2>
-    <ol class="c-steps st">
-      <li><h3>Nous analysons la commune</h3><p>Chaque maison, à partir des relevés aériens publics de l'IGN et des règles de votre département.</p></li>
-      <li><h3>Des courriers détaillés</h3><p>Pour chaque maison, un courrier explique au propriétaire ce qu'il doit faire et pourquoi. Rien ne part sans votre validation.</p></li>
-      <li><h3>Tout est daté</h3><p>Constats, courriers et relances sont conservés et suivis jusqu'à la mise en conformité.</p></li>
-    </ol>
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">Comment ça marche</span><h2 class="titre">4 étapes, sans visite préalable</h2></div>
+    <ol class="etapes"><li><h3>Nous analysons votre commune</h3><p>À partir des vues aériennes et des relevés de l'IGN : végétation autour de chaque maison, arbres proches des routes et des lignes.</p></li><li><h3>Vous voyez les maisons à risque</h3><p>Sur une carte, une fiche par maison, classée de la plus urgente à la moins urgente, selon les règles de votre département.</p></li><li><h3>Un courrier détaillé par maison</h3><p>Il explique au propriétaire ce qu'il doit faire et pourquoi, avec la vue aérienne de sa maison. Rien ne part sans votre validation.</p></li><li><h3>Tout est daté et suivi</h3><p>Courriers, réponses et relances sont conservés jusqu'à la mise en conformité. En cas de crise, les signalements s'ajoutent au même suivi.</p></li></ol>
   </div>
-</div>
 </section>
 
 <section class="c-sec" id="signalements">
@@ -523,12 +518,9 @@ if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){auto=false;sg.c
 if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){go(0);o.disconnect()}})},{threshold:.4}).observe(sg)}else go(0);
 })();
 </script>
-<script>(function(){var sec=document.getElementById('etapes');if(!sec||window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;var li=sec.querySelectorAll('.st>li'),tick=false;
-function upd(){tick=false;var r=sec.getBoundingClientRect(),vh=window.innerHeight,tot=r.height-vh,p=Math.min(1,Math.max(0,(-r.top+vh*.15)/Math.max(1,tot*.85)));
-for(var i=0;i<li.length;i++){var t=Math.min(1,Math.max(0,(p-i*0.3)/0.26));li[i].style.setProperty('--t',t.toFixed(3))}}
-window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});window.addEventListener('resize',upd);upd();})();</script>
 <script src="/static/menu.js?v=8" defer></script>
 <script src="/static/fond.js?v=2" defer></script>
+<script src="/static/serpentin.js?v=2" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>
 </html>
