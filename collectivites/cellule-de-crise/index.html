@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="/static/fonts.css?v=2">
 <link rel="stylesheet" href="/static/secteurs.css?v=21">
 <link rel="stylesheet" href="/static/mobile.css?v=10">
-<link rel="stylesheet" href="/static/nav.css?v=16">
+<link rel="stylesheet" href="/static/nav.css?v=17">
 <link rel="stylesheet" href="/static/fond.css?v=4">
 <link rel="stylesheet" href="/static/serpentin.css?v=3">
 <style>
@@ -301,6 +301,26 @@ main{overflow-x:clip}
 .ic-m .sl{font-size:11px;font-weight:700}
 .ic-m .tm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:9px}.ic-m .tm span{border:1.5px solid #e2ddd3;border-radius:9px;padding:6px 7px;font-size:11.5px}.ic-m .tm b{display:block;font-size:12px}.ic-m .tm i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
 @media (max-width:900px){.cc-grid{grid-template-columns:1fr}.cc-duo{grid-template-columns:1fr}}
+
+.cv-sec{padding:0 0 clamp(40px,6vw,80px)}
+.cv{max-width:1180px;margin:0 auto;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 60px 120px -40px rgba(0,0,0,.9),0 0 0 1px rgba(224,108,52,.08);background:#0e1a29}
+.cv-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#0B1320;border-bottom:1px solid rgba(255,255,255,.08)}.cv-bar i{width:10px;height:10px;border-radius:50%;background:#2a3646}.cv-bar span{margin-left:12px;font:500 12px var(--mono);color:#7d8a99}
+.cv-in{display:grid;grid-template-columns:minmax(0,1fr) 360px;height:560px}
+.cv-map{position:relative;background:#e9e4d6;overflow:hidden}.cv-map svg{position:absolute;inset:0;width:100%;height:100%}
+.cv-top{position:absolute;left:14px;top:14px;display:flex;gap:8px}.cv-top span{background:#1c2126;color:#fff;border-radius:9px;padding:7px 11px;font:600 12px var(--sans);box-shadow:0 4px 12px rgba(0,0,0,.25)}.cv-top .r{background:#c62828}
+.cv-pin{position:absolute;transform:translate(-50%,-100%);width:30px;height:30px;border-radius:50% 50% 50% 0;rotate:-45deg;display:grid;place-items:center;box-shadow:0 4px 10px rgba(0,0,0,.35);border:2px solid #fff}.cv-pin b{rotate:45deg;color:#fff;font:700 12px var(--sans)}
+.cv-pin.u{background:#c62828}.cv-pin.i{background:#ef8a17}.cv-pin.n{background:#5d6670}.cv-pin.d{background:#2e7d32}
+.cv-pin.sel{outline:4px solid rgba(198,40,40,.35);outline-offset:3px}
+.cv-team{position:absolute;transform:translate(-50%,-50%);background:#1565c0;color:#fff;border:2px solid #fff;border-radius:8px;padding:2px 7px;font:700 11px var(--sans);box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.cv-leg{position:absolute;left:14px;bottom:14px;background:rgba(255,255,255,.95);border-radius:10px;padding:8px 11px;font:500 11.5px var(--sans);color:#1c2126;display:flex;gap:12px}.cv-leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.cv-side{background:#f6f4ef;color:#1c2126;font:400 13px/1.4 var(--sans);padding:14px;display:flex;flex-direction:column;gap:10px;overflow:hidden;border-left:1px solid #ddd6c8}
+.cv-h{display:flex;align-items:center;justify-content:space-between}.cv-h b{font-size:16px}.cv-h span{background:#c62828;color:#fff;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700}
+.cv-wx{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:1px solid #f5c27a;border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}.cv-wx small{display:block;color:#8a5a00;font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}.cv-wx b{font-size:14px}.cv-wx em{font-style:normal;font:700 22px var(--sans);color:#b45309}.cv-wx em small{display:inline;font-size:11px;text-transform:none;letter-spacing:0}
+.cv-k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.cv-k div{background:#fff;border-radius:10px;padding:7px 9px;box-shadow:0 1px 2px rgba(0,0,0,.06)}.cv-k b{display:block;font-size:19px}.cv-k span{font-size:11px;color:#5d6670}
+.cv-l{font:650 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:#5d6670;margin-top:2px}
+.cv-it{display:flex;gap:9px;align-items:center;background:#fff;border-radius:10px;padding:8px 10px;box-shadow:0 1px 2px rgba(0,0,0,.06)}.cv-it.on{outline:2px solid #c62828}.cv-it .n{width:24px;height:24px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:700;font-size:11px;flex:none}.cv-it div{flex:1;min-width:0}.cv-it b{display:block;font-size:13px}.cv-it small{color:#5d6670;font-size:11.5px}.cv-it em{font-style:normal;font-size:10.5px;font-weight:700;border-radius:6px;padding:3px 7px;white-space:nowrap}
+.cv-cap{max-width:1180px;margin:16px auto 0;display:flex;gap:28px;flex-wrap:wrap;color:var(--doux);font-size:14px}.cv-cap b{color:#fff;font-weight:600}
+@media (max-width:900px){.cv-in{grid-template-columns:1fr;height:auto}.cv-map{height:340px}.cv-side .cv-it:nth-of-type(n+4){display:none}}
 </style>
 </head>
 <body>
@@ -328,6 +348,37 @@ main{overflow-x:clip}
   </div>
   <div class="wrap c-bas hx" style="--d:1.1s"><a class="c-mail" href="/collectivites/">Débroussaillement (OLD) →</a><a class="c-cue" href="#fonctionnement"><span>Découvrir</span><i aria-hidden="true"></i></a></div>
 </section>
+
+<section class="cv-sec"><div class="wrap"><div class="cv rv" aria-hidden="true">
+<div class="cv-bar"><i></i><i></i><i></i><span>Cellule de crise · Commune exemple</span></div>
+<div class="cv-in"><div class="cv-map"><svg viewBox="0 0 800 560" preserveAspectRatio="xMidYMid slice"><rect width="800" height="560" fill="#e9e4d6"/>
+<path d="M0 0H260L220 140 90 210 0 190Z" fill="#b9cf9c"/><path d="M560 0H800V260L700 230 620 120Z" fill="#b9cf9c"/><path d="M0 420 120 380 230 460 260 560H0Z" fill="#c4d6a8"/><path d="M640 400 800 360V560H600Z" fill="#b9cf9c"/>
+<g fill="#a8c48a" opacity=".7"><circle cx="70" cy="70" r="22"/><circle cx="150" cy="50" r="18"/><circle cx="660" cy="80" r="24"/><circle cx="740" cy="160" r="20"/><circle cx="90" cy="480" r="20"/><circle cx="720" cy="470" r="22"/></g>
+<path d="M-10 330C120 300 200 360 330 340S560 260 810 300" fill="none" stroke="#9cc3dd" stroke-width="16" stroke-linecap="round"/>
+<g fill="none" stroke="#fff" stroke-linecap="round"><path d="M0 250H800" stroke-width="13"/><path d="M380 0V560" stroke-width="11"/><path d="M380 250L600 560" stroke-width="8"/><path d="M180 250V560M560 0 470 250M0 120 380 140" stroke-width="7"/><path d="M380 400H800M250 180H380" stroke-width="6"/></g>
+<g fill="none" stroke="#d6cfbd" stroke-width="1"><path d="M0 250H800" stroke-dasharray="1"/></g>
+<g fill="#cfc4ae" stroke="#b9ad94" stroke-width=".8">
+<rect x="300" y="190" width="22" height="16"/><rect x="330" y="200" width="18" height="14"/><rect x="300" y="215" width="16" height="14"/><rect x="410" y="190" width="24" height="18"/><rect x="445" y="200" width="18" height="14"/><rect x="410" y="270" width="22" height="16"/><rect x="445" y="275" width="18" height="15"/><rect x="480" y="268" width="20" height="16"/><rect x="300" y="268" width="20" height="16"/><rect x="330" y="275" width="16" height="14"/><rect x="200" y="270" width="18" height="15"/><rect x="200" y="300" width="16" height="13"/><rect x="420" y="410" width="22" height="16"/><rect x="455" y="412" width="18" height="14"/><rect x="520" y="410" width="20" height="15"/><rect x="300" y="160" width="18" height="14"/><rect x="250" y="200" width="18" height="14"/><rect x="520" y="200" width="20" height="15"/><rect x="200" y="400" width="18" height="15"/><rect x="560" y="420" width="18" height="14"/><rect x="300" y="420" width="20" height="16"/><rect x="330" y="440" width="16" height="13"/></g>
+<rect x="390" y="300" width="70" height="42" rx="3" fill="#d9cdb2" stroke="#b9ad94"/><text x="425" y="325" font-family="sans-serif" font-size="10" fill="#6b5d43" text-anchor="middle">Mairie</text>
+<g font-family="sans-serif" font-size="11" fill="#7a6f5c" font-style="italic"><text x="20" y="243">Route de la Forêt</text><text x="560" y="243">Grande Rue</text><text x="388" y="80" transform="rotate(90 388 80)">Rue de la Gare</text><text x="600" y="393">Chemin des Prés</text></g>
+</svg>
+<div class="cv-top"><span class="r">● Cellule active · 13:42</span><span>Tempête</span></div>
+<span class="cv-pin u sel" style="left:47.5%;top:41%"><b>7</b></span><span class="cv-pin u" style="left:71%;top:68%"><b>4</b></span><span class="cv-pin i" style="left:28%;top:57%"><b>9</b></span><span class="cv-pin i" style="left:62%;top:30%"><b>3</b></span><span class="cv-pin n" style="left:22%;top:28%"><b>11</b></span><span class="cv-pin d" style="left:56%;top:78%"><b>2</b></span>
+<span class="cv-team" style="left:44%;top:50%">B</span><span class="cv-team" style="left:66%;top:74%;background:#2e7d32">A</span>
+<div class="cv-leg"><span><i style="background:#c62828"></i>Urgent</span><span><i style="background:#ef8a17"></i>Important</span><span><i style="background:#5d6670"></i>Normal</span><span><i style="background:#2e7d32"></i>Terminé</span></div>
+</div><div class="cv-side">
+<div class="cv-h"><b>Tempête · Commune exemple</b><span>Active</span></div>
+<div class="cv-wx"><div><small>Vigilance Météo-France</small><b>Orange · vent violent</b></div><em>95 <small>km/h rafales</small></em></div>
+<div class="cv-k"><div><b>6</b><span>en cours</span></div><div><b>2</b><span>urgents</span></div><div><b>1/3</b><span>équipes libres</span></div></div>
+<div class="cv-l">Incidents</div>
+<div class="cv-it on"><span class="n" style="background:#c62828">7</span><div><b>Arbre sur la route</b><small>Rue de la Gare · 2 signalements</small></div><em style="background:#e3eefb;color:#1565c0">Équipe B en route</em></div>
+<div class="cv-it"><span class="n" style="background:#c62828">4</span><div><b>Câble au sol</b><small>Chemin des Prés · 14:02</small></div><em style="background:#fdecea;color:#c62828">À traiter</em></div>
+<div class="cv-it"><span class="n" style="background:#ef8a17">3</span><div><b>Toiture endommagée</b><small>Grande Rue · 13:55</small></div><em style="background:#fff3e0;color:#b45309">Pris en compte</em></div>
+<div class="cv-it"><span class="n" style="background:#ef8a17">9</span><div><b>Route inondée</b><small>Route de la Forêt · 13:51</small></div><em style="background:#fff3e0;color:#b45309">Pris en compte</em></div>
+<div class="cv-it"><span class="n" style="background:#2e7d32">2</span><div><b>Branches sur le trottoir</b><small>Chemin des Prés · 13:20</small></div><em style="background:#e8f5e9;color:#2e7d32">Terminé</em></div>
+</div></div></div>
+<div class="cv-cap"><span><b>Carte</b> : chaque alerte à son adresse, avec sa priorité.</span><span><b>Équipes</b> : position et statut en direct.</span><span><b>Vigilance</b> : Météo-France pour le département.</span></div>
+</div></section>
 
 <section class="sec" id="fonctionnement">
   <div class="wrap">
