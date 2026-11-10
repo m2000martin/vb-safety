@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1E30">
+<title>Natural hazards for municipalities: vegetation clearance, storms, residents' reports · VB Safety</title>
+<meta name="description" content="VB OLD: house-by-house vegetation clearance assessment from IGN aerial and LiDAR data, letters for owners, and a municipal crisis cell with residents' reports and an incident log.">
+<link rel="canonical" href="https://vb-safety.com/en/municipalities/">
+<link rel="alternate" hreflang="fr" href="https://vb-safety.com/collectivites/">
+<link rel="alternate" hreflang="en" href="https://vb-safety.com/en/municipalities/">
+<link rel="alternate" hreflang="x-default" href="https://vb-safety.com/collectivites/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VB Safety">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Vegetation clearance and crisis management for municipalities">
+<meta property="og:description" content="House-by-house vegetation clearance assessment, letters ready to send, municipal crisis cell.">
+<meta property="og:url" content="https://vb-safety.com/en/municipalities/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="/static/fonts/inter-tight-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/fonts.css?v=2">
+<link rel="stylesheet" href="/static/secteurs.css?v=21">
+<link rel="stylesheet" href="/static/mobile.css?v=10">
+<link rel="stylesheet" href="/static/nav.css?v=13">
+<link rel="stylesheet" href="/static/fond.css?v=4">
+<link rel="stylesheet" href="/static/serpentin.css?v=3">
+<style>
+:root{--c-line:rgba(255,255,255,.09);--c-or:#E06C34;--c-or2:#F29A63;--c-card2:#0C1B2C}
+main{overflow-x:clip}
+.c-sec{padding:clamp(56px,7vw,96px) 0}
+
+.c-k{display:inline-block;font:700 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
+.c-h2{font-size:clamp(26px,3.2vw,40px);line-height:1.08;letter-spacing:-.035em;margin:10px 0 0;max-width:24ch}
+.c-lead{color:var(--doux);font-size:clamp(15.5px,1.4vw,18px);max-width:56ch;margin:14px 0 0}
+.c-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin-top:26px}
+.c-lien{color:var(--doux);text-decoration:none;font-weight:600;font-size:15px}.c-lien:hover{color:#fff}
+.c-note{margin:12px 0 0;color:var(--faible);font-size:13.5px}
+.c-hero{position:relative;min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.c-hero::before{content:"";position:absolute;left:50%;top:45%;width:min(900px,120vw);height:min(900px,120vw);transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(224,108,52,.12),transparent 70%);pointer-events:none}
+.c-hero-in{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;padding-bottom:60px}
+.c-hero h1{font-size:clamp(34px,5.4vw,72px);line-height:1.04;letter-spacing:-.045em;margin:18px 0 0;max-width:18ch}
+.c-hero .hl{display:block;overflow:hidden;padding-bottom:.08em}
+.c-gris{color:#9AA3AF}.c-gris em{font-style:normal;color:#fff;white-space:nowrap}
+.c-trait{width:44px;height:2px;background:var(--c-or);margin:28px auto 0}
+.c-sous{margin:22px auto 0;max-width:58ch;color:var(--doux);font-size:clamp(15.5px,1.45vw,18.5px);line-height:1.5}.c-sous b{color:#fff;font-weight:600}
+.c-tags{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin:22px 0 0;padding:0}
+.c-tags li{font:500 13.5px/1 var(--sans);color:var(--doux);border:1px solid var(--c-line);border-radius:999px;padding:8px 13px;background:rgba(255,255,255,.02)}
+.c-hero .c-cta{justify-content:center;margin-top:30px}
+.c-bas{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:space-between;align-items:center}
+.c-mail{color:#fff;text-decoration:none;font-size:14.5px;border-bottom:1px solid var(--c-or);padding-bottom:3px}
+.c-cue{display:flex;align-items:center;gap:10px;color:var(--doux);text-decoration:none;font-size:13.5px}
+.c-cue i{width:1px;height:26px;background:linear-gradient(var(--doux),transparent);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+.hx{opacity:0;transform:translateY(18px);animation:hx .9s cubic-bezier(.2,.7,.2,1) var(--d,0s) forwards}
+.hl>.hx{transform:translateY(105%);opacity:1;animation-name:hxl}
+@keyframes hx{to{opacity:1;transform:none}}
+@keyframes hxl{to{transform:none}}
+@media (max-width:560px){.c-hero h1{font-size:clamp(32px,9.6vw,44px)}.c-hero .c-cta .btn{width:100%}.c-hero .c-cta{align-self:stretch}.c-tags li{font-size:12.5px;padding:7px 11px}}
+@media (prefers-reduced-motion:reduce){.hx,.hl>.hx{animation:none;opacity:1;transform:none}.c-cue i{animation:none}}
+.vw-teaser{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center;width:100%;text-align:left;margin-top:14px;padding:12px;border:1px solid #E3E7EB;border-radius:10px;background:#F7F9FA;cursor:pointer;font:400 13px/1.4 var(--sans);color:#1C2733;transition:border-color .2s,background .2s}
+.vw-teaser:hover{border-color:#1C2733;background:#fff}
+.vw-teaser b{display:block;font-size:14.5px}.vw-teaser span span{display:block;color:#56636F;margin-top:2px}.vw-teaser em{display:block;font-style:normal;font-weight:700;color:#C4521C;margin-top:6px}
+.vw-mini{display:flex;flex-direction:column;gap:4px;width:64px;height:84px;padding:8px 7px;background:#fff;border:1px solid #D5DBE1;border-radius:4px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.vw-mini i{display:block;height:3px;border-radius:2px;background:#C9D0D7}.vw-mini i:nth-child(2){width:70%}.vw-mini i.img{height:22px;background:linear-gradient(135deg,#8FA86A,#6F8C55);border-radius:2px}.vw-mini i.s{width:40%;margin-left:auto;margin-top:auto}
+.vw-teaser.new{border-color:#E06C34;animation:tz 1.6s ease-in-out 3}
+@keyframes tz{0%,100%{box-shadow:0 0 0 0 rgba(224,108,52,0)}50%{box-shadow:0 0 0 5px rgba(224,108,52,.22)}}
+@media (prefers-reduced-motion:reduce){.vw-teaser.new{animation:none}}
+.pin{height:200vh;padding:0!important}
+#signalements{padding-top:clamp(24px,3vw,40px)}
+.pin-in{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding-top:60px;box-sizing:border-box}
+.pin-in>.wrap{width:100%}
+.pin .c-h2{font-size:clamp(28px,4vw,52px);max-width:none}
+@media (min-width:901px){.st{margin-top:56px;gap:40px}.st h3{font-size:24px}.st p{font-size:16.5px}}
+.st>li{opacity:var(--t,0);transform:translateY(calc((1 - var(--t,0)) * 40px));position:relative;border-top-color:rgba(224,108,52,.15)!important;transition:opacity .2s linear,transform .2s linear}
+.st>li::after{content:"";position:absolute;left:0;top:-2px;height:2px;width:calc(var(--t,0) * 100%);background:var(--c-or)}
+@media (max-width:900px){.c-steps.st{display:grid;grid-template-columns:1fr;gap:22px;overflow:visible;margin-right:0;padding-right:0}.c-steps.st li{flex:none;background:none;border:0;border-top:2px solid;border-radius:0;padding:14px 0 0}.pin{height:220vh}}
+@media (prefers-reduced-motion:reduce){.pin{height:auto;padding:clamp(56px,7vw,96px) 0!important}.pin-in{position:static;height:auto;padding-top:0}.st>li{opacity:1;transform:none}.st>li::after{width:100%}}
+.vw-syn{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#EEF1F4;color:#56636F;font:600 11px/1.4 var(--sans);vertical-align:2px}
+.vw-real{margin-top:2px;letter-spacing:0!important;font-size:11.5px!important}
+.vw-guide{list-style:none;margin:0;padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;background:#1C2733;color:#AEB8C2;font:500 13.5px var(--sans)}
+.vw-guide li{display:flex;align-items:center;gap:8px}
+.vw-guide li b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid #56636F;font-size:12px;color:#AEB8C2}
+.vw-guide li.cur{color:#fff;font-weight:700}
+.vw-guide li.cur b{background:#E06C34;border-color:#E06C34;color:#fff;animation:gp 1.4s ease-in-out infinite}
+.vw-guide li.ok b{background:#2E9E4F;border-color:#2E9E4F;color:#fff;font-size:0}.vw-guide li.ok b::before{content:"✓";font-size:13px}
+.vw-guide li+li::before{content:"→";color:#56636F;margin-right:10px}
+.vw-guide a{margin-left:auto;color:#F29A63;font-weight:700;text-decoration:none}.vw-guide a:hover{color:#fff}
+@keyframes gp{0%,100%{box-shadow:0 0 0 0 rgba(224,108,52,.6)}50%{box-shadow:0 0 0 6px rgba(224,108,52,0)}}
+.vw-teaser.new{background:#C4521C;border-color:#C4521C;color:#fff}
+.vw-teaser.new span span{color:rgba(255,255,255,.85)}.vw-teaser.new em{color:#fff}
+.vw-teaser.new:hover{background:#D25E26}
+@media (max-width:560px){.vw-guide{font-size:12px;gap:6px 10px;padding:9px 10px}.vw-guide li+li::before{margin-right:4px}.vw-guide a{margin-left:0;width:100%}.vw-syn{display:none}}
+@media (prefers-reduced-motion:reduce){.vw-guide li.cur b{animation:none}}
+.c-final2{position:relative;overflow:hidden;text-align:center;border:1px solid rgba(224,108,52,.3);border-radius:20px;padding:clamp(40px,6vw,80px) clamp(20px,4vw,48px);background:linear-gradient(180deg,rgba(12,27,44,.82),rgba(12,27,44,.95)),url(/collectivites/img/village.jpg) center/cover}
+.c-final2::before{content:"";position:absolute;left:50%;top:0;width:70%;height:100%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(224,108,52,.18),transparent);pointer-events:none}
+.c-final2>*{position:relative}
+.c-final2 h2{font-size:clamp(30px,4.2vw,54px);line-height:1.05;letter-spacing:-.04em;margin:12px auto 0;max-width:16ch}
+.c-final2 h2 span{color:#9AA3AF}
+.c-final2 p{color:var(--doux);max-width:46ch;margin:16px auto 0;font-size:clamp(15.5px,1.4vw,18px)}
+.cf2{display:flex;gap:10px;max-width:560px;margin:28px auto 0;padding:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px}
+.cf2 input{flex:1;min-width:0;background:transparent;border:0;color:#fff;font:500 16px var(--sans);padding:0 12px;outline:none}
+.cf2 input::placeholder{color:#8E9AA6}
+.cf2:focus-within{border-color:#E06C34}
+.cf2 .btn{min-height:48px;white-space:nowrap}
+.c-final2 .c-lien{display:inline-block;margin-top:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:560px){.cf2{flex-direction:column;background:none;border:0;padding:0}.cf2 input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;min-height:50px}}
+@media (min-width:901px){.vw-map{aspect-ratio:auto!important;min-height:560px}}
+/* carte */
+.vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
+.vw-top{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #E3E7EB}
+.vw-brand small{display:block;font-size:10.5px;letter-spacing:.08em;color:#7A8794}.vw-brand b{font-size:15px}
+.vw-kpi{margin-left:auto;display:flex;align-items:baseline;gap:8px;white-space:nowrap}.vw-kpi b{font:700 22px/1 var(--sans);color:#C62828}.vw-kpi span{font-size:12.5px;color:#56636F}
+.vw-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(290px,1fr)}
+.vw-map{position:relative;background:#7d8c5c;aspect-ratio:1280/840}
+.vw-map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vw-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid #E3E7EB;background:#F7F9FA}
+.vw-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid #DDE2E7;font:500 12.5px var(--sans);cursor:pointer;color:#1C2733}
+.vw-chip i{width:10px;height:10px;border-radius:3px}.vw-chip b{font-weight:700}.vw-chip.off{opacity:.4}
+.vw-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(28,39,51,.92);color:#fff;padding:7px 13px;border-radius:999px;font-size:12.5px;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.vw-h{cursor:pointer}
+.vw-h .hit{fill:transparent}
+.vw-h .shape{stroke-width:3;fill-opacity:.38;transition:fill-opacity .15s}
+.vw-h:hover .shape{fill-opacity:.65}
+.vw-h.sel .shape{stroke:#fff;stroke-width:4;fill-opacity:.75}
+.vw-h.hide{display:none}
+.vw-side{border-left:1px solid #E3E7EB;padding:18px;display:flex;flex-direction:column;min-height:0}
+.vw-side h3{margin:8px 0 2px;font:700 19px/1.2 var(--sans);letter-spacing:-.01em;color:#1C2733}
+.vw-sub{font-size:12.5px;color:#7A8794}
+.vw-st{display:inline-block;padding:4px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:700}
+.vw-c{display:grid;grid-template-columns:5px 1fr;gap:12px;padding:10px 12px;border:1px solid #E6EAEE;border-radius:9px;margin-top:9px}
+.vw-c i{border-radius:3px}.vw-c b{display:block;font-size:14px}.vw-c span{display:block;font-size:12.5px;color:#56636F}.vw-c em{font-style:normal;font-size:12.5px}
+.vw-btns{margin-top:auto;display:grid;gap:8px;padding-top:14px}
+.vw-b{border:1px solid #D5DBE1;background:#fff;color:#1C2733;border-radius:8px;padding:10px;font:600 13.5px var(--sans);cursor:pointer}
+.vw-b.p{background:#1C2733;border-color:#1C2733;color:#fff}
+.vw-empty{margin:14px 0 0;color:#56636F;font-size:14px}.vw-empty b{display:block;font-size:16px;color:#1C2733;margin-bottom:4px}
+.vw-sum{display:grid;gap:7px;margin-top:14px}.vw-sum div{display:flex;justify-content:space-between;padding:9px 12px;border-radius:8px;background:#F4F6F8;font-size:13.5px}
+.vw-toast{margin-top:10px;padding:9px 12px;border-radius:8px;background:#E7F5EE;color:#1E6B47;font-size:13px}
+.vw-modal{position:absolute;inset:0;background:rgba(14,30,48,.55);display:grid;place-items:center;z-index:5;padding:14px}
+.vw-modal[hidden]{display:none}
+.vw-letter{position:relative;background:#fff;width:min(560px,100%);max-height:100%;overflow:auto;border-radius:10px;padding:26px 28px;font:400 13.5px/1.55 Georgia,serif;color:#222;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.vw-letter h4{font:700 14px/1.4 Georgia,serif;margin:12px 0 6px}.vw-letter ol{padding-left:18px;margin:6px 0}.vw-letter .hl{background:#FFF3B0;padding:0 3px}
+.vw-letter{width:min(720px,100%);padding:0;font:400 13.5px/1.55 Georgia,serif}
+.lt-ton{position:sticky;top:0;z-index:2;display:flex;gap:4px;padding:10px 44px 10px 14px;background:#F4F6F8;border-bottom:1px solid #E3E7EB;font-family:var(--sans)}
+.lt-ton button{border:1px solid #D5DBE1;background:#fff;border-radius:7px;padding:6px 11px;font:600 12.5px var(--sans);color:#1C2733;cursor:pointer}
+.lt-ton button.on{background:#1C2733;color:#fff;border-color:#1C2733}
+.lt-ton button:disabled{opacity:.5;cursor:not-allowed}.lt-ton small{font-weight:400}
+.lt-doc{padding:24px 30px 6px}
+.lt-h{display:flex;justify-content:space-between;gap:16px}
+.lt-dest{text-align:right;margin:16px 0}
+.lt-fig{margin:14px 0;border-radius:8px;overflow:hidden;border:1px solid #E3E7EB}
+.lt-fig svg{display:block;width:100%;height:auto;aspect-ratio:4/3;max-height:240px}
+.lt-fig figcaption{padding:6px 10px;font:400 11.5px var(--sans);color:#56636F;background:#F7F9FA}
+.lt-t{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 10px}
+.lt-t th{text-align:left;font:700 11.5px var(--sans);text-transform:uppercase;letter-spacing:.04em;color:#56636F;border-bottom:2px solid #1C2733;padding:6px}
+.lt-t td{vertical-align:top;border-bottom:1px solid #E3E7EB;padding:8px 6px}
+.lt-c{background:#FFF8E1;border-left:3px solid #C9A227;padding:8px 10px;font-size:12.5px}
+.lt-p{padding-left:18px;margin:4px 0}.lt-p li{margin:3px 0}
+.vw-letter>.vw-btns{position:sticky;bottom:0;background:#fff;padding:12px 30px;border-top:1px solid #E3E7EB}
+@media (max-width:560px){.lt-doc{padding:18px 16px 4px}.lt-t thead{display:none}.lt-t td{display:block;border:0;padding:3px 0}.lt-t tr{display:block;border-bottom:1px solid #E3E7EB;padding:8px 0}.lt-t td:nth-child(2)::before{content:"To do: ";font-weight:700}.lt-t td:nth-child(3)::before{content:"Why: ";font-weight:700}.lt-t td:nth-child(3){color:#56636F}.vw-letter>.vw-btns{padding:10px 16px}.lt-ton{overflow-x:auto}}
+.vw-x{position:absolute;z-index:3;right:10px;top:8px;border:0;background:none;font-size:18px;cursor:pointer;color:#56636F}
+.vw-src{position:absolute;right:8px;bottom:6px;font:500 10.5px var(--sans);color:rgba(255,255,255,.85);text-shadow:0 1px 2px rgba(0,0,0,.6);pointer-events:none}
+/* étapes */
+.c-steps{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:e}
+.c-steps li{counter-increment:e;border-top:2px solid var(--c-or);padding-top:16px}
+.c-steps li::before{content:"0" counter(e);font:700 13px var(--mono);color:var(--c-or)}
+.c-steps h3{margin:8px 0 0;font:600 19px/1.25 var(--serif);letter-spacing:-.015em}
+.c-steps p{margin:6px 0 0;color:var(--doux);font-size:15px}
+.c-chiffres{display:flex;flex-wrap:wrap;gap:12px 40px;margin-top:36px;padding-top:24px;border-top:1px solid var(--c-line)}
+.c-chiffres div{display:flex;align-items:baseline;gap:10px}
+.c-chiffres b{font:600 28px/1 var(--serif);letter-spacing:-.03em;color:#fff}
+.c-chiffres span{font-size:14px;color:var(--doux)}
+/* crise */
+.c-duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.c-shot{margin:0;border:1px solid var(--c-line);border-radius:12px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.c-shot img{display:block;width:100%;height:auto}
+.c-shot figcaption{padding:10px 14px;font-size:12.5px;color:var(--faible);background:var(--c-card2)}
+/* faq + final */
+.c-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px)}
+.c-faq .faq{max-width:none}.c-faq .faq p{color:var(--doux)}
+.c-final{border:1px solid rgba(224,108,52,.35);border-radius:16px;padding:clamp(28px,4vw,52px);background:radial-gradient(120% 140% at 100% 0,rgba(224,108,52,.2),transparent 55%),var(--c-card2);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.c-final h2{font-size:clamp(24px,2.6vw,34px);line-height:1.1;letter-spacing:-.03em;max-width:20ch}
+.c-final .c-cta{margin:0}
+@media (max-width:900px){
+ .vw-body{grid-template-columns:1fr}.vw-side{border-left:0;border-top:1px solid #E3E7EB}
+ .vw-map{aspect-ratio:620/680}
+ .vw-kpi span{display:none}
+ .c-steps{grid-template-columns:1fr;gap:20px}
+ .c-duo,.c-faq{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+ .c-cta .btn{width:100%}
+  .c-hero .c-cta{flex-direction:column;align-items:stretch;text-align:center}
+ .vw-chip{font-size:12px;padding:5px 8px}
+ .c-chiffres{gap:14px 24px}.c-chiffres b{font-size:24px}
+}
+
+/* animations */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.vu{opacity:1;transform:none}
+.vw-h .shape{opacity:0;transition:opacity .4s ease,fill-opacity .15s}
+.vw.on .vw-h .shape{opacity:1}
+.vw-h.pulse .shape{animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{stroke-width:3}50%{stroke-width:9}}
+.vw-side>*{animation:fin .35s ease}
+@keyframes fin{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.vw-side>*{animation-name:fup}@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+@media (max-width:900px){
+ .c-steps{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-right:calc(-1*var(--gut));padding-right:var(--gut);scrollbar-width:none}
+ .c-steps::-webkit-scrollbar{display:none}
+ .c-steps li{flex:0 0 78%;scroll-snap-align:start;background:var(--c-card2);border:1px solid var(--c-line);border-top:2px solid var(--c-or);border-radius:10px;padding:16px}
+}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.vw-h .shape{opacity:1}.vw-h.pulse .shape,.vw-side>*{animation:none}}
+
+.sg{margin-top:30px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:22px;align-items:stretch}
+.sg-tabs{display:grid;gap:10px;align-content:center}
+.sg-tab{position:relative;text-align:left;background:transparent;border:1px solid var(--c-line);border-radius:12px;padding:16px 18px 16px;color:var(--doux);cursor:pointer;font:400 14.5px/1.45 var(--sans);transition:background .25s,border-color .25s}
+.sg-tab b{display:block;color:#fff;font-size:16.5px;margin-bottom:4px}
+.sg-tab.on{background:var(--c-card2);border-color:rgba(224,108,52,.5)}
+.sg-bar{position:absolute;left:18px;right:18px;bottom:0;height:2px;background:transparent;overflow:hidden}
+.sg-bar i{display:block;height:100%;width:0;background:var(--c-or)}
+.sg-tab.on .sg-bar i{animation:sgfill var(--sgt,4.2s) linear forwards}
+.sg.stop .sg-tab.on .sg-bar i{animation:none;width:100%}
+@keyframes sgfill{to{width:100%}}
+.sg-stage{position:relative;border-radius:14px;overflow:hidden;min-height:430px;background:#7d8c5c;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.sg-map{position:absolute;inset:0;background:url(/collectivites/img/village.jpg) 38% 30%/170% auto no-repeat;transition:filter .5s}
+.sg-stage[data-s="0"] .sg-map{filter:brightness(.55) saturate(.8)}
+.sg-pin{position:absolute;left:44%;top:30%;transform:translate(-50%,-100%) translateY(-60px);opacity:0;transition:transform .55s cubic-bezier(.3,1.6,.5,1),opacity .3s;z-index:2}
+.sg-stage:not([data-s="0"]) .sg-pin{opacity:1;transform:translate(-50%,-100%)}
+.sg-pulse{position:absolute;left:44%;top:30%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:rgba(211,47,47,.5);opacity:0}
+.sg-stage[data-s="1"] .sg-pulse{animation:sgp 1.4s ease-out .5s infinite}
+@keyframes sgp{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(5)}}
+.sg-card{position:absolute;left:calc(44% + 26px);top:12%;width:250px;background:#fff;color:#1C2733;border-radius:12px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.35);opacity:0;transform:translateY(10px) scale(.97);transition:opacity .4s .35s,transform .4s .35s;z-index:3;font:400 13px/1.4 var(--sans)}
+.sg-stage:not([data-s="0"]) .sg-card{opacity:1;transform:none}
+.sg-card b{display:block;font-size:15px;margin:6px 0 8px}
+.sg-card-h{display:flex;align-items:center;gap:6px}.sg-card-h small{margin-left:auto;color:#7A8794}
+.sg-badge{padding:3px 8px;border-radius:999px;font:700 11px/1.2 var(--sans)}
+.sg-badge.n{background:#FDECEA;color:#C62828}.sg-badge.e{display:none;background:#E7F5EE;color:#1E6B47}
+.sg-stage[data-s="2"] .sg-badge.n{display:none}.sg-stage[data-s="2"] .sg-badge.e{display:inline-block}
+.sg-ph{height:70px;border-radius:8px;overflow:hidden}
+.sg-meta{display:block;color:#7A8794;margin-top:6px}
+.sg-assign{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #E6EAEE;font-size:12.5px;color:#56636F}
+.sg-sel{position:relative;flex:1;border:1px solid #D5DBE1;border-radius:7px;padding:6px 8px;font-weight:600;color:#1C2733;overflow:hidden;height:30px}
+.sg-sel span{position:absolute;left:8px;right:8px;top:6px;transition:transform .35s,opacity .35s}
+.sg-sel .b{transform:translateY(20px);opacity:0;color:#1E6B47}
+.sg-stage[data-s="2"] .sg-sel{border-color:#2E9E4F;background:#F1FAF5}
+.sg-stage[data-s="2"] .sg-sel .a{transform:translateY(-20px);opacity:0}.sg-stage[data-s="2"] .sg-sel .b{transform:none;opacity:1;transition-delay:.5s}
+.sg-log{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(12,27,44,.9);color:#C9D2DB;border-radius:10px;padding:10px 14px;font:500 12.5px/1.8 var(--mono);opacity:0;transition:opacity .4s .6s;z-index:3}
+.sg-log b{color:var(--c-or2);margin-right:10px}
+.sg-log .l2{display:none}
+.sg-stage:not([data-s="0"]) .sg-log{opacity:1}
+.sg-stage[data-s="2"] .sg-log .l2{display:block;animation:fup .4s .7s both}
+.sg-phone{position:absolute;left:50%;top:50%;width:230px;margin:-195px 0 0 -115px;height:390px;background:#fff;color:#1C2733;border-radius:28px;border:8px solid #0B1320;box-shadow:0 30px 60px rgba(0,0,0,.5);padding:14px 12px;z-index:4;transition:transform .55s ease,opacity .45s;font:400 12.5px/1.4 var(--sans)}
+.sg-stage:not([data-s="0"]) .sg-phone{transform:translateY(40px) scale(.9);opacity:0;pointer-events:none}
+.sg-ph-top{font-weight:700;font-size:14px}.sg-ph-top small{display:block;font-weight:400;color:#7A8794;font-size:11.5px}
+.sg-ph-img{position:relative;height:120px;border-radius:10px;overflow:hidden;margin-top:10px}
+.sg-ph-img span{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.5);color:#fff;border-radius:6px;padding:2px 7px;font-size:11px}
+.sg-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.sg-chips span{border:1px solid #D5DBE1;border-radius:999px;padding:4px 8px;font-size:11.5px}
+.sg-chips .on{background:#1C2733;color:#fff;border-color:#1C2733}
+.sg-field{margin-top:10px;border:1px solid #D5DBE1;border-radius:8px;padding:8px;font-size:12px}
+.sg-send{position:relative;margin-top:12px;height:40px;border-radius:9px;background:#C4521C;color:#fff;font-weight:700;overflow:hidden}
+.sg-send span{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .3s}
+.sg-send .b{opacity:0;background:#2E9E4F}
+.sg-stage[data-s="0"].sent .sg-send .a{opacity:0}.sg-stage[data-s="0"].sent .sg-send .b{opacity:1}
+.sg-stage[data-s="0"] .sg-send{animation:tap .5s 1.6s both}
+@keyframes tap{50%{transform:scale(.95)}}
+@media (max-width:900px){
+ .sg{grid-template-columns:1fr}
+ .sg-tabs{grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+ .sg-tab{padding:10px 10px 12px;font-size:12.5px}.sg-tab b{font-size:13.5px}.sg-tab>span:not(.sg-bar){display:none}
+ .sg-stage{min-height:460px}
+ .sg-map{background-size:340% auto;background-position:30% 22%}
+ .sg-pin,.sg-pulse{left:22%;top:36%}
+ .sg-card{left:auto;right:12px;top:40%;width:min(250px,calc(100% - 24px))}
+}
+@media (prefers-reduced-motion:reduce){.sg-tab.on .sg-bar i{animation:none;width:100%}.sg-pin,.sg-card,.sg-phone,.sg-log{transition:none}.sg-pulse{animation:none!important}}
+</style>
+</head>
+<body>
+<a class="evitement" href="#contenu">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="marque" href="/en/">VB Safety<span class="marque-sub">Municipalities</span></a>
+    <nav class="onglets" aria-label="Main navigation">
+      <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Firefighters<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/firefighters/">Overview</a><a href="/en/innovation/#sapeurs-pompiers">Contamination sensor</a><a href="/cmr-pompier/en/">CMR tool</a><a href="/cmr-pompier/en/ppe-module.html">PPE module</a><a href="/ressources/#sapeurs-pompiers" hreflang="fr">Resources (FR)</a></div></div><div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Industry<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/industry/">Overview</a><a href="/en/innovation/#industrie">Contamination sensor</a><a href="/cmr-industrie/" hreflang="fr">CMR tool (FR)</a><a href="/ressources/#industrie" hreflang="fr">Resources (FR)</a></div></div>
+      <div class="nav-groupe nav-metier actif"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Municipalities<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/municipalities/" aria-current="page">Overview</a><a href="/en/municipalities/request/">Request a demo</a></div></div>
+    </nav>
+    <a class="langue" href="/collectivites/" hreflang="fr" lang="fr">FR</a>
+    <a class="ecrire" href="/en/#contact">Contact</a>
+  </div>
+</header>
+<main id="contenu">
+
+<section class="c-hero">
+  <div class="wrap c-hero-in">
+    <span class="c-k hx" style="--d:.05s">For town halls</span>
+    <h1><span class="hl"><span class="hx" style="--d:.15s">Your municipality's natural hazards,</span></span><span class="hl"><span class="hx c-gris" style="--d:.35s">anticipated from <em>the town hall.</em></span></span></h1>
+    <div class="c-trait hx" style="--d:.6s" aria-hidden="true"></div>
+    <p class="c-sous hx" style="--d:.7s">We analyse aerial imagery of your municipality to identify, house by house, <b>the vegetation clearance required</b> and, in a storm, <b>the trees that threaten roads and power lines</b>.</p>
+    <ul class="c-tags hx" style="--d:.8s"><li>Vegetation clearance (OLD)</li><li>Storms and high winds</li><li>Residents' reports</li></ul>
+    <div class="c-cta hx" style="--d:.9s"><a class="btn btn-p" href="/en/municipalities/request/">Request a demo</a><a class="c-lien" href="#essayer">Try the example ↓</a></div>
+  </div>
+  <div class="wrap c-bas hx" style="--d:1.1s"><a class="c-mail" href="/en/municipalities/request/">Request a presentation</a><a class="c-cue" href="#essayer"><span>Discover</span><i aria-hidden="true"></i></a></div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-tete"><span class="kicker">How it works</span><h2 class="titre">4 steps, no prior site visit</h2></div>
+    <ol class="etapes"><li><h3>We analyse your municipality</h3><p>From IGN (French mapping agency) aerial imagery and surveys: vegetation around each house, trees close to roads and power lines.</p></li><li><h3>You see the houses at risk</h3><p>On a map, one record per house, ranked from most to least urgent, according to the rules of your département.</p></li><li><h3>A detailed letter for each house</h3><p>It explains to the owner what to do and why, with the aerial view of their house. Nothing is sent without your approval.</p></li><li><h3>Everything is dated and tracked</h3><p>Letters, replies and reminders are kept until the work is done. In a crisis, residents' reports are added to the same record.</p></li></ol>
+  </div>
+</section>
+
+<section id="essayer" style="padding:clamp(56px,7vw,96px) 0">
+  <div class="wrap">
+    <span class="c-k">Try it</span>
+    <h2 class="c-h2">Click on a house.</h2>
+    <p class="c-lead">Example on a fictional municipality: choose a house, then open the letter prepared for its owner.</p>
+    <div class="vw" id="vw">
+      <div class="vw-top">
+        <div class="vw-brand"><small>VB OLD · wildfires</small><b>Example municipality <span class="vw-syn">synthetic image</span></b><small class="vw-real">In the tool: real IGN aerial photo</small></div>
+        <div class="vw-kpi"><b id="vw-pct">–</b><span>of houses with no findings</span></div>
+      </div>
+      <ol class="vw-guide" id="vw-guide"><li class="cur"><b>1</b>Click on a house</li><li><b>2</b>Open the letter</li><li><b>3</b>Approve sending</li></ol>
+      <div class="vw-chips" id="vw-chips"></div>
+      <div class="vw-body">
+        <div class="vw-map">
+          <svg id="vw-svg" viewBox="0 0 1280 840" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Aerial view of a fictional village. Each house can be clicked.">
+            <image href="/collectivites/img/village.jpg" x="0" y="0" width="1280" height="840" preserveAspectRatio="none"/>
+          </svg>
+          <div class="vw-hint" id="vw-hint">Click on a coloured house</div>
+          <span class="vw-src">Synthetic image</span>
+        </div>
+        <div class="vw-side" id="vw-side" aria-live="polite"></div>
+      </div>
+      <div class="vw-modal" id="vw-modal" hidden>
+        <div class="vw-letter" role="dialog" aria-modal="true" aria-label="Letter">
+          <button class="vw-x" type="button" id="vw-x" aria-label="Close">✕</button>
+          <div id="vw-letter"></div>
+        </div>
+      </div>
+    </div>
+    <p class="c-note">Fictional village and data. In the tool, every finding is dated and computed from IGN aerial surveys, and every letter explains to the owner what to do and why.</p>
+  </div>
+</section>
+
+
+
+<section class="c-sec" id="signalements">
+  <div class="rv wrap">
+    <span class="c-k">In a crisis: storm, fire</span>
+    <h2 class="c-h2">Residents report, you coordinate.</h2>
+    <div class="sg" id="sg">
+      <div class="sg-tabs" role="tablist">
+        <button type="button" class="sg-tab on" data-i="0" role="tab"><span class="sg-bar"><i></i></span><b>1 · A resident reports</b><span>Photo and location from their phone, no app to install.</span></button>
+        <button type="button" class="sg-tab" data-i="1" role="tab"><span class="sg-bar"><i></i></span><b>2 · It appears on your map</b><span>At the exact spot, with the photo and the time.</span></button>
+        <button type="button" class="sg-tab" data-i="2" role="tab"><span class="sg-bar"><i></i></span><b>3 · You assign it to a team</b><span>The intervention is tracked; everything is recorded in the incident log.</span></button>
+      </div>
+      <div class="sg-stage" data-s="0" aria-live="polite">
+        <div class="sg-map"></div>
+        <div class="sg-pin" aria-hidden="true"><svg viewBox="0 0 24 32" width="34" height="46"><path d="M12 0C5.4 0 0 5.3 0 11.9 0 21 12 32 12 32s12-11 12-20.1C24 5.3 18.6 0 12 0z" fill="#D32F2F"/><circle cx="12" cy="12" r="5" fill="#fff"/></svg></div>
+        <div class="sg-pulse" aria-hidden="true"></div>
+        <div class="sg-card">
+          <div class="sg-card-h"><span class="sg-badge n">New</span><span class="sg-badge e">Team on the way</span><small>14:02</small></div>
+          <b>Tree down in the park</b>
+          <div class="sg-ph"><svg viewBox="0 0 120 60" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><rect width="120" height="60" fill="#8FB070"/><rect y="38" width="120" height="22" fill="#7FA060"/><path d="M8 44 L96 30" stroke="#6B4A2E" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="26" r="14" fill="#3F6B32"/><circle cx="108" cy="34" r="10" fill="#4C7A3B"/><circle cx="88" cy="34" r="9" fill="#46733A"/><rect x="2" y="40" width="10" height="8" rx="2" fill="#6B4A2E"/></svg></div>
+          <small class="sg-meta">Reported by a resident · photo · GPS position</small>
+          <div class="sg-assign"><span>Assign to</span><div class="sg-sel"><span class="a">Choose a team ▾</span><span class="b">Parks team ✓</span></div></div>
+        </div>
+        <div class="sg-log"><div class="l1"><b>14:02</b>Report received, photo attached</div><div class="l2"><b>14:04</b>Assigned to the parks team</div></div>
+        <div class="sg-phone">
+          <div class="sg-ph-top">Report a problem<small>Example municipality</small></div>
+          <div class="sg-ph-img"><svg viewBox="0 0 120 70" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><rect width="120" height="70" fill="#9DBB7C"/><rect y="44" width="120" height="26" fill="#86A866"/><path d="M6 52 L92 34" stroke="#6B4A2E" stroke-width="7" stroke-linecap="round"/><circle cx="96" cy="30" r="16" fill="#3F6B32"/><circle cx="108" cy="40" r="11" fill="#4C7A3B"/><circle cx="84" cy="40" r="10" fill="#46733A"/></svg><span>Photo</span></div>
+          <div class="sg-chips"><span class="on">Fallen tree</span><span>Cable on the ground</span><span>Flooding</span></div>
+          <div class="sg-field">📍 Municipal park · GPS position</div>
+          <div class="sg-send"><span class="a">Send</span><span class="b">✓ Sent to the town hall</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="c-sec">
+  <div class="rv wrap c-faq">
+    <div><span class="c-k">Questions</span><h2 class="c-h2">Questions from elected officials.</h2></div>
+    <div class="faq"><details><summary>Does the assessment replace a site visit?</summary><p>No. It is a dated decision-support assessment based on imagery. It shows where to look first. Decisions remain with the mayor.</p></details><details><summary>Who sees the data?</summary><p>House-by-house findings are visible only to the town hall.</p></details><details><summary>What is needed to start?</summary><p>Nothing to install. We analyse the municipality; the town hall views the results in a web browser.</p></details></div>
+  </div>
+</section>
+
+<section class="c-sec" style="border-top:0;padding-top:0">
+  <div class="wrap">
+    <div class="c-final2 rv">
+      <span class="c-k">For your municipality</span>
+      <h2>See your municipality <span>in the tool.</span></h2>
+      <p>We prepare a demo with your municipality's data and present it to you, at the town hall or remotely.</p>
+      <form class="cf2" action="/en/municipalities/request/" method="get"><label class="sr" for="cf2-c">Your municipality</label><input id="cf2-c" name="commune" type="text" placeholder="Name of your municipality" autocomplete="address-level2" required><button class="btn btn-p" type="submit">Prepare my demo</button></form>
+      <a class="c-lien" href="#essayer">or try the example above ↑</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="pied">
+  <div class="wrap">
+    <div class="pied-grille">
+      <div><a class="marque" href="/en/">VB Safety</a><p>Detecting and tracking occupational exposure to carcinogens (CMR agents) for fire services, industry and construction.</p></div>
+      <div><h2 class="pied-h">Sectors</h2><ul><li><a href="/en/industry/">Industry</a></li><li><a href="/en/construction/">Construction</a></li><li><a href="/en/firefighters/">Firefighters</a></li><li><a href="/en/municipalities/">Municipalities</a></li></ul></div>
+      <div><h2 class="pied-h">Resources (in French)</h2><ul><li><a href="/ressources/" hreflang="fr">All resources</a></li><li><a href="/cmr-pompier/en/firefighter-health.html">Firefighter health guide</a></li><li><a href="/ressources/liste-travailleurs-exposes-cmr/" hreflang="fr">Exposed workers list template</a></li></ul></div>
+      <div><h2 class="pied-h">Platform</h2><ul><li><a href="/cmr-pompier/en/">VB CMR</a></li><li><a href="/cmr-pompier/en/ppe-module.html">PPE module</a></li><li><a href="/cmr-industrie/" hreflang="fr">VB CMR Industry and construction (in French)</a></li><li><a href="/en/innovation/">Contamination sensors</a></li></ul></div>
+      <div><h2 class="pied-h">Contact</h2><ul><li><a href="/en/#contact">Contact form</a></li><li><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></li><li><a href="/mentions-legales/" hreflang="fr">Legal notice (FR)</a></li><li><a href="/confidentialite/" hreflang="fr">Privacy policy (FR)</a></li></ul></div>
+    </div>
+    <div class="pied-bas"><span>© 2026 VB Safety SAS</span><span>Updated 1 October 2026</span></div>
+  </div>
+</footer>
+<script>
+(function(){
+var D=[{"n":"01","s":"r","d":28,"p":[[679.7,62.1],[673.3,89.3],[653.8,84.7],[660.2,57.5]],"x":666.8,"y":73.4,"c":[["r","Brush on the property","310 m² within the 50 m","clear and remove"]]},{"n":"02","s":"r","d":22,"p":[[574.2,101.7],[567.2,130.9],[549.7,126.7],[556.7,97.5]],"x":562.0,"y":114.2,"c":[["r","Brush on the property","90 m² within the 50 m","clear and remove"]]},{"n":"03","s":"r","d":52,"p":[[657.2,143.5],[633.7,138.3],[637.7,120.7],[661.1,126.0]],"x":647.4,"y":132.1,"c":[["r","Branches against the house","1 tree within 3 m of the walls · 10 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Brush on the property","260 m² within the 50 m","clear and remove"]]},{"n":"04","s":"v","d":47,"p":[[565.7,193.9],[539.8,191.2],[542.1,169.3],[568.0,172.0]],"x":553.9,"y":181.6,"c":[["y","Trees close together in the zone","3 trees with touching crowns","advice: thin out"]]},{"n":"05","s":"r","d":76,"p":[[651.5,202.1],[627.6,199.9],[629.3,182.0],[653.2,184.2]],"x":640.4,"y":192.1,"c":[["r","Branches against the house","2 trees within 3 m of the walls · 6 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Brush on the property","90 m² within the 50 m","clear and remove"],["r","Obstructed access","access path narrowed to 2 m wide","clear 5 m wide and 5 m high"],["y","Trees close together in the zone","3 trees with touching crowns","advice: thin out"]]},{"n":"06","s":"v","d":72,"p":[[555.9,237.2],[553.6,261.0],[535.7,259.3],[538.0,235.4]],"x":545.8,"y":248.2,"c":[["y","Trees close together in the zone","3 trees with touching crowns","advice: thin out"]]},{"n":"07","s":"r","d":99,"p":[[643.9,262.1],[619.9,261.1],[620.6,243.1],[644.6,244.1]],"x":632.2,"y":252.6,"c":[["r","Branches against the house","1 tree within 3 m of the walls · 6 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Brush on the property","120 m² within the 50 m","clear and remove"],["y","Trees close together in the zone","4 trees with touching crowns","advice: thin out"]]},{"n":"08","s":"o","d":66,"p":[[377.8,287.9],[405.6,284.7],[407.9,304.5],[380.1,307.7]],"x":392.8,"y":296.2,"c":[["o","Tree close to the house","1 tree 4 m from the walls","check on site"]]},{"n":"09","s":"r","d":51,"p":[[315.8,294.5],[341.5,290.7],[344.8,312.5],[319.0,316.3]],"x":330.3,"y":303.5,"c":[["r","Brush on the property","120 m² within the 50 m","clear and remove"],["y","Trees close together in the zone","7 trees with touching crowns","advice: thin out"]]},{"n":"10","s":"v","d":100,"p":[[557.8,301.1],[558.1,327.1],[536.1,327.4],[535.8,301.4]],"x":546.9,"y":314.3,"c":[]},{"n":"11","s":"r","d":124,"p":[[643.9,326.4],[617.9,325.1],[619.1,303.1],[645.1,304.5]],"x":631.5,"y":314.8,"c":[["r","Brush on the property","310 m² within the 50 m","clear and remove"],["y","Trees close together in the zone","5 trees with touching crowns","advice: thin out"]]},{"n":"12","s":"v","d":85,"p":[[397.4,359.2],[394.4,337.4],[410.2,335.2],[413.3,356.9]],"x":403.8,"y":347.2,"c":[]},{"n":"13","s":"o","d":148,"p":[[641.2,387.6],[615.2,388.7],[614.3,366.8],[640.2,365.6]],"x":627.7,"y":377.2,"c":[["o","Tree close to the house","1 tree 3.5 m from the walls","check on site"]]},{"n":"14","s":"r","d":129,"p":[[557.0,366.5],[558.5,392.4],[536.5,393.7],[535.0,367.8]],"x":546.8,"y":380.1,"c":[["r","Brush on the property","90 m² within the 50 m","clear and remove"]]},{"n":"15","s":"r","d":85,"p":[[402.2,415.2],[400.1,385.3],[418.1,384.1],[420.1,414.0]],"x":410.1,"y":399.6,"c":[["r","Branches against the house","1 tree within 3 m of the walls · 12 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Brush on the property","210 m² within the 50 m","clear and remove"],["r","Obstructed access","access path narrowed to 3 m wide","clear 5 m wide and 5 m high"],["y","Trees close together in the zone","4 trees with touching crowns","advice: thin out"]]},{"n":"16","s":"r","d":51,"p":[[334.4,420.7],[332.5,392.8],[352.4,391.4],[354.4,419.3]],"x":343.4,"y":406.1,"c":[["r","Brush on the property","90 m² within the 50 m","clear and remove"],["r","Branches against the house","3 trees within 3 m of the walls · 7 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Obstructed access","access path narrowed to 2 m wide","clear 5 m wide and 5 m high"]]},{"n":"17","s":"g","d":226,"p":[[868.5,404.9],[896.4,402.0],[898.5,421.9],[870.6,424.8]],"x":883.5,"y":413.4,"c":[]},{"n":"18","s":"g","d":217,"p":[[807.3,407.2],[833.2,404.9],[835.1,426.8],[809.2,429.1]],"x":821.2,"y":417.0,"c":[]},{"n":"19","s":"g","d":207,"p":[[745.5,417.7],[771.2,413.5],[774.7,435.2],[749.1,439.4]],"x":760.1,"y":426.5,"c":[]},{"n":"20","s":"v","d":191,"p":[[685.5,424.9],[709.4,422.2],[711.4,440.1],[687.6,442.8]],"x":698.5,"y":432.5,"c":[["y","Trees close together in the zone","3 trees with touching crowns","advice: thin out"]]},{"n":"21","s":"v","d":180,"p":[[625.9,441.4],[647.7,438.2],[650.0,454.1],[628.2,457.3]],"x":637.9,"y":447.8,"c":[]},{"n":"22","s":"o","d":140,"p":[[500.5,455.7],[530.5,454.0],[531.5,472.0],[501.5,473.7]],"x":516.0,"y":463.9,"c":[["o","Brush at the property boundary","57 m² within the 50 m, partly on the neighbour's land","check on site"]]},{"n":"23","s":"g","d":342,"p":[[1185.2,457.6],[1213.2,457.4],[1213.4,477.4],[1185.4,477.6]],"x":1199.3,"y":467.5,"c":[]},{"n":"24","s":"v","d":110,"p":[[442.6,461.2],[466.5,459.7],[467.7,477.7],[443.8,479.2]],"x":455.2,"y":469.4,"c":[]},{"n":"25","s":"g","d":321,"p":[[1124.2,459.9],[1150.2,459.0],[1150.9,481.0],[1124.9,481.9]],"x":1137.5,"y":470.5,"c":[]},{"n":"26","s":"r","d":52,"p":[[340.6,463.0],[342.1,489.0],[320.1,490.2],[318.6,464.3]],"x":330.3,"y":476.6,"c":[["r","Brush on the property","164 m² within the 50 m","clear and remove"],["r","Branches against the house","1 tree within 3 m of the walls · 7 m² of foliage","prune: nothing within 3 m or above the roof"]]},{"n":"27","s":"g","d":304,"p":[[1063.7,469.8],[1087.6,468.0],[1088.9,486.0],[1065.0,487.7]],"x":1076.3,"y":477.9,"c":[]},{"n":"28","s":"r","d":24,"p":[[253.7,472.6],[277.3,468.5],[280.4,486.3],[256.7,490.3]],"x":267.0,"y":479.4,"c":[["r","Branches against the house","3 trees within 3 m of the walls · 5 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Brush on the property","164 m² within the 50 m","clear and remove"]]},{"n":"29","s":"g","d":288,"p":[[1022.8,470.7],[1023.9,492.7],[1007.9,493.4],[1006.9,471.5]],"x":1015.4,"y":482.1,"c":[]},{"n":"30","s":"g","d":275,"p":[[964.8,473.0],[966.6,498.9],[944.7,500.5],[942.8,474.5]],"x":954.7,"y":486.7,"c":[]},{"n":"31","s":"g","d":263,"p":[[878.5,480.6],[906.4,477.9],[908.3,497.8],[880.4,500.5]],"x":893.4,"y":489.2,"c":[]},{"n":"32","s":"r","d":1,"p":[[193.5,485.4],[215.2,482.0],[217.7,497.8],[196.0,501.2]],"x":205.6,"y":491.6,"c":[["r","Branches against the house","3 trees within 3 m of the walls · 8 m² of foliage","prune: nothing within 3 m or above the roof"]]},{"n":"33","s":"g","d":259,"p":[[817.0,498.0],[846.7,493.8],[849.2,511.7],[819.5,515.8]],"x":833.1,"y":504.8,"c":[]},{"n":"34","s":"g","d":243,"p":[[756.5,500.2],[782.3,496.5],[785.4,518.3],[759.7,521.9]],"x":771.0,"y":509.2,"c":[]},{"n":"35","s":"g","d":230,"p":[[716.8,508.3],[718.7,530.2],[702.8,531.6],[700.8,509.7]],"x":709.8,"y":520.0,"c":[]},{"n":"36","s":"g","d":210,"p":[[634.7,514.4],[658.5,512.0],[660.4,529.9],[636.5,532.3]],"x":647.5,"y":522.2,"c":[]},{"n":"37","s":"o","d":154,"p":[[508.5,535.3],[538.5,533.6],[539.5,551.5],[509.6,553.3]],"x":524.0,"y":543.4,"c":[["o","Brush at the property boundary","54 m² within the 50 m, partly on the neighbour's land","check on site"]]},{"n":"38","s":"r","d":126,"p":[[449.9,541.7],[471.9,540.9],[472.5,556.9],[450.5,557.7]],"x":461.2,"y":549.3,"c":[["r","Brush on the property","164 m² within the 50 m","clear and remove"],["r","Branches against the house","3 trees within 3 m of the walls · 13 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Obstructed access","access path narrowed to 3 m wide","clear 5 m wide and 5 m high"],["y","Trees close together in the zone","3 trees with touching crowns","advice: thin out"]]},{"n":"39","s":"o","d":99,"p":[[407.0,537.6],[409.1,561.5],[391.1,563.1],[389.1,539.2]],"x":399.1,"y":550.4,"c":[["o","Brush at the property boundary","51 m² within the 50 m, partly on the neighbour's land","check on site"]]},{"n":"40","s":"o","d":73,"p":[[326.2,544.2],[348.0,541.8],[349.8,557.7],[327.9,560.1]],"x":338.0,"y":551.0,"c":[["o","Tree close to the house","1 tree 3.5 m from the walls","check on site"]]},{"n":"41","s":"r","d":51,"p":[[265.8,556.4],[287.5,552.6],[290.3,568.4],[268.6,572.2]],"x":278.1,"y":562.4,"c":[["r","Branches against the house","1 tree within 3 m of the walls · 6 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Brush on the property","210 m² within the 50 m","clear and remove"],["y","Trees close together in the zone","6 trees with touching crowns","advice: thin out"]]},{"n":"42","s":"r","d":23,"p":[[203.3,561.7],[226.9,557.3],[230.2,575.0],[206.6,579.4]],"x":216.8,"y":568.4,"c":[["r","Brush on the property","260 m² within the 50 m","clear and remove"],["r","Branches against the house","3 trees within 3 m of the walls · 6 m² of foliage","prune: nothing within 3 m or above the roof"],["r","Obstructed access","access path narrowed to 3 m wide","clear 5 m wide and 5 m high"],["y","Trees close together in the zone","6 trees with touching crowns","advice: thin out"]]},{"n":"43","s":"v","d":184,"p":[[587.9,581.6],[566.4,586.2],[563.0,570.6],[584.5,566.0]],"x":575.5,"y":576.1,"c":[]},{"n":"44","s":"g","d":231,"p":[[675.6,612.1],[679.0,633.8],[663.2,636.2],[659.8,614.5]],"x":669.4,"y":624.1,"c":[]},{"n":"45","s":"v","d":188,"p":[[594.3,624.0],[598.7,649.6],[577.0,653.3],[572.7,627.6]],"x":585.7,"y":638.6,"c":[["y","Trees close together in the zone","3 trees with touching crowns","advice: thin out"]]},{"n":"46","s":"g","d":231,"p":[[680.3,678.3],[682.5,700.2],[666.6,701.8],[664.3,680.0]],"x":673.4,"y":690.1,"c":[]},{"n":"47","s":"v","d":192,"p":[[600.8,687.2],[604.3,710.9],[586.5,713.5],[583.0,689.8]],"x":593.7,"y":700.3,"c":[]},{"n":"48","s":"g","d":239,"p":[[695.3,761.5],[673.3,762.9],[672.3,746.9],[694.2,745.5]],"x":683.8,"y":754.2,"c":[]},{"n":"49","s":"g","d":200,"p":[[612.3,748.0],[614.6,775.9],[594.7,777.5],[592.4,749.6]],"x":603.5,"y":762.7,"c":[]}];
+var S={r:['Clearance required','#D32F2F'],o:['To check','#F08A1C'],v:['No findings','#2E9E4F'],g:['Outside the zone','#C3C8CE']};
+var col={r:'#D32F2F',o:'#F08A1C',y:'#C9A227',v:'#2E9E4F'};
+var NS='http://www.w3.org/2000/svg',svg=document.getElementById('vw-svg'),side=document.getElementById('vw-side'),hint=document.getElementById('vw-hint');
+var off={},sel=null,done={},seen=false;
+function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
+function esc(t){return String(t).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+function grow(p,cx,cy,k){return p.map(function(q){return[(cx+(q[0]-cx)*k).toFixed(1),(cy+(q[1]-cy)*k).toFixed(1)].join(',')}).join(' ')}
+var ring=el('circle',{r:100,fill:'rgba(255,170,60,.12)',stroke:'#FFB347','stroke-width':3,'stroke-dasharray':'10 8',opacity:0,'pointer-events':'none'});
+D.forEach(function(h){
+  var g=el('g',{'class':'vw-h',tabindex:0,role:'button','aria-label':'House '+h.n+': '+S[h.s][0]});
+  el('circle',{'class':'hit',cx:h.x,cy:h.y,r:26},g);
+  el('polygon',{'class':'shape',points:grow(h.p,h.x,h.y,1.35),fill:S[h.s][1],stroke:S[h.s][1]},g);
+  h.g=g;
+  g.addEventListener('click',function(){touched=true;D.forEach(function(x){x.g.classList.remove('pulse')});pick(h)});
+  g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(h)}});
+});
+var chips=document.getElementById('vw-chips');
+['r','o','v','g'].forEach(function(k){
+  var n=D.filter(function(h){return h.s===k}).length,c=document.createElement('button');
+  c.type='button';c.className='vw-chip';c.innerHTML='<i style="background:'+S[k][1]+'"></i>'+S[k][0]+' <b>'+n+'</b>';
+  c.onclick=function(){off[k]=!off[k];c.classList.toggle('off',!!off[k]);D.forEach(function(h){h.g.classList.toggle('hide',!!off[h.s])})};
+  chips.appendChild(c);
+});
+var inP=D.filter(function(h){return h.s!=='g'});
+document.getElementById('vw-pct').textContent=Math.round(100*inP.filter(function(h){return h.s==='v'}).length/inP.length)+' %';
+function fit(){svg.setAttribute('viewBox',window.matchMedia('(max-width:900px)').matches?'140 40 620 680':'0 0 1280 840')}
+fit();window.addEventListener('resize',fit);
+function cnt(k){return D.filter(function(h){return h.s===k}).length}
+side.innerHTML='<div class="vw-sub">Houses within 200 m of woodland</div><h3>'+inP.length+' houses subject to vegetation clearance</h3><div class="vw-sum"><div><span>Clearance required</span><b>'+cnt('r')+'</b></div><div><span>To check</span><b>'+cnt('o')+'</b></div><div><span>No findings</span><b>'+cnt('v')+'</b></div></div><p class="vw-empty"><b>Click on a house</b>to see its findings and prepare the letter.</p>';
+function gstep(n){var L=document.querySelectorAll('#vw-guide li');for(var k=0;k<L.length;k++){L[k].classList.toggle('ok',k<n);L[k].classList.toggle('cur',k===n)}var g=document.getElementById('vw-guide');if(n>=3&&!document.getElementById('vw-fin')){var a=document.createElement('a');a.id='vw-fin';a.href='/en/municipalities/request/';a.textContent='See the same for your municipality →';g.appendChild(a)}}
+function pick(h){if(!document.querySelector('#vw-guide li.ok'))gstep(1);
+  if(sel)sel.g.classList.remove('sel');sel=h;h.g.classList.add('sel');hint.style.opacity=0;
+  ring.setAttribute('cx',h.x);ring.setAttribute('cy',h.y);ring.setAttribute('opacity',h.s==='g'?0:1);
+  var t='<div><span class="vw-st" style="background:'+S[h.s][1]+'">'+S[h.s][0]+'</span></div><h3>House no. '+h.n+'</h3><div class="vw-sub">'+(h.s==='g'?h.d+' m from woodland: outside the zone':h.d+' m from woodland · 50 m circle shown')+'</div>';
+  if(h.s==='g')t+='<p class="vw-empty"><b>No obligation</b>This house is more than 200 m from woodland.</p>';
+  else{
+    var real=h.c.filter(function(c){return c[0]!=='y'});
+    if(!real.length)t+='<p class="vw-empty"><b>Nothing to report</b>No visible issue on the imagery.</p>';
+    h.c.forEach(function(c){t+='<div class="vw-c"><i style="background:'+col[c[0]]+'"></i><div><b>'+esc(c[1])+'</b><span>'+esc(c[2])+'</span><em><b style="display:inline;font-size:12.5px">To do:</b> '+esc(c[3])+'</em></div></div>'});
+    t+='<button type="button" class="vw-teaser'+(seen?'':' new')+'" id="vw-t"><span class="vw-mini" aria-hidden="true"><i></i><i></i><i class="img"></i><i></i><i class="s"></i></span><span><b>'+(real.length?'The letter is ready':'Reminder letter ready')+'</b><span>For the owner: what to do and why, with the aerial view of their house.</span><em>Open the letter →</em></span></button>';
+    t+='<div class="vw-btns"><button class="vw-b" type="button" id="vw-c">+ Add to on-site checks</button></div>';
+    if(done[h.n])t+='<div class="vw-toast">'+esc(done[h.n])+'</div>';
+  }
+  side.innerHTML=t;
+  var b1=document.getElementById('vw-l');if(b1)b1.onclick=function(){seen=true;letter(h)};var bt=document.getElementById('vw-t');if(bt)bt.onclick=function(){seen=true;gstep(2);letter(h)};
+  var b2=document.getElementById('vw-c');if(b2)b2.onclick=function(){done[h.n]='Added to the list of on-site checks.';pick(h)};
+  if(touched&&window.matchMedia('(max-width:900px)').matches&&side.getBoundingClientRect().top>window.innerHeight-80)side.scrollIntoView({behavior:'smooth',block:'start'});
+}
+var modal=document.getElementById('vw-modal');
+var TON=0;
+var WHY={'Branches against the house':'branches touching the walls or above the roof carry fire to the house, often through embers','Brush on the property':'low, dry vegetation carries fire to the walls','Brush at the property boundary':'low, dry vegetation carries fire to the walls','Tree close to the house':'a tree too close can ignite the roof and gutters','Obstructed access':'emergency vehicles must be able to reach the house','Trees close together in the zone':'trees with touching crowns let fire pass from one to the next'};
+function todo(c){return c[0]==='o'?'check and, if needed, '+(/tree/i.test(c[1])?'prune or fell':'clear'):c[3]}
+function letter(h){
+  var items=h.c.filter(function(c){return c[0]!=='y'}),cons=h.c.filter(function(c){return c[0]==='y'});
+  var ref='OLD-2026-'+('0'+h.n).slice(-3);
+  var obj=['Vegetation clearance around your home: information','Reminder: vegetation clearance around your home','Formal notice to clear vegetation'][TON];
+  var x0=h.x-140,y0=h.y-105;
+  var fig='<figure class="lt-fig"><svg viewBox="'+x0+' '+y0+' 280 210" preserveAspectRatio="xMidYMid slice"><image href="/collectivites/img/village.jpg" x="0" y="0" width="1280" height="840"/><circle cx="'+h.x+'" cy="'+h.y+'" r="100" fill="rgba(255,170,60,.12)" stroke="#FFB347" stroke-width="2.5" stroke-dasharray="8 6"/><polygon points="'+grow(h.p,h.x,h.y,1.5)+'" fill="none" stroke="#fff" stroke-width="3"/></svg><figcaption>IGN aerial view of <span class="hl">[date]</span>. Circle: 50 m around your home.</figcaption></figure>';
+  var tab=items.length?'<table class="lt-t"><thead><tr><th>What the image shows</th><th>What to do</th><th>Why</th></tr></thead><tbody>'+items.map(function(c){return'<tr><td><b>'+esc(c[1])+'</b><br>'+esc(c[2])+'</td><td>'+esc(todo(c))+'</td><td>'+esc(WHY[c[1]]||'')+'</td></tr>'}).join('')+'</tbody></table>':'<p>The imagery shows no issue at this date. This letter reminds you of the obligation to maintain the surroundings of your home every year, before summer.</p>';
+  var conseil=cons.length?'<p class="lt-c"><b>Advice, not mandatory:</b> '+esc(cons[0][2])+'. Thinning limits fire spread from tree to tree.</p>':'';
+  var intro=['Your home is '+h.d+' m from woodland exposed to wildfire risk. In this case, French law requires vegetation to be cleared within 50 m of buildings (Forestry Code, articles L134-6 et seq.). This obligation lies with the owner, including where the 50 m extend onto a neighbouring property.',
+    'In our letter of <span class="hl">[date of first letter]</span>, we informed you of the obligation to clear vegetation within 50 m of your home. The most recent imagery shows that the following points remain to be addressed.',''][TON];
+  var delai=['We invite you to carry out this work before <span class="hl">[date]</span>, then to maintain it every year.','Please carry out this work before <span class="hl">[date]</span>. Otherwise, an on-site check will be arranged.',''][TON];
+  document.getElementById('vw-letter').innerHTML=
+   '<div class="lt-ton" role="tablist">'+['Information','Reminder','Formal notice'].map(function(t,k){return'<button type="button" data-t="'+k+'" class="'+(k===TON?'on':'')+'"'+(k===2?' disabled title="Only after an on-site check"':'')+'>'+t+(k===2?' <small>after check</small>':'')+'</button>'}).join('')+'</div>'+
+   '<div class="lt-doc"><div class="lt-h"><div><b>Town hall of the example municipality</b><br><span class="hl">[town hall address]</span></div><div style="text-align:right">Date: <span class="hl">[date]</span><br><small>Ref. '+ref+'</small></div></div>'+
+   '<p class="lt-dest">To the occupant or owner<br>House no. '+h.n+'</p>'+
+   '<p><b>Subject: '+obj+'</b></p><p>Dear Sir or Madam,</p><p>'+intro+'</p>'+fig+
+   (items.length?'<h4>On your property</h4>':'')+tab+conseil+'<p>'+delai+'</p>'+
+   '<h4>In practice</h4><ul class="lt-p"><li>Green waste goes to a recycling centre or is shredded; burning it is generally prohibited.</li><li>If the work is already done, tell the town hall: the record for your home will be updated.</li><li>These findings are made remotely, from aerial imagery. They are not a penalty.</li></ul>'+
+   '<p style="text-align:right;margin-top:16px">The mayor<br><span class="hl">[name]</span></p></div>'+
+   '<div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Approve sending</button></div>';
+  modal.hidden=false;
+  Array.prototype.forEach.call(document.querySelectorAll('.lt-ton button'),function(b){b.onclick=function(){TON=+b.getAttribute('data-t');letter(h)}});
+  document.getElementById('vw-ok').onclick=function(){gstep(3);done[h.n]='"'+['Information','Reminder'][TON]+'" letter approved: it will go out in the next batch.';modal.hidden=true;pick(h)};
+}
+
+var vw=document.getElementById('vw'),touched=false;
+svg.addEventListener('pointerdown',function(){touched=true});
+var first=D.filter(function(h){return h.s==='r'}).sort(function(a,b){return Math.hypot(a.x-450,a.y-330)-Math.hypot(b.x-450,b.y-330)})[0]||D[0];
+function start(){
+  vw.classList.add('on');
+  var pe=document.getElementById('vw-pct'),tg=parseInt(pe.textContent),t0=null;
+  (function f(ts){t0=t0||ts;var k=Math.min(1,(ts-t0)/900);pe.textContent=Math.round(tg*k)+' %';if(k<1)requestAnimationFrame(f)})(performance.now());
+  first.g.classList.add('pulse');
+  setTimeout(function(){if(!sel&&!touched){pick(first);first.g.classList.remove('pulse');hint.style.opacity=1;hint.textContent='Try another house'}},2200);
+}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){start();o.disconnect()}})},{threshold:.35}).observe(vw)}else start();
+document.getElementById('vw-x').onclick=function(){modal.hidden=true};
+modal.addEventListener('click',function(e){if(e.target===modal)modal.hidden=true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.hidden=true});
+})();
+</script>
+<script>(function(){var r=document.querySelectorAll(".rv");if(!("IntersectionObserver" in window)){r.forEach(function(e){e.classList.add("vu")});return}var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("vu");o.unobserve(e.target)}})},{threshold:.12});r.forEach(function(e){o.observe(e)})})();</script>
+<script>
+(function(){
+var sg=document.getElementById('sg'),st=sg.querySelector('.sg-stage'),tabs=sg.querySelectorAll('.sg-tab'),i=0,tm=null,auto=true,T=4200;
+function go(n){
+  i=n;st.setAttribute('data-s',n);st.classList.remove('sent');
+  tabs.forEach(function(t,k){t.classList.toggle('on',k===n);var b=t.querySelector('.sg-bar i');b.style.animation='none';b.offsetWidth;b.style.animation=''});
+  if(n===0)setTimeout(function(){if(i===0)st.classList.add('sent')},2000);
+  clearTimeout(tm);if(auto)tm=setTimeout(function(){go((i+1)%3)},n===0?T+600:T);
+}
+tabs.forEach(function(t,k){t.addEventListener('click',function(){auto=false;sg.classList.add('stop');go(k)})});
+if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){auto=false;sg.classList.add('stop')}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){go(0);o.disconnect()}})},{threshold:.4}).observe(sg)}else go(0);
+})();
+</script>
+<script src="/static/menu.js?v=9" defer></script>
+<script src="/static/fond.js?v=2" defer></script>
+<script src="/static/serpentin.js?v=2" defer></script>
+<script src="/static/nav.js?v=4" defer></script>
+</body>
+</html>

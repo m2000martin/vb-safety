@@ -55,11 +55,11 @@
   (function () {
     var chemin = location.pathname;
     // Pas de bouton dans les outils eux-mêmes (VB CMR sapeurs-pompiers, VB CMR industrie, DUERP) ni sur les statistiques et le devis
-    if (/^\/(en\/)?(stats|devis|duerp)\//.test(chemin) || /^\/collectivites\/demande\//.test(chemin) || /^\/cmr-(pompier|industrie)\//.test(chemin) || document.querySelector('.barre-action')) return;
+    if (/^\/(en\/)?(stats|devis|duerp)\//.test(chemin) || /^\/(collectivites\/demande|en\/municipalities\/request)\//.test(chemin) || /^\/cmr-(pompier|industrie)\//.test(chemin) || document.querySelector('.barre-action')) return;
     // Pages métier : le bouton mène à l'outil CMR du métier ; ailleurs : « Demander une démo »
     var OUTILS = { '/sapeurs-pompiers/': ['/cmr-pompier/', "Accéder à l'outil CMR sapeurs-pompiers"], '/industrie/': ['/cmr-industrie/', "Accéder à l'outil CMR industrie"], '/btp/': ['/cmr-industrie/', "Accéder à l'outil CMR BTP"],
       '/en/firefighters/': ['/cmr-pompier/en/', 'Open the firefighter CMR tool'], '/en/industry/': ['/cmr-industrie/', 'Open the industry CMR tool'], '/en/construction/': ['/cmr-industrie/', 'Open the construction CMR tool'] };
-    var cible = OUTILS[chemin]; if (/^\/collectivites\//.test(chemin)) cible = ['/collectivites/demande/', 'Demander une présentation'];
+    var cible = OUTILS[chemin]; if (/^\/collectivites\//.test(chemin)) cible = ['/collectivites/demande/', 'Demander une présentation']; if (/^\/en\/municipalities\//.test(chemin)) cible = ['/en/municipalities/request/', 'Request a demo'];
     var bar = document.createElement('div'); bar.className = 'barre-action barre-demo'; bar.setAttribute('aria-hidden', 'true'); bar.setAttribute('data-no-i18n', '');
     var a = document.createElement('a'); a.className = 'principal'; a.href = cible ? cible[0] : (EN ? '/en/#contact' : '/#contact'); a.tabIndex = -1;
     a.textContent = cible ? cible[1] : (EN ? 'Request a demo' : 'Demander une démo');
