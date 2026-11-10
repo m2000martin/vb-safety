@@ -1054,11 +1054,11 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
  H=L.geoJSON(D.h,{renderer:cv,style:sty,onEachFeature:(f,l)=>f.properties.k!==undefined?l.on('click',()=>openFiche(f.properties,l)).bindTooltip(()=>tip(f.properties),{sticky:true,direction:'top',className:'tt',offset:[0,-8]}):l.bindPopup(()=>pop(f.properties),{autoPanPaddingTopLeft:[10,190],autoPanPaddingBottomRight:[innerWidth<900?10:430,innerWidth<900?140:10]})}).addTo(map);
  MK=L.layerGroup().addTo(map);TIP=tip;
  if(D.sp&&D.sp.length){SP=L.layerGroup(D.sp.map((z,i)=>L.geoJSON(z.g,{renderer:cv,interactive:false,style:{color:'#b71c1c',weight:2,dashArray:'6 4',fillColor:'#c62828',fillOpacity:.10}})));}
- loadLocal();let M0='leg';try{M0=localStorage.getItem('oldmode')||'leg'}catch(_){}setMode(M0);
+ loadLocal();setMode('com');
  loadSuivi().then(()=>{restyle();legend();kpi();updTabs()});if(innerWidth<900){const t=document.querySelector('.leaflet-top.leaflet-right');if(t)t.style.top=(document.getElementById('head').offsetHeight+14)+'px';}
  map.on('zoomend',()=>{const z=map.getZoom();if(z>=17)map.removeLayer(MK);else if(!map.hasLayer(MK))MK.addTo(map);});
  document.querySelectorAll('.tab[data-t]').forEach(b=>b.onclick=()=>go(b.dataset.t));
- updTabs();initLayers();initRiskLayers();try{const r0=localStorage.getItem('oldrisk');if(!D.st)setRisk('feu');else if(r0&&(r0!=='inond'||D.fl))setRisk(r0);else setRisk('all')}catch(_){riskBar()}document.getElementById('tbn').textContent=D.nom;let T0='map';try{T0=localStorage.getItem('oldtop')||'map'}catch(_){}setTop(T0);
+ updTabs();initLayers();initRiskLayers();try{const r0=localStorage.getItem('oldrisk');if(!D.st)setRisk('feu');else if(r0&&(r0!=='inond'||D.fl))setRisk(r0);else setRisk('all')}catch(_){riskBar()}document.getElementById('tbn').textContent=D.nom;setTop('map');
  document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
  if(innerWidth<900)document.getElementById('panel').classList.add('min');
  document.onkeydown=e=>{if(tab!=='fic'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape')go(PREV);else if(e.key==='ArrowRight')nav(1);else if(e.key==='ArrowLeft')nav(-1);};
@@ -1072,7 +1072,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='xtCFfqHMZ1Fl18sG+0tKHw==',ITER=600000;let KEY=null;
+const SALT='NKr7CgI/q6XbUw3fYmxaUg==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
@@ -1090,4 +1090,33 @@ document.getElementById('gate').remove();start(d);
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='chg'){e.preventDefault();try{sessionStorage.removeItem('oldv')}catch(_){}location.reload()}});
 try{const c=sessionStorage.getItem('oldk');if(c){document.getElementById('gc').value=c;document.getElementById('gf').requestSubmit();}}catch(_){}
 </script>
-<div id="avert" style="position:fixed;inset:0;z-index:4500;background:rgba(20,24,28,.55);display:flex;align-items:center;justify-content:center;padding:16px"><div style="background:#fff;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,.3);padding:22px;max-width:520px;font-size:14px;line-height:1.5;color:#1c2126"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Avant de commencer</div><p style="margin:0 0 10px">Cet exemple porte sur un quartier de la commune. Il est établi à partir de relevés aériens de l'IGN <b>volontairement anciens</b> (photo 2022, relevés 2021 à 2025) : <b>il ne reflète pas l'état actuel des terrains</b> et n'a aucune valeur de constat.</p><p style="margin:0 0 14px">Le système <b>n'identifie aucun propriétaire</b> et ne traite ni nom, ni adresse : les maisons sont numérotées. Seule la mairie, si elle utilise l'outil, fait le lien avec ses administrés.</p><label style="display:flex;gap:9px;align-items:center;font-weight:600;cursor:pointer"><input type="checkbox" id="avok" style="width:18px;height:18px" onchange="document.getElementById('avgo').disabled=!this.checked">J'ai compris</label><button id="avgo" disabled onclick="document.getElementById('avert').remove()" style="margin-top:14px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Continuer</button></div></div><style>#avgo:disabled{opacity:.35;cursor:not-allowed}</style></body></html>
+<div id="avert" style="position:fixed;inset:0;z-index:4500;background:rgba(20,24,28,.55);display:flex;align-items:center;justify-content:center;padding:16px"><div style="background:#fff;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,.3);padding:22px;max-width:520px;font-size:14px;line-height:1.5;color:#1c2126"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Avant de commencer</div><p style="margin:0 0 10px">Cet exemple porte sur un quartier de la commune. Il est établi à partir de relevés aériens de l'IGN <b>volontairement anciens</b> (photo 2022, relevés 2021 à 2025) : <b>il ne reflète pas l'état actuel des terrains</b> et n'a aucune valeur de constat.</p><p style="margin:0 0 14px">Le système <b>n'identifie aucun propriétaire</b> et ne traite ni nom, ni adresse : les maisons sont numérotées. Seule la mairie, si elle utilise l'outil, fait le lien avec ses administrés.</p><label style="display:flex;gap:9px;align-items:center;font-weight:600;cursor:pointer"><input type="checkbox" id="avok" style="width:18px;height:18px" onchange="document.getElementById('avgo').disabled=!this.checked">J'ai compris</label><button id="avgo" disabled onclick="document.getElementById('avert').remove();setTimeout(tuto,300)" style="margin-top:14px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Continuer</button></div></div><style>#avgo:disabled{opacity:.35;cursor:not-allowed}</style><script>
+/* Guide de démarrage : surligne les zones à cliquer ; « Passer le tutoriel » à chaque étape */
+function tuto(){
+ const A=(D&&D.h)?D.h.features.find(f=>f.properties.c==='a'&&f.properties.k!==undefined):null;
+ const S=[
+  {q:['#modes','#head'],t:'Vue',x:'La carte s\'ouvre sur la <b>commune entière</b>. Les deux autres vues montrent le <b>périmètre des obligations légales de débroussaillement</b> et les <b>priorités de contrôle</b>.'},
+  {q:'#leg',t:'Couleurs',x:'Chaque maison est colorée selon ce que montrent les images. Cliquez sur une catégorie pour n\'afficher qu\'elle.'},
+  {q:'#panel',t:'Fiche d\'une maison',x:'Cliquez sur une maison de la carte : sa fiche s\'ouvre ici, avec ce que montre l\'image, ce qu\'il faut faire et pourquoi.',pre:()=>{const P=document.getElementById('panel');if(P)P.classList.remove('min');if(A)openByK(A.properties.k)}},
+  {q:'.acts .btn.dark',t:'Courrier',x:'Le document de deux pages pour le propriétaire, prêt à imprimer ou à envoyer. Les champs surlignés en jaune sont complétés par la mairie.'},
+  {q:'#tabs',t:'Résumé, liste, courriers',x:'Le résumé du quartier, la liste des maisons et les courriers types par situation.'},
+  {q:'#topm',t:'Suivi',x:'Suivi des envois, des contrôles et des relances, et tableau de bord.'},
+  {q:'.msrch',t:'Recherche',x:'Retrouvez une maison par son numéro.'}
+ ];
+ let i=0;const hl=document.createElement('div'),bx=document.createElement('div');
+ hl.style.cssText='position:fixed;z-index:4600;border-radius:10px;box-shadow:0 0 0 3px #ef8a17,0 0 0 9999px rgba(20,24,28,.55);pointer-events:none;transition:all .25s';
+ bx.style.cssText='position:fixed;z-index:4700;background:#fff;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.3);padding:14px 16px;width:min(320px,88vw);font-size:14px;line-height:1.45;color:#1c2126';
+ document.body.append(hl,bx);
+ const end=()=>{hl.remove();bx.remove();window.removeEventListener('resize',show)};
+ function show(){const s=S[i];const e=[].concat(s.q).map(q=>document.querySelector(q)).find(x=>x&&x.offsetParent);if(!e||!e.offsetParent){if(++i<S.length)return show();return end()}
+  const r=e.getBoundingClientRect(),p=6;Object.assign(hl.style,{left:r.left-p+'px',top:r.top-p+'px',width:r.width+2*p+'px',height:r.height+2*p+'px'});
+  bx.innerHTML='<div style="font-size:12px;color:#ef8a17;font-weight:700;margin-bottom:3px">'+(i+1)+' / '+S.length+' · '+s.t+'</div><div>'+s.x+'</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><a href="#" id="tskip" style="color:#5d6670;font-size:13px">Passer le tutoriel</a><button id="tnext" style="border:0;border-radius:8px;background:#1c2126;color:#fff;padding:8px 14px;font-size:14px;cursor:pointer">'+(i<S.length-1?'Suivant':'Terminer')+'</button></div>';
+  const W=bx.offsetWidth,Hh=bx.offsetHeight;let x=r.right+14,y=r.top;
+  if(x+W>innerWidth-8){x=r.left-W-14}if(x<8){x=Math.max(8,Math.min(innerWidth-W-8,r.left));y=r.bottom+14;if(y+Hh>innerHeight-8)y=Math.max(8,r.top-Hh-14)}
+  y=Math.max(8,Math.min(innerHeight-Hh-8,y));bx.style.left=x+'px';bx.style.top=y+'px';
+  document.getElementById('tskip').onclick=ev=>{ev.preventDefault();end()};
+  document.getElementById('tnext').onclick=()=>{if(++i>=S.length)return end();const n=S[i];if(n.pre){n.pre();setTimeout(show,700)}else show()};}
+ window.addEventListener('resize',show);const s0=S[0];if(s0.pre)s0.pre();show();
+}
+</script>
+</body></html>
