@@ -25,176 +25,107 @@
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/nav.css?v=13">
 <style>
-:root{--c-card:#112338;--c-card2:#0C1B2C;--c-line:rgba(255,255,255,.09);--c-or:#E06C34;--c-or2:#F29A63;--c-vert:#3BB98A;--c-rouge:#E5484D;--c-jaune:#F2B84B}
+:root{--c-line:rgba(255,255,255,.09);--c-or:#E06C34;--c-or2:#F29A63;--c-card2:#0C1B2C}
 main{overflow-x:clip}
-.c-sec{padding:clamp(64px,8vw,112px) 0}
+.c-sec{padding:clamp(56px,7vw,96px) 0}
 .c-sec+.c-sec{border-top:1px solid var(--c-line)}
 .c-k{display:inline-block;font:700 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
-.c-h2{font-size:clamp(30px,3.6vw,46px);line-height:1.06;letter-spacing:-.035em;margin:12px 0 0;max-width:22ch}
-.c-lead{color:var(--doux);font-size:clamp(16px,1.4vw,18px);max-width:58ch;margin:18px 0 0}
-
-/* HERO */
-.c-hero{position:relative;padding:clamp(36px,5vw,72px) 0 clamp(48px,6vw,88px)}
-.c-hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:70%;height:120%;background:radial-gradient(closest-side,rgba(224,108,52,.14),transparent);pointer-events:none}
-.c-hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
-.c-hero h1{font-size:clamp(38px,5vw,66px);line-height:1.02;letter-spacing:-.045em;margin:14px 0 0}
+.c-h2{font-size:clamp(26px,3.2vw,40px);line-height:1.08;letter-spacing:-.035em;margin:10px 0 0;max-width:24ch}
+.c-lead{color:var(--doux);font-size:clamp(15.5px,1.4vw,18px);max-width:56ch;margin:14px 0 0}
+.c-hero{position:relative;padding:clamp(36px,5vw,72px) 0 clamp(28px,3vw,40px)}
+.c-hero::before{content:"";position:absolute;inset:-30% -10% auto auto;width:60%;height:140%;background:radial-gradient(closest-side,rgba(224,108,52,.13),transparent);pointer-events:none}
+.c-hero .wrap{position:relative}
+.c-hero h1{font-size:clamp(34px,5vw,64px);line-height:1.03;letter-spacing:-.045em;margin:12px 0 0;max-width:17ch}
 .c-hero h1 em{font-style:normal;color:var(--c-or2)}
-.c-hero p.c-lead{margin-top:22px}
-.c-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.c-note{margin:14px 0 0;color:var(--faible);font-size:13.5px}
-.c-ariane{font-size:13px;color:var(--faible)}.c-ariane a{color:var(--doux);text-decoration:none}.c-ariane span{margin:0 8px}
-
-/* ILLUSTRATION */
-.c-ill{position:relative;background:linear-gradient(180deg,#0F2236,#0B1A2A);border:1px solid var(--c-line);border-radius:14px;padding:14px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
-.c-ill svg{width:100%;height:auto}
-.c-ill-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 12px;font:600 12px/1 var(--mono);color:var(--doux);letter-spacing:.06em}
-.c-ill-bar b{color:#fff;font-weight:700}
-.c-ill-leg{display:flex;flex-wrap:wrap;gap:8px 18px;padding:12px 6px 2px;font-size:12.5px;color:var(--doux)}
-.c-ill-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:-1px}
-.c-ill-cap{position:absolute;right:14px;bottom:-26px;font:500 11.5px var(--mono);color:var(--faible)}
-
-/* DEVISE + BANDEAU */
-.devise{margin:0;padding:0 0 12px;font:700 13px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c-or)}
-/* CHIFFRES */
-.c-chiffres{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--c-line);border-radius:12px;overflow:hidden;margin-top:clamp(48px,6vw,72px)}
-.c-chiffres div{padding:26px 24px;background:var(--c-card2)}
-.c-chiffres div+div{border-left:1px solid var(--c-line)}
-.c-chiffres b{display:block;font:600 clamp(30px,3vw,40px)/1 var(--serif);letter-spacing:-.03em;color:#fff}
-.c-chiffres span{display:block;margin-top:10px;font-size:14px;color:var(--doux);line-height:1.45}
-
-/* FICHE (maquette) */
-.c-duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:center}
-.c-liste{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:18px}
-.c-liste li{display:grid;grid-template-columns:34px 1fr;gap:14px}
-.c-liste .n{align-self:start;height:34px;font:700 13px/34px var(--mono);color:var(--c-or);border:1px solid rgba(224,108,52,.4);border-radius:8px;text-align:center}
-.c-liste b{display:block;font-size:17px;color:#fff}
-.c-liste span{color:var(--doux);font-size:15px}
-.c-app{background:var(--c-card);border:1px solid var(--c-line);border-radius:14px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
-.c-app-top{display:flex;gap:7px;padding:12px 14px;border-bottom:1px solid var(--c-line);background:var(--c-card2)}
-.c-app-top i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14)}
-.c-app-top span{margin-left:10px;font:600 12px/10px var(--mono);color:var(--faible)}
-.c-app-b{padding:22px}
-.c-app h3{margin:0;font:600 19px/1.2 var(--serif);letter-spacing:-.02em}
-.c-app .sub{margin-top:4px;font-size:13px;color:var(--faible)}
-.c-badge{display:inline-flex;white-space:nowrap;flex-shrink:0;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;font:700 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase}
-.b-rouge{background:rgba(229,72,77,.14);color:#FF8A8D}.b-vert{background:rgba(59,185,138,.14);color:#6FDDB2}.b-jaune{background:rgba(242,184,75,.14);color:#F6CD7E}
-.c-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 0;border-top:1px solid var(--c-line)}
-.c-row:first-of-type{margin-top:16px}
-.c-row b{display:block;font-size:14.5px;font-weight:600}
-.c-row small{display:block;color:var(--faible);font-size:12.5px;margin-top:2px}
-.c-app-foot{display:flex;gap:10px;margin-top:18px}
-.c-mini{flex:1;text-align:center;padding:11px;border-radius:7px;font:600 13.5px var(--sans);border:1px solid var(--c-line);color:var(--doux)}
-.c-mini.p{background:#C4521C;border-color:#C4521C;color:#fff}
-
-.c-shot{margin:40px 0 0;background:var(--c-card2);border:1px solid var(--c-line);border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8)}
-.c-shot img{display:block;width:100%;height:auto}
-.c-shot figcaption{padding:12px 16px;border-top:1px solid var(--c-line);font-size:13px;color:var(--faible)}
-.c-pts{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
-.c-pts li{display:grid;grid-template-columns:34px 1fr;gap:14px}
-.c-pts .n{align-self:start;height:34px;font:700 13px/34px var(--mono);color:var(--c-or);border:1px solid rgba(224,108,52,.4);border-radius:8px;text-align:center}
-.c-pts b{display:block;font-size:17px;color:#fff}.c-pts span{color:var(--doux);font-size:15px}
-@media (max-width:980px){.c-pts{grid-template-columns:1fr}}
-/* TROIS PARTIES */
-.c-trois{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
-.c-carte{position:relative;background:var(--c-card2);border:1px solid var(--c-line);border-radius:12px;padding:28px 26px 26px;display:flex;flex-direction:column}
-.c-carte .ico{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;background:rgba(224,108,52,.12);color:var(--c-or)}
-.c-carte h3{margin:20px 0 0;font:600 21px/1.2 var(--serif);letter-spacing:-.02em}
-.c-carte p{margin:10px 0 0;color:var(--doux);font-size:15px}
-.c-carte ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px;color:#D7DEE6}
-.c-carte li{padding-left:18px;position:relative}.c-carte li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:2px;background:var(--c-or)}
-.c-carte a{margin-top:auto;padding-top:22px;color:#fff;font-weight:600;font-size:14.5px;text-decoration:none}
-.c-carte a:hover{color:var(--c-or2)}
-
-/* ÉTAPES */
-.c-etapes{list-style:none;margin:48px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:e}
-.c-etapes li{position:relative;padding:0 26px 0 0;counter-increment:e}
-.c-etapes li::before{content:"0" counter(e);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--nuit);border:1px solid var(--c-or);color:var(--c-or);font:700 14px var(--mono);position:relative;z-index:1}
-.c-etapes li::after{content:"";position:absolute;left:46px;right:0;top:23px;height:1px;background:linear-gradient(90deg,rgba(224,108,52,.6),rgba(224,108,52,.1))}
-.c-etapes li:last-child::after{display:none}
-.c-etapes h3{margin:20px 0 0;font:600 18px/1.25 var(--serif);letter-spacing:-.015em}
-.c-etapes p{margin:8px 0 0;color:var(--doux);font-size:14.5px}
-
-/* CRISE */
-.c-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px;background:var(--c-card2)}
-.c-col h4{margin:0 0 10px;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faible);display:flex;justify-content:space-between}
-.c-col h4 em{font-style:normal;color:#fff}
-.c-tk{background:var(--c-card);border:1px solid var(--c-line);border-left:3px solid var(--c-jaune);border-radius:8px;padding:10px 11px;margin-bottom:8px;font-size:13px}
-.c-tk.r{border-left-color:var(--c-rouge)}.c-tk.v{border-left-color:var(--c-vert)}
-.c-tk b{display:block;font-weight:600}
-.c-tk small{color:var(--faible);font-size:11.5px}
-.c-log{padding:12px 16px 16px;border-top:1px solid var(--c-line);font:500 12px/1.9 var(--mono);color:var(--doux)}
-.c-log b{color:var(--c-or2);font-weight:600;margin-right:10px}
-
-/* FAQ + FINAL */
-.c-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,80px)}
-.c-faq .faq{max-width:none}
-.c-faq .faq p{color:var(--doux)}
-.c-final{position:relative;overflow:hidden;border:1px solid rgba(224,108,52,.35);border-radius:16px;padding:clamp(32px,4vw,56px);background:radial-gradient(120% 140% at 100% 0,rgba(224,108,52,.22),transparent 55%),var(--c-card2);display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:center}
-.c-final h2{font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.035em}
-.c-final p{color:var(--doux);margin:14px 0 0}
-.c-final .c-cta{margin:0;justify-content:flex-end}
-
-@media (max-width:980px){
- .c-hero .wrap,.c-duo,.c-faq,.c-final{grid-template-columns:1fr}
- .c-trois{grid-template-columns:1fr}
- .c-chiffres{grid-template-columns:1fr 1fr}.c-chiffres div:nth-child(3){border-left:0}.c-chiffres div:nth-child(n+3){border-top:1px solid var(--c-line)}
- .c-etapes{grid-template-columns:1fr 1fr;row-gap:36px}.c-etapes li:nth-child(2)::after{display:none}
- .c-final .c-cta{justify-content:flex-start}
- .c-duo .c-app{order:2}
-}
-@media (max-width:560px){
- .c-etapes{grid-template-columns:1fr}.c-etapes li::after{display:none}
- .c-cols{grid-template-columns:1fr}
- .c-chiffres div{padding:20px 18px}
- .c-cta .btn{width:100%}
-}
-
-.vw{position:relative;margin-top:36px;background:#F4F6F8;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans);user-select:none}
-.vw-top{display:flex;align-items:center;gap:18px;padding:10px 14px;background:#fff;border-bottom:1px solid #E3E7EB}
+.c-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.c-note{margin:12px 0 0;color:var(--faible);font-size:13.5px}
+/* carte */
+.vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
+.vw-top{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #E3E7EB}
 .vw-brand small{display:block;font-size:10.5px;letter-spacing:.08em;color:#7A8794}.vw-brand b{font-size:15px}
-.vw-tabs{display:flex;gap:2px;background:#EEF1F4;border-radius:8px;padding:3px}
-.vw-tabs span{padding:6px 12px;border-radius:6px;font-size:13px;color:#56636F}
-.vw-tabs .on{background:#fff;color:#1C2733;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.vw-kpi{margin-left:auto;display:flex;white-space:nowrap;align-items:baseline;gap:8px}.vw-kpi b{font:700 24px/1 var(--sans);color:#C62828}.vw-kpi span{font-size:12.5px;color:#56636F}
-.vw-body{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);height:520px}
-.vw-map{position:relative;background:#DCE5D6;overflow:hidden}
-.vw-map svg{position:absolute;inset:0;width:100%;height:100%}
-.vw-chips{position:absolute;left:12px;top:12px;z-index:2;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 24px)}
-.vw-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #DDE2E7;font-size:12.5px;cursor:pointer;color:#1C2733}
-.vw-chip i{width:10px;height:10px;border-radius:3px}
-.vw-chip b{font-weight:700}
-.vw-chip.off{opacity:.45}
-.vw-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:#1C2733;color:#fff;padding:7px 13px;border-radius:999px;font-size:12.5px;pointer-events:none;transition:opacity .3s}
-.vw-h{cursor:pointer;transition:opacity .2s}
-.vw-h rect{stroke:#fff;stroke-width:1.5}
-.vw-h:hover rect{stroke:#1C2733;stroke-width:2.5}
-.vw-h.sel rect{stroke:#1C2733;stroke-width:3}
-.vw-h.hide{opacity:.12;pointer-events:none}
-.vw-side{background:#fff;border-left:1px solid #E3E7EB;padding:18px;overflow:hidden;display:flex;flex-direction:column}
+.vw-kpi{margin-left:auto;display:flex;align-items:baseline;gap:8px;white-space:nowrap}.vw-kpi b{font:700 22px/1 var(--sans);color:#C62828}.vw-kpi span{font-size:12.5px;color:#56636F}
+.vw-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(290px,1fr)}
+.vw-map{position:relative;background:#7d8c5c;aspect-ratio:1280/840}
+.vw-map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vw-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid #E3E7EB;background:#F7F9FA}
+.vw-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid #DDE2E7;font:500 12.5px var(--sans);cursor:pointer;color:#1C2733}
+.vw-chip i{width:10px;height:10px;border-radius:3px}.vw-chip b{font-weight:700}.vw-chip.off{opacity:.4}
+.vw-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(28,39,51,.92);color:#fff;padding:7px 13px;border-radius:999px;font-size:12.5px;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.vw-h{cursor:pointer}
+.vw-h .hit{fill:transparent}
+.vw-h .shape{stroke-width:3;fill-opacity:.38;transition:fill-opacity .15s}
+.vw-h:hover .shape{fill-opacity:.65}
+.vw-h.sel .shape{stroke:#fff;stroke-width:4;fill-opacity:.75}
+.vw-h.hide{display:none}
+.vw-side{border-left:1px solid #E3E7EB;padding:18px;display:flex;flex-direction:column;min-height:0}
 .vw-side h3{margin:8px 0 2px;font:700 19px/1.2 var(--sans);letter-spacing:-.01em;color:#1C2733}
 .vw-sub{font-size:12.5px;color:#7A8794}
 .vw-st{display:inline-block;padding:4px 10px;border-radius:999px;color:#fff;font-size:12px;font-weight:700}
-.vw-c{display:grid;grid-template-columns:6px 1fr;gap:12px;padding:11px 12px;border:1px solid #E6EAEE;border-radius:9px;margin-top:10px}
-.vw-c i{border-radius:3px}
-.vw-c b{display:block;font-size:14px}.vw-c span{display:block;font-size:12.5px;color:#56636F}.vw-c em{font-style:normal;font-size:12.5px;color:#1C2733}
+.vw-c{display:grid;grid-template-columns:5px 1fr;gap:12px;padding:10px 12px;border:1px solid #E6EAEE;border-radius:9px;margin-top:9px}
+.vw-c i{border-radius:3px}.vw-c b{display:block;font-size:14px}.vw-c span{display:block;font-size:12.5px;color:#56636F}.vw-c em{font-style:normal;font-size:12.5px}
 .vw-btns{margin-top:auto;display:grid;gap:8px;padding-top:14px}
 .vw-b{border:1px solid #D5DBE1;background:#fff;color:#1C2733;border-radius:8px;padding:10px;font:600 13.5px var(--sans);cursor:pointer}
 .vw-b.p{background:#1C2733;border-color:#1C2733;color:#fff}
-.vw-b:hover{filter:brightness(.96)}
-.vw-empty{margin:auto 0;color:#56636F;font-size:14px}
-.vw-empty b{display:block;font-size:17px;color:#1C2733;margin-bottom:6px}
-.vw-sum{display:grid;gap:8px;margin-top:14px}
-.vw-sum div{display:flex;justify-content:space-between;padding:9px 12px;border-radius:8px;background:#F4F6F8;font-size:13.5px}
+.vw-empty{margin:14px 0 0;color:#56636F;font-size:14px}.vw-empty b{display:block;font-size:16px;color:#1C2733;margin-bottom:4px}
+.vw-sum{display:grid;gap:7px;margin-top:14px}.vw-sum div{display:flex;justify-content:space-between;padding:9px 12px;border-radius:8px;background:#F4F6F8;font-size:13.5px}
 .vw-toast{margin-top:10px;padding:9px 12px;border-radius:8px;background:#E7F5EE;color:#1E6B47;font-size:13px}
-.vw-modal{position:absolute;inset:0;background:rgba(14,30,48,.55);display:grid;place-items:center;z-index:5;padding:16px}
+.vw-modal{position:absolute;inset:0;background:rgba(14,30,48,.55);display:grid;place-items:center;z-index:5;padding:14px}
 .vw-modal[hidden]{display:none}
-.vw-letter{position:relative;background:#fff;width:min(560px,100%);max-height:100%;overflow:auto;border-radius:10px;padding:28px 30px;font:400 13.5px/1.55 Georgia,serif;color:#222;box-shadow:0 30px 60px rgba(0,0,0,.35)}
-.vw-letter h4{font:700 14px/1.4 Georgia,serif;margin:14px 0 8px}
-.vw-letter ol{padding-left:18px;margin:6px 0}
-.vw-letter .hl{background:#FFF3B0;padding:0 3px}
+.vw-letter{position:relative;background:#fff;width:min(560px,100%);max-height:100%;overflow:auto;border-radius:10px;padding:26px 28px;font:400 13.5px/1.55 Georgia,serif;color:#222;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.vw-letter h4{font:700 14px/1.4 Georgia,serif;margin:12px 0 6px}.vw-letter ol{padding-left:18px;margin:6px 0}.vw-letter .hl{background:#FFF3B0;padding:0 3px}
 .vw-x{position:absolute;right:10px;top:8px;border:0;background:none;font-size:18px;cursor:pointer;color:#56636F}
-@media (max-width:860px){.vw-body{grid-template-columns:1fr;height:auto}.vw-map{height:340px;padding-top:0}.vw-chips{position:static;padding:10px;background:#fff;max-width:none;border-bottom:1px solid #E3E7EB}.vw-chips+svg{top:auto;height:290px;bottom:0}.vw-map{height:auto;min-height:0}.vw-map svg{position:relative;display:block;height:290px}.vw-kpi span{display:none}.vw-side{border-left:0;border-top:1px solid #E3E7EB;min-height:330px}.vw-tabs{display:none}}
+.vw-src{position:absolute;right:8px;bottom:6px;font:500 10.5px var(--sans);color:rgba(255,255,255,.85);text-shadow:0 1px 2px rgba(0,0,0,.6);pointer-events:none}
+/* étapes */
+.c-steps{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:e}
+.c-steps li{counter-increment:e;border-top:2px solid var(--c-or);padding-top:16px}
+.c-steps li::before{content:"0" counter(e);font:700 13px var(--mono);color:var(--c-or)}
+.c-steps h3{margin:8px 0 0;font:600 19px/1.25 var(--serif);letter-spacing:-.015em}
+.c-steps p{margin:6px 0 0;color:var(--doux);font-size:15px}
+.c-chiffres{display:flex;flex-wrap:wrap;gap:12px 40px;margin-top:36px;padding-top:24px;border-top:1px solid var(--c-line)}
+.c-chiffres div{display:flex;align-items:baseline;gap:10px}
+.c-chiffres b{font:600 28px/1 var(--serif);letter-spacing:-.03em;color:#fff}
+.c-chiffres span{font-size:14px;color:var(--doux)}
+/* crise */
+.c-duo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.c-shot{margin:0;border:1px solid var(--c-line);border-radius:12px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.c-shot img{display:block;width:100%;height:auto}
+.c-shot figcaption{padding:10px 14px;font-size:12.5px;color:var(--faible);background:var(--c-card2)}
+/* faq + final */
+.c-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px)}
+.c-faq .faq{max-width:none}.c-faq .faq p{color:var(--doux)}
+.c-final{border:1px solid rgba(224,108,52,.35);border-radius:16px;padding:clamp(28px,4vw,52px);background:radial-gradient(120% 140% at 100% 0,rgba(224,108,52,.2),transparent 55%),var(--c-card2);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.c-final h2{font-size:clamp(24px,2.6vw,34px);line-height:1.1;letter-spacing:-.03em;max-width:20ch}
+.c-final .c-cta{margin:0}
+@media (max-width:900px){
+ .vw-body{grid-template-columns:1fr}.vw-side{border-left:0;border-top:1px solid #E3E7EB}
+ .vw-map{aspect-ratio:620/680}
+ .vw-kpi span{display:none}
+ .c-steps{grid-template-columns:1fr;gap:20px}
+ .c-duo,.c-faq{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+ .c-cta .btn{width:100%}
+ .c-hero h1{max-width:none}
+ .vw-chip{font-size:12px;padding:5px 8px}
+ .c-chiffres{gap:14px 24px}.c-chiffres b{font-size:24px}
+}
 
+/* animations */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.vu{opacity:1;transform:none}
+.vw-h .shape{opacity:0;transition:opacity .4s ease,fill-opacity .15s}
+.vw.on .vw-h .shape{opacity:1}
+.vw-h.pulse .shape{animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{stroke-width:3}50%{stroke-width:9}}
+.vw-side>*{animation:fin .35s ease}
+@keyframes fin{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.vw-side>*{animation-name:fup}@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+@media (max-width:900px){
+ .c-steps{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-right:calc(-1*var(--gut));padding-right:var(--gut);scrollbar-width:none}
+ .c-steps::-webkit-scrollbar{display:none}
+ .c-steps li{flex:0 0 78%;scroll-snap-align:start;background:var(--c-card2);border:1px solid var(--c-line);border-top:2px solid var(--c-or);border-radius:10px;padding:16px}
+}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.vw-h .shape{opacity:1}.vw-h.pulse .shape,.vw-side>*{animation:none}}
 </style>
 </head>
 <body>
@@ -212,168 +143,87 @@ main{overflow-x:clip}
 
 <section class="c-hero">
   <div class="wrap">
-    <div>
-      <span class="c-k">Pour les mairies</span>
-      <h1 style="margin-top:14px">Le débroussaillement de chaque maison de votre commune, <em>vérifié depuis la mairie.</em></h1>
-      <p class="c-lead">Sans faire le tour des propriétés, vous voyez quelles maisons ne respectent pas l'obligation de débroussaillement, vous envoyez les courriers et vous gardez une trace datée de chaque étape. L'analyse utilise les relevés aériens publics de l'IGN.</p>
-      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander une présentation en mairie</a></div>
-      <p class="c-note">Démonstration sur deux communes réelles. Code d'accès sur demande. Rien à installer.</p>
-    </div>
-    <figure class="c-ill" style="margin:0">
-      <div class="c-ill-bar"><span><b>Construction n° 0412</b> · exemple</span><span>Relevé aérien IGN</span></div>
-      <svg viewBox="0 0 560 400" role="img" aria-label="Schéma : une maison, la zone des 50 mètres à débroussailler, la végétation haute en orange et des arbres trop proches entourés en rouge.">
-        <defs>
-          <pattern id="hach" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="rgba(224,108,52,.16)"/><line x1="0" y1="0" x2="0" y2="7" stroke="rgba(242,154,99,.55)" stroke-width="2"/></pattern>
-          <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="rgba(255,255,255,.035)"/></pattern>
-          <radialGradient id="zone" r=".5"><stop offset=".7" stop-color="rgba(224,108,52,0)"/><stop offset="1" stop-color="rgba(224,108,52,.10)"/></radialGradient>
-        </defs>
-        <rect width="560" height="400" fill="url(#grid)"/>
-        <!-- forêt en bordure -->
-        <g fill="#1E4A3A" opacity=".9">
-          <circle cx="30" cy="40" r="26"/><circle cx="70" cy="22" r="22"/><circle cx="18" cy="92" r="24"/><circle cx="58" cy="70" r="20"/><circle cx="24" cy="150" r="22"/><circle cx="106" cy="30" r="18"/>
-          <circle cx="40" cy="210" r="20"/><circle cx="16" cy="262" r="22"/><circle cx="50" cy="318" r="24"/><circle cx="20" cy="372" r="22"/><circle cx="84" cy="384" r="20"/>
-        </g>
-        <!-- parcelle -->
-        <path d="M150 58 L470 70 L486 338 L140 350 Z" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.18)" stroke-dasharray="2 4"/>
-        <!-- zone 50 m -->
-        <circle cx="318" cy="206" r="168" fill="url(#zone)" stroke="#E06C34" stroke-width="1.5" stroke-dasharray="7 6"/>
-        <!-- végétation haute -->
-        <path d="M168 132 C186 104 232 98 246 122 C258 146 226 172 196 170 C176 168 160 154 168 132Z" fill="url(#hach)" stroke="rgba(242,154,99,.8)"/>
-        <path d="M352 300 C380 286 432 290 438 316 C444 342 398 352 370 344 C350 338 338 312 352 300Z" fill="url(#hach)" stroke="rgba(242,154,99,.8)"/>
-        <path d="M174 262 C184 248 210 250 214 266 C218 282 196 292 182 286 C172 282 168 272 174 262Z" fill="url(#hach)" stroke="rgba(242,154,99,.8)"/>
-        <!-- arbres isolés -->
-        <g fill="rgba(59,185,138,.22)" stroke="#3BB98A" stroke-width="1.5">
-          <circle cx="430" cy="118" r="17"/><circle cx="452" cy="210" r="15"/><circle cx="230" cy="322" r="14"/>
-        </g>
-        <!-- arbres trop proches -->
-        <g fill="rgba(229,72,77,.18)" stroke="#E5484D" stroke-width="1.5">
-          <circle cx="250" cy="248" r="16"/><circle cx="276" cy="262" r="14"/><circle cx="256" cy="276" r="13"/>
-          <circle cx="386" cy="148" r="15"/><circle cx="404" cy="166" r="13"/>
-        </g>
-        <!-- maison -->
-        <g>
-          <rect x="292" y="182" width="58" height="46" rx="3" fill="#E9EEF3"/>
-          <path d="M292 205 H350 M321 182 V228" stroke="#9AA6B2" stroke-width="1.2"/>
-        </g>
-        <!-- accès -->
-        <path d="M486 214 C440 214 400 210 350 208" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="7" stroke-linecap="round" opacity=".35"/>
-        <!-- étiquettes -->
-        <g font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="700">
-          <line x1="318" y1="38" x2="318" y2="206" stroke="rgba(224,108,52,.5)" stroke-dasharray="2 3"/>
-          <rect x="331" y="94" width="54" height="22" rx="4" fill="#E06C34"/><text x="358" y="109" text-anchor="middle" fill="#0E1E30">50 m</text>
-          <rect x="146" y="86" width="132" height="22" rx="4" fill="#0E1E30" stroke="rgba(242,154,99,.8)"/><text x="212" y="101" text-anchor="middle" fill="#F29A63">végétation 1,8 m</text>
-          <rect x="176" y="222" width="116" height="22" rx="4" fill="#0E1E30" stroke="#E5484D"/><text x="234" y="237" text-anchor="middle" fill="#FF8A8D">3 arbres serrés</text>
-        </g>
-      </svg>
-      <div class="c-ill-leg"><span><i style="background:#E06C34"></i>Zone des 50 m</span><span><i style="background:repeating-linear-gradient(45deg,#F29A63 0 2px,transparent 2px 5px)"></i>Végétation trop haute</span><span><i style="background:#E5484D"></i>Arbres trop proches</span><span><i style="background:#3BB98A"></i>Arbres isolés</span></div>
-      <figcaption class="c-ill-cap">Schéma d'illustration, construction fictive</figcaption>
-    </figure>
+    <span class="c-k">Pour les mairies</span>
+    <h1>Le débroussaillement de chaque maison, <em>vérifié depuis la mairie.</em></h1>
+    <p class="c-lead">VB OLD repère, à partir des relevés aériens de l'IGN, les maisons où le débroussaillement n'est pas fait. Vous validez les courriers, chaque étape est datée.</p>
+    <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander une présentation</a></div>
+    <p class="c-note">Démonstration complète sur deux communes réelles, code d'accès sur demande. Rien à installer.</p>
   </div>
 </section>
 
-<div class="wrap" style="border-bottom:1px solid var(--c-line)"><p class="devise">Détection et traçabilité</p></div>
-
-<section class="c-sec" style="padding-top:clamp(48px,6vw,80px)">
+<section id="essayer" style="padding-bottom:clamp(56px,7vw,96px)">
   <div class="wrap">
-    <span class="c-k">Les enjeux</span>
-    <h2 class="c-h2">Une obligation qui s'étend, peu de moyens pour la contrôler.</h2>
-    <p class="c-lead">En Seine-et-Marne, l'arrêté du 13 avril 2026 fait entrer de nouvelles communes dans l'obligation de débroussaillement. C'est au maire de veiller à son respect, souvent sans agent disponible pour faire le tour de chaque propriété.</p>
-    <div class="c-chiffres">
-      <div><b>1 298</b><span>constructions analysées à Samoreau (77)</span></div>
-      <div><b>3 817</b><span>constructions analysées au Porge (33)</span></div>
-      <div><b>22 655</b><span>arbres repérés autour des maisons de Samoreau</span></div>
-      <div><b>0</b><span>visite nécessaire pour la première analyse de la commune</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="c-sec">
-  <div class="wrap">
-    <span class="c-k">Ce que voit la mairie</span>
+    <span class="c-k">Essayez</span>
     <h2 class="c-h2">Cliquez sur une maison.</h2>
-    <p class="c-lead">Exemple sur une commune fictive, présenté comme dans l'outil : les constats de chaque maison et le courrier prêt à valider.</p>
     <div class="vw" id="vw">
       <div class="vw-top">
-        <div class="vw-brand"><small>VB OLD</small><b>Commune exemple</b></div>
-        <div class="vw-tabs" role="tablist"><span class="on">Feux de forêt</span><span>Tempête</span><span>Inondation</span></div>
-        <div class="vw-kpi"><b id="vw-pct">–</b><span>sans observation</span></div>
+        <div class="vw-brand"><small>VB OLD · feux de forêt</small><b>Commune exemple</b></div>
+        <div class="vw-kpi"><b id="vw-pct">–</b><span>des maisons sans observation</span></div>
       </div>
+      <div class="vw-chips" id="vw-chips"></div>
       <div class="vw-body">
         <div class="vw-map">
-          <div class="vw-chips" id="vw-chips"></div>
-          <svg id="vw-svg" viewBox="0 0 640 420" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Carte d'une commune fictive. Chaque maison est cliquable."></svg>
-          <div class="vw-hint" id="vw-hint">Cliquez sur une maison</div>
+          <svg id="vw-svg" viewBox="0 0 1280 840" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Vue aérienne d'un village fictif. Chaque maison est cliquable.">
+            <image href="/collectivites/img/village.jpg" x="0" y="0" width="1280" height="840" preserveAspectRatio="none"/>
+          </svg>
+          <div class="vw-hint" id="vw-hint">Cliquez sur une maison colorée</div>
+          <span class="vw-src">Vue aérienne fictive</span>
         </div>
         <div class="vw-side" id="vw-side" aria-live="polite"></div>
       </div>
       <div class="vw-modal" id="vw-modal" hidden>
-        <div class="vw-letter" role="dialog" aria-modal="true" aria-labelledby="vw-l-t">
+        <div class="vw-letter" role="dialog" aria-modal="true" aria-label="Courrier">
           <button class="vw-x" type="button" id="vw-x" aria-label="Fermer">✕</button>
           <div id="vw-letter"></div>
         </div>
       </div>
     </div>
-    <p class="c-note" style="margin-top:12px">Commune et données fictives, pour la démonstration. Dans l'outil, chaque constat est daté et calculé à partir des relevés aériens de l'IGN.</p>
-    <ul class="c-pts">
-      <li><span class="n">01</span><div><b>Les écarts mesurés</b><span>Végétation trop haute dans les 50 m, arbres trop proches de la maison ou entre eux, accès.</span></div></li>
-      <li><span class="n">02</span><div><b>Les règles du département</b><span>Les distances et hauteurs de l'arrêté préfectoral de votre département sont appliquées automatiquement.</span></div></li>
-      <li><span class="n">03</span><div><b>Le courrier prêt</b><span>Information, rappel ou mise en demeure. Rien ne part sans votre validation.</span></div></li>
-    </ul>
+    <p class="c-note">Village et données fictifs. Dans l'outil, chaque constat est daté et calculé à partir des relevés aériens de l'IGN.</p>
   </div>
 </section>
 
-<section class="c-sec" id="offre">
-  <div class="wrap">
-    <span class="c-k">Ce que fait l'outil</span>
-    <h2 class="c-h2">Trois usages, une seule carte de la commune.</h2>
-    <div class="c-trois">
-      <article class="c-carte"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg></span><h3>État du débroussaillement</h3><p>Chaque construction analysée, classée de la plus urgente à la moins urgente.</p><ul><li>Relevés aériens et photos de l'IGN, datés</li><li>Règles nationales et départementales</li></ul><a href="/OLD-demo/">Voir la démo →</a></article>
-      <article class="c-carte"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><h3>Courriers et relances</h3><p>Un courrier prêt pour chaque propriétaire concerné, et le suivi des réponses.</p><ul><li>Information, rappel, mise en demeure</li><li>Envoi après validation du maire</li></ul><a href="/OLD-demo/">Voir la démo →</a></article>
-      <article class="c-carte"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg></span><h3>Cellule de crise</h3><p>Le jour d'un feu ou d'une tempête : signalements des habitants, actions en cours, main courante.</p><ul><li>Main courante horodatée, exportable</li><li>Compatible avec votre plan communal de sauvegarde</li></ul><a href="/OLD-demo/">Voir la démo →</a></article>
+<section class="c-sec">
+  <div class="rv wrap">
+    <span class="c-k">Comment ça marche</span>
+    <h2 class="c-h2">Trois étapes, sans visite préalable.</h2>
+    <ol class="c-steps">
+      <li><h3>Nous analysons la commune</h3><p>Chaque maison, à partir des relevés aériens publics de l'IGN et des règles de votre département.</p></li>
+      <li><h3>Vous validez</h3><p>Vous consultez les écarts et choisissez les courriers. Rien ne part sans votre accord.</p></li>
+      <li><h3>Tout est daté</h3><p>Constats, courriers et relances sont conservés, et servent aussi le jour d'une crise.</p></li>
+    </ol>
+    <div class="c-chiffres">
+      <div><b>1 298</b><span>maisons analysées à Samoreau (77)</span></div>
+      <div><b>3 817</b><span>au Porge (33)</span></div>
     </div>
   </div>
 </section>
 
 <section class="c-sec">
-  <div class="wrap">
-    <span class="c-k">Comment ça marche</span>
-    <h2 class="c-h2">De l'analyse au courrier, en quatre étapes.</h2>
-    <ol class="c-etapes">
-      <li><h3>Analyse de la commune</h3><p>Nous analysons chaque construction à partir des relevés publics de l'IGN, sans visite sur place.</p></li>
-      <li><h3>Vous consultez</h3><p>Carte, fiche par maison et liste des écarts triée par urgence.</p></li>
-      <li><h3>Vous validez</h3><p>Vous choisissez les courriers et les relances. Une vérification sur place reste possible avant toute mise en demeure.</p></li>
-      <li><h3>Tout est daté</h3><p>Constats, courriers et réponses sont conservés. La même base sert le jour d'une crise.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="c-sec">
-  <div class="wrap c-duo">
-    <figure class="c-shot" style="margin:0">
-      <img src="/collectivites/img/crise.jpg" width="1600" height="937" loading="lazy" alt="Capture de la cellule de crise VB OLD : incidents classés en colonnes (à classer, urgent, important, normal), météo locale et carte des incidents.">
-      <figcaption>Capture réelle de la démonstration, exercice tempête avec incidents fictifs.</figcaption>
+  <div class="rv wrap c-duo">
+    <figure class="c-shot">
+      <picture><source media="(max-width:900px)" srcset="/collectivites/img/crise-m.jpg"><img src="/collectivites/img/crise.jpg" width="1600" height="937" loading="lazy" alt="Capture de la cellule de crise VB OLD : incidents classés en colonnes, météo locale et carte des incidents."></picture>
+      <figcaption>Capture de la démonstration, exercice tempête avec incidents fictifs.</figcaption>
     </figure>
     <div>
       <span class="c-k">Le jour de la crise</span>
-      <h2 class="c-h2">Les signalements des habitants et vos décisions au même endroit.</h2>
-      <p class="c-lead">Les habitants signalent un problème avec une photo depuis leur téléphone. La mairie classe, envoie une équipe et suit l'avancement. Chaque action est horodatée dans la main courante, exportable en PDF.</p>
-      <p class="c-lead" style="margin-top:12px">Votre plan communal de sauvegarde reste celui de la commune : l'outil sert à l'appliquer.</p>
+      <h2 class="c-h2">Signalements des habitants et décisions au même endroit.</h2>
+      <p class="c-lead">Les habitants envoient une photo depuis leur téléphone. La mairie classe, envoie une équipe et suit l'avancement. Tout est horodaté. Votre plan communal de sauvegarde reste le vôtre.</p>
     </div>
   </div>
 </section>
 
 <section class="c-sec">
-  <div class="wrap c-faq">
-    <div><span class="c-k">Questions fréquentes</span><h2 class="c-h2">Les questions des élus.</h2></div>
-    <div class="faq"><details><summary>Le constat remplace-t-il une visite ?</summary><p>Non. C'est un constat d'aide à la décision, daté, établi à partir d'images et de mesures. Il indique où regarder en priorité. Les décisions et les mises en demeure relèvent du maire.</p></details><details><summary>Qui voit les données ?</summary><p>Les constats maison par maison ne sont visibles que par la mairie. Aucun nom de propriétaire n'est stocké dans la démonstration.</p></details><details><summary>Faut-il changer notre plan communal de sauvegarde ?</summary><p>Non. Le PCS reste celui de la commune. La cellule de crise fournit la carte, les signalements et la main courante ; elle ne modifie pas l'organisation prévue.</p></details><details><summary>Que faut-il à la mairie pour commencer ?</summary><p>Rien à installer. Nous analysons la commune à partir des données publiques, puis la mairie consulte les résultats depuis un navigateur.</p></details><details><summary>Comment tester la démonstration ?</summary><p>Demandez un code d'accès par le formulaire de contact. La démonstration porte sur deux communes, en Seine-et-Marne et en Gironde.</p></details></div>
+  <div class="rv wrap c-faq">
+    <div><span class="c-k">Questions</span><h2 class="c-h2">Les questions des élus.</h2></div>
+    <div class="faq"><details><summary>Le constat remplace-t-il une visite ?</summary><p>Non. C'est un constat d'aide à la décision, daté, établi à partir d'images. Il indique où regarder en priorité. Les décisions relèvent du maire.</p></details><details><summary>Qui voit les données ?</summary><p>Les constats maison par maison ne sont visibles que par la mairie.</p></details><details><summary>Que faut-il pour commencer ?</summary><p>Rien à installer. Nous analysons la commune, la mairie consulte les résultats depuis un navigateur.</p></details></div>
   </div>
 </section>
 
 <section class="c-sec" style="border-top:0;padding-top:0">
   <div class="wrap">
-    <div class="c-final">
-      <div><span class="c-k">Pour votre commune</span><h2 style="margin-top:12px">Voir l'état du débroussaillement de votre commune.</h2><p>Testez la démonstration, puis demandez l'analyse de votre commune.</p></div>
-      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander l'analyse de ma commune</a></div>
+    <div class="c-final rv">
+      <h2>Voir l'état du débroussaillement de votre commune.</h2>
+      <div class="c-cta"><a class="btn btn-p" href="/OLD-demo/">Accéder à la démonstration</a><a class="btn btn-g" href="/#contact">Demander l'analyse</a></div>
     </div>
   </div>
 </section>
@@ -390,98 +240,79 @@ main{overflow-x:clip}
 </footer>
 <script>
 (function(){
-var S={r:['Débroussaillement à réaliser','#C62828'],o:['À vérifier','#EF8A17'],v:['Sans observation','#2E7D32'],g:['Hors périmètre','#B8BEC4']};
-var H=[
- {x:150,y:92,w:24,h:18,s:'r',n:'01',c:[['r','Branches contre la maison','Arbres à moins de 3 m des murs · 9 m² de feuillage','élaguer, rien à moins de 3 m ni au-dessus du toit'],['r','Broussaille sur le terrain','210 m² dans les 50 m','débroussailler et évacuer']]},
- {x:205,y:70,w:20,h:16,s:'o',n:'02',c:[['o','Broussaille en limite de terrain','40 m² dans les 50 m, en partie chez le voisin','vérifier sur place']]},
- {x:170,y:160,w:26,h:18,s:'r',n:'03',c:[['r','Broussaille sur le terrain','164 m² dans les 50 m','débroussailler et évacuer'],['y','Arbres serrés dans la zone','5 arbres dont les couronnes se touchent','conseil : éclaircir']]},
- {x:230,y:205,w:22,h:16,s:'v',n:'04',c:[]},
- {x:265,y:120,w:24,h:18,s:'o',n:'05',c:[['o','Arbres proches de la maison','1 arbre à 3,5 m des murs','vérifier sur place']]},
- {x:120,y:250,w:22,h:18,s:'r',n:'06',c:[['r','Branches contre la maison','2 arbres touchant le toit','élaguer'],['r','Accès encombré','Chemin d\'accès réduit à 3 m de large','dégager 5 m de large et 5 m de haut']]},
- {x:205,y:290,w:24,h:16,s:'v',n:'07',c:[]},
- {x:300,y:240,w:20,h:16,s:'v',n:'08',c:[]},
- {x:330,y:165,w:24,h:18,s:'v',n:'09',c:[['y','Arbres serrés dans la zone','3 arbres dont les couronnes se touchent','conseil : éclaircir']]},
- {x:285,y:330,w:24,h:18,s:'o',n:'10',c:[['o','Broussaille sur le terrain','30 m² dans les 50 m','vérifier sur place']]},
- {x:420,y:110,w:22,h:16,s:'g',n:'11',c:[]},
- {x:470,y:190,w:26,h:18,s:'g',n:'12',c:[]},
- {x:440,y:290,w:22,h:16,s:'g',n:'13',c:[]},
- {x:530,y:250,w:24,h:18,s:'g',n:'14',c:[]},
- {x:375,y:300,w:22,h:16,s:'v',n:'15',c:[]},
- {x:510,y:120,w:20,h:16,s:'g',n:'16',c:[]}
-];
-var col={r:'#C62828',o:'#EF8A17',y:'#C9A227',v:'#2E7D32'};
-var svg=document.getElementById('vw-svg'),side=document.getElementById('vw-side'),hint=document.getElementById('vw-hint');
-var NS='http://www.w3.org/2000/svg',off={},sel=null,sent={};
+var D=[{"n":"01","s":"r","d":28,"p":[[679.7,62.1],[673.3,89.3],[653.8,84.7],[660.2,57.5]],"x":666.8,"y":73.4,"c":[["r","Broussaille sur le terrain","310 m² dans les 50 m","débroussailler et évacuer"]]},{"n":"02","s":"r","d":22,"p":[[574.2,101.7],[567.2,130.9],[549.7,126.7],[556.7,97.5]],"x":562.0,"y":114.2,"c":[["r","Broussaille sur le terrain","90 m² dans les 50 m","débroussailler et évacuer"]]},{"n":"03","s":"r","d":52,"p":[[657.2,143.5],[633.7,138.3],[637.7,120.7],[661.1,126.0]],"x":647.4,"y":132.1,"c":[["r","Branches contre la maison","1 arbres à moins de 3 m des murs · 10 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Broussaille sur le terrain","260 m² dans les 50 m","débroussailler et évacuer"]]},{"n":"04","s":"v","d":47,"p":[[565.7,193.9],[539.8,191.2],[542.1,169.3],[568.0,172.0]],"x":553.9,"y":181.6,"c":[["y","Arbres serrés dans la zone","3 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"05","s":"r","d":76,"p":[[651.5,202.1],[627.6,199.9],[629.3,182.0],[653.2,184.2]],"x":640.4,"y":192.1,"c":[["r","Branches contre la maison","2 arbres à moins de 3 m des murs · 6 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Broussaille sur le terrain","90 m² dans les 50 m","débroussailler et évacuer"],["r","Accès encombré","chemin d'accès réduit à 2 m de large","dégager 5 m de large et 5 m de haut"],["y","Arbres serrés dans la zone","3 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"06","s":"v","d":72,"p":[[555.9,237.2],[553.6,261.0],[535.7,259.3],[538.0,235.4]],"x":545.8,"y":248.2,"c":[["y","Arbres serrés dans la zone","3 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"07","s":"r","d":99,"p":[[643.9,262.1],[619.9,261.1],[620.6,243.1],[644.6,244.1]],"x":632.2,"y":252.6,"c":[["r","Branches contre la maison","1 arbres à moins de 3 m des murs · 6 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Broussaille sur le terrain","120 m² dans les 50 m","débroussailler et évacuer"],["y","Arbres serrés dans la zone","4 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"08","s":"o","d":66,"p":[[377.8,287.9],[405.6,284.7],[407.9,304.5],[380.1,307.7]],"x":392.8,"y":296.2,"c":[["o","Arbre proche de la maison","1 arbre à 4 m des murs","vérifier sur place"]]},{"n":"09","s":"r","d":51,"p":[[315.8,294.5],[341.5,290.7],[344.8,312.5],[319.0,316.3]],"x":330.3,"y":303.5,"c":[["r","Broussaille sur le terrain","120 m² dans les 50 m","débroussailler et évacuer"],["y","Arbres serrés dans la zone","7 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"10","s":"v","d":100,"p":[[557.8,301.1],[558.1,327.1],[536.1,327.4],[535.8,301.4]],"x":546.9,"y":314.3,"c":[]},{"n":"11","s":"r","d":124,"p":[[643.9,326.4],[617.9,325.1],[619.1,303.1],[645.1,304.5]],"x":631.5,"y":314.8,"c":[["r","Broussaille sur le terrain","310 m² dans les 50 m","débroussailler et évacuer"],["y","Arbres serrés dans la zone","5 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"12","s":"v","d":85,"p":[[397.4,359.2],[394.4,337.4],[410.2,335.2],[413.3,356.9]],"x":403.8,"y":347.2,"c":[]},{"n":"13","s":"o","d":148,"p":[[641.2,387.6],[615.2,388.7],[614.3,366.8],[640.2,365.6]],"x":627.7,"y":377.2,"c":[["o","Arbre proche de la maison","1 arbre à 3,5 m des murs","vérifier sur place"]]},{"n":"14","s":"r","d":129,"p":[[557.0,366.5],[558.5,392.4],[536.5,393.7],[535.0,367.8]],"x":546.8,"y":380.1,"c":[["r","Broussaille sur le terrain","90 m² dans les 50 m","débroussailler et évacuer"]]},{"n":"15","s":"r","d":85,"p":[[402.2,415.2],[400.1,385.3],[418.1,384.1],[420.1,414.0]],"x":410.1,"y":399.6,"c":[["r","Branches contre la maison","1 arbres à moins de 3 m des murs · 12 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Broussaille sur le terrain","210 m² dans les 50 m","débroussailler et évacuer"],["r","Accès encombré","chemin d'accès réduit à 3 m de large","dégager 5 m de large et 5 m de haut"],["y","Arbres serrés dans la zone","4 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"16","s":"r","d":51,"p":[[334.4,420.7],[332.5,392.8],[352.4,391.4],[354.4,419.3]],"x":343.4,"y":406.1,"c":[["r","Broussaille sur le terrain","90 m² dans les 50 m","débroussailler et évacuer"],["r","Branches contre la maison","3 arbres à moins de 3 m des murs · 7 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Accès encombré","chemin d'accès réduit à 2 m de large","dégager 5 m de large et 5 m de haut"]]},{"n":"17","s":"g","d":226,"p":[[868.5,404.9],[896.4,402.0],[898.5,421.9],[870.6,424.8]],"x":883.5,"y":413.4,"c":[]},{"n":"18","s":"g","d":217,"p":[[807.3,407.2],[833.2,404.9],[835.1,426.8],[809.2,429.1]],"x":821.2,"y":417.0,"c":[]},{"n":"19","s":"g","d":207,"p":[[745.5,417.7],[771.2,413.5],[774.7,435.2],[749.1,439.4]],"x":760.1,"y":426.5,"c":[]},{"n":"20","s":"v","d":191,"p":[[685.5,424.9],[709.4,422.2],[711.4,440.1],[687.6,442.8]],"x":698.5,"y":432.5,"c":[["y","Arbres serrés dans la zone","3 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"21","s":"v","d":180,"p":[[625.9,441.4],[647.7,438.2],[650.0,454.1],[628.2,457.3]],"x":637.9,"y":447.8,"c":[]},{"n":"22","s":"o","d":140,"p":[[500.5,455.7],[530.5,454.0],[531.5,472.0],[501.5,473.7]],"x":516.0,"y":463.9,"c":[["o","Broussaille en limite de terrain","57 m² dans les 50 m, en partie chez le voisin","vérifier sur place"]]},{"n":"23","s":"g","d":342,"p":[[1185.2,457.6],[1213.2,457.4],[1213.4,477.4],[1185.4,477.6]],"x":1199.3,"y":467.5,"c":[]},{"n":"24","s":"v","d":110,"p":[[442.6,461.2],[466.5,459.7],[467.7,477.7],[443.8,479.2]],"x":455.2,"y":469.4,"c":[]},{"n":"25","s":"g","d":321,"p":[[1124.2,459.9],[1150.2,459.0],[1150.9,481.0],[1124.9,481.9]],"x":1137.5,"y":470.5,"c":[]},{"n":"26","s":"r","d":52,"p":[[340.6,463.0],[342.1,489.0],[320.1,490.2],[318.6,464.3]],"x":330.3,"y":476.6,"c":[["r","Broussaille sur le terrain","164 m² dans les 50 m","débroussailler et évacuer"],["r","Branches contre la maison","1 arbres à moins de 3 m des murs · 7 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"]]},{"n":"27","s":"g","d":304,"p":[[1063.7,469.8],[1087.6,468.0],[1088.9,486.0],[1065.0,487.7]],"x":1076.3,"y":477.9,"c":[]},{"n":"28","s":"r","d":24,"p":[[253.7,472.6],[277.3,468.5],[280.4,486.3],[256.7,490.3]],"x":267.0,"y":479.4,"c":[["r","Branches contre la maison","3 arbres à moins de 3 m des murs · 5 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Broussaille sur le terrain","164 m² dans les 50 m","débroussailler et évacuer"]]},{"n":"29","s":"g","d":288,"p":[[1022.8,470.7],[1023.9,492.7],[1007.9,493.4],[1006.9,471.5]],"x":1015.4,"y":482.1,"c":[]},{"n":"30","s":"g","d":275,"p":[[964.8,473.0],[966.6,498.9],[944.7,500.5],[942.8,474.5]],"x":954.7,"y":486.7,"c":[]},{"n":"31","s":"g","d":263,"p":[[878.5,480.6],[906.4,477.9],[908.3,497.8],[880.4,500.5]],"x":893.4,"y":489.2,"c":[]},{"n":"32","s":"r","d":1,"p":[[193.5,485.4],[215.2,482.0],[217.7,497.8],[196.0,501.2]],"x":205.6,"y":491.6,"c":[["r","Branches contre la maison","3 arbres à moins de 3 m des murs · 8 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"]]},{"n":"33","s":"g","d":259,"p":[[817.0,498.0],[846.7,493.8],[849.2,511.7],[819.5,515.8]],"x":833.1,"y":504.8,"c":[]},{"n":"34","s":"g","d":243,"p":[[756.5,500.2],[782.3,496.5],[785.4,518.3],[759.7,521.9]],"x":771.0,"y":509.2,"c":[]},{"n":"35","s":"g","d":230,"p":[[716.8,508.3],[718.7,530.2],[702.8,531.6],[700.8,509.7]],"x":709.8,"y":520.0,"c":[]},{"n":"36","s":"g","d":210,"p":[[634.7,514.4],[658.5,512.0],[660.4,529.9],[636.5,532.3]],"x":647.5,"y":522.2,"c":[]},{"n":"37","s":"o","d":154,"p":[[508.5,535.3],[538.5,533.6],[539.5,551.5],[509.6,553.3]],"x":524.0,"y":543.4,"c":[["o","Broussaille en limite de terrain","54 m² dans les 50 m, en partie chez le voisin","vérifier sur place"]]},{"n":"38","s":"r","d":126,"p":[[449.9,541.7],[471.9,540.9],[472.5,556.9],[450.5,557.7]],"x":461.2,"y":549.3,"c":[["r","Broussaille sur le terrain","164 m² dans les 50 m","débroussailler et évacuer"],["r","Branches contre la maison","3 arbres à moins de 3 m des murs · 13 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Accès encombré","chemin d'accès réduit à 3 m de large","dégager 5 m de large et 5 m de haut"],["y","Arbres serrés dans la zone","3 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"39","s":"o","d":99,"p":[[407.0,537.6],[409.1,561.5],[391.1,563.1],[389.1,539.2]],"x":399.1,"y":550.4,"c":[["o","Broussaille en limite de terrain","51 m² dans les 50 m, en partie chez le voisin","vérifier sur place"]]},{"n":"40","s":"o","d":73,"p":[[326.2,544.2],[348.0,541.8],[349.8,557.7],[327.9,560.1]],"x":338.0,"y":551.0,"c":[["o","Arbre proche de la maison","1 arbre à 3,5 m des murs","vérifier sur place"]]},{"n":"41","s":"r","d":51,"p":[[265.8,556.4],[287.5,552.6],[290.3,568.4],[268.6,572.2]],"x":278.1,"y":562.4,"c":[["r","Branches contre la maison","1 arbres à moins de 3 m des murs · 6 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Broussaille sur le terrain","210 m² dans les 50 m","débroussailler et évacuer"],["y","Arbres serrés dans la zone","6 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"42","s":"r","d":23,"p":[[203.3,561.7],[226.9,557.3],[230.2,575.0],[206.6,579.4]],"x":216.8,"y":568.4,"c":[["r","Broussaille sur le terrain","260 m² dans les 50 m","débroussailler et évacuer"],["r","Branches contre la maison","3 arbres à moins de 3 m des murs · 6 m² de feuillage","élaguer, rien à moins de 3 m ni au-dessus du toit"],["r","Accès encombré","chemin d'accès réduit à 3 m de large","dégager 5 m de large et 5 m de haut"],["y","Arbres serrés dans la zone","6 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"43","s":"v","d":184,"p":[[587.9,581.6],[566.4,586.2],[563.0,570.6],[584.5,566.0]],"x":575.5,"y":576.1,"c":[]},{"n":"44","s":"g","d":231,"p":[[675.6,612.1],[679.0,633.8],[663.2,636.2],[659.8,614.5]],"x":669.4,"y":624.1,"c":[]},{"n":"45","s":"v","d":188,"p":[[594.3,624.0],[598.7,649.6],[577.0,653.3],[572.7,627.6]],"x":585.7,"y":638.6,"c":[["y","Arbres serrés dans la zone","3 arbres dont les couronnes se touchent","conseil : éclaircir"]]},{"n":"46","s":"g","d":231,"p":[[680.3,678.3],[682.5,700.2],[666.6,701.8],[664.3,680.0]],"x":673.4,"y":690.1,"c":[]},{"n":"47","s":"v","d":192,"p":[[600.8,687.2],[604.3,710.9],[586.5,713.5],[583.0,689.8]],"x":593.7,"y":700.3,"c":[]},{"n":"48","s":"g","d":239,"p":[[695.3,761.5],[673.3,762.9],[672.3,746.9],[694.2,745.5]],"x":683.8,"y":754.2,"c":[]},{"n":"49","s":"g","d":200,"p":[[612.3,748.0],[614.6,775.9],[594.7,777.5],[592.4,749.6]],"x":603.5,"y":762.7,"c":[]}];
+var S={r:['Débroussaillement à réaliser','#D32F2F'],o:['À vérifier','#F08A1C'],v:['Sans observation','#2E9E4F'],g:['Hors périmètre','#C3C8CE']};
+var col={r:'#D32F2F',o:'#F08A1C',y:'#C9A227',v:'#2E9E4F'};
+var NS='http://www.w3.org/2000/svg',svg=document.getElementById('vw-svg'),side=document.getElementById('vw-side'),hint=document.getElementById('vw-hint');
+var off={},sel=null,done={};
 function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
-// fond
-var forest='M0 0 H120 C110 40 70 60 80 110 C90 160 40 190 60 240 C75 290 30 330 45 420 H0Z';
-el('path',{d:forest,fill:'#7FA36B'});
-var sd=7;function rnd(){sd=(sd*9301+49297)%233280;return sd/233280}
-for(var i=0;i<60;i++){var fx=rnd()*90,fy=rnd()*420;if(fx<100-Math.abs(Math.sin(fy/60))*30)el('circle',{cx:fx,cy:fy,r:7+rnd()*7,fill:'#5E8A4E',opacity:.8})}
-el('path',{d:'M0 0 H220 C200 60 180 120 200 200 C215 270 170 330 190 420 H0Z',fill:'#C62828',opacity:.05});
-el('path',{d:'M220 0 C200 60 180 120 200 200 C215 270 170 330 190 420',fill:'none',stroke:'#C62828','stroke-dasharray':'6 6',opacity:.0});
-el('path',{d:'M395 0 C380 100 390 200 360 260 C340 310 350 360 345 420',fill:'none',stroke:'#C62828','stroke-width':1.5,'stroke-dasharray':'7 6',opacity:.55});
-el('text',{x:355,y:330,fill:'#8A2020','font-size':11,'font-weight':700,opacity:.7}).textContent='limite 200 m';
-el('path',{d:'M640 214 C520 210 430 225 330 215 C250 207 190 220 140 230',fill:'none',stroke:'#fff','stroke-width':10,'stroke-linecap':'round'});
-el('path',{d:'M310 420 C305 340 300 280 330 215 C350 170 360 100 350 0',fill:'none',stroke:'#fff','stroke-width':8,'stroke-linecap':'round'});
-var trees=[[160,120],[188,128],[182,108],[140,270],[150,240],[190,180],[250,100],[310,190],[350,190],[260,350],[240,180]];
-trees.forEach(function(t){el('circle',{cx:t[0],cy:t[1],r:8,fill:'#6E9A5C',opacity:.9})});
-var ring=el('circle',{cx:0,cy:0,r:100,fill:'rgba(239,138,23,.08)',stroke:'#EF8A17','stroke-width':1.5,'stroke-dasharray':'6 5',opacity:0,'pointer-events':'none'});
-var gH=el('g',{});
-H.forEach(function(h){
-  var g=el('g',{'class':'vw-h',tabindex:0,role:'button','aria-label':'Construction '+h.n+' : '+S[h.s][0]},gH);
-  el('rect',{x:h.x,y:h.y,width:h.w,height:h.h,rx:2,fill:S[h.s][1]},g);
+function esc(t){return String(t).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+function grow(p,cx,cy,k){return p.map(function(q){return[(cx+(q[0]-cx)*k).toFixed(1),(cy+(q[1]-cy)*k).toFixed(1)].join(',')}).join(' ')}
+var ring=el('circle',{r:100,fill:'rgba(255,170,60,.12)',stroke:'#FFB347','stroke-width':3,'stroke-dasharray':'10 8',opacity:0,'pointer-events':'none'});
+D.forEach(function(h){
+  var g=el('g',{'class':'vw-h',tabindex:0,role:'button','aria-label':'Maison '+h.n+' : '+S[h.s][0]});
+  el('circle',{'class':'hit',cx:h.x,cy:h.y,r:26},g);
+  el('polygon',{'class':'shape',points:grow(h.p,h.x,h.y,1.35),fill:S[h.s][1],stroke:S[h.s][1]},g);
   h.g=g;
-  g.addEventListener('click',function(){pick(h)});
+  g.addEventListener('click',function(){touched=true;D.forEach(function(x){x.g.classList.remove('pulse')});pick(h)});
   g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(h)}});
 });
-// chips
 var chips=document.getElementById('vw-chips');
 ['r','o','v','g'].forEach(function(k){
-  var n=H.filter(function(h){return h.s===k}).length;
-  var c=document.createElement('button');c.type='button';c.className='vw-chip';
-  c.innerHTML='<i style="background:'+S[k][1]+'"></i>'+S[k][0]+' <b>'+n+'</b>';
-  c.onclick=function(){off[k]=!off[k];c.classList.toggle('off',!!off[k]);H.forEach(function(h){h.g.classList.toggle('hide',!!off[h.s])})};
+  var n=D.filter(function(h){return h.s===k}).length,c=document.createElement('button');
+  c.type='button';c.className='vw-chip';c.innerHTML='<i style="background:'+S[k][1]+'"></i>'+S[k][0]+' <b>'+n+'</b>';
+  c.onclick=function(){off[k]=!off[k];c.classList.toggle('off',!!off[k]);D.forEach(function(h){h.g.classList.toggle('hide',!!off[h.s])})};
   chips.appendChild(c);
 });
-var inP=H.filter(function(h){return h.s!=='g'});
+var inP=D.filter(function(h){return h.s!=='g'});
 document.getElementById('vw-pct').textContent=Math.round(100*inP.filter(function(h){return h.s==='v'}).length/inP.length)+' %';
-function esc(t){return String(t).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
-function summary(){
-  var cnt=function(k){return H.filter(function(h){return h.s===k}).length};
-  side.innerHTML='<div class="vw-sub">Périmètre de débroussaillement</div><h3>'+inP.length+' constructions à moins de 200 m du bois</h3>'+
-  '<div class="vw-sum"><div><span>Débroussaillement à réaliser</span><b>'+cnt('r')+'</b></div><div><span>À vérifier</span><b>'+cnt('o')+'</b></div><div><span>Sans observation</span><b>'+cnt('v')+'</b></div></div>'+
-  '<p class="vw-empty" style="margin-top:18px"><b>Cliquez sur une maison</b>pour voir ses constats et préparer le courrier.</p>';
-}
+function fit(){svg.setAttribute('viewBox',window.matchMedia('(max-width:900px)').matches?'140 40 620 680':'0 0 1280 840')}
+fit();window.addEventListener('resize',fit);
+function cnt(k){return D.filter(function(h){return h.s===k}).length}
+side.innerHTML='<div class="vw-sub">Maisons à moins de 200 m du bois</div><h3>'+inP.length+' maisons soumises au débroussaillement</h3><div class="vw-sum"><div><span>Débroussaillement à réaliser</span><b>'+cnt('r')+'</b></div><div><span>À vérifier</span><b>'+cnt('o')+'</b></div><div><span>Sans observation</span><b>'+cnt('v')+'</b></div></div><p class="vw-empty"><b>Cliquez sur une maison</b>pour voir ses constats et préparer le courrier.</p>';
 function pick(h){
   if(sel)sel.g.classList.remove('sel');sel=h;h.g.classList.add('sel');hint.style.opacity=0;
-  ring.setAttribute('cx',h.x+h.w/2);ring.setAttribute('cy',h.y+h.h/2);ring.setAttribute('opacity',h.s==='g'?0:1);
-  var html='<div><span class="vw-st" style="background:'+S[h.s][1]+'">'+S[h.s][0]+'</span></div><h3>Construction n° '+h.n+'</h3><div class="vw-sub">Commune exemple · '+(h.s==='g'?'hors zone de débroussaillement':'soumise au débroussaillement · zone des 50 m affichée')+'</div>';
-  if(h.s==='g') html+='<p class="vw-empty"><b>Hors périmètre</b>Cette maison est à plus de 200 m du bois : pas d\'obligation de débroussaillement.</p>';
-  else if(!h.c.length) html+='<p class="vw-empty"><b>Rien à signaler</b>Aucun écart visible sur les images. Un courrier de rappel annuel reste possible.</p>';
-  else h.c.forEach(function(c){html+='<div class="vw-c"><i style="background:'+col[c[0]]+'"></i><div><b>'+esc(c[1])+'</b><span>'+esc(c[2])+'</span><em><b style="display:inline;font-size:12.5px">Propriétaire :</b> '+esc(c[3])+'</em></div></div>'});
-  if(h.s!=='g'){
-    html+='<div class="vw-btns"><button class="vw-b p" type="button" id="vw-l">Préparer le courrier</button><button class="vw-b" type="button" id="vw-c">+ À contrôler sur place</button></div>';
-    if(sent[h.n]) html+='<div class="vw-toast">'+esc(sent[h.n])+'</div>';
+  ring.setAttribute('cx',h.x);ring.setAttribute('cy',h.y);ring.setAttribute('opacity',h.s==='g'?0:1);
+  var t='<div><span class="vw-st" style="background:'+S[h.s][1]+'">'+S[h.s][0]+'</span></div><h3>Maison n° '+h.n+'</h3><div class="vw-sub">'+(h.s==='g'?'À '+h.d+' m du bois : hors zone':'À '+h.d+' m du bois · cercle des 50 m affiché')+'</div>';
+  if(h.s==='g')t+='<p class="vw-empty"><b>Pas d\'obligation</b>Cette maison est à plus de 200 m du bois.</p>';
+  else{
+    var real=h.c.filter(function(c){return c[0]!=='y'});
+    if(!real.length)t+='<p class="vw-empty"><b>Rien à signaler</b>Aucun écart visible sur les images.</p>';
+    h.c.forEach(function(c){t+='<div class="vw-c"><i style="background:'+col[c[0]]+'"></i><div><b>'+esc(c[1])+'</b><span>'+esc(c[2])+'</span><em><b style="display:inline;font-size:12.5px">À faire :</b> '+esc(c[3])+'</em></div></div>'});
+    t+='<div class="vw-btns"><button class="vw-b p" type="button" id="vw-l">'+(real.length?'Préparer le courrier':'Préparer un courrier de rappel')+'</button><button class="vw-b" type="button" id="vw-c">+ À contrôler sur place</button></div>';
+    if(done[h.n])t+='<div class="vw-toast">'+esc(done[h.n])+'</div>';
   }
-  side.innerHTML=html;
-  var bl=document.getElementById('vw-l');if(bl)bl.onclick=function(){letter(h)};
-  var bc=document.getElementById('vw-c');if(bc)bc.onclick=function(){sent[h.n]='Ajouté à la liste des contrôles sur place.';pick(h)};
+  side.innerHTML=t;
+  var b1=document.getElementById('vw-l');if(b1)b1.onclick=function(){letter(h)};
+  var b2=document.getElementById('vw-c');if(b2)b2.onclick=function(){done[h.n]='Ajoutée à la liste des contrôles sur place.';pick(h)};
+  if(touched&&window.matchMedia('(max-width:900px)').matches&&side.getBoundingClientRect().top>window.innerHeight-80)side.scrollIntoView({behavior:'smooth',block:'start'});
 }
 var modal=document.getElementById('vw-modal');
 function letter(h){
   var items=h.c.filter(function(c){return c[0]!=='y'});
-  var body=items.length?'<h4>Sur votre terrain</h4><ol>'+items.map(function(c){return'<li>'+esc(c[1])+' : '+esc(c[2])+'. À faire : '+esc(c[3])+'.</li>'}).join('')+'</ol>':'<p>Les images ne montrent pas d\'écart. Nous vous rappelons l\'obligation d\'entretenir les abords de votre habitation dans un rayon de 50 m.</p>';
-  document.getElementById('vw-letter').innerHTML='<p style="display:flex;justify-content:space-between"><b>Mairie de la commune exemple</b><span>Le <span class="hl">[date]</span></span></p><p style="text-align:right;margin-top:14px">À l\'occupant ou au propriétaire<br>Construction n° '+h.n+'</p><p id="vw-l-t"><b>Objet : débroussaillement autour de votre habitation</b></p><p>Madame, Monsieur,</p><p>Votre habitation se trouve à moins de 200 m d\'un bois classé à risque d\'incendie. Les photographies aériennes de l\'IGN montrent les points suivants :</p>'+body+'<p>Ces constats sont faits à distance. Si la situation a changé, vous pouvez nous l\'indiquer.</p><p style="text-align:right">Le maire</p><div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
-  modal.hidden=false;document.getElementById('vw-x').focus();
-  document.getElementById('vw-ok').onclick=function(){sent[h.n]='Courrier validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
+  var body=items.length?'<h4>Sur votre terrain</h4><ol>'+items.map(function(c){return'<li>'+esc(c[1])+' : '+esc(c[2])+'. À faire : '+esc(c[3])+'.</li>'}).join('')+'</ol>':'<p>Les images ne montrent pas d\'écart. Nous vous rappelons l\'obligation d\'entretenir les abords de votre habitation sur 50 m.</p>';
+  document.getElementById('vw-letter').innerHTML='<p style="display:flex;justify-content:space-between;gap:10px"><b>Mairie de la commune exemple</b><span>Le <span class="hl">[date]</span></span></p><p style="text-align:right;margin-top:12px">À l\'occupant ou au propriétaire<br>Maison n° '+h.n+'</p><p><b>Objet : débroussaillement autour de votre habitation</b></p><p>Madame, Monsieur,</p><p>Votre habitation se trouve à moins de 200 m d\'un bois classé à risque d\'incendie. Les photographies aériennes de l\'IGN montrent les points suivants :</p>'+body+'<p>Ces constats sont faits à distance. Si la situation a changé, vous pouvez nous l\'indiquer.</p><p style="text-align:right">Le maire</p><div class="vw-btns" style="font-family:var(--sans)"><button class="vw-b p" type="button" id="vw-ok">Valider l\'envoi</button></div>';
+  modal.hidden=false;
+  document.getElementById('vw-ok').onclick=function(){done[h.n]='Courrier validé : il partira dans le prochain envoi groupé.';modal.hidden=true;pick(h)};
 }
+
+var vw=document.getElementById('vw'),touched=false;
+svg.addEventListener('pointerdown',function(){touched=true});
+var first=D.filter(function(h){return h.s==='r'}).sort(function(a,b){return Math.hypot(a.x-450,a.y-330)-Math.hypot(b.x-450,b.y-330)})[0]||D[0];
+function start(){
+  vw.classList.add('on');
+  var pe=document.getElementById('vw-pct'),tg=parseInt(pe.textContent),t0=null;
+  (function f(ts){t0=t0||ts;var k=Math.min(1,(ts-t0)/900);pe.textContent=Math.round(tg*k)+' %';if(k<1)requestAnimationFrame(f)})(performance.now());
+  first.g.classList.add('pulse');
+  setTimeout(function(){if(!sel&&!touched){pick(first);first.g.classList.remove('pulse');hint.style.opacity=1;hint.textContent='Essayez une autre maison'}},2200);
+}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es,o){es.forEach(function(e){if(e.isIntersecting){start();o.disconnect()}})},{threshold:.35}).observe(vw)}else start();
 document.getElementById('vw-x').onclick=function(){modal.hidden=true};
 modal.addEventListener('click',function(e){if(e.target===modal)modal.hidden=true});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)modal.hidden=true});
-summary();
+document.addEventListener('keydown',function(e){if(e.key==='Escape')modal.hidden=true});
 })();
 </script>
+<script>(function(){var r=document.querySelectorAll(".rv");if(!("IntersectionObserver" in window)){r.forEach(function(e){e.classList.add("vu")});return}var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("vu");o.unobserve(e.target)}})},{threshold:.12});r.forEach(function(e){o.observe(e)})})();</script>
 <script src="/static/menu.js?v=7" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>
