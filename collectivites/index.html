@@ -64,6 +64,14 @@ main{overflow-x:clip}
 .vu .st>li:nth-child(2){transition-delay:.18s}.vu .st>li:nth-child(2)::after{transition-delay:.18s}
 .vu .st>li:nth-child(3){transition-delay:.36s}.vu .st>li:nth-child(3)::after{transition-delay:.36s}
 @media (prefers-reduced-motion:reduce){.st>li{opacity:1;transform:none;transition:none;border-top-color:var(--c-or)!important}.st>li::after{display:none}}
+.vw-teaser{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center;width:100%;text-align:left;margin-top:14px;padding:12px;border:1px solid #E3E7EB;border-radius:10px;background:#F7F9FA;cursor:pointer;font:400 13px/1.4 var(--sans);color:#1C2733;transition:border-color .2s,background .2s}
+.vw-teaser:hover{border-color:#1C2733;background:#fff}
+.vw-teaser b{display:block;font-size:14.5px}.vw-teaser span span{display:block;color:#56636F;margin-top:2px}.vw-teaser em{display:block;font-style:normal;font-weight:700;color:#C4521C;margin-top:6px}
+.vw-mini{display:flex;flex-direction:column;gap:4px;width:64px;height:84px;padding:8px 7px;background:#fff;border:1px solid #D5DBE1;border-radius:4px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.vw-mini i{display:block;height:3px;border-radius:2px;background:#C9D0D7}.vw-mini i:nth-child(2){width:70%}.vw-mini i.img{height:22px;background:linear-gradient(135deg,#8FA86A,#6F8C55);border-radius:2px}.vw-mini i.s{width:40%;margin-left:auto;margin-top:auto}
+.vw-teaser.new{border-color:#E06C34;animation:tz 1.6s ease-in-out 3}
+@keyframes tz{0%,100%{box-shadow:0 0 0 0 rgba(224,108,52,0)}50%{box-shadow:0 0 0 5px rgba(224,108,52,.22)}}
+@media (prefers-reduced-motion:reduce){.vw-teaser.new{animation:none}}
 /* carte */
 .vw{position:relative;margin-top:22px;background:#fff;color:#1C2733;border-radius:14px;overflow:hidden;box-shadow:0 50px 100px -50px rgba(0,0,0,.8);font:400 14px/1.45 var(--sans)}
 .vw-top{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid #E3E7EB}
@@ -370,7 +378,7 @@ var D=[{"n":"01","s":"r","d":28,"p":[[679.7,62.1],[673.3,89.3],[653.8,84.7],[660
 var S={r:['Débroussaillement à réaliser','#D32F2F'],o:['À vérifier','#F08A1C'],v:['Sans observation','#2E9E4F'],g:['Hors périmètre','#C3C8CE']};
 var col={r:'#D32F2F',o:'#F08A1C',y:'#C9A227',v:'#2E9E4F'};
 var NS='http://www.w3.org/2000/svg',svg=document.getElementById('vw-svg'),side=document.getElementById('vw-side'),hint=document.getElementById('vw-hint');
-var off={},sel=null,done={};
+var off={},sel=null,done={},seen=false;
 function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
 function esc(t){return String(t).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
 function grow(p,cx,cy,k){return p.map(function(q){return[(cx+(q[0]-cx)*k).toFixed(1),(cy+(q[1]-cy)*k).toFixed(1)].join(',')}).join(' ')}
@@ -405,11 +413,12 @@ function pick(h){
     var real=h.c.filter(function(c){return c[0]!=='y'});
     if(!real.length)t+='<p class="vw-empty"><b>Rien à signaler</b>Aucun écart visible sur les images.</p>';
     h.c.forEach(function(c){t+='<div class="vw-c"><i style="background:'+col[c[0]]+'"></i><div><b>'+esc(c[1])+'</b><span>'+esc(c[2])+'</span><em><b style="display:inline;font-size:12.5px">À faire :</b> '+esc(c[3])+'</em></div></div>'});
-    t+='<div class="vw-btns"><button class="vw-b p" type="button" id="vw-l">'+(real.length?'Voir le courrier prêt à envoyer':'Voir le courrier de rappel')+'</button><button class="vw-b" type="button" id="vw-c">+ À contrôler sur place</button></div>';
+    t+='<button type="button" class="vw-teaser'+(seen?'':' new')+'" id="vw-t"><span class="vw-mini" aria-hidden="true"><i></i><i></i><i class="img"></i><i></i><i class="s"></i></span><span><b>'+(real.length?'Le courrier est prêt':'Courrier de rappel prêt')+'</b><span>Pour le propriétaire : ce qu\'il doit faire, pourquoi, avec la vue aérienne de sa maison.</span><em>Ouvrir le courrier →</em></span></button>';
+    t+='<div class="vw-btns"><button class="vw-b" type="button" id="vw-c">+ À contrôler sur place</button></div>';
     if(done[h.n])t+='<div class="vw-toast">'+esc(done[h.n])+'</div>';
   }
   side.innerHTML=t;
-  var b1=document.getElementById('vw-l');if(b1)b1.onclick=function(){letter(h)};
+  var b1=document.getElementById('vw-l');if(b1)b1.onclick=function(){seen=true;letter(h)};var bt=document.getElementById('vw-t');if(bt)bt.onclick=function(){seen=true;letter(h)};
   var b2=document.getElementById('vw-c');if(b2)b2.onclick=function(){done[h.n]='Ajoutée à la liste des contrôles sur place.';pick(h)};
   if(touched&&window.matchMedia('(max-width:900px)').matches&&side.getBoundingClientRect().top>window.innerHeight-80)side.scrollIntoView({behavior:'smooth',block:'start'});
 }
