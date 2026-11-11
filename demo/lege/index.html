@@ -829,7 +829,7 @@ function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.pro
  return h}
 
 /* ===== Sélecteur de risque : Feu de forêt · Tempête · Inondation ===== */
-let RISK='feu';
+let RISK='feu';try{document.body.dataset.risk='feu'}catch(_){}
 const RC={tr:'#8e24aa',to:'#ce93d8',tv:'#cfc9bd',fr:'#0d47a1',fo:'#42a5f5',fi:'#ffb300',fv:'#cfc9bd'};
 const RN={tr:'Exposition forte',to:'Exposition modérée',tv:'Non exposée',fr:'Hauteur d\'eau > 1 m',fo:'Hauteur d\'eau < 1 m',fi:'Accès coupé',fv:'Hors zone inondable'};
 function stG(p){const s=D.st&&D.st.b[p.k];if(!s)return 'v';return (s[0]>=300||s[1]>=20)?'r':(s[0]>=100?'o':'v')}
@@ -842,12 +842,12 @@ kname=k=>RISK==='feu'?F0.kname(k):RN[k];
 low=p=>RISK==='feu'?F0.low(p):/v$/.test(key(p));
 inScope=p=>RISK==='feu'?F0.inScope(p):true;
 function kcol(k){return RISK!=='feu'?RC[k]:(MODE==='pri'?COL[k]:COLG[k])}
-function fixTop(){const th=innerWidth>=900?0:document.getElementById('topbar').offsetHeight;if(innerWidth<900&&!window._hc){window._hc=1;const hd=document.getElementById('head');hd.classList.add('cmp');const hx=document.getElementById('hx');if(hx)hx.textContent='▾ détails'}document.getElementById('map').style.top=th+'px';document.getElementById('page').style.top=th+'px';document.getElementById('head').style.top=(th+(innerWidth<900?8:10))+'px';if(innerWidth>=900)document.getElementById('panel').style.top=(th+10)+'px';if(map)map.invalidateSize();placeCtl()}
+function fixTop(){if(innerWidth>=900){const hd=document.getElementById('head'),P=document.getElementById('panel');if(hd&&P&&hd.parentNode!==P)P.insertBefore(hd,P.firstChild)}const th=innerWidth>=900?0:document.getElementById('topbar').offsetHeight;if(innerWidth<900&&!window._hc){window._hc=1;const hd=document.getElementById('head');hd.classList.add('cmp');const hx=document.getElementById('hx');if(hx)hx.textContent='▾ détails'}document.getElementById('map').style.top=th+'px';document.getElementById('page').style.top=th+'px';document.getElementById('head').style.top=(th+(innerWidth<900?8:10))+'px';if(innerWidth>=900)document.getElementById('panel').style.top=(th+10)+'px';if(map)map.invalidateSize();placeCtl()}
 function placeCtl(){if(innerWidth>=900)return;const t=document.querySelector('.leaflet-top.leaflet-right'),hd=document.getElementById('head');if(t&&hd)t.style.top=(hd.offsetHeight+16)+'px';const pn=document.getElementById('panel');if(pn&&hd){const top=hd.getBoundingClientRect().bottom+6;pn.style.setProperty('max-height',Math.max(240,innerHeight-top-70)+'px','important')}}
 addEventListener('resize',()=>{try{fixTop()}catch(_){}});
 function riskBar(){setTimeout(fixTop,0);const R=D.st?[['all','Synthèse'],['feu','Feux de forêt'],['tem','Tempête']].concat(D.fl?[['inond','Inondation']]:[]):[['feu','Feux de forêt']];
  {const rk=document.getElementById('risk'),hd=document.getElementById('head');if(innerWidth>=900&&rk.parentNode!==hd)hd.insertBefore(rk,hd.firstChild);}document.getElementById('risk').innerHTML=R.map(r=>'<button class="rk'+(r[0]===RISK?' on':'')+'" aria-pressed="'+(r[0]===RISK)+'" onclick="setRisk(\''+r[0]+'\')">'+r[1]+'</button>').join('')}
-function setRisk(r){RISK=r;if(CRISE&&document.getElementById('pcc').style.display==='flex')setTimeout(()=>{pccRender();pccMap(true)},0);document.getElementById('ttl').textContent=D.nom+' · '+{all:'synthèse multi-aléas',feu:'feux de forêt (OLD)',tem:'aléa tempête',inond:'aléa inondation'}[r];try{localStorage.setItem('oldrisk',r)}catch(_){}filt=null;
+function setRisk(r){RISK=r;document.body.dataset.risk=r;if(CRISE&&document.getElementById('pcc').style.display==='flex')setTimeout(()=>{pccRender();pccMap(true)},0);document.getElementById('ttl').textContent=D.nom+' · '+{all:'synthèse multi-aléas',feu:'feux de forêt (OLD)',tem:'aléa tempête',inond:'aléa inondation'}[r];try{localStorage.setItem('oldrisk',r)}catch(_){}filt=null;
  document.getElementById('modes').style.display=r==='feu'?'':'none';
  document.getElementById('mdesc').textContent=r==='feu'?MDESC[MODE]:r==='all'?'Nombre d\'aléas forts par construction : feux de forêt, tempête, inondation.':(r==='tem'?'Arbres de plus de 8 m susceptibles d\'atteindre une construction, une voie ou une ligne électrique en cas de chute (LiDAR HD IGN).':'Zonage réglementaire PPRI et hauteur d\'eau estimée (MNT LiDAR HD IGN).');
  riskBar();applyRiskLayers();if(typeof SELP!=='undefined'&&SELP===null&&tab==='fic')go('res');buildMK();legend();kpi();if(tab==='fic'&&CUR)document.getElementById('body').innerHTML=ficHTML(CUR.p,CUR.F);else ui();if(TOP!=='map')refreshTop()}
@@ -1035,7 +1035,7 @@ function incs(){const S=SIG();S.forEach(x=>{if(x.o===undefined)x.o=x.id;if(x.ok=
  ;if(x.ist==='clos')x.log.push([x.h,'Terminé'])}});return S}
 function jlog(x,txt){const h=hnow();x.log.push([h,txt]);CLOG.unshift([h,'n°'+x.id+' '+STY[x.t]+' · '+x.v,txt])}
 function pccOpen(){CT0=CT0||hnow();if(CRPREV===null){CRPREV=RISK;if(D.st&&RISK!=='tem')setRisk('tem')}
- const DSK=innerWidth>=900;if(!DSK)document.getElementById('topbar').style.display='none';const o=document.getElementById('pcc');o.style.top='0';o.style.display='flex';if(DSK){const R=document.getElementById('pccR'),S=document.getElementById('pccS');if(S.parentNode!==R)R.insertBefore(S,R.firstChild);if(!window._kv){window._kv=1;KV='list';KS='prio'}}document.getElementById('crisebtn').classList.add('on');document.body.classList.add('crise');if(DSK&&!document.getElementById('pcrs')){const b=document.querySelector('.pccb'),g=document.createElement('div');g.id='pcrs';g.title='Glisser pour ajuster';b.appendChild(g);g.onpointerdown=e=>{e.preventDefault();g.setPointerCapture(e.pointerId);const mv=ev=>{const r=b.getBoundingClientRect(),w=Math.max(340,Math.min(r.width*0.7,r.right-ev.clientX));document.getElementById('pcc').style.setProperty('--pcw',w+'px')},up=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',up);if(CM)CM.invalidateSize()};g.addEventListener('pointermove',mv);g.addEventListener('pointerup',up)};g.ondblclick=()=>{const P=document.getElementById('pcc'),c=parseInt(getComputedStyle(P).getPropertyValue('--pcw'))||0;P.style.setProperty('--pcw',(c>innerWidth*0.45?Math.round(innerWidth*0.36):Math.round(innerWidth*0.55))+'px');setTimeout(()=>CM&&CM.invalidateSize(),50)}}pccRender();
+ const DSK=innerWidth>=900;if(!DSK)document.getElementById('topbar').style.display='none';const o=document.getElementById('pcc');o.style.top='0';o.style.display='flex';if(DSK){const R=document.getElementById('pccR'),S=document.getElementById('pccS');if(S.parentNode!==R)R.insertBefore(S,R.firstChild);if(!window._kv){window._kv=1;KV='list';KS='prio'}}document.getElementById('crisebtn').classList.add('on');document.body.classList.add('crise');if(DSK&&!document.getElementById('pctb')){const R=document.getElementById('pccR'),tb=document.createElement('div');tb.id='pctb';tb.innerHTML='<button data-t="inc" class="on">Incidents</button><button data-t="eq">Équipes et journal</button><button data-t="met">Météo</button>';R.dataset.t='inc';R.insertBefore(tb,R.firstChild);tb.onclick=e=>{const b=e.target.closest('button');if(!b)return;R.dataset.t=b.dataset.t;tb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));R.scrollTop=0}}if(DSK&&!document.getElementById('pcrs')){const b=document.querySelector('.pccb'),g=document.createElement('div');g.id='pcrs';g.title='Glisser pour ajuster';b.appendChild(g);g.onpointerdown=e=>{e.preventDefault();g.setPointerCapture(e.pointerId);const mv=ev=>{const r=b.getBoundingClientRect(),w=Math.max(340,Math.min(r.width*0.7,r.right-ev.clientX));document.getElementById('pcc').style.setProperty('--pcw',w+'px')},up=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',up);if(CM)CM.invalidateSize()};g.addEventListener('pointermove',mv);g.addEventListener('pointerup',up)};g.ondblclick=()=>{const P=document.getElementById('pcc'),c=parseInt(getComputedStyle(P).getPropertyValue('--pcw'))||0;P.style.setProperty('--pcw',(c>innerWidth*0.45?Math.round(innerWidth*0.36):Math.round(innerWidth*0.55))+'px');setTimeout(()=>CM&&CM.invalidateSize(),50)}}pccRender();
  if(!CM){CM=L.map('pccmap',{zoomControl:true,attributionControl:false,preferCanvas:true});const W='https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',PH=L.tileLayer(W+'&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&FORMAT=image/jpeg',{maxZoom:19}).addTo(CM),PN=L.tileLayer(W+'&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&FORMAT=image/png',{maxZoom:19});
  const C=L.control({position:'topright'});C.onAdd=()=>{const d=L.DomUtil.create('div','pccly');d.innerHTML='<button class="on" data-l="ph">Photo</button><button data-l="pn">Plan</button>';L.DomEvent.disableClickPropagation(d);d.onclick=e=>{const t=e.target.closest('button');if(!t)return;d.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===t));if(t.dataset.l==='pn'){CM.removeLayer(PH);PN.addTo(CM)}else{CM.removeLayer(PN);PH.addTo(CM)}};return d};C.addTo(CM)}
  setTimeout(()=>{CM.invalidateSize();pccMap(true)},40)}
@@ -1199,7 +1199,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#0f172a;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='IPJOyZZbp8HKBOYcCrT6gw==',ITER=600000;let KEY=null;
+const SALT='wr/GpteNwAezV0mrWISw2A==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
@@ -1363,17 +1363,32 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif
 }
 .pccly{display:flex;background:rgba(255,255,255,.94);border-radius:10px;padding:3px;box-shadow:0 8px 24px -8px rgba(15,23,42,.45)}.pccly button{border:0;background:none;border-radius:7px;padding:5px 12px;font:600 12px Inter,system-ui,sans-serif;color:#64748b;cursor:pointer}.pccly button.on{background:#0f172a;color:#fff}
 #pccmap .leaflet-tile-pane{filter:saturate(.9) contrast(1.03)}
+@media(min-width:900px){
+ #panel #head{position:static!important;top:auto!important;left:auto!important;max-width:none!important;width:auto;box-shadow:none;border:0;border-bottom:1px solid #e5e7eb;border-radius:16px 16px 0 0;padding:14px 14px 10px;flex:none;background:#fff}
+ #panel #head #risk{margin-bottom:8px}
+ #panel #head .modes,#panel #head #mdesc{display:none!important}
+ body[data-risk=feu] #panel #head .kpi{display:none}
+ #panel #head .leg{flex-wrap:wrap;margin-top:8px}
+ #panel #head h1{font-size:15px}
+ #pctb{position:sticky;top:-14px;z-index:5;display:flex;gap:2px;background:#eef2f6;border-radius:12px;padding:3px;margin:0 0 12px;box-shadow:0 0 0 6px #f8fafc}
+ #pctb button{flex:1;border:0;background:none;border-radius:9px;padding:7px 6px;font:600 13px Inter,system-ui,sans-serif;color:#64748b;cursor:pointer}
+ #pctb button.on{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.15)}
+ #pccR[data-t=inc] #metP,#pccR[data-t=inc] .pcs2,#pccR[data-t=inc] #pccr{display:none}
+ #pccR[data-t=eq] #pccS,#pccR[data-t=eq] #pccl{display:none}
+ #pccR[data-t=met] .pkk,#pccR[data-t=met] #pccl,#pccR[data-t=met] #pccr{display:none}
+ #pccR[data-t=eq] #pccr .cth:first-child{margin-top:0!important}
+}
 </style>
 <div id="avert" style="position:fixed;inset:0;z-index:4500;background:rgba(20,24,28,.55);display:flex;align-items:center;justify-content:center;padding:16px"><div style="background:#fff;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,.3);padding:22px;max-width:520px;font-size:14px;line-height:1.5;color:#1c2126"><div style="font-weight:700;font-size:17px;margin-bottom:10px">Avant de commencer</div><p style="margin:0 0 10px">Cet exemple porte sur un quartier de la commune. Il est établi à partir de relevés aériens de l'IGN <b>volontairement anciens</b> (photo 2022, relevés 2021 à 2025) : <b>il ne reflète pas l'état actuel des terrains</b> et n'a aucune valeur de constat.</p><p style="margin:0 0 14px">Le système <b>n'identifie aucun propriétaire</b> et ne traite ni nom, ni adresse : les maisons sont numérotées. Seule la mairie, si elle utilise l'outil, fait le lien avec ses administrés.</p><p style="margin:0 0 14px"><b>Cet affichage anonyme est celui de la démonstration :</b> à la demande de la mairie, l'outil peut afficher la rue et le numéro de chaque maison.</p><label style="display:flex;gap:9px;align-items:center;font-weight:600;cursor:pointer"><input type="checkbox" id="avok" style="width:18px;height:18px" onchange="document.getElementById('avgo').disabled=!this.checked">J'ai compris</label><button id="avgo" disabled onclick="document.getElementById('avert').remove();setTimeout(tuto,300)" style="margin-top:14px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#1c2126;color:#fff;cursor:pointer">Continuer</button></div></div><style>#avgo:disabled{opacity:.35;cursor:not-allowed}</style><script>
 /* Guide de démarrage : surligne les zones à cliquer ; « Passer le tutoriel » à chaque étape */
 function tuto(){
  const A=(D&&D.h)?D.h.features.find(f=>f.properties.c==='a'&&f.properties.k!==undefined):null;
  const S=[
-  {q:['#modes','#head'],t:'Vue',x:'La carte s\'ouvre sur la <b>commune entière</b>. Les deux autres vues montrent le <b>périmètre des obligations légales de débroussaillement</b> et les <b>priorités de contrôle</b>.'},
+  {q:['.zsel','#modes','#head'],t:'Zone',x:'La carte s\'ouvre sur la <b>commune entière</b>. Les deux autres vues montrent le <b>périmètre des obligations légales de débroussaillement</b> et les <b>priorités de contrôle</b>.'},
   {q:'#leg',t:'Couleurs',x:'Chaque maison est colorée selon ce que montrent les images. Cliquez sur une catégorie pour n\'afficher qu\'elle.'},
   {q:'#panel',t:'Fiche d\'une maison',x:'Cliquez sur une maison de la carte : sa fiche s\'ouvre ici, avec ce que montre l\'image, ce qu\'il faut faire et pourquoi.',pre:()=>{const P=document.getElementById('panel');if(P)P.classList.remove('min');if(A)openByK(A.properties.k)}},
   {q:'.acts .btn.dark',t:'Courrier',x:'Le document de deux pages pour le propriétaire, prêt à imprimer ou à envoyer. Les champs surlignés en jaune sont complétés par la mairie.'},
-  {q:'#tabs',t:'Résumé, liste, courriers',x:'Le résumé du quartier, la liste des maisons et les courriers types par situation.'},
+  {q:'#tabs',t:'Résumé, liste, secteurs',x:'Les chiffres de la zone choisie, la liste des maisons et les secteurs où elles se regroupent.'},
   {q:'#topm',t:'Suivi',x:'Suivi des envois, des contrôles et des relances, et tableau de bord.'},
   {q:'.msrch',t:'Recherche',x:'Retrouvez une maison par son numéro.'}
  ];
