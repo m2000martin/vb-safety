@@ -551,7 +551,7 @@ let ACC=null;function drawAcc(F){if(ACC){map.removeLayer(ACC);ACC=null}const A=F
 function showAcc(){if(ACC)map.fitBounds(ACC.getLayers()[0].getBounds().pad(0.6),{maxZoom:19});}
 function navList(){const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(!filt||filt(p)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3,tr:0,to:1,tv:2,fr:0,fo:1,fi:2,fv:3};return L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}))}
 function nav(d){if(!NAV.length)return;NI=(NI+d+NAV.length)%NAV.length;openByK(NAV[NI].k)}
-function openByK(k){if(typeof TOP!=='undefined'&&TOP!=='map'){setTop('map');setTimeout(()=>openByK(k),120);return}let L0=null;H.eachLayer(l=>{if(l.feature.properties.k===k)L0=l});if(L0)openFiche(L0.feature.properties,L0)}
+function openByK(k){document.getElementById('panel').classList.remove('min');if(typeof TOP!=='undefined'&&TOP!=='map'){setTop('map');setTimeout(()=>openByK(k),120);return}let L0=null;H.eachLayer(l=>{if(l.feature.properties.k===k)L0=l});if(L0)openFiche(L0.feature.properties,L0)}
 function constats(p,F){const br=F.br||{},hors=F.v+F.f,dist=D.porge?'3 m':'3 m',C=[];
  if(br.fl)C.push({c:'#c62828',t:'Branches contre la maison',d:(br.toit>=2?'Arbres au-dessus du toit et à moins de 3 m des murs':'Arbres à moins de 3 m des murs')+' · '+m2(br.a25+br.toit)+' de feuillage',a:'<b>Propriétaire :</b> élaguer, rien à moins de '+dist+' ni au-dessus du toit',i:3});
  if(F.t>=50)C.push({c:'#e65100',t:'Broussaille sur le terrain',d:m2(F.t)+' dans les 50 m'+(F.c10>=50?(F.c10<=F.t?', dont '+m2(F.c10)+' à moins de 10 m':' ; '+m2(F.c10)+' à moins de 10 m de la maison, tous terrains confondus'):''),a:'<b>Propriétaire :</b> débroussailler et évacuer',i:2});
@@ -1199,7 +1199,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#0f172a;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='VPX5/bY5WbNNKmRBZwmZpg==',ITER=600000;let KEY=null;
+const SALT='kvppnKhB6Z5vIewnJwCu4A==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
