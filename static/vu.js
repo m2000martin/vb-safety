@@ -37,6 +37,10 @@
       if (/evaluation\.html/.test(h)) n = 'outil-duerp';
       else if (/connexion\.html/.test(h)) n = 'demo-pompier';
       else if (/\/devis\/$/.test(h)) n = 'devis';
+      else if (/\/collectivites\/demande\//.test(h)) n = 'demande-demo-commune';
+      else if (/\/demo\/|OLD-demo/.test(h)) n = 'ouvre-demo-commune';
+      else if (/cmr-industrie\/demo/.test(h)) n = 'demo-industrie';
+      else if (/calendar\.app\.google/.test(h)) n = 'rdv-agenda';
       else if (/\.(xlsx|pdf)$/.test(h)) n = 'telechargement';
       else if (/^mailto:/.test(h)) n = 'email';
       else if (/#contact$/.test(h)) n = 'contact';

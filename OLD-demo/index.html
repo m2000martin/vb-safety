@@ -1398,4 +1398,12 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif
 @media(min-width:900px){#pccR .kan{grid-template-columns:repeat(4,minmax(140px,1fr))}#pccR .kcol .ih b{font-size:13px}}
 @media(min-width:900px){#pccR .kcol .ih{flex-wrap:wrap;row-gap:4px}#pccR .kcol .ih b{flex:1 1 calc(100% - 40px);min-width:0}#pccR .kcol .ih .ip,#pccR .kcol .ih .tag,#pccR .kcol .ih>span:last-child{margin-left:34px}}
 </style>
+<script src="/static/vu.js?v=3"></script>
+<script id="dstat">/* Mesure des démos : commune + action, sans donnée personnelle (envoyée à notre serveur, voir /confidentialite/) */
+(function(){function S(){var m=location.pathname.match(/\/demo\/([^/]+)/);if(m)return m[1];var v='';try{v=sessionStorage.getItem('oldv')||''}catch(e){}return 'old-demo'+(v?'-'+v:'')}
+var last={};function E(t){var k=S()+':'+t,n=Date.now();if(last[k]&&n-last[k]<15000)return;last[k]=n;try{window.vbsEvt&&window.vbsEvt('demo:'+k)}catch(e){}}window.dEvt=E;
+function W(f,lab){var o=window[f];if(typeof o!=='function')return;window[f]=function(){try{E(typeof lab==='function'?lab.apply(null,arguments):lab)}catch(e){}return o.apply(this,arguments)}}
+W('start','code-ok');W('openByK','fiche');W('setTop',function(m){return 'page-'+m});W('crisisOn','crise');W('lettre','courrier');W('mail','email');W('rapportCommune','rapport');W('alertForm','alerte');W('setRisk',function(r){return 'theme-'+r});W('envMan','envoi-enregistre');W('laterSet','plus-tard');W('ctlLot','controle');
+var ge=document.getElementById('ge');if(ge)new MutationObserver(function(){if(/incorrect/i.test(ge.textContent))E('code-faux')}).observe(ge,{childList:true,characterData:true,subtree:true});
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('#avgo,.rdvt,.rdvh,a[href^="/collectivites/demande/"],#tskip');if(!a)return;E(a.id==='avgo'?'avertissement-ok':a.id==='tskip'?'tuto-passe':'demande-demo')},true);})();</script>
 </body></html>

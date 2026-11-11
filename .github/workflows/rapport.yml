@@ -1,0 +1,25 @@
+name: Rapport quotidien des visites
+on:
+  schedule:
+    - cron: '0 8,9 * * *'   # 10 h à Paris en été (8 h UTC) et en hiver (9 h UTC) ; le script vérifie l'heure
+  workflow_dispatch:
+    inputs:
+      forcer:
+        description: 'Envoyer maintenant (test)'
+        default: '1'
+jobs:
+  rapport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: _outils
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python _outils/rapport_quotidien.py
+        env:
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          FORCER: ${{ github.event.inputs.forcer }}
