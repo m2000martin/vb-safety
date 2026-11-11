@@ -128,7 +128,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .ic{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:9px 10px;margin-bottom:7px;cursor:pointer}.ic.sel{border-color:#0f172a;box-shadow:0 0 0 1px #0f172a}
 .ih{display:flex;align-items:center;gap:8px}.ih b{flex:1;font-size:14px}.in,.cmk{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;color:#fff;font-weight:800;font-size:12px;flex:none}
 .cmk{width:28px;height:28px;border:2.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);font-size:13px;box-sizing:border-box}.cmk.sel{outline:3px solid #0f172a}
-.ip{font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;background:#ebe7de}.ip.p1{background:#b71c1c;color:#fff}.ip.p2{background:#f0a020;color:#0f172a}
+.ip{font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;background:#ebe7de}.ip.p1{background:#b71c1c;color:#fff}.ip.p2{background:#e8590c;color:#0f172a}
 .il{font-size:12.5px;color:#334155;margin-top:3px}.is{font-size:12px;font-weight:650;margin-top:2px}
 .ia{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.ia .btn,.ia select{font-size:12.5px;padding:7px 9px;border:1px solid #d1d5db;border-radius:8px;background:#fff}.ia .btn.ok{background:#2e7d32;color:#fff;border-color:#2e7d32}
 .ij{margin-top:8px;border-top:1px solid #eee;padding-top:6px;font-size:12px;color:#334155}.ij div{margin:2px 0}
@@ -242,19 +242,19 @@ details.wv{display:block}details.wv summary{display:flex;align-items:center;gap:
 let D,map,H,MK,CV,SELP=null,NAV=[],NI=0,Q='',LF='a',filt=null,tab='res',showX=true,PL=null;
 const COL={a:'#c62828',s:'#f0a020',n:'#cfc9bd'};
 const CAT={a:['Contrôle prioritaire','Habitation exposée avec de la végétation dense autour ou des branches contre la maison'],s:['À surveiller','Habitation exposée, abords dégagés aujourd\'hui'],n:['Non prioritaire','Peu exposée au feu de forêt']};
-let MODE='leg';const COLG={r:'#c62828',o:'#f0a020',v:'#2e7d32',h:'#cfc9bd'};
-const GN={r:['Débroussaillement à réaliser','Branches contre la maison, broussaille sur le terrain ou le long du chemin'],o:['À vérifier','Broussaille chez les voisins ou en petite quantité'],v:['Sans observation','Rien de notable sur les images'],h:['Hors périmètre OLD','Pas soumise aux obligations légales de débroussaillement']};
+let MODE='leg';const COLG={r:'#d93636',o:'#e8590c',j:'#f2a32c',v:'#5a9a2a',h:'#cfc9bd'};
+const GN={r:['Obligatoire, à faire · urgent','Débroussaillement obligatoire non réalisé, maison très exposée au massif'],o:['Obligatoire, à faire','Débroussaillement obligatoire non réalisé, dans la zone des 200 m'],j:['Partiel ou conseil','Débroussaillement partiel, ou travaux conseillés au-delà de 200 m (non obligatoire)'],v:['Rien à faire','Rien de notable sur les images'],h:['Hors périmètre OLD','Pas soumise aux obligations légales de débroussaillement']};
 const MODES={leg:'Périmètre OLD',com:'Commune entière',pri:'Priorités de contrôle'};
 const MDESC={leg:'Constructions soumises aux obligations légales de débroussaillement (OLD).',com:'Ensemble des constructions, y compris hors périmètre OLD (recommandation).',pri:'Ordre de contrôle selon l\'exposition et la végétation au contact du bâti.'};
 function inScope(p){return MODE!=='leg'||!!p.l}
 function key(p){return MODE==='pri'?p.c:(inScope(p)?(p.g||'v'):'h')}
 function colOf(p){return (typeof stColor==='function'&&stColor(p))||(MODE==='pri'?COL[p.c]:COLG[key(p)])}
 function low(p){const k=key(p);return MODE==='pri'?k==='n':k==='h'}
-function keys(){return MODE==='pri'?['a','s','n']:(MODE==='leg'?['r','o','v','h']:['r','o','v'])}
+function keys(){return MODE==='pri'?['a','s','n']:(MODE==='leg'?['r','o','j','v','h']:['r','o','j','v'])}
 function kname(k){return MODE==='pri'?CAT[k][0]:GN[k][0]}
 function OBL(p){return !!(p.l&&D.zsrc==='off')}
 const MSGT={contre:'Végétation dense contre la maison',terrain:'Broussaille sur le terrain',lisiere:'Lisière boisée chez un voisin',foret:'Lisière de forêt publique',branches:'Branches contre la maison'};
-function sty(f){const p=f.properties;if(p===SELP)return {stroke:true,color:'#0f172a',weight:4,opacity:1,fillColor:colOf(p),fillOpacity:1};const on=!filt||filt(p),x=D.porge&&showX&&p.x,lo=low(p);return {stroke:on&&(!lo||x),color:x?'#000':'#fff',weight:x?2.5:1,fillColor:colOf(p),fillOpacity:on?(lo?.7:.95):.12,opacity:on?1:0}}
+function sty(f){const p=f.properties;if(p===SELP)return {stroke:true,color:'#0f172a',weight:4,opacity:1,fillColor:colOf(p),fillOpacity:1};const on=!filt||filt(p),x=D.porge&&showX&&p.x,lo=low(p);return {stroke:on&&(!lo||x||p.vp),color:x?'#000':(p.vp?'#1f2937':'#fff'),weight:x?2.5:(p.vp?1.6:1),dashArray:p.vp&&!x?'3 3':null,fillColor:colOf(p),fillOpacity:on?(lo?.7:.95):.12,opacity:on?1:0}}
 function pop(p){
  let s='<div class="pop"><span class="tag" style="background:'+(p.c==='n'?'#8a8478':COL[p.c])+'">'+CAT[p.c][0]+'</span>';
  s+='<h4>'+(p.a||'Habitation')+'</h4>';
@@ -481,7 +481,7 @@ function rapCm(){if(!D.cm)return '';const V=D.cm.v,km=L_=>(L_.length*0.05).toFix
  '<p class="note" style="margin-top:4px">Parcelles communales : fichier DGFiP des personnes morales 2024 ('+D.cm.p.length+' parcelles).</p>'}
 function rapTypes(){const F=D.h.features.map(f=>f.properties),T=[['h','Habitations'],['e','Autres bâtiments (entreprises, équipements)'],['c','Campings, hébergements de loisirs']];
  return '<h2>6. Toutes les constructions</h2><p>Les obligations légales de débroussaillement visent toutes les constructions, chantiers et installations, y compris les terrains de camping (Code forestier, art. L.134-6).</p><table><tr><th>Type</th><th class="r">Total</th><th class="r">Zone légale</th><th class="r">Travaux à faire</th></tr>'+
- T.map(([t,n])=>{const L_=F.filter(p=>(p.t||'h')===t);return '<tr><td>'+n+'</td><td class="r">'+L_.length+'</td><td class="r">'+L_.filter(p=>p.l).length+'</td><td class="r">'+L_.filter(p=>p.l&&p.g==='r').length+'</td></tr>'}).join('')+'</table>'}
+ T.map(([t,n])=>{const L_=F.filter(p=>(p.t||'h')===t);return '<tr><td>'+n+'</td><td class="r">'+L_.length+'</td><td class="r">'+L_.filter(p=>p.l).length+'</td><td class="r">'+L_.filter(p=>p.l&&(p.g==='r'||p.g==='o')).length+'</td></tr>'}).join('')+'</table>'}
 function rapportCommune(){
  const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),cnt=(L,f)=>L.filter(f).length,pc=(a,b)=>b?Math.round(100*a/b):0;
  const g=(L,x)=>cnt(L,p=>(p.g||'v')===x),cat=x=>cnt(F,p=>p.c===x),ST=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),EN=Object.values(SV.en).reduce((a,b)=>a+b.length,0),R=relances();
@@ -498,7 +498,7 @@ function rapportCommune(){
  '<h1>'+esc(D.nom)+' · état de préparation aux feux de végétation</h1><div class="sub">Rapport du '+today+' · '+F.filter(p=>!p.t).length+' habitations et '+F.filter(p=>p.t).length+' autres constructions analysées · données IGN (photo aérienne, relevé laser, COSIA)'+(D.porge?' · démonstration sur données d\'avant le feu de juillet 2026':'')+'</div>'+
  '<div class="kps">'+kpiB(pc(zv,Z.length),'Zone légale','sans constat : '+zv+' / '+Z.length+' constructions'+(D.zsrc==='est'?' (zone estimée)':''))+kpiB(pc(cv,F.length),'Toute la commune','sans constat : '+cv+' / '+F.length+' constructions')+kpiB(pr,'Maisons exposées','abords dégagés : '+D.k.degag+' / '+D.k.expo)+'</div>'+
  '<h2>1. Zone légale (obligations légales de débroussaillement)</h2><p>'+Z.length+' habitations à moins de 200 m d\'un bois ou d\'une forêt classés'+(D.zsrc==='est'?' — zone estimée : le zonage officiel IGN n\'inclut pas encore la commune':' — zonage officiel IGN')+'.</p>'+
- '<table><tr><th>Constat sur les images</th><th class="r">Zone légale</th><th class="r">Toute la commune</th></tr>'+tr('Travaux à faire (arbres contre la maison, broussaille, chemin d\'accès)',g(Z,'r'),g(F,'r'))+tr('À vérifier (broussaille chez les voisins, petites quantités)',g(Z,'o'),g(F,'o'))+tr('Rien à signaler',g(Z,'v'),g(F,'v'))+'</table>'+
+ '<table><tr><th>Constat sur les images</th><th class="r">Zone légale</th><th class="r">Toute la commune</th></tr>'+tr('Obligatoire, à faire, maison très exposée (urgent)',g(Z,'r'),g(F,'r'))+tr('Obligatoire, à faire (zone des 200 m)',g(Z,'o'),g(F,'o'))+tr('Partiel, ou conseillé au-delà de 200 m',g(Z,'j'),g(F,'j'))+tr('Rien à signaler',g(Z,'v'),g(F,'v'))+'</table>'+
  '<h2>2. Priorités de contrôle</h2><p>Classement par exposition au feu (nature autour, bois proche) et végétation contre la maison'+(D.porge?' ; testé sur ce feu : les maisons prioritaires ont été détruites '+(D.k.ta/D.k.to).toFixed(1).replace('.',',')+' fois plus souvent que les autres':'')+'.</p>'+
  '<table><tr><th>Catégorie</th><th class="r">Habitations</th><th></th></tr>'+tr('À contrôler en priorité',cat('a'))+tr('À surveiller (exposées, abords dégagés)',cat('s'))+tr('Pas prioritaires',cat('n'))+'</table>'+
  (D.sp&&D.sp.length?'<p style="margin-top:6px"><b>Secteurs à contrôler en premier</b> (concentrations de maisons prioritaires) :</p><table><tr><th>Secteur</th><th class="r">Maisons prioritaires</th><th class="r">dont arbres contre la maison</th></tr>'+D.sp.map((z,i)=>tr('Secteur '+(i+1),z.n,z.nb)).join('')+'</table>':'')+
@@ -576,7 +576,7 @@ function ficHTML(p,F){
  const TG=(t,c)=>' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+c+'">'+t+'</span>';
  h+='<div style="margin-top:12px">'+(RISK!=='feu'?TG(kname(key(p)),colOf(p)):MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):(MODE==='leg'&&!p.l?TG('Hors zone légale'+((p.g||'v')!=='v'?' · '+GN[p.g][0].toLowerCase()+' (recommandé)':''),'#8a8478'):TG(GN[p.g||'v'][0],COLG[p.g||'v'])));
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
- h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(p.t?'<b>'+typName(p)+'</b> · ':'')+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+' · priorité : '+CAT[p.c][0].toLowerCase()+'</div>';
+ h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(p.t?'<b>'+typName(p)+'</b> · ':'')+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+(MODE==='pri'?' · priorité : '+CAT[p.c][0].toLowerCase():(GN[p.g]&&p.g!=='v'?'<br>'+GN[p.g][1]+(p.vp?'<br><b>Constat partiel : à vérifier sur place.</b>':''):''))+'</div>';
  h+=riskFiche(p);const C=constats(p,F);
  h+='<div class="cst">'+C.map(c=>'<div class="row" onclick="'+(c.i===-2?'showHp()':c.i<0?'showAcc()':'fimg('+c.i+')')+'"><div class="ic" style="background:'+c.c+'"></div><div><div class="t">'+c.t+'</div><div class="d">'+c.d+'</div><div class="a">'+c.a+'</div></div></div>').join('')+'</div>';
  h+='<div class="acts"><button class="btn dark" onclick="lettre()">Courrier / rapport PDF</button><button class="btn" onclick="mail()">Envoyer par e-mail</button><button class="btn'+(CTL()[p.k]?' on':'')+'" id="ctlb" onclick="togCtl()">'+(CTL()[p.k]?'✓ Dans la liste à contrôler':'+ À contrôler sur place')+'</button></div>';
@@ -629,10 +629,11 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';if(tab==='r
  if(tab==='res'&&MODE!=='pri'){const F=D.h.features.map(f=>f.properties).filter(inScope),n=g=>F.filter(p=>p.g===g).length,out=D.h.features.length-F.length;
   const pc=g=>F.length?Math.round(100*n(g)/F.length):0;
   h+='<div class="zsum"><div class="zh">'+(MODE==='leg'?'Périmètre OLD':'Commune entière')+' · <b>'+F.length+' constructions</b></div>';
-  h+='<button class="zc" style="--c:'+COLG.r+'" onclick="LF=\'r\';go(\'lst\')"><b>'+n('r')+'</b><span>Travaux à faire</span><i>'+pc('r')+' %</i></button>';
-  h+='<button class="zc" style="--c:'+COLG.o+'" onclick="LF=\'o\';go(\'lst\')"><b>'+n('o')+'</b><span>À vérifier</span><i>'+pc('o')+' %</i></button>';
-  h+='<button class="zc" style="--c:'+COLG.v+'" onclick="LF=\'v\';go(\'lst\')"><b>'+n('v')+'</b><span>Rien à signaler</span><i>'+pc('v')+' %</i></button></div>';
-  h+='<p class="muted" style="margin:8px 0 0">'+(MODE==='leg'?(D.zsrc==='est'?'Zone estimée (200 m autour des bois). ':'')+(out?out+' constructions hors zone : choisir « Commune entière » pour les voir. ':''):'Hors zone légale, le courrier prend la forme d\'une recommandation. ')+'Touchez une maison pour sa fiche, ou un chiffre pour la liste.</p>';
+  h+='<button class="zc" style="--c:'+COLG.r+'" onclick="LF=\'r\';go(\'lst\')"><b>'+n('r')+'</b><span>Urgent</span><i>'+pc('r')+' %</i></button>';
+  h+='<button class="zc" style="--c:'+COLG.o+'" onclick="LF=\'o\';go(\'lst\')"><b>'+n('o')+'</b><span>À faire</span><i>'+pc('o')+' %</i></button>';
+  h+='<button class="zc" style="--c:'+COLG.j+'" onclick="LF=\'j\';go(\'lst\')"><b>'+n('j')+'</b><span>Partiel</span><i>'+pc('j')+' %</i></button>';
+  h+='<button class="zc" style="--c:'+COLG.v+'" onclick="LF=\'v\';go(\'lst\')"><b>'+n('v')+'</b><span>Rien</span><i>'+pc('v')+' %</i></button></div>';
+  h+='<p class="muted" style="margin:8px 0 0">'+(MODE==='leg'?(D.zsrc==='est'?'Zone estimée (200 m autour des bois). ':'')+(out?out+' constructions hors zone : choisir « Commune entière » pour les voir. ':''):'Hors zone légale, le courrier prend la forme d\'une recommandation. ')+'Touchez une maison pour sa fiche, ou un chiffre pour la liste. Contour pointillé : à vérifier sur place.</p>';
  }
  if(tab==='res'&&MODE==='pri'&&D.porge){
   h+='<p style="margin-top:0"><b>Ce que l\'outil aurait montré au maire du Porge avant le feu du 22 juillet 2026.</b> Classement fait uniquement avec des données d\'avant le feu (relevé laser IGN, occupation du sol 2021, masque forêt 2021, photo aérienne 2025).</p>';
@@ -653,7 +654,7 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';if(tab==='r
  if(tab==='eta')h+=etaHTML();
  if(tab==='lst'){
   h+='<input id="q" class="srch" placeholder="Rechercher une adresse…" autocomplete="off">';
-  h+='<div class="fl">'+(RISK!=='feu'?keys().map(k=>[k,kname(k)]):MODE==='pri'?[['a',CAT.a[0]],['s',CAT.s[0]],['lis','Lisière (mairie)']]:[['r',GN.r[0]],['o',GN.o[0]],['v',GN.v[0]]]).concat(D.porge?[['x','Détruites']]:[]).concat([['*','Toutes']]).map(x=>'<button data-f="'+x[0]+'" class="'+(LF===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div><div id="lst"></div>';
+  h+='<div class="fl">'+(RISK!=='feu'?keys().map(k=>[k,kname(k)]):MODE==='pri'?[['a',CAT.a[0]],['s',CAT.s[0]],['lis','Lisière (mairie)']]:[['r','Urgent'],['o','À faire'],['j','Partiel / conseil'],['v','Rien à faire'],['vp','À vérifier sur place']]).concat(D.porge?[['x','Détruites']]:[]).concat([['*','Toutes']]).map(x=>'<button data-f="'+x[0]+'" class="'+(LF===x[0]?'on':'')+'">'+x[1]+'</button>').join('')+'</div><div id="lst"></div>';
  }
  if(tab==='ctl'){const o=CTL(),K=Object.keys(o).filter(k=>{const r=lastSt(+k);return !r||r.s!=='conforme'});
   if(K.length){h+='<h4 style="margin:0 0 2px">À contrôler sur place ('+K.length+')</h4><div class="muted">Ajoutées depuis la fiche. Elles sortent de la liste une fois contrôlées conformes.</div>';
@@ -679,9 +680,9 @@ function ui(){const k=D.k,b=document.getElementById('body');let h='';if(tab==='r
  b.innerHTML=h;if(tab==='lst'){const q=document.getElementById('q');q.value=Q;q.oninput=()=>{Q=q.value;drawList()};document.querySelectorAll('.fl button').forEach(x=>x.onclick=()=>{LF=x.dataset.f;ui()});drawList();}}
 function isLis(p){return p.c==='s'&&p.df<=20&&!p.ft&&!p.fv&&!p.b}
 function lis(){return D.h.features.filter(f=>isLis(f.properties)).length}
-function drawList(){const qq=Q.trim().toLowerCase();const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(LF==='*'||(LF==='x'?p.x:(LF==='lis'?isLis(p):key(p)===LF)))&&(!qq||(p.a||'').toLowerCase().includes(qq)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3,tr:0,to:1,tv:2,fr:0,fo:1,fi:2,fv:3};
- L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));const el=document.getElementById('lst');
- el.innerHTML='<div class="muted" style="margin-bottom:4px">'+L.length+' habitation'+(L.length>1?'s':'')+'</div>'+L.slice(0,400).map(p=>'<div class="li" data-k="'+p.k+'"><span class="dt" style="background:'+colOf(p)+'"></span><span class="ad">'+esc(p.a||'Habitation sans adresse')+'<span class="bs">'+(p.b?'<span class="bd">branches</span>':'')+(p.ft?'<span class="bd">broussaille terrain</span>':'')+(p.fv?'<span class="bd">broussaille voisins</span>':'')+(p.x?'<span class="bd k">détruite</span>':'')+'</span></span><span class="muted">›</span></div>').join('')+(L.length>400?'<div class="muted">… affinez la recherche</div>':'');
+function drawList(){const qq=Q.trim().toLowerCase();const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(LF==='*'||(LF==='x'?p.x:(LF==='lis'?isLis(p):(LF==='vp'?!!p.vp:key(p)===LF))))&&(!qq||(p.a||'').toLowerCase().includes(qq)));const o={a:0,s:1,n:2,r:0,o:1,j:2,v:3,h:4,tr:0,to:1,tv:2,fr:0,fo:1,fi:2,fv:3};
+ L.sort((a,b)=>o[key(a)]-o[key(b)]||(b.lz?1:0)-(a.lz?1:0)||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));const el=document.getElementById('lst');
+ el.innerHTML='<div class="muted" style="margin-bottom:4px">'+L.length+' habitation'+(L.length>1?'s':'')+'</div>'+L.slice(0,400).map(p=>'<div class="li" data-k="'+p.k+'"><span class="dt" style="background:'+colOf(p)+'"></span><span class="ad">'+esc(p.a||'Habitation sans adresse')+'<span class="bs">'+(p.vp?'<span class="bd">à vérifier sur place</span>':'')+(p.b?'<span class="bd">branches</span>':'')+(p.ft?'<span class="bd">broussaille terrain</span>':'')+(p.fv?'<span class="bd">broussaille voisins</span>':'')+(p.x?'<span class="bd k">détruite</span>':'')+'</span></span><span class="muted">›</span></div>').join('')+(L.length>400?'<div class="muted">… affinez la recherche</div>':'');
  el.querySelectorAll('.li').forEach(x=>x.onclick=()=>{PREV='lst';openByK(+x.dataset.k)});}
 function go(t){if(t!=='fic'&&tab==='fic'){SELP=null;drawAcc(null);drawHp(null);['par','z50'].forEach(k=>{if(LG[k]){map.removeLayer(LG[k]);LG[k]=null}});if(SEL){map.removeLayer(SEL);SEL=null}restyle();}if(PL){if(t==='par')PL.addTo(map);else map.removeLayer(PL);}document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===t));tab=t;ui();document.getElementById('panel').classList.remove('min');}
 function tog(id){const e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block'}
@@ -697,7 +698,7 @@ async function getF(p){const key=D.city+'_'+p.k;if(FCACHE[key])return FCACHE[key
 function typName(p){return p.t==='c'?'Camping / hébergement de loisirs':p.t==='e'?((p.u&&p.u!=='Annexe'&&p.u!=='Indifférencié')?'Bâtiment '+p.u.toLowerCase():'Bâtiment (hors habitation)'):'Habitation'}
 function today_(){return new Date().toISOString().slice(0,10)}
 /* --- Accueil : 3 tuiles --- */
-function homeHTML(){const F=D.h.features.map(f=>f.properties),R=relances(),sansEnv=F.filter(p=>p.k!==undefined&&p.l&&p.g==='r'&&!envois(p.k).length).length;
+function homeHTML(){const F=D.h.features.map(f=>f.properties),R=relances(),sansEnv=F.filter(p=>p.k!==undefined&&p.l&&(p.g==='r'||p.g==='o')&&!envois(p.k).length).length;
  const it=(id,ic,h,d,badge)=>'<button class="mi" onclick="homeGo(\''+id+'\')"><span class="mic">'+ic+'</span><span class="mtx"><b>'+h+'</b><span>'+d+'</span>'+(badge?'<i>'+badge+'</i>':'')+'</span><span class="mar">›</span></button>';
  return '<div class="home"><div class="hh"><div class="hk">VB OLD · obligations légales de débroussaillement</div><h2>'+esc(D.nom)+'</h2><div class="muted">Que voulez-vous faire ?</div></div><div class="menu">'+
  it('map','<svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zm0 0v14m6-12v14"/></svg>','Carte des constructions','Voir chaque maison ou bâtiment, sa fiche, préparer un courrier','')+
@@ -719,12 +720,12 @@ function actHTML(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  const o=CTL(),K=Object.keys(o).filter(k=>{const r=lastSt(+k);return !r||r.s!=='conforme'});
  h+='<h4 style="margin:12px 0 2px">2. À contrôler sur place ('+K.length+')</h4>'+(K.length?K.map(k=>row(+k,esc(o[k].n))).join(''):'<div class="muted">Aucune. Bouton « + À contrôler sur place » dans les fiches.</div>');
  h+='<h4 style="margin:12px 0 2px">3. Réponses des habitants (0)</h4><div class="muted">Arrivent ici quand le serveur de la commune est en service (QR code des courriers).</div>';
- const S=F.filter(p=>p.l&&p.g==='r'&&!envois(p.k).length).sort((a,b)=>(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
+ const S=F.filter(p=>p.l&&(p.g==='r'||p.g==='o')&&!envois(p.k).length).sort((a,b)=>(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
  h+='<h4 style="margin:12px 0 2px">4. Travaux à faire, aucun courrier envoyé ('+S.length+')</h4><div class="btns" style="margin:2px 0 6px"><button class="btn" onclick="selAll(1)">Tout cocher (50 max)</button><button class="btn" onclick="selAll(0)">Décocher</button><button class="btn dark" id="grpb" onclick="lettresGroupees([...ASEL])">Courriers groupés ('+ASEL.size+')</button></div>'+
   S.slice(0,300).map(p=>row(p.k,typName(p)+(p.b?' · branches':'')+(p.ft?' · broussaille terrain':''),1)).join('')+(S.length>300?'<div class="muted">… '+(S.length-300)+' autres (liste Maisons)</div>':'');
  return h}
 function selT(k,v){if(v)ASEL.add(k);else ASEL.delete(k);const b=document.getElementById('grpb');if(b)b.textContent='Courriers groupés ('+ASEL.size+')'}
-function selAll(v){ASEL=new Set();if(v){D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&p.l&&p.g==='r'&&!envois(p.k).length).slice(0,50).forEach(p=>ASEL.add(p.k))}ui()}
+function selAll(v){ASEL=new Set();if(v){D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&p.l&&(p.g==='r'||p.g==='o')&&!envois(p.k).length).slice(0,50).forEach(p=>ASEL.add(p.k))}ui()}
 function printJour(){const w=window.open('','_blank');if(!w)return;const b=document.getElementById('body').cloneNode(true);b.querySelectorAll('button,input').forEach(x=>x.remove());
  w.document.write('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Résumé du jour</title><style>body{font:12px system-ui;margin:16mm}.li{border-bottom:1px solid #eee;padding:3px 0;display:block}.bs{display:block;color:#666}.chip{display:inline-block;margin:2px 6px 2px 0}.muted{color:#666}</style></head><body><h2>'+esc(D.nom)+' – résumé du jour</h2>'+b.innerHTML+'</body></html>');w.document.close();setTimeout(()=>w.print(),300)}
 /* --- Fiche : envois en bas de « Contrôle et envois » --- */
@@ -751,7 +752,7 @@ function applyLay(){const s=(k,l)=>{if(!l)return;if(lay(k)){if(!map.hasLayer(l))
 function initLayers(){
  LG.cad=L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&STYLE=PCI%20vecteur&TILEMATRIXSET=PM&FORMAT=image/png&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',{maxNativeZoom:19,maxZoom:20,opacity:.9,minZoom:15});
  if(D.an){LG.an=L.geoJSON({type:'FeatureCollection',features:D.an},{renderer:CV,style:{stroke:true,color:'#777',weight:1,fillColor:'#bdb8ae',fillOpacity:.7},onEachFeature:(f,l)=>l.on('click',()=>openByK(f.properties.an)).bindTooltip('Annexe : voir la fiche de la construction voisine',{sticky:true,className:'tt'})})}
- if(D.cm){const QC={r:'#c62828',o:'#f0a020',v:'#2e7d32'},GE={com:'Commune',dep:'Département',etat:'État',dfci:'ASA DFCI (piste, pare-feu)',ind:'À vérifier (chemin sans nom : commune, ONF ou DFCI)'};
+ if(D.cm){const QC={r:'#d93636',o:'#e8590c',v:'#5a9a2a'},GE={com:'Commune',dep:'Département',etat:'État',dfci:'ASA DFCI (piste, pare-feu)',ind:'À vérifier (chemin sans nom : commune, ONF ou DFCI)'};
   LG.voi=L.layerGroup(D.cm.v.map((s,i)=>L.polyline(s.g,{renderer:CV,color:QC[s.q],weight:s.ge==='com'?5:3,opacity:.9,dashArray:s.ge==='com'?null:'4 4'}).bindTooltip(()=>'<b>'+esc(s.n||'Voie sans nom')+'</b><br>Gestionnaire : '+GE[s.ge]+'<br>'+voiTxt(s),{sticky:true,className:'tt'})));
   LG.pcm=L.layerGroup(D.cm.p.map(q=>L.polygon(q.g,{renderer:CV,color:'#1565c0',weight:1.5,fillColor:'#1565c0',fillOpacity:.12}).bindTooltip(()=>'<b>Parcelle communale '+q.i.slice(-6)+'</b><br>'+esc(q.na||'')+(q.b50?'<br>'+m2(q.b50)+' de broussaille à moins de 50 m de constructions':''),{sticky:true,className:'tt'})))}
  layCtl();applyLay()}
@@ -771,7 +772,7 @@ function etaHTML(){const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),
  const EN=Object.values(SV.en).reduce((a,b)=>a+b.length,0),ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean);
  let h='<button class="btn dark" style="width:100%;margin:0 0 10px;padding:10px" onclick="rapportCommune()">Rapport d\'état de la commune (PDF) ↗</button>';
  h+='<div class="box" style="margin-top:0"><h3>Constructions</h3><table class="pt"><tr><th></th><th class="r">Total</th><th class="r">Zone légale</th><th class="r">Travaux</th></tr>'+
-  [['h','Habitations'],['e','Autres bâtiments (entreprises, équipements)'],['c','Campings, hébergements de loisirs']].map(([t,n])=>{const L_=ty(t);return '<tr><td>'+n+'</td><td class="r">'+L_.length+'</td><td class="r">'+L_.filter(p=>p.l).length+'</td><td class="r">'+L_.filter(p=>p.l&&p.g==='r').length+'</td></tr>'}).join('')+'</table>'+
+  [['h','Habitations'],['e','Autres bâtiments (entreprises, équipements)'],['c','Campings, hébergements de loisirs']].map(([t,n])=>{const L_=ty(t);return '<tr><td>'+n+'</td><td class="r">'+L_.length+'</td><td class="r">'+L_.filter(p=>p.l).length+'</td><td class="r">'+L_.filter(p=>p.l&&(p.g==='r'||p.g==='o')).length+'</td></tr>'}).join('')+'</table>'+
   '<div class="muted" style="margin-top:4px">Zone légale : '+g('r')+' travaux à faire · '+g('o')+' à vérifier · '+g('v')+' rien à signaler</div></div>';
  h+='<div class="box"><h3>Campagne</h3><div class="chips"><span class="chip">Envois : <b>'+EN+'</b></span><span class="chip">Contrôlés conformes : <b>'+ST_.filter(s=>s.s==='conforme').length+'</b></span><span class="chip">Non conformes : <b>'+ST_.filter(s=>s.s==='non_conforme').length+'</b></span><span class="chip">Relances dues : <b>'+relances().length+'</b></span></div></div>';
  if(D.cm){const V=D.cm.v,com=V.filter(s=>s.ge==='com'),km=L_=>(L_.length*0.05).toFixed(1).replace('.',','),byS={};
@@ -797,7 +798,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ===== Navigation B : 3 modes en haut (Carte · Actions en cours · État de la commune), un écran par mode ===== */
 let TOP='map',AZ='leg';
 function topBar(){const R=relances(),F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0;
- const sansEnv=F.filter(p=>p.k!==undefined&&p.l&&p.g==='r'&&!envois(p.k).length).length;
+ const sansEnv=F.filter(p=>p.k!==undefined&&p.l&&(p.g==='r'||p.g==='o')&&!envois(p.k).length).length;
  const SH={map:'Carte',act:'Suivi',eta:'Bilan'};const M=[['map','Carte','Fiches et courriers par construction',F.filter(p=>p.k!==undefined).length+''],['act','Suivi des actions','Relances, contrôles, courriers',R.length?R.length+' relance'+(R.length>1?'s':''):sansEnv+' à envoyer'],['eta','Tableau de bord','Bilan communal et rapport',pc+' %']];
  document.getElementById('topm').innerHTML=M.map(m=>{const on=m[0]===TOP;return '<button class="tm'+(on?' on':'')+'" data-m="'+m[0]+'" aria-pressed="'+on+'" onclick="setTop(\''+m[0]+'\')"><em class="ti" aria-hidden="true"></em><b><span class="lg">'+m[1]+'</span><span class="sh">'+SH[m[0]]+'</span></b>'+(on?'<span>'+m[2]+'</span>':'<i class="'+(m[0]==='act'&&R.length?'hot':'')+'">'+m[3]+'</i>')+'</button>'}).join('');}
 function setTop(m){TOP=m;try{localStorage.setItem('oldtop',m)}catch(_){}
@@ -817,7 +818,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  const row=(k,txt,chk)=>{const p=prop_(k);return '<div class="pr" onclick="PREV=\'res\';openByK('+k+')">'+(chk?'<input type="checkbox" aria-label="Sélectionner" '+(ASEL.has(k)?'checked':'')+' onclick="event.stopPropagation();selT('+k+',this.checked)">':'')+'<span class="dt" style="background:'+(p?(COLG[p.g]||'#cbd5e1'):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'};
  const col=(t,n,d,body,cta,hot)=>'<section class="pcol"><div class="pch"><b>'+t+'</b><span class="bd'+(hot?' hot':'')+'">'+n+'</span></div><div class="muted">'+d+'</div><div class="pcl">'+body+'</div>'+(cta||'')+'</section>';
  const o=CTL(),K=Object.keys(o).filter(k=>{const r=lastSt(+k);return !r||r.s!=='conforme'});
- const LT=LATER(),S=F.filter(p=>(AZ==='com'||p.l)&&p.g==='r'&&!envois(p.k).length&&!LT[p.k]).sort((a,b)=>(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
+ const LT=LATER(),S=F.filter(p=>(AZ==='com'||p.l)&&(p.g==='r'||p.g==='o')&&!envois(p.k).length&&!LT[p.k]).sort((a,b)=>(a.g==='r'?0:1)-(b.g==='r'?0:1)||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
  let h='<div class="ph"><h1>Suivi des actions</h1><span class="muted">Aujourd\'hui : '+envT.length+' envoi'+(envT.length>1?'s':'')+' · '+ctlT.length+' contrôle'+(ctlT.length>1?'s':'')+' · 0 réponse d\'habitant</span><span class="sp"></span><div class="zseg" title="Indépendant de la carte"><button class="'+(AZ==='leg'?'on':'')+'" onclick="AZ=\'leg\';refreshTop()">Périmètre OLD</button><button class="'+(AZ==='com'?'on':'')+'" onclick="AZ=\'com\';refreshTop()">Commune entière</button></div><button class="btn" onclick="printJour()">Imprimer le résumé du jour</button><button class="btn" onclick="csvSuivi()">Exporter (tableur)</button></div>';
  h+='<div class="pgrid4">';
  h+=col('Relances dues',R.length,'Courrier envoyé il y a plus de 60 jours, aucun contrôle conforme depuis',R.length?R.map(([k,e])=>row(k,'envoi du '+fdate(e.d))).join(''):'<div class="emp">Aucune relance due.</div>',R.length?'<button class="btn dark" onclick="lettresGroupees(['+R.map(x=>x[0]).join(',')+'])">Courriers de relance ('+R.length+')</button>':'',R.length);
@@ -832,7 +833,7 @@ function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.pro
  const ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),km=D.cm?(D.cm.v.filter(s=>s.ge==='com'&&s.q==='r').length*0.05).toFixed(1).replace('.',','):'–';
  const kp=(t,v,d,c)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div><div class="kd">'+d+'</div></div>';
  let h='<div class="ph"><h1>Tableau de bord communal</h1><span class="muted">'+esc(D.nom)+' · '+imgTxt()+'</span><span class="sp"></span><button class="btn dark" onclick="rapportCommune()">Rapport d\'état (PDF) ↗</button></div>';
- h+='<div class="kgrid">'+kp('Zone légale',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('Travaux à faire',Z.filter(p=>p.g==='r').length,'en zone légale')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
+ h+='<div class="kgrid">'+kp('Zone légale',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('Débroussaillement à faire',Z.filter(p=>p.g==='r'||p.g==='o').length,'en zone légale')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
  h+='<div class="pcols">'+etaRisk()+etaHTML().replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
  return h}
 
@@ -942,7 +943,7 @@ function etaRisk(){let h='';
 /* ===== Vue générale (tous risques), météo de crise, KPI de crise, courriers par thème et multirisque ===== */
 RC.a3='#4a148c';RC.a2='#c62828';RC.a1='#f0a020';RC.a0='#cfc9bd';
 RN.a3='3 aléas forts';RN.a2='2 aléas forts';RN.a1='1 aléa fort';RN.a0='Aucun aléa fort';
-function rFeu(p){return !!(p.l&&p.g==='r')}
+function rFeu(p){return !!(p.l&&(p.g==='r'||p.g==='o'))}
 function rTem(p){return !!D.st&&stG(p)==='r'}
 function rInd(p){if(!D.fl)return false;const g=flG(p);return g==='r'||g==='i'}
 function nRisk(p){return (rFeu(p)?1:0)+(rTem(p)?1:0)+(rInd(p)?1:0)}
@@ -1372,12 +1373,12 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif
 .zseg button{flex:1;border:0;background:none;border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px;font-weight:600;color:#64748b;cursor:pointer;white-space:nowrap}
 .zseg button.on{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.15)}
 .ph .zseg{flex:0 0 auto}
-.zsum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.zsum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .zh{grid-column:1/-1;font-size:13px;color:#64748b}.zh b{color:#0f172a}
 .zc{position:relative;text-align:left;border:1px solid #e5e7eb;background:#fff;border-radius:14px;padding:12px 12px 10px;cursor:pointer;font:inherit;transition:.15s;overflow:hidden}
 .zc::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--c)}
 .zc:hover{border-color:#cbd5e1;box-shadow:0 8px 18px -10px rgba(15,23,42,.4);transform:translateY(-1px)}
-.zc b{display:block;font-size:26px;line-height:1.05;letter-spacing:-.03em;color:var(--c)}.zc span{display:block;font-size:12px;font-weight:600;color:#0f172a;margin-top:2px}.zc i{display:block;font-style:normal;font-size:11.5px;color:#64748b}
+.zc b{display:block;font-size:26px;line-height:1.05;letter-spacing:-.03em;color:var(--c)}.zc span{display:block;font-size:12px;font-weight:600;color:#0f172a;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zc i{display:block;font-style:normal;font-size:11.5px;color:#64748b}
 .envf{margin-top:10px;border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#f8fafc}
 .envf .lab{font-size:12px;font-weight:650;color:#334155;margin-bottom:6px}
 .envf .row{display:flex;gap:6px;flex-wrap:wrap}.envf select,.envf input[type=date]{flex:1;min-width:0;border:1px solid #e2e8f0;border-radius:9px;padding:6px 8px;font:inherit;font-size:13px;background:#fff}
