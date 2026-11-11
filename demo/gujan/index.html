@@ -1177,7 +1177,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' Â
  map.on('zoomend',()=>{const z=map.getZoom();if(z>=17)map.removeLayer(MK);else if(!map.hasLayer(MK))MK.addTo(map);});
  document.querySelectorAll('.tab[data-t]').forEach(b=>b.onclick=()=>go(b.dataset.t));
  updTabs();initLayers();initRiskLayers();try{const r0=localStorage.getItem('oldrisk');if(!D.st)setRisk('feu');else if(r0&&(r0!=='inond'||D.fl))setRisk(r0);else setRisk('all')}catch(_){riskBar()}document.getElementById('tbn').textContent=D.nom;setTop('map');
- {const P=document.getElementById('panel'),R=document.getElementById('prs'),setW=w=>{w=Math.max(340,Math.min(innerWidth*0.75,w));document.documentElement.style.setProperty('--pw',w+'px');try{localStorage.setItem('oldpw',w)}catch(_){}};try{const w=+localStorage.getItem('oldpw');if(w)setW(w)}catch(_){}
+ {const P=document.getElementById('panel'),R=document.getElementById('prs'),setW=w=>{w=Math.max(340,Math.min(innerWidth*0.75,w));document.documentElement.style.setProperty('--pw',w+'px');};setW(Math.round(Math.min(440,Math.max(360,innerWidth*0.26))));
   R.addEventListener('mousedown',e=>{e.preventDefault();const mv=ev=>setW(innerWidth-10-ev.clientX),up=()=>{removeEventListener('mousemove',mv);removeEventListener('mouseup',up);map.invalidateSize()};addEventListener('mousemove',mv);addEventListener('mouseup',up)});
   R.addEventListener('dblclick',()=>{const cur=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--pw'))||400;setW(cur>500?400:Math.round(innerWidth*0.55));map.invalidateSize()})}
  document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
@@ -1194,7 +1194,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' Â
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#0f172a;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='+6wKCmQCvhdewHk1/GbhHA==',ITER=600000;let KEY=null;
+const SALT='HtblaNVwyY0HDpzYP+XT+Q==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
