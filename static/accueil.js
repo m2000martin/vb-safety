@@ -249,8 +249,7 @@
       var tel = (data.get('telephone') || '').trim(), creneau = data.getAll('creneau').join(', ');
       var body = data.get('message') + '\n\n—\n' + data.get('nom') + '\n' + data.get('organisation') + '\n' + data.get('email')
         + (tel ? '\n' + (EN ? 'Phone' : 'Téléphone') + ' : ' + tel + (creneau ? ' (' + creneau + ')' : '') : '')
-        + '\n' + (EN ? 'Profile' : 'Profil') + ' : ' + data.get('profil')
-        + '\n' + (EN ? 'Tool' : 'Outil') + ' : ' + data.get('outil');
+        + '\n' + (EN ? 'Profile' : 'Profil') + ' : ' + data.get('profil');
       setTimeout(function () { location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }, 600);
     } finally {
       btn.disabled = false; btn.firstElementChild.textContent = M.submit;
