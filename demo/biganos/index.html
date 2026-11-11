@@ -214,7 +214,7 @@ details.wv{display:block}details.wv summary{display:flex;align-items:center;gap:
 .tcur{flex-wrap:wrap}
 .seg{border:0;background:none;padding:0;overflow:visible;flex-wrap:wrap;gap:4px;width:auto}.seg button{flex:none;border:1px solid #e5e7eb!important;border-radius:999px;padding:5px 9px}
 </style><style>#chg,#chg3{display:none!important}</style></head><body>
-<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a class="rdvt" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">Demander un rdv pour ma ville</a><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Activer la cellule de crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
+<div id="topbar"><div class="tbl"><span>VB OLD</span><b id="tbn"></b></div><div id="risk" role="group" aria-label="Risque"></div><nav id="topm" aria-label="Modes"></nav><a class="rdvt" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">Demander une démo pour ma ville</a><button id="crisebtn" class="crb" aria-pressed="false" onclick="crisisToggle()">Activer la cellule de crise</button><a href="#" id="chg3" onclick="try{sessionStorage.removeItem('oldv')}catch(_){}location.reload();return false">Changer de commune</a></div>
 <div id="map"></div><div id="page"></div><div id="pcc"><div id="pcch"></div><div id="pcct"><button data-t="map" onclick="pccTab('map')">Carte et état de la commune</button><button data-t="act" onclick="pccTab('act')">Actions en cours</button></div><div class="pccb"><section id="pccL" aria-label="Carte et état de la commune"><div id="pccS"></div><div id="pccmap"></div></section><section id="pccR" aria-label="Actions en cours"><div id="pccl"></div><div id="pccr"></div></section></div></div>
 <div id="head" class="card">
  <button id="hx" onclick="this.parentNode.classList.toggle('cmp');setTimeout(placeCtl,0);this.textContent=this.parentNode.classList.contains('cmp')?'▾ détails':'▴ réduire'">▴ réduire</button><h1 id="ttl"></h1>
@@ -222,7 +222,7 @@ details.wv{display:block}details.wv summary{display:flex;align-items:center;gap:
  <div class="modes" id="modes"></div><div class="mdesc" id="mdesc"></div>
  <div class="kpi"><div class="pc" id="pc"></div><div class="tx" id="pctx"></div></div>
  <div class="leg" id="leg"></div>
- <a class="rdvh" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">📅 Demander un rdv pour ma ville</a>
+ <a class="rdvh" href="https://calendar.app.google/2akSPAUYagxgU2AR7" target="_blank" rel="noopener">📅 Demander une démo pour ma ville</a>
 </div>
 <div id="panel" class="card"><div id="prs" title="Glisser pour élargir · double-clic : grand ou normal"></div>
  <div id="grip" title="Glisser ou toucher pour réduire"></div><button id="pmin" type="button" onclick="document.getElementById('panel').classList.add('min')">▾ Réduire</button>
@@ -800,7 +800,7 @@ function adr_(k){const f=D.h.features.find(x=>x.properties.k===k);return esc(f?(
 function prop_(k){const f=D.h.features.find(x=>x.properties.k===k);return f?f.properties:null}
 let CSET=new Set();
 function ctlRow(k,txt){const p=prop_(k);return '<div class="pr" onclick="PREV=\'res\';openByK('+k+')"><input type="checkbox" aria-label="Sélectionner" '+(CSET.has(k)?'checked':'')+' onclick="event.stopPropagation();CSET[this.checked?\'add\':\'delete\']('+k+');refreshTop()"><span class="dt" style="background:'+(p?colOf(p):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'}
-async function ctlLot(st){if(!CSET.size){alert('Cochez d\'abord les maisons contrôlées.');return}const n=CSET.size;if(!confirm(n+' maison'+(n>1?'s':'')+' : enregistrer « '+STATUTS[st][0]+' » à la date du jour ?'))return;for(const k of CSET)await saveStatut(k,st,today_(),'','Contrôle enregistré en lot');CSET=new Set();refreshTop()}
+async function ctlLot(st){if(!CSET.size){alert('Cochez d\'abord les maisons contrôlées.');return}const n=CSET.size;if(!confirm(n+' maison'+(n>1?'s':'')+' : enregistrer le résultat « '+STATUTS[st][0]+' » à la date du jour dans leur fiche ?'+(st==='conforme'?'\nElles sortiront de la liste « À contrôler sur place ».':'\nElles restent dans la liste « À contrôler sur place ».')))return;for(const k of CSET)await saveStatut(k,st,today_(),'','Contrôle enregistré en lot');CSET=new Set();refreshTop()}
 function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined),R=relances();
  const envT=[],ctlT=[];Object.keys(SV.en).forEach(k=>envois(+k).forEach(e=>{if(e.d===t)envT.push([+k,e])}));Object.keys(SV.st).forEach(k=>(SV.st[k]||[]).forEach(s=>{if(s.d===t)ctlT.push([+k,s])}));
  const row=(k,txt,chk)=>{const p=prop_(k);return '<div class="pr" onclick="PREV=\'res\';openByK('+k+')">'+(chk?'<input type="checkbox" aria-label="Sélectionner" '+(ASEL.has(k)?'checked':'')+' onclick="event.stopPropagation();selT('+k+',this.checked)">':'')+'<span class="dt" style="background:'+(p?colOf(p):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'};
@@ -810,7 +810,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  let h='<div class="ph"><h1>Suivi des actions</h1><span class="muted">Aujourd\'hui : '+envT.length+' envoi'+(envT.length>1?'s':'')+' · '+ctlT.length+' contrôle'+(ctlT.length>1?'s':'')+' · 0 réponse d\'habitant</span><span class="sp"></span><button class="btn" onclick="printJour()">Imprimer le résumé du jour</button><button class="btn" onclick="csvSuivi()">Exporter (tableur)</button></div>';
  h+='<div class="pgrid4">';
  h+=col('Relances dues',R.length,'Courrier envoyé il y a plus de 60 jours, aucun contrôle conforme depuis',R.length?R.map(([k,e])=>row(k,'envoi du '+fdate(e.d))).join(''):'<div class="emp">Aucune relance due.</div>',R.length?'<button class="btn dark" onclick="lettresGroupees(['+R.map(x=>x[0]).join(',')+'])">Courriers de relance ('+R.length+')</button>':'',R.length);
- h+=col('À contrôler sur place',K.length,'Ajoutées depuis les fiches (« + À contrôler sur place »). Cochez-en plusieurs pour enregistrer le résultat en une fois.',K.length?K.map(k=>ctlRow(+k,esc(o[k].n))).join(''):'<div class="emp">Aucune. Ajoutez des maisons depuis leur fiche sur la carte.</div>',K.length?'<div class="btns"><button class="btn" onclick="CSET=new Set(['+K.join(',')+']);refreshTop()">Tout cocher</button><button class="btn" onclick="CSET=new Set();refreshTop()">Décocher</button></div><div class="btns" style="margin-top:6px"><button class="btn ok" onclick="ctlLot(\'conforme\')">Conformes ('+CSET.size+')</button><button class="btn" onclick="ctlLot(\'non_conforme\')">Non conformes ('+CSET.size+')</button><button class="btn" onclick="ctlLot(\'a_recontroler\')">À recontrôler ('+CSET.size+')</button></div><button class="btn dark" style="margin-top:6px" onclick="printJour()">Imprimer la tournée</button>':'');
+ h+=col('À contrôler sur place',K.length,'Maisons à vérifier sur le terrain (ajoutées depuis leur fiche). Après la visite : cochez-les, puis indiquez le résultat.',K.length?K.map(k=>ctlRow(+k,esc(o[k].n))).join(''):'<div class="emp">Aucune. Ajoutez des maisons depuis leur fiche sur la carte (« + À contrôler sur place »).</div>',K.length?'<button class="btn dark" style="width:100%" onclick="printJour()">1. Imprimer la tournée</button><div class="btns" style="margin-top:8px"><button class="btn" onclick="CSET=new Set(['+K.join(',')+']);refreshTop()">Tout cocher</button><button class="btn" onclick="CSET=new Set();refreshTop()">Décocher</button></div><div class="ctlres'+(CSET.size?'':' off')+'"><div class="ctlh">2. Résultat du contrôle'+(CSET.size?' · <b>'+CSET.size+' maison'+(CSET.size>1?'s':'')+' cochée'+(CSET.size>1?'s':'')+'</b>':' · cochez d\'abord les maisons visitées')+'</div><button class="ctlb ok" onclick="ctlLot(\'conforme\')"><b>✓ Conforme</b><span>Débroussaillement fait : la maison sort de la liste</span></button><button class="ctlb ko" onclick="ctlLot(\'non_conforme\')"><b>✗ Non conforme</b><span>Reste dans la liste ; un nouveau courrier peut partir depuis la fiche</span></button><button class="ctlb rc" onclick="ctlLot(\'a_recontroler\')"><b>↻ À recontrôler</b><span>Visite impossible ou travaux en cours : reste dans la liste</span></button><div class="ctlf">Le résultat est enregistré à la date du jour dans la fiche de chaque maison.</div></div>':'');
  h+=col('Réponses des habitants',0,'Reçues par le QR code des courriers','<div class="emp">Arrivent ici quand le serveur de la commune est en service. <a href="/OLD-demo/r/#DEMO" target="_blank">Voir la page habitant</a></div>','');
  h+=col('Courriers à envoyer',S.length,'Travaux à faire, aucun courrier envoyé',S.slice(0,200).map(p=>row(p.k,typName(p)+(p.b?' · branches':'')+(p.ft?' · broussaille':''),1)).join('')+(S.length>200?'<div class="emp">… '+(S.length-200)+' autres</div>':''),
   '<div class="btns"><button class="btn" onclick="selAll(1);refreshTop()">Cocher 50</button><button class="btn" onclick="selAll(0);refreshTop()">Décocher</button><button class="btn dark" id="grpb" onclick="lettresGroupees([...ASEL])">Courriers groupés ('+ASEL.size+')</button></div>',S.length);
@@ -1194,7 +1194,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#0f172a;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div></form></div>
 <script>
-const SALT='hq/W4vgGEGhU40x0gJiz4Q==',ITER=600000;let KEY=null;
+const SALT='tMbzKhbKo9mHhI4ugCJsqA==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}
@@ -1212,7 +1212,16 @@ document.getElementById('gate').remove();start(d);
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='chg'){e.preventDefault();try{sessionStorage.removeItem('oldv')}catch(_){}location.reload()}});
 try{const c=sessionStorage.getItem('oldk');if(c){document.getElementById('gc').value=c;document.getElementById('gf').requestSubmit();}}catch(_){}
 </script>
-<style id="skin">/* ===== Habillage 2026-11 : rail de navigation, palette ardoise ===== */
+<style id="skin">.ctlres{margin-top:12px;border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#f8fafc;display:flex;flex-direction:column;gap:6px}
+.ctlres.off .ctlb{opacity:.45;pointer-events:none}
+.ctlh{font-size:12.5px;color:#64748b;margin:0 2px 2px}.ctlh b{color:#0f172a}
+.ctlb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:9px 11px;cursor:pointer;font:inherit;transition:.15s}
+.ctlb b{font-size:13.5px}.ctlb span{font-size:12px;color:#64748b}
+.ctlb.ok b{color:#15803d}.ctlb.ok:hover{border-color:#16a34a;background:#f0fdf4}
+.ctlb.ko b{color:#b91c1c}.ctlb.ko:hover{border-color:#dc2626;background:#fef2f2}
+.ctlb.rc b{color:#475569}.ctlb.rc:hover{border-color:#64748b;background:#f1f5f9}
+.ctlf{font-size:11.5px;color:#94a3b8;margin:2px 2px 0}
+/* ===== Habillage 2026-11 : rail de navigation, palette ardoise ===== */
 html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.005em;color:#0f172a}
 .card{border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,.06),0 12px 32px -12px rgba(15,23,42,.35);border:1px solid rgba(226,232,240,.9)}
 .btn{border-radius:10px;font-weight:600;border-color:#e2e8f0;transition:background .15s,border-color .15s,box-shadow .15s}
@@ -1268,7 +1277,7 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif
  .rdvt:hover{background:#1e293b}
  .crb,.rdvt{font-size:0!important}
  .crb::after{content:"Cellule de crise";font-size:10.5px;font-weight:650}
- .rdvt::after{content:"Demander un rdv";font-size:10.5px;font-weight:650}
+ .rdvt::after{content:"Demander une démo";font-size:10.5px;font-weight:650}
  #chg3{color:#64748b;font-size:10px;text-align:center}
  #map{left:76px}
  #page{left:76px;padding:22px 26px 40px}
