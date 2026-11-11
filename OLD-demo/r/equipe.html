@@ -29,6 +29,7 @@ textarea{width:100%;font:inherit;border:1px solid #d6d0c6;border-radius:10px;pad
 .sv{width:100%;border:0;border-radius:11px;padding:12px;background:#1c2126;color:#fff;font:650 15px system-ui;margin-top:6px;cursor:pointer}
 .demo{background:#fff3cd;border:1px solid #e6c65c;border-radius:12px;padding:9px 12px;font-size:12.5px;margin-top:16px;color:#5a4a10}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1c2126;color:#fff;border-radius:10px;padding:11px 16px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9}.toast.on{opacity:1}
+.nb{display:inline-block;background:#1c2126;color:#fff;border-radius:7px;font-size:12px;font-weight:700;padding:1px 7px;margin-right:7px;vertical-align:1px}.act .nb{font-size:15px;padding:2px 9px}.lock{opacity:.55}.tk{font-size:12.5px;color:#1565c0;font-weight:650;margin-top:2px}
 </style></head><body>
 <div style="max-width:620px;margin:10px auto 0;padding:0 14px"><a href="#" onclick="if(window.opener){window.close();}else{history.back()}return false" style="display:inline-flex;gap:6px;align-items:center;background:#0f172a;color:#fff;text-decoration:none;font-weight:650;font-size:13px;border-radius:999px;padding:7px 12px;font-family:system-ui,sans-serif">← Revenir à la vue mairie</a> <span style="font:13px system-ui,sans-serif;color:#64748b">Démonstration · vue service technique (téléphone du chef d'équipe)</span></div>
 <div class="top"><small id="com">Commune</small><div class="r"><b>Missions de l'équipe</b><select id="me" aria-label="Mon équipe"></select></div><div class="stb" id="stb"></div></div>
@@ -53,20 +54,23 @@ const all=()=>J('vbteams_'+C)||{},me=()=>all()[ME]||{},incs=()=>J('vbinc_'+C)||[
 function put(fn){const o=all(),t=o[ME]||{};fn(t);t.h=hnow();t.by='terrain';t.logS=Date.now();o[ME]=t;localStorage.setItem('vbteams_'+C,JSON.stringify(o));render()}
 function toast(s){const e=document.getElementById('toast');e.textContent=s;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1900)}
 const lab=x=>'n°'+x.id+' '+x.l;
-function go(id){const x=incs().find(y=>y.id===id);if(!x)return;if(me().cur&&me().cur!==id&&!confirm('Une mission est déjà en cours. Passer à celle-ci ?'))return;
+const nb=id=>'<span class="nb">n°'+id+'</span>';
+function onIt(id){const o=all();for(const k in o){if(k!==ME&&o[k]&&(o[k].cur===id)&&(o[k].s==='route'||o[k].s==='inter'))return k}return null}
+const tName=k=>(DEF.t.find(t=>t.id===k)||{n:'Une autre équipe'}).n;
+function go(id){const x=incs().find(y=>y.id===id);if(!x)return;const oc=onIt(id);if(oc){toast(tName(oc)+' est déjà dessus');render();return}if(me().cur&&me().cur!==id&&!confirm('Une mission est déjà en cours. Passer à celle-ci ?'))return;
  put(t=>{t.cur=id;t.s='route';t.task=lab(x)+' · '+x.v;t.go=id;if(x.team!==ME)t.take=id});toast('En route : la cellule est prévenue')}
 function arrive(){const id=me().cur;put(t=>{t.s='inter';t.start=id});toast('Sur place')}
 function done(){const id=me().cur;if(!id)return;put(t=>{t.done=id;t.cur=null;t.s='dispo';t.task=''});toast('Mission terminée')}
 function setS(s){put(t=>{t.s=s;if(s==='dispo'||s==='indispo'){t.cur=null;t.task=''}});toast('Statut : '+TST[s][0])}
 function saveNote(){const v=document.getElementById('task').value.trim();if(!v)return;put(t=>{t.task=(me().cur?(t.task||'').split(' — ')[0]+' — ':'')+v});document.getElementById('task').value='';toast('Précision envoyée')}
-function row(x,mine){const busy=me().cur===x.id;return '<div class="mi'+(mine?' mine':'')+'"><div class="x">'+(x.pr===1?'<span class="p1">URGENT</span>':'')+'<b>'+esc(x.l)+'</b><div class="v">📍 '+esc(x.v)+(x.h?' · '+esc(x.h):'')+'</div>'+(x.d?'<div class="d">'+esc(x.d)+'</div>':'')+'</div><button onclick="go('+x.id+')"'+(busy?' disabled':'')+'>'+(busy?'En cours':'J\'y vais')+'</button></div>'}
+function row(x,mine){const busy=me().cur===x.id,oc=onIt(x.id);return '<div class="mi'+(mine?' mine':'')+(oc?' lock':'')+'"><div class="x">'+(x.pr===1?'<span class="p1">URGENT</span>':'')+'<b>'+nb(x.id)+esc(x.l)+'</b>'+(oc?'<div class="tk">'+esc(tName(oc))+' y va · non disponible</div>':'')+'<div class="v">📍 '+esc(x.v)+(x.h?' · '+esc(x.h):'')+'</div>'+(x.d?'<div class="d">'+esc(x.d)+'</div>':'')+'</div><button onclick="go('+x.id+')"'+(busy||oc?' disabled':'')+'>'+(busy?'En cours':oc?'Pris':'J\'y vais')+'</button></div>'}
 function render(){DEF=J('vbteamdef_'+C)||DEF;document.getElementById('com').textContent=DEF.nom||'Commune';
  document.getElementById('me').innerHTML=DEF.t.map(t=>'<option value="'+t.id+'"'+(t.id===ME?' selected':'')+'>'+esc(t.n)+' · '+esc(t.r)+'</option>').join('');
  const t=me(),s=TST[t.s||'dispo'],I=incs(),cx=t.cur?I.find(y=>y.id===t.cur):null;
- const sb=document.getElementById('stb');sb.style.cssText='display:inline-flex;background:'+s[1]+';color:#fff;border-radius:999px;padding:5px 12px;font-weight:650';sb.innerHTML='<i style="background:#fff"></i>'+s[0]+(cx?' · '+esc(cx.l):'')+(t.h?' · '+t.h:'');document.querySelector('.top').style.borderBottom='4px solid '+s[1];
+ const sb=document.getElementById('stb');sb.style.cssText='display:inline-flex;background:'+s[1]+';color:#fff;border-radius:999px;padding:5px 12px;font-weight:650';sb.innerHTML='<i style="background:#fff"></i>'+s[0]+(cx?' · n°'+cx.id+' '+esc(cx.l):'')+(t.h?' · '+t.h:'');document.querySelector('.top').style.borderBottom='4px solid '+s[1];
  document.getElementById('cur').innerHTML=cx?'<div class="act" style="border-color:'+s[1]+';box-shadow:0 4px 14px '+s[1]+'33"><div class="k" style="color:'+s[1]+'">Mission en cours · '+s[0]+'</div><div class="t">'+esc(cx.l)+'</div><div class="v">📍 '+esc(cx.v)+'</div>'+(cx.d?'<div class="d">'+esc(cx.d)+'</div>':'')+
   (t.s==='route'?'<button class="big b-on" onclick="arrive()">Arrivé sur place</button>':'')+'<button class="big b-ok" onclick="done()">✓ Terminé</button></div>':'';
- const mine=I.filter(x=>x.team===ME&&x.id!==t.cur).sort((a,b)=>a.pr-b.pr||a.id-b.id),free=I.filter(x=>!x.team).sort((a,b)=>a.pr-b.pr||a.id-b.id);
+ const mine=I.filter(x=>x.team===ME&&x.id!==t.cur).sort((a,b)=>a.pr-b.pr||a.id-b.id),free=I.filter(x=>!x.team||(x.team!==ME&&onIt(x.id))).filter(x=>x.id!==t.cur).sort((a,b)=>!!onIt(a.id)-!!onIt(b.id)||a.pr-b.pr||a.id-b.id);
  document.getElementById('mine').innerHTML=mine.length?mine.map(x=>row(x,1)).join(''):'<div class="emp">'+(cx?'Rien d\'autre en attente pour votre équipe.':'Aucune mission envoyée par la cellule pour le moment.')+'</div>';
  document.getElementById('free').innerHTML=free.length?free.map(x=>row(x,0)).join(''):'<div class="emp">Aucun incident sans équipe.</div>';
  document.getElementById('oth').innerHTML=['dispo','pause','indispo'].map(k=>'<button class="'+((t.s||'dispo')===k?'on':'')+'" onclick="setS(\''+k+'\')">'+TST[k][0]+'</button>').join('')}
