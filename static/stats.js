@@ -71,7 +71,7 @@
   }
 
 
-  var COM = { ares: 'Arès', lanton: 'Lanton', andernos: 'Andernos-les-Bains', audenge: 'Audenge', biganos: 'Biganos', 'le-teich': 'Le Teich', arcachon: 'Arcachon', gujan: 'Gujan-Mestras', lege: 'Lège-Cap-Ferret', 'la-teste': 'La Teste-de-Buch' };
+  var COM = { ares: 'Arès', lanton: 'Lanton', andernos: 'Andernos-les-Bains', audenge: 'Audenge', biganos: 'Biganos', 'le-teich': 'Le Teich', arcachon: 'Arcachon', gujan: 'Gujan-Mestras', lege: 'Lège-Cap-Ferret', 'la-teste': 'La Teste-de-Buch', biscarrosse: 'Biscarrosse', parentis: 'Parentis-en-Born', sanguinet: 'Sanguinet', mimizan: 'Mimizan', 'vielle-saint-girons': 'Vielle-Saint-Girons', leon: 'Léon', moliets: 'Moliets-et-Maâ', messanges: 'Messanges', seignosse: 'Seignosse', capbreton: 'Capbreton' };
   var ACT = { 'code-ok': 'code saisi', 'code-faux': 'code erroné', 'avertissement-ok': 'avertissement lu', 'tuto-passe': 'tutoriel passé', fiche: 'fiches', courrier: 'courriers', email: 'e-mails préparés', rapport: 'rapport PDF', crise: 'cellule de crise', alerte: 'alertes', 'demande-demo': '« Demander une démo »', 'envoi-enregistre': 'envois enregistrés', 'plus-tard': '« plus tard »', controle: 'contrôles' };
   function demos(d) {
     var D = {};
