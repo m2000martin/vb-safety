@@ -1039,7 +1039,7 @@ const IST={nouveau:['À traiter','#c62828'],pris:['Pris en compte','#ef8a17'],af
 const PRN={1:'Urgent',2:'Important',3:'Normal'};
 const PRIO={cable:1,fumee:1,isole:1,arbre_maison:1,arbre_route:2,eau:2,route:2,toiture:3,autre:3};
 function hnow(){return new Date().toTimeString().slice(0,5)}
-function incs(){const S=SIG();S.forEach(x=>{if(x.o===undefined)x.o=x.id;if(x.ok===undefined)x.ok=x.ist?true:!(x.st==='s'&&x.id>=7);if(!x.ist){x.ist=x.st==='d'?'clos':(x.st==='p'?'affecte':'nouveau');x.pr=PRIO[x.t]||3;x.team=x.st==='p'?TEAMS[x.id%2].id:null;x.log=[[x.h,'Signalé par un habitant'+(x.n>1?' ('+x.n+' signalements regroupés)':'')]];if(x.team)x.log.push([x.h,TEAMS.find(t=>t.id===x.team).n+' envoyée'])
+function incs(){const S=SIG();S.forEach(x=>{if(x.o===undefined){x.o=x.id;if(x.v)x.v=String(x.v).replace(/^(Annexe|Bâtiment collectif) · /,'')}if(x.ok===undefined)x.ok=x.ist?true:!(x.st==='s'&&x.id>=7);if(!x.ist){x.ist=x.st==='d'?'clos':(x.st==='p'?'affecte':'nouveau');x.pr=PRIO[x.t]||3;x.team=x.st==='p'?TEAMS[x.id%2].id:null;x.log=[[x.h,'Signalé par un habitant'+(x.n>1?' ('+x.n+' signalements regroupés)':'')]];if(x.team)x.log.push([x.h,TEAMS.find(t=>t.id===x.team).n+' envoyée'])
  ;if(x.ist==='clos')x.log.push([x.h,'Terminé'])}});return S}
 function jlog(x,txt){const h=hnow();x.log.push([h,txt]);CLOG.unshift([h,'n°'+x.id+' '+STY[x.t]+' · '+x.v,txt])}
 function pccOpen(){CT0=CT0||hnow();if(CRPREV===null){CRPREV=RISK;if(D.st&&RISK!=='tem')setRisk('tem')}
