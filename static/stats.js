@@ -61,12 +61,29 @@
     $('st-k-clics').textContent = nf.format(somme(d.clics));
     $('st-periode').textContent = 'Du ' + jourFr(d.depuis) + ' à aujourd\'hui · visiteurs comptés une fois par jour';
     graphe(d);
+    demos(d);
     table('st-pages', d.pages, { col: 'Page' });
     table('st-sources', d.sources, { col: 'Provenance' });
     table('st-fuseaux', d.fuseaux, { col: 'Fuseau horaire (pays approximatif)', nom: function (k) { return k ? (TZ[k] ? TZ[k] + ' · ' + k : k) : 'Inconnu'; } });
     table('st-appareils', d.appareils, { col: 'Appareil' });
     table('st-clics', d.clics, { col: 'Action', n: 'Nombre' });
     table('st-demandes', d.demandes, { col: 'Type de demande', n: 'Nombre', sansV: true });
+  }
+
+
+  var COM = { ares: 'Arès', lanton: 'Lanton', andernos: 'Andernos-les-Bains', audenge: 'Audenge', biganos: 'Biganos', 'le-teich': 'Le Teich', arcachon: 'Arcachon', gujan: 'Gujan-Mestras', lege: 'Lège-Cap-Ferret', 'la-teste': 'La Teste-de-Buch' };
+  var ACT = { 'code-ok': 'code saisi', 'code-faux': 'code erroné', 'avertissement-ok': 'avertissement lu', 'tuto-passe': 'tutoriel passé', fiche: 'fiches', courrier: 'courriers', email: 'e-mails préparés', rapport: 'rapport PDF', crise: 'cellule de crise', alerte: 'alertes', 'demande-demo': '« Demander une démo »', 'envoi-enregistre': 'envois enregistrés', 'plus-tard': '« plus tard »', controle: 'contrôles' };
+  function demos(d) {
+    var D = {};
+    (d.pages || []).forEach(function (r) { var m = /^\/(?:demo\/([^\/]+)|(OLD-demo))\//.exec(r.cle || ''); if (m) { var c = m[1] || 'old-demo'; (D[c] = D[c] || { v: 0, a: {} }).v += r.n; } });
+    (d.clics || []).forEach(function (r) { var m = /^demo:([^:]+):(.+)$/.exec(r.cle || ''); if (m) { var c = /^old-demo/.test(m[1]) ? 'old-demo' : m[1]; D[c] = D[c] || { v: 0, a: {} }; D[c].a[m[2]] = (D[c].a[m[2]] || 0) + r.n; } });
+    var el = $('st-demos'); if (!el) return;
+    var keys = Object.keys(D).sort(function (a, b) { return (D[b].v - D[a].v); });
+    var jamais = Object.keys(COM).filter(function (c) { return !D[c]; }).map(function (c) { return COM[c]; });
+    el.innerHTML = (keys.length ? '<table class="st-t"><thead><tr><th scope="col">Commune</th><th scope="col" class="num">Ouvertures</th><th scope="col">Actions</th></tr></thead><tbody>' + keys.map(function (c) {
+      var a = Object.keys(D[c].a).filter(function (k) { return !/^(page|theme)-/.test(k); }).sort(function (x, y) { return D[c].a[y] - D[c].a[x]; }).map(function (k) { return D[c].a[k] + ' ' + (ACT[k] || k); }).join(', ');
+      return '<tr><td><b>' + esc(c === 'old-demo' ? 'Démo principale' : (COM[c] || c)) + '</b></td><td class="num">' + nf.format(D[c].v) + '</td><td>' + esc(a || '—') + '</td></tr>';
+    }).join('') + '</tbody></table>' : '<p class="st-vide">Aucune démo ouverte sur la période.</p>') + '<p class="st-vide" style="margin-top:8px">Jamais ouvertes sur la période : ' + esc(jamais.join(', ') || 'aucune') + '.</p>';
   }
 
   async function charger() {
