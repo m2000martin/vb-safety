@@ -63,8 +63,8 @@ function row(x,mine){const busy=me().cur===x.id;return '<div class="mi'+(mine?' 
 function render(){DEF=J('vbteamdef_'+C)||DEF;document.getElementById('com').textContent=DEF.nom||'Commune';
  document.getElementById('me').innerHTML=DEF.t.map(t=>'<option value="'+t.id+'"'+(t.id===ME?' selected':'')+'>'+esc(t.n)+' · '+esc(t.r)+'</option>').join('');
  const t=me(),s=TST[t.s||'dispo'],I=incs(),cx=t.cur?I.find(y=>y.id===t.cur):null;
- document.getElementById('stb').innerHTML='<i style="background:'+s[1]+'"></i>'+s[0]+(t.h?' · mis à jour à '+t.h:'');
- document.getElementById('cur').innerHTML=cx?'<div class="act"><div class="k">Mission en cours · '+s[0]+'</div><div class="t">'+esc(cx.l)+'</div><div class="v">📍 '+esc(cx.v)+'</div>'+(cx.d?'<div class="d">'+esc(cx.d)+'</div>':'')+
+ const sb=document.getElementById('stb');sb.style.cssText='display:inline-flex;background:'+s[1]+';color:#fff;border-radius:999px;padding:5px 12px;font-weight:650';sb.innerHTML='<i style="background:#fff"></i>'+s[0]+(cx?' · '+esc(cx.l):'')+(t.h?' · '+t.h:'');document.querySelector('.top').style.borderBottom='4px solid '+s[1];
+ document.getElementById('cur').innerHTML=cx?'<div class="act" style="border-color:'+s[1]+';box-shadow:0 4px 14px '+s[1]+'33"><div class="k" style="color:'+s[1]+'">Mission en cours · '+s[0]+'</div><div class="t">'+esc(cx.l)+'</div><div class="v">📍 '+esc(cx.v)+'</div>'+(cx.d?'<div class="d">'+esc(cx.d)+'</div>':'')+
   (t.s==='route'?'<button class="big b-on" onclick="arrive()">Arrivé sur place</button>':'')+'<button class="big b-ok" onclick="done()">✓ Terminé</button></div>':'';
  const mine=I.filter(x=>x.team===ME&&x.id!==t.cur).sort((a,b)=>a.pr-b.pr||a.id-b.id),free=I.filter(x=>!x.team).sort((a,b)=>a.pr-b.pr||a.id-b.id);
  document.getElementById('mine').innerHTML=mine.length?mine.map(x=>row(x,1)).join(''):'<div class="emp">'+(cx?'Rien d\'autre en attente pour votre équipe.':'Aucune mission envoyée par la cellule pour le moment.')+'</div>';
