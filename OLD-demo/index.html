@@ -1031,10 +1031,10 @@ function incs(){const S=SIG();S.forEach(x=>{if(x.o===undefined)x.o=x.id;if(x.ok=
  ;if(x.ist==='clos')x.log.push([x.h,'Terminé'])}});return S}
 function jlog(x,txt){const h=hnow();x.log.push([h,txt]);CLOG.unshift([h,'n°'+x.id+' '+STY[x.t]+' · '+x.v,txt])}
 function pccOpen(){CT0=CT0||hnow();if(CRPREV===null){CRPREV=RISK;if(D.st&&RISK!=='tem')setRisk('tem')}
- document.getElementById('topbar').style.display='none';const o=document.getElementById('pcc');o.style.top='0';o.style.display='flex';pccRender();
+ const DSK=innerWidth>=900;if(!DSK)document.getElementById('topbar').style.display='none';const o=document.getElementById('pcc');o.style.top='0';o.style.display='flex';if(DSK){const R=document.getElementById('pccR'),S=document.getElementById('pccS');if(S.parentNode!==R)R.insertBefore(S,R.firstChild);if(!window._kv){window._kv=1;KV='list';KS='prio'}}document.getElementById('crisebtn').classList.add('on');document.body.classList.add('crise');pccRender();
  if(!CM){CM=L.map('pccmap',{zoomControl:true,attributionControl:false,preferCanvas:true});L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/png&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',{maxZoom:19}).addTo(CM)}
  setTimeout(()=>{CM.invalidateSize();pccMap(true)},40)}
-function pccClose(){document.getElementById('pcc').style.display='none';document.getElementById('topbar').style.display='';if(CRPREV!==null){const r=CRPREV;CRPREV=null;if(r!==RISK)setRisk(r)}setTimeout(fixTop,0)}
+function pccClose(){document.getElementById('pcc').style.display='none';document.getElementById('topbar').style.display='';document.getElementById('crisebtn').classList.remove('on');document.body.classList.remove('crise');if(CRPREV!==null){const r=CRPREV;CRPREV=null;if(r!==RISK)setRisk(r)}setTimeout(fixTop,0)}
 function pccMap(fit){if(!CM)return;if(CML)CM.removeLayer(CML);const S=incs(),G=[];
  if(D.st&&D.cm)D.cm.v.forEach((s,i)=>{const v=D.st.v[i];if(v&&v[0]>=1500)G.push(L.polyline(s.g,{interactive:false,color:'#8e24aa',weight:3,opacity:.4}))});
  S.forEach(x=>{const sel=CSEL===x.id,c=IST[x.ist][1];G.push(L.marker([x.lat,x.lng],{icon:L.divIcon({className:'',html:'<div class="cmk'+(sel?' sel':'')+'" style="background:'+c+'">'+x.id+'</div>',iconSize:[28,28],iconAnchor:[14,14]})}).on('click',()=>{CSEL=x.id;pccRender();pccMap();if(innerWidth<900)pccTab('act')}))});
@@ -1291,7 +1291,6 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif
  #page{left:76px;padding:22px 26px 40px}
  #head{left:90px!important;max-width:calc(100% - var(--pw,400px) - 120px)}
  #panel{top:12px!important}
- #pcc{left:0}
 }
 @media(max-width:899px){
  .ti{display:none}
@@ -1306,5 +1305,32 @@ html,body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif
 .cmk{box-shadow:0 4px 10px rgba(0,0,0,.35)!important;border-width:2px!important}
 #pcch .btn{border-radius:999px}
 .kh{font-weight:700}
+
+@media(min-width:900px){
+ #pcc{left:76px;background:#f8fafc}
+ #pcch{background:#fff;color:#0f172a;border-bottom:1px solid #e5e7eb;padding:10px 18px;box-shadow:none}
+ #pcch .pt1 b{font-size:16px;font-weight:700}
+ #pcch .pt1 b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:9px;vertical-align:2px;animation:pccp 1.6s infinite}
+ @keyframes pccp{70%{box-shadow:0 0 0 7px rgba(239,68,68,0)}0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}}
+ #pcch .pt1 span{opacity:1;color:#64748b}
+ #pcch .btn{border-radius:999px;border-color:#e2e8f0;background:#fff;color:#0f172a}
+ #pcch .btn.dark{background:#fef2f2;border-color:#fecaca;color:#b91c1c;box-shadow:none}
+ #pcch .btn.dark:hover{background:#b91c1c;color:#fff}
+ .pccb{grid-template-columns:minmax(0,1fr) clamp(400px,32vw,500px)}
+ #pccL{border-right:1px solid #e5e7eb}
+ #pccR{background:#f8fafc;padding:14px;border:0}
+ #pccR #pccS{padding:0;background:none;margin-bottom:12px}
+ #pccR .pkk{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #pccR .met .mg{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #pccR .met{border-radius:14px}
+ #pccR .met .mb{height:44px}
+ .crb.on{background:#b91c1c!important;color:#fff!important}
+}
+@media(min-width:900px){
+ body.crise #topm .tm{opacity:.35;pointer-events:none;box-shadow:none!important;background:none!important}
+ body.crise #risk{opacity:.35;pointer-events:none}
+ body.crise .crb::after{content:"Fermer la cellule"}
+}
+@media(max-width:899px){.pkk{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 </style>
 </body></html>
