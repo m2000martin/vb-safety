@@ -487,7 +487,7 @@ function rapportCommune(){
  const g=(L,x)=>cnt(L,p=>(p.g||'v')===x),cat=x=>cnt(F,p=>p.c===x),ST=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),EN=Object.values(SV.en).reduce((a,b)=>a+b.length,0),R=relances();
  const today=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
  const zv=g(Z,'v'),cv=g(F,'v'),pr=pc(D.k.degag,D.k.expo),lis=lis_n();
- const col=x=>x>=80?'#2e7d32':(x>=60?'#ef8a17':'#c62828');
+ const col=x=>'#2e7d32';
  const kpiB=(v,t,s)=>'<div class="kp"><b style="color:'+col(v)+'">'+v+' %</b><span>'+t+'</span><i>'+s+'</i></div>';
  const tr=(a,b,c)=>'<tr><td>'+a+'</td><td class="r">'+b+'</td><td class="r">'+(c==null?'':c)+'</td></tr>';
  let h='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Rapport d\'état – '+esc(D.nom)+'</title><style>@page{size:A4;margin:13mm 14mm}body{font:9.6pt/1.4 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#0f172a;margin:0}'+
@@ -829,11 +829,11 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
   '<div class="btns"><button class="btn" onclick="selAll(1);refreshTop()">Cocher 50</button><button class="btn" onclick="selAll(0);refreshTop()">Décocher</button><button class="btn dark" id="grpb" onclick="lettresGroupees([...ASEL])">Courriers groupés ('+ASEL.size+')</button></div>',S.length);
  h+='</div><h2 class="ph2">Suivi complet</h2><div class="pwide">'+suiviHTML()+'</div>';
  return h}
-function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl=pc>=80?'#2e7d32':(pc>=60?'#ef8a17':'#c62828');
+function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl='#2e7d32';
  const ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),km=D.cm?(D.cm.v.filter(s=>s.ge==='com'&&s.q==='r').length*0.05).toFixed(1).replace('.',','):'–';
  const kp=(t,v,d,c)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div><div class="kd">'+d+'</div></div>';
  let h='<div class="ph"><h1>Tableau de bord communal</h1><span class="muted">'+esc(D.nom)+' · '+imgTxt()+'</span><span class="sp"></span><button class="btn dark" onclick="rapportCommune()">Rapport d\'état (PDF) ↗</button></div>';
- h+='<div class="kgrid">'+kp('Zone légale',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('Débroussaillement à faire',Z.filter(p=>p.g==='r'||p.g==='o').length,'en zone légale')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
+ h+='<div class="kgrid">'+kp('Zone légale',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('Débroussaillement à faire',Z.filter(p=>p.g==='r'||p.g==='o').length,'en zone légale (priorités 1 et 2)','#c62828')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
  h+='<div class="pcols">'+etaRisk()+etaHTML().replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
  return h}
 
