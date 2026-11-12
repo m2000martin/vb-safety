@@ -33,3 +33,12 @@
 .hero-haut { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 20px; }
 .demo-pastille { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1.4; background: rgba(255, 106, 95, .12); color: #FF8A80; border: 1px solid rgba(255, 106, 95, .28); }
 .demo-pastille::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* liens juridiques du pied : séparateurs posés en CSS, masqués en étroit */
+.footer-legal { display: inline-flex; flex-wrap: wrap; gap: 4px 20px; }
+.footer-legal a { color: inherit; text-decoration: none; }
+.footer-legal a:hover { color: #fff; text-decoration: underline; }
+@media (min-width: 800px) {
+  .footer-legal a + a { position: relative; }
+  .footer-legal a + a::before { content: "·"; position: absolute; left: -12px; }
+}

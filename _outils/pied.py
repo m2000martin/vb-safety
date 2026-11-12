@@ -128,6 +128,50 @@ def pied_accueil(lang):
     )
 
 
+def pied_espace(s, lang):
+    """Espaces applicatifs (.site-footer) : on ne touche ni à la marque, ni à la
+    colonne propre à l'outil, ni à la mention d'état en bas de page. Seules les
+    colonnes communes et les liens juridiques sont repris."""
+    i = s.find('<footer class="site-footer"')
+    if i < 0:
+        return s
+    j = s.find("</footer>", i) + len("</footer>")
+    bloc = s[i:j]
+
+    src = pied(lang)
+    cols = []
+    for titre, items in re.findall(
+            r'<div><h2 class="pied-h">(.*?)</h2><ul>(.*?)</ul></div>', src, re.S):
+        if titre in ("VB Safety",):
+            continue
+        cols.append(f'<div class="footer-col"><h2 class="footer-h">{titre}</h2><ul>'
+                    + items + "</ul></div>")
+
+    # colonnes existantes : [0] marque, [1] colonne de l'outil, le reste est remplacé
+    parts = re.split(r'(?=<div class="footer-col">)', bloc)
+    garde = parts[:3]           # ouverture + marque + colonne de l'outil
+    fin = re.search(r'<div class="footer-bottom">.*?</div>\s*</div>\s*</footer>',
+                    bloc, re.S)
+    if len(garde) < 3 or not fin:
+        return s
+
+    etat = re.findall(r"<span>(.*?)</span>", fin.group(0), re.S)
+    etat = etat[-1] if len(etat) >= 3 else ""
+    bas_g = re.search(r'<div class="pied-bas"><span>(.*?)</span>', src).group(1)
+    legal = re.search(r'<span class="pied-legal">(.*?)</span>', src, re.S).group(1)
+    accueil = "/en/" if lang == "en" else "/"
+    retour = ("Back to vb-safety.com" if lang == "en" else "Accueil vb-safety.com")
+    legal = f'<a href="{accueil}">{retour}</a>' + legal
+
+    neuf = ("".join(garde) + "".join(cols)
+            + '</div>\n    <div class="footer-bottom">'
+            + f'<span>© <span id="year">2026</span> VB Safety SAS · {bas_g.split("· ", 1)[1]}</span>'
+            + f'<span class="footer-legal">{legal}</span>'
+            + (f"<span>{etat}</span>" if etat else "")
+            + "</div>\n  </div>\n</footer>")
+    return s[:i] + neuf + s[j:]
+
+
 def main():
     variantes = [
         (re.compile(r'<footer class="pied">.*?</footer>', re.S), pied),
@@ -146,6 +190,7 @@ def main():
             if motif.search(s2):
                 neuf = rendus[(motif.pattern, "en" if anglais else "fr")]
                 s2 = motif.sub(lambda _: neuf, s2, count=1)
+        s2 = pied_espace(s2, "en" if anglais else "fr")
         if s2 != s:
             open(chemin, "w", encoding="utf-8").write(s2)
             n += 1
