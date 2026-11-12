@@ -237,7 +237,7 @@
   .foot-col a { font-size: 13.5px; }
   .foot-col a[href^="mailto:"] { flex-basis: 100%; color: #D4D4D8; }
   .foot-bottom { margin-top: 20px; padding-top: 14px; font-size: 12px; }
-  .foot-bottom span + span { display: none; }
+  .foot-bottom span + span { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 }
 
 /* Téléphone : « Outils », trois grands blocs empilés (plus de défilement de côté), qui apparaissent au défilement */

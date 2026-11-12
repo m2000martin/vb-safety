@@ -96,19 +96,56 @@ def pied(lang):
     )
 
 
+def pied_accueil(lang):
+    """Même contenu, dans le balisage propre à l'accueil (.site-foot).
+
+    L'accueil a sa propre feuille de style : colonnes en .foot-col, liens nus
+    plutôt qu'une liste, et liens juridiques en .foot-legal, la règle
+    .pied-legal n'étant pas chargée sur cette page.
+    """
+    en = lang == "en"
+    accueil = "/en/" if en else "/"
+    src = pied(lang)
+
+    # on récupère l'accroche et les colonnes construites plus haut
+    accroche = re.search(r"<p>(.*?)</p>", src, re.S).group(1)
+    cols = []
+    for bloc in re.findall(r'<div><h2 class="pied-h">(.*?)</h2><ul>(.*?)</ul></div>', src, re.S):
+        titre, items = bloc
+        liens = re.findall(r"<li>(<a .*?</a>)</li>", items)
+        cols.append(f'<div class="foot-col"><h2 class="foot-h">{titre}</h2>'
+                    + "".join(liens) + "</div>")
+    bas_g = re.search(r'<div class="pied-bas"><span>(.*?)</span>', src).group(1)
+    legal = re.search(r'<span class="pied-legal">(.*?)</span>', src, re.S).group(1)
+
+    return (
+        '<footer class="site-foot">\n  <div class="section-inner foot-grid">\n'
+        f'    <div class="foot-brand"><a class="marque" href="{accueil}">VB Safety</a>'
+        f"<p>{accroche}</p></div>\n    "
+        + "\n    ".join(cols)
+        + '\n  </div>\n  <div class="section-inner foot-bottom">'
+        f'<span>{bas_g}</span><span class="foot-legal">{legal}</span></div>\n</footer>'
+    )
+
+
 def main():
-    motif = re.compile(r'<footer class="pied">.*?</footer>', re.S)
-    fr, en = pied("fr"), pied("en")
+    variantes = [
+        (re.compile(r'<footer class="pied">.*?</footer>', re.S), pied),
+        (re.compile(r'<footer class="site-foot">.*?</footer>', re.S), pied_accueil),
+    ]
+    rendus = {(m.pattern, l): f(l) for m, f in variantes for l in ("fr", "en")}
     n = 0
     for chemin in sorted(glob.glob(os.path.join(RACINE, "**", "*.html"), recursive=True)):
         rel = os.path.relpath(chemin, RACINE)
         if rel.startswith(("_", "OLD-demo")):
             continue
         s = open(chemin, encoding="utf-8").read()
-        if not motif.search(s):
-            continue
         anglais = '<html lang="en"' in s or rel.startswith("en/") or "/en/" in rel
-        s2 = motif.sub(lambda _: en if anglais else fr, s, count=1)
+        s2 = s
+        for motif, _ in variantes:
+            if motif.search(s2):
+                neuf = rendus[(motif.pattern, "en" if anglais else "fr")]
+                s2 = motif.sub(lambda _: neuf, s2, count=1)
         if s2 != s:
             open(chemin, "w", encoding="utf-8").write(s2)
             n += 1

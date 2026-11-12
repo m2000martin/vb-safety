@@ -257,6 +257,11 @@
   .foot-col h3 { font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #A1A1AA; margin: 0 0 8px; }
   .foot-col a, .foot-col button { background: none; border: none; padding: 3px 0; color: #A1A1AA; font: 14px var(--sans); text-align: left; text-decoration: none; cursor: pointer; }
   .foot-col a:hover, .foot-col button:hover { color: #fff; }
+  .foot-legal { display: inline-flex; flex-wrap: wrap; gap: 4px 20px; }
+  @media (min-width: 820px) { .foot-legal a + a { position: relative; }
+    .foot-legal a + a::before { content: "·"; position: absolute; left: -12px; } }
+  .foot-bottom a { color: inherit; text-decoration: none; }
+  .foot-bottom a:hover { color: #fff; text-decoration: underline; }
   .foot-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 12.5px; color: #A1A1AA; }
 
   /* Mentions légales & confidentialité */
@@ -484,7 +489,7 @@
 <link rel="stylesheet" href="/static/mobile.css?v=10">
 <link rel="stylesheet" href="/static/nav.css?v=17">
 <link rel="stylesheet" href="/static/texte.css?v=3">
-<link rel="stylesheet" href="/static/accueil-mobile.css?v=46">
+<link rel="stylesheet" href="/static/accueil-mobile.css?v=47">
 </head>
 <body>
 
@@ -615,41 +620,13 @@
 
 <footer class="site-foot">
   <div class="section-inner foot-grid">
-    <div class="foot-brand">
-      <a class="marque" href="/en/">VB Safety</a>
-      <p>Detecting and tracking occupational exposure to carcinogens (CMR agents) for fire services and industry.</p>
-    </div>
-    <div class="foot-col">
-      <h2 class="foot-h">Sectors</h2>
-      <a href="/en/industry/">Industry</a>
-      <a href="/en/construction/">Construction</a>
-      <a href="/en/firefighters/">Firefighters</a>
-    </div>
-    <div class="foot-col">
-      <h2 class="foot-h">Resources (FR)</h2>
-      <a href="/ressources/" hreflang="fr">All resources</a>
-      <a href="/cmr-pompier/en/firefighter-health.html">Firefighter health guide</a>
-      <a href="/ressources/liste-travailleurs-exposes-cmr/" hreflang="fr">Exposed workers list template</a>
-    </div>
-    <div class="foot-col">
-      <h2 class="foot-h">Platform (FR)</h2>
-      <a href="/cmr-pompier/en/">VB CMR</a>
-      <a href="/cmr-pompier/en/ppe-module.html">PPE module</a>
-      <a href="/cmr-industrie/en/">VB CMR Industry</a>
-      <a href="/en/innovation/">Contamination sensors</a>
-    </div>
-    <div class="foot-col">
-      <h2 class="foot-h">Contact</h2>
-      <a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a>
-      <a href="#contact" data-goto="contact">Contact form</a>
-      <a href="/mentions-legales/" hreflang="fr">Legal notice (FR)</a>
-      <a href="/confidentialite/" hreflang="fr">Privacy policy (FR)</a>
-    </div>
+    <div class="foot-brand"><a class="marque" href="/en/">VB Safety</a><p>Making exposure measurable: carcinogens and natural hazards.</p></div>
+    <div class="foot-col"><h2 class="foot-h">Firefighters</h2><a href="/en/firefighters/">Overview</a><a href="/cmr-pompier/en/">Exposure tracking</a><a href="/cmr-pompier/en/ppe-module.html">PPE tracking</a></div>
+    <div class="foot-col"><h2 class="foot-h">Industry</h2><a href="/en/industry/">Overview</a><a href="/cmr-industrie/en/">CMR exposure tracking</a><a href="/ressources/liste-travailleurs-exposes-cmr/" hreflang="fr">Exposed workers list template</a></div>
+    <div class="foot-col"><h2 class="foot-h">Local authorities</h2><a href="/en/municipalities/">Overview</a><a href="/collectivites/" hreflang="fr">Vegetation clearance (OLD)</a><a href="/collectivites/cellule-de-crise/" hreflang="fr">Crisis unit</a></div>
+    <div class="foot-col"><h2 class="foot-h">VB Safety</h2><a href="/en/innovation/">Contamination sensors</a><a href="/ressources/" hreflang="fr">Resources (in French)</a><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></div>
   </div>
-  <div class="section-inner foot-bottom">
-    <span>© 2026 VB Safety SAS · All rights reserved.</span>
-    <span>Updated 1 October 2026</span>
-  </div>
+  <div class="section-inner foot-bottom"><span>© 2026 VB Safety SAS · RCS Paris 109 381 640</span><span class="foot-legal"><a href="/mentions-legales/" hreflang="fr">Legal notice</a><a href="/confidentialite/" hreflang="fr">Privacy</a><a href="/cgv/" hreflang="fr">Terms of sale</a><a href="/cgu/" hreflang="fr">Terms of use</a></span></div>
 </footer>
 
 <script src="/static/accueil.js?v=52" defer></script>
