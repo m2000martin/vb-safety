@@ -1430,7 +1430,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 function tuto(){
  const A=(D&&D.h)?D.h.features.find(f=>f.properties.c==='a'&&f.properties.k!==undefined):null;
  const S=[
-  {q:['.zsel','#modes','#head'],t:'Zone',x:'La carte s\'ouvre sur la <b>commune entière</b>. Les deux autres vues montrent le <b>périmètre des obligations légales de débroussaillement</b> et les <b>priorités de contrôle</b>.'},
+  {q:['.zsel','#modes','#head'],t:'Zone',x:'La carte s\'ouvre sur le <b>périmètre des obligations légales de débroussaillement</b>. Les deux autres vues montrent la <b>commune entière</b> et les <b>priorités de contrôle</b>.'},
   {q:'#leg',t:'Couleurs',x:'Chaque maison est colorée selon ce que montrent les images. Cliquez sur une catégorie pour n\'afficher qu\'elle.'},
   {q:'#panel',t:'Fiche d\'une maison',x:'Cliquez sur une maison de la carte : sa fiche s\'ouvre ici, avec ce que montre l\'image, ce qu\'il faut faire et pourquoi.',pre:()=>{const P=document.getElementById('panel');if(P)P.classList.remove('min');if(A)openByK(A.properties.k)}},
   {q:'.acts .btn.dark',t:'Courrier',x:'Le document de deux pages pour le propriétaire, prêt à imprimer ou à envoyer. Les champs surlignés en jaune sont complétés par la mairie.'},
