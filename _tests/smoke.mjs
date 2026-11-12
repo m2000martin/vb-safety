@@ -88,18 +88,18 @@ for (const p of pages) {
   await pg.fill('#code', 'FAUX12'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
   ok(await pg.locator('#login-msg.error').count() === 1, 'Accès DUERP · code incorrect refusé');
   await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/duerp\.html/);
-  ok(/\/cmr-industrie\/duerp\.html#produits$/.test(pg.url()), 'Accès DUERP · VLN533 ouvre la page demandée');
+  ok(/\/cmr-industrie\/duerp\.html#produits$/.test(pg.url()), 'Accès DUERP · le code de démo ouvre la page demandée');
   await pg.goto(BASE + '/cmr-industrie/expert.html'); await pg.waitForTimeout(300);
   ok(/expert\.html($|#)/.test(pg.url()), 'Accès DUERP · le mode expert reste ouvert ensuite');
-  await pg.goto(BASE + '/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent('//exemple.com/x')); await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/\/duerp\/$/);
+  await pg.goto(BASE + '/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent('//exemple.com/x')); await pg.fill('#code', (process.env.VBS_CODE_DEMO || '')); await pg.click('#login-btn'); await pg.waitForURL(/\/duerp\/$/);
   ok(pg.url() === BASE + '/duerp/', 'Accès DUERP · aucun renvoi vers un autre site');
   const pub = await (await newCtx(false)).newPage();
   for (const p of ['/duerp/', '/cmr-industrie/evaluation.html']) {
     await pub.goto(BASE + p); await pub.waitForURL(/acces-duerp/);
     ok(pub.url().includes('/cmr-industrie/acces-duerp/?suite=' + encodeURIComponent(p)), 'Accès DUERP · ' + p + ' demande le code');
   }
-  await pub.fill('#code', 'VLN533'); await pub.click('#login-btn'); await pub.waitForURL(/evaluation\.html$/);
-  ok(true, 'Accès DUERP · VLN533 ouvre la page de présentation');
+  await pub.fill('#code', (process.env.VBS_CODE_DEMO || '')); await pub.click('#login-btn'); await pub.waitForURL(/evaluation\.html$/);
+  ok(true, 'Accès DUERP · le code de démo ouvre la page de présentation');
   ok(!errs.length, 'Accès DUERP · aucune erreur JavaScript' + (errs.length ? ' · ' + errs.join(' | ') : ''));
   await ctx.close();
 }
@@ -184,7 +184,7 @@ for (const p of pages) {
   await ctx.close();
 }
 
-// Démo industrie : code faux refusé, VLN533 ouvre le dossier de preuve sur l'exemple
+// Démo industrie : code faux refusé, le code de démo ouvre le dossier de preuve sur l'exemple
 {
   const ctx = await newCtx(); const pg = await ctx.newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message));
@@ -193,7 +193,7 @@ for (const p of pages) {
   await pg.fill('#code', 'ABC123'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
   ok(/incorrect/.test(await pg.locator('#login-msg').textContent()) && /demo\/$/.test(pg.url()), 'Démo · un code faux est refusé');
   await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
-  ok(await pg.locator('.demo-note').count() === 1 && /45 obligations/.test(await pg.locator('#q-title').textContent()), 'Démo · VLN533 ouvre l\'outil sur la liste des obligations, avec l\'exemple fictif');
+  ok(await pg.locator('.demo-note').count() === 1 && /45 obligations/.test(await pg.locator('#q-title').textContent()), 'Démo · le code de démo ouvre l\'outil sur la liste des obligations, avec l\'exemple fictif');
   ok(await pg.evaluate(() => !localStorage.getItem('vbs-eval-v1')), 'Démo · aucune donnée réelle créée');
   await pg.goto(BASE + '/cmr-industrie/'); 
   ok(await pg.locator('.header-cta[href="/devis/"]').count() === 1 && await pg.locator('.ih-note').count() === 0, 'Portail · bouton « Demander un devis » en haut, petit texte retiré');
@@ -259,7 +259,7 @@ for (const p of pages) {
   ok(await pg.locator('.demo-note').count() === 1 && await pg.locator('.ob-it').count() === 45, 'Adresses · dossier.html#exemple redirige vers /outil/ avec l\'exemple');
   await pg.goto(BASE + '/cmr-industrie/connexion.html'); await pg.waitForURL(/demo\/$/);
   ok(await pg.locator('#code').count() === 1, 'Adresses · connexion.html redirige vers /demo/');
-  await pg.fill('#code', 'VLN533'); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
+  await pg.fill('#code', (process.env.VBS_CODE_DEMO || '')); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
   ok(!/\.html|#/.test(pg.url()), 'Adresses · après connexion, l\'adresse est propre : ' + pg.url().replace(BASE, ''));
   ok(await pg.evaluate(() => !!(window.REF && REF.substances && REF.substances.length)), 'Adresses · le référentiel des substances se charge depuis /outil/');
   await ctx.close();
