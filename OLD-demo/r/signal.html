@@ -32,7 +32,7 @@ button.go{width:100%;font:600 16px system-ui;border:0;border-radius:11px;padding
 <div class="card"><h2>2. Où ?</h2><button class="bt2" onclick="loc()">Utiliser ma position</button><div class="muted" id="lm">Ou touchez la carte pour placer le point.</div><div id="m"></div></div>
 <div class="card"><h2>3. Photo (facultative)</h2><input type="file" accept="image/*" capture="environment" id="ph"><div class="muted" id="phm">Seule la position du signalement est gardée ; les autres informations cachées de la photo (téléphone, date) sont supprimées.</div>
 <textarea id="cm" rows="3" placeholder="Précision (facultatif, sans nom ni coordonnées) : route coupée dans les deux sens, câble sur la chaussée…"></textarea>
-<button class="go" onclick="send()">Envoyer à la mairie</button></div>
+<button class="go" onclick="send()">Envoyer à la mairie</button><p style="font-size:12px;color:#64748b;margin:8px 0 0">En envoyant, vous acceptez les <a href="/cgu/#article-6" target="_blank" rel="noopener" style="color:#334155">conditions d'utilisation</a>. Ce n'est pas un service d'urgence : en cas de danger, appelez le 18 ou le 112.</p></div>
 <div class="card ok" id="ok"><b>Merci, signalement reçu.</b><p>La mairie le voit sur sa carte de crise et l'attribue aux services concernés. Inutile de le renvoyer.</p><p class="muted" id="okm">(Démonstration : rien n'a été envoyé.)</p></div>
 <div class="muted" style="margin:10px 4px 30px"><b>Votre identité n'est pas enregistrée.</b> Données conservées : type, position, photo et précision, pour la durée de la crise. Traitement mis en œuvre par la mairie (gestion de crise, mission d'intérêt public).</div>
 </div>

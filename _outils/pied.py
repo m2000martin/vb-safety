@@ -54,7 +54,8 @@ def pied(lang):
         bas_g = "© 2026 VB Safety SAS · RCS Paris 109 381 640"
         bas_d = ('<a href="/mentions-legales/" hreflang="fr">Legal notice</a>'
                  '<a href="/confidentialite/" hreflang="fr">Privacy</a>'
-                 '<a href="/cgv/" hreflang="fr">Terms of sale</a>')
+                 '<a href="/cgv/" hreflang="fr">Terms of sale</a>'
+                 '<a href="/cgu/" hreflang="fr">Terms of use</a>')
     else:
         accroche = ("Rendre mesurable l'exposition aux risques : agents cancérogènes "
                     "pour les services de secours et l'industrie, risques naturels "
@@ -94,6 +95,7 @@ def pied(lang):
         bas_d = ('<a href="/mentions-legales/">Mentions légales</a>'
                  '<a href="/confidentialite/">Confidentialité</a>'
                  '<a href="/cgv/">CGV</a>'
+                 '<a href="/cgu/">CGU</a>'
                  '<a href="/collectivites/conditions/">Conditions de service (communes)</a>')
 
     marque = (f'<div><a class="marque" href="{accueil}">VB Safety</a>'
