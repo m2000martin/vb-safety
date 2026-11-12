@@ -24,6 +24,13 @@
 - [Relevé d'exposition du sapeur-pompier : que noter après chaque feu](https://vb-safety.com/ressources/releve-exposition-sapeur-pompier/) : rubriques à noter le soir même, professionnels et volontaires.
 - [Toutes les ressources](https://vb-safety.com/ressources/)
 
+## Collectivités et débroussaillement
+- [VB OLD pour les communes](https://vb-safety.com/collectivites/) : constat du débroussaillement maison par maison à partir des relevés aériens de l'IGN, classement par priorité de contrôle, courrier préparé par propriétaire, suivi daté jusqu'à la mise en conformité. Cellule de crise communale avec signalements des habitants et main courante.
+- [Obligations légales de débroussaillement (OLD)](https://vb-safety.com/ressources/obligations-legales-debroussaillement/) : qui est soumis à l'obligation (construction située dans un massif classé ou à moins de 200 m), profondeur de 50 m portée à 100 m par arrêté, 10 m des voies privées, définition légale du débroussaillement, cas du terrain voisin, sanctions (contravention de 5e classe, amende administrative jusqu'à 50 €/m², exécution d'office).
+- [Contrôle des OLD : la procédure du maire](https://vb-safety.com/ressources/controle-old-maire/) : police spéciale non délégable à une autre collectivité, suppression du préavis d'un mois depuis la loi du 10 juillet 2023, mise en demeure par arrêté individuel, amende administrative prononcée par le préfet, exécution d'office aux frais du propriétaire, faute lourde en cas de carence, calendrier à rebours de la saison des feux.
+- [Contrôler le débroussaillement par imagerie](https://vb-safety.com/ressources/controle-satellite-debroussaillement/) : apports et limites du satellite, de l'orthophotographie et du LiDAR pour les OLD ; l'imagerie priorise le contrôle mais ne constitue pas un constat opposable.
+- [Anticiper le feu de forêt dans sa commune](https://vb-safety.com/ressources/anticiper-feu-de-foret-commune/) : calendrier annuel, débroussaillement, information des habitants, accès et points d'eau, préparation de la crise, travail avec le SDIS.
+
 ## Guides
 - [Cancers des sapeurs-pompiers et fumées d'incendie](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) : classement CIRC groupe 1 (2022), feux de forêt, PFAS, cancers par organe, volontaires, décret n° 2025-1349 (tableaux de maladies professionnelles 16 bis et 30), décret n° 2024-307, proposition de loi adoptée par le Sénat en mars 2025, décontamination.
 - [Obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/) : articles R. 4412-59 et suivants du code du travail, décret n° 2024-307, décret n° 2022-395, arrêté du 26 octobre 2020.
