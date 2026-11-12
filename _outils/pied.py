@@ -24,21 +24,18 @@ def pied(lang):
     en = lang == "en"
     accueil = "/en/" if en else "/"
     if en:
-        accroche = ("Making exposure measurable: carcinogens for fire services and "
-                    "industry, natural hazards for local authorities.")
+        accroche = "Making exposure measurable: carcinogens and natural hazards."
         cols = [
             colonne("Firefighters", [
                 ("/en/firefighters/", "Overview", ""),
                 ("/cmr-pompier/en/", "Exposure tracking", ""),
                 ("/cmr-pompier/en/ppe-module.html", "PPE tracking", ""),
-                ("/en/innovation/", "Contamination sensor", ""),
             ]),
             colonne("Industry", [
                 ("/en/industry/", "Overview", ""),
                 ("/cmr-industrie/en/", "CMR exposure tracking", ""),
                 ("/ressources/liste-travailleurs-exposes-cmr/",
                  "Exposed workers list template", ' hreflang="fr"'),
-                ("/en/construction/", "Construction sites", ""),
             ]),
             colonne("Local authorities", [
                 ("/en/municipalities/", "Overview", ""),
@@ -46,8 +43,8 @@ def pied(lang):
                 ("/collectivites/cellule-de-crise/", "Crisis unit", ' hreflang="fr"'),
             ]),
             colonne("VB Safety", [
+                ("/en/innovation/", "Contamination sensors", ""),
                 ("/ressources/", "Resources (in French)", ' hreflang="fr"'),
-                ("/en/#contact", "Contact form", ""),
                 ("mailto:contact@vb-safety.com", "contact@vb-safety.com", ""),
             ]),
         ]
@@ -57,37 +54,28 @@ def pied(lang):
                  '<a href="/cgv/" hreflang="fr">Terms of sale</a>'
                  '<a href="/cgu/" hreflang="fr">Terms of use</a>')
     else:
-        accroche = ("Rendre mesurable l'exposition aux risques : agents cancérogènes "
-                    "pour les services de secours et l'industrie, risques naturels "
-                    "pour les communes.")
+        accroche = ("Rendre mesurable l'exposition aux risques : "
+                    "agents cancérogènes et risques naturels.")
         cols = [
             colonne("Sapeurs-pompiers", [
                 ("/sapeurs-pompiers/", "Présentation", ""),
                 ("/cmr-pompier/", "Suivi des expositions", ""),
                 ("/cmr-pompier/module-epi.html", "Suivi des EPI", ""),
-                ("/innovation/#sapeurs-pompiers", "Capteur de contamination", ""),
-                ("/ressources/#sapeurs-pompiers", "Ressources", ""),
             ]),
             colonne("Industrie", [
                 ("/industrie/", "Présentation", ""),
                 ("/cmr-industrie/", "Suivi des expositions CMR", ""),
                 ("/cmr-industrie/outil/", "Dossier de preuve CMR", ""),
-                ("/ressources/liste-travailleurs-exposes-cmr/",
-                 "Modèle de liste des exposés", ""),
-                ("/btp/", "Chantiers et BTP", ""),
             ]),
             colonne("Collectivités", [
                 ("/collectivites/", "Débroussaillement (OLD)", ""),
                 ("/collectivites/cellule-de-crise/", "Cellule de crise", ""),
                 ("/ressources/obligations-legales-debroussaillement/",
                  "Obligations de débroussaillement", ""),
-                ("/ressources/controle-old-maire/", "Contrôle des OLD", ""),
-                ("/ressources/#collectivites", "Ressources", ""),
             ]),
             colonne("VB Safety", [
                 ("/a-propos/", "À propos", ""),
                 ("/innovation/", "Capteurs en développement", ""),
-                ("/devis/", "Démonstration ou devis", ""),
                 ("mailto:contact@vb-safety.com", "contact@vb-safety.com", ""),
             ]),
         ]
