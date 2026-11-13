@@ -34,12 +34,23 @@ LOGO = (
 # « certification RGPD » qu'une entreprise puisse s'attribuer elle-même, et un
 # badge qui en aurait l'air serait trompeur. On n'affiche donc que des faits
 # vérifiables sur le site, et le lien renvoie à la page qui les détaille.
-def pastille(lang):
+def pastille(lang, espace=False):
+    """Pastille de confidentialité. Elle porte sur les solutions, pas sur le site.
+
+    Dans les espaces VB CMR, l'affirmation est celle de leur propre page
+    « Sécurité et données de santé » : hébergement en France chez un hébergeur
+    certifié pour les données de santé. Ailleurs, la formulation couvre
+    l'ensemble des outils, VB OLD compris.
+    """
     en = lang == "en"
     titre = "GDPR" if en else "RGPD"
-    # la seule affirmation vérifiable d'un simple coup d'œil au réseau
-    ligne = "No cookies or trackers" if en else "Sans cookie ni traceur tiers"
-    href = "/confidentialite/"
+    if espace:
+        ligne = ("Hosted in France, HDS-certified" if en
+                 else "Hébergement en France certifié HDS")
+        href = "/cmr-pompier/securite-donnees.html"
+    else:
+        ligne = "Data hosted in the EU" if en else "Données hébergées dans l'UE"
+        href = "/confidentialite/"
     return (
         f'<a href="{href}" class="pied-rgpd"'
         ' style="display:inline-flex;align-items:center;gap:10px;margin-top:18px;'
@@ -192,11 +203,11 @@ def pied_espace(s, lang):
     parts = re.split(r'(?=<div class="footer-col">)', bloc)
     garde = parts[:3]           # ouverture + marque + colonne de l'outil
     # la pastille s'ajoute à la fin du bloc de marque, sans toucher au reste
-    garde[1] = re.sub(r'<a href="/confidentialite/" class="pied-rgpd".*?</a>', '',
+    garde[1] = re.sub(r'<a href="[^"]*" class="pied-rgpd".*?</a>', '',
                       garde[1], flags=re.S)        # idempotence : on retire l'ancienne
     i_fin = garde[1].rstrip().rfind('</div>')
     if i_fin > 0:
-        garde[1] = garde[1][:i_fin] + pastille(lang) + garde[1][i_fin:]
+        garde[1] = garde[1][:i_fin] + pastille(lang, espace=True) + garde[1][i_fin:]
     fin = re.search(r'<div class="footer-bottom">.*?</div>\s*</div>\s*</footer>',
                     bloc, re.S)
     if len(garde) < 3 or not fin:
