@@ -12,6 +12,7 @@ import os
 import re
 import sys
 
+NBSP = "\u00a0"
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -26,6 +27,33 @@ LOGO = (
     ' Arial, sans-serif" font-weight="800" font-size="27" fill="#E8EFF4"'
     ' text-anchor="middle" letter-spacing="-0.5">VB</text></svg>'
 )
+
+
+
+# Pastille de confidentialité. Volontairement factuelle : il n'existe pas de
+# « certification RGPD » qu'une entreprise puisse s'attribuer elle-même, et un
+# badge qui en aurait l'air serait trompeur. On n'affiche donc que des faits
+# vérifiables sur le site, et le lien renvoie à la page qui les détaille.
+def pastille(lang):
+    en = lang == "en"
+    titre = "GDPR" if en else "RGPD"
+    # la seule affirmation vérifiable d'un simple coup d'œil au réseau
+    ligne = "No cookies or trackers" if en else "Sans cookie ni traceur tiers"
+    href = "/confidentialite/"
+    return (
+        f'<a href="{href}" class="pied-rgpd"'
+        ' style="display:inline-flex;align-items:center;gap:10px;margin-top:18px;'
+        'padding:8px 13px 8px 11px;border:1px solid rgba(217,113,60,.45);border-radius:9px;'
+        'text-decoration:none;max-width:max-content">'
+        '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#D9713C"'
+        ' stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"'
+        ' aria-hidden="true" focusable="false" style="flex:none">'
+        '<path d="M12 2.8 20 6v6c0 5.2-3.4 8.6-8 10.2C7.4 20.6 4 17.2 4 12V6Z"/>'
+        '<path d="m8.9 12.1 2.2 2.2 4-4.4"/></svg>'
+        '<span style="font:600 11.5px/1.35 var(--sans,system-ui);color:#A1A1AA">'
+        f'<strong style="display:block;color:#E8EFF4;font-size:11px;letter-spacing:.16em;'
+        f'font-weight:700">{titre}</strong>{ligne}</span></a>'
+    )
 
 
 def colonne(titre, liens):
@@ -100,7 +128,7 @@ def pied(lang):
                  '<a href="/collectivites/conditions/">Conditions de service (communes)</a>')
 
     marque = (f'<div><a class="marque" href="{accueil}">{LOGO}VB Safety</a>'
-              f'<p>{accroche}</p></div>')
+              f'<p>{accroche}</p>{pastille(lang)}</div>')
     return (
         '<footer class="pied">\n  <div class="wrap">\n    <div class="pied-grille">\n      '
         + marque + "\n      " + "\n      ".join(cols)
@@ -134,7 +162,7 @@ def pied_accueil(lang):
     return (
         '<footer class="site-foot">\n  <div class="section-inner foot-grid">\n'
         f'    <div class="foot-brand"><a class="marque" href="{accueil}">{LOGO}VB Safety</a>'
-        f"<p>{accroche}</p></div>\n    "
+        f"<p>{accroche}</p>{pastille(lang)}</div>\n    "
         + "\n    ".join(cols)
         + '\n  </div>\n  <div class="section-inner foot-bottom">'
         f'<span>{bas_g}</span><span class="foot-legal">{legal}</span></div>\n</footer>'
@@ -163,6 +191,12 @@ def pied_espace(s, lang):
     # colonnes existantes : [0] marque, [1] colonne de l'outil, le reste est remplacé
     parts = re.split(r'(?=<div class="footer-col">)', bloc)
     garde = parts[:3]           # ouverture + marque + colonne de l'outil
+    # la pastille s'ajoute à la fin du bloc de marque, sans toucher au reste
+    garde[1] = re.sub(r'<a href="/confidentialite/" class="pied-rgpd".*?</a>', '',
+                      garde[1], flags=re.S)        # idempotence : on retire l'ancienne
+    i_fin = garde[1].rstrip().rfind('</div>')
+    if i_fin > 0:
+        garde[1] = garde[1][:i_fin] + pastille(lang) + garde[1][i_fin:]
     fin = re.search(r'<div class="footer-bottom">.*?</div>\s*</div>\s*</footer>',
                     bloc, re.S)
     if len(garde) < 3 or not fin:
