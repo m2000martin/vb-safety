@@ -15,6 +15,19 @@ import sys
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+# Marque du pied de page : le monogramme de la favicon, posé en ligne pour qu'il
+# fonctionne quelle que soit la feuille de style de la page (trois variantes de pied).
+LOGO = (
+    '<svg viewBox="0 0 64 64" width="30" height="30" aria-hidden="true" focusable="false"'
+    ' style="margin-right:11px;flex:none;vertical-align:middle">'
+    '<rect x="2.5" y="2.5" width="59" height="59" rx="12.5" fill="#16293F"'
+    ' stroke="#D9713C" stroke-width="3"/>'
+    '<text x="32" y="43" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto,'
+    ' Arial, sans-serif" font-weight="800" font-size="27" fill="#E8EFF4"'
+    ' text-anchor="middle" letter-spacing="-0.5">VB</text></svg>'
+)
+
+
 def colonne(titre, liens):
     items = "".join(f'<li><a href="{h}"{a}>{t}</a></li>' for h, t, a in liens)
     return f'<div><h2 class="pied-h">{titre}</h2><ul>{items}</ul></div>'
@@ -86,7 +99,7 @@ def pied(lang):
                  '<a href="/cgu/">CGU</a>'
                  '<a href="/collectivites/conditions/">Conditions de service (communes)</a>')
 
-    marque = (f'<div><a class="marque" href="{accueil}">VB Safety</a>'
+    marque = (f'<div><a class="marque" href="{accueil}">{LOGO}VB Safety</a>'
               f'<p>{accroche}</p></div>')
     return (
         '<footer class="pied">\n  <div class="wrap">\n    <div class="pied-grille">\n      '
@@ -120,7 +133,7 @@ def pied_accueil(lang):
 
     return (
         '<footer class="site-foot">\n  <div class="section-inner foot-grid">\n'
-        f'    <div class="foot-brand"><a class="marque" href="{accueil}">VB Safety</a>'
+        f'    <div class="foot-brand"><a class="marque" href="{accueil}">{LOGO}VB Safety</a>'
         f"<p>{accroche}</p></div>\n    "
         + "\n    ".join(cols)
         + '\n  </div>\n  <div class="section-inner foot-bottom">'

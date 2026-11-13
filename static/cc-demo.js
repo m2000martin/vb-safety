@@ -188,8 +188,8 @@
   }
   function loadL(cb) {
     if (window.L) return cb();
-    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
-    var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; s.onload = cb; s.onerror = cb; document.head.appendChild(s);
+    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = '/static/leaflet/leaflet.min.css'; document.head.appendChild(css);
+    var s = document.createElement('script'); s.src = '/static/leaflet/leaflet.min.js'; s.onload = cb; s.onerror = cb; document.head.appendChild(s);
   }
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); loadL(start); } }, { rootMargin: '300px' });

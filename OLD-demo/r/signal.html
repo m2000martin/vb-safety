@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>Signaler un dégât – tempête</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="/static/leaflet/leaflet.min.css">
 <style>
 *{box-sizing:border-box}body{margin:0;font:15px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:#1c2126;background:#f1efe9}
 .w{max-width:620px;margin:0 auto;padding:14px}.card{background:#fff;border-radius:14px;box-shadow:0 1px 6px rgba(0,0,0,.1);padding:16px;margin:12px 0}
@@ -36,7 +36,7 @@ button.go{width:100%;font:600 16px system-ui;border:0;border-radius:11px;padding
 <div class="card ok" id="ok"><b>Merci, signalement reçu.</b><p>La mairie le voit sur sa carte de crise et l'attribue aux services concernés. Inutile de le renvoyer.</p><p class="muted" id="okm">(Démonstration : rien n'a été envoyé.)</p></div>
 <div class="muted" style="margin:10px 4px 30px"><b>Votre identité n'est pas enregistrée.</b> Données conservées : type, position, photo et précision, pour la durée de la crise. Traitement mis en œuvre par la mairie (gestion de crise, mission d'intérêt public).</div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="/static/leaflet/leaflet.min.js"></script>
 <script>
 const Q=new URLSearchParams(location.search),CITY=Q.get('c')||'',LL=(Q.get('ll')||'').split(',').map(Number);
 if(Q.get('n'))document.getElementById('vnom').textContent=Q.get('n');
