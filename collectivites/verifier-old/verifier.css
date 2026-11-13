@@ -36,3 +36,9 @@
 .vo-meth summary{cursor:pointer;color:#E8EFF4;font-weight:600}
 .vo-meth li{margin:6px 0}
 #vo-out{scroll-margin-top:90px}
+.vo-lien{background:none;border:0;color:var(--doux);font:600 14px var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-left:14px;padding:10px 0}
+.vo-lien:hover{color:#fff}
+.vo-faq{margin-top:34px}
+.vo-faq h2{font-size:clamp(20px,2.4vw,26px);margin:0 0 10px}
+.vo-faq h3{font-size:17px;margin:20px 0 6px;color:#E8EFF4}
+.vo-faq p{color:var(--doux);margin:0}

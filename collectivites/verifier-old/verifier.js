@@ -14,15 +14,23 @@
     return WFS + '&TYPENAMES=' + type + (props ? '&PROPERTYNAME=' + props : '') +
       '&CQL_FILTER=' + encodeURIComponent(cql) + (extra || '');
   }
-  async function getJSON(u) {
-    var r = await fetch(u);
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
+  async function getJSON(u, essai) {
+    try {
+      var r = await fetch(u);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return await r.json();
+    } catch (e) {
+      if (essai) throw e;
+      await new Promise(function (ok) { setTimeout(ok, 1200); });
+      return getJSON(u, true);
+    }
   }
-  async function paged(type, props, cql, max) {
+  async function paged(type, props, cql, max, tri) {
     var all = [], start = 0, page = 5000;
     while (true) {
-      var d = await getJSON(url(type, props, cql, '&COUNT=' + page + '&STARTINDEX=' + start));
+      var d;
+      try { d = await getJSON(url(type, props, cql, '&COUNT=' + page + '&STARTINDEX=' + start + (tri ? '&SORTBY=' + tri : '')), start > 0); }
+      catch (e) { if (!start) throw e; return { f: all, plus: true }; }
       all = all.concat(d.features || []);
       if (!d.features || d.features.length < page || all.length >= max) return { f: all, plus: d.features && d.features.length === page };
       start += page;
@@ -102,19 +110,6 @@
       var B = [bb[0] - dx, bb[1] - dy, bb[2] + dx, bb[3] + dy];
       var bbox = function (b, g) { return 'BBOX(' + (g || 'geometrie') + ',' + b.join(',') + ",'EPSG:4326')"; };
       var depCode = dep.length === 2 ? '0' + dep : dep;
-      msg('Interrogation du zonage OLD, des bâtiments et des zones boisées (IGN)…');
-      var rs = await Promise.all([
-        fetch(HITS + '&TYPENAMES=DEBROUSSAILLEMENT:debroussaillement&CQL_FILTER=' + encodeURIComponent("dept='" + depCode + "'")).then(function (r) { return r.text(); }),
-        paged('DEBROUSSAILLEMENT:debroussaillement', 'geom', bbox(B, 'geom'), 5000),
-        paged('BDTOPO_V3:batiment', 'geometrie', "usage_1='Résidentiel' AND " + bbox(bb), 40000),
-        paged('BDTOPO_V3:zone_de_vegetation', 'geometrie,nature', "nature NOT IN ('Haie','Verger','Vigne','Peupleraie') AND " + bbox(B), 40000)
-      ]);
-      if (id !== run) return;
-      var depCouvert = +((rs[0].match(/numberMatched="(\d+)"/) || [0, 0])[1]) > 0;
-      var zon = rs[1].f, bat = rs[2].f, veg = rs[3].f, tropGrand = rs[2].plus;
-      msg('Calcul des distances…');
-      await new Promise(function (r) { setTimeout(r, 30); });
-
       /* grille locale en mètres */
       var X = function (lon) { return (lon - lon0) * kx; }, Y = function (lat) { return (lat - lat0) * ky; };
       var x0 = X(B[0]), y1 = Y(B[3]), W = X(B[2]) - x0, H = y1 - Y(B[1]);
@@ -136,6 +131,44 @@
         return a;
       }
       var mCom = raster(cpolys);
+
+      /* bâtiments : dalles de 2 km qui touchent la commune (évite de charger les communes voisines) */
+      var T = Math.max(1, Math.round(2000 / res_)), dalles = [];
+      for (var ty = 0; ty < ny; ty += T) for (var tx = 0; tx < nx; tx += T) {
+        var touche = false;
+        for (var yy0 = ty; yy0 < Math.min(ny, ty + T) && !touche; yy0++) for (var xx0 = tx; xx0 < Math.min(nx, tx + T); xx0++) if (mCom[yy0 * nx + xx0]) { touche = true; break; }
+        if (!touche) continue;
+        var mx0 = x0 + tx * res_, mx1 = x0 + Math.min(nx, tx + T) * res_, my1 = y1 - ty * res_, my0 = y1 - Math.min(ny, ty + T) * res_;
+        dalles.push([mx0 / kx + lon0, my0 / ky + lat0, mx1 / kx + lon0, my1 / ky + lat0].map(function (v) { return +v.toFixed(6); }));
+      }
+      var MAXB = 60000, vus = {}, bat = [], tropGrand = false, faites = 0;
+      async function chargerDalles() {
+        var i = 0;
+        async function suivant() {
+          while (i < dalles.length && !tropGrand) {
+            var d = dalles[i++], r;
+            try { r = await paged('BDTOPO_V3:batiment', 'geometrie', "usage_1='Résidentiel' AND " + bbox(d), 20000, 'cleabs'); }
+            catch (e) { tropGrand = true; continue; }
+            r.f.forEach(function (f) { if (!vus[f.id]) { vus[f.id] = 1; bat.push(f); } });
+            if (r.plus || bat.length >= MAXB) tropGrand = true;
+            faites++;
+            if (dalles.length > 6) msg('Bâtiments : ' + fmt(bat.length) + ' chargés (' + Math.round(100 * faites / dalles.length) + ' %)…');
+          }
+        }
+        await Promise.all([suivant(), suivant(), suivant(), suivant()]);
+      }
+      msg('Interrogation du zonage OLD, des bâtiments et des zones boisées (IGN)…' + ((P.population || 0) > 100000 ? ' Grande ville : le calcul peut prendre une à deux minutes.' : ''));
+      var rs = await Promise.all([
+        fetch(HITS + '&TYPENAMES=DEBROUSSAILLEMENT:debroussaillement&CQL_FILTER=' + encodeURIComponent("dept='" + depCode + "'")).then(function (r) { return r.text(); }),
+        paged('DEBROUSSAILLEMENT:debroussaillement', 'geom,date_integ,dat_ap_old', bbox(B, 'geom'), 5000, 'id'),
+        chargerDalles(),
+        paged('BDTOPO_V3:zone_de_vegetation', 'geometrie,nature', "nature NOT IN ('Haie','Verger','Vigne','Peupleraie') AND " + bbox(B), 60000, 'cleabs')
+      ]);
+      if (id !== run) return;
+      var depCouvert = +((rs[0].match(/numberMatched="(\d+)"/) || [0, 0])[1]) > 0;
+      var zon = rs[1].f, veg = rs[3].f;
+      msg('Calcul des distances…');
+      await new Promise(function (r) { setTimeout(r, 30); });
       var zpolys = []; zon.forEach(function (f) { zpolys = zpolys.concat(rings(f.geometry)); });
       var mZon = zpolys.length ? raster(zpolys) : new Uint8Array(nx * ny);
       var vpolys = []; veg.forEach(function (f) { vpolys = vpolys.concat(rings(f.geometry)); });
@@ -195,7 +228,9 @@
       });
       var zonCom = 0; for (i = 0; i < N; i++) if (mZon[i] && mCom[i]) zonCom++;
       var haZon = Math.round(zonCom * res_ * res_ / 1e4);
-      afficher({ P: P, depCouvert: depCouvert, n: n, nOld: nOld, n50: n50, n200: n200, haZon: haZon, pts: pts, cpolys: cpolys, zon: zon, trop: tropGrand });
+      var dates = {}, aps = {};
+      zon.forEach(function (f) { var q = f.properties || {}; if (q.date_integ) dates[q.date_integ] = 1; if (q.dat_ap_old) aps[q.dat_ap_old] = 1; });
+      afficher({ dates: Object.keys(dates), aps: Object.keys(aps), P: P, depCouvert: depCouvert, n: n, nOld: nOld, n50: n50, n200: n200, haZon: haZon, pts: pts, cpolys: cpolys, zon: zon, trop: tropGrand });
       etat.textContent = '';
     } catch (e) {
       if (id === run) msg("Le service de l'IGN ne répond pas pour le moment. Réessayez dans quelques instants.");
@@ -225,14 +260,25 @@
       suite = '<p>' + fmt(r.n50 + r.n200) + ' bâtiment' + (r.n50 + r.n200 > 1 ? 's' : '') + ' d\'habitation se trouve' + (r.n50 + r.n200 > 1 ? 'nt' : '') + ' à moins de 200 m d\'un bois d\'au moins 4 ha, dont ' + fmt(r.n50) + ' à moins de 50 m.</p>' +
         '<a class="btn btn-p" href="' + demande + '">Faire le point pour ' + nom + ' <span aria-hidden="true">→</span></a>';
     }
-    if (r.trop) v += ' <span style="color:var(--faible)">(Commune très étendue : comptage limité aux 40 000 premiers bâtiments.)</span>';
+    if (r.nOld > 0 || r.haZon > 0) {
+      var src = [];
+      if (r.aps.length) src.push('arrêté préfectoral du ' + r.aps.map(esc).join(', '));
+      if (r.dates.length) src.push('zonage intégré par l\'IGN le ' + r.dates.map(esc).join(', '));
+      if (src.length) v += ' <span style="color:var(--faible);font-size:.85em">(' + src.join(' ; ') + ')</span>';
+    }
+    if (r.trop) v += ' <span style="color:var(--faible)">(Commune très étendue : comptage partiel (plus de 60 000 bâtiments d\'habitation ou service IGN saturé). Les chiffres sont des minimums.)</span>';
     $('vo-verdict').innerHTML = v;
     $('vo-chiffres').innerHTML =
       '<div class="vo-c"><b>' + fmt(r.n) + '</b><span>bâtiments d\'habitation dans la commune</span></div>' +
       '<div class="vo-c c1"><b>' + fmt(r.nOld) + '</b><span>dans le zonage OLD</span></div>' +
       '<div class="vo-c c2"><b>' + fmt(r.n50) + '</b><span>hors zonage, à moins de 50 m d\'un bois</span></div>' +
       '<div class="vo-c c3"><b>' + fmt(r.n200) + '</b><span>hors zonage, entre 50 et 200 m d\'un bois</span></div>';
-    $('vo-suite').innerHTML = suite;
+    $('vo-suite').innerHTML = suite + ' <button type="button" class="vo-lien" id="vo-lien">Copier le lien de ce résultat</button>';
+    $('vo-lien').addEventListener('click', function () {
+      var b = this, u = location.origin + location.pathname + '?commune=' + r.P.code_insee;
+      var ok = function () { b.textContent = 'Lien copié'; setTimeout(function () { b.textContent = 'Copier le lien de ce résultat'; }, 2000); };
+      if (navigator.clipboard) navigator.clipboard.writeText(u).then(ok, function () { b.textContent = u; }); else b.textContent = u;
+    });
     dessiner(r);
     out.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

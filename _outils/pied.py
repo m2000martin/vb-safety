@@ -92,6 +92,7 @@ def pied(lang):
             colonne("Local authorities", [
                 ("/en/municipalities/", "Overview", ""),
                 ("/collectivites/", "Vegetation clearance (OLD)", ' hreflang="fr"'),
+                ("/collectivites/verifier-old/", "Is my municipality concerned? (FR)", ' hreflang="fr"'),
                 ("/collectivites/cellule-de-crise/", "Crisis unit", ' hreflang="fr"'),
             ]),
             colonne("VB Safety", [
@@ -121,6 +122,7 @@ def pied(lang):
             ]),
             colonne("Collectivités", [
                 ("/collectivites/", "Débroussaillement (OLD)", ""),
+                ("/collectivites/verifier-old/", "Ma commune est-elle soumise ?", ""),
                 ("/collectivites/cellule-de-crise/", "Cellule de crise", ""),
                 ("/ressources/obligations-legales-debroussaillement/",
                  "Obligations de débroussaillement", ""),
