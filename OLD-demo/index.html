@@ -894,11 +894,11 @@ function QUAL(){try{return JSON.parse(localStorage.getItem('oldqual_'+D.city)||'
 function qualSet(ks,v){const o=QUAL();ks.forEach(k=>{if(v)o[k]=v;else delete o[k]});try{localStorage.setItem('oldqual_'+D.city,JSON.stringify(o))}catch(_){MEM['q'+D.city]=o}}
 let PST='qual',PSEL=new Set();
 const STG=[['qual','À qualifier','Repérées à distance (feu, tempête, inondation). Choisir la suite : courrier, contrôle, plus tard ou sans suite.'],
+ ['ctl','À contrôler','Constat sur place, avant le courrier ou après une réponse ou une relance. Imprimer la tournée, puis enregistrer le résultat.'],
  ['env','Courrier à envoyer','Décision prise : informer le propriétaire. Imprimer les courriers groupés, puis enregistrer l\'envoi.'],
  ['att','En attente','Courrier envoyé. La relance est proposée 60 jours après l\'envoi.'],
  ['rep','Réponse à traiter','Le propriétaire a répondu (QR code, téléphone, accueil). Décider : conforme, contrôle ou sans suite.'],
  ['rel','Relance due','Délai dépassé sans contrôle conforme. Courrier de rappel ou contrôle sur place.'],
- ['ctl','À contrôler','Visite terrain. Imprimer la tournée, puis enregistrer le résultat.'],
  ['md','Non conforme','Contrôle non conforme : suite décidée par le maire.'],
  ['clos','Clos','Conforme, ou classé sans suite.']];
 function pFlags(p){const out=[];const scope=AZ==='com'||p.l||!D.h.features.some(f=>f.properties.l);
