@@ -261,6 +261,15 @@
     }
   }
 
+  // Les intitulés officiels des zonages sont longs : on les abrège pour les étiquettes.
+  function courtType(t) {
+    t = String(t || '');
+    if (/habitats/i.test(t)) return 'N2000 habitats';
+    if (/oiseaux/i.test(t)) return 'N2000 oiseaux';
+    if (/znieff/i.test(t)) return t.replace(/znieff\s*de\s*type\s*/i, 'ZNIEFF ').trim();
+    return t;
+  }
+
   function afficher(r) {
     out.hidden = false;
     var nom = esc(r.P.nom_officiel);
@@ -285,32 +294,55 @@
       suite = '<p>' + fmt(r.n50 + r.n200) + ' bâtiment' + (r.n50 + r.n200 > 1 ? 's' : '') + ' d\'habitation se trouve' + (r.n50 + r.n200 > 1 ? 'nt' : '') + ' à moins de 200 m d\'un bois d\'au moins 4 ha, dont ' + fmt(r.n50) + ' à moins de 50 m.</p>' +
         '<a class="btn btn-p" href="' + demande + '">Faire le point pour ' + nom + ' <span aria-hidden="true">→</span></a>';
     }
+    $('vo-verdict').innerHTML = v;
+
+    // Sources et réserves : une note à part, pour ne pas couper la phrase du verdict
+    var notes = [];
     if (r.nOld > 0 || r.haZon > 0) {
       var src = [];
       if (r.aps.length) src.push('arrêté préfectoral du ' + r.aps.map(esc).join(', '));
       if (r.dates.length) src.push('zonage intégré par l\'IGN le ' + r.dates.map(esc).join(', '));
-      if (src.length) v += ' <span style="color:var(--faible);font-size:.85em">(' + src.join(' ; ') + ')</span>';
+      if (src.length) notes.push('<span class="vo-n">Source</span>' + src.join(' ; ') + '.');
     }
-    if (r.trop) v += ' <span style="color:var(--faible)">(Comptage partiel : commune très étendue ou service IGN momentanément saturé. Les chiffres sont des minimums ; relancez la recherche pour compléter.)</span>';
-    $('vo-verdict').innerHTML = v;
-    $('vo-chiffres').innerHTML =
-      '<div class="vo-c"><b>' + fmt(r.n) + '</b><span>bâtiments d\'habitation dans la commune</span></div>' +
-      '<div class="vo-c c1"><b>' + fmt(r.nOld) + '</b><span>dans le zonage OLD</span></div>' +
-      '<div class="vo-c c2"><b>' + fmt(r.n50) + '</b><span>hors zonage, à moins de 50 m d\'un bois</span></div>' +
-      '<div class="vo-c c3"><b>' + fmt(r.n200) + '</b><span>hors zonage, entre 50 et 200 m d\'un bois</span></div>' +
-      (r.nNat ? '<div class="vo-c c4"><b>' + fmt(r.nNat) + '</b><span>de ces bâtiments à moins de 50 m d\'une zone naturelle protégée</span></div>' : '');
+    if (r.trop) notes.push('<span class="vo-n vo-n-a">Comptage partiel</span>Commune très étendue ou service IGN momentanément saturé. Les chiffres sont des minimums : relancez la recherche pour compléter.');
+    var elNote = $('vo-note');
+    elNote.innerHTML = notes.join('<br>');
+    elNote.hidden = notes.length === 0;
+
+    // Un chiffre principal, le reste en appui : le nombre de bâtiments soumis est la réponse
+    var cpal = r.depCouvert
+      ? '<div class="vo-c vo-une ' + (r.nOld === 0 && !r.haZon ? 'nul' : 'c1') + '"><b>' + fmt(r.nOld) + '</b>' +
+        '<span>bâtiment' + (r.nOld > 1 ? 's' : '') + ' d\'habitation dans le zonage OLD</span>' +
+        '<em>sur ' + fmt(r.n) + ' dans la commune</em></div>'
+      : '<div class="vo-c vo-une inc"><b>' + fmt(r.n) + '</b><span>bâtiment' + (r.n > 1 ? 's' : '') + ' d\'habitation dans la commune</span>' +
+        '<em>zonage OLD non disponible pour ce département</em></div>';
+    var appui = (r.n50 + r.n200 > 0)
+      ? '<div class="vo-groupe"><h3 class="vo-gt">' + (r.depCouvert ? 'Hors zonage, à proximité d\'un bois' : 'À proximité d\'un bois') + '</h3><div class="vo-g">' +
+        '<div class="vo-c c2"><b>' + fmt(r.n50) + '</b><span>à moins de 50 m</span></div>' +
+        '<div class="vo-c c3"><b>' + fmt(r.n200) + '</b><span>entre 50 et 200 m</span></div>' +
+        '</div></div>'
+      : '';
+    var ch = $('vo-chiffres');
+    ch.className = 'vo-chiffres' + (appui ? '' : ' seul');
+    ch.innerHTML = cpal + appui;
     var bio = '';
     if (r.nat.length && r.nNat > 0) {
       var now = new Date(), mo = now.getMonth(), dd = now.getDate();
       var nid = (mo === 2 && dd >= 15) || (mo >= 3 && mo <= 6);
       var vus = {}, sites = [];
       r.nat.forEach(function (f) { var q = f.properties; if (q.nom_site && !vus[q.nom_site]) { vus[q.nom_site] = 1; sites.push(q); } });
-      bio = '<div class="vo-bio' + (nid ? ' nid' : '') + '"><p><b>' + (nid ? 'Période de nidification en cours (mi-mars à fin juillet).' : 'Zone naturelle protégée à proximité.') + '</b> ' +
-        fmt(r.nNat) + ' bâtiment' + (r.nNat > 1 ? 's' : '') + ' concerné' + (r.nNat > 1 ? 's' : '') + ' se trouve' + (r.nNat > 1 ? 'nt' : '') + ' à moins de 50 m d\'une zone Natura 2000 ou d\'une ZNIEFF. ' +
-        (nid ? 'Avant de couper arbres et haies, vérifier l\'absence de nids et reporter si possible les coupes d\'août à février. '
-             : 'Pour la prochaine campagne, prévoir les coupes d\'arbres et de haies d\'août à février, hors période de nidification. ') +
-        'Débroussailler ne veut pas dire raser : conserver des arbres isolés et une strate herbacée basse. La destruction de nids d\'espèces protégées est interdite toute l\'année ; l\'arrêté préfectoral peut prévoir des adaptations.</p>' +
-        '<p class="vo-sites">' + sites.slice(0, 6).map(function (q) { return (q.url_fiche ? '<a href="' + esc(q.url_fiche) + '" rel="noopener" target="_blank">' + esc(q.nom_site) + '</a>' : esc(q.nom_site)) + ' <small>(' + esc(q.type) + ')</small>'; }).join(' · ') + (sites.length > 6 ? ' · …' : '') + '</p></div>';
+      var pl = r.nNat > 1;
+      bio = '<div class="vo-bio' + (nid ? ' nid' : '') + '">' +
+        '<h3 class="vo-bt">' + (nid ? 'Période de nidification en cours' : 'Zone naturelle protégée à proximité') + '</h3>' +
+        '<p><b>' + fmt(r.nNat) + ' bâtiment' + (pl ? 's' : '') + '</b> situé' + (pl ? 's' : '') + ' dans le zonage ou à moins de 200 m d\'un bois ' +
+        'se trouve' + (pl ? 'nt' : '') + ' à moins de 50 m d\'une zone Natura 2000 ou d\'une ZNIEFF.</p>' +
+        '<ul class="vo-regles">' +
+        '<li>' + (nid ? 'Avant de couper arbres et haies, vérifier l\'absence de nids ; reporter si possible les coupes d\'août à février.'
+                     : 'Prévoir les coupes d\'arbres et de haies d\'août à février, hors période de nidification (mi-mars à fin juillet).') + '</li>' +
+        '<li>Débroussailler ne veut pas dire raser : conserver des arbres isolés et une strate herbacée basse.</li>' +
+        '<li>La destruction de nids d\'espèces protégées est interdite toute l\'année ; l\'arrêté préfectoral peut prévoir des adaptations.</li>' +
+        '</ul>' +
+        '<p class="vo-sites"><span class="vo-sl">Sites concernés</span>' + sites.slice(0, 6).map(function (q) { return '<span class="vo-s">' + (q.url_fiche ? '<a href="' + esc(q.url_fiche) + '" rel="noopener" target="_blank">' + esc(q.nom_site) + '</a>' : esc(q.nom_site)) + ' <small>' + esc(courtType(q.type)) + '</small></span>'; }).join('') + (sites.length > 6 ? '<span class="vo-s vo-plus">+ ' + (sites.length - 6) + ' autre' + (sites.length - 6 > 1 ? 's' : '') + '</span>' : '') + '</p></div>';
     }
     $('vo-suite').innerHTML = bio + suite + ' <button type="button" class="vo-lien" id="vo-lien">Copier le lien de ce résultat</button>';
     $('vo-lien').addEventListener('click', function () {
@@ -338,7 +370,12 @@
     var g = L.layerGroup();
     r.pts.forEach(function (p) { L.circleMarker([p[0], p[1]], { renderer: rd, radius: p[3] ? 4 : 3, stroke: !!p[3], color: '#1B5E20', weight: 1.5, fillColor: col[p[2]], fillOpacity: .95 }).addTo(g); });
     g.addTo(map); couches.push(g);
-    setTimeout(function () { map.invalidateSize(); map.fitBounds(com.getBounds(), { padding: [10, 10] }); }, 50);
+    setTimeout(function () {
+      map.invalidateSize();
+      // Si le contour de la commune n'a pas pu être chargé, on se cale sur les bâtiments.
+      var b = com.getBounds(); if (!b.isValid()) b = g.getLayers().length ? L.featureGroup(g.getLayers()).getBounds() : null;
+      if (b && b.isValid()) map.fitBounds(b, { padding: [10, 10] }); else map.setView([46.6, 2.5], 5);
+    }, 50);
   }
 
   var init = new URLSearchParams(location.search).get('commune');

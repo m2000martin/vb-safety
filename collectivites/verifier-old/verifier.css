@@ -1,11 +1,17 @@
+/* VB Safety · vérification du zonage OLD.
+   Règle de mise en page : on ne centre que ce qui est court (titres, chiffres).
+   Toute phrase se lit alignée à gauche, y compris sur téléphone. */
+
 .vo-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Recherche ---------- */
 .vo-hero{padding:clamp(48px,7vw,96px) 0 clamp(20px,3vw,32px);text-align:center;position:relative;overflow-x:clip}
 .vo-hero::before{content:"";position:absolute;left:50%;top:40%;width:min(800px,120vw);height:500px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(224,108,52,.11),transparent 70%);pointer-events:none}
 .vo-hero .wrap{position:relative;max-width:780px}
 .vo-k{font:700 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#E06C34}
 .vo-hero h1{font-size:clamp(30px,4.6vw,54px);line-height:1.06;letter-spacing:-.04em;margin:14px 0 0}
 .vo-hero h1 span{color:#9AA3AF}
-.vo-hero p{text-align:center;color:var(--doux);font-size:clamp(16px,1.5vw,18px);margin:18px auto 0;max-width:52ch;hyphens:manual}
+.vo-hero p{color:var(--doux);font-size:clamp(16px,1.5vw,18px);line-height:1.6;margin:18px auto 0;max-width:52ch;text-align:center;-webkit-hyphens:manual;hyphens:manual}
 .vo-search{position:relative;max-width:520px;margin:28px auto 0;text-align:left}
 .vo-search input{width:100%;box-sizing:border-box;font:500 18px var(--sans);padding:16px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#0C1B2C;color:#fff;outline:none}
 .vo-search input:focus{border-color:#E06C34;box-shadow:0 0 0 3px rgba(224,108,52,.25)}
@@ -13,53 +19,111 @@
 .vo-list li{padding:10px 12px;border-radius:8px;cursor:pointer;color:#E8EFF4;display:flex;justify-content:space-between;gap:12px}
 .vo-list li small{color:var(--faible)}
 .vo-list li[aria-selected=true],.vo-list li:hover{background:rgba(224,108,52,.16)}
+
+/* ---------- Résultat ---------- */
 .vo-res{padding:0 0 clamp(64px,8vw,110px)}
 .vo-res .wrap{max-width:900px}
-.vo-etat{color:var(--doux);text-align:center;margin:8px 0 18px;hyphens:manual}
-.vo-res h2{font-size:clamp(24px,3vw,32px);letter-spacing:-.03em;margin:0 0 8px}
-.vo-verdict{font-size:18px;color:#E8EFF4;margin:0 0 18px;text-align:left!important;hyphens:manual!important}
-.vo-verdict b.oui{color:#F08A5D}.vo-verdict b.non{color:#7BC67E}.vo-verdict b.nc{color:#E3C15A}
-.vo-chiffres{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0 0 16px}
-.vo-c{background:#0C1B2C;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px}
-.vo-c b{display:block;font:700 30px/1.1 var(--sans);letter-spacing:-.03em;color:#fff}
-.vo-c span{display:block;color:var(--doux);font-size:14px;margin-top:4px}
-.vo-c.c1 b{color:#F08A5D}.vo-c.c2 b{color:#F2B14C}.vo-c.c3 b{color:#E3D27A}
-.vo-map{height:min(62vh,520px);border-radius:12px;border:1px solid rgba(255,255,255,.09);background:#0C1B2C}
-.vo-leg{font-size:13px;color:var(--doux);margin:8px 0 18px;text-align:left!important;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
-.vo-leg .it{display:inline-flex;align-items:center;gap:6px}
-.vo-leg .d{display:inline-block;flex:none;width:10px;height:10px;border-radius:50%}
-.vo-leg .d1{background:#E5484D}.vo-leg .d2{background:#F59E0B}.vo-leg .d3{background:#EAD15A}
-.vo-leg .z{display:inline-block;width:16px;height:10px;background:rgba(229,72,77,.25);border:1px solid #E5484D;flex:none}
-.vo-suite{background:#0C1B2C;border:1px solid rgba(224,108,52,.35);border-radius:12px;padding:18px 20px;margin:0 0 18px}
-.vo-suite p{margin:0 0 12px;text-align:left!important;hyphens:manual!important}
-.vo-suite .btn{display:inline-flex}
-.vo-meth{color:var(--doux);font-size:14.5px}
-.vo-meth summary{cursor:pointer;color:#E8EFF4;font-weight:600}
-.vo-meth li{margin:6px 0}
+.vo-etat{color:var(--doux);text-align:center;margin:8px 0 18px}
+.vo-res h2{font-size:clamp(26px,3.2vw,36px);letter-spacing:-.03em;margin:0 0 10px;text-align:left}
 #vo-out{scroll-margin-top:90px}
+
+.vo-verdict{font-size:clamp(17px,1.7vw,19px);line-height:1.55;color:#E8EFF4;margin:0 0 14px;max-width:62ch;text-align:left}
+.vo-verdict b.oui{color:#F08A5D}.vo-verdict b.non{color:#7BC67E}.vo-verdict b.nc{color:#E3C15A}.vo-verdict b.cons{color:#E3D27A}
+
+/* Note de source, sous le verdict et non dans la phrase */
+.vo-note{font-size:13.5px;line-height:1.6;color:var(--faible);margin:0 0 20px;max-width:70ch;text-align:left}
+.vo-n{display:inline-block;margin-right:8px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.07);color:#B9C3CF;font:700 10.5px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;vertical-align:1px}
+.vo-n-a{background:rgba(227,193,90,.16);color:#E3C15A}
+
+/* ---------- Chiffres : un principal, deux en appui ---------- */
+.vo-chiffres{margin:0 0 18px;display:grid;gap:12px}
+.vo-c{background:#0C1B2C;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px}
+.vo-c b{display:block;font:700 30px/1.05 var(--sans);letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums}
+.vo-c span{display:block;color:var(--doux);font-size:14px;line-height:1.4;margin-top:5px}
+.vo-c em{display:block;font-style:normal;color:var(--faible);font-size:13px;margin-top:6px}
+
+.vo-une{padding:22px 24px;border-color:rgba(224,108,52,.4);background:linear-gradient(180deg,rgba(224,108,52,.09),rgba(12,27,44,0) 70%),#0C1B2C}
+.vo-une b{font-size:clamp(44px,7vw,60px);color:#F08A5D}
+.vo-une span{font-size:16px;color:#E8EFF4;max-width:34ch}
+/* Aucun bâtiment soumis : le chiffre ne doit pas être alarmant */
+.vo-une.nul{border-color:rgba(123,198,126,.4);background:linear-gradient(180deg,rgba(46,125,50,.14),rgba(12,27,44,0) 70%),#0C1B2C}
+.vo-une.nul b{color:#7BC67E}
+/* Zonage indisponible : chiffre neutre */
+.vo-une.inc{border-color:rgba(255,255,255,.12);background:#0C1B2C}
+.vo-une.inc b{color:#E8EFF4}
+.vo-c.c1 b{color:#F08A5D}.vo-c.c2 b{color:#F2B14C}.vo-c.c3 b{color:#E3D27A}
+
+.vo-groupe{border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px 16px;background:rgba(255,255,255,.015)}
+.vo-gt{margin:0 0 10px;font:700 11px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faible)}
+.vo-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vo-g .vo-c{background:#0C1B2C}
+.vo-g .vo-c b{font-size:26px}
+/* Écran large : le chiffre principal et son groupe d'appui se lisent côte à côte */
+@media (min-width:860px){
+  .vo-chiffres{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:stretch}
+  .vo-chiffres.seul{grid-template-columns:1fr}
+  .vo-une{display:flex;flex-direction:column;justify-content:center}
+  .vo-groupe{display:flex;flex-direction:column}
+  .vo-g{flex:1}
+}
+
+/* ---------- Carte et légende ---------- */
+.vo-map{height:min(62vh,520px);border-radius:12px;border:1px solid rgba(255,255,255,.09);background:#0C1B2C}
+.vo-leg{font-size:13px;line-height:1.45;color:var(--doux);margin:10px 0 20px;display:grid;gap:7px 20px;text-align:left}
+.vo-leg .it{display:flex;align-items:flex-start;gap:8px}
+.vo-leg .d{display:inline-block;flex:none;width:10px;height:10px;border-radius:50%;margin-top:4px}
+.vo-leg .d1{background:#E5484D}.vo-leg .d2{background:#F59E0B}.vo-leg .d3{background:#EAD15A}
+.vo-leg .z{display:inline-block;width:16px;height:10px;background:rgba(229,72,77,.25);border:1px solid #E5484D;flex:none;margin-top:4px}
+.vo-leg .nz{display:inline-block;width:16px;height:10px;background:rgba(46,125,50,.2);border:1px dashed #2E7D32;flex:none;margin-top:4px}
+
+/* ---------- Encadré zone protégée ---------- */
+.vo-bio{background:rgba(46,125,50,.12);border:1px solid rgba(123,198,126,.45);border-radius:12px;padding:16px 18px;margin:0 0 16px;text-align:left}
+.vo-bio.nid{background:rgba(229,72,77,.10);border-color:rgba(240,138,93,.6)}
+.vo-bt{margin:0 0 8px;font-size:16px;line-height:1.3;color:#E8EFF4;letter-spacing:-.01em}
+.vo-bio p{margin:0;font-size:15px;line-height:1.55;color:var(--doux);max-width:64ch;text-align:left}
+.vo-bio p b{color:#E8EFF4}
+.vo-regles{margin:10px 0 0;padding:0 0 0 18px;color:var(--doux);font-size:14.5px;line-height:1.5}
+.vo-regles li{margin:5px 0}
+.vo-sites{margin:14px 0 0!important;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px!important}
+.vo-sl{width:100%;font:700 10.5px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faible)}
+.vo-s{display:inline-flex;align-items:baseline;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);line-height:1.3}
+.vo-s a{color:#9fd8a2;text-decoration:none}
+.vo-s a:hover{text-decoration:underline}
+.vo-s small{color:var(--faible);font-size:11.5px}
+.vo-plus{color:var(--faible)}
+
+/* ---------- Recommandations et action ---------- */
+.vo-suite{background:#0C1B2C;border:1px solid rgba(224,108,52,.35);border-radius:12px;padding:18px 20px;margin:0 0 18px;text-align:left}
+.vo-suite p{margin:0 0 12px;font-size:15.5px;line-height:1.55;color:var(--doux);max-width:64ch;text-align:left}
+.vo-suite p b{color:#E8EFF4}
+.vo-suite .btn{display:inline-flex}
 .vo-lien{background:none;border:0;color:var(--doux);font:600 14px var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-left:14px;padding:10px 0}
 .vo-lien:hover{color:#fff}
+
+.vo-meth{color:var(--doux);font-size:14.5px;line-height:1.55}
+.vo-meth summary{cursor:pointer;color:#E8EFF4;font-weight:600;padding:6px 0}
+.vo-meth li{margin:7px 0;max-width:72ch}
+
+/* ---------- Questions fréquentes ---------- */
 .vo-faq{margin-top:34px}
 .vo-faq h2{font-size:clamp(20px,2.4vw,26px);margin:0 0 10px}
-.vo-faq h3{font-size:17px;margin:20px 0 6px;color:#E8EFF4}
-.vo-faq p{color:var(--doux);margin:0}
-.vo-c.c4 b{color:#7BC67E}
-.vo-bio{background:rgba(46,125,50,.12);border:1px solid rgba(123,198,126,.45);border-radius:10px;padding:12px 14px;margin:0 0 14px}
-.vo-bio.nid{background:rgba(229,72,77,.10);border-color:rgba(240,138,93,.6)}
-.vo-bio p{margin:0 0 6px!important;font-size:15px}
-.vo-sites{font-size:13.5px!important;color:var(--doux)}
-.vo-sites a{color:#9fd8a2}
-.vo-leg .nz{display:inline-block;width:16px;height:10px;background:rgba(46,125,50,.2);border:1px dashed #2E7D32;flex:none}
+.vo-faq h3{font-size:17px;line-height:1.3;margin:22px 0 6px;color:#E8EFF4}
+.vo-faq p{color:var(--doux);margin:0;line-height:1.6;max-width:68ch;text-align:left;-webkit-hyphens:manual;hyphens:manual}
 
-.vo-verdict b.cons{color:#E3D27A}
+/* ---------- Téléphone ---------- */
 @media (max-width:700px){
- #vo-out h2,.vo-verdict{text-align:center!important}
- .vo-chiffres{grid-template-columns:1fr 1fr}
- .vo-c{text-align:center;padding:12px 10px}
- .vo-leg{justify-content:center;text-align:center!important}
- .vo-suite{text-align:center}
- .vo-suite p{text-align:center!important}
- .vo-suite .btn{width:100%;justify-content:center;box-sizing:border-box}
- .vo-lien{display:block;margin:6px auto 0}
- .vo-bio p{text-align:center!important}
+  .vo-res h2{text-align:center;font-size:26px}
+  .vo-verdict{font-size:17px}
+  /* le chiffre principal se lit centré, les phrases restent à gauche */
+  .vo-une{text-align:center;padding:20px 16px}
+  .vo-une span{margin-left:auto;margin-right:auto}
+  .vo-g .vo-c{text-align:center;padding:12px 10px}
+  .vo-g .vo-c span{font-size:13px}
+  .vo-leg{grid-template-columns:1fr}
+  .vo-suite .btn{width:100%;justify-content:center;box-sizing:border-box;text-align:center}
+  .vo-lien{display:block;margin:10px auto 0;text-align:center}
+  .vo-map{height:min(58vh,440px)}
+  .vo-res{padding-bottom:36px}
+  .vo-faq{margin-top:18px}
+  .vo-s{max-width:100%}
 }
