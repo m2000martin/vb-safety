@@ -87,7 +87,7 @@ for (const p of pages) {
   ok(/\/cmr-industrie\/acces-duerp\/\?suite=/.test(pg.url()), 'Accès DUERP · sans code, renvoi vers la page de connexion');
   await pg.fill('#code', 'FAUX12'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
   ok(await pg.locator('#login-msg.error').count() === 1, 'Accès DUERP · code incorrect refusé');
-  await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/duerp\.html/);
+  await pg.fill('#code', (process.env.VBS_CODE_DEMO || '')); await pg.click('#login-btn'); await pg.waitForURL(/cmr-industrie\/duerp\.html/);
   ok(/\/cmr-industrie\/duerp\.html#produits$/.test(pg.url()), 'Accès DUERP · le code de démo ouvre la page demandée');
   await pg.goto(BASE + '/cmr-industrie/expert.html'); await pg.waitForTimeout(300);
   ok(/expert\.html($|#)/.test(pg.url()), 'Accès DUERP · le mode expert reste ouvert ensuite');
@@ -192,7 +192,7 @@ for (const p of pages) {
   ok(/demo\/$/.test(pg.url()), 'Démo · « Accéder à la démo » ouvre /cmr-industrie/demo/');
   await pg.fill('#code', 'ABC123'); await pg.click('#login-btn'); await pg.waitForTimeout(300);
   ok(/incorrect/.test(await pg.locator('#login-msg').textContent()) && /demo\/$/.test(pg.url()), 'Démo · un code faux est refusé');
-  await pg.fill('#code', 'vln533'); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
+  await pg.fill('#code', (process.env.VBS_CODE_DEMO || '')); await pg.click('#login-btn'); await pg.waitForURL(/outil\/$/); await pg.waitForTimeout(600);
   ok(await pg.locator('.demo-note').count() === 1 && /45 obligations/.test(await pg.locator('#q-title').textContent()), 'Démo · le code de démo ouvre l\'outil sur la liste des obligations, avec l\'exemple fictif');
   ok(await pg.evaluate(() => !localStorage.getItem('vbs-eval-v1')), 'Démo · aucune donnée réelle créée');
   await pg.goto(BASE + '/cmr-industrie/'); 

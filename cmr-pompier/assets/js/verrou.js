@@ -3,8 +3,12 @@
 // Le bon code les déchiffre et les affiche ; il est gardé pour la session (autres pages, connexion).
 (function () {
   var KEY = 'vbs-code', ITER = 300000;
-  // Empreinte du code de démonstration (même valeur que connexion.js), pour la page de connexion
-  var HASH = '1f25a3f79dc7cbc6a54cd05250b81875c13d1f455bbeb72d926f96e347d01ac3';
+  // Vérification du code sans empreinte publiée : on tente de déchiffrer un témoin (PBKDF2-SHA256 300 000 itérations, AES-GCM)
+  var CHECK = 'gMsXeRN/yCsN/E1Iie9/wh+mGMQ7SFVJQOgWCQbdTfMDMWlqjZDH4Ii49nw1k1dg/hA=';
+  async function codeOk(code) { try { var raw = Uint8Array.from(atob(CHECK), function (c) { return c.charCodeAt(0); }), salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+    var base = await crypto.subtle.importKey('raw', new TextEncoder().encode(String(code || '').replace(/\s+/g, '').toUpperCase()), 'PBKDF2', false, ['deriveKey']);
+    var key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: 300000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ct)) === 'vbs-ok'; } catch (e) { return false; } }
   var EN = document.documentElement.lang === 'en';
   function norm(c) { return String(c || '').replace(/\s+/g, '').toUpperCase(); }
   function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
@@ -32,7 +36,7 @@
   // Page de connexion : choix du profil flouté jusqu'au bon code
   async function openLogin(code) {
     var box = document.querySelector('.locked-login'); if (!box) return false;
-    if ((await sha256(norm(code))) !== HASH) return false;
+    if (!(await codeOk(code))) return false;
     box.classList.add('open');
     var inner = box.querySelector('[inert]'); if (inner) inner.removeAttribute('inert');
     var f = document.getElementById('code'); if (f) { f.value = norm(code); f.dispatchEvent(new Event('input', { bubbles: true })); }

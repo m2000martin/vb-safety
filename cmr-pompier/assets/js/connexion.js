@@ -19,9 +19,12 @@
   var codeField = document.getElementById('code-field'), codeInput = document.getElementById('code');
   var qc = new URLSearchParams(location.search).get('code');
   if (qc) codeInput.value = qc;
-  // Empreinte du code, pour l'aperçu sans serveur uniquement (le serveur vérifie le code lui-même)
-  var CODE_HASH = '1f25a3f79dc7cbc6a54cd05250b81875c13d1f455bbeb72d926f96e347d01ac3';
-  async function sha256(t) { var b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return Array.prototype.map.call(new Uint8Array(b), function (x) { return x.toString(16).padStart(2, '0'); }).join(''); }
+  // Vérification du code sans empreinte publiée : on tente de déchiffrer un témoin (PBKDF2-SHA256 300 000 itérations, AES-GCM)
+  var CHECK = 'gMsXeRN/yCsN/E1Iie9/wh+mGMQ7SFVJQOgWCQbdTfMDMWlqjZDH4Ii49nw1k1dg/hA=';
+  async function codeOk(code) { try { var raw = Uint8Array.from(atob(CHECK), function (c) { return c.charCodeAt(0); }), salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
+    var base = await crypto.subtle.importKey('raw', new TextEncoder().encode(String(code || '').replace(/\s+/g, '').toUpperCase()), 'PBKDF2', false, ['deriveKey']);
+    var key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: 300000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ct)) === 'vbs-ok'; } catch (e) { return false; } }
   function codeValue() { return codeInput.value.trim().toUpperCase().replace(/\s+/g, ''); }
 
   function current() {
@@ -62,7 +65,7 @@
         show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error');
       } else if ((err.status === 400 || err.status === 403) && p.role === 'admin') {
         // Profil administrateur pas encore installé sur le serveur : ouverture directe en aperçu sans serveur
-        var okA = false; try { okA = (await sha256(codeValue())) === CODE_HASH; } catch (e2) {}
+        var okA = await codeOk(codeValue());
         if (okA) { var sa = VBS.offlinePreview(p); location.href = VBS.HOME[sa.role]; return; }
         codeInput.setAttribute('aria-invalid', 'true'); codeInput.select();
         show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error');
@@ -78,7 +81,7 @@
   });
 
   offline.addEventListener('click', async function () {
-    var ok = false; try { ok = (await sha256(codeValue())) === CODE_HASH; } catch (e) {}
+    var ok = await codeOk(codeValue());
     if (!ok) { show("Code d'accès incorrect. Vérifiez-le ou demandez un accès.", 'error'); codeInput.focus(); return; }
     var s = VBS.offlinePreview(current());
     location.href = VBS.HOME[s.role];

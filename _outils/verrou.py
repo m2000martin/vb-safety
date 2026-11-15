@@ -11,7 +11,7 @@ Utilisation :
 
 Options d'une zone : <!--verrou:roles cta--> (encadré « Réservé aux membres » avec saisie du code)
                      <!--verrou:sante-->     (zone floutée sans encadré, déverrouillée avec les autres)
-Le même code que la démo (connexion.js, CODE_HASH) : changer l'un impose de rechiffrer avec l'autre.
+Le même code que la démo (connexion.js et verrou.js, témoin CHECK chiffré) : changer le code impose de rechiffrer les zones et de régénérer le témoin.
 """
 import base64, html, os, re, sys
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
