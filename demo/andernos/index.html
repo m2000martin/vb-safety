@@ -857,7 +857,7 @@ function nextHTML(p){const k=p.k,R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=C
  const B=(a,txt,cls)=>'<button class="btn'+(cls?' '+cls:'')+'" onclick="fAct(\''+a+'\')">'+txt+'</button>';
  const contact='<div class="nxl">Contacter maintenant</div><div class="nxr">'+B('pdf','Courrier PDF','dark')+B('mail','E-mail','dark')+'</div>';
  const row=x=>'<div class="nxr">'+x+'</div>';
- const acts={qual:contact+row(B('tard','+ À contacter plus tard')+B('ctl','+ À contrôler sur place'))+row(B('ss','Sans suite','lnkb')),
+ const acts={qual:contact+row(B('tard','+ À contacter')+B('ctl','+ À contrôler sur place'))+row(B('ss','Sans suite','lnkb')),
   env:contact+row(B('requal','Revenir à qualifier','lnkb')),
   att:row(B('rep','Réponse reçue','dark')+B('ctl','+ À contrôler sur place')),
   rep:row(B('conf','Conforme','ok')+B('ctl','+ À contrôler sur place'))+row(B('ss','Sans suite','lnkb')),
@@ -867,7 +867,7 @@ function nextHTML(p){const k=p.k,R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=C
   clos:row((r&&r.s==='conforme'?B('att','Attestation','dark'):'')+B('requal','Rouvrir','lnkb')),
   tard:contact+row(B('requal','Remettre à qualifier','lnkb'))};
  const last=[E.length?'courrier du '+fdate(E[E.length-1].d):'',r?STATUTS[r.s][0].toLowerCase()+' le '+fdate(r.d):'',LT[k]?'à contacter le '+fdate(LT[k].d):''].filter(Boolean).join(' · ');
- return '<div class="nx"><div class="nxh"><span class="nxs">'+(S?(STG.indexOf(S)+1)+'. '+S[1]:st==='tard'?'Mise de côté':'Aucune action prévue')+'</span>'+(last?'<span class="muted">'+last+'</span>':'')+'</div>'+(acts[st]||contact+row(B('ctl','+ À contrôler sur place')))+
+ return '<div class="nx"><div class="nxh"><span class="nxs">'+(S?(STG.indexOf(S)+1)+'. '+S[1]:st==='tard'?'À contacter':'Aucune action prévue')+'</span>'+(last?'<span class="muted">'+last+'</span>':'')+'</div>'+(acts[st]||contact+row(B('ctl','+ À contrôler sur place')))+
  '<details class="nxm"><summary>Autres actions</summary>'+
  '<div class="envf"><div class="lab">Contacter à une date précise</div><div class="row"><input type="date" id="ltd" value="'+(LT[k]?LT[k].d:addDays(t,14))+'" min="'+t+'" aria-label="Date"><button class="btn" onclick="laterSet('+k+',document.getElementById(\'ltd\').value)">Enregistrer</button>'+(LT[k]?'<button class="btn" onclick="laterSet('+k+',null)">Retirer</button>':'')+'</div></div>'+
  '<div class="envf"><div class="lab">Envoi déjà fait hors de l\'outil</div><div class="row"><select id="evc" aria-label="Moyen"><option value="courrier">Courrier</option><option value="email">E-mail</option><option value="remise_main">Remis en main propre</option></select><input type="date" id="evd" value="'+t+'" max="'+t+'" aria-label="Date"><button class="btn" onclick="envMan('+k+')">Enregistrer</button></div></div>'+
@@ -921,7 +921,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  h+='<div class="pipe">'+STG.map((s,i)=>'<button class="pst'+(s[0]===PST?' on':'')+(by[s[0]].length&&(s[0]==='rel'||s[0]==='rep')?' hot':'')+'" onclick="PST=\''+s[0]+'\';PSEL=new Set();refreshTop()"><span class="pn">'+(i+1)+'</span><b>'+s[1]+'</b><i>'+by[s[0]].length+'</i></button>').join('<span class="psep">›</span>')+'</div>';
  const S=STG.find(s=>s[0]===PST),L=by[PST].slice().sort((a,b)=>pFlags(b).length-pFlags(a).length||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
  const B=(a,txt,dark)=>'<button class="btn'+(dark?' dark':'')+'" onclick="pAct(\''+a+'\')">'+txt+'</button>';
- const acts={qual:B('env','Courrier',1)+B('ctl','À contrôler sur place')+B('tard','Plus tard (30 jours)')+B('ss','Sans suite'),
+ const acts={qual:B('env','Courrier',1)+B('ctl','À contrôler sur place')+B('tard','+ À contacter')+B('ss','Sans suite'),
   env:B('pdf','Imprimer les courriers groupés',1)+B('sent','Enregistrer comme envoyés')+B('requal','Revenir à qualifier'),
   att:B('rep','Réponse reçue',1)+B('ctl','À contrôler sur place'),
   rep:B('conf','Conforme (photo ou déclaration validée)',1)+B('ctl','À contrôler sur place')+B('ss','Sans suite'),
@@ -934,7 +934,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  h+='<div class="pwide" style="margin-top:12px"><div class="pch"><b style="font-size:17px">'+S[1]+'</b><span class="bd">'+L.length+'</span></div><div class="muted" style="margin:2px 0 8px">'+S[2]+'</div>'+info+
   '<div class="pbar"><button class="btn" onclick="PSEL=new Set(['+L.slice(0,50).map(p=>p.k).join(',')+']);refreshTop()">Cocher '+Math.min(50,L.length)+'</button><button class="btn" onclick="PSEL=new Set();refreshTop()">Décocher</button><span class="muted">'+PSEL.size+' cochée'+(PSEL.size>1?'s':'')+'</span><span class="sp"></span>'+acts+'</div>'+
   '<div class="pcl" style="max-height:520px">'+(L.length?L.slice(0,300).map(row).join('')+(L.length>300?'<div class="emp">… '+(L.length-300)+' autres</div>':''):'<div class="emp">Aucune maison à cette étape.</div>')+'</div></div>';
- if(by.tard.length)h+='<div class="pwide" style="margin-top:12px"><div class="pch"><b>Mises de côté</b><span class="bd">'+by.tard.length+'</span></div><div class="muted" style="margin-bottom:6px">Reviennent à qualifier à la date choisie.</div><div class="pcl">'+by.tard.map(p=>'<div class="pr" onclick="PREV=\'res\';openByK('+p.k+')"><span class="dt" style="background:#94a3b8"></span><span class="ad">'+esc(p.a||'Sans adresse')+'<span>'+(LT[p.k].d<=t?'<b style="color:#dc2626">à reprendre depuis le '+fdate(LT[p.k].d)+'</b>':'à reprendre le '+fdate(LT[p.k].d))+'</span></span><span class="ar">›</span></div>').join('')+'</div></div>';
+ if(by.tard.length)h+='<div class="pwide" style="margin-top:12px"><div class="pch"><b>À contacter</b><span class="bd">'+by.tard.length+'</span></div><div class="muted" style="margin-bottom:6px">Maisons à contacter à une date choisie ; elles reviennent à qualifier à cette date.</div><div class="pcl">'+by.tard.map(p=>'<div class="pr" onclick="PREV=\'res\';openByK('+p.k+')"><span class="dt" style="background:#94a3b8"></span><span class="ad">'+esc(p.a||'Sans adresse')+'<span>'+(LT[p.k].d<=t?'<b style="color:#dc2626">à reprendre depuis le '+fdate(LT[p.k].d)+'</b>':'à reprendre le '+fdate(LT[p.k].d))+'</span></span><span class="ar">›</span></div>').join('')+'</div></div>';
  h+='<h2 class="ph2">Suivi complet</h2><div class="pwide">'+suiviHTML()+'</div>';
  return h}
 
