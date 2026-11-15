@@ -94,6 +94,21 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .ftab button span{font-size:11.5px;font-weight:600;color:#c2622d;margin-left:4px}.ftab button.on{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .cst.cmp .row .a{display:none}
 .repb{border:1px solid #f3d4bf;background:#fff7f0;border-radius:10px;padding:9px 11px;margin-bottom:8px;font-size:13.5px}.repb img{display:block;max-width:100%;max-height:220px;border-radius:8px;margin-top:6px}
+#triov{position:fixed;inset:0;z-index:4000;background:rgba(15,23,42,.88);display:none;flex-direction:column;align-items:center;padding:14px;box-sizing:border-box;overflow:auto;font-family:Inter,system-ui,sans-serif}
+.ttop{width:100%;max-width:560px;display:flex;align-items:center;gap:10px;color:#e2e8f0;font-size:13.5px;margin-bottom:10px;flex-wrap:wrap}.ttop b{font-size:16px;color:#fff}.ttop .tn{flex:1;color:#94a3b8}
+.ttop button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:9px;padding:6px 10px;font:600 13px Inter,sans-serif;cursor:pointer}.ttop button[disabled]{opacity:.4}
+.tcard{width:100%;max-width:560px;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.4);touch-action:none;user-select:none;transition:transform .17s,opacity .17s;cursor:grab}
+.tcard.out-env{transform:translateX(130%) rotate(12deg);opacity:0}.tcard.out-ss{transform:translateX(-130%) rotate(-12deg);opacity:0}.tcard.out-ctl{transform:translateY(-120%);opacity:0}.tcard.out-skip{transform:translateY(40px);opacity:0}
+.timg{position:relative;background:#0f172a;height:min(46vh,380px)}.timg img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}.tload{position:absolute;inset:0;display:grid;place-items:center;color:#94a3b8;font-size:13px}
+.timg i{position:absolute;top:14px;font-style:normal;font-weight:800;font-size:18px;padding:5px 12px;border-radius:10px;border:3px solid;opacity:0;transition:opacity .1s;background:rgba(255,255,255,.85)}
+.timg .tl{left:14px;color:#64748b}.timg .tr{right:14px;color:#c2622d}.timg .tu{left:50%;transform:translateX(-50%);color:#1d4ed8}
+.tcard[data-dir=l] .tl,.tcard[data-dir=r] .tr,.tcard[data-dir=u] .tu{opacity:1}
+.tbody{padding:12px 16px 14px}.tad{font-size:18px;font-weight:700;color:#0f172a}.ttags{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0 8px}.ttags span{font-size:12px;font-weight:600;background:#eef2f6;border-radius:7px;padding:2px 8px;color:#334155}
+.tc{font-size:13px;color:#334155;margin:3px 0}.tc i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.tprop{margin-top:10px;background:#fff7ed;border:1px solid #f3d4bf;border-radius:10px;padding:8px 10px;font-size:13.5px}
+.tbtns{width:100%;max-width:560px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.tb{border:0;border-radius:12px;padding:13px 8px;font:700 14.5px Inter,sans-serif;cursor:pointer}
+.tb.ss{background:#e2e8f0;color:#334155}.tb.ctl{background:#dbeafe;color:#1d4ed8}.tb.env{background:#c2622d;color:#fff}
+.thelp{color:#94a3b8;font-size:12px;margin-top:8px;text-align:center}.tdone{padding:28px;text-align:center;cursor:default}.tdone h2{margin:0 0 6px}
 .nx{margin-top:12px;border:1px solid #e5e7eb;border-radius:14px;padding:12px;background:#fff}
 .nxh{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-bottom:8px}.nxs{font-weight:700;font-size:14px;color:#0f172a;background:#eef2f6;border-radius:8px;padding:3px 9px}
 .nxl{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin:6px 0 4px}
@@ -884,6 +899,35 @@ async function repDone(k){for(const r of (REP[k]||[])){if(r.id&&online()){try{aw
 function repBox(k){const L=REP[k];if(!L||!L.length)return '';return L.map(r=>'<div class="repb"><b>Réponse du '+fdate(r.d)+' : '+(REPT[r.ty]||esc(r.ty))+'</b>'+(r.dt?'<div class="muted">Travaux déclarés le '+fdate(r.dt)+'</div>':'')+(r.c?'<div>« '+esc(r.c)+' »</div>':'')+(r.ph?'<a href="'+r.ph+'" target="_blank" rel="noopener"><img src="'+r.ph+'" alt="Photo envoyée par le propriétaire"></a>':'')+'</div>').join('')}
 setInterval(()=>{if(typeof D!=='undefined'&&D&&online())loadRep().then(()=>{if(TOP==='act')refreshTop()})},60000);
 addEventListener('focus',()=>{if(typeof D==='undefined'||!D)return;loadRep().then(()=>{if(TOP==='act')refreshTop();else if(tab==='fic'&&CUR)openByK(CUR.p.k)})});
+/* ===== Tri rapide : une maison à la fois, glisser ou flèches ===== */
+let TQ=null;
+function propose(p){if(p.vp)return ['ctl','Constat partiel sur l\'image : à vérifier sur place'];if(p.g==='r')return ['env','Priorité 1 : constat net sur l\'image'];if(p.g==='o')return ['env','Priorité 2 : débroussaillement à faire'];
+ if(typeof rTem==='function'&&rTem(p))return ['env','Arbres de plus de 8 m à portée (tempête)'];if(typeof rInd==='function'&&rInd(p))return ['env','Zone inondable : information du propriétaire'];return ['ss','Rien de prioritaire sur les images']}
+const TRL={env:'À contacter',ctl:'À contrôler',ss:'Sans suite',skip:'Passée'};
+function triStart(){const R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=CTL(),LT=LATER();
+ const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&stageOf(p,R,Q,O,LT)==='qual').sort((a,b)=>({r:0,o:1,j:2,v:3}[a.g]??4)-({r:0,o:1,j:2,v:3}[b.g]??4)||pFlags(b).length-pFlags(a).length);
+ TQ={list:L.map(p=>p.k),i:0,hist:[],n:{env:0,ctl:0,ss:0}};triShow()}
+function triEnd(){const ov=document.getElementById('triov');if(ov)ov.style.display='none';TQ=null;refreshTop()}
+async function triShow(){let ov=document.getElementById('triov');if(!ov){ov=document.createElement('div');ov.id='triov';document.body.appendChild(ov)}ov.style.display='flex';
+ const top='<div class="ttop"><b>Tri rapide</b><span>'+Math.min(TQ.i+1,TQ.list.length)+' / '+TQ.list.length+'</span><span class="tn">À contacter '+TQ.n.env+' · À contrôler '+TQ.n.ctl+' · Sans suite '+TQ.n.ss+'</span><button onclick="triUndo()" '+(TQ.hist.length?'':'disabled')+'>↶ Annuler</button><button onclick="triEnd()">Fermer ✕</button></div>';
+ if(TQ.i>=TQ.list.length){ov.innerHTML=top+'<div class="tcard tdone"><h2>Tout est trié</h2><p>'+TQ.n.env+' maisons à contacter, '+TQ.n.ctl+' à contrôler, '+TQ.n.ss+' sans suite.</p><button class="btn dark" onclick="triEnd()">Voir le suivi</button></div>';return}
+ const k=TQ.list[TQ.i],p=prop_(k),pr=propose(p);
+ ov.innerHTML=top+'<div class="tcard" id="tcard"><div class="timg"><img id="timg" alt=""><span class="tload">Chargement de l\'image…</span><i class="tl">Sans suite</i><i class="tr">À contacter</i><i class="tu">À contrôler</i></div><div class="tbody"><div class="tad">'+esc(p.a||'Sans adresse')+'</div><div class="ttags">'+pFlags(p).map(t=>'<span>'+t+'</span>').join('')+'</div><div id="tcst" class="muted">…</div><div class="tprop">Proposé : <b>'+TRL[pr[0]]+'</b> · '+pr[1]+'</div></div></div>'+
+ '<div class="tbtns"><button class="tb ss" onclick="triAct(\'ss\')">← Sans suite</button><button class="tb ctl" onclick="triAct(\'ctl\')">↑ À contrôler</button><button class="tb env" onclick="triAct(\'env\')">À contacter →</button></div><div class="thelp">Glisser la carte, ou flèches du clavier · Entrée : valider la proposition · Espace : passer · Z : annuler</div>';
+ triDrag(document.getElementById('tcard'));
+ const F=await getF(p);if(!TQ||TQ.list[TQ.i]!==k)return;
+ const im=document.getElementById('timg');if(F&&im){im.src=F.imgb||F.img[0];im.onload=()=>{const l=document.querySelector('.tload');if(l)l.remove()}}
+ const C=F?constats(p,F).filter(c=>!c.info).slice(0,3):[];const el=document.getElementById('tcst');if(el)el.innerHTML=C.length?C.map(c=>'<div class="tc"><i style="background:'+c.c+'"></i><b>'+c.t+'</b> · '+c.d+'</div>').join(''):'Aucun constat particulier sur l\'image.'}
+function triAct(a){if(!TQ||TQ.i>=TQ.list.length)return;const k=TQ.list[TQ.i];if(a==='ok')a=propose(prop_(k))[0];
+ if(a==='env')qualSet([k],'env');else if(a==='ss')qualSet([k],'ss');else if(a==='ctl')ctlAdd([k]);
+ if(TQ.n[a]!==undefined)TQ.n[a]++;TQ.hist.push([k,a]);const c=document.getElementById('tcard');if(c)c.classList.add('out-'+a);setTimeout(()=>{TQ.i++;triShow()},170)}
+function triUndo(){if(!TQ||!TQ.hist.length)return;const [k,a]=TQ.hist.pop();if(a==='env'||a==='ss')qualSet([k],null);else if(a==='ctl')ctlDel([k]);if(TQ.n[a]!==undefined)TQ.n[a]--;TQ.i--;triShow()}
+function triDrag(c){if(!c)return;let x0=0,y0=0,dx=0,dy=0,on=false;
+ c.addEventListener('pointerdown',e=>{on=true;x0=e.clientX;y0=e.clientY;dx=dy=0;c.setPointerCapture(e.pointerId);c.style.transition='none'});
+ c.addEventListener('pointermove',e=>{if(!on)return;dx=e.clientX-x0;dy=e.clientY-y0;c.style.transform='translate('+dx+'px,'+Math.min(dy,40)+'px) rotate('+dx/25+'deg)';c.dataset.dir=dx>60?'r':dx<-60?'l':dy<-60?'u':''});
+ c.addEventListener('pointerup',()=>{if(!on)return;on=false;c.style.transition='';const d=dx>110?'env':dx<-110?'ss':dy<-110?'ctl':'';if(d)triAct(d);else{c.style.transform='';c.dataset.dir=''}})}
+addEventListener('keydown',e=>{if(!TQ||document.getElementById('triov').style.display==='none')return;const m={ArrowRight:'env',ArrowLeft:'ss',ArrowUp:'ctl',Enter:'ok',' ':'skip'};
+ if(m[e.key]){e.preventDefault();triAct(m[e.key])}else if(e.key==='z'||e.key==='Z'||e.key==='Backspace'){e.preventDefault();triUndo()}else if(e.key==='Escape')triEnd()});
 /* ===== Fiche : étape de la maison et actions possibles (même logique que le Suivi) ===== */
 let FT='d',CX=false;
 function ftabs(p){const R=new Set(relances().map(x=>x[0])),st=stageOf(p,R,QUAL(),CTL(),LATER()),S=STG.find(x=>x[0]===st),lab=S?(STG.indexOf(S)+1)+'. '+S[1]:st==='tard'?'À contacter':'aucune';
@@ -970,7 +1014,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  if(PST==='hist'){h+='<div class="pwide" style="margin-top:12px"><div class="pch"><b style="font-size:17px">Historique</b></div><div class="muted" style="margin:2px 0 8px">Courriers, e-mails et contrôles, du plus récent au plus ancien.</div><input id="hq" placeholder="Rechercher une adresse…" value="'+esc(HQ)+'" oninput="HQ=this.value;document.getElementById(\'hl\').innerHTML=histList()" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid #d6dbe1;border-radius:10px;font-size:14px;margin-bottom:8px"><div id="hl" class="pcl" style="max-height:560px">'+histList()+'</div></div>';return h}
  const S=STG.find(s=>s[0]===PST),L=by[PST].slice().sort((a,b)=>pFlags(b).length-pFlags(a).length||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
  const B=(a,txt,dark,tip)=>'<button class="btn'+(dark?' dark':'')+'"'+(PSEL.size||a==='tour'?'':' disabled')+(tip?' title="'+tip+'"':'')+' onclick="pAct(\''+a+'\')">'+txt+'</button>';
- const acts={qual:B('env','+ À contacter',1)+B('ctl','+ À contrôler')+B('ss','Sans suite'),
+ const acts={qual:'<button class="btn dark" onclick="triStart()">Tri rapide ▶</button>'+B('env','+ À contacter')+B('ctl','+ À contrôler')+B('ss','Sans suite'),
   env:B('pdf','Imprimer les courriers groupés',1)+B('sent','Enregistrer comme envoyés')+B('requal','Revenir à qualifier'),
   att:B('rep','Réponse reçue',1)+B('ctl','À contrôler sur place'),
   rep:B('conf','✓ Travaux faits',1,'Photo ou déclaration validée : la maison passe en Clos')+B('encours','Travaux en cours',0,'Retour en attente')+B('err','Constat erroné',0,'Erreur signalée : classé sans suite')+B('ctl','+ À contrôler'),
