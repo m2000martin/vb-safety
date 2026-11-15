@@ -141,14 +141,18 @@
         var mx0 = x0 + tx * res_, mx1 = x0 + Math.min(nx, tx + T) * res_, my1 = y1 - ty * res_, my0 = y1 - Math.min(ny, ty + T) * res_;
         dalles.push([mx0 / kx + lon0, my0 / ky + lat0, mx1 / kx + lon0, my1 / ky + lat0].map(function (v) { return +v.toFixed(6); }));
       }
-      var MAXB = 60000, vus = {}, bat = [], tropGrand = false, faites = 0;
+      var MAXB = 60000, vus = {}, bat = [], tropGrand = false, faites = 0, echecs = 0;
       async function chargerDalles() {
         var i = 0;
         async function suivant() {
           while (i < dalles.length && !tropGrand) {
             var d = dalles[i++], r;
-            try { r = await paged('BDTOPO_V3:batiment', 'geometrie', "usage_1='Résidentiel' AND " + bbox(d), 20000, 'cleabs'); }
-            catch (e) { tropGrand = true; continue; }
+            r = null;
+            for (var essai = 0; essai < 3 && !r; essai++) {
+              try { r = await paged('BDTOPO_V3:batiment', 'geometrie', "usage_1='Résidentiel' AND " + bbox(d), 20000, 'cleabs'); }
+              catch (e) { r = null; await new Promise(function (ok) { setTimeout(ok, 1500 * (essai + 1)); }); }
+            }
+            if (!r) { echecs++; faites++; continue; }
             r.f.forEach(function (f) { if (!vus[f.id]) { vus[f.id] = 1; bat.push(f); } });
             if (r.plus || bat.length >= MAXB) tropGrand = true;
             faites++;
@@ -171,6 +175,7 @@
         }))
       ]);
       if (id !== run) return;
+      if (dalles.length && echecs >= dalles.length * 0.5) throw new Error('batiments indisponibles');
       var depCouvert = +((rs[0].match(/numberMatched="(\d+)"/) || [0, 0])[1]) > 0;
       var zon = rs[1].f, veg = rs[3].f, nat = [].concat.apply([], rs[4]);
       msg('Calcul des distances…');
@@ -244,7 +249,7 @@
       var haZon = Math.round(zonCom * res_ * res_ / 1e4);
       var dates = {}, aps = {};
       zon.forEach(function (f) { var q = f.properties || {}; if (q.date_integ) dates[q.date_integ] = 1; if (q.dat_ap_old) aps[q.dat_ap_old] = 1; });
-      afficher({ dates: Object.keys(dates), aps: Object.keys(aps), P: P, depCouvert: depCouvert, n: n, nOld: nOld, n50: n50, n200: n200, haZon: haZon, nNat: nNat, nat: nat, pts: pts, cpolys: cpolys, zon: zon, trop: tropGrand });
+      afficher({ dates: Object.keys(dates), aps: Object.keys(aps), P: P, depCouvert: depCouvert, n: n, nOld: nOld, n50: n50, n200: n200, haZon: haZon, nNat: nNat, nat: nat, pts: pts, cpolys: cpolys, zon: zon, trop: tropGrand || echecs > 0 });
       etat.textContent = '';
     } catch (e) {
       if (window.console) console.error(e);
@@ -262,10 +267,10 @@
       v = '<b class="oui">Oui.</b> Une partie de la commune est dans le zonage des obligations légales de débroussaillement (' + fmt(r.haZon) + ' ha). ' +
         fmt(r.nOld) + ' bâtiment' + (r.nOld > 1 ? 's' : '') + " d'habitation s'y trouve" + (r.nOld > 1 ? 'nt' : '') + '.';
       suite = '<p><b>Ce que cela implique :</b> les propriétaires de ces bâtiments doivent débroussailler dans les conditions de l\'arrêté préfectoral, et le maire contrôle l\'exécution.</p>' +
-        '<p>VB Safety estime à distance l\'état de chaque terrain (végétation dense, arbres proches des façades), établit l\'ordre des contrôles et prépare les courriers. Le projet est éligible au Fonds vert (mesure de vérification des OLD).</p>' +
+        '<p>VB Safety estime à distance l\'état de chaque terrain (végétation dense, arbres proches des façades), établit l\'ordre des contrôles et prépare les courriers. Ce projet peut être présenté au Fonds vert 2026 (axe 2 Incendies, mesure III) avant le 31 décembre 2026 ; l\'éligibilité et le taux sont décidés par le préfet.</p>' +
         '<a class="btn btn-p" href="' + demande + '">Recevoir le diagnostic détaillé de ' + nom + ' <span aria-hidden="true">→</span></a>';
     } else if (r.depCouvert) {
-      v = '<b class="non">Non, selon le zonage officiel.</b> Aucun secteur de la commune n\'est dans le zonage OLD.';
+      v = '<b class="non">Non, selon le zonage OLD publié par l\'IGN.</b> Aucun secteur de la commune n\'est dans le zonage OLD.';
       suite = (r.n50 + r.n200 > 0 ?
         '<p>Aucune obligation légale de débroussaillement ne s\'applique. En revanche, <b>' + fmt(r.n50 + r.n200) + ' bâtiment' + (r.n50 + r.n200 > 1 ? 's' : '') + ' d\'habitation</b> se trouve' + (r.n50 + r.n200 > 1 ? 'nt' : '') + ' à moins de 200 m d\'un bois d\'au moins 4 ha, dont ' + fmt(r.n50) + ' à moins de 50 m. Une information préventive des habitants concernés peut être utile.</p>' :
         '<p>Aucune obligation légale de débroussaillement ne s\'applique, et peu de bâtiments d\'habitation sont proches d\'un bois.</p>') +
@@ -281,7 +286,7 @@
       if (r.dates.length) src.push('zonage intégré par l\'IGN le ' + r.dates.map(esc).join(', '));
       if (src.length) v += ' <span style="color:var(--faible);font-size:.85em">(' + src.join(' ; ') + ')</span>';
     }
-    if (r.trop) v += ' <span style="color:var(--faible)">(Commune très étendue : comptage partiel (plus de 60 000 bâtiments d\'habitation ou service IGN saturé). Les chiffres sont des minimums.)</span>';
+    if (r.trop) v += ' <span style="color:var(--faible)">(Comptage partiel : commune très étendue ou service IGN momentanément saturé. Les chiffres sont des minimums ; relancez la recherche pour compléter.)</span>';
     $('vo-verdict').innerHTML = v;
     $('vo-chiffres').innerHTML =
       '<div class="vo-c"><b>' + fmt(r.n) + '</b><span>bâtiments d\'habitation dans la commune</span></div>' +
