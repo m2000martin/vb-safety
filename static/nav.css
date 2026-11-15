@@ -37,6 +37,12 @@
 
 /* Menus métier (Sapeurs-pompiers, Industrie, BTP) : liste simple sur ordinateur, deux liens par ligne sur téléphone */
 .nav-metier .nav-liste { min-width: 230px; }
+/* Le dernier menu est le plus à droite de la barre : ancré à gauche, sa liste
+   sortait de la fenêtre. On l'aligne sur son bord droit. */
+.nav-groupe:last-of-type .nav-liste { left: auto; right: 0; }
+/* Garde-fou : aucune liste ne dépasse la fenêtre, même si un libellé s'allonge. */
+.nav-liste { max-width: calc(100vw - 24px); box-sizing: border-box; }
+@media (max-width: 1240px) { .nav-liste a { white-space: normal; } }
 @media (max-width: 1040px) {
   .top.mm-open .onglets .nav-liste.nav-metiers, .haut.has-menu.open > .haut-nav .nav-liste.nav-metiers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px 0 10px; }
   .top.mm-open .onglets .nav-metiers a, .haut.has-menu.open > .haut-nav .nav-metiers a { display: flex; align-items: center; min-height: 46px; padding: 8px 12px !important; font-size: 14.5px !important; line-height: 1.25; white-space: normal; border: 1px solid rgba(255, 255, 255, .1) !important; border-radius: 10px !important; background: rgba(255, 255, 255, .03); }
