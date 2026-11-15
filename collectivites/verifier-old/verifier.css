@@ -26,9 +26,10 @@
 .vo-c.c1 b{color:#F08A5D}.vo-c.c2 b{color:#F2B14C}.vo-c.c3 b{color:#E3D27A}
 .vo-map{height:min(62vh,520px);border-radius:12px;border:1px solid rgba(255,255,255,.09);background:#0C1B2C}
 .vo-leg{font-size:13px;color:var(--doux);margin:8px 0 18px;text-align:left!important;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
-.vo-leg .d{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:-8px}
+.vo-leg .it{display:inline-flex;align-items:center;gap:6px}
+.vo-leg .d{display:inline-block;flex:none;width:10px;height:10px;border-radius:50%}
 .vo-leg .d1{background:#E5484D}.vo-leg .d2{background:#F59E0B}.vo-leg .d3{background:#EAD15A}
-.vo-leg .z{display:inline-block;width:16px;height:10px;background:rgba(229,72,77,.25);border:1px solid #E5484D;margin-right:-8px}
+.vo-leg .z{display:inline-block;width:16px;height:10px;background:rgba(229,72,77,.25);border:1px solid #E5484D;flex:none}
 .vo-suite{background:#0C1B2C;border:1px solid rgba(224,108,52,.35);border-radius:12px;padding:18px 20px;margin:0 0 18px}
 .vo-suite p{margin:0 0 12px;text-align:left!important;hyphens:manual!important}
 .vo-suite .btn{display:inline-flex}
@@ -48,4 +49,17 @@
 .vo-bio p{margin:0 0 6px!important;font-size:15px}
 .vo-sites{font-size:13.5px!important;color:var(--doux)}
 .vo-sites a{color:#9fd8a2}
-.vo-leg .nz{display:inline-block;width:16px;height:10px;background:rgba(46,125,50,.2);border:1px dashed #2E7D32;margin-right:-8px}
+.vo-leg .nz{display:inline-block;width:16px;height:10px;background:rgba(46,125,50,.2);border:1px dashed #2E7D32;flex:none}
+
+.vo-verdict b.cons{color:#E3D27A}
+@media (max-width:700px){
+ #vo-out h2,.vo-verdict{text-align:center!important}
+ .vo-chiffres{grid-template-columns:1fr 1fr}
+ .vo-c{text-align:center;padding:12px 10px}
+ .vo-leg{justify-content:center;text-align:center!important}
+ .vo-suite{text-align:center}
+ .vo-suite p{text-align:center!important}
+ .vo-suite .btn{width:100%;justify-content:center;box-sizing:border-box}
+ .vo-lien{display:block;margin:6px auto 0}
+ .vo-bio p{text-align:center!important}
+}

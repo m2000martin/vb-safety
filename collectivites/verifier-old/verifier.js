@@ -274,9 +274,10 @@
         '<p>VB Safety estime à distance l\'état de chaque terrain (végétation dense, arbres proches des façades), établit l\'ordre des contrôles et prépare les courriers. Ce projet peut être présenté au Fonds vert 2026 (axe 2 Incendies, mesure III) avant le 31 décembre 2026 ; l\'éligibilité et le taux sont décidés par le préfet.</p>' +
         '<a class="btn btn-p" href="' + demande + '">Recevoir le diagnostic détaillé de ' + nom + ' <span aria-hidden="true">→</span></a>';
     } else if (r.depCouvert) {
-      v = '<b class="non">Non, selon le zonage OLD publié par l\'IGN.</b> Aucun secteur de la commune n\'est dans le zonage OLD.';
+      v = '<b class="non">Non, selon le zonage OLD publié par l\'IGN.</b> Aucun secteur de la commune n\'est dans le zonage OLD.' + (r.n50 + r.n200 > 0 ? ' <b class="cons">Débroussaillement conseillé, sans être obligatoire</b>, pour les maisons proches d\'un bois.' : '');
       suite = (r.n50 + r.n200 > 0 ?
-        '<p>Aucune obligation légale de débroussaillement ne s\'applique. En revanche, <b>' + fmt(r.n50 + r.n200) + ' bâtiment' + (r.n50 + r.n200 > 1 ? 's' : '') + ' d\'habitation</b> se trouve' + (r.n50 + r.n200 > 1 ? 'nt' : '') + ' à moins de 200 m d\'un bois d\'au moins 4 ha, dont ' + fmt(r.n50) + ' à moins de 50 m. Une information préventive des habitants concernés peut être utile.</p>' :
+        '<p>Aucune obligation légale de débroussaillement ne s\'applique. En revanche, <b>' + fmt(r.n50 + r.n200) + ' bâtiment' + (r.n50 + r.n200 > 1 ? 's' : '') + ' d\'habitation</b> se trouve' + (r.n50 + r.n200 > 1 ? 'nt' : '') + ' à moins de 200 m d\'un bois d\'au moins 4 ha, dont ' + fmt(r.n50) + ' à moins de 50 m.</p>' +
+        '<p><b>Pour ces maisons, le débroussaillement est conseillé sans être obligatoire</b> : dégager 50 m autour de la maison (broussaille, branches à moins de 3 m des murs et au-dessus du toit) réduit l\'intensité du feu au contact et facilite le travail des secours. La mairie peut le recommander par un courrier d\'information.</p>' :
         '<p>Aucune obligation légale de débroussaillement ne s\'applique, et peu de bâtiments d\'habitation sont proches d\'un bois.</p>') +
         '<a class="btn btn-p" href="' + demande + '">Échanger sur le risque feu à ' + nom + ' <span aria-hidden="true">→</span></a>';
     } else {
