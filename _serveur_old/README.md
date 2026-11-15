@@ -52,3 +52,24 @@ Aucune donnée n'est perdue à l'installation : elle n'est simplement pas partag
 - Contrat de sous-traitance avec la commune (art. 28 RGPD), registre des traitements, aide à l'AIPD.
 - Durée de conservation : statuts et envois supprimés à la fin de la campagne suivante (à automatiser : tâche cron PocketBase).
 - Sauvegarde quotidienne du dossier `pb_data/` (chiffrée, hébergée en France ou dans l'UE).
+
+## Réponses des habitants · collection `old_reponses`
+
+Le QR code de chaque courrier ouvre `vb-safety.com/OLD-demo/r/#REFERENCE` (référence = commune, numéro de la maison, code de contrôle).
+L'habitant choisit sa réponse (travaux faits, constats inexacts, demande de conseil, voisin qui refuse l'accès), ajoute un commentaire
+et, s'il le souhaite, une photo (métadonnées GPS supprimées dans le navigateur avant l'envoi). Aucun nom, e-mail ni téléphone.
+
+- Dépôt : anonyme (règle de création ouverte, impossible de créer une réponse déjà « traitée »).
+- Lecture, traitement, suppression : comptes de la commune uniquement ; photos en fichiers protégés (jeton de fichier).
+- Dans l'outil : la maison passe d'elle-même à l'étape « Réponse à traiter », avec la réponse et la photo dans la fiche.
+  Après décision (travaux faits, en cours, constat erroné, contrôle), la réponse est marquée traitée.
+
+### Mise en service
+
+1. Copier `pb_migrations/1792100000_old_reponses.js` avec les autres migrations, puis redémarrer PocketBase.
+2. Settings → Rate limits : ajouter la règle `/api/collections/old_reponses/records` (méthode POST), **10 requêtes / 60 s par IP**.
+3. Conservation : supprimer les réponses traitées et leurs photos après 12 mois (à faire à la main pendant le test).
+4. Test : ouvrir une fiche dans la démo (étape « En attente »), cliquer « Simuler la réponse du propriétaire », envoyer,
+   revenir dans l'outil connecté : la maison apparaît dans « Réponse à traiter ».
+
+Sans serveur joignable, la page de réponse garde une copie dans le navigateur : la démonstration fonctionne sur le même ordinateur.

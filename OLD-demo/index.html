@@ -93,6 +93,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .ftab{display:flex;gap:4px;background:#eef2f6;border-radius:12px;padding:4px;margin:12px 0 10px}.ftab button{flex:1;border:0;background:none;border-radius:9px;padding:8px;font:600 14px Inter,system-ui,sans-serif;color:#475569;cursor:pointer}
 .ftab button span{font-size:11.5px;font-weight:600;color:#c2622d;margin-left:4px}.ftab button.on{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .cst.cmp .row .a{display:none}
+.repb{border:1px solid #f3d4bf;background:#fff7f0;border-radius:10px;padding:9px 11px;margin-bottom:8px;font-size:13.5px}.repb img{display:block;max-width:100%;max-height:220px;border-radius:8px;margin-top:6px}
 .nx{margin-top:12px;border:1px solid #e5e7eb;border-radius:14px;padding:12px;background:#fff}
 .nxh{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-bottom:8px}.nxs{font-weight:700;font-size:14px;color:#0f172a;background:#eef2f6;border-radius:8px;padding:3px 9px}
 .nxl{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin:6px 0 4px}
@@ -361,7 +362,7 @@ function planHTML(p,F){const P=plan(p,F),d=dept(),sec=(t,L,c)=>L.length?'<div cl
 function defTon(p,F){if(!p.l)return 'hors_zone';const P=plan(p,F);if(!P.terrain.length&&!P.voisins.length)return 'rappel';
  const deja=(typeof envois==='function')&&envois(p.k).length;if(!deja)return 'premier';return OBL(p)&&fresh()?'legal':'bienveillant'}
 const LOCKED=['legal','ferme'];
-function rcode(p){return (D.city+'-'+p.k).toUpperCase()}
+function rcode(p){const s=D.city+'-'+p.k;let h=7;for(const c of s+'·vbold')h=(h*31+c.charCodeAt(0))>>>0;return (s+'-'+h.toString(36).slice(-4)).toUpperCase()}
 function qrURL(p){return 'https://vb-safety.com/OLD-demo/r/#'+rcode(p)}
 function qrImg(p){try{const q=qrcode(0,'M');q.addData(qrURL(p));q.make();return q.createDataURL(3,2)}catch(e){return ''}}
 function NIDIF(){const d=new Date(),m=d.getMonth(),j=d.getDate();return (m===2&&j>=15)||(m>=3&&m<=6)}
@@ -469,7 +470,7 @@ function saveLocal(){try{localStorage.setItem(lkey(),JSON.stringify(SV))}catch(_
 async function pb(path,opt){opt=opt||{};const h={'Content-Type':'application/json'};if(PBA&&PBA.token)h.Authorization=PBA.token;
  const r=await fetch(API+path,{method:opt.method||'GET',headers:h,body:opt.body?JSON.stringify(opt.body):undefined});if(!r.ok)throw new Error(r.status);return r.status===204?null:r.json()}
 function online(){return !!(PBA&&PBA.token&&PBA.user&&PBA.user.commune===D.city)}
-async function loadSuivi(){loadLocal();if(!online())return;
+async function loadSuivi(){loadLocal();await loadRep();if(!online())return;
  try{const g=async c=>{let page=1,out=[];for(;;){const r=await pb('/api/collections/'+c+'/records?perPage=500&page='+page+'&filter='+encodeURIComponent("commune='"+D.city+"'"));out=out.concat(r.items);if(page>=r.totalPages)break;page++}return out};
   const [a,b]=await Promise.all([g('old_statuts'),g('old_envois')]);SV={st:{},en:{}};
   a.forEach(r=>{(SV.st[r.k]=SV.st[r.k]||[]).push({id:r.id,s:r.statut,d:(r.date_controle||'').slice(0,10),c:r.controleur,m:r.commentaire})});
@@ -871,6 +872,20 @@ function prop_(k){const f=D.h.features.find(x=>x.properties.k===k);return f?f.pr
 let CSET=new Set();
 function ctlRow(k,txt){const p=prop_(k);return '<div class="pr" onclick="PREV=\'res\';openByK('+k+')"><input type="checkbox" aria-label="Sélectionner" '+(CSET.has(k)?'checked':'')+' onclick="event.stopPropagation();CSET[this.checked?\'add\':\'delete\']('+k+');refreshTop()"><span class="dt" style="background:'+(p?colOf(p):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'}
 async function ctlLot(st){if(!CSET.size){alert('Cochez d\'abord les maisons contrôlées.');return}const n=CSET.size;if(!confirm(n+' maison'+(n>1?'s':'')+' : enregistrer le résultat « '+STATUTS[st][0]+' » à la date du jour dans leur fiche ?'+(st==='conforme'?'\nElles sortiront de la liste « À contrôler sur place ».':'\nElles restent dans la liste « À contrôler sur place ».')))return;for(const k of CSET)await saveStatut(k,st,today_(),'','Contrôle enregistré en lot');CSET=new Set();refreshTop()}
+/* ===== Réponses des habitants (QR code du courrier) ===== */
+let REP={};
+const REPT={fait:'Travaux faits',erreur:'Constats inexacts ou pas concerné',conseil:'Demande de conseil ou de visite',voisin:'Voisin qui refuse l\'accès'};
+function repKey(){return 'oldrep_'+D.city}
+function repLocal(){try{return JSON.parse(localStorage.getItem(repKey())||'[]')}catch(_){return []}}
+async function loadRep(){const R={};repLocal().forEach(r=>{if(!r.t&&!(r.srv&&online()))(R[r.k]=R[r.k]||[]).push(r)});
+ if(online()){try{const j=await pb('/api/collections/old_reponses/records?perPage=500&sort=-created&filter='+encodeURIComponent("commune='"+D.city+"' && traitee=false"));let ft='';try{ft=(await pb('/api/files/token',{method:'POST'})).token}catch(_){}
+  j.items.forEach(x=>{(R[x.k]=R[x.k]||[]).push({id:x.id,k:x.k,ty:x.type,c:x.commentaire,d:(x.created||'').slice(0,10),dt:(x.date_travaux||'').slice(0,10),ph:x.photo?API+'/api/files/'+x.collectionId+'/'+x.id+'/'+x.photo+(ft?'?token='+ft:''):''})})}catch(e){console.warn('réponses indisponibles',e)}}
+ REP=R}
+async function repDone(k){for(const r of (REP[k]||[])){if(r.id&&online()){try{await pb('/api/collections/old_reponses/records/'+r.id,{method:'PATCH',body:{traitee:true}})}catch(_){}}}
+ try{localStorage.setItem(repKey(),JSON.stringify(repLocal().map(r=>r.k===k?Object.assign(r,{t:1}):r)))}catch(_){}delete REP[k]}
+function repBox(k){const L=REP[k];if(!L||!L.length)return '';return L.map(r=>'<div class="repb"><b>Réponse du '+fdate(r.d)+' : '+(REPT[r.ty]||esc(r.ty))+'</b>'+(r.dt?'<div class="muted">Travaux déclarés le '+fdate(r.dt)+'</div>':'')+(r.c?'<div>« '+esc(r.c)+' »</div>':'')+(r.ph?'<a href="'+r.ph+'" target="_blank" rel="noopener"><img src="'+r.ph+'" alt="Photo envoyée par le propriétaire"></a>':'')+'</div>').join('')}
+setInterval(()=>{if(typeof D!=='undefined'&&D&&online())loadRep().then(()=>{if(TOP==='act')refreshTop()})},60000);
+addEventListener('focus',()=>{if(typeof D==='undefined'||!D)return;loadRep().then(()=>{if(TOP==='act')refreshTop();else if(tab==='fic'&&CUR)openByK(CUR.p.k)})});
 /* ===== Fiche : étape de la maison et actions possibles (même logique que le Suivi) ===== */
 let FT='d',CX=false;
 function ftabs(p){const R=new Set(relances().map(x=>x[0])),st=stageOf(p,R,QUAL(),CTL(),LATER()),S=STG.find(x=>x[0]===st),lab=S?(STG.indexOf(S)+1)+'. '+S[1]:st==='tard'?'À contacter':'aucune';
@@ -882,8 +897,8 @@ function nextHTML(p){const k=p.k,R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=C
  const row=x=>'<div class="nxr">'+x+'</div>';
  const acts={qual:contact+row(B('tard','+ À contacter')+B('ctl','+ À contrôler'))+row(B('ss','Sans suite','lnkb')),
   env:contact+row(B('requal','Revenir à qualifier','lnkb')),
-  att:row(B('rep','Réponse reçue','dark')+B('ctl','+ À contrôler sur place')),
-  rep:'<div class="nxl">Réponse du propriétaire</div>'+row(B('conf','✓ Travaux faits','ok')+B('encours','Travaux en cours'))+row(B('err','Constat erroné')+B('ctl','+ À contrôler')),
+  att:row(B('rep','Réponse reçue','dark')+B('ctl','+ À contrôler'))+'<a class="lnk" href="'+qrURL(p)+'" target="_blank" rel="noopener">Simuler la réponse du propriétaire (page du QR code)</a>',
+  rep:repBox(k)+'<div class="nxl">Suite à donner</div>'+row(B('conf','✓ Travaux faits','ok')+B('encours','Travaux en cours'))+row(B('err','Constat erroné')+B('ctl','+ À contrôler')),
   rel:(E.length>=2?'<div class="muted" style="margin-bottom:6px">'+E.length+' courriers sans effet : contrôle sur place conseillé.</div>'+row(B('ctl','+ À contrôler','dark')):'')+'<div class="nxl">Relancer maintenant</div>'+row(B('pdf','Courrier de rappel',E.length>=2?'':'dark')+B('mail','E-mail',E.length>=2?'':'dark'))+(E.length>=2?'':row(B('ctl','+ À contrôler'))),
   ctl:'<div class="nxl">Résultat du contrôle</div>'+row(B('conf','Conforme','ok')+B('nc','Non conforme','ko')+B('rec','À recontrôler'))+row(B('unctl','Retirer de la tournée','lnkb')),
   md:row(B('pdf',OBL(p)?'Courrier de mise en demeure':'Nouveau courrier de recommandation','dark')+B('ctl','+ Nouveau contrôle')),
@@ -898,6 +913,7 @@ function nextHTML(p){const k=p.k,R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=C
  '</details></div>'}
 async function fAct(a){const p=CUR.p,k=p.k;
  if(a==='pdf'){lettre();return}if(a==='mail'){mail();setTimeout(()=>openByK(k),400);return}if(a==='att'){attestation();return}
+ if(['conf','encours','err','ctl','ss'].includes(a)&&REP[k])await repDone(k);
  if(a==='tard')qualSet([k],'env');else if(a==='encours')qualSet([k],null);else if(a==='err')qualSet([k],'ss');else if(a==='ctl')ctlAdd([k]);else if(a==='unctl')ctlDel([k]);else if(a==='ss')qualSet([k],'ss');
  else if(a==='requal'){qualSet([k],null);if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&r0.s==='conforme')await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}else if(a==='rep')qualSet([k],'rep');
  else if(a==='conf'){await saveStatut(k,'conforme',today(),'','Fiche');ctlDel([k]);qualSet([k],null)}
@@ -921,11 +937,12 @@ function pFlags(p){const out=[];const scope=AZ==='com'||p.l||!D.h.features.some(
  if(typeof rTem==='function'&&rTem(p))out.push('tempête');if(typeof rInd==='function'&&rInd(p))out.push('inondation');return out}
 function stageOf(p,R,Q,O,LT){const k=p.k,s=lastSt(k);
  if(s&&s.s==='conforme')return 'clos';if(s&&s.s==='non_conforme'&&!O[k])return 'md';if(O[k])return 'ctl';
- if(Q[k]==='rep')return 'rep';if(Q[k]==='env'||LT[k])return 'env';if(R.has(k))return 'rel';if(envois(k).length)return 'att';
+ if((REP[k]&&REP[k].length)||Q[k]==='rep')return 'rep';if(Q[k]==='env'||LT[k])return 'env';if(R.has(k))return 'rel';if(envois(k).length)return 'att';
  if(Q[k]==='ss')return 'clos';return pFlags(p).length?'qual':null}
 function ctlAdd(ks){const o=CTL();ks.forEach(k=>{const p=prop_(k);if(p&&!o[k])o[k]={a:p.a||'Habitation',c:p.c,s:'c',d:today(),n:pFlags(p).join(' · ')}});saveCtl(o)}
 function ctlDel(ks){const o=CTL();ks.forEach(k=>delete o[k]);saveCtl(o)}
 async function pAct(a){const ks=[...PSEL];if(!ks.length&&a!=='print'&&a!=='tour'){alert('Cochez d\'abord une ou plusieurs maisons.');return}
+ if(['conf','encours','err','ctl','ss'].includes(a))for(const k of ks)if(REP[k])await repDone(k);
  if(a==='env')qualSet(ks,'env');else if(a==='ctl'){ctlAdd(ks)}else if(a==='tard'){qualSet(ks,'env')}
  else if(a==='ss')qualSet(ks,'ss');else if(a==='requal'){qualSet(ks,null);for(const k of ks){if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&r0.s==='conforme')await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}}
  else if(a==='pdf')lettresGroupees(ks);
@@ -963,7 +980,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
   ctl:B('tour','Imprimer la tournée')+B('conf','✓ Conforme',1,'Débroussaillement fait : la maison passe en Clos')+B('nc','✗ Non conforme',0,'Travaux non faits : suite décidée par le maire')+B('rec','↻ À revoir',0,'Visite impossible ou travaux en cours : reste à contrôler'),
   md:B('ctl','Nouveau contrôle'),clos:B('requal','Rouvrir')}[PST];
  const info=PST==='ctl'?'<div class="muted" style="margin:4px 0 8px">Après la visite : <b style="color:#2e7d32">✓ conforme</b> = débroussaillement fait, la maison passe en Clos · <b style="color:#a31515">✗ non conforme</b> = suite décidée par le maire · <b>↻ à revoir</b> = visite impossible ou travaux en cours, elle reste à contrôler.</div>':PST==='md'?'<div class="muted" style="margin:4px 0 8px">Dans le zonage OLD : mise en demeure par le maire, courrier « Légal » depuis la fiche. Hors zonage : pas de mise en demeure possible, un nouveau courrier de recommandation.</div>':PST==='rep'?'<div class="muted" style="margin:4px 0 8px">En service, les réponses du QR code arrivent ici automatiquement. <a href="/OLD-demo/r/#DEMO" target="_blank">Voir la page habitant</a></div>':'';
- const sub=p=>{const fl=pFlags(p),e=envois(p.k),s=lastSt(p.k),lt=LT[p.k];return [fl.join(' · '),e.length?'courrier du '+fdate(e[e.length-1].d):'',s?STATUTS[s.s][0].toLowerCase()+' le '+fdate(s.d):'',lt?'à contacter à partir du '+fdate(lt.d):'',e.length>1?e.length+' courriers':'',Q[p.k]==='ss'?'classée sans suite':''].filter(Boolean).join(' · ')};
+ const sub=p=>{const fl=pFlags(p),e=envois(p.k),s=lastSt(p.k),lt=LT[p.k];return [fl.join(' · '),e.length?'courrier du '+fdate(e[e.length-1].d):'',s?STATUTS[s.s][0].toLowerCase()+' le '+fdate(s.d):'',lt?'à contacter à partir du '+fdate(lt.d):'',e.length>1?e.length+' courriers':'',Q[p.k]==='ss'?'classée sans suite':'',REP[p.k]?'<b style="color:#c2622d">réponse : '+(REPT[REP[p.k][0].ty]||'')+'</b>':''].filter(Boolean).join(' · ')};
  const RA={qual:[['env','+ À contacter'],['ctl','+ À contrôler'],['ss','Sans suite']],env:[['pdfone','PDF'],['sent','Envoyé']],att:[['rep','Réponse reçue'],['ctl','+ À contrôler']],rep:[['conf','✓ Travaux faits'],['encours','En cours'],['err','Constat erroné'],['ctl','+ À contrôler']],rel:[['pdfone','Rappel PDF'],['sent','Envoyé'],['ctl','+ À contrôler']],ctl:[['conf','✓ Conforme'],['nc','✗ Non conforme'],['rec','↻ À revoir']],md:[['ctl','+ Nouveau contrôle']],clos:[['requal','Rouvrir']]}[PST]||[];
  const TIP={conf:'Conforme : débroussaillement fait',nc:'Non conforme : travaux non faits',rec:'À revoir : visite impossible ou travaux en cours'};
  const row=p=>'<div class="pr'+(PSEL.has(p.k)?' sel':'')+'" onclick="PREV=\'res\';openByK('+p.k+')"><input type="checkbox" aria-label="Sélectionner" '+(PSEL.has(p.k)?'checked':'')+' onclick="event.stopPropagation();PSEL[this.checked?\'add\':\'delete\']('+p.k+');refreshTop()"><span class="dt" style="background:'+(COLG[p.g]||'#cbd5e1')+'"></span><span class="ad">'+esc(p.a||'Sans adresse')+'<span>'+sub(p)+'</span></span><span class="ra">'+RA.map(x=>'<button class="rb'+(x[0]==='conf'?' ok':x[0]==='nc'?' ko':'')+'"'+(TIP[x[0]]?' title="'+TIP[x[0]]+'"':'')+' onclick="event.stopPropagation();'+(x[0]==='pdfone'?'lettresGroupees(['+p.k+'])':'rAct('+p.k+',\''+x[0]+'\')')+'">'+x[1]+'</button>').join('')+'</span><span class="ar">›</span></div>';
