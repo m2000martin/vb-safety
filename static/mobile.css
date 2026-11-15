@@ -94,9 +94,9 @@
 /* ---------- Téléphone : bouton « Demander une démo » fixé en bas (toutes les pages) ---------- */
 .barre-demo { display: none; }
 @media (max-width: 700px) {
-  .barre-demo { display: flex; position: fixed; z-index: 60; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 8px; border-radius: 16px; background: rgba(16, 30, 48, .88); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .55); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); transform: translateY(calc(100% + 24px)); opacity: 0; transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s; pointer-events: none; }
+  .barre-demo { display: flex; box-sizing: border-box; max-width: calc(100vw - 24px); position: fixed; z-index: 60; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); padding: 8px; border-radius: 16px; background: rgba(16, 30, 48, .88); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .55); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); transform: translateY(calc(100% + 24px)); opacity: 0; transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s; pointer-events: none; }
   .barre-demo.visible { transform: none; opacity: 1; pointer-events: auto; }
-  .barre-demo a { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 11px; background: #C4521C; color: #fff; font: 600 15px/1 Inter, -apple-system, "Segoe UI", sans-serif; text-decoration: none; white-space: nowrap; }
+  .barre-demo a { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 11px; background: #C4521C; color: #fff; font: 600 15px/1 Inter, -apple-system, "Segoe UI", sans-serif; text-decoration: none; white-space: normal; text-align: center; min-width: 0; padding: 0 10px; box-sizing: border-box; }
 }
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) { .barre-demo { transition: none; } }
 

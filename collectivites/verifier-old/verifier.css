@@ -1,5 +1,5 @@
 .vo-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.vo-hero{padding:clamp(48px,7vw,96px) 0 clamp(20px,3vw,32px);text-align:center;position:relative}
+.vo-hero{padding:clamp(48px,7vw,96px) 0 clamp(20px,3vw,32px);text-align:center;position:relative;overflow-x:clip}
 .vo-hero::before{content:"";position:absolute;left:50%;top:40%;width:min(800px,120vw);height:500px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(224,108,52,.11),transparent 70%);pointer-events:none}
 .vo-hero .wrap{position:relative;max-width:780px}
 .vo-k{font:700 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#E06C34}
