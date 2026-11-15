@@ -329,6 +329,10 @@ const LOCKED=['legal','ferme'];
 function rcode(p){return (D.city+'-'+p.k).toUpperCase()}
 function qrURL(p){return 'https://vb-safety.com/OLD-demo/r/#'+rcode(p)}
 function qrImg(p){try{const q=qrcode(0,'M');q.addData(qrURL(p));q.make();return q.createDataURL(3,2)}catch(e){return ''}}
+function NIDIF(){const d=new Date(),m=d.getMonth(),j=d.getDate();return (m===2&&j>=15)||(m>=3&&m<=6)}
+function natNoms(){return (D.nat||[]).slice(0,3).join(', ')}
+function natBox(p){if(!p||!p.n2)return '';const n=NIDIF(),s=natNoms();return '<div style="margin:10px 0 0;padding:9px 11px;border-radius:8px;font-size:14px;line-height:1.45;'+(n?'background:#fdecea;border:1px solid #f3b4ac;color:#7f1d1d':'background:#e8f5e9;border:1px solid #a5d6a7;color:#1b5e20')+'"><b>'+(n?'Période de nidification en cours (mi-mars à fin juillet)':'Zone naturelle protégée à moins de 50 m')+'</b>'+(s?' · '+esc(s):'')+'<br>'+(n?'Vérifier l\'absence de nids avant toute coupe d\'arbre ou de haie ; reporter si possible les coupes d\'août à février.':'Coupes d\'arbres et de haies de préférence d\'août à février, hors période de nidification.')+' Débroussailler sans raser : conserver des arbres isolés.</div>'}
+function natLettre(p){if(!p||!p.n2)return '';const s=natNoms();return '<p><b>Milieu naturel protégé à proximité'+(s?' ('+esc(s)+')':'')+'.</b> Les travaux doivent préserver la faune : vérifiez l\'absence de nids avant de couper arbres ou haies et, si possible, réalisez ces coupes d\'août à février, en dehors de la période de nidification (mi-mars à fin juillet). Débroussailler ne veut pas dire raser : conservez des arbres isolés et une végétation basse entretenue.</p>'}
 function lettreParts(p,F){
  const adr=(F.adr||'').replace(/^≈ /,''),today=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
  const P=plan(p,F),imgs=[],d=dept(),H=HAB(p),Hc=HAB(p,1);
@@ -365,7 +369,7 @@ function lettreParts(p,F){
  const body={};
  Object.keys(T).forEach(k=>{const t=T[k],hasPlan=k!=='rappel'&&planL,efp=ef&&hasPlan&&k!=='ferme'?'<p><i>'+ef.m+'</i></p>':'';
   body[k]='<div class="obj"><b>Objet : '+t.obj+(adr?' – '+esc(adr):'')+'</b></div><p>Madame, Monsieur,</p>'+t.intro+(hasPlan?planL+efp:(k==='rappel'?'':'<p><i>Rien de particulier n\'apparaît sur les images.</i></p>'))+
-  '<h3>Bons gestes</h3><ul>'+P.gestes.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+t.fin});
+  natLettre(p)+'<h3>Bons gestes</h3><ul>'+P.gestes.map(x=>'<li>'+x+'</li>').join('')+'</ul>'+t.fin});
  const head='<div class="hd"><div><b>'+esc(D.mairie||('Mairie de '+D.nom))+'</b><br>'+ED('Adresse de la mairie')+'<br>'+ED('Téléphone · courriel')+'</div><div style="text-align:right">'+esc(D.nom)+', le '+ED(today)+'<br><span style="font-size:9pt;color:#555">Réf. OLD-'+D.city+'-'+p.k+(F.parc?' · parcelle '+esc(F.parc):'')+'</span></div></div>'+
  '<div class="dest">À l\'occupant ou au propriétaire<br>'+ED(esc(adr||'Adresse'))+'<br>'+ED(esc(D.cp||'')+' '+esc(D.nom))+'</div>';
  const tail='<p>Ces constats ont été établis à distance, à partir de données publiques de l\'IGN ('+imgTxt()+'). Si les travaux ont déjà été faits, merci de nous le signaler. Contact : '+ED('téléphone de la mairie')+'.</p>'+
@@ -576,7 +580,7 @@ function ficHTML(p,F){
  const TG=(t,c)=>' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+c+'">'+t+'</span>';
  h+='<div style="margin-top:12px">'+(RISK!=='feu'?TG(kname(key(p)),colOf(p)):MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):(MODE==='leg'&&!p.l?TG('Hors zone légale'+((p.g||'v')!=='v'?' · '+GN[p.g][0].toLowerCase()+' (recommandé)':''),'#8a8478'):TG(GN[p.g||'v'][0],COLG[p.g||'v'])));
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
- h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(p.t?'<b>'+typName(p)+'</b> · ':'')+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+(MODE==='pri'?' · priorité : '+CAT[p.c][0].toLowerCase():(GN[p.g]&&p.g!=='v'?'<br>'+GN[p.g][1]+(p.vp?'<br><b>Constat partiel : à vérifier sur place.</b>':''):'')+'<br><span style="color:#475569"><b>Constat indicatif établi à distance ('+imgTxt()+'), sans valeur de procès-verbal.</b> Décision et contrôle : la mairie.</span>')+'</div>';
+ h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(p.t?'<b>'+typName(p)+'</b> · ':'')+(F.parc?'Parcelle '+F.parc+' · ':'')+(p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+(MODE==='pri'?' · priorité : '+CAT[p.c][0].toLowerCase():(GN[p.g]&&p.g!=='v'?'<br>'+GN[p.g][1]+(p.vp?'<br><b>Constat partiel : à vérifier sur place.</b>':''):'')+'<br><span style="color:#475569"><b>Constat indicatif établi à distance ('+imgTxt()+'), sans valeur de procès-verbal.</b> Décision et contrôle : la mairie.</span>')+'</div>'+natBox(p);
  h+=riskFiche(p);const C=constats(p,F);
  h+='<div class="cst">'+C.map(c=>'<div class="row" onclick="'+(c.i===-2?'showHp()':c.i<0?'showAcc()':'fimg('+c.i+')')+'"><div class="ic" style="background:'+c.c+'"></div><div><div class="t">'+c.t+'</div><div class="d">'+c.d+'</div><div class="a">'+c.a+'</div></div></div>').join('')+'</div>';
  h+='<div class="acts"><button class="btn dark" onclick="lettre()">Courrier / rapport PDF</button><button class="btn" onclick="mail()">Envoyer par e-mail</button><button class="btn'+(CTL()[p.k]?' on':'')+'" id="ctlb" onclick="togCtl()">'+(CTL()[p.k]?'✓ Dans la liste à contrôler':'+ À contrôler sur place')+'</button></div>';
@@ -1226,7 +1230,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
 <button style="margin-top:10px;width:100%;font-size:15px;padding:10px;border:0;border-radius:9px;background:#0f172a;color:#fff;cursor:pointer">Entrer</button>
 <div id="ge" style="color:#c62828;font-size:13px;margin-top:8px;min-height:16px"></div><div style="border-top:1px solid #e5e7eb;margin-top:6px;padding-top:12px;font-size:13px;color:#64748b">Pas encore de code ?<a href="/collectivites/demande/" style="display:block;margin-top:6px;text-align:center;padding:9px;border:1px solid #e2e8f0;border-radius:9px;color:#0f172a;font-weight:650;text-decoration:none">Demander l'accès à une démonstration pour ma ville →</a></div></form></div><script>(function(){try{const a=JSON.parse(localStorage.getItem('vb_cgu')||'null');if(a&&a.v==='1.0'){const c=document.getElementById('gt');if(c)c.checked=true}}catch(_){}})()</script>
 <script>
-const SALT='c3TFWHlx7EkqFW11pQIhNw==',ITER=600000;let KEY=null;
+const SALT='lA8FOpVd+vcXAJGxLY+u+A==',ITER=600000;let KEY=null;
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function derive(code){const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(code),'PBKDF2',false,['deriveKey']);
 return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['decrypt']);}

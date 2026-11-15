@@ -42,3 +42,10 @@
 .vo-faq h2{font-size:clamp(20px,2.4vw,26px);margin:0 0 10px}
 .vo-faq h3{font-size:17px;margin:20px 0 6px;color:#E8EFF4}
 .vo-faq p{color:var(--doux);margin:0}
+.vo-c.c4 b{color:#7BC67E}
+.vo-bio{background:rgba(46,125,50,.12);border:1px solid rgba(123,198,126,.45);border-radius:10px;padding:12px 14px;margin:0 0 14px}
+.vo-bio.nid{background:rgba(229,72,77,.10);border-color:rgba(240,138,93,.6)}
+.vo-bio p{margin:0 0 6px!important;font-size:15px}
+.vo-sites{font-size:13.5px!important;color:var(--doux)}
+.vo-sites a{color:#9fd8a2}
+.vo-leg .nz{display:inline-block;width:16px;height:10px;background:rgba(46,125,50,.2);border:1px dashed #2E7D32;margin-right:-8px}

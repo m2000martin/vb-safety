@@ -162,11 +162,17 @@
         fetch(HITS + '&TYPENAMES=DEBROUSSAILLEMENT:debroussaillement&CQL_FILTER=' + encodeURIComponent("dept='" + depCode + "'")).then(function (r) { return r.text(); }),
         paged('DEBROUSSAILLEMENT:debroussaillement', 'geom,date_integ,dat_ap_old', bbox(B, 'geom'), 5000, 'id'),
         chargerDalles(),
-        paged('BDTOPO_V3:zone_de_vegetation', 'geometrie,nature', "nature NOT IN ('Haie','Verger','Vigne','Peupleraie') AND " + bbox(B), 60000, 'cleabs')
+        paged('BDTOPO_V3:zone_de_vegetation', 'geometrie,nature', "nature NOT IN ('Haie','Verger','Vigne','Peupleraie') AND " + bbox(B), 60000, 'cleabs'),
+        Promise.all(['patrinat_sic:sic', 'patrinat_zps:zps', 'patrinat_znieff1:znieff1'].map(function (t) {
+          return paged(t, 'geom,nom_site,url_fiche', bbox(B, 'geom'), 2000).then(function (r) {
+            r.f.forEach(function (f) { f.properties.type = t.indexOf('znieff') > 0 ? 'ZNIEFF' : (t.indexOf('zps') > 0 ? 'Natura 2000 (oiseaux)' : 'Natura 2000 (habitats)'); });
+            return r.f;
+          }).catch(function () { return []; });
+        }))
       ]);
       if (id !== run) return;
       var depCouvert = +((rs[0].match(/numberMatched="(\d+)"/) || [0, 0])[1]) > 0;
-      var zon = rs[1].f, veg = rs[3].f;
+      var zon = rs[1].f, veg = rs[3].f, nat = [].concat.apply([], rs[4]);
       msg('Calcul des distances…');
       await new Promise(function (r) { setTimeout(r, 30); });
       var zpolys = []; zon.forEach(function (f) { zpolys = zpolys.concat(rings(f.geometry)); });
@@ -189,24 +195,31 @@
         }
         if (t >= minCells) for (var k = 0; k < t; k++) mas[qu[k]] = 1;
       }
-      /* distance au massif (chanfrein 3-4, en mètres) */
-      var INF = 1e9, D = new Float32Array(N);
-      for (var i = 0; i < N; i++) D[i] = mas[i] ? 0 : INF;
-      for (var yy = 0; yy < ny; yy++) for (var xx = 0; xx < nx; xx++) {
-        var j = yy * nx + xx, v = D[j];
-        if (xx > 0) v = Math.min(v, D[j - 1] + 3);
-        if (yy > 0) { v = Math.min(v, D[j - nx] + 3); if (xx > 0) v = Math.min(v, D[j - nx - 1] + 4); if (xx < nx - 1) v = Math.min(v, D[j - nx + 1] + 4); }
-        D[j] = v;
+      /* distance (chanfrein 3-4) ; résultat en mètres = D * res_ / 3 */
+      function chanfrein(mask) {
+        var INF = 1e9, D = new Float32Array(N), j, v, xx, yy;
+        for (var i = 0; i < N; i++) D[i] = mask[i] ? 0 : INF;
+        for (yy = 0; yy < ny; yy++) for (xx = 0; xx < nx; xx++) {
+          j = yy * nx + xx; v = D[j];
+          if (xx > 0) v = Math.min(v, D[j - 1] + 3);
+          if (yy > 0) { v = Math.min(v, D[j - nx] + 3); if (xx > 0) v = Math.min(v, D[j - nx - 1] + 4); if (xx < nx - 1) v = Math.min(v, D[j - nx + 1] + 4); }
+          D[j] = v;
+        }
+        for (yy = ny - 1; yy >= 0; yy--) for (xx = nx - 1; xx >= 0; xx--) {
+          j = yy * nx + xx; v = D[j];
+          if (xx < nx - 1) v = Math.min(v, D[j + 1] + 3);
+          if (yy < ny - 1) { v = Math.min(v, D[j + nx] + 3); if (xx < nx - 1) v = Math.min(v, D[j + nx + 1] + 4); if (xx > 0) v = Math.min(v, D[j + nx - 1] + 4); }
+          D[j] = v;
+        }
+        return D;
       }
-      for (yy = ny - 1; yy >= 0; yy--) for (xx = nx - 1; xx >= 0; xx--) {
-        j = yy * nx + xx; v = D[j];
-        if (xx < nx - 1) v = Math.min(v, D[j + 1] + 3);
-        if (yy < ny - 1) { v = Math.min(v, D[j + nx] + 3); if (xx < nx - 1) v = Math.min(v, D[j + nx + 1] + 4); if (xx > 0) v = Math.min(v, D[j + nx - 1] + 4); }
-        D[j] = v;
-      }
+      var D = chanfrein(mas);
+      /* zones naturelles protégées : Natura 2000 (habitats et oiseaux) et ZNIEFF de type 1 */
+      var ppolys = []; nat.forEach(function (f) { ppolys = ppolys.concat(rings(f.geometry)); });
+      var DN = ppolys.length ? chanfrein(raster(ppolys)) : null;
 
       /* bâtiments */
-      var n = 0, nOld = 0, n50 = 0, n200 = 0, pts = [];
+      var n = 0, nOld = 0, n50 = 0, n200 = 0, nNat = 0, pts = [];
       bat.forEach(function (f) {
         var r = rings(f.geometry)[0]; if (!r) return; r = r[0];
         var sx = 0, sy = 0, A = 0, L = r.length - 1;
@@ -224,15 +237,17 @@
         if (mZon[g]) { nOld++; cat = 1; }
         else if (d <= 50) { n50++; cat = 2; }
         else if (d <= 200) { n200++; cat = 3; }
-        if (cat) pts.push([cym / ky + lat0, cxm / kx + lon0, cat]);
+        var pn = cat && DN && DN[g] * res_ / 3 <= 50 ? 1 : 0; if (pn) nNat++;
+        if (cat) pts.push([cym / ky + lat0, cxm / kx + lon0, cat, pn]);
       });
-      var zonCom = 0; for (i = 0; i < N; i++) if (mZon[i] && mCom[i]) zonCom++;
+      var zonCom = 0; for (var i = 0; i < N; i++) if (mZon[i] && mCom[i]) zonCom++;
       var haZon = Math.round(zonCom * res_ * res_ / 1e4);
       var dates = {}, aps = {};
       zon.forEach(function (f) { var q = f.properties || {}; if (q.date_integ) dates[q.date_integ] = 1; if (q.dat_ap_old) aps[q.dat_ap_old] = 1; });
-      afficher({ dates: Object.keys(dates), aps: Object.keys(aps), P: P, depCouvert: depCouvert, n: n, nOld: nOld, n50: n50, n200: n200, haZon: haZon, pts: pts, cpolys: cpolys, zon: zon, trop: tropGrand });
+      afficher({ dates: Object.keys(dates), aps: Object.keys(aps), P: P, depCouvert: depCouvert, n: n, nOld: nOld, n50: n50, n200: n200, haZon: haZon, nNat: nNat, nat: nat, pts: pts, cpolys: cpolys, zon: zon, trop: tropGrand });
       etat.textContent = '';
     } catch (e) {
+      if (window.console) console.error(e);
       if (id === run) msg("Le service de l'IGN ne répond pas pour le moment. Réessayez dans quelques instants.");
     }
   }
@@ -272,8 +287,22 @@
       '<div class="vo-c"><b>' + fmt(r.n) + '</b><span>bâtiments d\'habitation dans la commune</span></div>' +
       '<div class="vo-c c1"><b>' + fmt(r.nOld) + '</b><span>dans le zonage OLD</span></div>' +
       '<div class="vo-c c2"><b>' + fmt(r.n50) + '</b><span>hors zonage, à moins de 50 m d\'un bois</span></div>' +
-      '<div class="vo-c c3"><b>' + fmt(r.n200) + '</b><span>hors zonage, entre 50 et 200 m d\'un bois</span></div>';
-    $('vo-suite').innerHTML = suite + ' <button type="button" class="vo-lien" id="vo-lien">Copier le lien de ce résultat</button>';
+      '<div class="vo-c c3"><b>' + fmt(r.n200) + '</b><span>hors zonage, entre 50 et 200 m d\'un bois</span></div>' +
+      (r.nNat ? '<div class="vo-c c4"><b>' + fmt(r.nNat) + '</b><span>de ces bâtiments à moins de 50 m d\'une zone naturelle protégée</span></div>' : '');
+    var bio = '';
+    if (r.nat.length && r.nNat > 0) {
+      var now = new Date(), mo = now.getMonth(), dd = now.getDate();
+      var nid = (mo === 2 && dd >= 15) || (mo >= 3 && mo <= 6);
+      var vus = {}, sites = [];
+      r.nat.forEach(function (f) { var q = f.properties; if (q.nom_site && !vus[q.nom_site]) { vus[q.nom_site] = 1; sites.push(q); } });
+      bio = '<div class="vo-bio' + (nid ? ' nid' : '') + '"><p><b>' + (nid ? 'Période de nidification en cours (mi-mars à fin juillet).' : 'Zone naturelle protégée à proximité.') + '</b> ' +
+        fmt(r.nNat) + ' bâtiment' + (r.nNat > 1 ? 's' : '') + ' concerné' + (r.nNat > 1 ? 's' : '') + ' se trouve' + (r.nNat > 1 ? 'nt' : '') + ' à moins de 50 m d\'une zone Natura 2000 ou d\'une ZNIEFF. ' +
+        (nid ? 'Avant de couper arbres et haies, vérifier l\'absence de nids et reporter si possible les coupes d\'août à février. '
+             : 'Pour la prochaine campagne, prévoir les coupes d\'arbres et de haies d\'août à février, hors période de nidification. ') +
+        'Débroussailler ne veut pas dire raser : conserver des arbres isolés et une strate herbacée basse. La destruction de nids d\'espèces protégées est interdite toute l\'année ; l\'arrêté préfectoral peut prévoir des adaptations.</p>' +
+        '<p class="vo-sites">' + sites.slice(0, 6).map(function (q) { return (q.url_fiche ? '<a href="' + esc(q.url_fiche) + '" rel="noopener" target="_blank">' + esc(q.nom_site) + '</a>' : esc(q.nom_site)) + ' <small>(' + esc(q.type) + ')</small>'; }).join(' · ') + (sites.length > 6 ? ' · …' : '') + '</p></div>';
+    }
+    $('vo-suite').innerHTML = bio + suite + ' <button type="button" class="vo-lien" id="vo-lien">Copier le lien de ce résultat</button>';
     $('vo-lien').addEventListener('click', function () {
       var b = this, u = location.origin + location.pathname + '?commune=' + r.P.code_insee;
       var ok = function () { b.textContent = 'Lien copié'; setTimeout(function () { b.textContent = 'Copier le lien de ce résultat'; }, 2000); };
@@ -293,10 +322,11 @@
     couches.forEach(function (c) { map.removeLayer(c); }); couches = [];
     var com = L.geoJSON({ type: 'MultiPolygon', coordinates: r.cpolys }, { style: { color: '#16293F', weight: 2.5, fill: false, dashArray: '7 5' } }).addTo(map);
     couches.push(com);
+    if (r.nat.length) couches.push(L.geoJSON({ type: 'FeatureCollection', features: r.nat }, { style: { color: '#2E7D32', weight: 1, dashArray: '4 3', fillColor: '#2E7D32', fillOpacity: .10 } }).addTo(map));
     if (r.zon.length) couches.push(L.geoJSON({ type: 'FeatureCollection', features: r.zon }, { style: { color: '#E5484D', weight: 1, fillColor: '#E5484D', fillOpacity: .18 } }).addTo(map));
     var col = { 1: '#E5484D', 2: '#F59E0B', 3: '#EAD15A' }, rd = L.canvas();
     var g = L.layerGroup();
-    r.pts.forEach(function (p) { L.circleMarker([p[0], p[1]], { renderer: rd, radius: 3, stroke: false, fillColor: col[p[2]], fillOpacity: .95 }).addTo(g); });
+    r.pts.forEach(function (p) { L.circleMarker([p[0], p[1]], { renderer: rd, radius: p[3] ? 4 : 3, stroke: !!p[3], color: '#1B5E20', weight: 1.5, fillColor: col[p[2]], fillOpacity: .95 }).addTo(g); });
     g.addTo(map); couches.push(g);
     setTimeout(function () { map.invalidateSize(); map.fitBounds(com.getBounds(), { padding: [10, 10] }); }, 50);
   }

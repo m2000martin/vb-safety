@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="/static/nav.css?v=17">
 <link rel="stylesheet" href="/static/texte.css?v=3">
 <link rel="stylesheet" href="/static/leaflet/leaflet.min.css">
-<link rel="stylesheet" href="/collectivites/verifier-old/verifier.css?v=2">
+<link rel="stylesheet" href="/collectivites/verifier-old/verifier.css?v=3">
 </head>
 <body>
 <a class="evitement" href="#contenu">Aller au contenu</a>
@@ -58,13 +58,14 @@
       <p class="vo-verdict" id="vo-verdict"></p>
       <div class="vo-chiffres" id="vo-chiffres"></div>
       <div id="vo-map" class="vo-map" aria-label="Carte de la commune"></div>
-      <p class="vo-leg"><span class="d d1"></span>dans le zonage OLD <span class="d d2"></span>hors zonage, à moins de 50 m d'un bois <span class="d d3"></span>hors zonage, entre 50 et 200 m d'un bois <span class="z"></span>zonage OLD</p>
+      <p class="vo-leg"><span class="d d1"></span>dans le zonage OLD <span class="d d2"></span>hors zonage, à moins de 50 m d'un bois <span class="d d3"></span>hors zonage, entre 50 et 200 m d'un bois <span class="z"></span>zonage OLD <span class="nz"></span>zone naturelle protégée (contour vert : bâtiment à moins de 50 m)</p>
       <div class="vo-suite" id="vo-suite"></div>
       <details class="vo-meth"><summary>Méthode, sources et limites</summary>
         <ul>
           <li><b>Zonage OLD</b> : base DÉBROUSSAILLEMENT de l'IGN, publiée sur data.gouv.fr. C'est un zonage informatif, établi à partir des zonages des préfectures. Il ne remplace pas l'arrêté préfectoral de votre département, qui fait foi, ni un éventuel arrêté municipal.</li>
           <li><b>Bâtiments d'habitation</b> : BD TOPO de l'IGN, bâtiments d'usage résidentiel de plus de 20 m². Un bâtiment n'est pas un logement : un immeuble compte pour un.</li>
           <li><b>Proximité d'un bois</b> : distance entre le centre du bâtiment et une zone boisée ou de lande d'au moins 4 ha d'un seul tenant (BD TOPO, zones de végétation, hors haies, vergers et vignes), calculée sur une grille de 10 m environ. Seuil et distances indicatifs.</li>
+          <li><b>Zones naturelles protégées</b> : sites Natura 2000 (directives habitats et oiseaux) et ZNIEFF de type 1 de l'inventaire national du patrimoine naturel (PatriNat), diffusés par la Géoplateforme. Période de nidification indiquée : mi-mars à fin juillet, à titre de recommandation.</li>
           <li>Les bâtiments hors zonage proches d'un bois <b>ne sont pas soumis aux OLD</b>. Le chiffre indique une exposition possible, utile pour l'information préventive.</li>
           <li>Calcul fait dans votre navigateur à partir des services publics de la Géoplateforme IGN. Aucune donnée saisie n'est enregistrée par VB Safety.</li>
         </ul>
@@ -74,7 +75,7 @@
 </section>
 <section class="vo-faq-s"><div class="wrap" style="max-width:900px;padding-bottom:clamp(48px,6vw,90px)"><div class="vo-faq"><h2>Questions fréquentes</h2><h3>Comment savoir si ma commune est soumise aux obligations légales de débroussaillement ?</h3><p>Les OLD s'appliquent dans les bois et forêts classés à risque d'incendie et à moins de 200 m de leur lisière. Le zonage est fixé par l'arrêté préfectoral de chaque département. L'IGN en publie une version informative nationale (base DÉBROUSSAILLEMENT), interrogée par l'outil ci-dessus. En cas de doute, l'arrêté préfectoral et la DDT font foi.</p><h3>Que doit faire une commune soumise aux OLD ?</h3><p>Les propriétaires des constructions situées dans le zonage doivent débroussailler autour de celles-ci, dans les conditions de l'arrêté préfectoral. Le maire contrôle l'exécution : information des propriétaires, contrôle, mise en demeure, puis travaux d'office aux frais du propriétaire si nécessaire.</p><h3>Ma commune n'est pas soumise, mais des maisons sont proches d'un bois. Que faire ?</h3><p>Aucune obligation légale ne s'applique hors zonage. Une information préventive des habitants concernés reste utile : le risque ne s'arrête pas à la limite du zonage, et le classement peut évoluer. En 2026, 16 communes de Seine-et-Marne ont ainsi été classées à la suite des incendies du massif de Fontainebleau.</p><h3>Le projet de contrôle des OLD peut-il être financé ?</h3><p>Le Fonds vert (axe prévention des incendies de forêt) finance notamment la vérification de la mise en œuvre des OLD par des systèmes d'information à l'échelle de la commune. La demande est déposée par la collectivité ; le taux est décidé par le préfet.</p></div></div></section>
 <script src="/static/leaflet/leaflet.min.js" defer></script>
-<script src="/collectivites/verifier-old/verifier.js?v=5" defer></script>
+<script src="/collectivites/verifier-old/verifier.js?v=6" defer></script>
 </main>
 <footer class="pied">
   <div class="wrap">
