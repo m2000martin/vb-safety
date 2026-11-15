@@ -118,14 +118,18 @@
       var cv = document.createElement('canvas'); cv.width = nx; cv.height = ny;
       var ctx = cv.getContext('2d', { willReadFrequently: true });
       function raster(polys) {
-        ctx.clearRect(0, 0, nx, ny); ctx.fillStyle = '#fff'; ctx.beginPath();
-        polys.forEach(function (p) { p.forEach(function (ring) {
-          ring.forEach(function (c, i) {
-            var px = (X(c[0]) - x0) / res_, py = (y1 - Y(c[1])) / res_;
-            if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
-          }); ctx.closePath();
-        }); });
-        ctx.fill('evenodd');
+        ctx.clearRect(0, 0, nx, ny); ctx.fillStyle = '#fff';
+        /* un remplissage par polygone : les entités qui se chevauchent ne s'annulent pas (trous internes conservés) */
+        polys.forEach(function (p) {
+          ctx.beginPath();
+          p.forEach(function (ring) {
+            ring.forEach(function (c, i) {
+              var px = (X(c[0]) - x0) / res_, py = (y1 - Y(c[1])) / res_;
+              if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+            }); ctx.closePath();
+          });
+          ctx.fill('evenodd');
+        });
         var d = ctx.getImageData(0, 0, nx, ny).data, a = new Uint8Array(nx * ny);
         for (var i = 0; i < a.length; i++) a[i] = d[i * 4 + 3] > 127 ? 1 : 0;
         return a;
