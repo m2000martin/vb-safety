@@ -87,6 +87,12 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 #chg3{flex:none;font-size:12px;color:#64748b}
 #page{position:fixed;top:56px;left:0;right:0;bottom:0;overflow:auto;background:#f1f5f9;display:none;padding:18px 20px 40px;box-sizing:border-box;z-index:1500}
 .ph{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 auto 14px;max-width:1400px}.ph h1{font-size:22px;margin:0}.ph .sp{flex:1}.ph2{font-size:16px;max-width:1400px;margin:22px auto 8px}
+.nx{margin-top:12px;border:1px solid #e5e7eb;border-radius:14px;padding:12px;background:#fff}
+.nxh{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-bottom:8px}.nxs{font-weight:700;font-size:14px;color:#0f172a;background:#eef2f6;border-radius:8px;padding:3px 9px}
+.nxl{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin:6px 0 4px}
+.nxr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.nxr .btn{flex:1 1 auto}
+.btn.lnkb{background:none;border:0;color:#64748b;text-decoration:underline;flex:0 0 auto;padding-left:2px}
+.nxm{margin-top:6px}.nxm summary{cursor:pointer;font-size:13px;font-weight:600;color:#334155;padding:4px 0}
 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:4px;max-width:1400px;margin:10px auto 0}
 .pst{display:flex;align-items:center;gap:6px;border:1px solid #e5e7eb;background:#fff;border-radius:10px;padding:7px 9px;font:600 12.5px Inter,system-ui,sans-serif;color:#1f2937;cursor:pointer}
 .pst .pn{width:17px;height:17px;border-radius:50%;background:#eef2f6;color:#475569;font-size:10.5px;display:grid;place-items:center}
@@ -559,7 +565,7 @@ function mail(){const p=CUR.p,F=CUR.F,adr=(F.adr||'').replace(/^≈ /,''),C=cons
  t+=OBL(p)?'Vous devez débroussailler et maintenir débroussaillés ses abords sur 50 m, y compris au-delà des limites de votre terrain, ainsi que '+dept().bandeAcces+' de part et d\'autre du chemin d\'accès (Code forestier, art. L.131-10 et suivants).\n\n':'La commune vous recommande de dégager ses abords sur 50 m.\n\n';
  if(own.length){t+='Les photographies aériennes récentes de l\'IGN font apparaître :\n';own.forEach((c,i)=>{t+=(i+1)+'. '+c.t+' : '+c.d.replace(/<[^>]+>/g,'')+'\n   À faire : '+c.a.replace(/<[^>]+>/g,'')+'\n'});t+='\nMerci de réaliser ces travaux avant l\'été, à la date fixée par la mairie.\n\n';}
  else t+='Les photographies aériennes récentes ne font pas apparaître de point particulier. Merci d\'entretenir ces abords chaque année avant l\'été.\n\n';
- t+='Le détail et les images figurent dans le courrier joint. Pour toute question, contactez la mairie.\n\nRépondre en ligne (travaux faits, erreur, conseil) : '+qrURL(p)+'\nVotre identité n\'est pas enregistrée : ce service ne connaît que l\'adresse.\n\nCe système d\'analyse est encore en cours d\'amélioration : merci de nous signaler toute information inexacte. Pour contribuer ou donner votre avis d\'utilisateur : vb-safety.com/contribuer\n\nCordialement,\n'+(D.mairie||('Mairie de '+D.nom));
+ t+='Le détail et les images figurent dans le courrier joint. Pour toute question, contactez la mairie.\n\nRépondre en ligne (travaux faits, erreur, conseil) : '+qrURL(p)+'\nVotre identité n\'est pas enregistrée : ce service ne connaît que l\'adresse.\n\nCe système d\'analyse est encore en cours d\'amélioration : merci de nous signaler toute information inexacte.\n\nCordialement,\n'+(D.mairie||('Mairie de '+D.nom));
  logEnvoi(p.k,'email',defTon(p,F));location.href='mailto:?subject='+encodeURIComponent('Débroussaillement des abords de '+HAB(p)+(adr?' – '+adr:''))+'&body='+encodeURIComponent(t);}
 let PREV='res',FCACHE={},SEL=null;
 function whyList(p,F){let s='<li>Bois ou forêt à '+(p.df<=10?'moins de 10':p.df)+' m</li>';const fb=F&&F.br&&F.br.fl;
@@ -608,17 +614,17 @@ function ficHTML(p,F){
  h+='</div><h3 style="font-size:19px;margin:8px 0 0">'+esc((F.adr||('Habitation sans adresse'+(F.parc?' · parcelle '+F.parc:''))).replace(/^≈ /,''))+'</h3><div class="muted">'+(p.t?'<b>'+typName(p)+'</b> · ':'')+(F.parc?'Parcelle '+F.parc+' · ':'')+(TH()?(RISK==='tem'?'Aléa tempête':'Aléa inondation'):p.l?'Soumise aux OLD'+(D.zsrc==='est'?' (zone estimée)':''):'Hors zone légale')+(TH()?'<br><span style="color:#475569"><b>Estimation à distance ('+(RISK==='tem'?'relevé laser IGN':'relief IGN et plan de prévention')+'), sans valeur de procès-verbal.</b></span>':MODE==='pri'?' · priorité : '+CAT[p.c][0].toLowerCase():(GN[p.g]&&p.g!=='v'?'<br>'+GN[p.g][1]+(p.vp?'<br><b>Constat partiel : à vérifier sur place.</b>':''):'')+'<br><span style="color:#475569"><b>Constat indicatif établi à distance ('+imgTxt()+'), sans valeur de procès-verbal.</b> Décision et contrôle : la mairie.</span>')+'</div>'+(RISK==='inond'?'':natBox(p));
  h+=(TH()?'':riskFiche(p));const C=TH()?themeConstats(p):constats(p,F);
  h+='<div class="cst">'+C.map(c=>'<div class="row" onclick="'+(c.i===-2?'showHp()':c.i<0?'showAcc()':'fimg('+c.i+')')+'"><div class="ic" style="background:'+c.c+'"></div><div><div class="t">'+c.t+'</div><div class="d">'+c.d+'</div><div class="a">'+c.a+'</div></div></div>').join('')+'</div>';
- h+='<div class="acts"><button class="btn dark" onclick="lettre()">Courrier / rapport PDF</button><button class="btn" onclick="mail()">Envoyer par e-mail</button>'+(function(){const r=lastSt(p.k);return r&&r.s==='conforme'&&!TH()?'<button class="btn" onclick="attestation()">Attestation de débroussaillement</button>':''})()+'<button class="btn'+(CTL()[p.k]?' on':'')+'" id="ctlb" onclick="togCtl()">'+(CTL()[p.k]?'✓ Dans la liste à contrôler':RISK==='inond'?'+ À recenser (plan de sauvegarde)':RISK==='tem'?'+ À visiter (arbres)':'+ À contrôler sur place')+'</button></div>';
- h+='<div class="fsub"><button data-s="c" class="'+(FSUB==='c'?'on':'')+'" onclick="setFS(\'c\')">Constats et plan d\'action</button><button data-s="e" class="'+(FSUB==='e'?'on':'')+'" onclick="setFS(\'e\')">Contrôle et envois'+(nEnv(p.k)?' ('+nEnv(p.k)+')':'')+'</button></div><div id="fs-c" style="display:'+(FSUB==='c'?'block':'none')+'">';
+ h+=nextHTML(p);
+ h+='<div id="fs-c">';
  h+='<div class="fimg"><img id="fimg" alt=""><div class="seg3">'+(F.imgb&&RISK!=='inond'?'<button data-i="3" onclick="fimg(3)">Arbres</button>':'')+(RISK==='inond'?['Photo']:RISK==='tem'?['Photo','Infrarouge']:['Photo','Infrarouge','Broussaille']).map((t,i)=>'<button data-i="'+i+'" onclick="fimg('+i+')">'+t+'</button>').join('')+'</div><div class="ileg" id="fcap"></div></div>';
- h+='</div><div id="fs-e" style="display:'+(FSUB==='e'?'block':'none')+'">'+ctrlHTML(p)+envoisBtns(p)+histHTML(p)+'</div><div id="fs-c2" style="display:'+(FSUB==='c'?'block':'none')+'">'+(TH()?themePlan(p,F):planHTML(p,F));
+ h+='</div><div id="fs-c2">'+(TH()?themePlan(p,F):planHTML(p,F));
  if(!TH())h+='<div class="chips"><span class="chip">Bois à '+(p.df<=10?'moins de 10':p.df)+' m</span>'+(p.i?'<span class="chip">Rue sans issue</span>':'')+(p.ch?'<span class="chip">Bord de champ</span>':'')+'</div>';
  if(D.porge)h+='<div class="sec"><h4>Résultat</h4><div>'+(p.c==='a'?'Avant le feu, cette habitation aurait été signalée « à dégager ».':'Avant le feu, cette habitation n\'était pas signalée « à dégager ».')+' '+(p.x?'Elle a été détruite.':'Elle n\'a pas été détruite.')+'</div></div>';
  if(tot>=50&&!TH()){h+='<details><summary>Détail de la broussaille dans les 50 m</summary><div class="bar"><div style="width:'+pc(F.t)+';background:#c62828"></div><div style="width:'+pc(F.v)+';background:#7b5aa6"></div><div style="width:'+pc(F.f)+';background:#2e7d32"></div></div>';
   h+='<div class="bl"><span><i style="background:#c62828"></i>Terrain : '+m2(F.t)+'</span><span><i style="background:#7b5aa6"></i>Voisins : '+m2(F.v)+'</span>'+(F.f?'<span><i style="background:#2e7d32"></i>Forêt publique : '+m2(F.f)+'</span>':'')+'</div>';
   h+='<div style="margin-top:6px"><b>'+hors+' %</b> hors du terrain de l\'habitation.</div>';
   if(F.par&&F.par.length)h+='<div class="muted" style="margin-top:4px">Parcelles principales : '+F.par.map(q=>q.idu+(q.own?' (la sienne)':'')+' '+m2(q.m2)).join(' · ')+'</div>';h+='</details>';}
- h+='</div>';setTimeout(()=>fimg(RISK==='inond'?0:3),0);return h;}
+ h+='</div>'+histDetails(p);setTimeout(()=>fimg(RISK==='inond'?0:3),0);return h;}
 let FSUB='c';function nEnv(k){return (typeof envois==='function')?envois(k).length+(lastSt(k)?1:0):0}
 function setFS(x){FSUB=x;['c','c2'].forEach(i=>{const e=document.getElementById('fs-'+i);if(e)e.style.display=x==='c'?'block':'none'});const e=document.getElementById('fs-e');if(e)e.style.display=x==='e'?'block':'none';document.querySelectorAll('.fsub button').forEach(b=>b.classList.toggle('on',b.dataset.s===x))}
 const FCAP=['Photo aérienne IGN','Infrarouge IGN : végétation vivante en rouge','Relevé laser IGN : broussaille (0,5 à 3 m de haut) en rouge','Photo aérienne IGN, vue rapprochée : arbres et branches à moins de 3 m de la maison en rouge (trait jaune = 3 m)'];let CUR=null;
@@ -846,6 +852,35 @@ function prop_(k){const f=D.h.features.find(x=>x.properties.k===k);return f?f.pr
 let CSET=new Set();
 function ctlRow(k,txt){const p=prop_(k);return '<div class="pr" onclick="PREV=\'res\';openByK('+k+')"><input type="checkbox" aria-label="Sélectionner" '+(CSET.has(k)?'checked':'')+' onclick="event.stopPropagation();CSET[this.checked?\'add\':\'delete\']('+k+');refreshTop()"><span class="dt" style="background:'+(p?colOf(p):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'}
 async function ctlLot(st){if(!CSET.size){alert('Cochez d\'abord les maisons contrôlées.');return}const n=CSET.size;if(!confirm(n+' maison'+(n>1?'s':'')+' : enregistrer le résultat « '+STATUTS[st][0]+' » à la date du jour dans leur fiche ?'+(st==='conforme'?'\nElles sortiront de la liste « À contrôler sur place ».':'\nElles restent dans la liste « À contrôler sur place ».')))return;for(const k of CSET)await saveStatut(k,st,today_(),'','Contrôle enregistré en lot');CSET=new Set();refreshTop()}
+/* ===== Fiche : étape de la maison et actions possibles (même logique que le Suivi) ===== */
+function nextHTML(p){const k=p.k,R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=CTL(),LT=LATER(),st=stageOf(p,R,Q,O,LT),S=STG.find(s=>s[0]===st),r=lastSt(k),E=envois(k),t=today();
+ const B=(a,txt,cls)=>'<button class="btn'+(cls?' '+cls:'')+'" onclick="fAct(\''+a+'\')">'+txt+'</button>';
+ const contact='<div class="nxl">Contacter maintenant</div><div class="nxr">'+B('pdf','Courrier PDF','dark')+B('mail','E-mail','dark')+'</div>';
+ const row=x=>'<div class="nxr">'+x+'</div>';
+ const acts={qual:contact+row(B('tard','+ À contacter plus tard')+B('ctl','+ À contrôler sur place'))+row(B('ss','Sans suite','lnkb')),
+  env:contact+row(B('requal','Revenir à qualifier','lnkb')),
+  att:row(B('rep','Réponse reçue','dark')+B('ctl','+ À contrôler sur place')),
+  rep:row(B('conf','Conforme','ok')+B('ctl','+ À contrôler sur place'))+row(B('ss','Sans suite','lnkb')),
+  rel:'<div class="nxl">Relancer maintenant</div>'+row(B('pdf','Courrier de rappel','dark')+B('mail','E-mail','dark'))+row(B('ctl','+ À contrôler sur place')),
+  ctl:'<div class="nxl">Résultat du contrôle</div>'+row(B('conf','Conforme','ok')+B('nc','Non conforme','ko')+B('rec','À recontrôler'))+row(B('unctl','Retirer de la tournée','lnkb')),
+  md:row(B('pdf',OBL(p)?'Courrier de mise en demeure':'Nouveau courrier de recommandation','dark')+B('ctl','+ Nouveau contrôle')),
+  clos:row((r&&r.s==='conforme'?B('att','Attestation','dark'):'')+B('requal','Rouvrir','lnkb')),
+  tard:contact+row(B('requal','Remettre à qualifier','lnkb'))};
+ const last=[E.length?'courrier du '+fdate(E[E.length-1].d):'',r?STATUTS[r.s][0].toLowerCase()+' le '+fdate(r.d):'',LT[k]?'à contacter le '+fdate(LT[k].d):''].filter(Boolean).join(' · ');
+ return '<div class="nx"><div class="nxh"><span class="nxs">'+(S?(STG.indexOf(S)+1)+'. '+S[1]:'Aucune action prévue')+'</span>'+(last?'<span class="muted">'+last+'</span>':'')+'</div>'+(acts[st]||contact+row(B('ctl','+ À contrôler sur place')))+
+ '<details class="nxm"><summary>Autres actions</summary>'+
+ '<div class="envf"><div class="lab">Contacter à une date précise</div><div class="row"><input type="date" id="ltd" value="'+(LT[k]?LT[k].d:addDays(t,14))+'" min="'+t+'" aria-label="Date"><button class="btn" onclick="laterSet('+k+',document.getElementById(\'ltd\').value)">Enregistrer</button>'+(LT[k]?'<button class="btn" onclick="laterSet('+k+',null)">Retirer</button>':'')+'</div></div>'+
+ '<div class="envf"><div class="lab">Envoi déjà fait hors de l\'outil</div><div class="row"><select id="evc" aria-label="Moyen"><option value="courrier">Courrier</option><option value="email">E-mail</option><option value="remise_main">Remis en main propre</option></select><input type="date" id="evd" value="'+t+'" max="'+t+'" aria-label="Date"><button class="btn" onclick="envMan('+k+')">Enregistrer</button></div></div>'+
+ '<div class="envf"><div class="lab">Contrôle avec date, contrôleur et commentaire</div><div class="row"><input type="date" id="cd" value="'+t+'" aria-label="Date"><input id="cc" placeholder="Contrôleur" value="'+esc(PBA&&PBA.user?PBA.user.nom||'':'')+'"></div><textarea id="cm" rows="2" placeholder="Commentaire (facultatif)" style="width:100%;box-sizing:border-box;margin-top:4px"></textarea><div class="row" style="margin-top:4px"><button class="btn ok" onclick="ctl(\'conforme\')">Conforme</button><button class="btn ko" onclick="ctl(\'non_conforme\')">Non conforme</button><button class="btn" onclick="ctl(\'a_recontroler\')">À recontrôler</button></div>'+(r?'<button class="lnk" onclick="delStatut('+k+').then(()=>openByK('+k+'))">Annuler le dernier statut</button>':'')+'</div>'+
+ '</details></div>'}
+async function fAct(a){const p=CUR.p,k=p.k;
+ if(a==='pdf'){lettre();return}if(a==='mail'){mail();setTimeout(()=>openByK(k),400);return}if(a==='att'){attestation();return}
+ if(a==='tard')laterSet(k,addDays(today(),14));else if(a==='ctl')ctlAdd([k]);else if(a==='unctl')ctlDel([k]);else if(a==='ss')qualSet([k],'ss');
+ else if(a==='requal'){qualSet([k],null);if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&r0.s==='conforme')await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}else if(a==='rep')qualSet([k],'rep');
+ else if(a==='conf'){await saveStatut(k,'conforme',today(),'','Fiche');ctlDel([k]);qualSet([k],null)}
+ else if(a==='nc'){await saveStatut(k,'non_conforme',today(),'','Fiche');ctlDel([k])}else if(a==='rec'){await saveStatut(k,'a_recontroler',today(),'','Fiche')}
+ openByK(k)}
+function histDetails(p){const n=envois(p.k).length+(SV.st[p.k]||[]).length;return '<details class="nxm" style="margin-top:10px"><summary>Historique ('+n+')</summary>'+histHTML(p).replace('<h4>Historique</h4>','')+'</details>'}
 /* ===== Suivi des actions : une étape par maison, indépendante de la carte ===== */
 function QUAL(){try{return JSON.parse(localStorage.getItem('oldqual_'+D.city)||'{}')}catch(_){return MEM['q'+D.city]||(MEM['q'+D.city]={})}}
 function qualSet(ks,v){const o=QUAL();ks.forEach(k=>{if(v)o[k]=v;else delete o[k]});try{localStorage.setItem('oldqual_'+D.city,JSON.stringify(o))}catch(_){MEM['q'+D.city]=o}}
@@ -869,7 +904,7 @@ function ctlAdd(ks){const o=CTL();ks.forEach(k=>{const p=prop_(k);if(p&&!o[k])o[
 function ctlDel(ks){const o=CTL();ks.forEach(k=>delete o[k]);saveCtl(o)}
 async function pAct(a){const ks=[...PSEL];if(!ks.length&&a!=='print'&&a!=='tour'){alert('Cochez d\'abord une ou plusieurs maisons.');return}
  if(a==='env')qualSet(ks,'env');else if(a==='ctl'){ctlAdd(ks)}else if(a==='tard'){ks.forEach(k=>laterSet(k,addDays(today(),30)))}
- else if(a==='ss')qualSet(ks,'ss');else if(a==='requal'){qualSet(ks,null);ks.forEach(k=>{if(LATER()[k])laterSet(k,null)})}
+ else if(a==='ss')qualSet(ks,'ss');else if(a==='requal'){qualSet(ks,null);for(const k of ks){if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&r0.s==='conforme')await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}}
  else if(a==='pdf')lettresGroupees(ks);
  else if(a==='sent'){for(const k of ks){const p=prop_(k);await logEnvoi(k,'courrier',p&&!p.l?'hors_zone':'bienveillant','Envoi groupé',today())}qualSet(ks,null)}
  else if(a==='rep')qualSet(ks,'rep');
