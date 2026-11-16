@@ -50,3 +50,6 @@ Disallow: /demo/
 Disallow: /OLD-demo/
 
 Sitemap: https://vb-safety.com/sitemap.xml
+
+# Index du site pour les moteurs de réponse : https://vb-safety.com/llms.txt
+# Texte intégral des pages de référence : https://vb-safety.com/llms-full.txt

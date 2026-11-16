@@ -2,6 +2,9 @@
 
 > VB Safety est une société française (SAS) qui développe des outils de détection et de traçabilité de l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les services d'incendie et de secours (SDIS) et leur service de santé (SSSM), VB CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, VB Safety aide à tenir la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP. Contenu en français.
 
+## Texte intégral
+- [llms-full.txt](https://vb-safety.com/llms-full.txt) : le contenu complet des pages de référence ci-dessous, en un seul fichier markdown.
+
 ## Secteurs
 - [Sapeurs-pompiers](https://vb-safety.com/sapeurs-pompiers/) : relevé d'exposition des sapeurs-pompiers aux fumées d'incendie, contrôle de la décontamination, transmission au SSSM, suivi des tenues de feu.
 - [BTP](https://vb-safety.com/btp/) : traçabilité CMR sur chantier (silice cristalline, poussières de bois, émissions diesel, HAP), liste des travailleurs exposés et fiches individuelles. Espace en préparation · accès anticipé.

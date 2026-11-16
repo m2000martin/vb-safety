@@ -1,0 +1,1486 @@
+# VB Safety
+
+> VB Safety est une société française (SAS) qui développe des outils de détection et de traçabilité de l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques (CMR). Pour les services d'incendie et de secours (SDIS) et leur service de santé (SSSM), VB CMR enregistre l'exposition de chaque sapeur-pompier après intervention. Pour l'industrie et le BTP, VB Safety aide à tenir la liste des travailleurs exposés, les fiches individuelles d'exposition et l'évaluation du risque chimique du DUERP. Contenu en français.
+
+Ce fichier contient le texte intégral des pages de référence de vb-safety.com.
+La carte du site se trouve dans https://vb-safety.com/llms.txt.
+
+---
+
+# Présentation
+
+## Source : https://vb-safety.com/
+
+## Détection et traçabilité de l'exposition aux risques — Les risques sont reconnus, nous les rendons visibles.
+
+VB Safety développe des outils de détection et de traçabilité de l'exposition aux risques naturels et aux agents cancérogènes.
+
+---
+
+# Secteurs
+
+## Source : https://vb-safety.com/sapeurs-pompiers/  ·  mise à jour : 2026-10-01
+
+## Traçabilité des expositions des sapeurs-pompiers — Chaque intervention laisse une trace. Nous la rendons visible.
+
+Le relevé d'exposition d'un sapeur-pompier enregistre, à chaque intervention, ce à quoi il a été exposé : feu, position tenue, durée, protection. VB Safety aide les SDIS à le tenir et à le transmettre au SSSM, avec [VB CMR, le logiciel de rapport de contamination pour SDIS](https://vb-safety.com/cmr-pompier/).
+
+### Un risque reconnu, des expositions encore mal tracées
+
+#### Une contamination que personne ne peut mesurer
+
+Rien, sur le terrain, ne dit ce qui reste de suies sur la peau d'un agent. L'exposition se devine à l'odeur, elle ne se mesure pas.
+
+#### Une décontamination impossible à confirmer
+
+Déshabillage, ensachage, lingettes, douche : les gestes sont prévus. Rien ne prouve qu'ils ont eu lieu, ni qu'ils ont suffi.
+
+#### Une exposition qui n'est pas tracée
+
+Le Sénat le constatait en 2024 : le remplissage des fiches d'exposition n'est « ni systématique, ni généralisé ». Sans relevé daté, une maladie tardive ne se rattache à rien.
+Source : [rapport du Sénat sur les cancers imputables à l’activité de sapeur-pompier, 2024](https://vb-safety.com/ressources/hap-sapeurs-pompiers/#sources).
+
+### L'intervention dure deux heures. La preuve doit durer quarante ans.
+
+- 01 **Intervention** Équipage et durée repris automatiquement
+- 02 **Décontamination** Renseignée au retour, validée par le commandement
+- 03 **Vérification** Décontamination vérifiée grâce au [capteur VB Safety](https://vb-safety.com/innovation/)
+- 04 **Fiche d'exposition** Transmise au SSSM
+- 05 **Suivi médical** Versé au dossier, conservé quarante ans
+- **Preuve disponible** Le jour où l'agent en a besoin
+- 01 **Intervention** L'engagement est noté, l'exposition ne l'est pas
+- 02 **Rien n'est noté** Ni la zone, ni la protection, ni la décontamination
+- 03 **Rien n'est vérifié** Personne ne sait si la décontamination a suffi
+- 04 **Rien n'est transmis** Le service de santé n'en sait rien
+- **Des années plus tard** Une maladie, aucune preuve d'exposition
+
+### Trois solutions pour la santé des sapeurs-pompiers
+
+Trois outils conçus avec des sapeurs-pompiers, qui suivent le circuit réel d'une intervention.
+
+#### Capteur de contamination terrain
+
+Une technologie de mesure terrain de contamination cutanée développée par VB Safety, complémentaire de VB CMR.
+- Résultat en quelques secondes, sans attendre un laboratoire
+- Essais en cours avec des sapeurs-pompiers
+
+#### Suivi CMR
+
+Le rapport de contamination de l'équipage, rempli en fin d'intervention par le chef d'agrès.
+- Rôle tenu, port de l'ARI, contamination et décontamination
+- Contrôlé, complété et validé par le SSSM
+
+#### Suivi des EPI
+
+Le suivi de la tenue de feu (veste, pantalon, cagoule, casque F1, rangers), rattachée aux interventions où elle a été portée.
+- Tenue ensachée sur place, rattachée au rapport
+- Lavage, désorption et remise en service tracés
+
+### 4 étapes après chaque intervention
+
+- Le CA ou le COS rédige Pour lui et son équipage : rôle tenu, port de l'ARI, degré de contamination, gestes de décontamination.
+- Le commandement vérifie Chaque intervention a-t-elle son rapport ? Le chef de centre voit ce qui manque et relance, sans accès aux données individuelles.
+- Le SSSM contrôle et complète Il consulte, corrige si besoin, ajoute les mesures et prélèvements, puis valide et verrouille le rapport.
+- L'agent garde sa preuve Il retrouve chaque exposition datée, son historique cumulé, et l'exporte à tout moment.
+
+### Ce que disent les textes
+
+- **2022** CIRC · monographie 132 Le métier classé cancérogène pour l'homme Preuves suffisantes pour le mésothéliome et le cancer de la vessie ; preuves limitées pour cinq autres cancers. [Lire la monographie du CIRC](https://www.ncbi.nlm.nih.gov/books/NBK597253/)
+- **2024** Décret n° 2024-307 En vigueur Une liste des travailleurs exposés aux CMR L'employeur tient une liste actualisée des travailleurs exposés ; les informations sont conservées au moins quarante ans. [Lire le décret sur Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748)
+- **2025** Proposition de loi Adoptée par le Sénat Un relevé d'exposition pour chaque sapeur-pompier Chaque SDIS devrait établir un relevé d'exposition pour tout sapeur-pompier professionnel ou volontaire exposé à des agents CMR, selon un modèle national. [Lire le texte adopté par le Sénat](https://www.senat.fr/leg/tas24-084.html)
+- **2025** Décret n° 2025-1349 En vigueur Maladies professionnelles : tableaux 16 bis et 30 Les travaux des sapeurs-pompiers sont inscrits dans les tableaux des suies de combustion et de l'amiante. [Lire le décret sur Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053176919)
+Le détail, les sources officielles et les gestes de décontamination : [maladies professionnelles des sapeurs-pompiers : cancers reconnus, tableaux et démarches](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html). Le suivi des tenues de feu : [module EPI](https://vb-safety.com/cmr-pompier/module-epi.html).
+
+### Ce que les SDIS nous demandent
+
+**Qui saisit les informations après une intervention ?**
+Le chef d'agrès ou le COS, pour lui et son équipage. Il connaît les rôles tenus, le port de l'ARI et les conditions de décontamination. L'agent n'a rien à saisir.
+
+**Où sont hébergées les données ?**
+La démonstration fonctionne sur un serveur situé en France, avec des données fictives. Pour un déploiement réel, les données d'exposition sont des données de santé : elles sont hébergées chez un hébergeur certifié HDS ou sur l'infrastructure du SDIS.
+
+**Les sapeurs-pompiers volontaires sont-ils concernés ?**
+Oui. Ils sont exposés aux mêmes fumées que les professionnels, et la proposition de loi adoptée par le Sénat en 2025 les inclut expressément.
+
+**L'outil peut-il s'adapter à notre SDIS ?**
+Oui : types d'intervention, protocole de décontamination, circuit de validation, rôles et formats d'export pour le SSSM sont configurables.
+
+**Comment tester la démonstration ?**
+Demandez un code d'accès depuis la page de la démo ou par le formulaire de contact. Chaque profil (agent, CA/COS, chef de centre, SSSM, référent EPI) est accessible avec des données fictives.
+
+### Une version configurable pour votre SDIS
+
+Testez la démonstration avec des données fictives. Nous adaptons ensuite l'outil à vos types d'intervention, votre protocole de décontamination, vos rôles et vos exports SSSM.
+
+### Autres secteurs
+
+## Source : https://vb-safety.com/industrie/  ·  mise à jour : 2026-10-01
+
+## Détection et traçabilité de l'exposition aux CMR dans l'industrie — Détecter l'exposition là où elle se produit.
+
+Un employeur dont les salariés manipulent des agents CMR doit évaluer le risque, tenir la liste des travailleurs exposés et la transmettre au service de santé au travail. VB Safety accompagne les équipes HSE avec une traçabilité réglementaire des expositions et une détection de la contamination chimique sur site.
+
+### Des expositions diffuses, des obligations renforcées
+
+#### Des expositions multiples
+
+Maintenance, nettoyage, usinage, soudage, travail du bois, engins et véhicules diesel : les expositions aux CMR se répartissent sur de nombreux postes et sous-traitants.
+
+#### Des exigences plus précises
+
+Depuis juillet 2024, la liste des travailleurs exposés doit indiquer, lorsqu'ils sont connus, la nature, la durée et le degré d'exposition de chacun.
+
+#### Des données rarement exploitables
+
+Mesures, fiches de poste et plannings sont dispersés : difficile de dire qui a été exposé, à quoi et combien de temps.
+
+### Tracer, mesurer, documenter
+
+Le même moteur d'exposition que nos espaces métier, adapté à vos postes, et une mesure terrain pour objectiver ce qui est déclaré.
+
+#### Traçabilité CMR
+
+Chaque tâche rattachée aux salariés concernés et aux agents CMR, avec un niveau d'exposition indicatif.
+- Saisie par tâche ou par poste, en langage courant
+- Liste des travailleurs exposés tenue à jour
+- Fiches individuelles d'exposition
+
+#### Mesure sur site
+
+Une technologie de mesure développée par VB Safety, complémentaire du suivi CMR.
+- Programme pilote avec des sites industriels
+- Présentation sur demande
+
+#### Données pour la santé au travail
+
+Des informations prêtes à transmettre au service de prévention et de santé au travail.
+- Exports par salarié et par période
+- Historique conservé dans la durée
+- Aucune donnée médicale stockée
+
+### Un déploiement progressif, site par site
+
+- Cartographier Postes, tâches et agents CMR concernés, à partir de votre évaluation des risques existante.
+- Saisir Les chefs d'équipe ou les HSE décrivent les tâches réalisées ; chaque salarié concerné est rattaché.
+- Mesurer Sur les sites pilotes, une mesure de contamination objective les situations à risque.
+- Documenter Liste des exposés et fiches individuelles se mettent à jour d'elles-mêmes.
+
+### Les obligations de l'employeur
+
+- **Code du travail** Art. R. 4412-59 et suivants En vigueur Prévention du risque CMR Évaluer les expositions, substituer quand c'est possible, réduire au niveau le plus bas techniquement possible, informer et former les salariés.
+- **2024** Décret n° 2024-307 En vigueur Liste des travailleurs exposés et valeurs limites Liste actualisée des travailleurs exposés aux agents cancérogènes, mutagènes et reprotoxiques, conservée au moins quarante ans ; valeurs limites renforcées pour le benzène, l'acrylonitrile et les composés du nickel. [Lire le décret sur Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748)
+Outil gratuit : [modèle de liste des travailleurs exposés](https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/). Le détail des obligations : [obligations de l'employeur face aux agents CMR](https://vb-safety.com/cmr-industrie/).
+
+### Ce que les équipes HSE nous demandent
+
+**Quels secteurs industriels sont concernés ?**
+Tous ceux où des salariés sont exposés à des agents CMR : métallurgie, chimie, maintenance, travail du bois, logistique avec engins diesel, traitement de surface, entre autres.
+
+**L'outil s'intègre-t-il à nos outils existants ?**
+Les imports (liste du personnel, postes, plannings) sont définis avec chaque site pilote, pour éviter toute double saisie.
+
+**Stockez-vous des données médicales ?**
+Non. L'outil documente des tâches, des durées, des agents et des protections. Le suivi médical reste celui du service de santé au travail.
+
+**Sur quelle technologie repose la mesure sur site ?**
+Il s'agit d'une mesure rapide sur place, en cours de validation. Le détail est partagé avec les sites pilotes, sous accord de confidentialité.
+
+**Comment démarrer ?**
+Décrivez-nous votre site et vos postes exposés par le formulaire de contact : nous proposons un pilote adapté.
+
+### Testez sur un de vos sites
+
+Traçabilité en préparation · accès anticipé, mesure sur site avec les premiers sites pilotes. Parlons de vos postes exposés.
+
+### Autres secteurs
+
+## Source : https://vb-safety.com/collectivites/
+
+## Les risques naturels de votre commune, anticipés depuis la mairie.
+
+Nous analysons les vues aériennes de votre commune pour repérer, maison par maison, **le débroussaillement à faire** et, en cas de tempête, **les arbres qui menacent routes et lignes**.
+- Débroussaillement (OLD)
+- Tempête et vents forts
+- Signalements des habitants
+
+### 4 étapes, sans visite préalable
+
+- Nous analysons votre commune À partir des vues aériennes et des relevés de l'IGN : végétation autour de chaque maison, arbres proches des routes et des lignes.
+- Vous voyez les maisons à risque Sur une carte, une fiche par maison, classée de la plus urgente à la moins urgente, selon les règles de votre département.
+- Un courrier détaillé par maison Il explique au propriétaire ce qu'il doit faire et pourquoi, avec la vue aérienne de sa maison. Rien ne part sans votre validation.
+- Tout est daté et suivi Courriers, réponses et relances sont conservés jusqu'à la mise en conformité. En cas de crise, les signalements s'ajoutent au même suivi.
+
+### Cliquez sur une maison.
+
+Exemple sur une commune fictive : choisissez une maison, puis ouvrez le courrier préparé pour son propriétaire.
+- **1**Cliquez sur une maison
+- **2**Ouvrez le courrier
+- **3**Validez l'envoi
+Village et données fictifs. Dans l'outil, chaque constat est daté et calculé à partir des relevés aériens de l'IGN, et chaque courrier explique au propriétaire quoi faire et pourquoi.
+
+### Les habitants signalent, vous coordonnez.
+
+[Tout sur la cellule de crise →](https://vb-safety.com/collectivites/cellule-de-crise/)
+
+### Les questions des élus.
+
+**Le constat remplace-t-il une visite ?**
+Non. C'est une estimation établie à distance sur des images datées, sans valeur de procès-verbal. Elle indique où contrôler en priorité ; un agent vérifie sur place avant toute mise en demeure.
+
+**Qui décide et qui envoie les courriers ?**
+La mairie. Le contrôle des obligations de débroussaillement relève du maire. L'outil prépare les courriers ; la mairie les valide, les signe et les envoie. Rien n'est envoyé automatiquement.
+
+**Qui voit les données ?**
+Les constats maison par maison ne sont visibles que par la mairie. Aucun nom de propriétaire n'est traité par VB Safety ; pour les données de la commune, nous agissons comme sous-traitant au sens du RGPD. [Conditions de service](https://vb-safety.com/collectivites/conditions/).
+
+**Que faut-il pour commencer ?**
+Rien à installer. Nous analysons la commune, la mairie consulte les résultats depuis un navigateur.
+Pour aller plus loin : [les obligations légales de débroussaillement](https://vb-safety.com/ressources/obligations-legales-debroussaillement/) · [la procédure de contrôle du maire](https://vb-safety.com/ressources/controle-old-maire/) · [contrôler le débroussaillement par imagerie](https://vb-safety.com/ressources/controle-satellite-debroussaillement/) · [anticiper le feu de forêt dans sa commune](https://vb-safety.com/ressources/anticiper-feu-de-foret-commune/).
+
+### Voyez votre commune dans l'outil.
+
+Nous préparons une démonstration avec les données de votre commune et vous la présentons, en mairie ou à distance.
+
+## Source : https://vb-safety.com/btp/  ·  mise à jour : 2026-10-01
+
+## Traçabilité CMR sur chantier et liste des travailleurs exposés — La traçabilité CMR se construit au fil des chantiers.
+
+Depuis juillet 2024, toute entreprise du BTP tient la liste de ses travailleurs exposés aux agents CMR, comme la silice cristalline ou les poussières de bois. Avec VB Safety, une phrase du chef d'équipe suffit : l'outil reconnaît les salariés, la tâche, la durée et la protection, puis tient la liste et les fiches individuelles à jour.
+
+### Des agents CMR au quotidien, une traçabilité de fin d'année
+
+#### Des expositions de tous les jours
+
+Découpe et perçage de béton ou de pierre (silice), travail du bois, engins diesel, anciens enrobés et goudrons (HAP) : les agents CMR font partie des tâches courantes.
+
+#### Une obligation qui repose sur la mémoire
+
+La liste des travailleurs exposés et les fiches se remplissent souvent a posteriori, à partir de souvenirs, au moment de mettre à jour le DUERP.
+
+#### Des documents attendus par la santé au travail
+
+Nature, durée et degré d'exposition doivent être transmis au service de prévention et de santé au travail, et conservés des décennies.
+
+### Une traçabilité pensée pour le chef d'équipe
+
+Pas de formulaire à rallonge : ce que l'équipe a réellement fait, saisi en une phrase, devient une traçabilité par salarié.
+
+#### Traçabilité par salarié
+
+Chaque tâche est rattachée aux agents CMR concernés et reçoit un niveau d'exposition indicatif.
+- Saisie en langage courant depuis le chantier
+- Reconnaissance des salariés, de la tâche, de la durée, du procédé et de la protection
+- Calendrier des jours non renseignés
+- Historique par salarié et par chantier
+
+#### Documents réglementaires
+
+Les documents se construisent au fil des saisies, prêts à transmettre.
+- Liste des travailleurs exposés
+- Fiche individuelle d'exposition par salarié
+- Évaluation du risque chimique pré-remplie
+- Base de travail pour la mise à jour du DUERP, validée par l'employeur
+
+#### Mesure sur chantier
+
+Une technologie de mesure développée par VB Safety, complémentaire du suivi CMR.
+- Pilotes avec des entreprises volontaires
+- Présentation sur demande
+
+### De la phrase du chef d'équipe au DUERP
+
+- Saisir depuis le chantier Le chef d'équipe décrit la tâche en une phrase, sur son téléphone. « Karim et Lucas, découpe parpaing 2 h à sec, FFP3 »
+- Tracer par salarié L'outil identifie les agents CMR concernés et attribue un niveau d'exposition indicatif à chaque salarié.
+- Documenter La liste des travailleurs exposés et les fiches individuelles se mettent à jour automatiquement.
+- Mettre à jour le DUERP L'évaluation du risque chimique est pré-remplie ; l'employeur la valide et l'intègre au document unique.
+
+### Les obligations de l'employeur
+
+- **Code du travail** Art. R. 4412-59 et suivants En vigueur Prévention du risque CMR Évaluer les expositions, substituer quand c'est possible, réduire au niveau le plus bas techniquement possible, informer et former les salariés.
+- **2021** Arrêté du 26 octobre 2020 En vigueur La silice cristalline classée cancérogène Les travaux exposant à la poussière de silice cristalline alvéolaire issue de procédés de travail figurent sur la liste des procédés cancérogènes depuis le 1er janvier 2021. [Lire l'arrêté sur Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042483502)
+- **2022** Décret n° 2022-395 En vigueur Le DUERP conservé 40 ans Les versions successives du document unique d'évaluation des risques sont conservées au moins quarante ans et tenues à disposition. [Lire le décret sur Légifrance](https://www.legifrance.gouv.fr/loda/id/JORFTEXT000045381978)
+- **2024** Décret n° 2024-307 En vigueur Une liste des travailleurs exposés aux CMR Liste actualisée des travailleurs susceptibles d'être exposés, avec la nature, la durée et le degré d'exposition lorsqu'ils sont connus ; conservée au moins quarante ans par le service de santé au travail. [Lire le décret sur Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748)
+Pour commencer dès aujourd'hui : [modèle gratuit de liste des travailleurs exposés](https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/). Toutes les obligations de l'employeur : [gestion du risque CMR en entreprise](https://vb-safety.com/cmr-industrie/).
+
+### Ce que les entreprises nous demandent
+
+**Faut-il installer une application ?**
+Non. L'espace industrie fonctionne dans le navigateur, sur téléphone comme sur ordinateur.
+
+**L'outil stocke-t-il des données médicales ?**
+Non. Il documente des tâches, des durées, des agents et des protections. Le suivi médical reste l'affaire du service de santé au travail.
+
+**Quels agents CMR sont couverts ?**
+La première version couvre les agents courants du BTP : silice cristalline, poussières de bois, émissions de moteurs diesel, HAP. Chaque version en ajoute.
+
+**Et l'amiante ?**
+L'amiante relève d'un régime spécifique (repérage, modes opératoires, suivi des interventions). Il n'est pas couvert par la première version.
+
+**Comment tester ?**
+L'espace industrie, qui couvre aussi le BTP, est en préparation · accès anticipé. Demandez un accès depuis sa page ou par le formulaire de contact. L'évaluation du risque chimique pour le DUERP est déjà disponible, gratuitement.
+
+### Suivez vos expositions chantier dans l'espace industrie
+
+L'espace industrie couvre aussi les entreprises du BTP : liste des salariés exposés, fiches, DUERP. Demandez un accès anticipé.
+
+### Autres secteurs
+
+---
+
+# Produits
+
+## Source : https://vb-safety.com/cmr-pompier/  ·  mise à jour : 2026-10-07
+
+## Logiciel VB CMR — Vos expositions CMR en intervention, suivies et tracées.
+
+À la fin de chaque intervention, le chef d'agrès ou le COS rédige le rapport de contamination de son équipage. Le commandement vérifie que tout est à jour, le SSSM contrôle et complète, chaque agent retrouve son historique.
+- **Hébergé en France** Serveur et base de données en France
+- **Accès par rôle** Chacun ne voit que ce qui le concerne
+- **Preuve individuelle** Chaque exposition datée et rattachée à l'agent
+- TB T. Bernard Chef d'agrès Faible Décontamination validée
+- AM A. Martin Binôme d'attaque Forte Décontamination validée
+- JL J. Leroy Binôme d'attaque Moyenne Décontamination validée
+- LD L. Dubois Conducteur Faible Décontamination à valider
+Démo · personnes et interventions fictives
+
+### L'essentiel de VB CMR
+
+#### Une exposition réelle et reconnue
+
+L'activité de sapeur-pompier est classée cancérogène pour l'homme (groupe 1) par le CIRC depuis 2022. Ce qui n'est pas noté le jour de l'intervention est perdu, pour le suivi médical comme pour une future reconnaissance en maladie professionnelle.
+
+#### 3 étapes après chaque intervention
+
+- 1 **Le CA ou le COS rédige le rapport CA / COS ** Pour lui et son équipage : rôles, port de l'ARI, degré de contamination et décontamination de chacun.
+- 2 **Le commandement vérifie Chef CI ** Chaque intervention a-t-elle son rapport ? À jour, en attente ou en retard, avec relance.
+- 3 **Le SSSM contrôle et complète SSSM ** Consulte, corrige si besoin, et suit l'historique de chaque agent.
+
+#### 4 engagements de confidentialité
+
+- **Hébergé en France** Serveur et sauvegardes en France, aucun traceur ni service tiers sur l'outil.
+- **Accès cloisonné par rôle** Les droits sont contrôlés par le serveur, pas seulement masqués à l'écran.
+- **L'agent garde la main** Il consulte et exporte son historique d'exposition à tout moment.
+- **Modifications tracées** Chaque consultation et chaque correction d'un rapport est journalisée.
+
+### L'intervention dure deux heures. La preuve doit durer quarante ans.
+
+- 01 **Intervention** Équipage et durée repris automatiquement
+- 02 **Décontamination** Renseignée au retour, validée par le commandement
+- 03 **Vérification** Décontamination vérifiée grâce au [capteur VB Safety](https://vb-safety.com/innovation/)
+- 04 **Fiche d'exposition** Transmise au SSSM
+- 05 **Suivi médical** Versé au dossier, conservé quarante ans
+- **Preuve disponible** Le jour où l'agent en a besoin
+- 01 **Intervention** L'engagement est noté, l'exposition ne l'est pas
+- 02 **Rien n'est noté** Ni la zone, ni la protection, ni la décontamination
+- 03 **Rien n'est vérifié** Personne ne sait si la décontamination a suffi
+- 04 **Rien n'est transmis** Le service de santé n'en sait rien
+- **Des années plus tard** Une maladie, aucune preuve d'exposition
+
+### Ce que la réglementation demande, VB CMR le produit
+
+Les rapports remplis après chaque intervention alimentent directement les documents attendus par les textes. Le médecin du SSSM contrôle, vise, puis télécharge.
+
+#### Relevé annuel et attestation d'exposition
+
+Un relevé annuel des activités exposantes par agent, avant la visite médicale, et une attestation cumulée à conserver 50 ans. Modèles distincts pour les professionnels et les volontaires.
+
+#### Formations, déblai et nettoyage comptent aussi
+
+Les tableaux de maladies professionnelles 16 bis et 30 visent la lutte contre l'incendie, y compris les formations exposantes, le déblai et le nettoyage du matériel.
+
+#### Liste des exposés et fiche individuelle
+
+Nature, durée et degré de chaque exposition aux agents CMR, transmis au service de santé et conservés au moins 40 ans.
+
+#### Liste des personnels exposés sur les interventions de grande ampleur
+
+Feu de forêt sur plusieurs jours, relèves, colonnes de renfort : qui était engagé, quand, combien de temps, et dans quelle zone.
+
+### Cinq rôles, chacun limité à ce qui le concerne
+
+Code incorrect.
+[Demander un accès](#demande) · [Devenir partenaire](#demande)
+
+### Une version configurable pour votre SDIS
+
+Chaque SDIS a ses procédures. Nous adaptons l'outil à votre organisation : types d'intervention, protocole de décontamination, rôles et circuit de validation, formats d'export pour votre SSSM.
+- Vos types d'intervention et votre vocabulaire
+- Votre protocole de décontamination
+- Votre organisation des rôles
+- Les exports attendus par votre SSSM
+L'indice d'exposition est indicatif : il ne constitue ni une mesure métrologique ni un avis médical. Cette version de démonstration n'est pas destinée à recevoir de données réelles.
+
+## Source : https://vb-safety.com/cmr-pompier/module-epi.html  ·  mise à jour : 2026-10-01
+
+## Suivi de la contamination des tenues de sapeurs-pompiers — Module EPI
+
+Suivre la contamination de vos EPI après chaque intervention.
+Un suivi simple de l'utilisation, de la contamination, du nettoyage et de la remise en service de la tenue de feu (veste, pantalon, cagoule, casque F1 et rangers), relié aux rapports d'intervention de VB CMR.
+- **Réduire les risques** Limiter les expositions secondaires aux agents CMR.
+- **Suivi complet** Utilisation, contamination, nettoyage, remplacement.
+- **Preuve de traçabilité** Pour le suivi médical et la prévention.
+
+### 4 étapes, du feu au magasin
+
+- ** **
+- ** **
+- ** **
+- ** **
+Code incorrect.
+[Demander un accès](#demande) · [Devenir partenaire](#demande)
+- **Veste de feu** Premier écran contre les fumées et les suies.
+- **Pantalon de feu** Exposé au sol, au déblai et aux eaux d'extinction.
+- **Cagoule de feu** Au contact direct du cou et du visage.
+- **Casque F1** Coque, visière et bavolet chargés en suies.
+- **Rangers incendie** Suies et eaux d'extinction ramenées au centre.
+
+### Un circuit clair, sans ressaisie
+
+### Essayez le module EPI
+
+Un module à part, réservé au référent EPI de chaque caserne : agents à rééquiper, changements de tenue, lavages et seuil d'alerte. Conçu avec des sapeurs-pompiers et des responsables habillement.
+
+## Source : https://vb-safety.com/cmr-pompier/securite-donnees.html  ·  mise à jour : 2026-10-01
+
+## Sécurité et données de santé
+
+Les données d'exposition d'un sapeur-pompier sont des données de santé, à conserver des décennies. Voici comment VB CMR les protège, et ce qui change entre la démonstration et la version de votre SDIS.
+
+#### Hébergement certifié HDS
+
+En production, les données sont hébergées en France chez un hébergeur certifié pour les données de santé, ou sur l'infrastructure de votre SDIS si elle le permet. La démonstration actuelle ne contient aucune donnée réelle.
+
+#### Chacun ne voit que ce qui le concerne
+
+L'exposition individuelle est réservée à l'agent et au SSSM. Le commandement voit l'état des rapports, jamais leur contenu. L'administrateur peut restreindre les accès, jamais les élargir. Les règles sont appliquées par le serveur.
+
+#### Accès et corrections journalisés
+
+Chaque consultation et chaque correction d'un rapport est enregistrée. Une fois validé par le médecin, le rapport est verrouillé. Les relevés annuels portent le visa du médecin et sa date.
+
+#### Conservation sur toute une carrière
+
+Au moins 40 ans pour les données d'exposition aux agents CMR (code du travail, R. 4412-93-3), 50 ans pour l'attestation d'exposition (circulaire DGSCGC du 14 janvier 2025). Les formats d'export restent ouverts : CSV et PDF.
+
+#### Analyse d'impact préparée avec votre DPO
+
+Nous fournissons la description du traitement, le registre et le modèle d'analyse d'impact (AIPD). Aucun traceur, aucun service publicitaire. Les agents sont informés de leurs droits.
+
+#### Vos données restent les vôtres
+
+Les données appartiennent au SDIS. Elles s'exportent à tout moment, en entier, dans des formats ouverts. Le contrat prévoit leur restitution et leur effacement en fin de service.
+
+#### Aucune donnée d'exposition envoyée à l'IA
+
+L'assistant ouvre, cherche et explique. Il ne reçoit que la phrase de l'utilisateur, jamais ses données d'exposition. Il ne remplit et ne valide rien, et l'administrateur peut le désactiver.
+
+#### Formats nationaux et exports ouverts
+
+Réception des interventions au format national d'échange (CISU, utilisé par NexSIS), export des mouvements de tenues pour votre logiciel d'habillement, exports CSV pour le SSSM.
+
+### Démonstration et version SDIS
+
+La démonstration sert à voir l'outil. La version de votre SDIS est installée sur un hébergement adapté, avec vos comptes et vos paramètres.
+
+## Source : https://vb-safety.com/cmr-industrie/  ·  mise à jour : 2026-10-01
+
+Conformité Prévention Santé des travailleurs
+
+## Obligations de l'employeur face aux agents CMR Maîtrisez vos obligations CMR en toute simplicité
+
+Inventaire des agents, liste nominative des salariés exposés, contrôles VLEP, suivi individuel renforcé et hiérarchie de prévention : toutes les obligations de l'employeur face aux agents cancérogènes, mutagènes et reprotoxiques, au même endroit.
+- Conformité réglementaire
+- Protection de vos équipes
+- Traçabilité sur 40 ans
+
+##### Évolution des expositions
+
+##### Statut de conformité
+
+- Inventaire
+- Liste nominative
+- Mesures VLEP
+- Suivi médical
+- Transmission SPST
+
+#### Inventorier
+
+Recensez toutes les substances, procédés et sous-produits CMR émis par votre activité.
+
+#### Suivre vos salariés
+
+Tenez une liste nominative actualisée des salariés exposés : nature, durée, degré.
+
+#### Assurer la traçabilité
+
+Conservez l'historique pendant 40 ans et transmettez-le au service de prévention et de santé au travail.
+
+#### Piloter la prévention
+
+Appliquez la hiérarchie de prévention et suivez vos contrôles VLEP et vos plans d'action.
+- Industrie
+- Automobile, garages
+- Construction
+- Chimie
+- Agro­alimentaire
+- Métallurgie
+- Bois
+- Santé, laboratoires
+- Logistique
+- Et bien d'autres
+
+### Évaluation et traçabilité des expositions CMR
+
+Savoir quels agents CMR sont présents, qui y est exposé, dans quelles conditions, et garder cette information pendant des décennies : c'est le socle de toutes les autres obligations.
+
+#### Inventaire
+
+Recenser toutes les substances, mélanges, procédés et sous-produits cancérogènes, mutagènes ou toxiques pour la reproduction présents ou émis, et évaluer la nature, le degré et la durée des expositions.
+
+#### Liste nominative
+
+Tenir une liste actualisée des salariés susceptibles d'être exposés, avec les agents concernés et, lorsqu'ils sont connus, la nature, la durée et le degré de leur exposition.
+
+#### Conservation 40 ans
+
+Les informations d'exposition sont conservées au moins quarante ans.
+
+#### Transmission
+
+Transmettre la liste au service de prévention et de santé au travail (SPST), informer chaque salarié des données qui le concernent et communiquer une version anonyme au CSE.
+
+### La hiérarchie de prévention, dans l'ordre
+
+Pour les agents CMR, les mesures ne se choisissent pas : la loi impose un ordre. On ne passe à l'étape suivante que si la précédente est techniquement impossible.
+Du plus efficace au dernier recours
+Remplacer obligatoirement l'agent CMR par une substance, un mélange ou un procédé non ou moins dangereux, dès que c'est techniquement possible. L'employeur consigne les résultats de ses recherches.
+Si la substitution est impossible, la production et l'utilisation de l'agent CMR ont lieu dans un système clos.
+Réduire au niveau le plus bas techniquement possible les quantités utilisées, le nombre de salariés exposés et l'intensité de l'exposition : captage à la source, zones délimitées, signalisation, mesures d'hygiène.
+Privilégier les protections collectives et l'hygiène. Les équipements de protection individuelle viennent en dernier recours, quand l'exposition ne peut pas être évitée autrement.
+
+### Contrôles, suivi médical et interdictions
+
+Mesurer régulièrement, suivre la santé des salariés exposés et vérifier que personne n'est affecté à un poste qui lui est interdit.
+
+#### Contrôles des VLEP
+
+Faire vérifier au moins une fois par an le respect des valeurs limites d'exposition professionnelle (VLEP) par un organisme accrédité. En cas de dépassement d'une valeur contraignante, le travail est arrêté aux postes concernés jusqu'à la mise en place de mesures correctives.
+
+#### Suivi individuel renforcé
+
+Les salariés exposés à des agents CMR bénéficient d'un suivi individuel renforcé (SIR) : examen médical d'aptitude avant l'affectation, puis renouvellement par le médecin du travail au moins tous les quatre ans, avec une visite intermédiaire au plus tard au bout de deux ans.
+
+#### Interdictions d'affectation
+
+- **Jeunes de moins de 18 ans** : travaux exposant à des agents chimiques dangereux interdits, sauf dérogation encadrée pour la formation (art. D. 4153-17).
+- **Femmes enceintes ou allaitantes** : pas d'affectation aux postes exposant aux agents toxiques pour la reproduction de catégorie 1A ou 1B, au benzène et à certains dérivés aromatiques (art. D. 4152-10).
+- **CDD et intérimaires** : certains travaux exposant à des agents très dangereux leur sont interdits (art. D. 4154-1).
+
+### Les textes à connaître
+
+Le risque CMR relève de règles particulières du code du travail, plus strictes que celles des autres agents chimiques dangereux, et régulièrement renforcées.
+- **Directive 2004/37/CE** Union européenne Le cadre européen des agents cancérogènes et mutagènes Modifiée à plusieurs reprises, elle couvre aussi les substances toxiques pour la reproduction depuis la directive (UE) 2022/431, et fixe des valeurs limites contraignantes.
+- **Art. R. 4412-59 à R. 4412-93** Code du travail Les règles particulières de prévention des risques CMR Évaluation, substitution, système clos, réduction de l'exposition, contrôles des VLEP, information, formation et traçabilité.
+- **1er janvier 2021** Arrêté du 26 octobre 2020 La liste des procédés cancérogènes s'allonge La liste des substances, mélanges et procédés cancérogènes intègre notamment les travaux exposant à la poussière de silice cristalline alvéolaire issue de procédés de travail.
+- **5 juillet 2024** Décret n° 2024-307 La liste des travailleurs exposés aux CMR Liste actualisée des salariés exposés avec la nature, la durée et le degré d'exposition, transmise au SPST et conservée au moins quarante ans. Le décret renforce aussi les valeurs limites du benzène, de l'acrylonitrile et des composés du nickel.
+C'est l'amende encourue pour une infraction aux règles de santé et de sécurité, appliquée autant de fois qu'il y a de salariés concernés (art. L. 4741-1 du code du travail). La responsabilité de l'employeur peut aussi être engagée au titre de la faute inexcusable en cas de maladie professionnelle.
+
+### Un portail pour tenir chaque obligation
+
+Chaque écran répond à une obligation précise, et produit la preuve qui va avec.
+
+#### Inventaire des agents CMR
+
+Substances et mélanges classés H340, H350 ou H360, procédés cancérogènes et sous-produits émis, par site et par poste.
+
+#### Liste nominative des exposés
+
+Construite à partir des postes et des tâches, avec nature, durée et degré d'exposition, et mise à jour en continu.
+
+#### Mesures et VLEP
+
+Calendrier des contrôles annuels, résultats de l'organisme accrédité, comparaison aux valeurs limites et alertes.
+
+#### Suivi individuel renforcé
+
+Échéances des visites de chaque salarié exposé, à partager avec le SPST, sans stocker de donnée médicale.
+
+#### Plan de prévention
+
+Études de substitution, mesures collectives et EPI organisés selon la hiérarchie de prévention, avec responsables et échéances.
+
+#### Documents et exports
+
+Liste pour le SPST, fiche individuelle par salarié, version anonymisée pour le CSE, archivage 40 ans.
+
+### Une mise en conformité en 4 étapes
+
+- **Inventorier** Importez vos fiches de données de sécurité et décrivez vos procédés : les agents CMR sont identifiés et rattachés aux postes.
+- **Rattacher les salariés** Chaque salarié est associé à ses postes et tâches. La liste nominative se construit d'elle-même.
+- **Prévenir et mesurer** Plan de prévention, contrôles VLEP et échéances de suivi médical suivis au même endroit, avec alertes.
+- **Transmettre et archiver** Exports pour le SPST et le CSE, informations individuelles pour chaque salarié, conservation pendant 40 ans.
+
+### Agents CMR : ce que les employeurs nous demandent
+
+**Qu'est-ce qu'un agent CMR ?**
+Un agent cancérogène, mutagène ou toxique pour la reproduction. Le code du travail vise les substances et mélanges classés dans les catégories 1A ou 1B (mentions de danger H350, H340 ou H360), ainsi que les substances, mélanges et procédés listés par arrêté, comme les travaux exposant aux poussières de bois ou à la silice cristalline alvéolaire.
+
+**Quelles sont les obligations de l'employeur face au risque CMR ?**
+Évaluer les expositions, substituer l'agent dès que c'est techniquement possible, à défaut travailler en système clos, réduire l'exposition au niveau le plus bas possible, privilégier les protections collectives, contrôler les VLEP au moins une fois par an, informer et former les salariés, assurer leur suivi individuel renforcé et tenir la liste des travailleurs exposés.
+
+**Que doit contenir la liste des travailleurs exposés aux CMR ?**
+L'identité de chaque salarié susceptible d'être exposé, les agents CMR concernés et, lorsqu'ils sont connus, la nature, la durée et le degré de l'exposition. Cette obligation s'applique depuis le 5 juillet 2024.
+
+**Combien de temps faut-il conserver les données d'exposition ?**
+Au moins quarante ans pour les informations relatives à l'exposition aux agents CMR, conservées par le service de prévention et de santé au travail.
+
+**À qui transmettre la liste des salariés exposés ?**
+Au service de prévention et de santé au travail (SPST), qui l'intègre au dossier médical en santé au travail. Chaque salarié est informé des données qui le concernent, et le CSE reçoit une version anonyme.
+
+**À quelle fréquence contrôler les VLEP ?**
+Au moins une fois par an, par un organisme accrédité, ainsi qu'après toute modification des installations ou des conditions de travail susceptible d'avoir un effet sur l'exposition.
+
+**Qui peut être affecté à un poste exposant à des agents CMR ?**
+Les travaux exposant à des agents chimiques dangereux sont interdits aux jeunes de moins de 18 ans, sauf dérogation encadrée pour la formation. Les femmes enceintes ou allaitantes ne peuvent pas être affectées aux postes exposant aux agents toxiques pour la reproduction de catégorie 1A ou 1B. Certains travaux très dangereux sont interdits aux CDD et aux intérimaires.
+
+**Le portail stocke-t-il des données médicales ?**
+Non. Il gère des agents, des postes, des expositions et des échéances. Les résultats médicaux restent chez le médecin du travail.
+
+**Quand le portail sera-t-il disponible ?**
+Il est en cours de conception avec des équipes HSE. Demandez un accès anticipé : nous vous présentons la solution et vous ouvrons un accès parmi les premiers.
+
+### Voyez le portail avec une entreprise fictive
+
+Nous construisons le portail avec quelques entreprises pilotes. Présentez-nous votre site et vos postes exposés : nous l'adaptons à vos besoins.
+- Présentation personnalisée
+- Import de votre inventaire existant
+- Conditions préférentielles pour les pilotes
+- Hébergement en France
+
+### Références officielles
+
+- [INRS · Cancers professionnels, réglementation](https://www.inrs.fr/risques/cancers-professionnels/reglementation.html)
+- [INRS · Risques chimiques, réglementation](https://www.inrs.fr/risques/chimiques/reglementation.html)
+- [DREETS · Traçabilité de l'exposition des travailleurs aux agents CMR](https://bourgogne-franche-comte.dreets.gouv.fr/tracabilite-de-lexposition-des-travailleurs-aux-agents-chimiques-cancerogenes-mutagenes-ou-toxiques-pour-la-reproduction-0)
+- [Code du travail numérique · article R. 4412-68 (système clos)](https://code.travail.gouv.fr/code-du-travail/r4412-68)
+- [Code du travail numérique · article D. 4152-10 (femmes enceintes et allaitantes)](https://code.travail.gouv.fr/code-du-travail/d4152-10)
+- [Légifrance · arrêté du 26 octobre 2020, liste des procédés cancérogènes](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042483502)
+- [Carsat Rhône-Alpes · agents CMR, obligations de l'employeur](https://www.carsat-ra.fr/files/live/sites/carsat-ra/files/pdf_illustrations/entreprise/Documentation/sp1128.pdf)
+Cette page est une synthèse d'information générale. Elle ne remplace ni les textes officiels ni l'avis de votre service de prévention et de santé au travail. Mise à jour le 29 septembre 2026.
+
+## Source : https://vb-safety.com/innovation/  ·  mise à jour : 2026-10-30
+
+## Qualité laboratoire. En quelques secondes.
+
+Contrôle de la contamination cutanée sur le terrain, sans attendre le retour d'un laboratoire.
+
+---
+
+# Guides
+
+## Source : https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html  ·  mise à jour : 2026-10-21
+
+- [L'essentiel](#essentiel)
+- [Fumées d'incendie](#fumees)
+- [Feux de forêt](#forets)
+- [PFAS et tenues](#pfas)
+- [Cancers reconnus](#cancers)
+- [Démarches](#demarches)
+- [Volontaires](#volontaires)
+- [Ce que dit la loi](#loi)
+- [Décontamination](#decontamination)
+- [Suivi médical](#suivi)
+- [Questions fréquentes](#faq)
+- [Sources](#sources)
+
+### L'essentiel en 4 points
+
+- **Groupe 1 du CIRC.** Depuis juin 2022, l'exposition professionnelle en tant que pompier est classée « cancérogène pour l'homme ».
+- **Deux cancers établis.** Mésothéliome et cancer de la vessie ; cinq autres cancers avec des preuves limitées.
+- **Maladies professionnelles.** Depuis le décret du 26 décembre 2025, la lutte contre l'incendie figure dans le tableau n° 16 bis (tumeurs de la vessie et des voies urinaires) et dans le tableau n° 30 (amiante, dont le mésothéliome).
+- **Tracer, pour prouver.** Sans relevé d'exposition daté et individuel, le lien entre une maladie et des interventions anciennes reste très difficile à établir.
+
+### Ce que contient une fumée d'incendie
+
+Une fumée d'incendie est un mélange de gaz, de vapeurs et de particules dont la composition dépend de ce qui brûle : mobilier, plastiques, isolants, carburants, batteries, végétation. Elle contient des centaines de composés, dont plusieurs sont cancérogènes, mutagènes ou toxiques pour la reproduction (CMR).
+
+#### Les principales familles d'agents CMR
+
+Combustion incomplète de toute matière organique : les suies.
+Plastiques, carburants, bois, mousses.
+Combustion de matières chlorées comme le PVC.
+Bois traités, peintures, équipements électriques, batteries.
+Bâtiments construits avant 1997.
+Certains émulseurs et textiles ; classé cancérogène (groupe 1) par le CIRC depuis 2023.
+S'y ajoutent des gaz à toxicité aiguë, comme le monoxyde de carbone et le cyanure d'hydrogène, qui relèvent de l'intoxication immédiate plutôt que du risque cancérogène.
+
+#### Trois voies d'exposition
+
+ARI retiré trop tôt, déblai, feux de végétation où l'ARI n'est généralement pas porté, tenues qui continuent de dégazer.
+Les suies se déposent au cou, à la mâchoire, aux poignets. L'absorption augmente avec la chaleur et la transpiration.
+Mains, gourdes ou nourriture consommées sans nettoyage préalable.
+L'exposition ne s'arrête donc pas à l'extinction. Le déblai, le retour en engin avec une tenue souillée, le stockage des EPI en remise ou à domicile prolongent le contact avec les polluants. C'est l'objet du [module EPI de suivi des tenues de feu](module-epi.html).
+Schéma de principe, sans valeurs mesurées : l'exposition ne s'arrête pas à l'extinction. Les gestes de décontamination font la différence après le feu.
+
+### Feux de forêt et de végétation : une exposition à part
+
+L'Agence nationale de sécurité sanitaire (ANSES) a consacré un rapport d'expertise à la pollution liée aux incendies de végétation et à ses effets sur la santé, y compris celle des intervenants [[a]](#src-anses) .
+- **Un mélange de polluants :** particules fines (PM 2,5 et PM 10 ), monoxyde de carbone, oxydes d'azote, composés organiques volatils et hydrocarbures aromatiques polycycliques (HAP). Leur composition varie selon la végétation, les conditions de combustion et l'humidité de l'air.
+- **Des particules cancérogènes :** le CIRC classe la pollution de l'air extérieur et les particules qu'elle contient comme cancérogènes pour l'homme (groupe 1, 2013) [[b]](#src-circ2013) .
+- **Tous les personnels sous le panache :** selon l'ANSES, l'exposition ne concerne pas seulement les équipes au contact du feu, mais aussi les conducteurs d'engins, la chaîne de commandement et les personnels de santé présents dans la zone de retombée des fumées.
+- **Des protections insuffisantes :** l'ANSES rapporte qu'une évaluation du laboratoire CEREN a conclu que les cagoules disponibles pour les feux de forêt ne filtrent ni les particules fines ni les composés chimiques des fumées.
+Les travaux de lutte contre les incendies naturels figurent dans les tableaux de maladies professionnelles modifiés par le décret du 26 décembre 2025 : **tracer les feux de végétation compte autant que les feux urbains**.
+
+### PFAS : émulseurs et tenues de feu
+
+Les PFAS, dits « polluants éternels », sont des composés fluorés très persistants. Le magazine de l'INRS Travail et Sécurité relève deux sources d'exposition chez les pompiers : les **mousses anti-incendie** et les **équipements imperméabilisés et ignifugés**, dont les tenues d'intervention [[c]](#src-inrs-pfas) .
+Acide perfluorooctanoïque, classé cancérogène pour l'homme [[d]](#src-circ135) .
+Sulfonate de perfluorooctane, classé peut-être cancérogène pour l'homme [[d]](#src-circ135) .
+Pour la traçabilité, l'usage de mousses fluorées lors d'une intervention mérite d'être noté dans le relevé d'exposition, au même titre que les fumées.
+
+### Les cancers reconnus chez les sapeurs-pompiers
+
+#### Le classement du CIRC (2022)
+
+En juin 2022, un groupe de travail du Centre international de recherche sur le cancer (CIRC), l'agence spécialisée de l'OMS, a classé l'exposition professionnelle en tant que pompier dans le groupe 1, « cancérogène pour l'homme » (monographie 132). C'est le niveau de preuve le plus élevé ; auparavant, le métier était classé « peut-être cancérogène » (groupe 2B).
+- **Preuves suffisantes :** mésothéliome, cancer de la vessie.
+- **Preuves limitées :** cancer du côlon, de la prostate, du testicule, mélanome, lymphome non hodgkinien.
+
+#### Cancer par cancer : ce que disent le CIRC et les tableaux
+
+Sources : CIRC, monographie 132 [[e]](#src-circ132) ; INRS, tableau n° 16 bis [[f]](#src-inrs16) et n° 30 [[i]](#src-inrs30) ; décret n° 2025-1349. Les autres cancers ne figurent pas parmi ceux retenus par le CIRC en 2022. « Au cas par cas » : hors tableau, il faut établir le lien avec le service devant le conseil médical pour un sapeur-pompier professionnel (voir [les démarches](#demarches)), ce qui suppose de pouvoir documenter les expositions.
+
+#### La reconnaissance en maladie professionnelle en France
+
+Le décret n° 2025-1349 du 26 décembre 2025, publié au Journal officiel le 29 décembre 2025, a modifié deux tableaux de maladies professionnelles du code de la sécurité sociale pour y inscrire les travaux des sapeurs-pompiers : lutte contre les incendies urbains, ruraux et naturels, formations exposant aux mêmes risques, déblai, sauvetage après effondrement et nettoyage du matériel.
+- **Tableau n° 16 bis** (goudrons, huiles, brais et suies de combustion) : la lutte contre l'incendie est ajoutée à la liste limitative des travaux pour une seule maladie, la tumeur primitive de l'épithélium urinaire (vessie, voies excrétrices supérieures). Les cancers de la peau et broncho-pulmonaires du même tableau ne visent pas ces travaux.
+- **Tableau n° 30** (poussières d'amiante) : la lutte contre l'incendie et le sauvetage-déblaiement après effondrement entrent dans la liste indicative des travaux, pour toutes les maladies du tableau, dont le mésothéliome et les cancers broncho-pulmonaires et pleuraux liés à l'amiante.
+Être inscrit dans un tableau crée une présomption d'origine professionnelle lorsque les conditions du tableau sont remplies. Encore faut-il pouvoir montrer que l'agent a bien effectué ces travaux, et pendant combien de temps : c'est tout l'enjeu de la traçabilité.
+
+### Faire reconnaître une maladie professionnelle quand on est sapeur-pompier
+
+Les tableaux fixent pour chaque maladie un délai de prise en charge (temps maximal entre la fin de l'exposition et la première constatation médicale) et, souvent, une durée d'exposition minimale. Pour les maladies où la lutte contre l'incendie est désormais inscrite :
+Sources : INRS, tableaux n° 16 bis [[f]](#src-inrs16) et n° 30 [[i]](#src-inrs30) du régime général, dans leur version issue du décret n° 2025-1349.
+
+#### Sapeurs-pompiers professionnels
+
+Les sapeurs-pompiers professionnels sont des fonctionnaires territoriaux. La reconnaissance relève de l'article L. 822-20 du code général de la fonction publique et ouvre droit au congé pour invalidité temporaire imputable au service (CITIS) : traitement maintenu, frais médicaux pris en charge [[j]](#src-citis) .
+- **Maladie d'un tableau, conditions remplies :** elle est présumée imputable au service.
+- **Maladie d'un tableau, une condition manque** (délai, durée d'exposition ou liste limitative des travaux) : la reconnaissance reste possible si l'agent établit que la maladie est directement causée par l'exercice de ses fonctions.
+- **Maladie hors tableau** (côlon, prostate, testicule, mélanome, lymphome non hodgkinien…) : l'agent doit établir qu'elle est essentiellement et directement causée par ses fonctions et qu'elle entraîne une incapacité permanente d'au moins 25 %.
+- **Conseil médical :** dans ces deux derniers cas, l'employeur doit saisir le conseil médical en formation plénière avant tout refus.
+- **Délais :** la déclaration est à faire dans les deux ans suivant la première constatation médicale de la maladie, ou la date à laquelle un certificat médical informe l'agent du lien possible avec son activité. L'employeur dispose de deux mois pour instruire, jusqu'à cinq mois en cas d'expertise ou de saisine du conseil médical.
+
+#### Sapeurs-pompiers volontaires
+
+Les volontaires relèvent d'un régime propre, fixé par la loi n° 91-1389 du 31 décembre 1991 relative à leur protection sociale en cas d'accident survenu ou de maladie contractée en service, et pris en charge par le SDIS [[k]](#src-spv) . Le décret du 26 décembre 2025 vise les professionnels comme les volontaires. La demande se fait auprès du SDIS d'engagement.
+
+#### Les pièces qui font la différence
+
+- **Le certificat médical** qui constate la maladie.
+- **Les états de service :** ils établissent la durée d'exposition, par exemple les dix ans exigés pour le cancer de la vessie.
+- **Les relevés d'exposition :** interventions datées, nature du feu, rôle tenu, port de l'ARI, durée d'engagement, décontamination. La circulaire DGSCGC du 14 janvier 2025 prévoit un relevé annuel et une attestation d'activités.
+- **Pour une maladie hors tableau :** tout élément qui documente l'intensité et la répétition des expositions, puisque c'est à l'agent d'établir le lien.
+Ces pièces sont demandées des années, parfois des décennies, après les interventions. Un relevé rempli le soir même, conservé quarante ans, est ce qui permet de les produire.
+
+### Les sapeurs-pompiers volontaires
+
+Au 31 décembre 2024, la France comptait 256 400 sapeurs-pompiers, dont 198 900 volontaires, soit 78 % des effectifs [[h]](#src-dgscgc) . Ils combattent les mêmes feux et respirent les mêmes fumées que les professionnels. Pour reconstituer leurs expositions des années plus tard, un relevé individuel qui les suit tout au long de leur engagement est leur meilleure garantie.
+
+### Ce que dit la loi sur le suivi des expositions CMR
+
+- **1985** Socle En vigueur Le code du travail s'applique aux SDIS Les règles de prévention du risque CMR (articles R. 4412-59 et suivants du code du travail) s'appliquent aux collectivités territoriales et à leurs établissements publics, dont les SDIS, par le décret n° 85-603 du 10 juin 1985 : évaluer les expositions, les réduire au plus bas, informer les agents.
+- **Avril 2024** Décret n° 2024-307 En vigueur depuis le 5 juillet 2024 Une liste des travailleurs exposés, conservée 40 ans Transposition de la directive européenne sur les agents cancérogènes, mutagènes et reprotoxiques. L'employeur tient une liste actualisée des travailleurs susceptibles d'être exposés, avec les agents concernés et, lorsqu'ils sont connus, la nature, la durée et le degré d'exposition. Le service de santé au travail la conserve au moins quarante ans.
+- **Janvier 2025** DGSCGC Diffusé Des modèles nationaux pour les sapeurs-pompiers La direction générale de la sécurité civile diffuse des modèles de synthèse annuelle et d'attestation d'activités, pour recenser les interventions exposant à des facteurs de risque.
+- **Mars 2025** Proposition de loi Adoptée par le Sénat · transmise à l'Assemblée Un relevé d'exposition obligatoire Chaque SDIS devrait établir un relevé d'exposition pour tout sapeur-pompier, professionnel ou volontaire, exposé à des agents CMR dans le cadre de ses fonctions, selon un modèle national.
+- **Décembre 2025** Décret n° 2025-1349 En vigueur depuis le 29 décembre 2025 Les tableaux de maladies professionnelles évoluent Les travaux des sapeurs-pompiers sont inscrits dans les tableaux n° 16 bis (suies de combustion) et n° 30 (amiante).
+
+#### Le constat : une traçabilité encore très inégale
+
+Déclarations de maladie professionnelle de sapeurs-pompiers enregistrées par la CNRACL en 2023, soit 0,55 % de la sinistralité. La mission d'information du Sénat relevait en 2024 qu'une fiche d'exposition n'était pas systématiquement remplie et que seuls certains départements traçaient les expositions.
+
+### Décontamination : les gestes qui réduisent l'exposition
+
+Le guide de doctrine opérationnelle de la DGSCGC, « Prévention des risques liés à la toxicité des fumées » (2018, mis à jour en 2020), organise la prévention avant, pendant et après l'intervention. Chaque SDIS le décline dans ses propres protocoles. Les principes communs :
+- Garder l'ARI jusqu'à la sortie de la zone, y compris pendant le déblai quand c'est possible.
+- Limiter le nombre de personnels exposés et le temps passé dans les fumées.
+- Se déshabiller dans une zone dédiée, de préférence à l'air libre.
+- Ensacher les EPI souillés et les transporter hors de la cabine.
+- Nettoyer visage, cou et mains avec des lingettes adaptées.
+- Se doucher au plus tôt et changer de tenue.
+- Laver les EPI avant toute réutilisation, sans les ramener à domicile.
+- Ne pas boire ni manger avant de s'être lavé les mains.
+Pour le détail sur les HAP et la peau, voir notre page [HAP et sapeurs-pompiers](https://vb-safety.com/ressources/hap-sapeurs-pompiers/). Tracer ces gestes a un double intérêt : vérifier qu'ils sont réellement appliqués, et documenter l'exposition résiduelle de chaque agent quand ils ne l'ont pas été.
+
+### Le suivi médical, sur des décennies
+
+Les cancers liés aux fumées d'incendie apparaissent souvent plusieurs décennies après les expositions, parfois bien après la fin de l'engagement. Le service de santé et de secours médical (SSSM) assure la surveillance médicale des sapeurs-pompiers ; pour qu'elle soit adaptée, il doit savoir qui a été exposé, à quoi et combien de fois.
+- **Adapter la surveillance :** repérer les agents les plus exposés et adapter les examens.
+- **Prouver l'exposition :** fournir, des années plus tard, les éléments nécessaires à une demande de reconnaissance.
+- **Améliorer la prévention :** identifier les types de feux, les postes et les pratiques les plus exposants.
+- **Couvrir les volontaires :** les sapeurs-pompiers volontaires, qui représentent la grande majorité des effectifs, sont concernés au même titre que les professionnels.
+
+#### Le relevé se fait le soir même, sans ressaisie
+
+Le chef d'agrès ou le COS remplit le rapport de contamination de son équipage en fin d'intervention. Le commandement voit ce qui manque, le SSSM contrôle et complète, et chaque agent conserve l'historique de ses expositions.
+
+### Questions fréquentes
+
+**Les feux de forêt exposent-ils aussi aux cancérogènes ?**
+Oui. Selon l'ANSES, la fumée de végétation contient des particules fines, du monoxyde de carbone, des oxydes d'azote, des composés organiques volatils et des HAP ; le CIRC classe les particules de la pollution de l'air extérieur cancérogènes pour l'homme (groupe 1). Les travaux de lutte contre les incendies naturels figurent dans les tableaux de maladies professionnelles modifiés en décembre 2025.
+
+**Les tenues de feu contiennent-elles des PFAS ?**
+Selon le magazine de l'INRS Travail et Sécurité, les mousses anti-incendie et les équipements imperméabilisés et ignifugés, dont les tenues d'intervention, sont des sources d'exposition aux PFAS. Le CIRC a classé le PFOA cancérogène pour l'homme (groupe 1) en 2023.
+
+**Les sapeurs-pompiers volontaires sont-ils concernés ?**
+Oui, au même titre que les professionnels : ils sont exposés aux mêmes fumées. Fin 2024, ils représentaient 78 % des sapeurs-pompiers en France (198 900 sur 256 400, selon la DGSCGC). La proposition de loi adoptée par le Sénat en mars 2025 les inclut expressément dans l'obligation de relevé d'exposition, le décret de décembre 2025 vise aussi bien les professionnels que les volontaires, et la circulaire DGSCGC du 14 janvier 2025 prévoit un modèle de relevé propre aux volontaires. Un relevé individuel permet de reconstituer leurs expositions des années plus tard.
+
+**Le métier de sapeur-pompier est-il reconnu comme cancérogène ?**
+Oui. Depuis juin 2022, le CIRC classe l'exposition professionnelle en tant que pompier dans le groupe 1, « cancérogène pour l'homme », avec des preuves suffisantes pour le mésothéliome et le cancer de la vessie.
+
+**Quels cancers peuvent être reconnus en maladie professionnelle ?**
+Depuis le décret n° 2025-1349 du 26 décembre 2025, la lutte contre l'incendie figure dans le tableau n° 16 bis pour les tumeurs de la vessie et des voies urinaires (délai de prise en charge de 30 ans, 10 ans d'exposition) et dans le tableau n° 30 pour les maladies liées à l'amiante, dont le mésothéliome (délai de 40 ans). Les autres cancers, dont ceux retenus par le CIRC avec des preuves limitées, peuvent être reconnus au cas par cas si le lien avec le service est établi.
+
+**Comment un sapeur-pompier professionnel fait-il reconnaître une maladie professionnelle ?**
+Il adresse à son SDIS une déclaration accompagnée d'un certificat médical, dans les deux ans suivant la première constatation médicale ou la date à laquelle un certificat l'informe du lien possible avec son activité. Si la maladie figure dans un tableau et que les conditions sont remplies, elle est présumée imputable au service (article L. 822-20 du code général de la fonction publique) et ouvre droit au CITIS. Sinon, l'agent doit établir le lien et le conseil médical est saisi avant tout refus.
+
+**Quelles sont les conditions pour un cancer de la vessie ?**
+Le tableau n° 16 bis exige une durée d'exposition d'au moins dix ans et une première constatation médicale au plus tard trente ans après la fin de l'exposition. Les états de service et les relevés d'exposition servent à le démontrer.
+
+**Un cancer de la prostate ou du côlon peut-il être reconnu ?**
+Il ne figure dans aucun tableau pour les sapeurs-pompiers. Pour un professionnel, il faut établir que la maladie est essentiellement et directement causée par le service et qu'elle entraîne une incapacité permanente d'au moins 25 %, après avis du conseil médical. Le CIRC a retenu ces deux cancers avec des preuves limitées.
+
+**Un sapeur-pompier volontaire peut-il faire reconnaître une maladie professionnelle ?**
+Oui. Les volontaires relèvent de la loi n° 91-1389 du 31 décembre 1991 relative à leur protection sociale en cas de maladie contractée en service, prise en charge par le SDIS, et le décret de décembre 2025 les vise expressément. La demande se fait auprès du SDIS d'engagement.
+
+**Qu'est-ce qu'une fiche ou un relevé d'exposition ?**
+C'est un document individuel qui indique à quels agents dangereux un sapeur-pompier a été exposé, lors de quelle intervention, pendant combien de temps et avec quelles protections. Il sert au suivi médical et, plus tard, à une éventuelle demande de reconnaissance.
+
+**Combien de temps faut-il conserver les données d'exposition ?**
+Pour les agents CMR, le décret n° 2024-307 prévoit une conservation d'au moins quarante ans par le service de santé au travail. Ces données étant des données de santé, leur hébergement doit respecter le RGPD et les règles applicables aux données de santé.
+
+**Qui remplit le relevé après une intervention ?**
+Cela dépend de l'organisation de chaque SDIS. Dans VB CMR, c'est le chef d'agrès ou le COS qui le remplit pour lui et son équipage : il connaît les rôles tenus, le port de l'ARI et les conditions de décontamination. Le SSSM contrôle ensuite et peut corriger.
+
+**Les feux de végétation sont-ils moins exposants ?**
+Pas nécessairement. Les concentrations sont souvent plus faibles qu'en feu de structure, mais les durées d'engagement sont longues et l'ARI n'est généralement pas porté. L'exposition cumulée peut donc être importante.
+
+### Sources
+
+- [CIRC, Monographies volume 132 : exposition professionnelle en tant que pompier](https://monographs.iarc.who.int/fr/news-events/volume-132-exposition-professionnelle-en-tant-que-pompier)
+- [Sénat, rapport d'information n° 641 (2023-2024) : cancers imputables à l'activité de sapeur-pompier](https://www.senat.fr/rap/r23-641/r23-6415.html)
+- [Sénat, rapport n° 436 (2024-2025) sur la proposition de loi relative au suivi de l'exposition des sapeurs-pompiers aux agents CMR](https://www.senat.fr/rap/l24-436/l24-436_mono.html)
+- [Sénat, la loi en clair : état d'avancement de la proposition de loi](https://www.senat.fr/travaux-parlementaires/textes-legislatifs/la-loi-en-clair/proposition-de-loi-visant-a-garantir-le-suivi-de-lexposition-des-sapeurs-pompiers-a-des-agents-cancerogenes-mutagenes-ou-toxiques-pour-la-reproduction.html)
+- [DGSCGC, guide de doctrine opérationnelle « Prévention des risques liés à la toxicité des fumées »](https://www.interieur.gouv.fr/content/download/133630/1059122/file/GDO-Prevention-Risques-Toxicite-Fumees.pdf)
+- [Décret n° 2024-307 du 4 avril 2024 : traçabilité de l'exposition aux agents CMR](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748)
+- [Décret n° 2025-1349 du 26 décembre 2025 : tableaux de maladies professionnelles n° 16 bis et n° 30](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053176919)
+- [[e] CIRC, monographie 132 : cancers à preuves suffisantes (mésothéliome, vessie) et limitées (côlon, prostate, testicule, mélanome, lymphome non hodgkinien)](https://www.iarc.who.int/news-events/iarc-monographs-volume-132-occupational-exposure-as-a-firefighter)
+- [[g] Demers et al., « Firefighting and Cancer: A Meta-analysis of Cohort Studies in the Context of Cancer Hazard Identification », Safety and Health at Work, 2023 (rapports de taux 1,58 pour le mésothéliome et 1,16 pour la vessie)](https://www.sciencedirect.com/science/article/pii/S2093791123000082)
+- [[a] ANSES, rapport d'expertise « Pollution liée aux incendies de végétation et effets sur la santé humaine » (saisine 2023-SA-0154)](https://www.anses.fr/system/files/AIR-2023-SA-0154-RA.pdf)
+- [[b] CIRC, communiqué n° 221 (17 octobre 2013) : la pollution de l'air extérieur et les particules classées cancérogènes pour l'homme (groupe 1)](https://www.iarc.who.int/wp-content/uploads/2018/07/pr221_E.pdf)
+- [[c] INRS, Travail et Sécurité n° 861 : « PFAS : les pompiers sonnent l'alerte »](https://www.travail-et-securite.fr/ts/861/ACT/pfas-les-pompiers-sonnent-l-alerte.html)
+- [[d] CIRC, monographie 135 : PFOA (groupe 1) et PFOS (groupe 2B), 2023](https://www.iarc.who.int/news-events/iarc-monographs-volume-135-perfluorooctanoic-acid-pfoa-and-perfluorooctanesulfonic-acid-pfos/)
+- [[f] INRS, tableau n° 16 bis du régime général : la lutte contre l'incendie figure parmi les travaux de la tumeur primitive de l'épithélium urinaire](https://www.inrs.fr/publications/bdd/mp/tableau.html?refINRS=RG+16+BIS)
+- [[h] DGSCGC, statistiques des services d'incendie et de secours, édition 2024](https://www.interieur.gouv.fr/documentation/etudes-et-statistiques/statistiques-2024-dgscgc.html)
+- [[i] INRS, tableau n° 30 du régime général : affections consécutives à l'inhalation de poussières d'amiante](https://www.inrs.fr/publications/bdd/mp/tableau.html?refINRS=RG+30)
+- [[j] Centre de gestion de la Gironde, CITIS et maladie professionnelle des fonctionnaires territoriaux (article L. 822-20 du code général de la fonction publique, décret n° 87-602, titre VI bis)](https://www.cdg33.fr/wp-content/uploads/ressources/20231214_CITISMALPROF.pdf)
+- [[k] Loi n° 91-1389 du 31 décembre 1991 relative à la protection sociale des sapeurs-pompiers volontaires en cas d'accident survenu ou de maladie contractée en service](https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000355917)
+Ce guide est une synthèse d'information générale rédigée par VB Safety. Il ne constitue ni un avis médical ni un conseil juridique. Les textes cités peuvent évoluer : reportez-vous aux sources officielles et à votre SSSM.
+
+### Tracer chaque exposition, dès la fin de l'intervention
+
+Un outil conçu avec des sapeurs-pompiers : rapport du CA ou du COS, suivi du commandement, contrôle SSSM, historique pour chaque agent. Configurable pour votre SDIS. Voir aussi [la traçabilité des expositions des sapeurs-pompiers](https://vb-safety.com/sapeurs-pompiers/).
+
+---
+
+# Ressources
+
+## Source : https://vb-safety.com/ressources/hap-sapeurs-pompiers/  ·  mise à jour : 2026-10-29
+
+## HAP et sapeurs-pompiers : peau, tenue, risques
+
+Les hydrocarbures aromatiques polycycliques (HAP) sont l'indicateur de référence de la contamination par les fumées d'incendie. Comment ils atteignent la peau et les tenues, ce que montrent les études, et les gestes qui réduisent l'exposition.
+
+### L'essentiel
+
+- **Les HAP sont dans toutes les suies.** Ils se forment dès qu'une matière organique brûle mal : bois, plastiques, mobilier, carburants, végétation.
+- **La peau est une voie d'entrée majeure.** Après un feu, les métabolites de HAP mesurés dans les urines de pompiers sont en moyenne 3 à 5 fois plus élevés qu'avant, et les auteurs désignent le contact cutané comme une voie importante.
+- **Les gestes simples marchent, en partie.** Une lingette sur le cou réduit de moitié environ la contamination ; un nettoyage humide de la veste sur place en retire la grande majorité.
+- **Le lavage ne retire pas tout.** Les HAP les plus lourds, qui sont aussi les plus cancérogènes, résistent le mieux au lavage des tenues.
+
+### Que sont les HAP ?
+
+Les hydrocarbures aromatiques polycycliques (HAP) sont une famille de plusieurs centaines de composés formés lors de la combustion incomplète de la matière organique. Ils se fixent sur les particules de suie et se déposent sur tout ce que la fumée touche : peau, cagoule, tenue, matériel, cabine des engins.
+Le plus étudié est le benzo[a]pyrène, classé cancérogène pour l'homme (groupe 1) par le Centre international de recherche sur le cancer (CIRC). Les HAP servent d'indicateur de référence de la contamination par les fumées d'incendie dans les études internationales sur les sapeurs-pompiers. En France, les suies de combustion relèvent du tableau n° 16 bis des maladies professionnelles, dans lequel la lutte contre l'incendie a été inscrite pour les tumeurs de la vessie et des voies urinaires.
+
+### Comment ils atteignent le sapeur-pompier
+
+#### Par la peau
+
+Les suies passent par les interfaces de la tenue : cou, mâchoire, poignets, chevilles. L'absorption cutanée augmente avec la chaleur et la transpiration, deux conditions réunies sur un feu. Les mains sont très exposées lors de la recherche et du déblai, et le contact se prolonge tant que la peau n'est pas nettoyée.
+
+#### Par la respiration
+
+Quand l'ARI est retiré trop tôt, pendant le déblai, sur les feux de végétation où il n'est généralement pas porté, ou au contact de tenues qui continuent de dégazer pendant le retour en engin.
+
+#### Par la bouche
+
+Mains, gourdes ou nourriture consommées sans s'être lavé les mains.
+
+### Ce que montrent les études
+
+**Métabolites urinaires**
+- À Ottawa, les métabolites de HAP dans les urines de pompiers étaient en moyenne 3 à 5 fois plus élevés après un feu qu'avant. Les auteurs désignent le contact cutané comme une voie d'exposition importante [2].
+
+**Zones de peau**
+- Dans des feux expérimentaux, les mains des équipes engagées à l'intérieur étaient les plus contaminées, et le cou l'était chez ceux qui ne portaient pas de cagoule [1].
+
+**Lingettes**
+- Des lingettes nettoyantes passées sur le cou ont réduit la contamination en HAP de 54 % en médiane [1].
+
+**Tenue sur place**
+- Sans décontamination, la contamination des vestes augmentait à chaque feu. Un nettoyage humide au savon sur place l'a réduite de 85 % en médiane, une brosse à sec de 23 %, et le soufflage à l'air n'a eu quasiment aucun effet [1].
+
+**Lavage des tenues**
+- En laboratoire, avec les doses de lessive recommandées, une partie seulement des HAP lourds (cinq et six cycles) est retirée ; il faut des doses bien plus élevées pour dépasser 80 % [3]. Sur des cagoules, le lavage courant retire environ 80 % des HAP [4].
+
+### Réduire l'exposition de la peau
+
+- Porter la cagoule et des gants adaptés, et garder les interfaces fermées pendant le feu et le déblai.
+- Nettoyer visage, cou, mains et poignets avec des lingettes dès la sortie de la zone, avant de boire ou de manger.
+- Se déshabiller dans une zone dédiée, ensacher les EPI souillés et les transporter hors de la cabine.
+- Se doucher au plus tôt et changer de tenue.
+- Faire laver les EPI avant toute réutilisation, sans jamais les ramener à domicile.
+Ces gestes reprennent les principes du guide de doctrine opérationnelle de la DGSCGC sur la toxicité des fumées, que chaque SDIS décline dans ses propres protocoles.
+
+### Mesurer, pour savoir où l'on en est
+
+Aujourd'hui, mesurer les HAP sur la peau ou une tenue passe par un prélèvement envoyé en laboratoire : des résultats en plusieurs jours, trop tard pour savoir si un agent ou une tenue est réellement propre après la décontamination. En pratique, l'efficacité des gestes est surtout appréciée à l'odeur et à l'aspect visuel.
+VB Safety développe un [capteur de contrôle sur les lieux des niveaux de contamination post-incendie](https://vb-safety.com/innovation/). En attendant, tracer chaque intervention et chaque décontamination reste le moyen de documenter l'exposition de chaque agent : c'est ce que fait [VB CMR](https://vb-safety.com/sapeurs-pompiers/).
+
+### En bref
+
+**Les HAP passent-ils vraiment par la peau ?**
+Oui. Les métabolites de HAP mesurés dans les urines de sapeurs-pompiers augmentent nettement après un feu, et les études désignent le contact cutané comme une voie importante, d'autant plus que la chaleur et la transpiration favorisent l'absorption.
+
+**Quelles zones de peau sont les plus touchées ?**
+Les interfaces de la tenue : cou, mâchoire, poignets, ainsi que les mains, surtout lors de la recherche et du déblai.
+
+**Les lingettes suffisent-elles ?**
+Non, mais elles aident : dans une étude, elles ont réduit de moitié environ la contamination du cou. Elles ne remplacent pas la douche au plus tôt ni le lavage des EPI.
+
+**Le lavage des tenues enlève-t-il tous les HAP ?**
+Non. Les HAP les plus lourds, qui sont aussi les plus cancérogènes, résistent le mieux au lavage, et la contamination s'accumule si la tenue n'est pas nettoyée entre deux feux.
+
+**Les feux de végétation sont-ils concernés ?**
+Oui. La fumée de végétation contient des HAP et des particules fines, et l'ARI n'y est généralement pas porté : l'exposition passe alors aussi par la respiration.
+
+### Sources
+
+- [Fent K. W. et al., « Contamination of firefighter personal protective equipment and skin and the effectiveness of decontamination procedures », Journal of Occupational and Environmental Hygiene, 2017](https://fsri.org/sites/default/files/2021-07/FentEtAl_JOEH2017.pdf)
+- [Keir J. L. A. et al., « Elevated exposures to polycyclic aromatic hydrocarbons and other organic mutagens in Ottawa firefighters participating in emergency, on-shift fire suppression », Environmental Science & Technology, 2017 (résumé)](https://www.healthday.com/health-news/public-health/firefighters-exposed-to-carcinogens-through-the-skin-727549.html)
+- [Hossain M. D. T. et al., « Evaluating the performance of surfactant and charcoal-based cleaning products to effectively remove PAHs from firefighter gear », Frontiers in Materials, 2023](https://www.frontiersin.org/journals/materials/articles/10.3389/fmats.2023.1142777/full)
+- [NIOSH, IFSI et UL FSRI, synthèse sur le lavage des cagoules et tenues (Firehouse, 2018)](https://www.firehouse.com/safety-health/cancer-prevention/article/21021879/research-into-gear-cleaning-to-prevent-exposure-to-harmful-chemicals)
+- [CIRC, Monographie 132, « Occupational exposure as a firefighter »](https://www.iarc.who.int/news-events/iarc-monographs-volume-132-occupational-exposure-as-a-firefighter)
+- [Sénat, commission des affaires sociales, « Cancers imputables à l’activité de sapeur-pompier : protéger les soldats du feu », rapport d’information de Anne-Marie Nédélec et Émilienne Poumirol, 29 mai 2024](https://www.senat.fr/rap/r23-641/r23-641-syn.pdf)
+- [INRS, tableau n° 16 bis des maladies professionnelles](https://www.inrs.fr/publications/bdd/mp/tableau.html?refINRS=RG+16+BIS)
+Cette page informe, elle ne remplace pas l'avis du service de santé et de secours médical (SSSM) ni les protocoles de votre SDIS.
+Pour aller plus loin : [maladies professionnelles des sapeurs-pompiers](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) · [affiche décontamination](https://vb-safety.com/ressources/decontamination-sapeurs-pompiers/) · [VB CMR pour les SDIS](https://vb-safety.com/sapeurs-pompiers/).
+
+## Source : https://vb-safety.com/ressources/releve-exposition-sapeur-pompier/  ·  mise à jour : 2026-10-29
+
+## Relevé d'exposition du sapeur-pompier : que noter après chaque feu
+
+Les rubriques à noter le soir même pour garder la trace de ses expositions aux fumées, des années plus tard. Pour les professionnels comme pour les volontaires.
+
+### Pourquoi le soir même
+
+Les cancers liés aux fumées apparaissent souvent des décennies après les interventions. Pour faire reconnaître une maladie professionnelle, il faut alors montrer quelles interventions ont été faites, combien de temps et dans quelles conditions. Ce qui n'est pas noté le jour même est rarement retrouvé plus tard, surtout pour un sapeur-pompier volontaire qui change de centre, de département ou d'employeur principal.
+
+### Ce qu'il faut noter après chaque feu
+
+### Où le conserver
+
+- Renseignez le relevé prévu par votre SDIS : la circulaire DGSCGC du 14 janvier 2025 prévoit une synthèse annuelle et une attestation d'activités.
+- Gardez une copie personnelle datée, sur un support que vous conserverez des décennies.
+- Demandez chaque année votre synthèse et vos états de service, et rangez-les avec vos relevés.
+- En cas de doute sur votre santé, transmettez ces éléments au SSSM et à votre médecin.
+
+### Pour les volontaires
+
+Les sapeurs-pompiers volontaires représentent environ 78 % des sapeurs-pompiers en France. Ils combattent les mêmes feux que les professionnels, mais leurs expositions sont plus rarement reconstituées. Le décret n° 2025-1349 du 26 décembre 2025, qui inscrit la lutte contre l'incendie dans les tableaux n° 16 bis et n° 30, vise aussi bien les volontaires que les professionnels : un relevé personnel tenu à jour est leur meilleure garantie.
+Dans un SDIS équipé de [VB CMR](https://vb-safety.com/sapeurs-pompiers/), le chef d'agrès remplit ces informations pour tout l'équipage en fin d'intervention, et chaque agent consulte et exporte son propre historique.
+
+### En bref
+
+**Le relevé d'exposition est-il obligatoire ?**
+Le SDIS doit tracer les expositions aux agents CMR, comme tout employeur public. La circulaire DGSCGC du 14 janvier 2025 diffuse des modèles nationaux de synthèse annuelle et d'attestation d'activités, et une proposition de loi adoptée par le Sénat en mars 2025 prévoit un relevé obligatoire pour chaque sapeur-pompier exposé.
+
+**Combien de temps garder ses relevés ?**
+Toute sa vie. Les données d'exposition aux agents CMR doivent être conservées au moins quarante ans par le service de santé au travail, et les maladies concernées peuvent apparaître bien après la fin de l'engagement.
+
+**Que noter si je ne connais pas la nature exacte du feu ?**
+Ce que vous savez : type de bâtiment ou de végétation, matériaux visibles, durée et rôle tenu. Un relevé incomplet mais daté vaut mieux qu'aucun relevé.
+
+**Les feux de végétation doivent-ils être notés ?**
+Oui. Les travaux de lutte contre les incendies naturels figurent dans les tableaux de maladies professionnelles modifiés en décembre 2025, et l'ARI n'y est généralement pas porté.
+
+### Sources
+
+- [CIRC, Monographie 132, « Occupational exposure as a firefighter »](https://www.iarc.who.int/news-events/iarc-monographs-volume-132-occupational-exposure-as-a-firefighter)
+- [DGSCGC, circulaire du 14 janvier 2025 et doctrine « Prévention des risques liés à la toxicité des fumées » (citées dans notre guide)](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html#loi)
+- [Décret n° 2025-1349 du 26 décembre 2025 : tableaux de maladies professionnelles n° 16 bis et n° 30](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053176919)
+- [Décret n° 2024-307 du 4 avril 2024 : traçabilité de l'exposition aux agents CMR](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748)
+- [DGSCGC, statistiques des services d'incendie et de secours, édition 2024](https://www.interieur.gouv.fr/documentation/etudes-et-statistiques/statistiques-2024-dgscgc.html)
+Cette page informe, elle ne remplace pas l'avis du service de santé et de secours médical (SSSM) ni les protocoles de votre SDIS.
+Pour aller plus loin : [maladies professionnelles des sapeurs-pompiers](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) · [affiche décontamination](https://vb-safety.com/ressources/decontamination-sapeurs-pompiers/) · [VB CMR pour les SDIS](https://vb-safety.com/sapeurs-pompiers/).
+
+## Source : https://vb-safety.com/ressources/decontamination-sapeurs-pompiers/  ·  mise à jour : 2026-10-03
+
+## Affiche : décontamination des sapeurs-pompiers après un feu
+
+Les gestes qui réduisent l'exposition aux fumées, pendant, à la sortie et après l'intervention. À afficher dans la remise, les vestiaires ou la salle de garde.
+- 1 Pendant Je garde l'ARI jusqu'à la sortie de la zone, déblai compris quand c'est possible.
+- On limite le nombre de personnels exposés et le temps dans les fumées.
+- 2 À la sortie Je me déshabille dans la zone prévue, de préférence à l'air libre.
+- J'ensache mes EPI souillés. Ils voyagent hors de la cabine.
+- Je nettoie visage, cou et mains avec des lingettes adaptées.
+- 3 Après Je me douche au plus tôt et je change de tenue.
+- Mes EPI sont lavés avant toute réutilisation. Jamais à la maison.
+- Je ne bois et ne mange qu'après m'être lavé les mains.
+
+### Utiliser cette affiche
+
+- **Format :** conçue pour une impression A3 en couleur ; elle reste lisible en A4.
+- **Adaptation :** la licence CC BY 4.0 vous autorise à l'adapter aux protocoles de votre SDIS, en citant VB Safety.
+- **Pour aller plus loin :** le [guide santé des sapeurs-pompiers](https://vb-safety.com/cmr-pompier/sante-sapeurs-pompiers.html) détaille les fumées, les cancers reconnus et la loi ; le [VB CMR](https://vb-safety.com/cmr-pompier/) trace chaque exposition après l'intervention.
+
+## Source : https://vb-safety.com/ressources/liste-travailleurs-exposes-cmr/  ·  mise à jour : 2026-10-01
+
+## Modèle de liste des travailleurs exposés aux agents CMR
+
+Un modèle gratuit, en Excel et en PDF, pour tenir la liste des travailleurs exposés aux agents CMR que tout employeur doit tenir depuis le 5 juillet 2024. Colonnes prêtes, mode d'emploi et deux exemples fictifs, BTP et industrie.
+
+### Pour qui ?
+
+Dirigeants de TPE et PME, responsables HSE et QSE, ressources humaines, entreprises du BTP et de l'industrie : toute entreprise dont des salariés sont susceptibles d'être exposés à des agents CMR (silice cristalline, poussières de bois, émissions diesel, HAP, chrome VI, formaldéhyde…).
+
+### Ce que dit la loi
+
+Le [décret n° 2024-307 du 4 avril 2024](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049366748) impose à l'employeur, depuis le 5 juillet 2024, de tenir la liste actualisée des travailleurs susceptibles d'être exposés aux agents CMR (articles R. 4412-93-1 et suivants du code du travail). Elle précise, lorsqu'ils sont connus, la nature, la durée et le degré de l'exposition, et elle est transmise au service de prévention et de santé au travail, qui la conserve au moins quarante ans. Les procédés cancérogènes concernés sont listés par l'[arrêté du 26 octobre 2020](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042483502).
+
+### Les colonnes du modèle
+
+### Comment le remplir
+
+- Partez de l'évaluation du risque chimique de votre DUERP.
+- Une ligne par salarié et par agent CMR, dans l'onglet « Liste des exposés ».
+- Décrivez la tâche, la durée habituelle et le degré d'exposition quand vous le connaissez.
+- Mettez la liste à jour à chaque changement de poste, de produit ou de procédé.
+- Transmettez-la au service de prévention et de santé au travail et notez la date d'envoi.
+Modèle gratuit, sans inscription. Licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr) : réutilisation et modification libres, avec la mention « VB Safety · vb-safety.com ». Les exemples sont fictifs.
+
+### Être prévenu des évolutions
+
+Un e-mail quand la réglementation ou le modèle change. Rien d'autre.
+Voir la [politique de confidentialité](https://vb-safety.com/confidentialite/).
+
+### La liste des exposés en 5 questions
+
+**Qui doit tenir la liste des travailleurs exposés ?**
+Tout employeur dont des salariés sont susceptibles d'être exposés à des agents cancérogènes, mutagènes ou toxiques pour la reproduction : substances et mélanges classés en catégorie 1A ou 1B, ou procédés cancérogènes comme la découpe de matériaux contenant de la silice. La taille de l'entreprise ne change rien à l'obligation.
+
+**Que doit contenir la liste ?**
+L'identité des travailleurs concernés, les agents CMR auxquels ils sont susceptibles d'être exposés et, lorsqu'ils sont connus, la nature, la durée et le degré de leur exposition. Elle s'appuie sur l'évaluation du risque chimique du document unique.
+
+**À qui la transmettre, et combien de temps la conserver ?**
+Au service de prévention et de santé au travail, qui conserve ces informations au moins quarante ans. Gardez aussi une trace de chaque version et de sa date d'envoi.
+
+**Ce modèle suffit-il à être en règle ?**
+Il vous aide à tenir la liste dans le bon format. Il ne remplace ni l'évaluation des risques, ni le dialogue avec votre service de santé au travail, ni les mesures de prévention à mettre en place.
+
+**Puis-je modifier et diffuser ce modèle ?**
+Oui. Il est publié sous licence CC BY 4.0 : vous pouvez l'adapter, l'intégrer à vos outils et le partager, y compris à des clients, en mentionnant « VB Safety · vb-safety.com ».
+Selon votre secteur : [traçabilité CMR sur chantier (BTP)](https://vb-safety.com/btp/) · [détection et traçabilité CMR dans l'industrie](https://vb-safety.com/industrie/) · [toutes les obligations de l'employeur](https://vb-safety.com/cmr-industrie/).
+
+## Source : https://vb-safety.com/ressources/obligations-legales-debroussaillement/  ·  mise à jour : 2026-11-12
+
+## Obligations légales de débroussaillement (OLD) : ce que dit la loi
+
+Le débroussaillement n'est pas un conseil d'entretien : c'est une obligation du code forestier, à la charge du propriétaire, contrôlée par le maire et sanctionnée. Voici qui est concerné, sur quelle profondeur, et ce qui se passe quand ce n'est pas fait.
+
+### L'essentiel
+
+- **C'est le propriétaire du bâtiment qui doit débroussailler**, y compris sur le terrain du voisin lorsque la zone des 50 mètres déborde chez lui.
+- **La profondeur de référence est de 50 mètres** autour des constructions, portée jusqu'à 100 mètres par arrêté motivé du maire, et jusqu'à 10 mètres de part et d'autre des voies privées d'accès.
+- **Débroussailler n'est pas raser.** Le code forestier demande de réduire la masse de végétation et de créer des ruptures, pas de couper les arbres ni de défricher.
+- **Les sanctions sont réelles** : contravention, amende administrative pouvant atteindre 50 € par mètre carré soumis à l'obligation de débroussaillement (art. L135-2 du code forestier), travaux exécutés d'office aux frais du propriétaire, et franchise d'assurance possible en cas de sinistre.
+
+### Qui est concerné
+
+Les obligations légales de débroussaillement, les OLD, s'appliquent dans les territoires particulièrement exposés au risque d'incendie. Elles visent toutes les constructions, chantiers et installations situés à l'intérieur d'un massif forestier, d'une lande, d'un maquis ou d'une garrigue classés, **ou à moins de 200 mètres de leur lisière**.
+Cette distance de 200 mètres est la plus mal comprise. Elle ne définit pas ce qu'il faut débroussailler, mais qui est soumis à l'obligation. Une maison située à 180 mètres d'un massif est concernée, même si aucun arbre ne se trouve sur sa parcelle. Le zonage applicable est arrêté au niveau départemental ; la carte informative publiée sur Géoportail et la fiche OLD de la préfecture donnent la règle locale, qui prime sur toute généralité.
+Pour savoir si une commune est dans ce zonage et combien de bâtiments d'habitation sont concernés : [vérifier une commune](https://vb-safety.com/collectivites/verifier-old/) (zonage informatif de l'IGN, calcul immédiat).
+La responsabilité pèse sur le propriétaire de la construction. Un locataire peut réaliser les travaux si le bail le prévoit, mais cela ne décharge pas le propriétaire de sa responsabilité pénale.
+
+### Sur quelle distance
+
+- **50 mètres au minimum** autour des habitations, bâtiments et installations de toute nature. C'est le régime de droit commun.
+- **Jusqu'à 100 mètres** lorsque le maire le décide par arrêté motivé, ou le préfet. Cette extension est fréquente dans les communes les plus exposées : il faut donc toujours vérifier l'arrêté local plutôt que de s'en tenir aux 50 mètres.
+- **10 mètres de part et d'autre** des voies privées donnant accès à la construction, pour que les engins de secours puissent passer et, surtout, ressortir.
+Le périmètre se mesure depuis le bâtiment, pas depuis la limite de propriété. C'est ce qui explique que l'obligation déborde si souvent chez le voisin.
+
+### Ce que « débroussailler » veut dire
+
+Le terme a un sens juridique précis, et il est plus souple que ce que redoutent la plupart des propriétaires. Il s'agit de **diminuer l'intensité et limiter la propagation des incendies** en réduisant la masse de végétation et en créant des discontinuités : couper les herbes et les broussailles, éliminer les arbustes sous les arbres, espacer les houppiers, élaguer les branches basses, supprimer les bois morts et évacuer les rémanents.
+Ce n'est ni une coupe rase, ni un défrichement, qui sont d'ailleurs soumis à d'autres autorisations. Les arbres restent, les règles locales fixent simplement les distances entre houppiers et la hauteur d'élagage. L'entretien se maintient dans le temps : un terrain débroussaillé une fois ne l'est plus deux ans après.
+Les gros travaux se font de préférence en automne et en hiver, hors période de nidification et hors risque d'étincelle.
+
+### Quand le débroussaillement déborde chez le voisin
+
+C'est la situation la plus conflictuelle, et la procédure est précise. Le propriétaire soumis à l'obligation doit informer le voisin **par lettre recommandée avec accusé de réception**, en décrivant les travaux qu'il compte réaliser sur sa parcelle.
+Si le voisin refuse l'accès, ou ne répond pas dans le délai d'un mois, **la charge des travaux lui est transférée** : il en devient responsable, et le propriétaire initial doit en informer le maire. Garder la trace de ces échanges n'est pas une précaution de confort : c'est ce qui détermine qui sera poursuivi en cas de contrôle.
+
+### Ce que risque un propriétaire qui ne débroussaille pas
+
+- **Sanction pénale** : contravention de 5 e classe, jusqu'à 1 500 €. Le tribunal peut assortir sa décision d'une injonction de faire sous astreinte, de 50 à 100 € par jour et par hectare.
+- **Astreinte administrative** : le maire peut assortir sa mise en demeure d'une astreinte de 100 € par jour de retard au plus, plafonnée à 5 000 € (art. L134-9 du code forestier).
+- **Amende administrative** : le préfet peut infliger une amende pouvant atteindre **50 € par mètre carré soumis à l'obligation de débroussaillement (art. L135-2 du code forestier)**. Sur une zone de quelques centaines de mètres carrés, le montant dépasse rapidement celui des travaux.
+- **Exécution d'office** : après mise en demeure restée sans effet, la commune fait réaliser les travaux et émet un titre de perception à l'encontre du propriétaire.
+- **Assurance** : en cas de sinistre, l'assureur peut appliquer une franchise supplémentaire de 5 000 € au plus lorsque l'obligation n'était pas respectée (art. L122-8 du code des assurances).
+
+### Qui contrôle
+
+Le contrôle des OLD autour des constructions relève du **maire**, au titre de ses pouvoirs de police spéciale. Il peut contrôler lui-même ou mandater des agents assermentés, et le contrôle peut s'effectuer depuis la voie publique. Depuis la loi du 10 juillet 2023, le préavis d'un mois avant contrôle n'est plus exigé.
+Le contrôle des **infrastructures linéaires** — routes, voies ferrées, lignes électriques — relève du préfet. Et si le maire n'exerce pas ses pouvoirs, le préfet peut se substituer à lui après mise en demeure.
+
+### Depuis 2025, l'information de l'acheteur et du locataire
+
+Depuis le 1 er janvier 2025, un bien situé dans une zone soumise aux OLD doit être signalé comme tel à l'acquéreur ou au locataire, **dès l'annonce immobilière** et dans l'état des risques et pollutions. L'obligation suit donc désormais la transaction, ce qui la rend visible pour des propriétaires qui l'ignoraient.
+
+### En bref
+
+#### Le débroussaillement est-il obligatoire partout en France ?
+
+Non. Il s'applique dans les territoires classés particulièrement exposés au risque d'incendie, pour les constructions situées dans un massif forestier, une lande, un maquis ou une garrigue, ou à moins de 200 mètres de leur lisière. Le zonage est arrêté au niveau départemental.
+
+#### Faut-il débroussailler 50 ou 200 mètres ?
+
+Les deux chiffres ne désignent pas la même chose. Les 200 mètres déterminent si vous êtes soumis à l'obligation ; les 50 mètres, portés jusqu'à 100 mètres par arrêté motivé du maire, correspondent à la profondeur à traiter autour du bâtiment.
+
+#### Dois-je débroussailler chez mon voisin ?
+
+Oui si la zone des 50 mètres autour de votre maison déborde sur sa parcelle. Vous devez l'en informer par lettre recommandée avec accusé de réception. S'il refuse ou ne répond pas sous un mois, la charge des travaux lui est transférée et vous devez en informer le maire.
+
+#### Débroussailler, est-ce couper mes arbres ?
+
+Non. Il s'agit de réduire la masse de végétation et de créer des ruptures : herbes, broussailles, arbustes sous les arbres, branches basses, bois morts. Ce n'est ni une coupe rase ni un défrichement, et les arbres sont conservés en respectant les distances fixées localement.
+
+#### Quelle amende en cas de non-respect des OLD ?
+
+Une contravention de 5e classe pouvant aller jusqu'à 1 500 €, et une amende administrative pouvant atteindre 50 € par mètre carré soumis à l'obligation de débroussaillement (art. L135-2 du code forestier). S'y ajoutent l'exécution d'office des travaux aux frais du propriétaire et, en cas de sinistre, une possible franchise d'assurance.
+
+#### Qui vérifie que le débroussaillement est fait ?
+
+Le maire, au titre de sa police spéciale, pour les constructions de sa commune ; le préfet pour les infrastructures linéaires. Le contrôle peut se faire depuis la voie publique et, depuis la loi du 10 juillet 2023, sans préavis d'un mois.
+
+### Sources
+
+- [Géorisques, « Obligations légales de débroussaillement (OLD) », ministère de la Transition écologique](https://www.georisques.gouv.fr/me-preparer-me-proteger/OLD-obligations-legales-de-debroussaillement)
+- [Fédération nationale des Communes forestières, « FAQ maires – les obligations légales de débroussaillement », 2024](https://www.communesforestieresfrance.fr/docs/library/faq-maires-old-2024.pdf)
+- [ONF, « Foire aux questions : les obligations légales de débroussaillement »](https://www.onf.fr/vivre-la-foret/enjeux-foret/feux-foret/+/1525::foire-aux-questions-faq-les-obligations-legales-de-debroussaillement-old.html)
+- [Banque des Territoires, « Les obligations légales de débroussaillement : le cadre juridique »](https://www.banquedesterritoires.fr/les-obligations-legales-de-debroussaillement-le-cadre-juridique)
+Cette page présente le cadre national. Les distances, les essences et les modalités sont précisées par arrêté préfectoral : la fiche OLD de votre département fait foi.
+Pour aller plus loin : [la procédure de contrôle du maire](https://vb-safety.com/ressources/controle-old-maire/) · [contrôler le débroussaillement par imagerie](https://vb-safety.com/ressources/controle-satellite-debroussaillement/) · [VB OLD pour les communes](https://vb-safety.com/collectivites/).
+
+## Source : https://vb-safety.com/ressources/controle-old-maire/  ·  mise à jour : 2026-11-12
+
+## Contrôle des OLD : la procédure du maire, étape par étape
+
+Contrôler les obligations de débroussaillement est une police spéciale du maire, et son absence a déjà été qualifiée de faute lourde par le juge administratif. Voici la procédure, les délais à tenir et les quatre obstacles que rencontrent les communes.
+
+### L'essentiel
+
+- **Le contrôle des OLD est une compétence propre du maire** et ne peut pas être déléguée à une autre collectivité, même si sa mise en œuvre peut être mutualisée.
+- **Ne pas l'exercer engage la commune.** Le juge administratif a qualifié de faute lourde l'absence de mise en œuvre de cette police, avec indemnisation à la clé après un incendie évitable.
+- **La procédure est graduée** : information, contrôle, mise en demeure par arrêté individuel, amende administrative prononcée par le préfet, puis exécution d'office aux frais du propriétaire.
+- **Le calendrier est contraignant.** Pour que des travaux d'office soient réalisés avant la saison des feux, les mises en demeure doivent partir plusieurs mois à l'avance.
+
+### Ce que la loi met à la charge du maire
+
+Le maire contrôle l'exécution des obligations de débroussaillement autour des habitations, constructions, chantiers et installations de sa commune. Il peut procéder lui-même aux contrôles ou mandater des agents assermentés, et déléguer une partie de ses fonctions à ses adjoints.
+Trois limites méritent d'être connues. La compétence **ne peut pas être transférée à une intercommunalité**, même si la mise en œuvre peut être mutualisée avec la police municipale ou des gardes champêtres. Les pouvoirs du maire **s'arrêtent aux limites de la commune**, ce qui impose une concertation entre maires voisins lorsqu'une zone de 50 mètres franchit la frontière communale. Enfin, le contrôle des **infrastructures linéaires** — routes, voies ferrées, lignes électriques — relève du préfet, pas du maire.
+En cas de carence, le préfet peut se substituer au maire après une mise en demeure restée sans effet.
+
+### La procédure, étape par étape
+
+#### 1. Informer
+
+Avant de contrôler, la commune informe ses administrés du périmètre applicable et de ce qu'il recouvre. Les services forestiers de la DDT et les cartes de Géoportail servent de base. Les périmètres ont vocation à figurer en annexe du plan local d'urbanisme. Depuis 2025, vendeurs et bailleurs doivent par ailleurs informer acquéreurs et locataires.
+
+#### 2. Contrôler
+
+Depuis la loi du 10 juillet 2023, **le préavis d'un mois n'est plus exigé**. Le contrôle peut s'effectuer depuis la voie publique ; l'accès à une propriété close suit une procédure particulière. Si le propriétaire est absent, une notification est laissée sur place ou envoyée en recommandé avec accusé de réception, avec un délai pour une nouvelle visite. Si le propriétaire est inconnu, la notification est affichée en mairie.
+
+#### 3. Mettre en demeure
+
+Le maire fixe par arrêté individuel un délai de réalisation des travaux. C'est également par arrêté motivé qu'il peut porter la profondeur à débroussailler jusqu'à 100 mètres autour des habitations.
+
+#### 4. Faire sanctionner
+
+En cas d'inexécution, le maire saisit le préfet, qui peut prononcer une amende administrative pouvant atteindre **50 € par mètre carré soumis à l'obligation de débroussaillement (art. L135-2 du code forestier)**. Le préfet peut également agir sans saisine préalable. Au pénal, le tribunal peut ajouter une injonction assortie d'une astreinte de 50 à 100 € par jour et par hectare. Le maire peut aussi assortir sa mise en demeure d'une astreinte administrative de 100 € par jour de retard au plus, plafonnée à 5 000 € (art. L134-9 du code forestier) ; les travaux d'office ne peuvent intervenir qu'au moins un mois après la mise en demeure.
+
+#### 5. Exécuter d'office
+
+Après mise en demeure et constat de non-exécution, la commune peut faire réaliser les travaux **aux frais du propriétaire**, qui reçoit un titre de perception. Si le terrain est clos et que le propriétaire s'y oppose, l'accord du juge des libertés et de la détention est nécessaire. La pratique recommandée consiste à prévenir par recommandé une dizaine de jours avant, à dresser un état des lieux avant et après travaux, et à prendre un arrêté récapitulant travaux et frais.
+
+#### 6. Ou mutualiser
+
+Avec l'accord des propriétaires, la commune peut organiser elle-même les travaux et se faire rembourser. C'est souvent plus rapide et moins conflictuel que la voie contentieuse, en particulier dans les lotissements où les parcelles se ressemblent.
+
+### Ce que risque la commune si rien n'est fait
+
+La jurisprudence administrative considère que **l'absence de mise en œuvre de la police des OLD constitue une faute lourde**, susceptible d'obliger la commune à indemniser des propriétaires lorsqu'un incendie aurait pu être évité. La responsabilité pénale du maire peut par ailleurs être recherchée pour mise en danger d'autrui, à des conditions strictes. La commune, en tant que personne morale, n'est pas pénalement responsable dans ce cadre.
+Autrement dit, le risque n'est pas de mal contrôler : il est de ne pas contrôler du tout, et de ne pas pouvoir démontrer le contraire. D'où l'importance de dater et de conserver chaque constat, chaque courrier et chaque relance.
+
+### Les quatre difficultés que signalent les communes
+
+- **Recenser les parcelles concernées.** Les zones de 50 mètres se chevauchent d'une maison à l'autre et produisent un périmètre morcelé, difficile à cartographier sans système d'information géographique.
+- **Identifier les propriétaires.** La recherche passe par le cadastre et le fichier immobilier de la DGFiP. Lorsque le propriétaire reste introuvable, aucune procédure spécifique n'est prévue ; les solutions existantes, comme le régime des biens sans maître, sont longues. En indivision, le procès-verbal vise tous les indivisaires connus.
+- **Financer.** Il n'existe pas d'aide publique directe pour les particuliers (hors crédit d'impôt pour services à la personne), les frais engagés d'office ne sont pas récupérés si le propriétaire est insolvable, et ces dépenses ne sont pas éligibles au FCTVA.
+- **Tenir la trace.** Un registre des transferts de responsabilité est recommandé, puisqu'un voisin qui refuse l'accès ou ne répond pas dans le mois devient lui-même responsable des travaux.
+
+### Le calendrier, à rebours de la saison des feux
+
+Un travail d'office ne s'improvise pas en juin. En remontant depuis l'été : les travaux doivent être faits avant la saison, donc l'entreprise doit être commandée au printemps, donc le constat de non-exécution doit être dressé en fin d'hiver, donc la mise en demeure doit partir en automne, donc le contrôle doit avoir eu lieu à la fin de l'été précédent. **Une commune qui commence à contrôler au printemps ne pourra rien exécuter d'office la même année.**
+
+### En bref
+
+#### Le contrôle des OLD peut-il être confié à la communauté de communes ?
+
+Non. C'est une police spéciale du maire, qui ne peut pas être déléguée à une autre collectivité. En revanche, sa mise en œuvre peut être mutualisée, par exemple avec une police municipale pluricommunale ou des gardes champêtres.
+
+#### Faut-il prévenir le propriétaire avant de contrôler ?
+
+Depuis la loi du 10 juillet 2023, le préavis d'un mois n'est plus exigé. Le contrôle peut se faire depuis la voie publique. Si le propriétaire est absent, une notification est laissée sur place ou envoyée en recommandé avec accusé de réception.
+
+#### Que peut faire la commune si le propriétaire ne fait rien ?
+
+Après mise en demeure par arrêté individuel et constat de non-exécution, la commune peut faire réaliser les travaux d'office aux frais du propriétaire et émettre un titre de perception. Le maire peut aussi saisir le préfet, qui prononce une amende administrative.
+
+#### Que se passe-t-il si le maire ne contrôle pas ?
+
+Le préfet peut se substituer à lui après mise en demeure. Par ailleurs, le juge administratif a qualifié de faute lourde l'absence de mise en œuvre de cette police, ce qui peut conduire la commune à indemniser des propriétaires après un incendie évitable.
+
+#### Comment identifier le propriétaire d'une parcelle non débroussaillée ?
+
+Par le cadastre et le fichier immobilier de la DGFiP. Lorsque le propriétaire reste inconnu, aucune procédure spécifique n'est prévue par la réglementation ; le régime des biens sans maître est une piste, mais il est long à mettre en œuvre.
+
+#### Quand faut-il lancer les contrôles dans l'année ?
+
+Dès la fin de l'été précédent si la commune veut pouvoir exécuter des travaux d'office avant la saison suivante : mise en demeure en automne, constat de non-exécution en fin d'hiver, travaux au printemps.
+
+### Sources
+
+- [Fédération nationale des Communes forestières, « FAQ maires – les obligations légales de débroussaillement », 2024](https://www.communesforestieresfrance.fr/docs/library/faq-maires-old-2024.pdf)
+- [Observatoire de la forêt méditerranéenne, « Faire exécuter les OLD » (fiche technique)](https://ofme.org/debroussaillement/documents/FicheOLDFaireExecuter_06_web.pdf)
+- [Banque des Territoires, « Les obligations légales de débroussaillement : le cadre juridique »](https://www.banquedesterritoires.fr/les-obligations-legales-de-debroussaillement-le-cadre-juridique)
+- [Géorisques, « Obligations légales de débroussaillement (OLD) »](https://www.georisques.gouv.fr/me-preparer-me-proteger/OLD-obligations-legales-de-debroussaillement)
+Cette page décrit le cadre national et ne remplace ni la fiche OLD de votre préfecture, ni l'avis du service forestier de la DDT.
+Pour aller plus loin : [le cadre légal des OLD](https://vb-safety.com/ressources/obligations-legales-debroussaillement/) · [contrôler par imagerie](https://vb-safety.com/ressources/controle-satellite-debroussaillement/) · [VB OLD : constat maison par maison et suivi des courriers](https://vb-safety.com/collectivites/).
+
+## Source : https://vb-safety.com/ressources/controle-satellite-debroussaillement/  ·  mise à jour : 2026-11-12
+
+## Contrôler le débroussaillement par imagerie : satellite, avion, LiDAR
+
+Une commune de mille maisons ne peut pas être contrôlée à pied chaque année. L'imagerie permet de savoir où regarder en priorité — à condition de savoir ce qu'elle montre réellement, et ce qu'elle ne remplacera jamais.
+
+### L'essentiel
+
+- **L'imagerie priorise, elle ne constate pas.** Elle indique quelles maisons méritent une visite ; le procès-verbal, lui, repose sur un contrôle de terrain.
+- **Le LiDAR est plus utile que le satellite** pour les OLD, parce qu'il mesure la structure verticale de la végétation et permet d'estimer la strate basse sous les arbres, qui est précisément celle qui propage le feu.
+- **La date de la donnée est le premier critère de qualité.** Un relevé de trois ans dit où le problème était, pas où il est.
+- **L'intérêt principal n'est pas la détection, c'est l'inventaire.** Savoir combien de maisons sont concernées et lesquelles, c'est ce qui manque à la plupart des communes avant même de parler de contrôle.
+
+### Ce que chaque source permet de voir
+
+#### L'image satellite
+
+Les satellites d'observation à très haute résolution descendent aujourd'hui à 30 à 50 centimètres par pixel selon les capteurs. C'est suffisant pour distinguer une parcelle entretenue d'une parcelle en friche, pour repérer un couvert continu et pour suivre une évolution d'une année sur l'autre. Ce n'est pas suffisant pour juger de la hauteur d'une strate arbustive ni de la distance entre houppiers, qui sont des critères réglementaires. L'avantage du satellite est la fraîcheur : une acquisition peut être programmée.
+
+#### La photographie aérienne
+
+Les orthophotographies de l'IGN descendent à 20 centimètres par pixel et couvrent tout le territoire, gratuitement. La lecture est bien plus confortable qu'en satellite, et l'historique permet de comparer plusieurs millésimes. En contrepartie, le rafraîchissement d'un département prend plusieurs années : la donnée disponible a souvent deux à quatre ans.
+
+#### Le LiDAR
+
+C'est la source la plus pertinente pour le débroussaillement, et la moins connue des élus. Un relevé LiDAR aéroporté mesure la distance au sol par retours laser successifs, ce qui restitue la végétation **en trois dimensions** : hauteur de la strate basse, présence de broussailles sous les arbres, continuité verticale entre le sol et les houppiers. Or c'est ce que vise la réglementation — un sol propre sous des arbres espacés — et c'est invisible sur une photo vue du dessus, où le couvert masque tout. Le programme LiDAR HD de l'IGN couvre progressivement le territoire et les données sont publiques.
+
+### Ce que l'imagerie ne permet pas
+
+- **Dresser un constat opposable.** Le procès-verbal suppose un contrôle effectué par le maire ou un agent assermenté. Une analyse d'image est une aide à la décision, pas un acte de police.
+- **Dater finement.** Un propriétaire qui a débroussaillé le mois dernier apparaîtra en défaut sur une donnée plus ancienne. C'est la première objection que vous recevrez, et elle est légitime.
+- **Voir sous un couvert très dense** en imagerie optique. Le LiDAR réduit fortement ce problème sans l'éliminer.
+- **Juger tous les critères.** Essences, bois morts au sol, élagage précis, état des rémanents : certains points ne se vérifient que sur place.
+
+### Ce que ça change concrètement pour une commune
+
+Le gain n'est pas de remplacer les contrôles, c'est de les ordonner. Une commune qui dispose d'un classement de ses maisons par priorité peut concentrer ses visites là où l'écart à la règle est le plus net et le plus exposé, au lieu de parcourir des quartiers au hasard ou de traiter les seules plaintes reçues.
+Trois effets concrets :
+- **Un inventaire.** Combien de constructions sont soumises aux OLD dans la commune, et où se trouvent les zones de 50 mètres qui se chevauchent — cartographie qu'il est très difficile de produire à la main.
+- **Un ordre de passage.** Les agents partent avec une liste, pas avec une intuition.
+- **Une trace datée.** L'état de la végétation à une date donnée, conservé, qui documente le travail de la commune et permet de montrer l'évolution d'une année sur l'autre.
+
+### Prévention plutôt que répression
+
+Une remarque de méthode, qui décide souvent de l'accueil fait à ce type d'outil. Présenté comme un moyen de verbaliser depuis le ciel, il crée un conflit immédiat avec les administrés et met l'élu en difficulté. Présenté comme un moyen d'expliquer à chaque propriétaire, vue aérienne de sa maison à l'appui, ce qu'il doit faire et pourquoi, il devient un outil d'information — et le taux de mise en conformité spontanée est le vrai indicateur de réussite. La sanction reste disponible ; elle n'est pas l'objectif.
+
+### En bref
+
+#### Peut-on contrôler le débroussaillement par satellite ?
+
+On peut repérer par imagerie les parcelles qui semblent non conformes et les classer par priorité, mais pas dresser un constat opposable. Le procès-verbal suppose un contrôle par le maire ou un agent assermenté. L'imagerie sert à décider où aller voir.
+
+#### Satellite, photo aérienne ou LiDAR : quelle source choisir ?
+
+Pour les OLD, le LiDAR est le plus pertinent, car il mesure la végétation en trois dimensions et permet d'estimer la strate basse sous les arbres, invisible sur une vue du dessus. La photo aérienne offre une bonne résolution et un historique ; le satellite offre la fraîcheur d'acquisition.
+
+#### Un constat par image a-t-il une valeur juridique ?
+
+C'est un élément d'aide à la décision, daté, pas un acte de police. Il peut documenter le travail de la commune et justifier une visite, mais la mise en demeure s'appuie sur un contrôle de terrain.
+
+#### Que faire si le propriétaire a débroussaillé après la prise de vue ?
+
+C'est le cas le plus fréquent et il doit être prévu : le constat indique sa date, et une visite ou une réponse du propriétaire suffit à le corriger. Un outil qui ne permet pas cette correction n'est pas utilisable en mairie.
+
+#### Les données LiDAR de l'IGN sont-elles accessibles ?
+
+Oui, le programme LiDAR HD de l'IGN produit une couverture nationale progressive dont les données sont publiques. La disponibilité et le millésime varient selon les secteurs.
+
+### Sources
+
+- [IGN, programme LiDAR HD](https://geoservices.ign.fr/lidarhd)
+- [Géorisques, « Obligations légales de débroussaillement (OLD) »](https://www.georisques.gouv.fr/me-preparer-me-proteger/OLD-obligations-legales-de-debroussaillement)
+- [Fédération nationale des Communes forestières, « FAQ maires – les obligations légales de débroussaillement », 2024](https://www.communesforestieresfrance.fr/docs/library/faq-maires-old-2024.pdf)
+Les résolutions et millésimes cités sont des ordres de grandeur : vérifiez la donnée réellement disponible sur votre secteur avant de bâtir une méthode de contrôle.
+Pour aller plus loin : [le cadre légal des OLD](https://vb-safety.com/ressources/obligations-legales-debroussaillement/) · [la procédure de contrôle du maire](https://vb-safety.com/ressources/controle-old-maire/) · [VB OLD : voir sa commune maison par maison](https://vb-safety.com/collectivites/).
+
+## Source : https://vb-safety.com/ressources/anticiper-feu-de-foret-commune/  ·  mise à jour : 2026-11-12
+
+## Anticiper le feu de forêt dans sa commune : ce qui se prépare avant la saison
+
+Une saison de feux se prépare l'hiver précédent. Pour une commune exposée, l'essentiel de ce qui sera utile en juillet se décide entre septembre et avril. Voici les leviers, par ordre d'effet réel.
+
+### L'essentiel
+
+- **Le débroussaillement est l'un des principaux leviers** dont dispose une commune, et l'un des rares qu'elle peut faire appliquer directement.
+- **Le calendrier commande.** Contrôler au printemps, c'est renoncer à agir la même année.
+- **L'accès compte autant que la végétation** : une maison parfaitement débroussaillée mais inaccessible aux engins reste indéfendable.
+- **Préparer la crise, c'est préparer l'information** : qui prévient qui, par quel canal, et où sont consignées les décisions.
+
+### Le calendrier d'une commune exposée
+
+En remontant depuis l'été :
+- **Fin d'été et automne** — contrôles de débroussaillement, mises en demeure, information des nouveaux propriétaires.
+- **Automne et hiver** — période des travaux : c'est le moment où le débroussaillement se fait, hors nidification et hors risque d'étincelle.
+- **Fin d'hiver** — constats de non-exécution, préparation des travaux d'office.
+- **Printemps** — travaux d'office, vérification des accès, des points d'eau et de la signalétique, mise à jour des contacts.
+- **Été** — surveillance, information, gestion de crise. Il est trop tard pour agir sur la végétation.
+
+### Le levier principal : les obligations de débroussaillement
+
+C'est le seul dispositif qui réduit directement l'intensité du feu au contact des maisons, et le maire en a la police. Il suppose trois choses que beaucoup de communes n'ont pas : savoir quelles constructions sont soumises à l'obligation, savoir lesquelles ne sont pas conformes, et garder la trace de ce qui a été demandé à qui. Le reste de la procédure, du courrier à l'exécution d'office, est détaillé dans [la fiche sur le contrôle des OLD](https://vb-safety.com/ressources/controle-old-maire/).
+
+### Informer les habitants, avant l'urgence
+
+Beaucoup de propriétaires ignorent qu'ils sont soumis aux OLD, ou confondent débroussailler et raser. L'information produit plus d'effet qu'une menace de sanction, surtout si elle est concrète : ce qu'il faut faire sur cette parcelle, pourquoi, et jusqu'où. Les obligations d'information lors d'une vente ou d'une location, en vigueur depuis 2025, touchent progressivement les nouveaux arrivants, mais ne disent rien aux propriétaires installés de longue date.
+Le document d'information communal sur les risques majeurs reste le support de référence, à condition qu'il soit lu : une version courte, illustrée et distribuée au bon moment de l'année vaut mieux qu'un fascicule complet consultable en mairie.
+
+### L'accès et l'eau
+
+Les engins doivent pouvoir arriver, se croiser, faire demi-tour et repartir, parfois en urgence et dans la fumée. Les points de vigilance habituels : voies privées étroites ou en impasse, portails sans dispositif d'ouverture accessible, branches basses au-dessus de la chaussée, numérotation illisible, citernes et poteaux mal signalés ou inaccessibles. Les 10 mètres de débroussaillement de part et d'autre des voies privées relèvent de la même logique.
+Un recensement à jour des points d'eau et de leur accessibilité, partagé avec le service d'incendie et de secours, fait partie des éléments les plus simples à tenir et les plus utiles le jour venu.
+
+### Se préparer à la crise
+
+Les communes dotées d'un plan de prévention des risques, et celles exposées au risque feu de forêt depuis la loi du 25 novembre 2021, sont tenues d'établir un plan communal de sauvegarde (art. L731-3 du code de la sécurité intérieure), révisable et à exercer régulièrement. Au-delà de l'obligation formelle, trois éléments font la différence le jour J :
+- **Le registre des personnes vulnérables**, tenu à jour, qui conditionne l'ordre des évacuations.
+- **Un canal de remontée d'information** depuis les habitants, pour que la mairie sache rapidement où sont les arbres tombés, les câbles au sol et les routes coupées.
+- **Une main courante** horodatée des décisions prises. C'est l'outil de coordination pendant l'événement, et le document qui permettra d'expliquer après coup ce qui a été décidé, quand et pourquoi.
+
+### Travailler avec le service d'incendie et de secours
+
+Le SDIS connaît les secteurs difficiles de la commune mieux que quiconque : les accès qui posent problème, les zones où les engins ne passent pas, les quartiers déjà menacés lors d'un feu précédent. Une visite commune avant la saison coûte une demi-journée et oriente utilement les priorités de débroussaillement et de voirie.
+
+### En bref
+
+#### Que peut faire concrètement une commune contre le risque de feu de forêt ?
+
+Faire appliquer les obligations de débroussaillement, qui réduisent l'intensité du feu au contact des maisons ; garantir l'accès des engins et la disponibilité des points d'eau ; informer les habitants ; et préparer l'organisation de crise, notamment le recensement des personnes vulnérables et la main courante.
+
+#### À quel moment de l'année faut-il s'y prendre ?
+
+Les contrôles de débroussaillement commencent à la fin de l'été, les travaux se font en automne et en hiver, les travaux d'office en fin d'hiver (avant mi-mars si possible ; au-delà, vérifier l'absence de nids). Une commune qui démarre au printemps ne pourra pas faire exécuter de travaux avant la saison suivante.
+
+#### Le plan communal de sauvegarde est-il obligatoire ?
+
+Il l'est pour les communes dotées d'un plan de prévention des risques, avec une obligation de révision périodique et d'exercices. Son contenu et son articulation avec le plan intercommunal relèvent de la commune et des services de l'État.
+
+#### Comment savoir quelles maisons sont soumises aux obligations de débroussaillement ?
+
+Le zonage est arrêté au niveau départemental et consultable sur Géoportail et auprès de la DDT. Sont visées les constructions situées dans un massif classé ou à moins de 200 mètres de sa lisière. Le report parcellaire est la partie la plus laborieuse.
+
+#### Faut-il associer le SDIS en amont ?
+
+C'est la démarche la plus rentable. Le service connaît les accès difficiles et les secteurs déjà menacés, et une visite avant la saison oriente les priorités de débroussaillement et de voirie.
+
+### Sources
+
+- [Géorisques, « Obligations légales de débroussaillement (OLD) »](https://www.georisques.gouv.fr/me-preparer-me-proteger/OLD-obligations-legales-de-debroussaillement)
+- [Fédération nationale des Communes forestières, « FAQ maires – les obligations légales de débroussaillement », 2024](https://www.communesforestieresfrance.fr/docs/library/faq-maires-old-2024.pdf)
+- [ONF, « Foire aux questions : les obligations légales de débroussaillement »](https://www.onf.fr/vivre-la-foret/enjeux-foret/feux-foret/+/1525::foire-aux-questions-faq-les-obligations-legales-de-debroussaillement-old.html)
+VB Safety ne rédige pas de plan communal de sauvegarde : cette page décrit le cadre, l'élaboration du plan relève de la commune et des services de l'État.
+Pour aller plus loin : [le cadre légal des OLD](https://vb-safety.com/ressources/obligations-legales-debroussaillement/) · [la procédure de contrôle](https://vb-safety.com/ressources/controle-old-maire/) · [VB OLD et cellule de crise communale](https://vb-safety.com/collectivites/).
+
+---
+
+# À propos
+
+## Source : https://vb-safety.com/a-propos/
+
+## Rendre l'exposition mesurable, traçable, transmissible.
+
+VB Safety est une entreprise française qui développe des outils de détection et de traçabilité de l'exposition professionnelle aux agents cancérogènes, mutagènes et reprotoxiques.
+
+### Deux sapeurs-pompiers, un sujet qu'ils connaissent de l'intérieur
+
+#### Martin Mallet
+
+Ingénieur, INSA Lyon et KAIST. Sapeur-pompier volontaire au SDIS 77 depuis plus de dix ans, spécialiste feux de forêt. A travaillé sur les solutions de décontamination et les outils de suivi des agents chimiques dans l'industrie.
+
+#### Jean-Daniel Le Creurer
+
+Sapeur-pompier volontaire au SDIS 77 depuis plus de quinze ans. Conduit les essais terrain et le travail avec les services d'incendie et de secours : conditions réelles, contraintes opérationnelles, retours des équipages.
+
+### Deux projets
+
+#### Capteur de contamination terrain
+
+Une technologie de mesure terrain de contamination cutanée développée par VB Safety.
+- Résultat en quelques secondes, sans attendre un laboratoire
+- Essais en cours avec des sapeurs-pompiers
+
+#### VB CMR
+
+Le logiciel de suivi des expositions et de la décontamination, des agents comme des équipements.
+- Sapeurs-pompiers, industrie et BTP
+- Fiche d'exposition, historique individuel, exports
+
+### Où en est le développement
+
+VB Safety est propriétaire de la technologie et développe elle-même l'appareil de mesure.
+État d'avancement : technologie validée en laboratoire (TRL 4). Essais sur prélèvement cutané en préparation.
+
+### Un projet, une question, un essai ?
+
+SDIS, service de santé au travail, entreprise ou investisseur : décrivez-nous votre contexte, nous revenons vers vous rapidement.
