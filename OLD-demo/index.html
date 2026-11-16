@@ -1059,6 +1059,8 @@ function prmPage(){const P=PRM(),f=n=>esc(P[n]||''),nO=D.h.features.some(x=>OBL(
   '<textarea rows="4" placeholder="Exemple : la commune organise une collecte des déchets verts le premier samedi de mars, devant les services techniques." oninput="prmSet(\'pa_'+PTY+'\',this.value.trim());prmLive()">'+f('pa_'+PTY)+'</textarea></div>';
  h+='</div><div class="pset-r"><div class="pprh"><b>Aperçu</b><span class="muted">'+esc((PRMT.find(x=>x[0]===PTY)||[0,''])[1])+'</span><span class="sp"></span><button class="btn" onclick="prmApercu(PTY)">Ouvrir en grand</button></div><div id="prmnote" class="muted" style="margin:0 0 6px"></div><div class="pprev" id="prmpw"><div class="pph"><div id="prmsc" class="ppsc"><div class="lpdf" id="prmprev"><div class="emp">Chargement…</div></div></div></div></div></div></div>';
  setTimeout(prmPrev,0);return h}
+/* ===== Fiche : étape de la maison et actions possibles (même logique que le Suivi) ===== */
+let FT='d',CX=false;
 function ftabs(p){const R=new Set(relances().map(x=>x[0])),st=stageOf(p,R,QUAL(),CTL(),LATER()),S=STG.find(x=>x[0]===st),lab=S?(STG.indexOf(S)+1)+'. '+S[1]:st==='tard'?'À contacter':'aucune';
  return '<div class="ftab"><button class="'+(FT==='d'?'on':'')+'" onclick="setFT(\'d\')">Diagnostic</button><button class="'+(FT==='a'?'on':'')+'" onclick="setFT(\'a\')">Action <span>'+lab+'</span></button></div>'}
 function setFT(t){FT=t;const d=document.getElementById('fd-d'),a=document.getElementById('fd-a');if(d)d.style.display=t==='d'?'block':'none';if(a)a.style.display=t==='a'?'block':'none';document.querySelectorAll('.ftab button').forEach((b,i)=>b.classList.toggle('on',(i===0)===(t==='d')));if(t==='d')setTimeout(()=>fimg(RISK==='inond'?0:3),0)}
