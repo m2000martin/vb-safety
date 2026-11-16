@@ -39,14 +39,14 @@ migrate((app) => {
     }));
   }
   coll("old_statuts", [
-    { name: "statut", type: "select", values: ["conforme", "non_conforme", "a_recontroler"], maxSelect: 1, required: true },
+    { name: "statut", type: "select", values: ["conforme", "declare_fait", "non_conforme", "a_recontroler"], maxSelect: 1, required: true },
     { name: "date_controle", type: "date", required: true },
     { name: "controleur", type: "text", max: 80 },
     { name: "commentaire", type: "text", max: 2000 }
   ]);
   coll("old_envois", [
     { name: "canal", type: "select", values: ["courrier", "email", "remise_main"], maxSelect: 1, required: true },
-    { name: "ton", type: "select", values: ["bienveillant", "legal", "ferme", "hors_zone", "rappel"], maxSelect: 1, required: true },
+    { name: "ton", type: "select", values: ["premier", "bienveillant", "legal", "ferme", "hors_zone", "rappel", "multi"], maxSelect: 1, required: true },
     { name: "date_envoi", type: "date", required: true },
     { name: "relance_le", type: "date" },
     { name: "note", type: "text", max: 1000 }
