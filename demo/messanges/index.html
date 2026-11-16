@@ -121,7 +121,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .pills{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}.pills button{border:1px solid #d6dbe1;background:#fff;border-radius:999px;padding:5px 11px;font:600 12.5px Inter,system-ui,sans-serif;color:#334155;cursor:pointer}.pills button.on{background:#0f172a;border-color:#0f172a;color:#fff}.pills button.has:after{content:" ●";color:#c2622d}
 .pcard textarea{width:100%;box-sizing:border-box;border:1px solid #d6dbe1;border-radius:10px;padding:9px 11px;font:14px/1.45 Inter,system-ui,sans-serif;resize:vertical}
 .pset-r{position:sticky;top:12px}.pprh{display:flex;align-items:center;gap:8px;margin-bottom:4px}.pprh .sp{flex:1}.pprev{background:#e9e6df;border-radius:14px;padding:12px;max-height:calc(100vh - 150px);overflow:auto}.pph{overflow:hidden}.ppsc{width:760px;transform-origin:0 0}.ppsc .lpdf{width:auto;background:#fff;padding:40px 44px;box-shadow:0 1px 6px rgba(0,0,0,.15)}.ppsc .pa{background:#fff6c2;outline:1px dashed #d9b800}
-@media(max-width:1100px){.pset{grid-template-columns:1fr}.pset-r{position:static}}@media(max-width:600px){.pform,.pimgs{grid-template-columns:1fr}.prow{flex-direction:column;align-items:flex-start}}
+@media(max-width:1100px){.pset{grid-template-columns:minmax(0,1fr)}.pset-r{position:static}}@media(max-width:600px){.pform,.pimgs{grid-template-columns:1fr}.prow{flex-direction:column;align-items:flex-start}}
 .prmbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#f1f5f9;border-radius:10px;padding:8px 10px;margin:0 0 10px;font-size:13px;color:#334155}.prmbar span{flex:1}.prmg select{display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:9px 10px;border:1px solid #d6dbe1;border-radius:10px;font:inherit;background:#fff}
 .prmg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px 14px}.prmg label{display:flex;flex-direction:column;font-size:12.5px;font-weight:600;color:#475569;gap:3px}
 .prmg input{border:1px solid #d6dbe1;border-radius:9px;padding:8px 10px;font:14px Inter,system-ui,sans-serif;color:#0f172a}.prmi{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.prmi img{max-height:46px;max-width:140px;border:1px solid #e2e8f0;border-radius:6px;background:#fff}
@@ -479,14 +479,14 @@ const LCSS='@page{size:A4;margin:15mm 16mm 14mm}body{font:10.5pt/1.42 Georgia,"T
  '@media(max-width:600px){.bar button{padding:5px 7px;font-size:12px}.bar button.pr{margin-left:0;width:100%}}@media print{body{background:#fff}.bar,.warn{display:none}.pg{box-shadow:none;margin:0;width:auto;padding:0}.pg+.pg{page-break-before:always}.ed{background:none;outline:none}}';
 function lettre(tf){
  if(!CUR)return;const p=CUR.p,F=CUR.F,X=lettreParts(p,F);const tp=tonFor(p);let t0=tf&&X.body[tf]?tf:(X.body[tp]?tp:defTon(p,F));const fr=fresh();
- const ob=OBL(p);if(!tonOk(p,t0))t0=ob?'legal':(p.l?'bienveillant':'hors_zone');const keys=Object.keys(X.body),bt=keys.map(k=>'<button data-t="'+k+'" onclick="setT(\''+k+'\',1)"'+(!tonOk(p,k)?' disabled title="'+(k==='hors_zone'?'Maison dans le zonage OLD':'Hors zonage OLD : obligation non opposable')+'"':'')+'>'+TONS[k]+'</button>').join('');
+ const ob=OBL(p);if(!tonOk(p,t0)&&!window._PRV)t0=ob?'legal':(p.l?'bienveillant':'hors_zone');const keys=Object.keys(X.body),bt=keys.map(k=>'<button data-t="'+k+'" onclick="setT(\''+k+'\',1)"'+(!tonOk(p,k)?' disabled title="'+(k==='hors_zone'?'Maison dans le zonage OLD':'Hors zonage OLD : obligation non opposable')+'"':'')+'>'+TONS[k]+'</button>').join('');
  const warn=!ob&&p.l?'<div class="warn"><b>Tons « Légal » et « Ferme » indisponibles</b> : '+(D.zsrc==='est'?'le périmètre est estimé et l\'arrêté préfectoral fixant les modalités n\'est pas encore publié':'adresse hors du zonage officiel')+'. Courrier de prévention uniquement.</div>':(fr||!ob)?'':'<div class="warn"><b>Image de plus de '+FRESH_MAX+' mois ('+imgTxt()+').</b> Avant un courrier « Légal » ou « Ferme », vérifier sur place que la situation n\'a pas changé.</div>';
  const html='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Courrier débroussaillement - '+esc(X.adr)+'</title><style>'+LCSS+'.tv{display:none}'+keys.map(k=>'body.t-'+k+' .t-'+k+'{display:block}').join('')+'</style></head><body class="t-'+t0+'">'+
- '<div class="bar"><b style="margin-right:4px">Ton :</b>'+bt+'<button class="pr" onclick="env(\'courrier\')">Imprimer / PDF et enregistrer l\'envoi</button><span>Zones jaunes modifiables. Ton retenu pour cette maison : '+TONS[t0].toLowerCase()+' (repris dans « À contacter »).</span></div>'+warn+
+ '<div class="bar"><b style="margin-right:4px">Ton :</b>'+bt+'<button class="pr" onclick="env(\'courrier\')">Imprimer / PDF et enregistrer l\'envoi</button><span>Zones jaunes modifiables. '+(window._PRV?'Aperçu des paramètres : rien n\'est enregistré. Type affiché : <b id="tret" '+keys.map(k=>'data-'+k+'="'+(TONS[k]||k).toLowerCase()+'"').join(' ')+'>'+(TONS[t0]||t0).toLowerCase()+'</b>.':'Ton retenu pour cette maison : <b id="tret" '+keys.map(k=>'data-'+k+'="'+(TONS[k]||k).toLowerCase()+'"').join(' ')+'>'+TONS[t0].toLowerCase()+'</b> (repris dans « À contacter »).')+'</span></div>'+warn+
  '<div class="pg">'+X.head+keys.map(k=>'<div class="tv t-'+k+'">'+X.body[k]+'</div>').join('')+X.tail+'</div>'+X.annex+
- '<script>let T0="'+t0+'";function setT(t,u){T0=t;if(u)try{window.opener&&window.opener.tonSet&&window.opener.tonSet('+p.k+',t)}catch(e){}document.body.className="t-"+t;document.querySelectorAll(".bar button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===t))}setT(T0);'+
+ '<script>const NOSAVE='+(window._PRV?1:0)+';let T0="'+t0+'";function setT(t,u){T0=t;var e=document.getElementById("tret");if(e)e.textContent=e.dataset[t]||t;if(u&&!NOSAVE)try{window.opener&&window.opener.tonSet&&window.opener.tonSet('+p.k+',t)}catch(e){}document.body.className="t-"+t;document.querySelectorAll(".bar button[data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===t))}setT(T0);'+
  'function unlock(v){document.querySelectorAll(".bar button[data-t]").forEach(b=>{if(["legal","ferme"].includes(b.dataset.t)&&b.dataset.ob==="1")b.disabled=!v})}'+
- 'function env(c){try{window.opener&&window.opener.logEnvoi&&window.opener.logEnvoi('+p.k+',c,T0)}catch(e){}window.print()}<\/script></body></html>';
+ 'function env(c){try{!NOSAVE&&window.opener&&window.opener.logEnvoi&&window.opener.logEnvoi('+p.k+',c,T0)}catch(e){}window.print()}<\/script></body></html>';
  const u=URL.createObjectURL(new Blob([html],{type:'text/html'}));const w=window.open(u,'_blank');if(!w)location.href=u;}
 /* Attestation remise au propriétaire après un contrôle conforme (ou une photo validée par la mairie) */
 function deN(n){n=String(n||'');return /^Le /.test(n)?'du '+esc(n.slice(3)):/^Les /.test(n)?'des '+esc(n.slice(4)):'de '+esc(n)}
@@ -518,7 +518,7 @@ const TFILE={premier:'courrier-premier-contact',bienveillant:'courrier-informati
 function TSEL(){try{return JSON.parse(localStorage.getItem('oldton_'+D.city)||'{}')}catch(_){return MEM['t'+D.city]||(MEM['t'+D.city]={})}}
 function tonSet(k,t){const o=TSEL();if(t)o[k]=t;else delete o[k];try{localStorage.setItem('oldton_'+D.city,JSON.stringify(o))}catch(_){MEM['t'+D.city]=o}}
 function hasOther(p){return !!((typeof rTem==='function'&&rTem(p))||(typeof rInd==='function'&&rInd(p)))}
-function tonOk(p,t){if(t==='legal'||t==='ferme')return OBL(p);if(t==='hors_zone')return !p.l;if(!p.l&&(t==='premier'||t==='bienveillant'))return false;if(t==='multi')return hasOther(p);return !!TLAB[t]}
+function tonOk(p,t){if(t==='legal'||t==='ferme')return OBL(p);if(t==='hors_zone')return !p.l;if(!p.l&&(t==='premier'||t==='bienveillant'))return false;if(t==='multi')return hasOther(p);if(t==='rappel')return !(p.g==='r'||p.g==='o');return !!TLAB[t]}
 function tonDef(p){const PR=PRM(),feu=pFlags(p).some(x=>/^feu/.test(x));if(hasOther(p)&&(!feu||PR.ton_mr==='multi'))return 'multi';const n=envois(p.k).length;
  if(OBL(p)){const t=n?(PR.ton_obl2||'legal'):(PR.ton_obl1||'premier');return (t==='legal'||t==='ferme')&&!fresh()?'bienveillant':t}return p.l?(n?'bienveillant':'premier'):'hors_zone'}
 function tonFor(p){const t=TSEL()[p.k];return t&&tonOk(p,t)?t:tonDef(p)}
@@ -573,8 +573,8 @@ async function loadSuivi(){loadLocal();await loadRep();if(!online())return;
   const pend=[];['st','en'].forEach(t=>Object.keys(OLDSV[t]||{}).forEach(k=>(OLDSV[t][k]||[]).forEach(r=>{if(!r.id)pend.push([t,+k,r])})));
   for(const [t,k,r] of pend){const p=prop_(k),base={commune:D.city,agglo:D.agglo||'',k,adresse:p?p.a||'':'',auteur:PBA.user.id};try{const x=t==='st'?await pb('/api/collections/old_statuts/records',{method:'POST',body:Object.assign(base,{statut:r.s,date_controle:r.d+' 12:00:00.000Z',controleur:r.c||'',commentaire:r.m||''})}):await pb('/api/collections/old_envois/records',{method:'POST',body:Object.assign(base,{canal:r.c,ton:r.t,date_envoi:r.d+' 12:00:00.000Z',relance_le:r.r?r.r+' 12:00:00.000Z':'',note:r.n||''})});r.id=x.id}catch(e){}(SV[t][k]=SV[t][k]||[]).push(r)}
  }catch(e){console.warn('serveur indisponible',e)}}
-function today(){return new Date().toISOString().slice(0,10)}
-function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function addDays(d,n){const x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)}
 function fdate(d){if(!d)return '';const [y,m,j]=d.split('-');return j+'/'+m+'/'+y}
 function lastSt(k){const L=SV.st[k];if(!L||!L.length)return null;return L.slice().sort((a,b)=>a.d<b.d?-1:1).pop()}
 function envois(k){return (SV.en[k]||[]).slice().sort((a,b)=>a.d<b.d?-1:1)}
@@ -585,8 +585,8 @@ async function delStatut(k){const L=SV.st[k]||[];const r=lastSt(k);if(!r)return;
  SV.st[k]=L.filter(x=>x!==r);saveLocal();restyle();legend();kpi();updTabs()}
 async function logEnvoi(k,canal,ton,note,dd){const d=dd||today(),rec={c:canal,t:ton,d,r:(ton==='rappel'||ton==='hors_zone')?'':addDays(d,60),n:note||''};const p=D.h.features.find(f=>f.properties.k===k);
  if(online()){try{const r=await pb('/api/collections/old_envois/records',{method:'POST',body:{commune:D.city,agglo:D.agglo||'',k,adresse:p?p.properties.a||'':'',canal,ton,date_envoi:d+' 12:00:00.000Z',relance_le:rec.r?rec.r+' 12:00:00.000Z':'',note:rec.n,auteur:PBA.user.id}});rec.id=r.id}catch(e){}}
- if(online()&&!rec.id)toastMsg('Serveur indisponible : envoi enregistré dans ce navigateur, synchronisé à la prochaine connexion.',6000);try{if(QUAL()[k]==='env')qualSet([k],null);const lt=LATER();if(lt[k]){delete lt[k];localStorage.setItem('oldlater_'+D.city,JSON.stringify(lt))}}catch(_){}
- (SV.en[k]=SV.en[k]||[]).push(rec);saveLocal();updTabs();if(tab==='fic'&&CUR&&CUR.p.k===k){const el=document.getElementById('envs');if(el)el.innerHTML=envHTML(k)}else if(tab==='ctl')ui()}
+ if(online()&&!rec.id)toastMsg('Serveur indisponible : envoi enregistré dans ce navigateur, synchronisé à la prochaine connexion.',6000);try{if(QUAL()[k]==='env'||QUAL()[k]==='q')qualSet([k],null);const lt=LATER();if(lt[k]){delete lt[k];localStorage.setItem('oldlater_'+D.city,JSON.stringify(lt))}}catch(_){}
+ (SV.en[k]=SV.en[k]||[]).push(rec);saveLocal();updTabs();if(tab==='fic'&&CUR&&CUR.p.k===k){setTimeout(()=>openByK(k),50)}else if(tab==='ctl')ui()}
 window.logEnvoi=logEnvoi;
 async function login(email,pw){try{const r=await fetch(API+'/api/collections/users/auth-with-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identity:email,password:pw})});
   if(!r.ok)return 'Identifiants refusés ('+r.status+').';const j=await r.json();PBA={token:j.token,user:j.record};try{localStorage.setItem('oldpb',JSON.stringify(PBA))}catch(_){}
@@ -698,8 +698,8 @@ async function openFiche(p,l){
  const x0=0,x1=mob?sz.x:pb.left,y0=mob?hb.bottom:Math.min(hb.bottom,sz.y*0.3),y1=mob?pb.top:sz.y,tx=(x0+x1)/2,ty=(y0+y1)/2;
  const cur=map.latLngToContainerPoint(ll),vis=map.getZoom()>=17&&cur.x>x0+40&&cur.x<x1-40&&cur.y>y0+30&&cur.y<y1-30;
  if(!vis)map.flyTo(map.unproject(map.project(ll,z).add(L.point(sz.x/2-tx,sz.y/2-ty)),z),z,{duration:.45});
- NAV=navList();NI=Math.max(0,NAV.findIndex(q=>q.k===p.k));
- if(tab!=='fic')PREV=tab;tab='fic';document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.remove('on'));
+ NAV=navList();NI=NAV.findIndex(q=>q.k===p.k);
+ if(tab!=='fic')PREV=FROMS?'suivi':tab;FROMS=0;tab='fic';document.querySelectorAll('.tab[data-t]').forEach(x=>x.classList.remove('on'));
  const b=document.getElementById('body');b.innerHTML='<p class="muted">Chargement de la fiche…</p>';b.scrollTop=0;
  const key=D.city+'_'+p.k;let F=FCACHE[key];
  try{if(!F){F=JSON.parse(new TextDecoder().decode(await dec('f/'+key+'.bin')));FCACHE[key]=F;}}catch(e){b.innerHTML='<p>Fiche indisponible.</p>';return}
@@ -710,7 +710,8 @@ let ACC=null;function drawAcc(F){if(ACC){map.removeLayer(ACC);ACC=null}const A=F
 function showAcc(){if(ACC)map.fitBounds(ACC.getLayers()[0].getBounds().pad(0.6),{maxZoom:19});}
 function navList(){const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&inScope(p)&&(!filt||filt(p)));const o={a:0,s:1,n:2,r:0,o:1,v:2,h:3,tr:0,to:1,tv:2,fr:0,fo:1,fi:2,fv:3};return L.sort((a,b)=>o[key(a)]-o[key(b)]||(a.a||'').localeCompare(b.a||'','fr',{numeric:true}))}
 function nav(d){if(!NAV.length)return;NI=(NI+d+NAV.length)%NAV.length;openByK(NAV[NI].k)}
-function openByK(k){document.getElementById('panel').classList.remove('min');if(typeof TOP!=='undefined'&&TOP!=='map'){setTop('map');setTimeout(()=>openByK(k),120);return}let L0=null;H.eachLayer(l=>{if(l.feature.properties.k===k)L0=l});if(L0)openFiche(L0.feature.properties,L0)}
+let FROMS=0;function back_(){if(PREV==='suivi'){PREV='res';setTop('act')}else go(PREV)}
+function openByK(k){if(typeof TOP!=='undefined'&&TOP==='act')FROMS=1;document.getElementById('panel').classList.remove('min');if(typeof TOP!=='undefined'&&TOP!=='map'){setTop('map');setTimeout(()=>openByK(k),120);return}let L0=null;H.eachLayer(l=>{if(l.feature.properties.k===k)L0=l});if(L0)openFiche(L0.feature.properties,L0)}
 function constats(p,F){const br=F.br||{},hors=F.v+F.f,dist=D.porge?'3 m':'3 m',C=[];
  if(br.fl)C.push({c:'#c62828',t:'Branches contre la maison',d:(br.toit>=2?'Arbres au-dessus du toit et à moins de 3 m des murs':'Arbres à moins de 3 m des murs')+' · '+m2(br.a25+br.toit)+' de feuillage',a:'<b>Propriétaire :</b> élaguer, rien à moins de '+dist+' ni au-dessus du toit',i:3});
  if(F.t>=50)C.push({c:'#e65100',t:'Broussaille sur le terrain',d:m2(F.t)+' dans les 50 m'+(F.c10>=50?(F.c10<=F.t?', dont '+m2(F.c10)+' à moins de 10 m':' ; '+m2(F.c10)+' à moins de 10 m de la maison, tous terrains confondus'):''),a:'<b>Propriétaire :</b> débroussailler et évacuer',i:2});
@@ -723,7 +724,7 @@ function constats(p,F){const br=F.br||{},hors=F.v+F.f,dist=D.porge?'3 m':'3 m',C
  return C.filter(x=>!x.info).concat(C.filter(x=>x.info));}
 function ficHTML(p,F){
  const tot=F.t+F.v+F.f,hors=tot?Math.round(100*(F.v+F.f)/tot):0,pc=x=>tot?(100*x/tot)+'%':'0',br=F.br||{};
- let h='<div class="fnav"><button class="btn" onclick="go(PREV)" title="Échap">← '+({lst:'Liste',ctl:'Suivi',cou:'Courriers',sec:'Secteurs',par:'Parcelles',act:'Actions',eta:'Commune'}[PREV]||'Résumé')+'</button><span class="sp"></span><button class="btn ic" onclick="nav(-1)" title="Précédente (←)">‹</button><span class="muted">'+(NI+1)+' / '+NAV.length+'</span><button class="btn ic" onclick="nav(1)" title="Suivante (→)">›</button></div>';
+ let h='<div class="fnav"><button class="btn" onclick="back_()" title="Échap">← '+({suivi:'Suivi des actions',lst:'Liste',ctl:'Suivi',cou:'Courriers',sec:'Secteurs',par:'Parcelles',act:'Actions',eta:'Commune'}[PREV]||'Résumé')+'</button><span class="sp"></span><button class="btn ic" onclick="nav(-1)" title="Précédente (←)">‹</button><span class="muted">'+(NI<0?'hors liste':(NI+1)+' / '+NAV.length)+'</span><button class="btn ic" onclick="nav(1)" title="Suivante (→)">›</button></div>';
  const TG=(t,c)=>' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+c+'">'+t+'</span>';
  h+='<div style="margin-top:12px">'+(RISK!=='feu'?TG(kname(key(p)),colOf(p)):MODE==='pri'?TG(CAT[p.c][0],p.c==='n'?'#8a8478':COL[p.c]):(MODE==='leg'&&!p.l?TG('Hors zone légale'+((p.g||'v')!=='v'?' · '+GN[p.g][0].toLowerCase()+' (recommandé)':''),'#8a8478'):TG(GN[p.g||'v'][0],COLG[p.g||'v'])));
  if(D.porge)h+=' <span class="tag" style="display:inline-block;border-radius:10px;padding:2px 9px;font-size:12px;font-weight:700;color:#fff;background:'+(p.x?'#000':'#2e7d32')+'">'+(p.x?'Détruite en juillet 2026':'Non détruite en juillet 2026')+'</span>';
@@ -849,7 +850,7 @@ TONS.premier='Premier contact';
 const TONS_ORD=['premier','bienveillant','legal','ferme','hors_zone','rappel'];
 async function getF(p){const key=D.city+'_'+p.k;if(FCACHE[key])return FCACHE[key];try{const F=JSON.parse(new TextDecoder().decode(await dec('f/'+key+'.bin')));FCACHE[key]=F;return F}catch(e){return null}}
 function typName(p){return p.t==='c'?'Camping / hébergement de loisirs':p.t==='e'?((p.u&&p.u!=='Annexe'&&p.u!=='Indifférencié')?'Bâtiment '+p.u.toLowerCase():'Bâtiment (hors habitation)'):'Habitation'}
-function today_(){return new Date().toISOString().slice(0,10)}
+function today_(){return today()}
 /* --- Accueil : 3 tuiles --- */
 function homeHTML(){const F=D.h.features.map(f=>f.properties),R=relances(),sansEnv=F.filter(p=>p.k!==undefined&&p.l&&(p.g==='r'||p.g==='o')&&!envois(p.k).length).length;
  const it=(id,ic,h,d,badge)=>'<button class="mi" onclick="homeGo(\''+id+'\')"><span class="mic">'+ic+'</span><span class="mtx"><b>'+h+'</b><span>'+d+'</span>'+(badge?'<i>'+badge+'</i>':'')+'</span><span class="mar">›</span></button>';
@@ -880,6 +881,11 @@ function actHTML(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  return h}
 function selT(k,v){if(v)ASEL.add(k);else ASEL.delete(k);const b=document.getElementById('grpb');if(b)b.textContent='Courriers groupés ('+ASEL.size+')'}
 function selAll(v){ASEL=new Set();if(v){D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&p.l&&(p.g==='r'||p.g==='o')&&!envois(p.k).length).slice(0,50).forEach(p=>ASEL.add(p.k))}ui()}
+function printTour(){const R_=new Set(relances().map(x=>x[0])),Q=QUAL(),O=CTL(),LT=LATER(),L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&stageOf(p,R_,Q,O,LT)==='ctl').sort((a,b)=>(a.a||'').localeCompare(b.a||'','fr',{numeric:true}));
+ if(!L.length){toastMsg('Aucune maison à contrôler.');return}
+ const rows=L.map((p,i)=>'<tr><td>'+(i+1)+'</td><td><b>'+esc(p.a||'Sans adresse')+'</b><br><span>'+esc(pFlags(p).join(' · ')+(O[p.k]&&O[p.k].n?' · '+O[p.k].n:''))+(REP[p.k]?' · réponse : '+esc(REPT[REP[p.k][0].ty]||''):'')+'</span></td><td>'+rcode(p)+'</td><td class="c">☐</td><td class="c">☐</td><td class="c">☐</td><td class="n"></td></tr>').join('');
+ const html='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Tournée de contrôle – '+esc(D.nom)+'</title><style>@page{size:A4 landscape;margin:12mm}body{font:11pt system-ui,sans-serif;color:#111}h1{font-size:16pt;margin:0 0 2mm}p{margin:0 0 4mm;color:#444}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:5px 6px;vertical-align:top;font-size:10pt}th{background:#eee;text-align:left}td span{color:#555;font-size:9pt}.c{text-align:center;font-size:14pt;width:16mm}.n{width:70mm}button{margin:0 0 4mm;padding:6px 12px}@media print{button{display:none}}</style></head><body><button onclick="print()">Imprimer</button><h1>Tournée de contrôle · '+esc(PRM().mairie||('Mairie '+deN(D.nom)))+'</h1><p>'+fdate(today())+' · '+L.length+' maison'+(L.length>1?'s':'')+' · Agent : ______________________ · Résultats à saisir ensuite dans « À contrôler ».</p><table><thead><tr><th>#</th><th>Adresse et motif</th><th>Réf.</th><th>Conforme</th><th>Non conforme</th><th>À revoir</th><th>Observations</th></tr></thead><tbody>'+rows+'</tbody></table></body></html>';
+ const u=URL.createObjectURL(new Blob([html],{type:'text/html'}));const w=window.open(u,'_blank');if(!w)location.href=u}
 function printJour(){const w=window.open('','_blank');if(!w)return;const b=document.getElementById('body').cloneNode(true);b.querySelectorAll('button,input').forEach(x=>x.remove());
  w.document.write('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Résumé du jour</title><style>body{font:12px system-ui;margin:16mm}.li{border-bottom:1px solid #eee;padding:3px 0;display:block}.bs{display:block;color:#666}.chip{display:inline-block;margin:2px 6px 2px 0}.muted{color:#666}</style></head><body><h2>'+esc(D.nom)+' – résumé du jour</h2>'+b.innerHTML+'</body></html>');w.document.close();setTimeout(()=>w.print(),300)}
 /* --- Fiche : envois en bas de « Contrôle et envois » --- */
@@ -968,7 +974,7 @@ function refreshTop(){if(TOP==='act'||TOP==='eta'){const pg=document.getElementB
 function adr_(k){const f=D.h.features.find(x=>x.properties.k===k);return esc(f?(f.properties.a||'Sans adresse'):'—')}
 function prop_(k){const f=D.h.features.find(x=>x.properties.k===k);return f?f.properties:null}
 let CSET=new Set();
-function ctlRow(k,txt){const p=prop_(k);return '<div class="pr" onclick="PREV=\'res\';openByK('+k+')"><input type="checkbox" aria-label="Sélectionner" '+(CSET.has(k)?'checked':'')+' onclick="event.stopPropagation();CSET[this.checked?\'add\':\'delete\']('+k+');refreshTop()"><span class="dt" style="background:'+(p?colOf(p):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'}
+function ctlRow(k,txt){const p=prop_(k);return '<div class="pr" onclick="PREV=\'suivi\';openByK('+k+')"><input type="checkbox" aria-label="Sélectionner" '+(CSET.has(k)?'checked':'')+' onclick="event.stopPropagation();CSET[this.checked?\'add\':\'delete\']('+k+');refreshTop()"><span class="dt" style="background:'+(p?colOf(p):'#ccc')+'"></span><span class="ad">'+adr_(k)+'<span>'+txt+'</span></span><span class="ar">›</span></div>'}
 async function ctlLot(st){if(!CSET.size){alert('Cochez d\'abord les maisons contrôlées.');return}const n=CSET.size;if(!confirm(n+' maison'+(n>1?'s':'')+' : enregistrer le résultat « '+STATUTS[st][0]+' » à la date du jour dans leur fiche ?'+(st==='conforme'?'\nElles sortiront de la liste « À contrôler sur place ».':'\nElles restent dans la liste « À contrôler sur place ».')))return;for(const k of CSET)await saveStatut(k,st,today_(),'','Contrôle enregistré en lot');CSET=new Set();refreshTop()}
 /* ===== Réponses des habitants (QR code du courrier) ===== */
 let REP={};
@@ -1029,7 +1035,7 @@ const PRMT=[['premier','Premier courrier'],['bienveillant','Courrier d\'informat
 function PRM(){try{return JSON.parse(localStorage.getItem('oldprm_'+D.city)||'{}')}catch(_){return MEM['p'+D.city]||(MEM['p'+D.city]={})}}
 function prmSet(k,v){const o=PRM();if(v)o[k]=v;else delete o[k];try{localStorage.setItem('oldprm_'+D.city,JSON.stringify(o))}catch(_){MEM['p'+D.city]=o}}
 function prmImg(k,inp){const f=inp.files&&inp.files[0];if(!f)return;const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,(k==='logo'?240:360)/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);prmSet(k,c.toDataURL('image/png'));refreshTop()};im.src=u}
-async function prmApercu(t){const p=prvHouse(t),F=await getF(p);if(!F){alert('Aperçu indisponible.');return}const old=CUR;CUR={p,F};try{t==='multi'?lettreTheme(themesOf(p)):lettre(t)}finally{CUR=old}}
+async function prmApercu(t){const p=prvHouse(t),F=await getF(p);if(!F){alert('Aperçu indisponible.');return}const old=CUR;CUR={p,F};window._PRV=1;try{t==='multi'?lettreTheme(themesOf(p)):lettre(t)}finally{CUR=old;window._PRV=0}}
 function prmExport(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(PRM(),null,1)],{type:'application/json'}));a.download='parametres-courriers_'+slugF(D.nom)+'.json';document.body.appendChild(a);a.click();a.remove()}
 function prmImport(inp){const f=inp.files&&inp.files[0];if(!f)return;f.text().then(t=>{const o=JSON.parse(t);if(!o||typeof o!=='object')throw 0;try{localStorage.setItem('oldprm_'+D.city,JSON.stringify(o))}catch(_){MEM['p'+D.city]=o}refreshTop();toastMsg('Paramètres importés.')}).catch(()=>alert('Fichier non reconnu.'))}
 let PTY='bienveillant',PRVC={},SIMN=0;
@@ -1091,7 +1097,7 @@ async function fAct(a){const p=CUR.p,k=p.k;
  if(a==='pdf'){lettre();return}if(a==='mail'){mail();setTimeout(()=>openByK(k),400);return}if(a==='att'){attestation();return}
  if(['conf','encours','err','ctl','ss'].includes(a)&&REP[k])await repDone(k);
  if(a==='tard')qualSet([k],'env');else if(a==='encours')qualSet([k],null);else if(a==='err')qualSet([k],'ss');else if(a==='ctl')ctlAdd([k]);else if(a==='unctl')ctlDel([k]);else if(a==='ss')qualSet([k],'ss');
- else if(a==='requal'){qualSet([k],null);if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&r0.s==='conforme')await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}else if(a==='rep')qualSet([k],'rep');
+ else if(a==='requal'){qualSet([k],'q');if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&(r0.s==='conforme'||r0.s==='declare_fait'))await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}else if(a==='rep')qualSet([k],'rep');
  else if(a==='conf'){const dc=REP[k]&&REP[k].length;await saveStatut(k,dc?'declare_fait':'conforme',today(),'',dc?'Déclaration du propriétaire validée':'Fiche');ctlDel([k]);qualSet([k],null)}
  else if(a==='nc'){await saveStatut(k,'non_conforme',today(),'','Fiche');ctlDel([k])}else if(a==='rec'){await saveStatut(k,'a_recontroler',today(),'','Fiche')}
  const bd=document.getElementById('body'),sc=bd?bd.scrollTop:0;openByK(k);requestAnimationFrame(()=>{const b2=document.getElementById('body');if(b2)b2.scrollTop=sc})}
@@ -1113,14 +1119,14 @@ function pFlags(p){const out=[];const scope=AZ==='com'||p.l||!D.h.features.some(
  if(typeof rTem==='function'&&rTem(p))out.push('tempête');if(typeof rInd==='function'&&rInd(p))out.push('inondation');return out}
 function stageOf(p,R,Q,O,LT){const k=p.k,s=lastSt(k);
  if(s&&(s.s==='conforme'||s.s==='declare_fait'))return 'clos';if(s&&s.s==='non_conforme'&&!O[k])return 'md';if(O[k])return 'ctl';
- if((REP[k]&&REP[k].length)||Q[k]==='rep')return 'rep';if(Q[k]==='env'||LT[k])return 'env';if(R.has(k))return 'rel';if(envois(k).length)return 'att';
- if(Q[k]==='ss')return 'clos';return pFlags(p).length?'qual':null}
+ if((REP[k]&&REP[k].length)||Q[k]==='rep')return 'rep';if(Q[k]==='q')return 'qual';if(Q[k]==='env'||LT[k])return 'env';if(Q[k]==='ss')return 'clos';if(R.has(k))return 'rel';if(envois(k).length)return 'att';
+return pFlags(p).length?'qual':null}
 function ctlAdd(ks){const o=CTL();ks.forEach(k=>{const p=prop_(k);if(p&&!o[k])o[k]={a:p.a||'Habitation',c:p.c,s:'c',d:today(),n:pFlags(p).join(' · ')}});saveCtl(o)}
 function ctlDel(ks){const o=CTL();ks.forEach(k=>delete o[k]);saveCtl(o)}
 async function pAct(a){const ks=[...PSEL];if(!ks.length&&a!=='print'&&a!=='tour'){alert('Cochez d\'abord une ou plusieurs maisons.');return}
  if(['conf','encours','err','ctl','ss'].includes(a))for(const k of ks)if(REP[k])await repDone(k);
  if(a==='env')qualSet(ks,'env');else if(a==='ctl'){ctlAdd(ks)}else if(a==='tard'){qualSet(ks,'env')}
- else if(a==='ss')qualSet(ks,'ss');else if(a==='requal'){qualSet(ks,null);for(const k of ks){if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&r0.s==='conforme')await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}}
+ else if(a==='ss')qualSet(ks,'ss');else if(a==='requal'){qualSet(ks,'q');for(const k of ks){if(LATER()[k])laterSet(k,null);const r0=lastSt(k);if(r0&&(r0.s==='conforme'||r0.s==='declare_fait'))await saveStatut(k,'a_recontroler',today(),'','Dossier rouvert')}}
  else if(a==='pdf'){lettresGroupees(ks);return}
  else if(a==='sent'){for(const k of ks){const p=prop_(k);if(!envois(k).some(e=>e.d===today()))await logEnvoi(k,'courrier',p?tonFor(p):'bienveillant','Envoi groupé',today());const o=LATER();if(o[k]){delete o[k];try{localStorage.setItem('oldlater_'+D.city,JSON.stringify(o))}catch(_){}}}qualSet(ks,null)}
  else if(a==='encours'){qualSet(ks,null)}
@@ -1129,7 +1135,7 @@ async function pAct(a){const ks=[...PSEL];if(!ks.length&&a!=='print'&&a!=='tour'
  else if(a==='conf'){for(const k of ks)await saveStatut(k,PST==='rep'?'declare_fait':'conforme',today(),'',PST==='rep'?'Déclaration du propriétaire validée':'Suivi des actions');ctlDel(ks);qualSet(ks,null)}
  else if(a==='nc'){for(const k of ks)await saveStatut(k,'non_conforme',today(),'','Contrôle enregistré en lot');ctlDel(ks)}
  else if(a==='rec'){for(const k of ks)await saveStatut(k,'a_recontroler',today(),'','Contrôle enregistré en lot')}
- else if(a==='tour'){printJour();return}
+ else if(a==='tour'){printTour();return}
  const TG={env:'env',ctl:'ctl',tard:'env',encours:'att',err:'clos',ss:'clos',requal:'qual',sent:'att',rep:'rep',conf:'clos',nc:'md',rec:'ctl'}[a];
  PSEL=new Set();refreshTop();if(TG){const R_=new Set(relances().map(x=>x[0])),p0=prop_(ks[0]),st=p0?stageOf(p0,R_,QUAL(),CTL(),LATER()):TG;toastP(ks.length,st||'clos')}}
 function toastP(n,tg){const S=STG.find(s=>s[0]===tg),lab=S?S[1]:'À contacter';let t=document.getElementById('ptoast');if(!t){t=document.createElement('div');t.id='ptoast';document.body.appendChild(t)}
@@ -1137,7 +1143,7 @@ function toastP(n,tg){const S=STG.find(s=>s[0]===tg),lab=S?S[1]:'À contacter';l
 let HQ='';
 function histList(){const q=HQ.trim().toLowerCase(),ev=[];Object.keys(SV.en).forEach(k=>envois(+k).forEach(e=>ev.push([e.d,+k,(e.c==='email'?'E-mail':e.c==='remise_main'?'Remis en main propre':'Courrier')+(e.t&&TONS[e.t]?' · '+TONS[e.t].toLowerCase():'')])));Object.keys(SV.st).forEach(k=>(SV.st[k]||[]).forEach(x=>ev.push([x.d,+k,'Contrôle : '+STATUTS[x.s][0].toLowerCase()+(x.c?' · '+esc(x.c):'')])));
  const L=ev.map(e=>{const p=prop_(e[1]);return [e[0],e[1],e[2],p?(p.a||'Sans adresse'):'']}).filter(e=>!q||e[3].toLowerCase().includes(q)).sort((a,b)=>a[0]<b[0]?1:-1);
- return L.length?L.slice(0,300).map(e=>'<div class="pr" onclick="PREV=\'res\';openByK('+e[1]+')"><span class="dt" style="background:#94a3b8"></span><span class="ad">'+esc(e[3])+'<span>'+fdate(e[0])+' · '+e[2]+'</span></span><span class="ar">›</span></div>').join(''):'<div class="emp">'+(q?'Aucun événement pour cette recherche.':'Aucun événement pour l\'instant.')+'</div>'}
+ return L.length?L.slice(0,300).map(e=>'<div class="pr" onclick="PREV=\'suivi\';openByK('+e[1]+')"><span class="dt" style="background:#94a3b8"></span><span class="ad">'+esc(e[3])+'<span>'+fdate(e[0])+' · '+e[2]+'</span></span><span class="ar">›</span></div>').join(''):'<div class="emp">'+(q?'Aucun événement pour cette recherche.':'Aucun événement pour l\'instant.')+'</div>'}
 let REX=new Set();
 function repTog(k){REX.has(k)?REX.delete(k):REX.add(k);refreshTop()}
 function repFull(p){const L=REP[p.k]||[],e=envois(p.k),last=e[e.length-1],ph=L.filter(r=>r.ph);
@@ -1145,7 +1151,7 @@ function repFull(p){const L=REP[p.k]||[],e=envois(p.k),last=e[e.length-1],ph=L.f
   '<div class="muted" style="font-size:12.5px">'+(last?'Courrier « '+esc(TLAB[last.t]||last.t||'')+' » envoyé le '+fdate(last.d)+' · ':'')+'Réf. '+rcode(p)+(pFlags(p).length?' · '+pFlags(p).join(' · '):'')+'</div></div>'+
   '<div class="rexi"><figure><div class="rexim" id="rexa'+p.k+'">Chargement…</div><figcaption>Constat initial (photo aérienne IGN)</figcaption></figure>'+
   (ph.length?ph.map(r=>'<figure><a href="'+r.ph+'" target="_blank" rel="noopener" title="Agrandir"><img src="'+r.ph+'" alt="Photo du propriétaire"></a><figcaption>'+(r.sim?'Photo du propriétaire (démo : vue aérienne en substitut)':'Photo envoyée par le propriétaire')+'</figcaption></figure>').join(''):'<figure><div class="rexim">Aucune photo jointe</div><figcaption>Photo du propriétaire</figcaption></figure>')+'</div>'+
-  '<div class="rexd"><b>Décision</b><button class="btn okb" onclick="rAct('+p.k+',\'conf\')" title="Travaux déclarés par le propriétaire : clos sans contrôle, pas d\'attestation">✓ Valider la déclaration → Clos</button><button class="btn kob" onclick="rAct('+p.k+',\'ctl\')">✗ Ne pas valider → contrôle sur place</button><button class="btn" onclick="rAct('+p.k+',\'encours\')">Travaux en cours → En attente</button><button class="btn" onclick="rAct('+p.k+',\'err\')">Constat erroné → Sans suite</button><span class="sp"></span><button class="lnk" onclick="PREV=\'res\';openByK('+p.k+')">Ouvrir la fiche</button></div></div>'}
+  '<div class="rexd"><b>Décision</b><button class="btn okb" onclick="rAct('+p.k+',\'conf\')" title="Travaux déclarés par le propriétaire : clos sans contrôle, pas d\'attestation">✓ Valider la déclaration → Clos</button><button class="btn kob" onclick="rAct('+p.k+',\'ctl\')">✗ Ne pas valider → contrôle sur place</button><button class="btn" onclick="rAct('+p.k+',\'encours\')">Travaux en cours → En attente</button><button class="btn" onclick="rAct('+p.k+',\'err\')">Constat erroné → Sans suite</button><span class="sp"></span><button class="lnk" onclick="PREV=\'suivi\';openByK('+p.k+')">Ouvrir la fiche</button></div></div>'}
 async function repFill(){for(const k of REX){const el=document.getElementById('rexa'+k);if(!el||el.dataset.ok)continue;const p=prop_(k),F=p&&await getF(p);if(F&&F.img){el.innerHTML='<img src="'+F.img[0]+'" alt="">';el.dataset.ok=1}}}
 function repMini(k){const r=(REP[k]||[])[0];if(!r)return '';return '<span class="rpv"><b>À vérifier</b>'+(r.ph?'<img src="'+r.ph+'" alt="Photo du propriétaire">':'')+(r.dt?' travaux déclarés le '+fdate(r.dt):'')+(r.c?' « '+esc(String(r.c).slice(0,140))+' »':'')+'</span>'}
 async function simRep(){const A=D.h.features.map(f=>f.properties),Rl=new Set(relances().map(x=>x[0])),Q=QUAL(),O=CTL(),LT=LATER();
@@ -1179,7 +1185,7 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  const sub=p=>{const fl=pFlags(p),e=envois(p.k),s=lastSt(p.k),lt=LT[p.k];return [fl.join(' · '),e.length?'courrier du '+fdate(e[e.length-1].d):'',s?STATUTS[s.s][0].toLowerCase()+' le '+fdate(s.d):'',lt?'à contacter à partir du '+fdate(lt.d):'',e.length>1?e.length+' courriers':'',Q[p.k]==='ss'?'classée sans suite':'',REP[p.k]?'<b style="color:#c2622d">réponse : '+(REPT[REP[p.k][0].ty]||'')+'</b>':''].filter(Boolean).join(' · ')};
  const RA={qual:[['env','+ À contacter'],['ctl','+ À contrôler'],['ss','Sans suite']],env:[['dlone','⬇ PDF'],['pdfone','Aperçu'],['sent','Envoyé']],att:[['rep','Réponse tél. / accueil'],['ctl','+ À contrôler']],rep:[['conf','✓ Valider'],['encours','En cours'],['err','Constat erroné'],['ctl','+ À contrôler']],rel:[['dlone','⬇ PDF'],['pdfone','Aperçu'],['sent','Envoyé'],['ctl','+ À contrôler']],ctl:[['conf','✓ Conforme'],['nc','✗ Non conforme'],['rec','↻ À revoir']],md:[['ctl','+ Nouveau contrôle']],clos:[['requal','Rouvrir']]}[PST]||[];
  const TIP={conf:'Conforme : débroussaillement fait',nc:'Non conforme : travaux non faits',rec:'À revoir : visite impossible ou travaux en cours'};
- const row=p=>'<div class="pr'+(PSEL.has(p.k)?' sel':'')+(PST==='rep'&&REX.has(p.k)?' open':'')+'" onclick="'+(PST==='rep'?'repTog('+p.k+')':'PREV=\'res\';openByK('+p.k+')')+'"><input type="checkbox" aria-label="Sélectionner" '+(PSEL.has(p.k)?'checked':'')+' onclick="event.stopPropagation();PSEL[this.checked?\'add\':\'delete\']('+p.k+');refreshTop()"><span class="dt" style="background:'+(COLG[p.g]||'#cbd5e1')+'"></span><span class="ad">'+esc(p.a||'Sans adresse')+'<span>'+sub(p)+'</span>'+(PST==='rep'&&REP[p.k]?repMini(p.k):'')+'</span>'+((PST==='env'||PST==='rel')?'<select class="tsel" title="Courrier pour cette maison" onclick="event.stopPropagation()" onchange="tonSet('+p.k+',this.value);refreshTop()">'+tonOpts(p)+'</select>':'')+'<span class="ra">'+RA.map(x=>'<button class="rb'+(x[0]==='dlone'?' dl':x[0]==='conf'?' ok':x[0]==='nc'?' ko':'')+'"'+(TIP[x[0]]?' title="'+TIP[x[0]]+'"':'')+' onclick="event.stopPropagation();'+(x[0]==='dlone'?'dlOne('+p.k+')':x[0]==='pdfone'?'lettresGroupees(['+p.k+'])':'rAct('+p.k+',\''+x[0]+'\')')+'">'+x[1]+'</button>').join('')+'</span><span class="ar">'+(PST==='rep'?(REX.has(p.k)?'▾':'▸'):'›')+'</span></div>'+(PST==='rep'&&REX.has(p.k)?repFull(p):'');
+ const row=p=>'<div class="pr'+(PSEL.has(p.k)?' sel':'')+(PST==='rep'&&REX.has(p.k)?' open':'')+'" onclick="'+(PST==='rep'?'repTog('+p.k+')':'PREV=\'suivi\';openByK('+p.k+')')+'"><input type="checkbox" aria-label="Sélectionner" '+(PSEL.has(p.k)?'checked':'')+' onclick="event.stopPropagation();PSEL[this.checked?\'add\':\'delete\']('+p.k+');refreshTop()"><span class="dt" style="background:'+(COLG[p.g]||'#cbd5e1')+'"></span><span class="ad">'+esc(p.a||'Sans adresse')+'<span>'+sub(p)+'</span>'+(PST==='rep'&&REP[p.k]?repMini(p.k):'')+'</span>'+((PST==='env'||PST==='rel')?'<select class="tsel" title="Courrier pour cette maison" onclick="event.stopPropagation()" onchange="tonSet('+p.k+',this.value);refreshTop()">'+tonOpts(p)+'</select>':'')+'<span class="ra">'+RA.map(x=>'<button class="rb'+(x[0]==='dlone'?' dl':x[0]==='conf'?' ok':x[0]==='nc'?' ko':'')+'"'+(TIP[x[0]]?' title="'+TIP[x[0]]+'"':'')+' onclick="event.stopPropagation();'+(x[0]==='dlone'?'dlOne('+p.k+')':x[0]==='pdfone'?'lettresGroupees(['+p.k+'])':'rAct('+p.k+',\''+x[0]+'\')')+'">'+x[1]+'</button>').join('')+'</span><span class="ar">'+(PST==='rep'?(REX.has(p.k)?'▾':'▸'):'›')+'</span></div>'+(PST==='rep'&&REX.has(p.k)?repFull(p):'');
  h+='<div class="pwide" style="margin-top:12px"><div class="pch"><b style="font-size:17px">'+S[1]+'</b><span class="bd">'+L.length+'</span></div><div class="muted" style="margin:2px 0 8px">'+S[2]+'</div>'+info+
   '<div class="pbar"><button class="btn" onclick="PSEL=new Set(['+L.slice(0,50).map(p=>p.k).join(',')+']);refreshTop()">Cocher '+Math.min(50,L.length)+'</button><button class="btn" onclick="PSEL=new Set();refreshTop()">Décocher</button><span class="muted">'+PSEL.size+' cochée'+(PSEL.size>1?'s':'')+'</span><span class="sp"></span>'+((PST==='env'||PST==='rel')?'':'<span class="muted">'+(PSEL.size?'Pour les maisons cochées :':'Cochez des maisons pour agir en lot, ou utilisez les boutons de chaque ligne')+'</span>')+acts+'</div>'+
   (PST==='rep'?(setTimeout(repFill,0),'<div class="muted" style="margin:0 0 6px">Cliquer sur une ligne pour voir la réponse complète, les photos et décider.</div>'):'')+'<div class="pcl" style="max-height:'+(PST==='rep'?'none':'520px')+'">'+(L.length?L.slice(0,300).map(row).join('')+(L.length>300?'<div class="emp">… '+(L.length-300)+' autres</div>':''):'<div class="emp">Aucune maison à cette étape.</div>')+'</div></div>'; 
@@ -1194,7 +1200,7 @@ function setB(sc,d){if(sc)BSC=sc;if(d!==undefined&&d!==null)BD=d;refreshTop()}
 function bSel(F){bInit();const z=F.some(p=>p.l),base=F.filter(p=>BSC!=='leg'||p.l),c=d=>d?base.filter(p=>p.df!==undefined&&p.df<=d).length:base.length;
  return '<div class="bsel"><div class="dseg" style="flex:0 0 auto">'+(z?'<button class="'+(BSC==='leg'?'on':'')+'" onclick="setB(\'leg\')"><b>Périmètre OLD légal</b><i>'+F.filter(p=>p.l).length+'</i></button>':'')+'<button class="'+(BSC==='com'?'on':'')+'" onclick="setB(\'com\')"><b>Commune entière</b><i>'+F.length+'</i></button></div><span class="bsl">Distance au bois</span><div class="dseg">'+[[0,'Toutes'],[50,'< 50 m'],[100,'< 100 m'],[200,'< 200 m']].map(x=>'<button class="'+(BD===x[0]?'on':'')+'" onclick="setB(null,'+x[0]+')"><b>'+x[1]+'</b><i>'+c(x[0])+'</i></button>').join('')+'</div></div>'}
 let TEX=false;
-function wkS(d){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()-(x.getDay()+6)%7);return x.toISOString().slice(0,10)}
+function wkS(d){const x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()-(x.getUTCDay()+6)%7);return x.toISOString().slice(0,10)}
 function trendData(Z){const K=new Set(Z.map(p=>String(p.k))),ev=[],now=wkS(today());
  Object.keys(SV.en).forEach(k=>{if(K.has(k))envois(+k).forEach(e=>ev.push(['c',e.d]))});
  Object.keys(SV.st).forEach(k=>{if(K.has(k))(SV.st[k]||[]).forEach(s=>ev.push(['k',s.d]))});
@@ -1421,7 +1427,7 @@ function wxHTML(m,v,big){if(big===2)return wxRich(m,v);const C={jaune:['#f2c200'
  return '<div class="wx'+(big?' big':'')+'"><div class="wh"><b>Météo et vigilance</b><span>'+esc(D.nom)+(tm?' · '+tm:'')+'</span></div>'+vg+mt+
   '<div class="wf">Météo-France (vigilance, modèle AROME via Open-Meteo) · <a href="https://vigilance.meteofrance.fr" target="_blank" rel="noopener">Vigilance</a> · <a href="https://www.vigicrues.gouv.fr" target="_blank" rel="noopener">Vigicrues</a> · <a href="https://meteofrance.com/meteo-des-forets" target="_blank" rel="noopener">Météo des forêts</a></div></div>'}
 let WXS=true;
-function wxScen(m){const t0=new Date();t0.setMinutes(0,0,0);const hh=[...Array(12)].map((_,i)=>{const d=new Date(t0.getTime()+i*3600e3);return d.toISOString().slice(0,11)+String(d.getHours()).padStart(2,'0')+':00'});
+function wxScen(m){const t0=new Date();t0.setMinutes(0,0,0);const hh=[...Array(12)].map((_,i)=>{const d=new Date(t0.getTime()+i*3600e3);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'T'+String(d.getHours()).padStart(2,'0')+':00'});
  const g=[58,64,71,79,88,96,93,85,74,63,52,44],p=[.4,1.2,2.6,3.2,2.3,1.5,.8,.3,.1,0,0,0];
  return {current:{time:hh[0],wind_gusts_10m:g[0],wind_speed_10m:27,wind_direction_10m:240,precipitation:.4,temperature_2m:11},hourly:{time:hh,wind_gusts_10m:g,precipitation:p},sc:1}}
 function wxRich(m0,v){const scen=WXS,m=scen?wxScen(m0):m0;
@@ -1486,7 +1492,7 @@ function themeMain(p,F,themes){const body=themes.map(t=>themeBody(p,F,t)).join('
 function lettreTheme(themes){if(!CUR)return;const p=CUR.p,F=CUR.F,X=lettreParts(p,F),k=themes.length>1?'all':themes[0];
  const html='<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Courrier – '+esc(X.adr)+'</title><style>'+LCSS+'</style></head><body><div class="bar"><b>'+(k==='all'?'Courrier multirisque':k==='tem'?'Courrier tempête':'Courrier inondation')+'</b><button class="pr" onclick="env()">Imprimer / PDF et enregistrer l\'envoi</button><span>Zones jaunes modifiables.</span></div>'+
  '<div class="pg">'+X.head+themeMain(p,F,themes)+X.tail+'</div>'+X.annex+
- '<script>function env(){try{window.opener&&window.opener.logEnvoi&&window.opener.logEnvoi('+p.k+',"courrier","'+(k==='all'?'multi':'bienveillant')+'")}catch(e){}window.print()}<\/script></body></html>';
+ '<script>function env(){try{'+(window._PRV?'0&&':'')+'window.opener&&window.opener.logEnvoi&&window.opener.logEnvoi('+p.k+',"courrier","'+(k==='all'?'multi':'bienveillant')+'")}catch(e){}window.print()}<\/script></body></html>';
  const u=URL.createObjectURL(new Blob([html],{type:'text/html'}));const w=window.open(u,'_blank');if(!w)location.href=u}
 const _lettre0=lettre;
 lettre=function(tf){if(RISK==='feu'||tf)return _lettre0(tf);if(RISK==='all'){const p=CUR.p;return lettreTheme(['feu'].concat(D.st&&rTem(p)||D.st&&D.st.b[p.k]?['tem']:[]).concat(D.fl&&D.fl.b[p.k]?['inond']:[]))}return lettreTheme([RISK])};
@@ -1673,7 +1679,7 @@ function start(data){D=data;document.getElementById('ttl').textContent=D.nom+' �
  document.getElementById('grip').onclick=()=>document.getElementById('panel').classList.toggle('min');
  {const P=document.getElementById('panel');let y0=null;const st=e=>{y0=e.touches[0].clientY},mv=e=>{if(y0===null)return;const dy=e.touches[0].clientY-y0;if(dy>40){P.classList.add('min');y0=null}else if(dy<-40){P.classList.remove('min');y0=null}};['grip','tabs'].forEach(i=>{const e=document.getElementById(i);if(e){e.addEventListener('touchstart',st,{passive:true});e.addEventListener('touchmove',mv,{passive:true})}})}
  if(innerWidth<900)document.getElementById('panel').classList.add('min');
- document.onkeydown=e=>{if(tab!=='fic'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape')go(PREV);else if(e.key==='ArrowRight')nav(1);else if(e.key==='ArrowLeft')nav(-1);};
+ document.onkeydown=e=>{if(tab!=='fic'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='Escape')back_();else if(e.key==='ArrowRight')nav(1);else if(e.key==='ArrowLeft')nav(-1);};
 }
 </script>
 <div id="gate" style="position:fixed;inset:0;z-index:5000;background:#f1f5f9;display:flex;align-items:center;justify-content:center">
