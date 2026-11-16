@@ -94,6 +94,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .ftab button span{font-size:11.5px;font-weight:600;color:#c2622d;margin-left:4px}.ftab button.on{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .cst.cmp .row .a{display:none}
 .repb{border:1px solid #f3d4bf;background:#fff7f0;border-radius:10px;padding:9px 11px;margin-bottom:8px;font-size:13.5px}.repb img{display:block;max-width:100%;max-height:220px;border-radius:8px;margin-top:6px}
+#tmap{width:100%;height:100%}.tvsw{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;background:rgba(15,23,42,.75);border-radius:10px;padding:3px;z-index:500}.tvsw button{border:0;background:none;color:#e2e8f0;font:600 12.5px Inter,sans-serif;padding:5px 10px;border-radius:8px;cursor:pointer}.tvsw button.on{background:#fff;color:#0f172a}
 #triov{position:fixed;inset:0;z-index:4000;background:rgba(15,23,42,.88);display:none;flex-direction:column;align-items:center;padding:14px;box-sizing:border-box;overflow:auto;font-family:Inter,system-ui,sans-serif}
 .ttop{width:100%;max-width:560px;display:flex;align-items:center;gap:10px;color:#e2e8f0;font-size:13.5px;margin-bottom:10px;flex-wrap:wrap}.ttop b{font-size:16px;color:#fff}.ttop .tn{flex:1;color:#94a3b8}
 .ttop button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:9px;padding:6px 10px;font:600 13px Inter,sans-serif;cursor:pointer}.ttop button[disabled]{opacity:.4}
@@ -902,30 +903,40 @@ function repBox(k){const L=REP[k];if(!L||!L.length)return '';return L.map(r=>'<d
 setInterval(()=>{if(typeof D!=='undefined'&&D&&online())loadRep().then(()=>{if(TOP==='act')refreshTop()})},60000);
 addEventListener('focus',()=>{if(typeof D==='undefined'||!D)return;loadRep().then(()=>{if(TOP==='act')refreshTop();else if(tab==='fic'&&CUR)openByK(CUR.p.k)})});
 /* ===== Tri rapide : une maison à la fois, glisser ou flèches ===== */
-let TQ=null;
+let TQ=null,TV='p',TMAP=null,TCEN=null;
+function triCen(){if(TCEN)return TCEN;TCEN={};D.h.features.forEach(x=>{try{TCEN[x.properties.k]=L.geoJSON(x).getBounds().getCenter()}catch(_){}});return TCEN}
+function triView(v){TV=v;if(TQ)triShow()}
+function triMap(p){const el=document.getElementById('tmap');if(!el)return;if(TMAP){try{TMAP.remove()}catch(_){}TMAP=null}
+ const fe=D.h.features.find(x=>x.properties.k===p.k);if(!fe)return;const C=triCen(),c=C[p.k];
+ if(!c)return;const m=L.map(el,{zoomControl:true,attributionControl:false,scrollWheelZoom:true});TMAP=m;m.invalidateSize();m.setView(c,17);
+ L.tileLayer('https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIXSET=PM&FORMAT=image/jpeg&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',{maxNativeZoom:19,maxZoom:20}).addTo(m);
+ const near=D.h.features.filter(x=>x!==fe&&C[x.properties.k]&&c&&C[x.properties.k].distanceTo(c)<300);
+ L.geoJSON({type:'FeatureCollection',features:near},{interactive:false,style:x=>({color:'#fff',weight:1,fillColor:COLG[x.properties.g]||'#cbd5e1',fillOpacity:.75})}).addTo(m);
+ L.geoJSON(fe,{interactive:false,style:{color:'#0f172a',weight:3,fillColor:COLG[p.g]||'#c2622d',fillOpacity:.9}}).addTo(m);
+ L.circle(c,{radius:50,color:'#ffd200',weight:2,fill:false,dashArray:'6 5',interactive:false}).addTo(m);setTimeout(()=>{try{m.invalidateSize()}catch(_){}},60)}
 function propose(p){if(p.vp)return ['ctl','Constat partiel sur l\'image : à vérifier sur place'];if(p.g==='r')return ['env','Priorité 1 : constat net sur l\'image'];if(p.g==='o')return ['env','Priorité 2 : débroussaillement à faire'];
  if(typeof rTem==='function'&&rTem(p))return ['env','Arbres de plus de 8 m à portée (tempête)'];if(typeof rInd==='function'&&rInd(p))return ['env','Zone inondable : information du propriétaire'];return ['ss','Rien de prioritaire sur les images']}
 const TRL={env:'À contacter',ctl:'À contrôler',ss:'Sans suite',skip:'Passée'};
 function triStart(){const R=new Set(relances().map(x=>x[0])),Q=QUAL(),O=CTL(),LT=LATER();
  const L=D.h.features.map(f=>f.properties).filter(p=>p.k!==undefined&&stageOf(p,R,Q,O,LT)==='qual').sort((a,b)=>({r:0,o:1,j:2,v:3}[a.g]??4)-({r:0,o:1,j:2,v:3}[b.g]??4)||pFlags(b).length-pFlags(a).length);
  TQ={list:L.map(p=>p.k),i:0,hist:[],n:{env:0,ctl:0,ss:0}};triShow()}
-function triEnd(){const ov=document.getElementById('triov');if(ov)ov.style.display='none';TQ=null;refreshTop()}
+function triEnd(){if(TMAP){try{TMAP.remove()}catch(_){}TMAP=null}const ov=document.getElementById('triov');if(ov)ov.style.display='none';TQ=null;refreshTop()}
 async function triShow(){let ov=document.getElementById('triov');if(!ov){ov=document.createElement('div');ov.id='triov';document.body.appendChild(ov)}ov.style.display='flex';
  const top='<div class="ttop"><b>Tri rapide</b><span>'+Math.min(TQ.i+1,TQ.list.length)+' / '+TQ.list.length+'</span><span class="tn">À contacter '+TQ.n.env+' · À contrôler '+TQ.n.ctl+' · Sans suite '+TQ.n.ss+'</span><button onclick="triUndo()" '+(TQ.hist.length?'':'disabled')+'>↶ Annuler</button><button onclick="triEnd()">Fermer ✕</button></div>';
  if(TQ.i>=TQ.list.length){ov.innerHTML=top+'<div class="tcard tdone"><h2>Tout est trié</h2><p>'+TQ.n.env+' maisons à contacter, '+TQ.n.ctl+' à contrôler, '+TQ.n.ss+' sans suite.</p><button class="btn dark" onclick="triEnd()">Voir le suivi</button></div>';return}
  const k=TQ.list[TQ.i],p=prop_(k),pr=propose(p);
- ov.innerHTML=top+'<div class="tcard" id="tcard"><div class="timg"><img id="timg" alt=""><span class="tload">Chargement de l\'image…</span><i class="tl">Sans suite</i><i class="tr">À contacter</i><i class="tu">À contrôler</i></div><div class="tbody"><div class="tad">'+esc(p.a||'Sans adresse')+'</div><div class="ttags">'+pFlags(p).map(t=>'<span>'+t+'</span>').join('')+'</div><div id="tcst" class="muted">…</div><div class="tprop">Proposé : <b>'+TRL[pr[0]]+'</b> · '+pr[1]+'</div></div></div>'+
+ ov.innerHTML=top+'<div class="tcard" id="tcard"><div class="timg">'+(TV==='l'?'<div id="tmap"></div>':'<img id="timg" alt=""><span class="tload">Chargement de l\'image…</span>')+'<div class="tvsw"><button class="'+(TV==='p'?'on':'')+'" onpointerdown="event.stopPropagation()" onclick="triView(\'p\')">Vue proche</button><button class="'+(TV==='l'?'on':'')+'" onpointerdown="event.stopPropagation()" onclick="triView(\'l\')">Vue large</button></div><i class="tl">Sans suite</i><i class="tr">À contacter</i><i class="tu">À contrôler</i></div><div class="tbody"><div class="tad">'+esc(p.a||'Sans adresse')+'</div><div class="ttags">'+pFlags(p).map(t=>'<span>'+t+'</span>').join('')+'</div><div id="tcst" class="muted">…</div><div class="tprop">Proposé : <b>'+TRL[pr[0]]+'</b> · '+pr[1]+'</div></div></div>'+
  '<div class="tbtns"><button class="tb ss" onclick="triAct(\'ss\')">← Sans suite</button><button class="tb ctl" onclick="triAct(\'ctl\')">↑ À contrôler</button><button class="tb env" onclick="triAct(\'env\')">À contacter →</button></div><div class="thelp">Glisser la carte, ou flèches du clavier · Entrée : valider la proposition · Espace : passer · Z : annuler</div>';
- triDrag(document.getElementById('tcard'));
+ triDrag(document.getElementById('tcard'));if(TV==='l')setTimeout(()=>triMap(p),20);
  const F=await getF(p);if(!TQ||TQ.list[TQ.i]!==k)return;
- const im=document.getElementById('timg');if(F&&im){im.src=F.imgb||F.img[0];im.onload=()=>{const l=document.querySelector('.tload');if(l)l.remove()}}
+  const im=document.getElementById('timg');if(F&&im){im.src=F.imgb||F.img[0];im.onload=()=>{const l=document.querySelector('.tload');if(l)l.remove()}}
  const C=F?constats(p,F).filter(c=>!c.info).slice(0,3):[];const el=document.getElementById('tcst');if(el)el.innerHTML=C.length?C.map(c=>'<div class="tc"><i style="background:'+c.c+'"></i><b>'+c.t+'</b> · '+c.d+'</div>').join(''):'Aucun constat particulier sur l\'image.'}
 function triAct(a){if(!TQ||TQ.i>=TQ.list.length)return;const k=TQ.list[TQ.i];if(a==='ok')a=propose(prop_(k))[0];
  if(a==='env')qualSet([k],'env');else if(a==='ss')qualSet([k],'ss');else if(a==='ctl')ctlAdd([k]);
  if(TQ.n[a]!==undefined)TQ.n[a]++;TQ.hist.push([k,a]);const c=document.getElementById('tcard');if(c)c.classList.add('out-'+a);setTimeout(()=>{TQ.i++;triShow()},170)}
 function triUndo(){if(!TQ||!TQ.hist.length)return;const [k,a]=TQ.hist.pop();if(a==='env'||a==='ss')qualSet([k],null);else if(a==='ctl')ctlDel([k]);if(TQ.n[a]!==undefined)TQ.n[a]--;TQ.i--;triShow()}
 function triDrag(c){if(!c)return;let x0=0,y0=0,dx=0,dy=0,on=false;
- c.addEventListener('pointerdown',e=>{on=true;x0=e.clientX;y0=e.clientY;dx=dy=0;c.setPointerCapture(e.pointerId);c.style.transition='none'});
+ c.addEventListener('pointerdown',e=>{if(e.target.closest('.leaflet-container,.tvsw'))return;on=true;x0=e.clientX;y0=e.clientY;dx=dy=0;c.setPointerCapture(e.pointerId);c.style.transition='none'});
  c.addEventListener('pointermove',e=>{if(!on)return;dx=e.clientX-x0;dy=e.clientY-y0;c.style.transform='translate('+dx+'px,'+Math.min(dy,40)+'px) rotate('+dx/25+'deg)';c.dataset.dir=dx>60?'r':dx<-60?'l':dy<-60?'u':''});
  c.addEventListener('pointerup',()=>{if(!on)return;on=false;c.style.transition='';const d=dx>110?'env':dx<-110?'ss':dy<-110?'ctl':'';if(d)triAct(d);else{c.style.transform='';c.dataset.dir=''}})}
 addEventListener('keydown',e=>{if(!TQ||document.getElementById('triov').style.display==='none')return;const m={ArrowRight:'env',ArrowLeft:'ss',ArrowUp:'ctl',Enter:'ok',' ':'skip'};
