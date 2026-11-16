@@ -142,6 +142,12 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 .rexi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rexi figure{margin:0}.rexi img,.rexim{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:13px;overflow:hidden}.rexim img{width:100%;height:100%;object-fit:cover}.rexi figcaption{font-size:12px;color:#64748b;margin-top:3px}
 .rexd{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;border-top:1px solid #f3d4bf;padding-top:10px}.rexd .sp{flex:1}.btn.okb{background:#2e7d32;border-color:#2e7d32;color:#fff}.btn.kob{border-color:#a31515;color:#a31515}.pr.open{background:#fff7f0}.pr.open .ra,.pr.open .rpv{display:none!important}
 @media(max-width:900px){.rex{grid-template-columns:1fr;margin-left:6px}}
+.trd{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin:0 0 14px}.trh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.trh b{font-size:16px}.trh .sp{flex:1}.trx{background:#f1f5f9;border-radius:8px;padding:6px 10px;margin:8px 0 0;font-size:13px;color:#334155}
+.trg{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}.trt{font-weight:600;font-size:14px;color:#0f172a}.trv{font:700 28px Inter,system-ui,sans-serif;color:#0f172a;margin:2px 0}.trc svg{width:100%;height:auto;display:block}
+.trlg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:#334155;margin:6px 0 4px}.trlg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}.trlg b{color:#0f172a}
+.trc .tg{stroke:#e2e8f0;stroke-width:1}.trc .tl{font:11px Inter,system-ui,sans-serif;fill:#64748b}.trc .th{fill:transparent}.trc .th:hover{fill:rgba(15,23,42,.05)}
+.trtb{margin-top:8px;font-size:13px}.trtb summary{cursor:pointer;color:#475569}.trtb table{border-collapse:collapse;margin-top:6px;width:100%;max-width:640px}.trtb th,.trtb td{text-align:right;padding:3px 8px;border-bottom:1px solid #f1f5f9}.trtb th:first-child,.trtb td:first-child{text-align:left}
+@media(max-width:900px){.trg{grid-template-columns:1fr}}
 .simb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff7f0;border:1px solid #f3d4bf;border-radius:10px;padding:8px 10px;margin:6px 0 10px;font-size:13px;color:#7c2d12}.simb span{flex:1}.pst.ping{animation:ping .5s 4}@keyframes ping{50%{transform:scale(1.08);box-shadow:0 0 0 4px #c2622d55}}
 #ptoast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}#ptoast button{margin-left:10px;background:#c2622d;color:#fff;border:0;border-radius:8px;padding:4px 10px;font-weight:600;cursor:pointer}
 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:4px;max-width:1400px;margin:10px auto 0}
@@ -1172,12 +1178,46 @@ function bLab(){bInit();return (BSC==='leg'?'Périmètre OLD':'Commune entière'
 function setB(sc,d){if(sc)BSC=sc;if(d!==undefined&&d!==null)BD=d;refreshTop()}
 function bSel(F){bInit();const z=F.some(p=>p.l),base=F.filter(p=>BSC!=='leg'||p.l),c=d=>d?base.filter(p=>p.df!==undefined&&p.df<=d).length:base.length;
  return '<div class="bsel"><div class="dseg" style="flex:0 0 auto">'+(z?'<button class="'+(BSC==='leg'?'on':'')+'" onclick="setB(\'leg\')"><b>Périmètre OLD légal</b><i>'+F.filter(p=>p.l).length+'</i></button>':'')+'<button class="'+(BSC==='com'?'on':'')+'" onclick="setB(\'com\')"><b>Commune entière</b><i>'+F.length+'</i></button></div><span class="bsl">Distance au bois</span><div class="dseg">'+[[0,'Toutes'],[50,'< 50 m'],[100,'< 100 m'],[200,'< 200 m']].map(x=>'<button class="'+(BD===x[0]?'on':'')+'" onclick="setB(null,'+x[0]+')"><b>'+x[1]+'</b><i>'+c(x[0])+'</i></button>').join('')+'</div></div>'}
+let TEX=false;
+function wkS(d){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()-(x.getDay()+6)%7);return x.toISOString().slice(0,10)}
+function trendData(Z){const K=new Set(Z.map(p=>String(p.k))),ev=[],now=wkS(today());
+ Object.keys(SV.en).forEach(k=>{if(K.has(k))envois(+k).forEach(e=>ev.push(['c',e.d]))});
+ Object.keys(SV.st).forEach(k=>{if(K.has(k))(SV.st[k]||[]).forEach(s=>ev.push(['k',s.d]))});
+ repLocal().forEach(r=>{if(K.has(String(r.k)))ev.push(['r',r.d])});Object.values(REP).forEach(L=>L.forEach(r=>{if(r.id&&K.has(String(r.k)))ev.push(['r',r.d])}));
+ let st=ev.length?ev.map(e=>wkS(e[1])).sort()[0]:now;const m8=addDays(now,-7*7);if(st>m8)st=m8;
+ const W=[];for(let w=st;w<=now;w=addDays(w,7))W.push(w);const Ws=W.slice(-26),ix={};Ws.forEach((w,i)=>ix[w]=i);
+ const rows=Ws.map(w=>({w,c:0,r:0,k:0,ok:0}));ev.forEach(e=>{const i=ix[wkS(e[1])];if(i!==undefined)rows[i][e[0]]++});
+ rows.forEach(o=>{const end=addDays(o.w,6);let n=0;K.forEach(k=>{const L=(SV.st[k]||[]).filter(s=>s.d<=end).sort((a,b)=>a.d<b.d?-1:1);if(L.length&&L[L.length-1].s==='conforme')n++});o.ok=n});
+ return {rows,n:ev.length}}
+function trendEx(Z){const now=wkS(today()),N=Math.max(40,Z.filter(p=>p.g==='r'||p.g==='o').length),c=[0,0,.3,.35,.15,.06,.04,.02,0,0,.12,.08,.03,.01,0,0],r=[0,0,0,.05,.09,.08,.06,.04,.03,.02,.02,.04,.03,.02,.01,.01],k=[0,0,0,0,0,.02,.05,.06,.05,.03,.02,.04,.06,.07,.05,.03];
+ let ok=0;return {rows:c.map((_,i)=>{const o={w:addDays(now,-7*(15-i)),c:Math.round(c[i]*N),r:Math.round(r[i]*N),k:Math.round(k[i]*N)};ok+=Math.round((r[i]*.55+k[i]*.6)*N*.9);o.ok=ok;return o}),n:1,ex:1}}
+function trendHTML(Z){const T=TEX?trendEx(Z):trendData(Z),R_=T.rows,few=!T.ex&&T.n<3;const fd=d=>d.slice(8,10)+'/'+d.slice(5,7);
+ const C={c:['#2a78d6','Courriers et e-mails'],r:['#eb6834','Réponses reçues'],k:['#1baf7a','Contrôles sur place']};
+ const W=600,H=190,L=34,B=24,Tp=10,pw=W-L-8,ph=H-B-Tp,n=R_.length,bw=pw/n;
+ const nice=v=>{if(v<=4)return 4;const p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p;return (f<=2?2:f<=5?5:10)*p};
+ const ax=(mx)=>{let s='';for(let i=0;i<=2;i++){const v=mx*i/2,y=Tp+ph-ph*i/2;s+='<line x1="'+L+'" x2="'+(W-8)+'" y1="'+y+'" y2="'+y+'" class="tg"/><text x="'+(L-6)+'" y="'+(y+4)+'" class="tl" text-anchor="end">'+Math.round(v)+'</text>'}
+  R_.forEach((o,i)=>{if(i%Math.ceil(n/7)===0||i===n-1)s+='<text x="'+(L+bw*i+bw/2)+'" y="'+(H-6)+'" class="tl" text-anchor="middle">'+fd(o.w)+'</text>'});return s};
+ const top=(x,y,w,h,r)=>{r=Math.min(r,h,w/2);return 'M'+x+','+(y+h)+'V'+(y+r)+'Q'+x+','+y+' '+(x+r)+','+y+'H'+(x+w-r)+'Q'+(x+w)+','+y+' '+(x+w)+','+(y+r)+'V'+(y+h)+'Z'};
+ const mx1=nice(Math.max(1,...R_.map(o=>o.c+o.r+o.k)));let bars='';
+ R_.forEach((o,i)=>{let y=Tp+ph;const x=L+bw*i+bw*.18,w=bw*.64,seg=['c','r','k'].filter(s=>o[s]);seg.forEach((s,j)=>{const h=ph*o[s]/mx1,gap=j?2:0;y-=h;const hh=Math.max(0,h-gap);bars+=j===seg.length-1?'<path d="'+top(x,y,w,hh,4)+'" fill="'+C[s][0]+'"/>':'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+hh+'" fill="'+C[s][0]+'"/>'});
+  bars+='<rect x="'+(L+bw*i)+'" y="'+Tp+'" width="'+bw+'" height="'+ph+'" class="th"><title>Semaine du '+fd(o.w)+' : '+o.c+' courrier'+(o.c>1?'s':'')+', '+o.r+' réponse'+(o.r>1?'s':'')+', '+o.k+' contrôle'+(o.k>1?'s':'')+'</title></rect>'});
+ const mx2=nice(Math.max(1,...R_.map(o=>o.ok))),pts=R_.map((o,i)=>[L+bw*i+bw/2,Tp+ph-ph*o.ok/mx2]);
+ const line='<path d="M'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join('L')+'" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round"/>'+'<circle cx="'+pts[n-1][0]+'" cy="'+pts[n-1][1]+'" r="4" fill="#2e7d32" stroke="#fff" stroke-width="2"/>'+
+  R_.map((o,i)=>'<rect x="'+(L+bw*i)+'" y="'+Tp+'" width="'+bw+'" height="'+ph+'" class="th"><title>Fin de la semaine du '+fd(o.w)+' : '+o.ok+' maison'+(o.ok>1?'s':'')+' conforme'+(o.ok>1?'s':'')+'</title></rect>').join('');
+ const tot=s=>R_.reduce((a,o)=>a+o[s],0),last=R_[n-1].ok;
+ let h='<div class="trd"><div class="trh"><b>Évolution de la campagne</b><span class="muted">par semaine, '+(n)+' dernières semaines · périmètre : '+bLab()+'</span><span class="sp"></span>'+(TEX||few?'<button class="btn" onclick="TEX=!TEX;refreshTop()">'+(TEX?'Revenir aux données de la commune':'Voir un exemple de campagne (fictif)')+'</button>':'')+'</div>';
+ if(TEX)h+='<div class="trx">Exemple fictif : une campagne type sur 16 semaines, pour montrer la lecture des courbes. Aucune donnée de la commune.</div>';
+ else if(few)h+='<div class="trx">Peu d\'actions enregistrées pour l\'instant : les courbes se remplissent au fil des courriers, réponses et contrôles.</div>';
+ h+='<div class="trg"><div class="trc"><div class="trt">Maisons contrôlées conformes <span class="muted">(cumul)</span></div><div class="trv">'+last+'</div><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Maisons conformes, cumul par semaine">'+ax(mx2)+line+'</svg></div>'+
+  '<div class="trc"><div class="trt">Actions prises</div><div class="trlg">'+['c','r','k'].map(s=>'<span><i style="background:'+C[s][0]+'"></i>'+C[s][1]+' <b>'+tot(s)+'</b></span>').join('')+'</div><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Actions prises par semaine">'+ax(mx1)+bars+'</svg></div></div>';
+ h+='<details class="trtb"><summary>Voir le tableau</summary><table><thead><tr><th>Semaine du</th><th>Courriers</th><th>Réponses</th><th>Contrôles</th><th>Conformes (cumul)</th></tr></thead><tbody>'+R_.slice().reverse().map(o=>'<tr><td>'+fdate(o.w)+'</td><td>'+o.c+'</td><td>'+o.r+'</td><td>'+o.k+'</td><td>'+o.ok+'</td></tr>').join('')+'</tbody></table></details></div>';
+ return h}
 function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.properties),Z=bZ(F),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl='#2e7d32';
  const ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),km=D.cm?(D.cm.v.filter(s=>s.ge==='com'&&s.q==='r').length*0.05).toFixed(1).replace('.',','):'–';
  const kp=(t,v,d,c)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div><div class="kd">'+d+'</div></div>';
  let h='<div class="ph"><h1>Tableau de bord communal</h1><span class="muted">'+esc(D.nom)+' · '+imgTxt()+'</span><span class="sp"></span><button class="btn dark" onclick="rapportCommune()">Rapport d\'état (PDF) ↗</button></div>';
  h+=bSel(F)+'<div class="muted" style="margin:-2px 0 10px">Périmètre affiché : <b>'+bLab()+'</b> · '+Z.length+' constructions</div>';
- h+='<div class="kgrid">'+kp(BSC==='leg'?'Zone légale':'Sans rien à signaler',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('À traiter ou à vérifier',Z.filter(p=>p.g==='r'||p.g==='o').length,'dans le périmètre (priorité 1 : travaux ; priorité 2 : à vérifier)','#c62828')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
+ h+='<div class="kgrid">'+kp(BSC==='leg'?'Zone légale':'Sans rien à signaler',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('À traiter ou à vérifier',Z.filter(p=>p.g==='r'||p.g==='o').length,'dans le périmètre (priorité 1 : travaux ; priorité 2 : à vérifier)','#c62828')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>'+trendHTML(Z);
  h+='<div class="pcols">'+etaRisk()+etaHTML(Z).replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
  return h}
 
