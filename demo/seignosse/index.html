@@ -87,6 +87,7 @@ table.pt{border-collapse:collapse;width:100%;font-size:13px}table.pt td,table.pt
 #chg3{flex:none;font-size:12px;color:#64748b}
 #page{position:fixed;top:56px;left:0;right:0;bottom:0;overflow:auto;background:#f1f5f9;display:none;padding:18px 20px 40px;box-sizing:border-box;z-index:1500}
 .ph{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 auto 14px;max-width:1400px}.ph h1{font-size:22px;margin:0}.ph .sp{flex:1}.ph2{font-size:16px;max-width:1400px;margin:22px auto 8px}
+.bsel{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:2px 0 8px;max-width:1400px}.bsel .dseg{flex:1;min-width:280px}.bsl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
 .dsel{display:flex;flex-direction:column;gap:5px;margin:-4px 0 12px}.dsel>span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
 .dseg{display:flex;gap:4px;flex:1;flex-wrap:wrap}.dseg button{flex:1;white-space:nowrap;display:flex;flex-direction:column;align-items:center;border:1px solid #e2e8f0;background:#fff;border-radius:10px;padding:5px 4px;cursor:pointer;font:600 12.5px Inter,system-ui,sans-serif;color:#1f2937}
 .dseg button i{font-style:normal;font-size:11px;color:#64748b;font-weight:600}.dseg button.on{background:#0f172a;border-color:#0f172a;color:#fff}.dseg button.on i{color:#cbd5e1}
@@ -838,11 +839,11 @@ async function showParcel(p,F){['par','z50'].forEach(k=>{if(LG[k]){map.removeLay
   if(CUR&&CUR.p===p&&j.features&&j.features.length){LG.par=L.geoJSON(j,{renderer:CV,interactive:false,style:{color:'#fff',weight:3,dashArray:'2 6',fill:false}});const q=j.features[0].properties;CUR.parc=(q.section||'')+(q.numero||'')}}catch(e){}
  applyLay()}
 /* --- État de la commune (dont obligations de la commune) --- */
-function etaHTML(){const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),g=x=>Z.filter(p=>(p.g||'v')===x).length,ty=t=>F.filter(p=>(p.t||'h')===t);
+function etaHTML(zs){const F=D.h.features.map(f=>f.properties),Z=zs||F.filter(p=>p.l),g=x=>Z.filter(p=>(p.g||'v')===x).length,ty=t=>F.filter(p=>(p.t||'h')===t);
  const EN=Object.values(SV.en).reduce((a,b)=>a+b.length,0),ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean);
  let h='<button class="btn dark" style="width:100%;margin:0 0 10px;padding:10px" onclick="rapportCommune()">Rapport d\'état de la commune (PDF) ↗</button>';
- {const HZ=!Z.length,Z_=HZ?F:Z,ZH=Z_.filter(p=>(p.t||'h')==='h'),cib=Z_.filter(p=>p.g==='r'||p.g==='o').length,ev=Math.max(0,Z_.length-cib),nz=Z_.filter(p=>p.n2).length,cf=ST_.filter(s=>s.s==='conforme').length,f=n=>n.toLocaleString('fr-FR');
- h+='<div class="box" style="margin-top:0"><h3>Estimation de la campagne</h3><div class="chips"><span class="chip">'+(HZ?'Habitations de la commune':'Habitations en zone légale')+' : <b>'+f(ZH.length)+'</b></span><span class="chip">Habitants concernés (estim.) : <b>≈ '+f(Math.round(ZH.length*2.2))+'</b></span><span class="chip">'+(HZ?'Recommandations ciblées':'Contrôles ciblés')+' : <b>'+f(cib)+'</b></span><span class="chip">Sans constat à distance : <b>'+f(ev)+'</b></span>'+(nz?'<span class="chip">Près d\'une zone naturelle protégée : <b>'+f(nz)+'</b></span>':'')+'<span class="chip">Contrôlées conformes : <b>'+f(cf)+'</b></span></div>'+
+ {const HZ=zs?BSC!=='leg':!Z.length,Z_=zs?Z:(HZ?F:Z),ZH=Z_.filter(p=>(p.t||'h')==='h'),cib=Z_.filter(p=>p.g==='r'||p.g==='o').length,ev=Math.max(0,Z_.length-cib),nz=Z_.filter(p=>p.n2).length,cf=ST_.filter(s=>s.s==='conforme').length,f=n=>n.toLocaleString('fr-FR');
+ h+='<div class="box" style="margin-top:0"><h3>Estimation de la campagne</h3><div class="chips"><span class="chip">'+(zs?(BSC==='leg'?'Habitations en zone légale':'Habitations du périmètre'):(HZ?'Habitations de la commune':'Habitations en zone légale'))+' : <b>'+f(ZH.length)+'</b></span><span class="chip">Habitants concernés (estim.) : <b>≈ '+f(Math.round(ZH.length*2.2))+'</b></span><span class="chip">'+(HZ?'Recommandations ciblées':'Contrôles ciblés')+' : <b>'+f(cib)+'</b></span><span class="chip">Sans constat à distance : <b>'+f(ev)+'</b></span>'+(nz?'<span class="chip">Près d\'une zone naturelle protégée : <b>'+f(nz)+'</b></span>':'')+'<span class="chip">Contrôlées conformes : <b>'+f(cf)+'</b></span></div>'+
  '<div class="muted" style="margin-top:4px">Estimations : 2,2 personnes par habitation (taille moyenne des ménages, INSEE) ; « sans constat à distance » = constructions '+(HZ?'de la commune':'de la zone légale')+' sans point relevé sur les images.'+(HZ?' <b>Commune hors zonage OLD : recommandations, sans obligation légale.</b>':'')+'</div></div>';}
  h+='<div class="box"><h3>Constructions</h3><table class="pt"><tr><th></th><th class="r">Total</th><th class="r">Zone légale</th><th class="r">Travaux</th></tr>'+
   [['h','Habitations'],['e','Autres bâtiments (entreprises, équipements)'],['c','Campings, hébergements de loisirs']].map(([t,n])=>{const L_=ty(t);return '<tr><td>'+n+'</td><td class="r">'+L_.length+'</td><td class="r">'+L_.filter(p=>p.l).length+'</td><td class="r">'+L_.filter(p=>p.l&&(p.g==='r'||p.g==='o')).length+'</td></tr>'}).join('')+'</table>'+
@@ -1043,12 +1044,20 @@ function actPage(){const t=today_(),F=D.h.features.map(f=>f.properties).filter(p
  h+='<details class="pwide" style="margin-top:14px"><summary style="cursor:pointer;font-weight:700">Historique complet et connexion au serveur</summary>'+suiviHTML()+'</details>';
  return h}
 
-function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.properties),Z=F.filter(p=>p.l),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl='#2e7d32';
+let BSC=null,BD=null;
+function bInit(){if(BSC===null){const z=D.h.features.some(f=>f.properties.l);BSC=z?'leg':'com';BD=z?0:200}}
+function bZ(F){bInit();return F.filter(p=>(BSC!=='leg'||p.l)&&(!BD||(p.df!==undefined&&p.df<=BD)))}
+function bLab(){bInit();return (BSC==='leg'?'Périmètre OLD':'Commune entière')+(BD?', à moins de '+BD+' m d\'un bois':'')}
+function setB(sc,d){if(sc)BSC=sc;if(d!==undefined&&d!==null)BD=d;refreshTop()}
+function bSel(F){bInit();const z=F.some(p=>p.l),base=F.filter(p=>BSC!=='leg'||p.l),c=d=>d?base.filter(p=>p.df!==undefined&&p.df<=d).length:base.length;
+ return '<div class="bsel"><div class="dseg" style="flex:0 0 auto">'+(z?'<button class="'+(BSC==='leg'?'on':'')+'" onclick="setB(\'leg\')"><b>Périmètre OLD légal</b><i>'+F.filter(p=>p.l).length+'</i></button>':'')+'<button class="'+(BSC==='com'?'on':'')+'" onclick="setB(\'com\')"><b>Commune entière</b><i>'+F.length+'</i></button></div><span class="bsl">Distance au bois</span><div class="dseg">'+[[0,'Toutes'],[50,'< 50 m'],[100,'< 100 m'],[200,'< 200 m']].map(x=>'<button class="'+(BD===x[0]?'on':'')+'" onclick="setB(null,'+x[0]+')"><b>'+x[1]+'</b><i>'+c(x[0])+'</i></button>').join('')+'</div></div>'}
+function etaPage(){if(CRISE)return crisisEta();const F=D.h.features.map(f=>f.properties),Z=bZ(F),v=Z.filter(p=>(p.g||'v')==='v').length,pc=Z.length?Math.round(100*v/Z.length):0,cl='#2e7d32';
  const ST_=Object.keys(SV.st).map(k=>lastSt(+k)).filter(Boolean),km=D.cm?(D.cm.v.filter(s=>s.ge==='com'&&s.q==='r').length*0.05).toFixed(1).replace('.',','):'–';
  const kp=(t,v,d,c)=>'<div class="kc"><div class="muted">'+t+'</div><div class="kv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div><div class="kd">'+d+'</div></div>';
  let h='<div class="ph"><h1>Tableau de bord communal</h1><span class="muted">'+esc(D.nom)+' · '+imgTxt()+'</span><span class="sp"></span><button class="btn dark" onclick="rapportCommune()">Rapport d\'état (PDF) ↗</button></div>';
- h+='<div class="kgrid">'+kp('Zone légale',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('À traiter ou à vérifier',Z.filter(p=>p.g==='r'||p.g==='o').length,'en zone légale (priorité 1 : travaux ; priorité 2 : à vérifier)','#c62828')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
- h+='<div class="pcols">'+etaRisk()+etaHTML().replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
+ h+=bSel(F)+'<div class="muted" style="margin:-2px 0 10px">Périmètre affiché : <b>'+bLab()+'</b> · '+Z.length+' constructions</div>';
+ h+='<div class="kgrid">'+kp(BSC==='leg'?'Zone légale':'Sans rien à signaler',pc+' %',v+' / '+Z.length+' constructions sans rien à signaler',cl)+kp('À traiter ou à vérifier',Z.filter(p=>p.g==='r'||p.g==='o').length,'dans le périmètre (priorité 1 : travaux ; priorité 2 : à vérifier)','#c62828')+kp('Contrôlées conformes',ST_.filter(s=>s.s==='conforme').length,'depuis le début de la campagne')+kp('Voies communales',km+' km','à dégager (gabarit, broussaille)')+'</div>';
+ h+='<div class="pcols">'+etaRisk()+etaHTML(Z).replace(/^<button[^>]*rapportCommune[^>]*>.*?<\/button>/,'')+'</div>';
  return h}
 
 /* ===== Sélecteur de risque : Feu de forêt · Tempête · Inondation ===== */
