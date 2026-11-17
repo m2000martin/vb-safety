@@ -70,6 +70,12 @@
         <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
       <span data-t="rdv">Meeting</span>
     </a>
+    <a class="bt bt-deux" href="https://www.linkedin.com/in/martin-mallet-a1693b181/"
+      rel="noopener" target="_blank" data-evt="scan:linkedin">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true">
+        <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM2.9 21.5h4.16V10H2.9v11.5Zm7.02 0h4.16v-6.2c0-1.64.31-3.22 2.34-3.22 2 0 2.03 1.87 2.03 3.33v6.09h4.15v-6.92c0-3.6-.78-6.37-4.98-6.37-2.02 0-3.38 1.11-3.93 2.16h-.06V10H9.92v11.5Z"/></svg>
+      <span data-t="linkedin">LinkedIn</span>
+    </a>
     <button class="bt bt-deux" id="b-partage" type="button" hidden data-evt="scan:partage">
       <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
         stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -78,55 +84,18 @@
     </button>
   </div>
 
-  <section class="metier" aria-labelledby="t-metier">
-    <h2 id="t-metier" data-t="vousetes">You are?</h2>
-    <div class="choix" role="group" aria-labelledby="t-metier">
-      <button type="button" class="ch" data-m="sdis" aria-expanded="false" aria-controls="p-sdis">
-        <span data-t="m1">Fire and rescue</span><br><small data-t="m1b">service</small></button>
-      <button type="button" class="ch" data-m="indus" aria-expanded="false" aria-controls="p-indus">
-        <span data-t="m2">Industry</span><br><small data-t="m2b">or construction</small></button>
-      <button type="button" class="ch" data-m="com" aria-expanded="false" aria-controls="p-com">
-        <span data-t="m3">Municipality</span><br><small data-t="m3b">or public body</small></button>
-    </div>
-
-    <div class="panneau" id="p-sdis" hidden>
-      <a class="li" href="/sapeurs-pompiers/" data-evt="scan:sdis-offre">
-        <b data-t="s1">VB CMR exposure record</b><span data-t="s1b">Filled in by the crew leader,
-        validated by the medical service, statutory exposure certificate.</span></a>
-      <a class="li" href="/cmr-pompier/connexion.html" data-evt="scan:sdis-demo">
-        <b data-t="s2">Try the demonstration</b><span data-t="s2b">Immediate access, nothing to install.</span></a>
-      <a class="li" href="/ressources/decontamination-sapeurs-pompiers/" data-evt="scan:sdis-affiche">
-        <b data-t="s3">A3 decontamination poster</b><span data-t="s3b">Free to reuse, ready to print
-        for the fire station.</span></a>
-    </div>
-
-    <div class="panneau" id="p-indus" hidden>
-      <a class="li" href="/industrie/" data-evt="scan:indus-offre">
-        <b data-t="i1">CMR evidence file</b><span data-t="i1b">Register of agents, versioned list of
-        exposed workers, transfer to the occupational health service.</span></a>
-      <a class="li" href="/cmr-industrie/evaluation.html" data-evt="scan:indus-outil">
-        <b data-t="i2">Open the assessment tool</b><span data-t="i2b">Free, no account, data stays
-        in your browser.</span></a>
-      <a class="li" href="/ressources/liste-travailleurs-exposes-cmr/" data-evt="scan:indus-modele">
-        <b data-t="i3">Exposed workers list template</b><span data-t="i3b">Excel and PDF, compliant
-        with French decree no. 2024-307.</span></a>
-    </div>
-
-    <div class="panneau" id="p-com" hidden>
-      <a class="li" href="/collectivites/verifier-old/" data-evt="scan:com-verif">
-        <b data-t="c1">Is your municipality concerned?</b><span data-t="c1b">Immediate answer from
-        the zoning published by the French mapping agency.</span></a>
-      <a class="li" href="/collectivites/" data-evt="scan:com-offre">
-        <b data-t="c2">Vegetation clearance monitoring</b><span data-t="c2b">Assessment from aerial
-        imagery, control priorities, letters to owners.</span></a>
-      <a class="li" href="/collectivites/demande/" data-evt="scan:com-demande">
-        <b data-t="c3">Request a presentation</b><span data-t="c3b">Twenty minutes, online or on site.</span></a>
-    </div>
-  </section>
-
-  <!-- Lettre d'information -->
   <section class="info" aria-labelledby="t-info">
-    <h2 id="t-info" data-t="nlt">Follow the project</h2>
+    <!-- Repliée par défaut, pour que l'essentiel tienne sur le premier écran. -->
+    <button type="button" class="nl-tr" id="b-nl" aria-expanded="false" aria-controls="nl-corps"
+      data-evt="scan:newsletter-ouvre">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      <span id="t-info" data-t="nlt">Follow the project</span>
+      <i class="fl" aria-hidden="true"></i>
+    </button>
+
+    <div id="nl-corps" hidden>
     <p class="nl-p" data-t="nlp">Our newsletter, every two months: what we are building, what the
     regulations change, and what we learn in the field.</p>
 
@@ -151,6 +120,61 @@
       <a href="/confidentialite/" data-t="nlconf">Privacy policy</a>.</p>
     </form>
     <p class="nl-msg" id="nl-msg" hidden role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- Lettre d'information -->
+  <section class="metier" aria-labelledby="t-metier">
+    <h2 id="t-metier" data-t="vousetes">You are?</h2>
+    <div class="choix" role="group" aria-labelledby="t-metier">
+      <button type="button" class="ch" data-m="sdis" aria-expanded="false" aria-controls="p-sdis">
+        <span data-t="m1">Fire and rescue</span><br><small data-t="m1b">service</small></button>
+      <button type="button" class="ch" data-m="indus" aria-expanded="false" aria-controls="p-indus">
+        <span data-t="m2">Industry</span><br><small data-t="m2b">or construction</small></button>
+      <button type="button" class="ch" data-m="com" aria-expanded="false" aria-controls="p-com">
+        <span data-t="m3">Municipality</span><br><small data-t="m3b">or public body</small></button>
+    </div>
+
+    <div class="panneau" id="p-sdis" hidden>
+      <a class="li" href="/sapeurs-pompiers/" data-evt="scan:sdis-offre">
+        <b data-t="s1">VB CMR exposure record</b><span data-t="s1b">Filled in by the crew leader,
+        validated by the medical service, statutory exposure certificate.</span></a>
+      <a class="li" href="/cmr-pompier/connexion.html" data-evt="scan:sdis-demo">
+        <b data-t="s2">Try the demonstration</b><span data-t="s2b">Immediate access, nothing to install.</span></a>
+      <a class="li" href="/ressources/decontamination-sapeurs-pompiers/" data-evt="scan:sdis-affiche">
+        <b data-t="s3">A3 decontamination poster</b><span data-t="s3b">Free to reuse, ready to print
+        for the fire station.</span></a>
+      <a class="li li-demo" href="/devis/" data-evt="scan:sdis-demande">
+        <b data-t="dem">Ask for a demo</b><span data-t="demb">Twenty minutes, online or at your
+        premises, with your own cases.</span></a>
+    </div>
+
+    <div class="panneau" id="p-indus" hidden>
+      <a class="li" href="/industrie/" data-evt="scan:indus-offre">
+        <b data-t="i1">CMR evidence file</b><span data-t="i1b">Register of agents, versioned list of
+        exposed workers, transfer to the occupational health service.</span></a>
+      <a class="li" href="/cmr-industrie/evaluation.html" data-evt="scan:indus-outil">
+        <b data-t="i2">Open the assessment tool</b><span data-t="i2b">Free, no account, data stays
+        in your browser.</span></a>
+      <a class="li" href="/ressources/liste-travailleurs-exposes-cmr/" data-evt="scan:indus-modele">
+        <b data-t="i3">Exposed workers list template</b><span data-t="i3b">Excel and PDF, compliant
+        with French decree no. 2024-307.</span></a>
+      <a class="li li-demo" href="/devis/" data-evt="scan:indus-demande">
+        <b data-t="dem2">Ask for a demo</b><span data-t="dem2b">Twenty minutes, online or at your
+        premises, with your own cases.</span></a>
+    </div>
+
+    <div class="panneau" id="p-com" hidden>
+      <a class="li" href="/collectivites/verifier-old/" data-evt="scan:com-verif">
+        <b data-t="c1">Is your municipality concerned?</b><span data-t="c1b">Immediate answer from
+        the zoning published by the French mapping agency.</span></a>
+      <a class="li" href="/collectivites/" data-evt="scan:com-offre">
+        <b data-t="c2">Vegetation clearance monitoring</b><span data-t="c2b">Assessment from aerial
+        imagery, control priorities, letters to owners.</span></a>
+      <a class="li li-demo" href="/collectivites/demande/" data-evt="scan:com-demande">
+        <b data-t="c3">Ask for a demo</b><span data-t="c3b">Twenty minutes, online or at your
+        town hall, on your own territory.</span></a>
+    </div>
   </section>
 
   <footer class="pied">

@@ -124,3 +124,47 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;
 .nl-msg.err{background:rgba(229,103,91,.14);border:1px solid rgba(229,103,91,.5);color:#F2C4BE}
 
 @media (max-width:360px){.ch2{grid-template-columns:1fr}}
+
+/* ---------- Lettre d'information : ligne dépliable ---------- */
+.nl-tr{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;
+  padding:13px 16px;border-radius:12px;cursor:pointer;
+  border:1px solid var(--ligne);background:rgba(255,255,255,.025);color:var(--clair);
+  font:600 15px var(--sans);text-align:left;
+  -webkit-tap-highlight-color:transparent;transition:transform .12s,border-color .15s}
+.nl-tr:active{transform:scale(.985)}
+.nl-tr span{flex:1}
+.nl-tr .fl{width:8px;height:8px;flex:none;border-right:2px solid var(--signal);
+  border-bottom:2px solid var(--signal);transform:rotate(45deg) translate(-2px,-2px);
+  transition:transform .22s}
+.nl-tr[aria-expanded="true"]{border-color:var(--signal);background:rgba(224,108,52,.1)}
+.nl-tr[aria-expanded="true"] .fl{transform:rotate(-135deg) translate(-2px,-2px)}
+#nl-corps{margin-top:12px;animation:apparait .22s ease}
+
+/* ---------- Resserrage : l'essentiel doit tenir sur le premier écran ---------- */
+.carte{padding-top:22px}
+.tete{margin-bottom:18px}
+.mq{width:44px;height:44px;margin-bottom:10px}
+.tete h1{font-size:25px}
+.sous{margin-top:8px;font-size:14px;line-height:1.45;max-width:32ch}
+.bt-un{min-height:56px;font-size:16.5px}
+.info{margin-top:16px;padding-top:0;border-top:0}
+.metier{margin-top:14px;padding-top:16px}
+.metier h2{margin-bottom:10px;font-size:14px}
+.ch{min-height:68px}
+.pied{margin-top:20px;padding-top:14px}
+@media (min-height:780px){
+  .carte{padding-top:34px}
+  .tete{margin-bottom:24px}
+  .mq{width:52px;height:52px;margin-bottom:14px}
+  .tete h1{font-size:29px}
+  .sous{font-size:15px}
+}
+
+/* Les derniers pixels : sur un écran court, le pied se resserre. */
+@media (max-height:700px){
+  body{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+  .pied{margin-top:14px;padding-top:11px;font-size:12px;line-height:1.55}
+  .pied a{font-size:13px}
+  .metier{margin-top:12px;padding-top:13px}
+  .tete{margin-bottom:15px}
+}

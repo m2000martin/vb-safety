@@ -13,7 +13,7 @@
     sous: "Traçabilité de l'exposition professionnelle aux agents cancérogènes. " +
           "Sapeurs-pompiers, industrie, BTP.",
     vcf: 'Ajouter à mes contacts', ecrire: 'Écrire',
-    rdv: 'Rendez-vous', partage: 'Partager',
+    rdv: 'Rendez-vous', partage: 'Partager', linkedin: 'LinkedIn',
     vousetes: 'Vous êtes ?',
     m1: "Service d'incendie", m1b: 'et de secours',
     m2: 'Industrie', m2b: 'ou BTP',
@@ -150,6 +150,17 @@
       if (pan) { pan.hidden = false; pan.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
       if (window.vbsEvt) window.vbsEvt('clic:scan:metier-' + ch.dataset.m);
     });
+  });
+
+
+  /* ---- Lettre d'information : ligne dépliable ---- */
+  var bnl = document.getElementById('b-nl');
+  if (bnl) bnl.addEventListener('click', function () {
+    var corps = document.getElementById('nl-corps');
+    var ouvert = bnl.getAttribute('aria-expanded') === 'true';
+    bnl.setAttribute('aria-expanded', String(!ouvert));
+    corps.hidden = ouvert;
+    if (!ouvert) corps.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   });
 
   /* ---- Lettre d'information ---- */
