@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1E30">
+<title>VB Safety · contact</title>
+<meta name="description" content="Coordonnées de VB Safety : ajouter la fiche à vos contacts, écrire, prendre rendez-vous, et accéder aux outils selon votre métier.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://vb-safety.com/scan/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="/static/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/fonts.css?v=2">
+<link rel="stylesheet" href="/scan/scan.css?v=1">
+</head>
+<body>
+
+<main class="carte">
+
+  <header class="tete">
+    <svg class="mq" viewBox="0 0 64 64" width="52" height="52" aria-hidden="true" focusable="false">
+      <rect x="2.5" y="2.5" width="59" height="59" rx="12.5" fill="#16293F" stroke="#D9713C" stroke-width="3"/>
+      <text x="32" y="43" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="27"
+        fill="#E8EFF4" text-anchor="middle" letter-spacing="-0.5">VB</text>
+    </svg>
+    <h1>VB&nbsp;Safety</h1>
+    <p class="sous">Traçabilité de l'exposition professionnelle aux agents cancérogènes.
+    Sapeurs-pompiers, industrie, BTP.</p>
+  </header>
+
+  <!-- Action principale : la fiche contact. Fichier statique, donc iOS l'ouvre
+       directement dans « Ajouter aux contacts » sans passer par un téléchargement. -->
+  <a class="bt bt-un" href="/scan/vb-safety.vcf" download="VB-Safety.vcf" data-evt="scan:contact">
+    <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor"
+      stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+      <path d="M19 8v6M22 11h-6"/></svg>
+    <span>Ajouter à mes contacts</span>
+  </a>
+
+  <div class="rangee">
+    <a class="bt bt-deux" href="mailto:contact@vb-safety.com" data-evt="scan:email">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+      <span>Écrire</span>
+    </a>
+    <a class="bt bt-deux" href="https://calendar.app.google/2akSPAUYagxgU2AR7"
+      rel="noopener" target="_blank" data-evt="scan:rdv">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+      <span>Rendez-vous</span>
+    </a>
+    <button class="bt bt-deux" id="b-partage" type="button" hidden data-evt="scan:partage">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>
+      <span>Partager</span>
+    </button>
+    <button class="bt bt-deux" id="b-copie" type="button" data-evt="scan:copie">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+        stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+      <span>Copier l'e-mail</span>
+    </button>
+  </div>
+
+  <!-- Orientation par métier : le visiteur se range lui-même, et le choix est
+       compté, ce qui dit après le salon qui a scanné. -->
+  <section class="metier" aria-labelledby="t-metier">
+    <h2 id="t-metier">Vous êtes&nbsp;?</h2>
+    <div class="choix" role="group" aria-labelledby="t-metier">
+      <button type="button" class="ch" data-m="sdis" aria-expanded="false" aria-controls="p-sdis">
+        Service d'incendie<br><small>et de secours</small></button>
+      <button type="button" class="ch" data-m="indus" aria-expanded="false" aria-controls="p-indus">
+        Industrie<br><small>ou BTP</small></button>
+      <button type="button" class="ch" data-m="com" aria-expanded="false" aria-controls="p-com">
+        Commune<br><small>ou EPCI</small></button>
+    </div>
+
+    <div class="panneau" id="p-sdis" hidden>
+      <a class="li" href="/sapeurs-pompiers/" data-evt="scan:sdis-offre">
+        <b>Relevé d'exposition VB CMR</b><span>Saisie par le chef d'agrès, validation SSSM,
+        attestation au format de la circulaire.</span></a>
+      <a class="li" href="/cmr-pompier/connexion.html" data-evt="scan:sdis-demo">
+        <b>Essayer la démonstration</b><span>Accès immédiat, sans installation.</span></a>
+      <a class="li" href="/ressources/decontamination-sapeurs-pompiers/" data-evt="scan:sdis-affiche">
+        <b>Affiche de décontamination A3</b><span>Libre de réutilisation, à imprimer pour la caserne.</span></a>
+    </div>
+
+    <div class="panneau" id="p-indus" hidden>
+      <a class="li" href="/industrie/" data-evt="scan:indus-offre">
+        <b>Dossier de preuve CMR</b><span>Registre des agents, liste nominative versionnée,
+        transmission au service de santé au travail.</span></a>
+      <a class="li" href="/cmr-industrie/evaluation.html" data-evt="scan:indus-outil">
+        <b>Ouvrir l'outil d'évaluation</b><span>Gratuit, sans compte, les données restent
+        dans votre navigateur.</span></a>
+      <a class="li" href="/ressources/liste-travailleurs-exposes-cmr/" data-evt="scan:indus-modele">
+        <b>Modèle de liste des travailleurs exposés</b><span>Excel et PDF, conformes au
+        décret n° 2024-307.</span></a>
+    </div>
+
+    <div class="panneau" id="p-com" hidden>
+      <a class="li" href="/collectivites/verifier-old/" data-evt="scan:com-verif">
+        <b>Votre commune est-elle soumise aux OLD&nbsp;?</b><span>Réponse immédiate à partir
+        du zonage publié par l'IGN.</span></a>
+      <a class="li" href="/collectivites/" data-evt="scan:com-offre">
+        <b>Suivi du débroussaillement</b><span>Constat par imagerie, priorités de contrôle,
+        courriers aux propriétaires.</span></a>
+      <a class="li" href="/collectivites/demande/" data-evt="scan:com-demande">
+        <b>Demander une présentation</b><span>Vingt minutes, en visioconférence ou sur place.</span></a>
+    </div>
+  </section>
+
+  <footer class="pied">
+    <a href="/" data-evt="scan:site">vb-safety.com</a>
+    <span>VB Safety SAS · RCS Paris 109 381 640</span>
+  </footer>
+
+</main>
+
+<p class="lu" id="lu" role="status" aria-live="polite"></p>
+
+<script src="/static/vu.js?v=3" defer></script>
+<script src="/scan/scan.js?v=1" defer></script>
+</body>
+</html>

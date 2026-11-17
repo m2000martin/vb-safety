@@ -1,0 +1,92 @@
+/* VB Safety · page de contact scannée depuis un QR (roll-up, salon).
+   Contraintes : réseau de salon médiocre, lecture à une main, premier écran utile. */
+
+:root{
+  --nuit:#0E1E30; --profond:#0A1725; --carte:#12243A; --signal:#E06C34;
+  --clair:#E8EFF4; --doux:#A9B6C6; --faible:#7D8B9C; --ligne:rgba(255,255,255,.11);
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+/* display:flex et display:grid ci-dessous l'emportent sur la feuille du navigateur :
+   sans cette règle, un élément porteur de [hidden] resterait affiché. */
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--nuit);color:var(--clair);
+  font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;
+  padding:env(safe-area-inset-top) 0 calc(24px + env(safe-area-inset-bottom)) 0}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(90% 55% at 50% 0%,rgba(224,108,52,.16),transparent 70%)}
+
+.carte{position:relative;max-width:520px;margin:0 auto;padding:30px 20px 0}
+
+/* ---------- Identité ---------- */
+.tete{text-align:center;margin-bottom:26px}
+.mq{display:block;margin:0 auto 14px}
+.tete h1{margin:0;font-size:29px;line-height:1.1;letter-spacing:.04em;font-weight:800}
+.sous{margin:11px auto 0;max-width:34ch;color:var(--doux);font-size:15px;line-height:1.5}
+
+/* ---------- Boutons ---------- */
+.bt{display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:56px;padding:14px 16px;border-radius:13px;
+  font:600 16px var(--sans);text-decoration:none;cursor:pointer;
+  border:1px solid var(--ligne);background:var(--carte);color:var(--clair);
+  -webkit-tap-highlight-color:transparent;transition:transform .12s,background .15s,border-color .15s}
+.bt:active{transform:scale(.975)}
+.bt-un{background:var(--signal);border-color:var(--signal);color:#fff;
+  font-size:17px;min-height:60px;box-shadow:0 10px 26px -10px rgba(224,108,52,.75)}
+.bt-un:active{background:#c85f2c}
+.bt-un.ok{background:#2F7D43;border-color:#2F7D43;box-shadow:none}
+
+/* Le bouton Partager n'existe pas partout : la rangée doit rester correcte à
+   trois comme à quatre boutons, le dernier occupant alors toute la largeur. */
+.rangee{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.bt-deux{flex:1 1 calc(50% - 5px);font-size:15px;min-height:52px}
+.bt-deux:active{border-color:rgba(224,108,52,.75)}
+.bt svg{flex:none}
+
+/* ---------- Choix du métier ---------- */
+.metier{margin-top:30px;padding-top:24px;border-top:1px solid var(--ligne)}
+.metier h2{margin:0 0 13px;font-size:15px;font-weight:600;color:var(--doux);text-align:center}
+.choix{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ch{min-height:76px;padding:11px 7px;border-radius:12px;cursor:pointer;
+  border:1px solid var(--ligne);background:rgba(255,255,255,.025);color:var(--clair);
+  font:600 13.5px/1.25 var(--sans);text-align:center;
+  -webkit-tap-highlight-color:transparent;transition:transform .12s,background .15s,border-color .15s}
+.ch small{display:block;font-weight:500;color:var(--faible);font-size:12.5px;margin-top:2px}
+.ch:active{transform:scale(.97)}
+.ch[aria-expanded="true"]{background:rgba(224,108,52,.15);border-color:var(--signal)}
+.ch[aria-expanded="true"] small{color:var(--doux)}
+
+.panneau{margin-top:12px;display:grid;gap:9px;animation:apparait .22s ease}
+@keyframes apparait{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.li{position:relative;display:block;padding:14px 38px 14px 16px;border-radius:12px;text-decoration:none;
+  border:1px solid var(--ligne);background:var(--carte);color:var(--clair);
+  -webkit-tap-highlight-color:transparent;transition:transform .12s,border-color .15s}
+.li:active{transform:scale(.985);border-color:rgba(224,108,52,.7)}
+.li b{display:block;font-size:15.5px;font-weight:600;line-height:1.3}
+.li span{display:block;margin-top:4px;color:var(--doux);font-size:13.5px;line-height:1.45}
+.li::after{content:"→";position:absolute;right:15px;top:50%;transform:translateY(-50%);
+  color:var(--signal);font-size:17px;line-height:1}
+
+/* ---------- Pied ---------- */
+.pied{margin-top:30px;padding-top:18px;border-top:1px solid var(--ligne);
+  text-align:center;color:var(--faible);font-size:12.5px;line-height:1.7}
+.pied a{display:block;color:var(--doux);text-decoration:none;font-weight:600;font-size:14px}
+
+/* ---------- Confirmation ---------- */
+.lu{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));
+  transform:translateX(-50%) translateY(90px);margin:0;z-index:10;
+  background:var(--signal);color:#fff;font:600 14px var(--sans);
+  padding:11px 20px;border-radius:999px;box-shadow:0 10px 28px rgba(0,0,0,.5);
+  transition:transform .25s;white-space:nowrap}
+.lu.vu{transform:translateX(-50%) translateY(0)}
+
+/* ---------- Grand écran : la page reste une carte ---------- */
+@media (min-width:600px){
+  .carte{padding-top:48px}
+  .tete h1{font-size:33px}
+}
+@media (prefers-reduced-motion:reduce){
+  .bt,.ch,.li,.lu{transition:none}
+  .panneau{animation:none}
+}
