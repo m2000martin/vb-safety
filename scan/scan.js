@@ -12,7 +12,7 @@
   var FR = {
     sous: "Traçabilité de l'exposition professionnelle aux agents cancérogènes. " +
           "Sapeurs-pompiers, industrie, BTP.",
-    vcf: 'Ajouter à mes contacts', appel: 'Appeler', ecrire: 'Écrire',
+    vcf: 'Ajouter à mes contacts', ecrire: 'Écrire',
     rdv: 'Rendez-vous', partage: 'Partager',
     vousetes: 'Vous êtes ?',
     m1: "Service d'incendie", m1b: 'et de secours',
