@@ -185,7 +185,7 @@
       return;
     }
     var data = {
-      type: 'contact', nom: nom, email: email, organisme: '',
+      type: 'contact', nom: nom, email: email, organisme: 'Non renseigné',
       fonction: fonction.slice(0, 80),
       message: "[Lettre d'information] Inscription depuis /scan · " + fonction.slice(0, 200),
       page: '/scan/', site_web: f.elements.site_web.value
