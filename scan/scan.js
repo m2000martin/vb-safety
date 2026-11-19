@@ -10,11 +10,11 @@
   var CLE = 'vbs-scan-langue';
 
   var FR = {
-    pr1: "L'exposition aux agents CMR",
-    pr2: 'tracée sur papier, des semaines après',
-    pr3: 'mesurée et enregistrée sur site.',
-    sous: "Traçabilité de l'exposition professionnelle aux agents cancérogènes. " +
-          "Sapeurs-pompiers, industrie, collectivités.",
+    pr1: 'Les agents CMR se mesurent',
+    pr2: 'au laboratoire, en jours',
+    pr3: 'sur site, en secondes.',
+    sous: "Détection sur le terrain de la contamination par agents cancérogènes. " +
+          "Peau, surfaces, équipements de protection.",
     vcf: 'Ajouter à mes contacts', ecrire: 'Écrire',
     rdv: 'Rendez-vous', partage: 'Partager', linkedin: 'LinkedIn',
     vousetes: 'Vous êtes ?',
