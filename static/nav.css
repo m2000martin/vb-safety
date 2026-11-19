@@ -128,3 +128,11 @@ header.top a.langue, a.langue { display: inline-flex; align-items: center; gap: 
 header.top a.langue:hover, a.langue:hover { border-color: rgba(224, 108, 52, .6); color: #fff; }
 header.top a.langue:active, a.langue:active { transform: scale(.95); }
 a.langue svg { display: block; border-radius: 2px; flex: none; }
+
+/* Zones tactiles : le logo et le fil d'Ariane font moins de 32 px de haut sur
+   téléphone. Le remplissage agrandit la cible sans toucher à la mise en page,
+   la marge négative compensant l'espace ajouté. */
+@media (max-width: 700px) {
+  a.marque { padding: 12px 0; margin: -12px 0; }
+  .crumbs a, .ariane a, nav[aria-label="Fil d'Ariane"] a { padding: 11px 3px; margin: -11px -3px; }
+}
