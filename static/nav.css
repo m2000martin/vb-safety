@@ -104,3 +104,27 @@ header.top { border-bottom: 0 !important; }
 }
 .nav-metiers a[aria-current="page"]:has(.nav-th)::before{display:none}
 .nav-metiers a[aria-current="page"] .nav-th::before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:#E06C34;box-shadow:0 0 0 3px rgba(224,108,52,.2);vertical-align:middle}
+
+/* Sélecteur de langue : même pastille que sur /scan (drapeau + libellé).
+   « a.lang-link » plutôt que « .lang-link » pour l'emporter sur outils.css,
+   quel que soit l'ordre de chargement des feuilles. */
+a.lang-link { display: inline-flex; align-items: center; gap: 7px; min-height: 38px;
+  padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .04); color: #D4D4D8; text-decoration: none;
+  font: 700 12.5px var(--sans, system-ui, sans-serif); letter-spacing: .06em;
+  -webkit-tap-highlight-color: transparent; transition: transform .12s, border-color .15s, color .15s; }
+a.lang-link:hover { border-color: rgba(224, 108, 52, .6); color: #fff; }
+a.lang-link:active { transform: scale(.95); }
+a.lang-link svg { display: block; border-radius: 2px; flex: none; }
+
+/* Même pastille pour la variante « .langue » des pages métier et outil.
+   « header.top a.langue » l'emporte sur outils.css, qui la dessine en rectangle. */
+header.top a.langue, a.langue { display: inline-flex; align-items: center; gap: 7px;
+  min-height: 38px; padding: 7px 12px; border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .04);
+  color: #D4D4D8; text-decoration: none;
+  font: 700 12.5px var(--sans, system-ui, sans-serif); letter-spacing: .06em;
+  -webkit-tap-highlight-color: transparent; transition: transform .12s, border-color .15s, color .15s; }
+header.top a.langue:hover, a.langue:hover { border-color: rgba(224, 108, 52, .6); color: #fff; }
+header.top a.langue:active, a.langue:active { transform: scale(.95); }
+a.langue svg { display: block; border-radius: 2px; flex: none; }
