@@ -14,7 +14,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/static/fonts/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/static/fonts.css?v=2">
-<link rel="stylesheet" href="/scan/scan.css?v=3">
+<link rel="stylesheet" href="/scan/scan.css?v=5">
 </head>
 <body>
 
@@ -44,6 +44,11 @@
         fill="#E8EFF4" text-anchor="middle" letter-spacing="-0.5">VB</text>
     </svg>
     <h1>VB&nbsp;Safety</h1>
+    <p class="promesse">
+      <span data-t="pr1">Carcinogen exposure</span>
+      <s data-t="pr2">traced on paper, weeks later</s>
+      <b data-t="pr3">measured and recorded on site.</b>
+    </p>
     <p class="sous" data-t="sous">Traceability of occupational exposure to carcinogens.
     Fire and rescue services, industry, construction.</p>
   </header>
@@ -165,15 +170,15 @@
     </div>
 
     <div class="panneau" id="p-com" hidden>
-      <a class="li" href="/collectivites/verifier-old/" data-evt="scan:com-verif">
-        <b data-t="c1">Is your municipality concerned?</b><span data-t="c1b">Immediate answer from
-        the zoning published by the French mapping agency.</span></a>
-      <a class="li" href="/collectivites/" data-evt="scan:com-offre">
-        <b data-t="c2">Vegetation clearance monitoring</b><span data-t="c2b">Assessment from aerial
-        imagery, control priorities, letters to owners.</span></a>
+      <a class="li" href="/cmr-industrie/" data-evt="scan:com-offre">
+        <b data-t="c1">CMR evidence file</b><span data-t="c1b">For municipal staff exposed on
+        roadworks, asphalt and green spaces.</span></a>
+      <a class="li" href="/ressources/liste-travailleurs-exposes-cmr/" data-evt="scan:com-modele">
+        <b data-t="c2">Exposed workers list template</b><span data-t="c2b">Excel and PDF, compliant
+        with French decree no. 2024-307.</span></a>
       <a class="li li-demo" href="/collectivites/demande/" data-evt="scan:com-demande">
         <b data-t="c3">Ask for a demo</b><span data-t="c3b">Twenty minutes, online or at your
-        town hall, on your own territory.</span></a>
+        town hall, with your own cases.</span></a>
     </div>
   </section>
 
@@ -187,6 +192,6 @@
 <p class="lu" id="lu" role="status" aria-live="polite"></p>
 
 <script src="/static/vu.js?v=3" defer></script>
-<script src="/scan/scan.js?v=3" defer></script>
+<script src="/scan/scan.js?v=5" defer></script>
 </body>
 </html>

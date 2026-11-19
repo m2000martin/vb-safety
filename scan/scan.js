@@ -10,6 +10,9 @@
   var CLE = 'vbs-scan-langue';
 
   var FR = {
+    pr1: "L'exposition aux agents CMR",
+    pr2: 'tracée sur papier, des semaines après',
+    pr3: 'mesurée et enregistrée sur site.',
     sous: "Traçabilité de l'exposition professionnelle aux agents cancérogènes. " +
           "Sapeurs-pompiers, industrie, BTP.",
     vcf: 'Ajouter à mes contacts', ecrire: 'Écrire',
@@ -29,11 +32,11 @@
     i2b: 'Gratuit, sans compte, les données restent dans votre navigateur.',
     i3: 'Modèle de liste des travailleurs exposés',
     i3b: 'Excel et PDF, conformes au décret n° 2024-307.',
-    c1: 'Votre commune est-elle soumise aux OLD ?',
-    c1b: "Réponse immédiate à partir du zonage publié par l'IGN.",
-    c2: 'Suivi du débroussaillement',
-    c2b: 'Constat par imagerie, priorités de contrôle, courriers aux propriétaires.',
-    c3: 'Demander une présentation', c3b: 'Vingt minutes, en visioconférence ou sur place.',
+    c1: 'Dossier de preuve CMR',
+    c1b: 'Pour les agents exposés sur la voirie, les enrobés et les espaces verts.',
+    c2: 'Modèle de liste des travailleurs exposés',
+    c2b: 'Excel et PDF, conformes au décret n° 2024-307.',
+    c3: 'Demander une présentation', c3b: 'Vingt minutes, en visioconférence ou en mairie.',
     nlt: 'Suivre le projet',
     nlp: "Notre lettre d'information, tous les deux mois : ce que nous construisons, ce que la " +
          'réglementation change, et ce que nous apprenons sur le terrain.',

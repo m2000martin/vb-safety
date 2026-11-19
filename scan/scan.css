@@ -168,3 +168,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;
   .metier{margin-top:12px;padding-top:13px}
   .tete{margin-bottom:15px}
 }
+
+/* ---------- Promesse du premier écran (reprise du kakémono) ---------- */
+.promesse{margin:12px auto 0;max-width:22ch;font-size:19px;line-height:1.26;
+  font-weight:800;letter-spacing:-.015em}
+.promesse span{display:block;color:var(--clair)}
+.promesse s{display:block;color:var(--faible);text-decoration:line-through;
+  text-decoration-color:rgba(224,108,52,.9);text-decoration-thickness:.06em}
+.promesse b{display:block;color:var(--signal)}
+.sous{margin-top:10px}
+@media (max-height:700px){.promesse{font-size:17.5px;margin-top:9px}.sous{margin-top:8px}}
+@media (min-height:780px){.promesse{font-size:21px}}

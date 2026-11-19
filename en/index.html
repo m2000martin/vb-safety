@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E1E30">
-<title>Carcinogen (CMR) exposure tracking · VB Safety</title>
-<meta name="description" content="VB Safety develops tools to detect and track exposure to carcinogens (CMR agents): VB CMR for fire services, exposed workers list and risk assessment for industry.">
+<title>Measuring and tracing carcinogen exposure &#183; VB Safety</title>
+<meta name="description" content="VB Safety makes occupational exposure to carcinogens (CMR agents) measurable and traceable: field records, register of exposed workers, statutory certificates. Fire services, industry, construction, local authorities.">
 <link rel="canonical" href="https://vb-safety.com/en/">
 <link rel="alternate" hreflang="fr" href="https://vb-safety.com/">
 <link rel="alternate" hreflang="en" href="https://vb-safety.com/en/">
@@ -13,8 +13,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="VB Safety">
 <meta property="og:locale" content="en_GB">
-<meta property="og:title" content="Detecting and tracking exposure to carcinogens (CMR agents)">
-<meta property="og:description" content="VB Safety develops tools to detect and track exposure to carcinogens (CMR agents): VB CMR for fire services, exposed workers list and risk assessment for industry.">
+<meta property="og:title" content="Exposure to carcinogens: measured, traced, on the record.">
+<meta property="og:description" content="Measuring and tracing occupational exposure to carcinogens. Fire services, industry, construction, local authorities.">
 <meta property="og:url" content="https://vb-safety.com/en/">
 <meta property="og:image" content="https://vb-safety.com/static/og/home-en.png?v=2">
 <meta property="og:image:width" content="1200">
@@ -485,6 +485,9 @@
   .defile span { font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #7E8794; }
   @keyframes defile { to { transform: translateX(-100%); } }
   @media (prefers-reduced-motion: reduce) { .defile ul { animation: none; } .defile { flex-wrap: wrap; justify-content: center; } .defile ul[aria-hidden] { display: none; } }
+  /* V13 · Accueil : premier écran */
+  .scene .note { -webkit-hyphens: none; hyphens: none; text-wrap: pretty; }
+  .enonce .net { color: var(--signal); }
 </style>
 <link rel="stylesheet" href="/static/mobile.css?v=12">
 <link rel="stylesheet" href="/static/nav.css?v=18">
@@ -502,7 +505,6 @@
     <nav id="menu" class="haut-nav" aria-label="Main navigation">
       <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Firefighters<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/firefighters/">Overview</a><a href="/cmr-pompier/en/"><span class="nav-th">CMR risk</span>Exposure tracking tool</a><a href="/cmr-pompier/en/ppe-module.html"><span class="nav-th">CMR risk</span>PPE module</a><a href="/en/innovation/"><span class="nav-th">Toxic risk</span>Contamination sensor</a><a href="/ressources/#sapeurs-pompiers" hreflang="fr">Resources (FR)</a></div></div>
       <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Industry<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/industry/">Overview</a><a href="/cmr-industrie/en/"><span class="nav-th">CMR risk</span>Exposure tracking tool</a><a href="/en/innovation/"><span class="nav-th">Toxic risk</span>Contamination sensor</a><a href="/ressources/#industrie" hreflang="fr">Resources (FR)</a></div></div>
-      <div class="nav-groupe nav-metier"><button type="button" class="nav-sous" aria-expanded="false" aria-haspopup="true">Municipalities<span class="nav-fl" aria-hidden="true"></span></button><div class="nav-liste nav-metiers"><a href="/en/municipalities/">Overview</a><a href="/en/municipalities/"><span class="nav-th">Natural hazards</span>Vegetation clearance / storm</a><a href="/en/municipalities/#signalements">Crisis cell</a></div></div>
       <a class="nav-ecrire" href="#contact" data-goto="contact">Contact</a>
     </nav>
     <div class="actions-group">
@@ -515,14 +517,15 @@
   <main class="centre">
     <div>
       <h1 class="enonce">
-        <span class="h1-kw">Detecting and tracking exposure to risks</span>
-        <span>The risks are recognised,</span>
-        <span class="seconde">we make them <span class="invis">visible.</span></span>
+        <span class="h1-kw">Carcinogens &#183; CMR</span>
+        <span>Exposure to carcinogens,</span>
+        <span class="net">measured, traced, on the record.</span>
       </h1>
       <div class="trait" aria-hidden="true"></div>
-      <p class="note">VB Safety develops tools to detect and track exposure to natural hazards and carcinogens.</p>
+      <p class="note">Fire and rescue services, industry, construction, local authorities.</p>
       <div class="hero-cta">
-        <a class="btn-hero primary" href="/en/firefighters/"><span>Discover our tools</span></a>
+        <a class="btn-hero primary" href="/en/firefighters/" data-fixe><span>See VB CMR</span><span class="arr" aria-hidden="true">&#8594;</span></a>
+        <a class="btn-hero ghost" href="https://calendar.app.google/2akSPAUYagxgU2AR7" rel="noopener" data-evt="accueil:rdv"><span>Book a meeting</span></a>
       </div>
     </div>
   </main>
@@ -624,13 +627,13 @@
     <div class="foot-brand"><a class="marque" href="/en/"><svg viewBox="0 0 64 64" width="30" height="30" aria-hidden="true" focusable="false" style="margin-right:11px;flex:none;vertical-align:middle"><rect x="2.5" y="2.5" width="59" height="59" rx="12.5" fill="#16293F" stroke="#D9713C" stroke-width="3"/><text x="32" y="43" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-weight="800" font-size="27" fill="#E8EFF4" text-anchor="middle" letter-spacing="-0.5">VB</text></svg>VB Safety</a><p>Making exposure measurable: carcinogens and natural hazards.</p><a href="/confidentialite/" class="pied-rgpd" style="display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:8px 13px 8px 11px;border:1px solid rgba(217,113,60,.45);border-radius:9px;text-decoration:none;max-width:max-content"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#D9713C" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="flex:none"><path d="M12 2.8 20 6v6c0 5.2-3.4 8.6-8 10.2C7.4 20.6 4 17.2 4 12V6Z"/><path d="m8.9 12.1 2.2 2.2 4-4.4"/></svg><span style="font:600 11.5px/1.35 var(--sans,system-ui);color:#A1A1AA"><strong style="display:block;color:#E8EFF4;font-size:11px;letter-spacing:.16em;font-weight:700">GDPR</strong>Data hosted in the EU</span></a></div>
     <div class="foot-col"><h2 class="foot-h">Firefighters</h2><a href="/en/firefighters/">Overview</a><a href="/cmr-pompier/en/">Exposure tracking</a><a href="/cmr-pompier/en/ppe-module.html">PPE tracking</a></div>
     <div class="foot-col"><h2 class="foot-h">Industry</h2><a href="/en/industry/">Overview</a><a href="/cmr-industrie/en/">CMR exposure tracking</a><a href="/ressources/liste-travailleurs-exposes-cmr/" hreflang="fr">Exposed workers list template</a></div>
-    <div class="foot-col"><h2 class="foot-h">Local authorities</h2><a href="/en/municipalities/">Overview</a><a href="/collectivites/" hreflang="fr">Vegetation clearance (OLD)</a><a href="/collectivites/verifier-old/" hreflang="fr">Is my municipality concerned? (FR)</a><a href="/collectivites/cellule-de-crise/" hreflang="fr">Crisis unit</a></div>
+    <div class="foot-col"><h2 class="foot-h">Resources</h2><a href="/en/firefighters/">Fire services</a><a href="/en/industry/">Industry</a><a href="/ressources/" hreflang="fr">Guides and templates (FR)</a></div>
     <div class="foot-col"><h2 class="foot-h">VB Safety</h2><a href="/en/innovation/">Contamination sensors</a><a href="/ressources/" hreflang="fr">Resources (in French)</a><a href="mailto:contact@vb-safety.com">contact@vb-safety.com</a></div>
   </div>
   <div class="section-inner foot-bottom"><span>© 2026 VB Safety SAS · RCS Paris 109 381 640</span><span class="foot-legal"><a href="/mentions-legales/" hreflang="fr">Legal notice</a><a href="/confidentialite/" hreflang="fr">Privacy</a><a href="/cgv/" hreflang="fr">Terms of sale</a><a href="/cgu/" hreflang="fr">Terms of use</a></span></div>
 </footer>
 
-<script src="/static/accueil.js?v=52" defer></script>
+<script src="/static/accueil.js?v=53" defer></script>
 <script src="/static/vu.js?v=3" defer></script>
 <script src="/static/nav.js?v=4" defer></script>
 </body>

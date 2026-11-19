@@ -167,6 +167,9 @@
   // Premier écran : le bouton principal fait défiler capteurs, métiers et R&D ; il mène à la page correspondante ou à la carte du métier ; le fond suit
   (function () {
     var btn = document.querySelector('.scene .btn-hero.primary'), note = document.querySelector('.scene .note'); if (!btn) return;
+    // Libellé fixe (data-fixe) : le premier écran porte une seule affirmation, le bouton ne défile pas
+    // et la mention « en développement » reste lisible sur téléphone.
+    if (btn.hasAttribute('data-fixe')) { window.vbMode = 'pompiers'; return; }
     // [mode des particules, début, mot en gras, index de la carte dans « Outils » ou adresse]
     var M = EN ? [['pompiers', '', 'Firefighters', '/en/firefighters/'], ['industrie', '', 'Industry', '/en/industry/'], [null, '', 'Municipalities', '/en/municipalities/']]
                : [['pompiers', '', 'Sapeurs-pompiers', '/cmr-pompier/'], ['industrie', '', 'Industrie', '/cmr-industrie/'], [null, '', 'Collectivités', '/collectivites/']];
